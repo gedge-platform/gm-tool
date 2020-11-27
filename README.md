@@ -28,10 +28,13 @@ Gedge Management Dashboard
     root 선택후 clean -> complie -> install 순으로 update( 권장 )
 
   ### start project 
-
+  #### application 실행 
     * APIOpenstackApplication
     * ServiceRegistryApplication
     * GatewayApplication 
     * ClientApplication 프로젝트 실행
+    
+    
+    * ClientApplication port를 통해 웹페이지에서 확인 가능 
 
   
