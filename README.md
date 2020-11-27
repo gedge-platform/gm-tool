@@ -23,7 +23,7 @@ Gedge Management Dashboard
   *  프로젝트 생성 시 Maven > importing 에서 Import Maven projects automatically 체크를 통한 자동 update 하도록 설정 가능 
 
   ### Generate sources and update folder for all projects
-
+  * code update 후 maven update 
   * maven update 
     root 선택후 clean -> complie -> install 순으로 update( 권장 )
 
@@ -34,7 +34,6 @@ Gedge Management Dashboard
     * GatewayApplication 
     * ClientApplication 프로젝트 실행
     
-    
-    * ClientApplication port를 통해 웹페이지에서 확인 가능 
+    ->  ClientApplication port를 통해 웹페이지에서 확인 가능 
 
   
