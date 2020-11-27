@@ -29,7 +29,7 @@ Gedge Management Dashboard
 
   ### start project 
   #### application 실행 
-    * APIOpenstackApplication
+    * ApiEdgeApplication
     * ServiceRegistryApplication
     * GatewayApplication 
     * ClientApplication 프로젝트 실행
