@@ -1,6 +1,6 @@
 # gm-tool
 
-Gedge Management Dashboard
+Gedge Management Tool
 
 ## 사전 환경
 
