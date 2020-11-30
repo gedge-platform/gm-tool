@@ -1,4 +1,4 @@
-# gm-dashboard
+# gm-tool
 
 Gedge Management Dashboard
 
