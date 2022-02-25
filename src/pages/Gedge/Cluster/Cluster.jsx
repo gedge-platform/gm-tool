@@ -13,7 +13,6 @@ const Cluster = () => {
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
-    console.log(123);
 
     return (
         <Layout currentPageTitle={currentPageTitle} currentPage={currentPage}>

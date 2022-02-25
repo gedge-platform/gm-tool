@@ -4,7 +4,7 @@ import styled from "styled-components";
 import theme from "@/styles/theme";
 import { NavScrollbar } from "@/components/scrollbars";
 import { SubTitle, Title } from "@/pages";
-
+import { useHistory } from "react-router-dom";
 const MenuNav = styled.nav`
   position: relative;
   color: #afbacb;
@@ -162,6 +162,7 @@ const MenuNav = styled.nav`
 `;
 
 export const SideMenu = () => {
+    const history = useHistory();
     return (
         <MenuNav>
             <NavScrollbar>
@@ -169,7 +170,7 @@ export const SideMenu = () => {
                     {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
                     {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
                     <li className={`hasChild`}>
-                        <span>통합 대시보드</span>
+                        <span onClick={() => history.push("/")}>통합 대시보드</span>
                     </li>
 
                     <li className={`hasChild open`}>

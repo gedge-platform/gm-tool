@@ -10,33 +10,12 @@ import { agDateColumnFilter } from "@/utils/common-utils";
 import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
-import OrganizationStore from "../../../Store/OrganizationStore";
 import { toJS } from "mobx";
 
-const OrganizationDetail = observer((props) => {
-    const { orgInfo } = OrganizationStore;
+const Detail = observer((props) => {
+    const { cluster } = props;
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
-    // const actionList = [
-    //     {
-    //         name: '요청',
-    //         onClick: () => {
-    //             swalConfirm("요청하시겠습니까?")
-    //         },
-    //     },
-    //     {
-    //         name: '완료',
-    //         onClick: () => {
-    //             swalConfirm("완료하시겠습니까?")
-    //         },
-    //     },
-    //     {
-    //         name: '반려',
-    //         onClick: () => {
-    //             swalConfirm("반려하시겠습니까?")
-    //         },
-    //     },
-    // ]
 
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
@@ -49,88 +28,54 @@ const OrganizationDetail = observer((props) => {
         setOpen(false);
     };
 
-    // useEffect(() => {
-    //     console.log(tabvalue)
-    //     if (tabvalue === 0) {
-    //         shareStore.height(2)
-    //     }
-    //     if (tabvalue === 1) {
-    //         shareStore.height(4)
-    //     }
-    //     if (tabvalue === 2) {
-    //         shareStore.height(6)
-    //     }
-    // }, [tabvalue])
-
-    // shareStore.height(4)
-    console.log(orgInfo);
+    console.log(cluster);
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
                 <CTab label="상세정보" />
-                <CTab label="채널 정보" />
+                <CTab label="리소스 사용량" />
             </CTabs>
             <CTabPanel value={tabvalue} index={0}>
                 <div className="tb_container">
-                    <p
-                        style={{
-                            marginBottom: "8px",
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                        }}
-                    ></p>
                     <table className="tb_data">
                         <tbody>
                             <tr>
-                                <th>Node Type</th>
-                                <th>Node 이름</th>
-                                <th>상태</th>
+                                <th>클러스터</th>
+                                <td>{cluster.clusterName}</td>
                             </tr>
-                            {toJS(orgInfo)?.map((item) => (
-                                <tr>
-                                    <td>{item.metadata.labels.hlfCategory}</td>
-                                    <td>{item.metadata.labels.app}</td>
-                                    <td>{item.status.phase}</td>
-                                </tr>
-                            ))}
+                            <tr>
+                                <th>쿠버네티스 버전</th>
+                                <td>{cluster.kubeVersion}</td>
+                            </tr>
+                            <tr>
+                                <th>역할</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>생성자</th>
+                                <td>{cluster.clusterCreator}</td>
+                            </tr>
+                            <tr>
+                                <th>생성일</th>
+                                <td>{cluster.create_at}</td>
+                            </tr>
+                            <tr>
+                                <th>업데이트일</th>
+                                <td></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </CTabPanel>
             <CTabPanel value={tabvalue} index={1}>
                 <div className="panelCont">
-                    <div className="grid-height">
-                        <table className="tb_data">
-                            <tbody>
-                                <tr>
-                                    <th>조직 이름</th>
-                                    <th>채널 이름</th>
-                                </tr>
-                                <tr>
-                                    <td>block-orderer</td>
-                                    <td>my-block-channel-1</td>
-                                </tr>
-                                <tr>
-                                    <td>block-orderer</td>
-                                    <td>my-block-channel-2</td>
-                                </tr>
-                                <tr>
-                                    <td>block-orderer</td>
-                                    <td>my-block-channel-3</td>
-                                </tr>
-                                <tr>
-                                    <td>block-orderer</td>
-                                    <td>my-block-channel-4</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div className="grid-height">123</div>
                 </div>
             </CTabPanel>
         </PanelBox>
     );
 });
-export default OrganizationDetail;
+export default Detail;
 
 /*
     <PanelBox>
