@@ -6,21 +6,21 @@ import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-
 import { useHistory } from "react-router";
-
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
+import clusterStore from "../../../../store/Cluster";
 
 const APIListTab = observer(() => {
-    const [clusterList, setCLusterList] = useState([]);
     const [tabvalue, setTabvalue] = useState(0);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
+
+    const { clusterDetail, clusterList, loadClusterList } = clusterStore;
 
     const [columDefs] = useState([
         {
@@ -75,18 +75,8 @@ const APIListTab = observer(() => {
 
     const history = useHistory();
 
-    const loadData = async () => {
-        await axios
-            .get(`${SERVER_URL}/clusters`, {
-                auth: BASIC_AUTH,
-            })
-            .then((res) => {
-                setCLusterList(res.data.data);
-            });
-    };
-
     useEffect(() => {
-        loadData();
+        loadClusterList();
     }, []);
     console.log(clusterList);
     return (
@@ -106,7 +96,7 @@ const APIListTab = observer(() => {
                         </CTabPanel>
                     </div>
                 </PanelBox>
-                <Detail />
+                <Detail cluster={clusterDetail} />
             </CReflexBox>
         </>
     );
