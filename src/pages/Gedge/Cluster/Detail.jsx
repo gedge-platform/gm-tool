@@ -27,8 +27,6 @@ const Detail = observer((props) => {
     const handleClose = () => {
         setOpen(false);
     };
-
-    console.log(cluster);
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>

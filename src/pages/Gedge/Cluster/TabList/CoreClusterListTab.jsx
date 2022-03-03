@@ -14,7 +14,7 @@ import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 
-const APIListTab = observer(() => {
+const CoreClusterListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
@@ -23,15 +23,21 @@ const APIListTab = observer(() => {
     const { clusterDetail, clusterList, loadClusterList } = clusterStore;
 
     const [columDefs] = useState([
+        // {
+        //     headerName: "",
+        //     field: "check",
+        //     minWidth: 53,
+        //     maxWidth: 53,
+        //     filter: false,
+        //     headerCheckboxSelection: true,
+        //     headerCheckboxSelectionFilteredOnly: true,
+        //     checkboxSelection: true,
+        // },
         {
-            headerName: "",
-            field: "check",
-            minWidth: 53,
-            maxWidth: 53,
-            filter: false,
-            headerCheckboxSelection: true,
-            headerCheckboxSelectionFilteredOnly: true,
-            checkboxSelection: true,
+            headerName: "No",
+            field: "clusterNum",
+            maxWidth: 80,
+            filter: true,
         },
         {
             headerName: "이름",
@@ -76,7 +82,7 @@ const APIListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadClusterList();
+        loadClusterList("core");
     }, []);
     console.log(clusterList);
     return (
@@ -85,7 +91,7 @@ const APIListTab = observer(() => {
                 <PanelBox>
                     <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
                         <CCreateButton>생성</CCreateButton>
-                        <CSelectButton items={[]}>{"All Cluster"}</CSelectButton>
+                        {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
@@ -101,4 +107,4 @@ const APIListTab = observer(() => {
         </>
     );
 });
-export default APIListTab;
+export default CoreClusterListTab;
