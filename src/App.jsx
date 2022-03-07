@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { TotalDashboard, Cluster, Login } from "@/pages";
+import { TotalDashboard, Cluster, Project, Login } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
 
 // export const App = () => {
@@ -52,19 +52,20 @@ import AuthRoute from "./routes/AuthRoute";
 // };
 
 {
-    /* Gedge */
+  /* Gedge */
 }
 export const App = () => {
-    return (
-        <>
-            <Switch>
-                <Route exact path="/" component={TotalDashboard} />
-                {/* 인프라 관리 */}
-                <Route path="/cluster" component={Cluster} />
-                <Route path="/login" component={Login} />
-            </Switch>
-        </>
-    );
+  return (
+    <>
+      <Switch>
+        <Route exact path="/" component={TotalDashboard} />
+        {/* 인프라 관리 */}
+        <Route path="/cluster" component={Cluster} />
+        <Route path="/project" component={Project} />
+        <Route path="/login" component={Login} />
+      </Switch>
+    </>
+  );
 };
 
 export default App;
