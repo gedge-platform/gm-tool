@@ -20,7 +20,8 @@ const EdgeClusterListTab = observer(() => {
         setTabvalue(newValue);
     };
 
-    const { clusterDetail, clusterList, totalElements, loadClusterList } = clusterStore;
+    const { clusterDetail, clusterList, totalElements, loadClusterList } =
+        clusterStore;
 
     const [columDefs] = useState([
         // {
@@ -89,14 +90,23 @@ const EdgeClusterListTab = observer(() => {
         <>
             <CReflexBox>
                 <PanelBox>
-                    <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+                    <CommActionBar
+                        isSearch={true}
+                        isSelect={true}
+                        keywordList={["이름"]}
+                    >
                         <CCreateButton>생성</CCreateButton>
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
-                                <AgGrid rowData={clusterList} columnDefs={columDefs} isBottom={true} totalElements={totalElements} />
+                                <AgGrid
+                                    rowData={clusterList}
+                                    columnDefs={columDefs}
+                                    isBottom={true}
+                                    totalElements={totalElements}
+                                />
                             </div>
                         </CTabPanel>
                     </div>

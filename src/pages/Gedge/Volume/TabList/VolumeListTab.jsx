@@ -10,17 +10,18 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
+// import Detail from "../Detail";
+import volumeStore from "../../../../store/Volume";
 
-const CoreClusterListTab = observer(() => {
+const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+    const { volumeDetail, volumeList, totalElements, loadVolumeList } =
+        volumeStore;
 
     const [columDefs] = useState([
         // {
@@ -34,19 +35,13 @@ const CoreClusterListTab = observer(() => {
         //     checkboxSelection: true,
         // },
         {
-            headerName: "No",
-            field: "clusterNum",
-            maxWidth: 80,
-            filter: true,
-        },
-        {
             headerName: "이름",
-            field: "clusterName",
+            field: "name",
             filter: true,
         },
         {
             headerName: "타입",
-            field: "clusterType",
+            field: "capacity",
             filter: true,
         },
         {
@@ -55,18 +50,23 @@ const CoreClusterListTab = observer(() => {
             filter: true,
         },
         {
-            headerName: "노드개수",
-            field: "node",
+            headerName: "StorageClass",
+            field: "storageClass",
             filter: true,
         },
         {
-            headerName: "version",
-            field: "kubeVersion",
+            headerName: "볼륨 모드",
+            field: "volumeMode",
+            filter: true,
+        },
+        {
+            headerName: "클러스터",
+            field: "cluster",
             filter: true,
         },
         {
             headerName: "생성날짜",
-            field: "created_at",
+            field: "createAt",
             filter: "agDateColumnFilter",
             filterParams: agDateColumnFilter(),
             minWidth: 150,
@@ -82,9 +82,9 @@ const CoreClusterListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadClusterList("core");
+        loadVolumeList();
     }, []);
-    console.log(clusterList);
+    console.log(volumeList);
     return (
         <>
             <CReflexBox>
@@ -94,25 +94,25 @@ const CoreClusterListTab = observer(() => {
                         isSelect={true}
                         keywordList={["이름"]}
                     >
-                        <CCreateButton>생성</CCreateButton>
-                        {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
+                        {/* <CCreateButton>생성</CCreateButton> */}
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
-                                    rowData={clusterList}
+                                    rowData={volumeList}
                                     columnDefs={columDefs}
                                     isBottom={true}
+                                    totalElements={totalElements}
                                 />
                             </div>
                         </CTabPanel>
                     </div>
                 </PanelBox>
-                <Detail cluster={clusterDetail} />
+                {/* <Detail cluster={clusterDetail} /> */}
             </CReflexBox>
         </>
     );
 });
-export default CoreClusterListTab;
+export default VolumeListTab;

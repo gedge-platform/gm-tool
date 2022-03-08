@@ -125,54 +125,54 @@ const MenuNav = styled.nav`
 `;
 
 export const SideMenu = () => {
-  const history = useHistory();
-  return (
-    <MenuNav>
-      <NavScrollbar>
-        <ul>
-          {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
-          {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
-          <li>
-            <NavLink exact to="/" activeClassName="active">
-              {Title.Dashboard}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/cluster" activeClassName="active">
-              {Title.Cluster}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/workspace" activeClassName="active">
-              {Title.Workspace}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/project" activeClassName="active">
-              {Title.Project}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/component" activeClassName="active">
-              {Title.Component}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/volume" activeClassName="active">
-              {Title.Volume}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/monitoring" activeClassName="active">
-              {Title.Monitoring}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/user" activeClassName="active">
-              {Title.User}
-            </NavLink>
-          </li>
-          {/* <li className={`hasChild ${menu2}`} onClick={() => toggleClass()}>
+    const history = useHistory();
+    return (
+        <MenuNav>
+            <NavScrollbar>
+                <ul>
+                    {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
+                    {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
+                    <li>
+                        <NavLink exact to="/" activeClassName="active">
+                            {Title.Dashboard}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/cluster" activeClassName="active">
+                            {Title.Cluster}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/workspace" activeClassName="active">
+                            {Title.Workspace}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/project" activeClassName="active">
+                            {Title.Project}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/component" activeClassName="active">
+                            {Title.Component}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/volumes" activeClassName="active">
+                            {Title.Volume}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/monitoring" activeClassName="active">
+                            {Title.Monitoring}
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/user" activeClassName="active">
+                            {Title.User}
+                        </NavLink>
+                    </li>
+                    {/* <li className={`hasChild ${menu2}`} onClick={() => toggleClass()}>
                         <a href="javascript:void(0)">BlockChain</a>
                         <ul className="navChildren">
                             <li onClick={() => toggleClass()}>
@@ -222,10 +222,10 @@ export const SideMenu = () => {
                     ) : (
                         <></>
                     )} */}
-        </ul>
-      </NavScrollbar>
-    </MenuNav>
-  );
+                </ul>
+            </NavScrollbar>
+        </MenuNav>
+    );
 };
 
 export default SideMenu;
