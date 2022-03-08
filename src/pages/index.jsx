@@ -5,6 +5,9 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 // Gedege
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
+export { default as Login } from "./Login/Login";
+
+export { default as NotFound } from "./Gedge/NotFound/NotFound";
 
 const Title = {
   Dashboard: "통합 대시보드",
@@ -16,6 +19,9 @@ const Title = {
   Volume: "볼륨 관리",
   Monitoring: "모니터링",
   User: "사용자 관리",
+  Appstore: "앱스토어 관리",
+  Workload: "워크로드 관리",
+  Volume: "볼륨 관리",
 };
 
 const SubTitle = {
