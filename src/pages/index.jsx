@@ -2,16 +2,20 @@ import React from "react";
 
 export { default as TotalDashboard } from "./Dashboard/TotalDashboard";
 export { default as Dashboard } from "./Dashboard/Dashboard";
-// Gedege
+// Gedege PA
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
-export { default as Login } from "./Login/Login";
 
+// Gedgd SA
+export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
+export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
+
+//공통
+export { default as Login } from "./Login/Login";
 export { default as NotFound } from "./Gedge/NotFound/NotFound";
 
 const Title = {
   Dashboard: "통합 대시보드",
-  // Gedege
   Cluster: "클러스터 관리",
   Workspace: "워크스페이스 관리",
   Project: "프로젝트 관리",
