@@ -12,7 +12,7 @@ import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
 
-const ProjectListTab = observer(() => {
+const PlatfromServiceListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -71,7 +71,7 @@ const ProjectListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadProjectList();
+    loadProjectList("system");
   }, []);
   console.log(projectList);
   return (
@@ -100,4 +100,4 @@ const ProjectListTab = observer(() => {
     </>
   );
 });
-export default ProjectListTab;
+export default PlatfromServiceListTab;
