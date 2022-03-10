@@ -4,9 +4,9 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CSelectButton } from "@/components/buttons";
-import UserDetail from "./UserDetail";
+import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
-import userStore from "../../Store/UserStore";
+import userStore from "../../../../store/UserStore";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,11 +14,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { swalUpdate } from "@/utils/swal-utils";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
-import { getItem } from "../../utils/sessionStorageFn";
-import { swalError } from "../../utils/swal-utils";
-import UserAdd from "./UserCont/UserAdd";
+import { getItem } from "../../../../utils/sessionStorageFn";
+import { swalError } from "../../../../utils/swal-utils";
+import UserAdd from "../../../Management/UserCont/UserAdd";
 
-const UserListTab = observer(() => {
+const RoleListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
 
@@ -48,25 +48,12 @@ const UserListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "사용자 역할",
-      field: "memberRole",
+      headerName: "설명",
+      field: "description",
       filter: true,
     },
     {
-      headerName: "Last Login",
-      field: "logined_at",
-      filter: true,
-      cellRenderer: function (data) {
-        if (moment(data.value).year() === 1) {
-          return `<span>-</span>`;
-        }
-        return `<span>${moment(new Date(data.value)).format(
-          "YYYY-MM-DD HH:mm"
-        )}</span>`;
-      },
-    },
-    {
-      headerName: "등록일",
+      headerName: "생성날짜",
       field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -78,65 +65,7 @@ const UserListTab = observer(() => {
           .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
-    {
-      headerName: "상태",
-      field: "enabled",
-      filter: true,
-      cellRenderer: function (state) {
-        if (state.value == 0) {
-          return `<span class="state_ico state_04">승인 대기</span>`;
-        }
-        return `<span class="state_ico state_02">승인</span>`;
-      },
-    },
   ]);
-
-  const actionList = [
-    {
-      name: "승인",
-      onClick: () => {
-        swalUpdate("승인하시겠습니까?", setEnabled);
-      },
-    },
-    {
-      name: "반려",
-      onClick: () => {
-        swalUpdate("반려하시겠습니까?", setDisabled);
-      },
-    },
-  ];
-
-  const setEnabled = async () => {
-    await axios
-      .get(`${SERVER_URL}/users/${userDetail.id}/enabled`, {
-        auth: getItem("auth"),
-      })
-      .then(({ data: { status } }) => {
-        if (status === 200) {
-          swalError("사용자 승인이 완료되었습니다.");
-          loadUserList();
-        } else {
-          swalError("사용자 승인에 실패하였습니다.");
-        }
-      })
-      .catch((e) => console.log(e));
-  };
-
-  const setDisabled = async () => {
-    await axios
-      .get(`${SERVER_URL}/users/${userDetail.id}/disabled`, {
-        auth: getItem("auth"),
-      })
-      .then(({ data: { status } }) => {
-        if (status === 200) {
-          swalError("사용자 반려가 완료되었습니다.");
-          loadUserList();
-        } else {
-          swalError("사용자 반려에 실패하였습니다.");
-        }
-      })
-      .catch((e) => console.log(e));
-  };
 
   const handleCreateOpen = () => {
     setOpen2(true);
@@ -165,7 +94,7 @@ const UserListTab = observer(() => {
   };
   const deleteAPI = async () => {
     await axios
-      .delete(`${SERVER_URL}/users/${userDetail.id}`, {
+      .delete(`${SERVER_URL}/users/${userDetail.memberId}`, {
         auth: getItem("auth"),
       })
       .then(({ status }) => {
@@ -187,12 +116,11 @@ const UserListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <div className="panelTitBar panelTitBar_clear">
+          {/* <div className="panelTitBar panelTitBar_clear">
             <div className="tit"></div>
           </div>
-          {/* <CommActionBar isSearch={true}> */}
-          {/* </CommActionBar> */}
-          {/* <CommActionBar isSearch={false}>
+          <CommActionBar isSearch={true}></CommActionBar>
+          <CommActionBar isSearch={false}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             <UserAdd open={open} onClose={handleClose} />
 
@@ -211,53 +139,24 @@ const UserListTab = observer(() => {
           </CommActionBar> */}
           <div className="panelTitBar panelTitBar_clear">
             <div style={{ display: "flex" }}>
-              <div style={{ margin: "auto 10px auto auto" }}>
-                <CSelectButton className="none_transform" items={actionList}>
-                  액션
-                </CSelectButton>
-              </div>
-              <div>
-                {/* <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    position: "relative",
-                    width: "160px",
-                  }}
-                >
-                  <input
-                    style={{
-                      height: "30px",
-                      width: "160px",
-                      paddingLeft: "10px",
-                    }}
-                  ></input>
-                  <SearchIcon
-                    sx={{ fontSize: "26px" }}
-                    style={{
-                      position: "absolute",
-                      right: "5px",
-                      cursor: "pointer",
-                    }}
-                    className="search_icon"
-                  />
-                </div> */}
-              </div>
+              <div style={{ margin: "auto 10px auto auto" }} />
             </div>
-            <div>
-              <Button startIcon={<AddIcon />} onClick={handleCreateOpen}>
-                User 생성
-              </Button>
-              <Button
-                color="error"
-                startIcon={<DeleteIcon />}
-                onClick={deleteUser}
-              >
-                User 삭제
-              </Button>
+            <div className="panelTitBar panelTitBar_clear">
+              <div>
+                <Button startIcon={<AddIcon />} onClick={handleCreateOpen}>
+                  생성
+                </Button>
+                <Button
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={deleteUser}
+                >
+                  삭제
+                </Button>
+              </div>
             </div>
           </div>
-          <div className="grid-height">
+          <div className="grid-height2">
             <AgGrid
               rowData={userList}
               columnDefs={columnDefs}
@@ -274,4 +173,4 @@ const UserListTab = observer(() => {
     </>
   );
 });
-export default UserListTab;
+export default RoleListTab;

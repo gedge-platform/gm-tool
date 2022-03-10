@@ -84,7 +84,7 @@ const CoreClusterListTab = observer(() => {
   useEffect(() => {
     loadClusterList("core");
   }, []);
-  console.log(clusterList);
+ 
   return (
     <>
       <CReflexBox>

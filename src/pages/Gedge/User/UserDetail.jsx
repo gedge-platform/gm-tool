@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
-import userStore from "../../Store/UserStore";
+import userStore from "../../../Store/UserStore";
 import moment from "moment";
 
 const UserDetail = observer((props) => {
+  const { userDetail } = userStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const { userDetail } = userStore;
-  // console.log("로그", props.userDetail);
+  console.log("상세정보", userDetail.memberName);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -27,7 +27,7 @@ const UserDetail = observer((props) => {
               <tbody>
                 <tr>
                   <th>ID</th>
-                  <td>{userDetail.memberId}</td>
+                  <td>{userDetail.id}</td>
                   <th>이름</th>
                   <td>{userDetail.memberName}</td>
                 </tr>
@@ -37,7 +37,7 @@ const UserDetail = observer((props) => {
                   <th>부서</th>
                   <td>{userDetail.department}</td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <th>승인여부</th>
                   <td>
                     {userDetail.enabled ? (
@@ -48,7 +48,7 @@ const UserDetail = observer((props) => {
                   </td>
                   <th>Last Login</th>
                   <td>{moment(userDetail.logined_at).format("YYYY-MM-DD")}</td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th>등록일</th>
                   <td>{moment(userDetail.created_at).format("YYYY-MM-DD")}</td>

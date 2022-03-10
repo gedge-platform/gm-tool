@@ -84,7 +84,7 @@ const EdgeClusterListTab = observer(() => {
     useEffect(() => {
         loadClusterList("edge");
     }, []);
-    console.log(clusterList);
+
     return (
         <>
             <CReflexBox>

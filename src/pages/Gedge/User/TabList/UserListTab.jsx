@@ -4,9 +4,9 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CSelectButton } from "@/components/buttons";
-import UserDetail from "./UserDetail";
+import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
-import userStore from "../../Store/UserStore";
+import userStore from "../../../../store/UserStore";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,11 +14,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { swalUpdate } from "@/utils/swal-utils";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
-import { getItem } from "../../utils/sessionStorageFn";
-import { swalError } from "../../utils/swal-utils";
-import UserAdd from "./UserCont/UserAdd";
+import { getItem } from "../../../../utils/sessionStorageFn";
+import { swalError } from "../../../../utils/swal-utils";
+import UserAdd from "../../../Management/UserCont/UserAdd";
 
-const RoleListTab = observer(() => {
+const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
 
@@ -48,12 +48,25 @@ const RoleListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "설명",
-      field: "description",
+      headerName: "사용자 역할",
+      field: "memberRole",
       filter: true,
     },
     {
-      headerName: "생성날짜",
+      headerName: "Last Login",
+      field: "logined_at",
+      filter: true,
+      cellRenderer: function (data) {
+        if (moment(data.value).year() === 1) {
+          return `<span>-</span>`;
+        }
+        return `<span>${moment(new Date(data.value)).format(
+          "YYYY-MM-DD HH:mm"
+        )}</span>`;
+      },
+    },
+    {
+      headerName: "등록일",
       field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -63,6 +76,17 @@ const RoleListTab = observer(() => {
         return `<span>${moment(new Date(data.value))
           // .subtract(9, "h")
           .format("YYYY-MM-DD HH:mm")}</span>`;
+      },
+    },
+    {
+      headerName: "상태",
+      field: "enabled",
+      filter: true,
+      cellRenderer: function (state) {
+        if (state.value == 0) {
+          return `<span class="state_ico state_04">승인 대기</span>`;
+        }
+        return `<span class="state_ico state_02">승인</span>`;
       },
     },
   ]);
@@ -94,7 +118,7 @@ const RoleListTab = observer(() => {
   };
   const deleteAPI = async () => {
     await axios
-      .delete(`${SERVER_URL}/users/${userDetail.id}`, {
+      .delete(`${SERVER_URL}/users/${userDetail.memberId}`, {
         auth: getItem("auth"),
       })
       .then(({ status }) => {
@@ -116,12 +140,11 @@ const RoleListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <div className="panelTitBar panelTitBar_clear">
+          {/* <div className="panelTitBar panelTitBar_clear">
             <div className="tit"></div>
           </div>
-          {/* <CommActionBar isSearch={true}> */}
-          {/* </CommActionBar> */}
-          {/* <CommActionBar isSearch={false}>
+          <CommActionBar isSearch={true}></CommActionBar>
+          <CommActionBar isSearch={false}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             <UserAdd open={open} onClose={handleClose} />
 
@@ -157,7 +180,7 @@ const RoleListTab = observer(() => {
               </div>
             </div>
           </div>
-          <div className="grid-height">
+          <div className="grid-height2">
             <AgGrid
               rowData={userList}
               columnDefs={columnDefs}
@@ -174,4 +197,4 @@ const RoleListTab = observer(() => {
     </>
   );
 });
-export default RoleListTab;
+export default UserListTab;
