@@ -162,81 +162,79 @@ const MenuNav = styled.nav`
 `;
 
 export const SideMenu = () => {
-    const history = useHistory();
-    return (
-        <MenuNav>
-            <NavScrollbar>
-                <ul>
-                    {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
-                    {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
-                    <li className={`hasChild`}>
-                        <span onClick={() => history.push("/")}>통합 대시보드</span>
-                    </li>
+  const history = useHistory();
+  return (
+    <MenuNav>
+      <NavScrollbar>
+        <ul>
+          {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
+          {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
+          <li className={`hasChild`}>
+            <span onClick={() => history.push("/")}>통합 대시보드</span>
+          </li>
 
-                    <li className={`hasChild open`}>
-                        <div>{Title.Infra}</div>
-                        <ul className="navChildren">
-                            <li>
-                                <NavLink to="/cluster" activeClassName="active">
-                                    {SubTitle.Cluster}
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    노드 관리
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    모니터링
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </li>
+          <li className={`hasChild open`}>
+            <div>{Title.Infra}</div>
+            <ul className="navChildren">
+              <li>
+                <NavLink to="/cluster" activeClassName="active">
+                  {SubTitle.Cluster}
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/workSpace" activeClassName="active">
+                  {SubTitle.WorkSpace}
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  모니터링
+                </NavLink>
+              </li>
+            </ul>
+          </li>
+          <li className={`hasChild open`}>
+            <div>조직 관리</div>
+            <ul className="navChildren">
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  워크스페이스 관리
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  프로젝트 관리
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/user" activeClassName="active">
+                  사용자 관리
+                </NavLink>
+              </li>
+            </ul>
+          </li>
+          <li className={`hasChild open`}>
+            <div>시스템 관리</div>
+            <ul className="navChildren">
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  컴포넌트 관리
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  볼륨 관리
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard" activeClassName="active">
+                  모니터링
+                </NavLink>
+              </li>
+            </ul>
+          </li>
 
-                    <li className={`hasChild open`}>
-                        <div>조직 관리</div>
-                        <ul className="navChildren">
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    워크스페이스 관리
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    프로젝트 관리
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    사용자 관리
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li className={`hasChild open`}>
-                        <div>시스템 관리</div>
-                        <ul className="navChildren">
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    컴포넌트 관리
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    볼륨 관리
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/dashboard" activeClassName="active">
-                                    모니터링
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </li>
-
-                    {/* <li className={`hasChild ${menu2}`} onClick={() => toggleClass()}>
+          {/* <li className={`hasChild ${menu2}`} onClick={() => toggleClass()}>
                         <a href="javascript:void(0)">BlockChain</a>
                         <ul className="navChildren">
                             <li onClick={() => toggleClass()}>
@@ -286,10 +284,10 @@ export const SideMenu = () => {
                     ) : (
                         <></>
                     )} */}
-                </ul>
-            </NavScrollbar>
-        </MenuNav>
-    );
+        </ul>
+      </NavScrollbar>
+    </MenuNav>
+  );
 };
 
 export default SideMenu;

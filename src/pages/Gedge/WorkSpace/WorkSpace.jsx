@@ -4,8 +4,8 @@ import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import APIListTab from "./TabList/APIListTab";
 
-const Cluster = () => {
-  const currentPage = SubTitle.Cluster;
+const WorkSpace = () => {
+  const currentPage = SubTitle.WorkSpace;
   const currentPageTitle = Title.Infra;
 
   const [tabvalue, setTabvalue] = useState(0);
@@ -24,4 +24,4 @@ const Cluster = () => {
     </Layout>
   );
 };
-export default Cluster;
+export default WorkSpace;

@@ -5,7 +5,7 @@
   "main": "index.jsx",
   "repository": "http://210.207.104.150:8100/inno-rndplan/hyperledger/hyper-web.git",
   "scripts": {
-    "start": "webpack-dev-server -d --watch --history-api-fallback --host 0.0.0.0 --port 8181 --disable-host-check",
+    "start": "webpack-dev-server --open --watch",
     "dev": "webpack-dev-server --open --watch",
     "build": "webpack",
     "production-build": "cross-env NODE_ENV=production webpack",

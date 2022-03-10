@@ -2,28 +2,28 @@ import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { BASIC_AUTH, SERVER_URL } from "../config";
 
-class Cluster {
-  clusterList = [];
-  clusterDetail = {};
+class User {
+  userList = [];
+  userDetail = {};
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadClusterList = async () => {
+  loadUserList = async () => {
     await axios
-      .get(`${SERVER_URL}/clusters`, {
+      .get(`${SERVER_URL}/members`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
         console.log(res);
         runInAction(() => {
-          this.clusterList = res.data.data;
-          this.clusterDetail = res.data.data[0];
+          this.userList = res.data.data;
+          this.userDetail = res.data.data[0];
         });
       });
   };
 }
 
-const clusterStore = new Cluster();
-export default clusterStore;
+const userrStore = new User();
+export default userrStore;
