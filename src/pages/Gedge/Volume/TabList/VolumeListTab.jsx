@@ -10,64 +10,58 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
+// import Detail from "../Detail";
+import volumeStore from "../../../../store/Volume";
 
-const EdgeClusterListTab = observer(() => {
+const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { clusterDetail, clusterList, totalElements, loadClusterList } =
-        clusterStore;
+    const { volumeDetail, volumeList, totalElements, loadVolumeList } =
+        volumeStore;
 
     const [columDefs] = useState([
-        // {
-        //     headerName: "",
-        //     field: "check",
-        //     minWidth: 53,
-        //     maxWidth: 53,
-        //     filter: false,
-        //     headerCheckboxSelection: true,
-        //     headerCheckboxSelectionFilteredOnly: true,
-        //     checkboxSelection: true,
-        // },
         {
-            headerName: "No",
-            field: "clusterNum",
-            maxWidth: 80,
+            headerName: "Name",
+            field: "name",
             filter: true,
         },
         {
-            headerName: "이름",
-            field: "clusterName",
+            headerName: "Capacity",
+            field: "capacity",
             filter: true,
         },
         {
-            headerName: "타입",
-            field: "clusterType",
-            filter: true,
-        },
-        {
-            headerName: "상태",
+            headerName: "Status",
             field: "status",
             filter: true,
         },
         {
-            headerName: "노드개수",
-            field: "node",
+            headerName: "Storage Class",
+            field: "storageClass",
             filter: true,
         },
         {
-            headerName: "version",
-            field: "kubeVersion",
+            headerName: "Volume Mode",
+            field: "volumeMode",
             filter: true,
         },
         {
-            headerName: "생성날짜",
-            field: "created_at",
+            headerName: "Cluster",
+            field: "cluster",
+            filter: true,
+        },
+        {
+            headerName: "Claim",
+            field: "claim.name",
+            filter: true,
+        },
+        {
+            headerName: "Create At",
+            field: "createAt",
             filter: "agDateColumnFilter",
             filterParams: agDateColumnFilter(),
             minWidth: 150,
@@ -83,9 +77,9 @@ const EdgeClusterListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadClusterList("edge");
+        loadVolumeList();
     }, []);
-    console.log(clusterList);
+    console.log(volumeList);
     return (
         <>
             <CReflexBox>
@@ -95,14 +89,14 @@ const EdgeClusterListTab = observer(() => {
                         isSelect={true}
                         keywordList={["이름"]}
                     >
-                        <CCreateButton>생성</CCreateButton>
+                        {/* <CCreateButton>생성</CCreateButton> */}
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
-                                    rowData={clusterList}
+                                    rowData={volumeList}
                                     columnDefs={columDefs}
                                     isBottom={true}
                                     totalElements={totalElements}
@@ -111,9 +105,9 @@ const EdgeClusterListTab = observer(() => {
                         </CTabPanel>
                     </div>
                 </PanelBox>
-                <Detail cluster={clusterDetail} />
+                {/* <Detail cluster={clusterDetail} /> */}
             </CReflexBox>
         </>
     );
 });
-export default EdgeClusterListTab;
+export default VolumeListTab;

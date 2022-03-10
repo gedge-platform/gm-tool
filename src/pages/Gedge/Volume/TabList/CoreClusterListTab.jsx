@@ -14,14 +14,13 @@ import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 
-const EdgeClusterListTab = observer(() => {
+const CoreClusterListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { clusterDetail, clusterList, totalElements, loadClusterList } =
-        clusterStore;
+    const { clusterDetail, clusterList, loadClusterList } = clusterStore;
 
     const [columDefs] = useState([
         // {
@@ -83,7 +82,7 @@ const EdgeClusterListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadClusterList("edge");
+        loadClusterList("core");
     }, []);
     console.log(clusterList);
     return (
@@ -96,6 +95,7 @@ const EdgeClusterListTab = observer(() => {
                         keywordList={["이름"]}
                     >
                         <CCreateButton>생성</CCreateButton>
+                        {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
@@ -105,7 +105,6 @@ const EdgeClusterListTab = observer(() => {
                                     rowData={clusterList}
                                     columnDefs={columDefs}
                                     isBottom={true}
-                                    totalElements={totalElements}
                                 />
                             </div>
                         </CTabPanel>
@@ -116,4 +115,4 @@ const EdgeClusterListTab = observer(() => {
         </>
     );
 });
-export default EdgeClusterListTab;
+export default CoreClusterListTab;

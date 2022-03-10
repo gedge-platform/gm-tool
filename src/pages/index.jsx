@@ -10,6 +10,7 @@ export { default as User } from "./Management/User";
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
+export { default as Volume } from "./Gedge/Volume/Volume";
 
 //공통
 export { default as Login } from "./Login/Login";
