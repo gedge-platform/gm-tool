@@ -4,10 +4,10 @@ import {
   TotalDashboard,
   Cluster,
   Project,
-  Monitoring,
   Login,
   NotFound,
-  ServiceProject,
+  WorkSpace,
+  User,
 } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
 
@@ -16,7 +16,6 @@ export const App = () => {
     <>
       <AuthRoute exact path="/" component={TotalDashboard} />
       <Switch>
-        {/* PA */}
         <AuthRoute path="/cluster" component={Cluster} />
         <AuthRoute path="/project" component={Project} />
         <AuthRoute path="/monitoring" component={Monitoring} />
@@ -24,9 +23,10 @@ export const App = () => {
         {/* SA */}
         <AuthRoute path="/service/project" component={ServiceProject} />
 
-        <Route path="/login" component={Login} />
+        <AuthRoute path="/workSpace" component={WorkSpace} />
+        <AuthRoute path="/user" component={User} />
 
-        <Route component={NotFound} />
+        <Route path="/login" component={Login} />
       </Switch>
     </>
   );

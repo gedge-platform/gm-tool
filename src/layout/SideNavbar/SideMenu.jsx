@@ -117,7 +117,7 @@ export const SideMenu = () => {
             </li>
             <li>
               <NavLink to="/workspace" activeClassName="active">
-                {Title.Workspace}
+                {Title.WorkSpace}
               </NavLink>
             </li>
             <li>
