@@ -7,7 +7,11 @@ const AuthRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        getItem("user") ? <Component {...props} /> : <Redirect to="/Login" />
+        getItem("userRole") ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" />
+        )
       }
     />
   );

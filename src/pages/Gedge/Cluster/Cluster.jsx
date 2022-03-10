@@ -8,11 +8,11 @@ import EdgeClusterListTab from "./TabList/EdgeClusterListTab";
 const Cluster = () => {
     const currentPageTitle = Title.Cluster;
 
-    const [tabvalue, setTabvalue] = useState(0);
+  const [tabvalue, setTabvalue] = useState(0);
 
-    const handleTabChange = (event, newValue) => {
-        setTabvalue(newValue);
-    };
+  const handleTabChange = (event, newValue) => {
+    setTabvalue(newValue);
+  };
 
     return (
         <Layout currentPageTitle={currentPageTitle}>

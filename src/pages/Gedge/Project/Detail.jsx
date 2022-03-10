@@ -13,7 +13,7 @@ const TableTitle = styled.p`
 const Detail = observer((props) => {
   const { project } = props;
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(1);
+  const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);

@@ -9,6 +9,7 @@ const UserDetail = observer((props) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const { userDetail } = userStore;
+  // console.log("로그", props.userDetail);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -26,13 +27,13 @@ const UserDetail = observer((props) => {
               <tbody>
                 <tr>
                   <th>ID</th>
-                  <td>{userDetail.id}</td>
+                  <td>{userDetail.memberId}</td>
                   <th>이름</th>
-                  <td>{userDetail.name}</td>
+                  <td>{userDetail.memberName}</td>
                 </tr>
                 <tr>
                   <th>E-mail</th>
-                  <td>{userDetail.email}</td>
+                  <td>{userDetail.memberEmail}</td>
                   <th>부서</th>
                   <td>{userDetail.department}</td>
                 </tr>

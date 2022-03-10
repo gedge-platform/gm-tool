@@ -5,6 +5,8 @@ import theme from "@/styles/theme";
 import { NavScrollbar } from "@/components/scrollbars";
 import { SubTitle, Title } from "@/pages";
 import { useHistory } from "react-router-dom";
+import { getItem } from "@/utils/sessionStorageFn";
+
 const MenuNav = styled.nav`
   position: relative;
   color: #afbacb;
@@ -84,37 +86,7 @@ const MenuNav = styled.nav`
         }
       }
     }
-    /* &.hasChild:not(.open) a::after, &.hasChild:not(.open) a:hover::after {
-      content: ' ';
-      position: absolute;
-      top: 50%;
-      left: 25px;
-      bottom: 1px;
-      border-left: 3px solid transparent;
-      transition: all .2s;
-      width: 8px;
-      height: 2px;
-      border-radius: 0;
-      background: #485770;
-    }
 
-    &.hasChild:not(.open) a::before, &.hasChild:not(.open) a:hover::before {
-      content: ' ';
-      position: absolute;
-      top: 50%;
-      left: 25px;
-      width: 8px;
-      height: 2px;
-      background: #485770;
-      transition: all .2s;
-      transform: rotate(90deg);
-      border-radius: 0;
-    }
-
-    &.hasChild:not(.open) a:hover::before,
-    &.hasChild:not(.open) a:hover::after {
-      background-color: #fff;
-    } */
   }
 }
 .open {
@@ -125,107 +97,87 @@ const MenuNav = styled.nav`
 `;
 
 export const SideMenu = () => {
-    const history = useHistory();
-    return (
-        <MenuNav>
-            <NavScrollbar>
-                <ul>
-                    {/* <li><NavLink exact to="/" activeClassName="active">{Title.Dashboard}</NavLink></li> */}
-                    {/* <li><NavLink to="/TabList" activeClassName="active">{Title.TabList}</NavLink></li> */}
-                    <li>
-                        <NavLink exact to="/" activeClassName="active">
-                            {Title.Dashboard}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/cluster" activeClassName="active">
-                            {Title.Cluster}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/workspace" activeClassName="active">
-                            {Title.Workspace}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/project" activeClassName="active">
-                            {Title.Project}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/component" activeClassName="active">
-                            {Title.Component}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/volumes" activeClassName="active">
-                            {Title.Volume}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/monitoring" activeClassName="active">
-                            {Title.Monitoring}
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/user" activeClassName="active">
-                            {Title.User}
-                        </NavLink>
-                    </li>
-                    {/* <li className={`hasChild ${menu2}`} onClick={() => toggleClass()}>
-                        <a href="javascript:void(0)">BlockChain</a>
-                        <ul className="navChildren">
-                            <li onClick={() => toggleClass()}>
-                                <NavLink to="/networks" activeClassName="active">
-                                    {SubTitle.Blockchain.Networks}
-                                </NavLink>
-                            </li>
-                            <li onClick={() => toggleClass()}>
-                                <NavLink to="/organization" activeClassName="active">
-                                    {SubTitle.Blockchain.Organization}
-                                </NavLink>
-                            </li>
-                            <li onClick={() => toggleClass()}>
-                                <NavLink to="/nodes" activeClassName="active">
-                                    {SubTitle.Blockchain.Nodes}
-                                </NavLink>
-                            </li>
-                            <li onClick={() => toggleClass()}>
-                                <NavLink to="/channels" activeClassName="active">
-                                    {SubTitle.Blockchain.Channels}
-                                </NavLink>
-                            </li>
-                            <li onClick={() => toggleClass()}>
-                                <NavLink to="/chaincodes" activeClassName="active">
-                                    {SubTitle.Blockchain.Chaincodes}
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </li>
+  const history = useHistory();
+  const userRole = getItem("userRole");
 
-                    {role === "ADMIN" ? (
-                        <li className={`hasChild ${menu3}`} onClick={() => toggleClass2()}>
-                            <a href="javascript:void(0)">Management</a>
-                            <ul className="navChildren">
-                                <li onClick={() => toggleClass2()}>
-                                    <NavLink to="/user" activeClassName="active">
-                                        {SubTitle.Management.user}
-                                    </NavLink>
-                                </li>
-                                <li onClick={() => toggleClass2()}>
-                                    <NavLink to="/cluster" activeClassName="active">
-                                        {SubTitle.Management.cluster}
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </li>
-                    ) : (
-                        <></>
-                    )} */}
-                </ul>
-            </NavScrollbar>
-        </MenuNav>
-    );
+  return (
+    <MenuNav>
+      <NavScrollbar>
+        {userRole === "PA" ? (
+          <ul>
+            <li>
+              <NavLink exact to="/" activeClassName="active">
+                {Title.Dashboard}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/cluster" activeClassName="active">
+                {Title.Cluster}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/workspace" activeClassName="active">
+                {Title.WorkSpace}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/project" activeClassName="active">
+                {Title.Project}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/component" activeClassName="active">
+                {Title.Component}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/volume" activeClassName="active">
+                {Title.Volume}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/monitoring" activeClassName="active">
+                {Title.Monitoring}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/user" activeClassName="active">
+                {Title.User}
+              </NavLink>
+            </li>
+          </ul>
+        ) : (
+          <ul>
+            <li>
+              <NavLink exact to="/" activeClassName="active">
+                {Title.Dashboard}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/project" activeClassName="active">
+                {Title.Project}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/appstore" activeClassName="active">
+                {Title.Appstore}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/workload" activeClassName="active">
+                {Title.Workload}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/volume" activeClassName="active">
+                {Title.Volume}
+              </NavLink>
+            </li>
+          </ul>
+        )}
+      </NavScrollbar>
+    </MenuNav>
+  );
 };
 
 export default SideMenu;

@@ -11,57 +11,50 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+import workspacesStore from "../../../../store/WorkSpace";
 
-const CoreClusterListTab = observer(() => {
+const APIListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+  const { WorkSpaceDetail, workSpaceList, loadWorkSpaceList } = workspacesStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
-      filter: true,
+      headerName: "",
+      field: "check",
+      minWidth: 53,
+      maxWidth: 53,
+      filter: false,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: true,
     },
     {
       headerName: "이름",
-      field: "clusterName",
+      field: "workspaceName",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "설명",
+      field: "workspaceDescription",
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "selectCluster",
       filter: true,
     },
     {
-      headerName: "노드개수",
-      field: "node",
+      headerName: "OWNER",
+      field: "workspaceOwner",
       filter: true,
     },
     {
-      headerName: "version",
-      field: "kubeVersion",
+      headerName: "CREATOR",
+      field: "workspaceCreator",
       filter: true,
     },
     {
@@ -82,9 +75,9 @@ const CoreClusterListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadClusterList("core");
+    loadWorkSpaceList();
   }, []);
-  console.log(clusterList);
+
   return (
     <>
       <CReflexBox>
@@ -98,7 +91,7 @@ const CoreClusterListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={workSpaceList}
                   columnDefs={columDefs}
                   isBottom={true}
                 />
@@ -106,9 +99,8 @@ const CoreClusterListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
       </CReflexBox>
     </>
   );
 });
-export default CoreClusterListTab;
+export default APIListTab;

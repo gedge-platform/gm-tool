@@ -117,8 +117,7 @@ const SideUser = ({ userName }) => {
     setAnchorEl(null);
   };
   const handleItemClick = () => {
-    removeItem("user");
-    removeItem("info");
+    removeItem("userRole");
     history.push("/login");
   };
   useEffect(async () => {
