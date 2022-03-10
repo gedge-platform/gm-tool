@@ -154,22 +154,22 @@ export const SideMenu = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/project" activeClassName="active">
+              <NavLink to="/service/project" activeClassName="active">
                 {Title.Project}
               </NavLink>
             </li>
             <li>
-              <NavLink to="/appstore" activeClassName="active">
+              <NavLink to="/service/appstore" activeClassName="active">
                 {Title.Appstore}
               </NavLink>
             </li>
             <li>
-              <NavLink to="/workload" activeClassName="active">
+              <NavLink to="/service/workload" activeClassName="active">
                 {Title.Workload}
               </NavLink>
             </li>
             <li>
-              <NavLink to="/volume" activeClassName="active">
+              <NavLink to="/service/volume" activeClassName="active">
                 {Title.Volume}
               </NavLink>
             </li>

@@ -15,76 +15,76 @@ import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 
 const EdgeClusterListTab = observer(() => {
-    const [tabvalue, setTabvalue] = useState(0);
-    const handleTabChange = (event, newValue) => {
-        setTabvalue(newValue);
-    };
+  const [tabvalue, setTabvalue] = useState(0);
+  const handleTabChange = (event, newValue) => {
+    setTabvalue(newValue);
+  };
 
-    const { clusterDetail, clusterList, totalElements, loadClusterList } = clusterStore;
+  const { clusterDetail, clusterList, totalElements, loadClusterList } =
+    clusterStore;
 
-    const [columDefs] = useState([
-        // {
-        //     headerName: "",
-        //     field: "check",
-        //     minWidth: 53,
-        //     maxWidth: 53,
-        //     filter: false,
-        //     headerCheckboxSelection: true,
-        //     headerCheckboxSelectionFilteredOnly: true,
-        //     checkboxSelection: true,
-        // },
-        {
-            headerName: "No",
-            field: "clusterNum",
-            maxWidth: 80,
-            filter: true,
-        },
-        {
-            headerName: "이름",
-            field: "clusterName",
-            filter: true,
-        },
-        {
-            headerName: "타입",
-            field: "clusterType",
-            filter: true,
-        },
-        {
-            headerName: "상태",
-            field: "status",
-            filter: true,
-        },
-        {
-            headerName: "노드개수",
-            field: "node",
-            filter: true,
-        },
-        {
-            headerName: "version",
-            field: "kubeVersion",
-            filter: true,
-        },
-        {
-            headerName: "생성날짜",
-            field: "created_at",
-            filter: "agDateColumnFilter",
-            filterParams: agDateColumnFilter(),
-            minWidth: 150,
-            maxWidth: 200,
-            cellRenderer: function (data) {
-                return `<span>${moment(new Date(data.value))
-                    // .subtract(9, "h")
-                    .format("YYYY-MM-DD HH:mm")}</span>`;
-            },
-        },
-    ]);
+  const [columDefs] = useState([
+    // {
+    //     headerName: "",
+    //     field: "check",
+    //     minWidth: 53,
+    //     maxWidth: 53,
+    //     filter: false,
+    //     headerCheckboxSelection: true,
+    //     headerCheckboxSelectionFilteredOnly: true,
+    //     checkboxSelection: true,
+    // },
+    {
+      headerName: "No",
+      field: "clusterNum",
+      maxWidth: 80,
+      filter: true,
+    },
+    {
+      headerName: "이름",
+      field: "clusterName",
+      filter: true,
+    },
+    {
+      headerName: "타입",
+      field: "clusterType",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "status",
+      filter: true,
+    },
+    {
+      headerName: "노드개수",
+      field: "node",
+      filter: true,
+    },
+    {
+      headerName: "version",
+      field: "kubeVersion",
+      filter: true,
+    },
+    {
+      headerName: "생성날짜",
+      field: "created_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
+      },
+    },
+  ]);
 
-    const history = useHistory();
+  const history = useHistory();
 
     useEffect(() => {
         loadClusterList("edge");
     }, []);
-
     return (
         <>
             <CReflexBox>
@@ -93,17 +93,22 @@ const EdgeClusterListTab = observer(() => {
                         <CCreateButton>생성</CCreateButton>
                     </CommActionBar>
 
-                    <div className="tabPanelContainer">
-                        <CTabPanel value={tabvalue} index={0}>
-                            <div className="grid-height2">
-                                <AgGrid rowData={clusterList} columnDefs={columDefs} isBottom={true} totalElements={totalElements} />
-                            </div>
-                        </CTabPanel>
-                    </div>
-                </PanelBox>
-                <Detail cluster={clusterDetail} />
-            </CReflexBox>
-        </>
-    );
+          <div className="tabPanelContainer">
+            <CTabPanel value={tabvalue} index={0}>
+              <div className="grid-height2">
+                <AgGrid
+                  rowData={clusterList}
+                  columnDefs={columDefs}
+                  isBottom={true}
+                  totalElements={totalElements}
+                />
+              </div>
+            </CTabPanel>
+          </div>
+        </PanelBox>
+        <Detail cluster={clusterDetail} />
+      </CReflexBox>
+    </>
+  );
 });
 export default EdgeClusterListTab;
