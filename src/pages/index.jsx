@@ -5,6 +5,7 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 // Gedege PA
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
+export { default as Monitoring } from "./Gedge/Monitoring/Monitoring";
 
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";

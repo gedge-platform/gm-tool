@@ -154,7 +154,7 @@ export const SideMenu = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/project" activeClassName="active">
+              <NavLink to="/service/project" activeClassName="active">
                 {Title.Project}
               </NavLink>
             </li>
