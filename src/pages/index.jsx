@@ -5,7 +5,8 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 // Gedege PA
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
-
+export { default as WorkSpace } from "./Gedge/WorkSpace/WorkSpace";
+export { default as User } from "./Management/User";
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
@@ -17,7 +18,7 @@ export { default as NotFound } from "./Gedge/NotFound/NotFound";
 const Title = {
   Dashboard: "통합 대시보드",
   Cluster: "클러스터 관리",
-  Workspace: "워크스페이스 관리",
+  WorkSpace: "워크스페이스 관리",
   Project: "프로젝트 관리",
   Component: "컴포넌트 관리",
   Volume: "볼륨 관리",
@@ -28,11 +29,4 @@ const Title = {
   Volume: "볼륨 관리",
 };
 
-const SubTitle = {
-  Dashboard: {
-    Dashboard: "통합 대시보드",
-  },
-  // Gedge
-  Cluster: "클러스터 관리",
-};
-export { Title, SubTitle };
+export { Title };
