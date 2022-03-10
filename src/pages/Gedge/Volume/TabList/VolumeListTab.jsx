@@ -20,8 +20,7 @@ const VolumeListTab = observer(() => {
         setTabvalue(newValue);
     };
 
-    const { volumeDetail, volumeList, totalElements, loadVolumeList } =
-        volumeStore;
+    const { pvolume, pVolumes, totalElements, loadPVolumes } = volumeStore;
 
     const [columDefs] = useState([
         {
@@ -77,9 +76,8 @@ const VolumeListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadVolumeList();
+        loadPVolumes();
     }, []);
-    console.log(volumeList);
     return (
         <>
             <CReflexBox>
@@ -96,7 +94,7 @@ const VolumeListTab = observer(() => {
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
-                                    rowData={volumeList}
+                                    rowData={pVolumes}
                                     columnDefs={columDefs}
                                     isBottom={true}
                                     totalElements={totalElements}
