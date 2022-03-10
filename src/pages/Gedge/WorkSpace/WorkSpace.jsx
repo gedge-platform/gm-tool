@@ -5,8 +5,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import APIListTab from "./TabList/APIListTab";
 
 const WorkSpace = () => {
-  const currentPage = SubTitle.WorkSpace;
-  const currentPageTitle = Title.Infra;
+  const currentPageTitle = Title.WorkSpace;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -15,7 +14,7 @@ const WorkSpace = () => {
   };
 
   return (
-    <Layout currentPageTitle={currentPageTitle} currentPage={currentPage}>
+    <Layout currentPageTitle={currentPageTitle}>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
           <APIListTab />

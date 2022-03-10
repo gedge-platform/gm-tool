@@ -7,8 +7,7 @@ import RoleListTab from "./RoleListTab";
 // import APIAppTab from './APIAppTab'
 
 const User = (props) => {
-  const currentPageTitle = Title.Management;
-  const currentPage = SubTitle.Management.user;
+  const currentPageTitle = Title.User;
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
   const handleTabChange = (event, newValue) => {
@@ -42,7 +41,7 @@ const User = (props) => {
   ];
 
   return (
-    <Layout currentPageTitle={currentPageTitle} currentPage={currentPage}>
+    <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
         <CTab label="사용자 목록" />
         <CTab label="사용자 역할 목록" />
