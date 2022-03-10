@@ -3,25 +3,53 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { BASIC_AUTH, LOCAL_VOLUME_URL } from "../config";
 
 class Volume {
-    volumeList = [];
-    volumeDetail = {};
+    pVolumes = [];
+    pvolume = {};
     totalElements = 0;
+    // pVolumeInfo = {};
+    pvClaim = {};
 
     constructor() {
         makeAutoObservable(this);
     }
 
-    loadVolumeList = async () => {
+    loadPVolumes = async () => {
         await axios
             .get(`${LOCAL_VOLUME_URL}/pvs`, {
                 auth: BASIC_AUTH,
             })
             .then((res) => {
                 runInAction(() => {
-                    const list = res.data.data;
-                    this.volumeList = list;
-                    this.volumeDetail = list[0];
-                    this.totalElements = list.length;
+                    this.pVolumes = res.data.data;
+                    this.pVolume = this.pVolumes[0];
+                    this.totalElements = this.pVolumes.length;
+                });
+            });
+    };
+
+    loadPVolume = async (volumeName) => {
+        await axios
+            .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}`, {
+                auth: BASIC_AUTH,
+            })
+            .then((res) => {
+                runInAction(() => {
+                    this.pVolume = res.data.data;
+                });
+            });
+    };
+
+    loadPVClaim = async (pvClaimName, cluster, project) => {
+        await axios
+            .get(
+                `${LOCAL_VOLUME_URL}/pvcs/${pvClaimName}?cluster=${cluster}&project=${project}`,
+                {
+                    auth: BASIC_AUTH,
+                }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.pvClaim = res.data.data;
                 });
             });
     };

@@ -24,48 +24,43 @@ const VolumeListTab = observer(() => {
         volumeStore;
 
     const [columDefs] = useState([
-        // {
-        //     headerName: "",
-        //     field: "check",
-        //     minWidth: 53,
-        //     maxWidth: 53,
-        //     filter: false,
-        //     headerCheckboxSelection: true,
-        //     headerCheckboxSelectionFilteredOnly: true,
-        //     checkboxSelection: true,
-        // },
         {
-            headerName: "이름",
+            headerName: "Name",
             field: "name",
             filter: true,
         },
         {
-            headerName: "타입",
+            headerName: "Capacity",
             field: "capacity",
             filter: true,
         },
         {
-            headerName: "상태",
+            headerName: "Status",
             field: "status",
             filter: true,
         },
         {
-            headerName: "StorageClass",
+            headerName: "Storage Class",
             field: "storageClass",
             filter: true,
         },
         {
-            headerName: "볼륨 모드",
+            headerName: "Volume Mode",
             field: "volumeMode",
             filter: true,
         },
         {
-            headerName: "클러스터",
+            headerName: "Cluster",
             field: "cluster",
             filter: true,
         },
         {
-            headerName: "생성날짜",
+            headerName: "Claim",
+            field: "claim.name",
+            filter: true,
+        },
+        {
+            headerName: "Create At",
             field: "createAt",
             filter: "agDateColumnFilter",
             filterParams: agDateColumnFilter(),
