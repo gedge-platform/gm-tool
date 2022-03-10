@@ -11,14 +11,16 @@ class Project {
     makeAutoObservable(this);
   }
 
-  loadProjectList = async () => {
+  loadProjectList = async (type) => {
     await axios
       .get(`${SERVER_URL}/projects`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data;
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
           this.projectList = list;
           this.projectDetail = list[0];
           this.totalElements = list.length;

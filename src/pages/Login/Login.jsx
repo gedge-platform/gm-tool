@@ -6,8 +6,8 @@ import tit_welcome from "./images/tit_welcome.png";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
-import { swalError } from "../../utils/swal-utils";
 import { setItem } from "../../utils/sessionStorageFn";
+import { swalError } from "../../utils/swal-utils";
 
 const Login = () => {
   const history = useHistory();
@@ -39,17 +39,12 @@ const Login = () => {
 
     await axios
       .post(`${SERVER_URL}/auth`, inputs)
-      .then(({ status }) => {
+      .then(({ data, status }) => {
         if (status === 200) {
-          alert("로그인 되었습니다");
-          setItem("user", id);
-          setItem("auth", {
-            username: id,
-            password,
-          });
+          setItem("userRole", data.userRole);
+          swalError("로그인 되었습니다.", () => history.push("/"));
         }
       })
-      .then(() => history.push("/"))
       .catch((e) => alert("아이디와 비밀번호를 확인해주세요"));
   };
   return (
@@ -101,9 +96,9 @@ const Login = () => {
             </form>
           </div>
           <div className="memberLinks">
-            <Link to="/findId">아이디 찾기</Link>
-            <Link to="/findPw">비밀번호 찾기</Link>
-            <Link to="/join">회원가입</Link>
+            <Link to="/">아이디 찾기</Link>
+            <Link to="/">비밀번호 찾기</Link>
+            <Link to="/">회원가입</Link>
           </div>
           {check && (
             <div className="login-err">
