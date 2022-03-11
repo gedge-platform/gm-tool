@@ -25,3 +25,12 @@ const WorkSpace = () => {
 };
 
 export default WorkSpace;
+
+{/* 
+ - app.jsx
+<AuthRoute path="/service/workspace" component={ServiceWorkspace} />
+
+ - index.jsx
+export { default as ServiceWorkspace } from "./ServiceAdmin/Workspace/Workspace";
+
+*/}

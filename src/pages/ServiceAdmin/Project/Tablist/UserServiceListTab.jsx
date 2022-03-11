@@ -9,45 +9,22 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+import projectStore from "../../../../store/Project";
 
-const EdgeClusterListTab = observer(() => {
+const UserServiceListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, totalElements, loadClusterList } =
-    clusterStore;
+  const { projectDetail, projectList, totalElements, loadProjectList } =
+    projectStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
-    {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
-      filter: true,
-    },
     {
       headerName: "이름",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "타입",
-      field: "clusterType",
+      field: "projectName",
       filter: true,
     },
     {
@@ -56,26 +33,37 @@ const EdgeClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "노드개수",
-      field: "node",
+      headerName: "워크스페이스",
+      field: "workspaceName",
       filter: true,
     },
     {
-      headerName: "version",
-      field: "kubeVersion",
+      headerName: "클러스터 명",
+      field: "clusterName",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+      headerName: "CPU 사용량(core)",
+      field: "cpu",
+      filter: true,
+      cellRenderer: function ({ data: { resourceUsage } }) {
+        return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
+      },
+    },
+    {
+      headerName: "Memory 사용량(Gi)",
+      field: "memory",
+      filter: true,
+      cellRenderer: function ({ data: { resourceUsage } }) {
+        return `<span>${resourceUsage.namespace_memory ?? 0}</span>`;
+      },
+    },
+    {
+      headerName: "Pods 수(개)",
+      field: "resource",
+      filter: true,
+      cellRenderer: function ({ data: { resourceUsage } }) {
+        return `<span>${resourceUsage.namespace_pod_count ?? 0}</span>`;
       },
     },
   ]);
@@ -83,9 +71,9 @@ const EdgeClusterListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadClusterList("edge");
+    loadProjectList("user");
   }, []);
-  console.log(clusterList);
+  console.log(projectList);
   return (
     <>
       <CReflexBox>
@@ -98,7 +86,7 @@ const EdgeClusterListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={projectList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
@@ -107,9 +95,9 @@ const EdgeClusterListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
+        <Detail cluster={projectDetail} />
       </CReflexBox>
     </>
   );
 });
-export default EdgeClusterListTab;
+export default UserServiceListTab;
