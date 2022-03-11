@@ -16,6 +16,7 @@ export const App = () => {
         <AuthRoute path="/user" component={User} />
 
         <Route path="/login" component={Login} />
+        
       </Switch>
     </>
   );
