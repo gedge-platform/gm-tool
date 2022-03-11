@@ -9,6 +9,7 @@ import {
   WorkSpace,
   User,
   Monitoring,
+  ComponentManage,
   ServiceProject,
   ServiceWorkload,
   ServiceWorkspace,
@@ -23,6 +24,7 @@ export const App = () => {
         {/* PA */}
         <AuthRoute path="/cluster" component={Cluster} />
         <AuthRoute path="/project" component={Project} />
+        <AuthRoute path="/component" component={ComponentManage}/>
         <AuthRoute path="/monitoring" component={Monitoring} />
         <AuthRoute path="/workSpace" component={WorkSpace} />
         <AuthRoute path="/user" component={User} />
