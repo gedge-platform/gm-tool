@@ -4,7 +4,7 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CSelectButton } from "@/components/buttons";
-import UserDetail from "./UserDetail";
+import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
 import userStore from "../../store/UserStore";
 import moment from "moment";
@@ -14,9 +14,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { swalUpdate } from "@/utils/swal-utils";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
-import { getItem } from "../../utils/sessionStorageFn";
-import { swalError } from "../../utils/swal-utils";
-import UserAdd from "./UserCont/UserAdd";
+import { getItem } from "../../../../utils/sessionStorageFn";
+import { swalError } from "../../../../utils/swal-utils";
+import UserAdd from "../../../Management/UserCont/UserAdd";
 
 const RoleListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -94,7 +94,7 @@ const RoleListTab = observer(() => {
   };
   const deleteAPI = async () => {
     await axios
-      .delete(`${SERVER_URL}/users/${userDetail.id}`, {
+      .delete(`${SERVER_URL}/users/${userDetail.memberId}`, {
         auth: getItem("auth"),
       })
       .then(({ status }) => {
@@ -116,12 +116,11 @@ const RoleListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <div className="panelTitBar panelTitBar_clear">
+          {/* <div className="panelTitBar panelTitBar_clear">
             <div className="tit"></div>
           </div>
-          {/* <CommActionBar isSearch={true}> */}
-          {/* </CommActionBar> */}
-          {/* <CommActionBar isSearch={false}>
+          <CommActionBar isSearch={true}></CommActionBar>
+          <CommActionBar isSearch={false}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             <UserAdd open={open} onClose={handleClose} />
 
@@ -157,7 +156,7 @@ const RoleListTab = observer(() => {
               </div>
             </div>
           </div>
-          <div className="grid-height">
+          <div className="grid-height2">
             <AgGrid
               rowData={userList}
               columnDefs={columnDefs}
@@ -169,7 +168,7 @@ const RoleListTab = observer(() => {
           </div>
           <UserAdd open={open2} onClose={handleClose} />
         </PanelBox>
-        <UserDetail />
+        <UserDetail user={userDetail} />
       </CReflexBox>
     </>
   );

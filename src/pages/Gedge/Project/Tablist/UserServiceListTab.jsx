@@ -73,7 +73,7 @@ const UserServiceListTab = observer(() => {
   useEffect(() => {
     loadProjectList("user");
   }, []);
-  console.log(projectList);
+  // console.log(projectList);
   return (
     <>
       <CReflexBox>
@@ -95,7 +95,7 @@ const UserServiceListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={projectDetail} />
+        <Detail project={projectDetail} />
       </CReflexBox>
     </>
   );

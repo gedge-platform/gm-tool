@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import CommActionBar from "@/components/common/CommActionBar";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
+import moment from "moment";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -25,33 +27,35 @@ const Detail = observer((props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="프로젝트 정보" />
+        <CTab label="파드 정보" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
+          <TableTitle>상세 정보</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>디플로이먼트</th>
-                <td></td>
-                <th>파드</th>
-                <td></td>
+                <th>클러스터</th>
+                <td>{project.clusterName}</td>
+                <th>프로젝트</th>
+                <td>{project.projectName}</td>
               </tr>
               <tr>
-                <th>서비스</th>
-                <td></td>
-                <th>크론잡</th>
-                <td></td>
+                <th>status</th>
+                <td>{project.status}</td>
+                <th>워크스페이스</th>
+                <td>{project.workspaceName}</td>
               </tr>
               <tr>
-                <th>잡</th>
-                <td></td>
-                <th>볼륨</th>
-                <td></td>
+                <th>생성자</th>
+                <td>{project.projectCreator}</td>
+                <th>생성일</th>
+                <td>{moment(new Date()).format("YYYY-MM-DD HH:mm")}</td>
               </tr>
             </tbody>
           </table>
@@ -59,32 +63,25 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
+          <TableTitle>파드</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>key</th>
-                <th>Value</th>
-              </tr>
-              <tr>
+                <th>파드</th>
                 <td></td>
+                <th>클러스터</th>
                 <td></td>
               </tr>
               <tr>
+                <th>파드 IP</th>
                 <td></td>
+                <th>워크스페이스</th>
                 <td></td>
               </tr>
-            </tbody>
-          </table>
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
-            <tbody>
               <tr>
-                <th>key</th>
-                <th>Value</th>
-              </tr>
-              <tr>
+                <th>생성자</th>
                 <td></td>
+                <th>생성일</th>
                 <td></td>
               </tr>
             </tbody>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import UserListTab from "./UserListTab";
-import RoleListTab from "./RoleListTab";
+import UserListTab from "./TabList/UserListTab";
+import RoleListTab from "./TabList/RoleListTab";
 // import APIAppTab from './APIAppTab'
 
-const User = (props) => {
+const User = () => {
   const currentPageTitle = Title.User;
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);

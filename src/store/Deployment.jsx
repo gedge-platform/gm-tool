@@ -5,6 +5,9 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Deployment {
+  deploymentList = [];
+  deploymentDetail = {};
+  totalElements = 0;
   deploymentName = "";
   podReplicas = "";
   containerImage = "";
@@ -58,6 +61,20 @@ class Deployment {
   constructor() {
     makeAutoObservable(this);
   }
+
+  loadDeploymentList = async (type) => {
+    await axios
+      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter((item) => item.projetType === type);
+          this.deploymentList = list;
+          this.deploymentDetail = list[0];
+          this.totalElements = list.length;
+        });
+      });
+  };
+
   setWorkspace = (workspace) => {
     runInAction(() => {
       this.workspace = workspace;
