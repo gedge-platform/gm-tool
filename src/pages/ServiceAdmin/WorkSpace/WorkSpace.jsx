@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import UserServiceListTab from "./Tablist/UserServiceListTab";
+import APIListTab from "./TabList/APIListTab";
 
-const Project = () => {
-  const currentPageTitle = Title.Project;
+const WorkSpace = () => {
+  const currentPageTitle = Title.WorkSpace;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -15,14 +15,22 @@ const Project = () => {
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}></CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <UserServiceListTab />
+          <APIListTab />
         </CTabPanel>
       </div>
     </Layout>
   );
 };
 
-export default Project;
+export default WorkSpace;
+
+{/* 
+ - app.jsx
+<AuthRoute path="/service/workspace" component={ServiceWorkspace} />
+
+ - index.jsx
+export { default as ServiceWorkspace } from "./ServiceAdmin/Workspace/Workspace";
+
+*/}

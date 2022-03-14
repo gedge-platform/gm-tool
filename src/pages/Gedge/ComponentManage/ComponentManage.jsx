@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import UserServiceListTab from "./Tablist/UserServiceListTab";
+import ComponentListTab from "./Tablist/ComponentListTab";
 
-const Project = () => {
-  const currentPageTitle = Title.Project;
+const ComponentManage = () => {
+  const currentPageTitle = Title.Component;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -18,11 +18,12 @@ const Project = () => {
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}></CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <UserServiceListTab />
+          <ComponentListTab />
         </CTabPanel>
       </div>
     </Layout>
   );
 };
 
-export default Project;
+export default ComponentManage;
+
