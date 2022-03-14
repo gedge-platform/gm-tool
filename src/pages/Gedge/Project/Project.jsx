@@ -31,4 +31,5 @@ const Project = () => {
     </Layout>
   );
 };
+
 export default Project;
