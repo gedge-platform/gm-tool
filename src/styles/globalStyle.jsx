@@ -469,7 +469,7 @@ const globalStyles = createGlobalStyle`
         line-height: 1.3em;
       }
       th {
-        width: 15%;
+        /* width: 15%; */
         border: 1px solid #eff1f3;
         background: #fafbfc;
         text-align: left;
@@ -987,6 +987,26 @@ const globalStyles = createGlobalStyle`
   width:50%;
   margin-right: 10px;
 }
+
+//cafe43-----------------------
+.tb_volume_metadata{
+  width: 300px
+}
+
+.tb_volume_yaml{
+  text-align: center;
+  width: 60px;
+  height: 25px;
+  color : ${theme.colors.panelTit};
+  border-radius: 3px;
+  background-color: ${theme.colors.primaryBtn};
+  border: none;
+}
+
+.tb_volume_detail_th{
+  width: 300px;
+}
+
 `;
 
 export default globalStyles;

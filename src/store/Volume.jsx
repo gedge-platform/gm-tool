@@ -4,7 +4,12 @@ import { BASIC_AUTH, LOCAL_VOLUME_URL } from "../config";
 
 class Volume {
     pVolumes = [];
-    pvolume = {};
+    pVolume = {
+        annotations: {
+            "kubectl.kubernetes.io/last-applied-configuration": {},
+            "pv.kubernetes.io/bound-by-controller": {},
+        },
+    };
     totalElements = 0;
     // pVolumeInfo = {};
     pvClaim = {};
@@ -21,15 +26,15 @@ class Volume {
             .then((res) => {
                 runInAction(() => {
                     this.pVolumes = res.data.data;
-                    this.pVolume = this.pVolumes[0];
                     this.totalElements = this.pVolumes.length;
                 });
             });
+        this.loadPVolume(this.pVolumes[0].name, this.pVolumes[0].cluster);
     };
 
-    loadPVolume = async (volumeName) => {
+    loadPVolume = async (volumeName, cluster) => {
         await axios
-            .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}`, {
+            .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}?cluster=${cluster}`, {
                 auth: BASIC_AUTH,
             })
             .then((res) => {

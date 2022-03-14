@@ -4,23 +4,29 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+    CCreateButton,
+    CSelectButton,
+    BtnCellRenderer,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-// import Detail from "../Detail";
+import Detail from "../Detail";
 import volumeStore from "../../../../store/Volume";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
+    const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { pvolume, pVolumes, totalElements, loadPVolumes } = volumeStore;
+    const { pVolume, pVolumes, totalElements, loadPVolumes, loadPVolume } =
+        volumeStore;
 
     const [columDefs] = useState([
         {
@@ -71,7 +77,26 @@ const VolumeListTab = observer(() => {
                     .format("YYYY-MM-DD HH:mm")}</span>`;
             },
         },
+        {
+            headerName: "Yaml",
+            field: "yaml",
+            maxWidth: 150,
+            cellRenderer: function () {
+                return `<button class="tb_volume_yaml">View</button>`;
+            },
+            cellStyle: { textAlign: "center" },
+        },
     ]);
+
+    const handleOpen = (e) => {
+        let fieldName = e.colDef.field;
+        console.log(e.data);
+        if (fieldName === "yaml") {
+            //open popup
+        } else {
+            loadPVolume(e.data.name, e.data.cluster);
+        }
+    };
 
     const history = useHistory();
 
@@ -87,13 +112,14 @@ const VolumeListTab = observer(() => {
                         isSelect={true}
                         keywordList={["이름"]}
                     >
-                        {/* <CCreateButton>생성</CCreateButton> */}
+                        <CCreateButton>생성</CCreateButton>
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
+                                    onCellClicked={handleOpen}
                                     rowData={pVolumes}
                                     columnDefs={columDefs}
                                     isBottom={true}
@@ -103,7 +129,7 @@ const VolumeListTab = observer(() => {
                         </CTabPanel>
                     </div>
                 </PanelBox>
-                {/* <Detail cluster={clusterDetail} /> */}
+                <Detail pVolume={pVolume} />
             </CReflexBox>
         </>
     );
