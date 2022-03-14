@@ -159,6 +159,11 @@ export const SideMenu = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to="/service/Workspace" activeClassName="active">
+                {Title.WorkSpace}
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/service/appstore" activeClassName="active">
                 {Title.Appstore}
               </NavLink>
@@ -173,6 +178,7 @@ export const SideMenu = () => {
                 {Title.Volume}
               </NavLink>
             </li>
+            
           </ul>
         )}
       </NavScrollbar>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
@@ -11,8 +10,10 @@ import { observer } from "mobx-react";
 import Detail from "../Detail";
 import deploymentStore from "../../../../store/Deployment";
 import moment from "moment";
+import CreateDeployment from "../Dialog/CreateDeployment";
 
 const DeploymentListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -61,13 +62,20 @@ const DeploymentListTab = observer(() => {
   useEffect(() => {
     loadDeploymentList();
   }, []);
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -82,6 +90,7 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateDeployment open={open} onClose={handleClose} />
         </PanelBox>
         <Detail deployment={deploymentDetail} />
       </CReflexBox>

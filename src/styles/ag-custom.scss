@@ -1,20 +1,20 @@
 .grid-height_5 {
-  height: 239px
+  height: 239px;
 }
 .grid-height_10 {
-  height: 404px
+  height: 404px;
 }
 .grid-height {
-  height: 734px
+  height: 734px;
 }
 
 .grid-height2 {
-  height: 100% !important
+  height: 100% !important;
 }
 
 .grid-wrapper {
   width: 100%;
-  height: calc(100% - 37px)
+  height: calc(100% - 37px);
 }
 
 .paging-wrap {
@@ -40,7 +40,7 @@
     height: 24px;
     line-height: 22px;
     margin-right: 8px;
-    background-image: url(../images/bullet/select_arr_g.png)
+    background-image: url(../images/bullet/select_arr_g.png);
   }
   .btn_comm {
     width: 24px;
@@ -57,12 +57,10 @@
   }
 }
 
-
-
 .ag-theme-alpine {
   font: inherit;
   .ag-root-wrapper {
-    border: 0 hidden
+    border: 0 hidden;
   }
   .ag-header {
     border-bottom-color: #fff;
@@ -89,7 +87,7 @@
     &:last-child {
       border-right: 0;
       .ag-header-cell-resize::after {
-        display: none
+        display: none;
       }
     }
   }
@@ -110,7 +108,7 @@
       border-top-color: #ebedee;
     }
     &.ag-row-odd {
-      background-color: #f9fafc
+      background-color: #f9fafc;
     }
     &.ag-row-hover {
       border-color: #dfebf9;
@@ -119,7 +117,8 @@
         border-top-color: #dfebf9;
       }
     }
-    &.ag-row-focus, &.ag-row-selected {
+    &.ag-row-focus,
+    &.ag-row-selected {
       border-color: #d2e4f9 !important;
       background-color: #dbecff !important;
       & + .ag-row {
@@ -155,7 +154,8 @@
       width: 15px;
       height: 14px;
       border-radius: 2px;
-      background: #ccd0d7 url(../images/bullet/sort_arr.png) no-repeat center center;
+      background: #ccd0d7 url(../images/bullet/sort_arr.png) no-repeat center
+        center;
       &::before {
         display: none;
       }
@@ -173,7 +173,7 @@
     height: 15px;
     background: url(../images/bullet/grid_hamburger.png) no-repeat center top;
     &:hover {
-      background-position-y: -15px
+      background-position-y: -15px;
     }
     .ag-icon {
       &::before {
@@ -182,13 +182,13 @@
     }
   }
   .ag-column-menu-visible .ag-header-cell-menu-button {
-    background-position-y: -15px
+    background-position-y: -15px;
   }
   .ag-menu {
     border: 1px solid #071e3f;
     border-radius: 3px;
     background: #fff;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   }
   //.ag-filter-select { display: none }
   input {
@@ -197,15 +197,15 @@
   .ag-simple-filter-body-wrapper {
     padding: 0;
     & > * {
-      margin-bottom: 0
+      margin-bottom: 0;
     }
   }
-  input[class^='ag-'][type='date'],
-  input[class^='ag-'][type='text']{
+  input[class^="ag-"][type="date"],
+  input[class^="ag-"][type="text"] {
     border: 0;
     height: 32px;
     border-radius: 2px;
-    padding: 5px 10px
+    padding: 5px 10px;
   }
   .ag-checkbox-input-wrapper {
     &::after,
@@ -213,7 +213,8 @@
     &ag-indeterminate::after {
       display: none;
     }
-    &:focus-within, &:active {
+    &:focus-within,
+    &:active {
       box-shadow: none;
     }
 
@@ -231,7 +232,7 @@
     .ag-checkbox-input-wrapper {
       margin-left: -1px;
       border-color: #c6cbd1;
-      background-color: #edeef1
+      background-color: #edeef1;
     }
     .ag-checkbox {
       margin-right: 12px;
@@ -254,21 +255,20 @@
     &:last-child {
       border-right: 0;
       .ag-header-cell-resize::after {
-        display: none
+        display: none;
       }
     }
   }
   .ag-cell:last-child {
-    border-right: 0
+    border-right: 0;
   }
 
   .paging-wrap {
-    border-bottom: 1px solid #c5cad0
+    border-bottom: 1px solid #c5cad0;
   }
 
   //kwoo2
-  .ag-center-cols-viewport{
+  .ag-center-cols-viewport {
     overflow-x: hidden !important;
   }
-
 }

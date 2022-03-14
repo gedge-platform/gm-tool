@@ -9,8 +9,10 @@ import {
   WorkSpace,
   User,
   Monitoring,
+  ComponentManage,
   ServiceProject,
   ServiceWorkload,
+  ServiceWorkspace,
 } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
 
@@ -22,6 +24,7 @@ export const App = () => {
         {/* PA */}
         <AuthRoute path="/cluster" component={Cluster} />
         <AuthRoute path="/project" component={Project} />
+        <AuthRoute path="/component" component={ComponentManage}/>
         <AuthRoute path="/monitoring" component={Monitoring} />
         <AuthRoute path="/workSpace" component={WorkSpace} />
         <AuthRoute path="/user" component={User} />
@@ -29,9 +32,12 @@ export const App = () => {
         {/* SA */}
         <AuthRoute path="/service/project" component={ServiceProject} />
         <AuthRoute path="/service/workload" component={ServiceWorkload} />
+        <AuthRoute path="/service/workspace" component={ServiceWorkspace} />
 
         <Route path="/login" component={Login} />
+
         <Route component={NotFound} />
+
       </Switch>
     </>
   );
