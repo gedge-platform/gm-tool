@@ -100,84 +100,90 @@ export const SideMenu = () => {
     const history = useHistory();
     const userRole = getItem("userRole");
 
-    return (
-        <MenuNav>
-            <NavScrollbar>
-                {userRole === "PA" ? (
-                    <ul>
-                        <li>
-                            <NavLink exact to="/" activeClassName="active">
-                                {Title.Dashboard}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/cluster" activeClassName="active">
-                                {Title.Cluster}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/workspace" activeClassName="active">
-                                {Title.WorkSpace}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/project" activeClassName="active">
-                                {Title.Project}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/component" activeClassName="active">
-                                {Title.Component}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/volumes" activeClassName="active">
-                                {Title.Volume}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/monitoring" activeClassName="active">
-                                {Title.Monitoring}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/user" activeClassName="active">
-                                {Title.User}
-                            </NavLink>
-                        </li>
-                    </ul>
-                ) : (
-                    <ul>
-                        <li>
-                            <NavLink exact to="/" activeClassName="active">
-                                {Title.Dashboard}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/project" activeClassName="active">
-                                {Title.Project}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/appstore" activeClassName="active">
-                                {Title.Appstore}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/workload" activeClassName="active">
-                                {Title.Workload}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/volumes" activeClassName="active">
-                                {Title.Volume}
-                            </NavLink>
-                        </li>
-                    </ul>
-                )}
-            </NavScrollbar>
-        </MenuNav>
-    );
+  return (
+    <MenuNav>
+      <NavScrollbar>
+        {userRole === "PA" ? (
+          <ul>
+            <li>
+              <NavLink exact to="/" activeClassName="active">
+                {Title.Dashboard}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/cluster" activeClassName="active">
+                {Title.Cluster}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/workspace" activeClassName="active">
+                {Title.WorkSpace}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/project" activeClassName="active">
+                {Title.Project}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/component" activeClassName="active">
+                {Title.Component}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/volume" activeClassName="active">
+                {Title.Volume}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/monitoring" activeClassName="active">
+                {Title.Monitoring}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/user" activeClassName="active">
+                {Title.User}
+              </NavLink>
+            </li>
+          </ul>
+        ) : (
+          <ul>
+            <li>
+              <NavLink exact to="/" activeClassName="active">
+                {Title.Dashboard}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/service/project" activeClassName="active">
+                {Title.Project}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/service/Workspace" activeClassName="active">
+                {Title.WorkSpace}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/service/appstore" activeClassName="active">
+                {Title.Appstore}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/service/workload" activeClassName="active">
+                {Title.Workload}
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/service/volume" activeClassName="active">
+                {Title.Volume}
+              </NavLink>
+            </li>
+            
+          </ul>
+        )}
+      </NavScrollbar>
+    </MenuNav>
+  );
 };
 
 export default SideMenu;

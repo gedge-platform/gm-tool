@@ -16,7 +16,6 @@ class User {
         auth: BASIC_AUTH,
       })
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           this.userList = res.data.data;
           this.userDetail = res.data.data[0];
@@ -25,5 +24,5 @@ class User {
   };
 }
 
-const userrStore = new User();
-export default userrStore;
+const userStore = new User();
+export default userStore;

@@ -5,6 +5,8 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 class Project {
   projectList = [];
   projectDetail = {};
+  projectListinWorkspace = [];
+
   totalElements = 0;
 
   constructor() {
@@ -24,6 +26,19 @@ class Project {
           this.projectList = list;
           this.projectDetail = list[0];
           this.totalElements = list.length;
+        });
+      });
+  };
+  loadProjectListInWorkspace = async (workspace) => {
+    await axios
+      .get(`${SERVER_URL}/projects?workspace=${workspace}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        runInAction(() => {
+          this.projectListinWorkspace = res.data.data.filter(
+            (item) => item.projectType === "user"
+          );
         });
       });
   };

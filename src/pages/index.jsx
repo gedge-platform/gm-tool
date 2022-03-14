@@ -2,13 +2,18 @@ import React from "react";
 
 export { default as TotalDashboard } from "./Dashboard/TotalDashboard";
 export { default as Dashboard } from "./Dashboard/Dashboard";
+
 // Gedege PA
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
+export { default as ComponentManage } from "./Gedge/ComponentManage/ComponentManage";
+export { default as Monitoring } from "./Gedge/Monitoring/Monitoring";
 export { default as WorkSpace } from "./Gedge/WorkSpace/WorkSpace";
-export { default as User } from "./Management/User";
+export { default as User } from "./Gedge/User/User";
+
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
+export { default as ServiceWorkSpace } from "./ServiceAdmin/WorkSpace/WorkSpace";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
 export { default as Volume } from "./Gedge/Volume/Volume";
 
