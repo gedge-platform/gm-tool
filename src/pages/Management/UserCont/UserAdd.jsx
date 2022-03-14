@@ -7,7 +7,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { observer } from "mobx-react";
-import userStore from "../../../Store/UserStore";
+import userStore from "../../../store/UserStore";
 import { SERVER_URL } from "@/config.jsx";
 import axios from "axios";
 

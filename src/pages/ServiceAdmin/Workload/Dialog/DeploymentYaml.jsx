@@ -17,7 +17,6 @@ const DeploymentYaml = observer(() => {
       width="100%"
       onChange={(value) => {
         // setContent(value);
-        console.log(typeof value);
       }}
       fontSize={14}
       showPrintMargin={true}
@@ -31,6 +30,7 @@ const DeploymentYaml = observer(() => {
         showLineNumbers: true,
         tabSize: 4,
       }}
+      readOnly={true}
     />
   );
 });
