@@ -20,8 +20,14 @@ const EdgeClusterListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, totalElements, loadClusterList } =
-    clusterStore;
+  const {
+    clusterDetail,
+    clusterList,
+    totalElements,
+    loadClusterList,
+    loadCluster,
+    setDetail,
+  } = clusterStore;
 
   const [columDefs] = useState([
     // {
@@ -82,10 +88,14 @@ const EdgeClusterListTab = observer(() => {
 
   const history = useHistory();
 
+  const handleClick = (e) => {
+    loadCluster(e.data.clusterName);
+  };
+
   useEffect(() => {
     loadClusterList("edge");
   }, []);
-  console.log(clusterList);
+
   return (
     <>
       <CReflexBox>
@@ -102,6 +112,7 @@ const EdgeClusterListTab = observer(() => {
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
+                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
