@@ -192,7 +192,7 @@ const UserListTab = observer(() => {
           </div>
           <UserAdd open={open2} onClose={handleClose} />
         </PanelBox>
-        <UserDetail />
+        <UserDetail user={userDetail} />
       </CReflexBox>
     </>
   );

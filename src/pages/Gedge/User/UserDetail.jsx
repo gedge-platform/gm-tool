@@ -6,10 +6,9 @@ import userStore from "../../../Store/UserStore";
 import moment from "moment";
 
 const UserDetail = observer((props) => {
-  const { userDetail } = userStore;
+  const { user } = props;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  console.log("상세정보", userDetail.memberName);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -27,15 +26,15 @@ const UserDetail = observer((props) => {
               <tbody>
                 <tr>
                   <th>ID</th>
-                  <td>{userDetail.id}</td>
+                  <td>{user.memberId}</td>
                   <th>이름</th>
-                  <td>{userDetail.memberName}</td>
+                  <td>{user.memberName}</td>
                 </tr>
                 <tr>
                   <th>E-mail</th>
-                  <td>{userDetail.memberEmail}</td>
+                  <td>{user.memberEmail}</td>
                   <th>부서</th>
-                  <td>{userDetail.department}</td>
+                  <td>{user.department}</td>
                 </tr>
                 {/* <tr>
                   <th>승인여부</th>
@@ -51,7 +50,7 @@ const UserDetail = observer((props) => {
                 </tr> */}
                 <tr>
                   <th>등록일</th>
-                  <td>{moment(userDetail.created_at).format("YYYY-MM-DD")}</td>
+                  <td>{moment(user.created_at).format("YYYY-MM-DD")}</td>
                   <th></th>
                   <td></td>
                 </tr>

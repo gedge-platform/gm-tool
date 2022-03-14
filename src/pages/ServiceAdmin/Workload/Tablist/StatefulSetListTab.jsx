@@ -8,23 +8,27 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../statefulSetDetail";
+import statefulSetStore from "../../../../store/StatefulSet";
 import moment from "moment";
-import Detail from "../Detail";
-import projectStore from "../../../../store/Project";
 
-const PlatfromServiceListTab = observer(() => {
+const StatefulSetListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { projectDetail, projectList, totalElements, loadProjectList } =
-    projectStore;
+  const {
+    statefulSetList,
+    statefulSetDetail,
+    totalElements,
+    loadStatefulSetList,
+  } = statefulSetStore;
 
   const [columDefs] = useState([
     {
-      headerName: "이름",
-      field: "projectName",
+      headerName: "스테이트풀셋 이름",
+      field: "name",
       filter: true,
     },
     {
@@ -33,37 +37,21 @@ const PlatfromServiceListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspaceName",
+      headerName: "프로젝트명",
+      field: "project",
       filter: true,
     },
     {
-      headerName: "클러스터 명",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "CPU 사용량(core)",
-      field: "cpu",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Memory 사용량(Gi)",
-      field: "memory",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_memory ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Pods 수(개)",
-      field: "resource",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_pod_count ?? 0}</span>`;
+      headerName: "생성날짜",
+      field: "created_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
   ]);
@@ -71,7 +59,7 @@ const PlatfromServiceListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadProjectList("system");
+    loadStatefulSetList();
   }, []);
 
   return (
@@ -86,7 +74,7 @@ const PlatfromServiceListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={projectList}
+                  rowData={statefulSetList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
@@ -95,9 +83,9 @@ const PlatfromServiceListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail project={projectDetail} />
+        <Detail statefulSet={statefulSetDetail} />
       </CReflexBox>
     </>
   );
 });
-export default PlatfromServiceListTab;
+export default StatefulSetListTab;

@@ -8,62 +8,46 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../DaemonSetDetail";
+import daemonSetStore from "../../../../store/DaemonSet";
 import moment from "moment";
-import Detail from "../Detail";
-import projectStore from "../../../../store/Project";
 
-const PlatfromServiceListTab = observer(() => {
+const DaemonSetListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { projectDetail, projectList, totalElements, loadProjectList } =
-    projectStore;
+  const { daemonSetList, daemonSetDetail, totalElements, loadDaemonSetList } =
+    daemonSetStore;
 
   const [columDefs] = useState([
     {
-      headerName: "이름",
-      field: "projectName",
+      headerName: "데몬셋 이름",
+      field: "name",
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "프로젝트명",
+      field: "project",
       filter: true,
     },
     {
       headerName: "워크스페이스",
-      field: "workspaceName",
+      field: "workspace",
       filter: true,
     },
     {
-      headerName: "클러스터 명",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "CPU 사용량(core)",
-      field: "cpu",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Memory 사용량(Gi)",
-      field: "memory",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_memory ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Pods 수(개)",
-      field: "resource",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_pod_count ?? 0}</span>`;
+      headerName: "생성날짜",
+      field: "createAt",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
   ]);
@@ -71,7 +55,7 @@ const PlatfromServiceListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadProjectList("system");
+    loadDaemonSetList();
   }, []);
 
   return (
@@ -86,7 +70,7 @@ const PlatfromServiceListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={projectList}
+                  rowData={daemonSetList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
@@ -95,9 +79,9 @@ const PlatfromServiceListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail project={projectDetail} />
+        <Detail daemonSet={daemonSetDetail} />
       </CReflexBox>
     </>
   );
 });
-export default PlatfromServiceListTab;
+export default DaemonSetListTab;

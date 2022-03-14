@@ -3,6 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
+import moment from "moment";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -28,30 +29,33 @@ const Detail = observer((props) => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="프로젝트 정보" />
+        <CTab label="파드 정보" />
+        <CTab label="게이트웨이 정보" />
+        <CTab label="프로젝트 할당" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
+          <TableTitle>상세정보</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>디플로이먼트</th>
-                <td></td>
-                <th>파드</th>
-                <td></td>
+                <th>클러스터</th>
+                <td>{project.clusterName}</td>
+                <th>프로젝트</th>
+                <td>{project.projectName}</td>
               </tr>
               <tr>
-                <th>서비스</th>
-                <td></td>
-                <th>크론잡</th>
-                <td></td>
+                <th>status</th>
+                <td>{project.status}</td>
+                <th>워크스페이스</th>
+                <td>{project.workspaceName}</td>
               </tr>
               <tr>
-                <th>잡</th>
-                <td></td>
-                <th>볼륨</th>
-                <td></td>
+                <th>생성자</th>
+                <td>{project.projectCreator}</td>
+                <th>생성일</th>
+                <td>{moment(project.created_at).format("YYYY-MM-DD")}</td>
               </tr>
             </tbody>
           </table>
@@ -59,36 +63,102 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
+          <TableTitle>파드</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>key</th>
-                <th>Value</th>
-              </tr>
-              <tr>
+                <th>파드</th>
                 <td></td>
+                <th>클러스터</th>
                 <td></td>
               </tr>
               <tr>
+                <th>파드 IP</th>
+                <td></td>
+                <th>워크스페이스</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>생성자</th>
+                <td></td>
+                <th>생성일</th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>인터넷 접근</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th>게이트웨이</th>
+                <td></td>
+                <th>서브넷</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>상태</th>
+                <td></td>
+                <th>네트워크</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>생성일</th>
+                <td></td>
+                <th>설명</th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>컨테이너 기본 리소스</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th>파드</th>
+                <td></td>
                 <td></td>
                 <td></td>
               </tr>
             </tbody>
           </table>
-          <TableTitle>어노테이션</TableTitle>
+          <br />
+          <TableTitle>리소스 할당량</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>key</th>
-                <th>Value</th>
+                <th>Limits.cpu</th>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
               <tr>
+                <th>Limits.memory</th>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Pods</th>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th>services</th>
+                <td></td>
                 <td></td>
                 <td></td>
               </tr>
             </tbody>
           </table>
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>
