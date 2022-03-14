@@ -1,6 +1,8 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
+import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
@@ -149,7 +151,7 @@ class Deployment {
     });
   };
 
-  postDeployment = async (callback) => {
+  postDeployment = async () => {
     const YAML = require("yamljs");
 
     await axios
@@ -161,7 +163,12 @@ class Deployment {
         }
       )
       .then((res) => {
-        if (res.status === 200) callback();
+        if (res.status === 200) {
+          const history = useHistory();
+          swalError("Deployment가 생성되었습니다.", () =>
+            history.push("/service/workload")
+          );
+        }
       });
   };
 }

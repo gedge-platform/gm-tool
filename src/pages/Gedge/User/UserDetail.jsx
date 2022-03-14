@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
-import userStore from "../../../Store/UserStore";
 import moment from "moment";
 
 const UserDetail = observer((props) => {

@@ -6,7 +6,7 @@ import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CSelectButton } from "@/components/buttons";
 import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
-import userStore from "../../../../store/UserStore";
+import userStore from "@/store/UserStore";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
