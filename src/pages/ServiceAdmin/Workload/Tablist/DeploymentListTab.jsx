@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import Detail from "../Detail";
+import CreateDeployment from "../Dialog/CreateDeployment";
 
 const DeploymentListTab = () => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -19,12 +20,20 @@ const DeploymentListTab = () => {
 
   const history = useHistory();
 
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -39,6 +48,7 @@ const DeploymentListTab = () => {
               </div>
             </CTabPanel>
           </div>
+          <CreateDeployment open={open} onClose={handleClose} />
         </PanelBox>
         <Detail />
       </CReflexBox>
