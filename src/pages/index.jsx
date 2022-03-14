@@ -9,7 +9,7 @@ export { default as Project } from "./Gedge/Project/Project";
 export { default as ComponentManage } from "./Gedge/ComponentManage/ComponentManage";
 export { default as Monitoring } from "./Gedge/Monitoring/Monitoring";
 export { default as WorkSpace } from "./Gedge/WorkSpace/WorkSpace";
-export { default as User } from "./Management/User";
+export { default as User } from "./Gedge/User/User";
 
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";

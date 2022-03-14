@@ -8,45 +8,22 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../PodDetail";
+import podStore from "../../../../store/Pod";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
 
-const CoreClusterListTab = observer(() => {
+const PodListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+  const { podList, podDetail, totalElements, loadPodList } = podStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
-      filter: true,
-    },
-    {
-      headerName: "이름",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "파드 이름",
+      field: "name",
       filter: true,
     },
     {
@@ -55,18 +32,18 @@ const CoreClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "노드개수",
-      field: "node",
+      headerName: "노드명",
+      field: "node_name",
       filter: true,
     },
     {
-      headerName: "version",
-      field: "kubeVersion",
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "업데이트 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -82,33 +59,33 @@ const CoreClusterListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadClusterList("core");
+    loadPodList();
   }, []);
- 
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
+        <Detail pod={podDetail} />
       </CReflexBox>
     </>
   );
 });
-export default CoreClusterListTab;
+export default PodListTab;

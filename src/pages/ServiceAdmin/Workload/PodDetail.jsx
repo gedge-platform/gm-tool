@@ -3,6 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import { Podcasts } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -11,7 +12,7 @@ const TableTitle = styled.p`
 `;
 
 const Detail = (props) => {
-  const { deployment } = props;
+  const { pod } = props;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -38,19 +39,19 @@ const Detail = (props) => {
             <tbody>
               <tr>
                 <th>클러스터</th>
-                <td>{deployment.cluster}</td>
+                <td>{pod.cluster}</td>
                 <th>프로젝트</th>
-                <td>{deployment.project}</td>
+                <td>{pod.project}</td>
               </tr>
               <tr>
                 <th>앱</th>
                 <td></td>
                 <th>생성일</th>
-                <td>{moment(deployment.createAt).format("YYYY-MM-DD")}</td>
+                <td>{moment(pod.created_at).format("YYYY-MM-DD")}</td>
               </tr>
               <tr>
                 <th>업데이트 날짜</th>
-                <td>{moment(deployment.updateAt).format("YYYY-MM-DD")}</td>
+                <td></td>
                 <th>생성자</th>
                 <td></td>
               </tr>

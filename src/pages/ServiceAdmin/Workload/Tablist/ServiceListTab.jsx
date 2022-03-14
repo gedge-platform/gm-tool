@@ -8,65 +8,38 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../ServiceDetail";
+import serviceStore from "../../../../store/Service";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
 
-const CoreClusterListTab = observer(() => {
+const ServiceListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+  const { serviceList, serviceDetail, totalElements, loadServiceList } =
+    serviceStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
+      headerName: "서비스 이름",
+      field: "name",
       filter: true,
     },
     {
-      headerName: "이름",
-      field: "clusterName",
+      headerName: "프로젝트명",
+      field: "project",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
-      filter: true,
-    },
-    {
-      headerName: "상태",
-      field: "status",
-      filter: true,
-    },
-    {
-      headerName: "노드개수",
-      field: "node",
-      filter: true,
-    },
-    {
-      headerName: "version",
-      field: "kubeVersion",
+      headerName: "액세스 타입",
+      field: "type",
       filter: true,
     },
     {
       headerName: "생성날짜",
-      field: "created_at",
+      field: "createAt",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -82,33 +55,33 @@ const CoreClusterListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadClusterList("core");
+    loadServiceList();
   }, []);
- 
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={serviceList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
+        <Detail service={serviceDetail} />
       </CReflexBox>
     </>
   );
 });
-export default CoreClusterListTab;
+export default ServiceListTab;
