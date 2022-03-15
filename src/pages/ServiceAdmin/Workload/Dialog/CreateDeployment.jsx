@@ -16,6 +16,7 @@ import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
 import { useHistory } from "react-router";
 import * as FormData from "form-data";
+import DeploymentPopup from "./DeploymentPopup";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -37,6 +38,7 @@ const ButtonNext = styled.button`
 const CreateDialog = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const {
     deploymentName,
@@ -44,9 +46,11 @@ const CreateDialog = observer((props) => {
     containerName,
     containerImage,
     containerPort,
+    responseData,
     setContent,
     clearAll,
     postDeployment,
+    setResponseData,
   } = deploymentStore;
 
   const template = {
@@ -97,47 +101,22 @@ const CreateDialog = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callback", "http://192.168.150.197:8080/callback");
+    formData.append("callbackUrl", "http://192.168.150.197:8080/callback");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
+    formData.append("clusters", "test");
 
     axios
       .post("http://101.79.4.15:32527/yaml", formData)
       .then(function (response) {
-        console.log(response);
+        if (response.status === 200) {
+          setResponseData(response.data);
+          setStepValue(4);
+        }
       })
       .catch(function (error) {
         console.log(error);
       });
-
-    // // // Create formData
-    // let formData = new FormData();
-    // formData.append("callback", "http://192.168.150.197:8080/callback");
-    // formData.append("requestId", deploymentName);
-    // formData.append("yaml", deploymentStore.content);
-    // // axios.post("http://101.79.4.15:32527/yaml", formData);
-    // // window.open("http://101.79.4.15:32527/yaml");
-    // // formData console log
-    // // for (var pair of formData.entries()) {
-    // //   console.log(pair[0] + ", " + pair[1]);
-    // // }
-    // var config = {
-    //   method: "post",
-    //   url: "http://101.79.4.15:32527/yaml",
-    //   // headers: {
-    //   //   // 'Cookie': 'JSESSIONID=7776EDB77915C3F4E4B077DE244E6250',
-    //   //   ...formData.getHeaders(),
-    //   // },
-    //   data: formData,
-    // };
-
-    // axios(config)
-    //   .then(function (response) {
-    //     console.log(JSON.stringify(response.data));
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
   };
   useEffect(() => {
     if (stepValue === 3) {
@@ -201,7 +180,7 @@ const CreateDialog = observer((props) => {
           </div>
         </>
       );
-    } else {
+    } else if (stepValue === 3) {
       return (
         <>
           <DeploymentYaml />
@@ -229,13 +208,13 @@ const CreateDialog = observer((props) => {
           </div>
         </>
       );
-    }
+    } else return <DeploymentPopup />;
   };
 
   return (
     <CDialog
       id="myDialog"
-      open={open}
+      open={true}
       maxWidth="md"
       title={"Create Deployment"}
       onClose={handleClose}

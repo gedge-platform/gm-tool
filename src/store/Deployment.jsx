@@ -15,9 +15,10 @@ class Deployment {
   containerPort = "";
   podReplicas = 0;
 
-  workspace = "";
-  cluster = "";
-  project = "";
+  workspace = "default";
+  cluster = "default";
+  project = "default";
+  responseData = "";
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -136,6 +137,11 @@ class Deployment {
   setContent = (content) => {
     runInAction(() => {
       this.content = content;
+    });
+  };
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
     });
   };
 
