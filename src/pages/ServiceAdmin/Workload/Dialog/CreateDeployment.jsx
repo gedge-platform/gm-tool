@@ -14,6 +14,8 @@ import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
 import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
+import { useHistory } from "react-router";
+import * as FormData from "form-data";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -93,6 +95,50 @@ const CreateDialog = observer((props) => {
   const createDeployment = () => {
     postDeployment(handleClose);
   };
+  const createDeployment2 = () => {
+    let formData = new FormData();
+    formData.append("callback", "http://192.168.150.197:8080/callback");
+    formData.append("requestId", deploymentName);
+    formData.append("yaml", deploymentStore.content);
+
+    axios
+      .post("http://101.79.4.15:32527/yaml", formData)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    // // // Create formData
+    // let formData = new FormData();
+    // formData.append("callback", "http://192.168.150.197:8080/callback");
+    // formData.append("requestId", deploymentName);
+    // formData.append("yaml", deploymentStore.content);
+    // // axios.post("http://101.79.4.15:32527/yaml", formData);
+    // // window.open("http://101.79.4.15:32527/yaml");
+    // // formData console log
+    // // for (var pair of formData.entries()) {
+    // //   console.log(pair[0] + ", " + pair[1]);
+    // // }
+    // var config = {
+    //   method: "post",
+    //   url: "http://101.79.4.15:32527/yaml",
+    //   // headers: {
+    //   //   // 'Cookie': 'JSESSIONID=7776EDB77915C3F4E4B077DE244E6250',
+    //   //   ...formData.getHeaders(),
+    //   // },
+    //   data: formData,
+    // };
+
+    // axios(config)
+    //   .then(function (response) {
+    //     console.log(JSON.stringify(response.data));
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+  };
   useEffect(() => {
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
@@ -169,13 +215,16 @@ const CreateDialog = observer((props) => {
             <div
               style={{
                 display: "flex",
-                width: "230px",
+                width: "430px",
                 justifyContent: "space-around",
               }}
             >
               <Button onClick={cancelClick}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment}>생성</ButtonNext>
+              <ButtonNext onClick={createDeployment2}>
+                Schedule Apply
+              </ButtonNext>
+              <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext>
             </div>
           </div>
         </>
