@@ -55,7 +55,7 @@ const Detail = observer((props) => {
                 <th>생성자</th>
                 <td>{project.projectCreator}</td>
                 <th>생성일</th>
-                <td>{moment(new Date()).format("YYYY-MM-DD HH:mm")}</td>
+                <td>{moment(project.created_at).format("YYYY-MM-DD HH:mm")}</td>
               </tr>
             </tbody>
           </table>

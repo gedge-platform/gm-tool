@@ -18,8 +18,13 @@ const UserServiceListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { projectDetail, projectList, totalElements, loadProjectList } =
-    projectStore;
+  const {
+    projectDetail,
+    projectList,
+    totalElements,
+    loadProjectList,
+    loadProject,
+  } = projectStore;
 
   const [columDefs] = useState([
     {
@@ -70,10 +75,14 @@ const UserServiceListTab = observer(() => {
 
   const history = useHistory();
 
+  const handleClick = (e) => {
+    loadProject(e.data.projectName);
+  };
+
   useEffect(() => {
     loadProjectList("user");
   }, []);
-  // console.log(projectList);
+
   return (
     <>
       <CReflexBox>
@@ -90,6 +99,7 @@ const UserServiceListTab = observer(() => {
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
+                  onCellClicks={handleClick}
                 />
               </div>
             </CTabPanel>

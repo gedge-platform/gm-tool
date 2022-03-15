@@ -24,11 +24,24 @@ class Project {
             (item) => item.projectType === type
           );
           this.projectList = list;
-          this.projectDetail = list[0];
+          this.projectDetail = this.loadProject(list[0].projectName);
           this.totalElements = list.length;
         });
       });
   };
+
+  loadProject = async (projectName) => {
+    await axios
+      .get(`${SERVER_URL}/projects/${projectName}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        runInAction(() => {
+          this.projectDetail = res.data.data;
+        });
+      });
+  };
+
   loadProjectListInWorkspace = async (workspace) => {
     await axios
       .get(`${SERVER_URL}/projects?workspace=${workspace}`, {
