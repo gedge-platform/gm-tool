@@ -17,10 +17,12 @@ import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
 import volumeStore from "../../../../store/Volume";
+import ViewYaml from "../Dialog/ViewYaml";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
+    const [yamlData, setYamlData] = useState();
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
@@ -38,6 +40,20 @@ const VolumeListTab = observer(() => {
             headerName: "Capacity",
             field: "capacity",
             filter: true,
+            // valueFormatter: (params) =>
+            //     params.data.capacity.substring(
+            //         0,
+            //         params.data.capacity.length - 2
+            //     ).length > 4
+            //         ? params.data.capacity.substring(
+            //               0,
+            //               params.data.capacity.length - 2
+            //           )
+            //         : params.data.capacity.substring(
+            //               0,
+            //               params.data.capacity.length - 2
+            //           ),
+            // // params.data.number.toFixeD(2),
         },
         {
             headerName: "Status",
@@ -82,7 +98,7 @@ const VolumeListTab = observer(() => {
             field: "yaml",
             maxWidth: 150,
             cellRenderer: function () {
-                return `<button class="tb_volume_yaml">View</button>`;
+                return `<button class="tb_volume_yaml" onClick>View</button>`;
             },
             cellStyle: { textAlign: "center" },
         },
@@ -90,12 +106,17 @@ const VolumeListTab = observer(() => {
 
     const handleOpen = (e) => {
         let fieldName = e.colDef.field;
-        console.log(e.data);
+        loadPVolume(e.data.name, e.data.cluster);
         if (fieldName === "yaml") {
-            //open popup
-        } else {
-            loadPVolume(e.data.name, e.data.cluster);
+            handleOpenYaml();
         }
+    };
+
+    const handleOpenYaml = () => {
+        setOpen(true);
+    };
+    const handleCloseYaml = () => {
+        setOpen(false);
     };
 
     const history = useHistory();
@@ -128,6 +149,11 @@ const VolumeListTab = observer(() => {
                             </div>
                         </CTabPanel>
                     </div>
+                    <ViewYaml
+                        open={open}
+                        pVolume={pVolume}
+                        onClose={handleCloseYaml}
+                    />
                 </PanelBox>
                 <Detail pVolume={pVolume} />
             </CReflexBox>

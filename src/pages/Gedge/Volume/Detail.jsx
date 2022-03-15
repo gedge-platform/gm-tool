@@ -56,7 +56,7 @@ const Detail = observer(({ pVolume }) => {
                                 <th className="tb_volume_detail_th">name</th>
                                 <td>{pVolume?.name}</td>
                                 <th>capacity</th>
-                                <td>{pVolume?.capecity}</td>
+                                <td>{pVolume?.capacity}</td>
                             </tr>
                             <tr>
                                 <th className="tb_volume_detail_th">

@@ -1004,7 +1004,7 @@ const globalStyles = createGlobalStyle`
 }
 
 .tb_volume_detail_th{
-  width: 300px;
+  width: 400px;
 }
 
 `;
