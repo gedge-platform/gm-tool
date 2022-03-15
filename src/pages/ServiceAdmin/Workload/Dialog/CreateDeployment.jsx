@@ -14,6 +14,9 @@ import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
 import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
+import { useHistory } from "react-router";
+import * as FormData from "form-data";
+import DeploymentPopup from "./DeploymentPopup";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -35,6 +38,7 @@ const ButtonNext = styled.button`
 const CreateDialog = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const {
     deploymentName,
@@ -42,9 +46,11 @@ const CreateDialog = observer((props) => {
     containerName,
     containerImage,
     containerPort,
+    responseData,
     setContent,
     clearAll,
     postDeployment,
+    setResponseData,
   } = deploymentStore;
 
   const template = {
@@ -92,6 +98,25 @@ const CreateDialog = observer((props) => {
 
   const createDeployment = () => {
     postDeployment();
+  };
+  const createDeployment2 = () => {
+    let formData = new FormData();
+    formData.append("callbackUrl", "http://192.168.150.197:8080/callback");
+    formData.append("requestId", deploymentName);
+    formData.append("yaml", deploymentStore.content);
+    formData.append("clusters", "test");
+
+    axios
+      .post("http://101.79.4.15:32527/yaml", formData)
+      .then(function (response) {
+        if (response.status === 200) {
+          setResponseData(response.data);
+          setStepValue(4);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   useEffect(() => {
     if (stepValue === 3) {
@@ -155,7 +180,7 @@ const CreateDialog = observer((props) => {
           </div>
         </>
       );
-    } else {
+    } else if (stepValue === 3) {
       return (
         <>
           <DeploymentYaml />
@@ -169,24 +194,27 @@ const CreateDialog = observer((props) => {
             <div
               style={{
                 display: "flex",
-                width: "230px",
+                width: "430px",
                 justifyContent: "space-around",
               }}
             >
               <Button onClick={cancelClick}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment}>생성</ButtonNext>
+              <ButtonNext onClick={createDeployment2}>
+                Schedule Apply
+              </ButtonNext>
+              <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext>
             </div>
           </div>
         </>
       );
-    }
+    } else return <DeploymentPopup />;
   };
 
   return (
     <CDialog
       id="myDialog"
-      open={open}
+      open={true}
       maxWidth="md"
       title={"Create Deployment"}
       onClose={handleClose}
