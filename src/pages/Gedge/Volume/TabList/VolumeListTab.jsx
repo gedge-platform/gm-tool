@@ -22,10 +22,11 @@ import ViewYaml from "../Dialog/ViewYaml";
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
-    const [yamlData, setYamlData] = useState();
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
+    const [yamlFile, setYamlFile] = useState();
+    const [metaData, setMedaData] = useState();
 
     const { pVolume, pVolumes, totalElements, loadPVolumes, loadPVolume } =
         volumeStore;
@@ -107,14 +108,33 @@ const VolumeListTab = observer(() => {
     const handleOpen = (e) => {
         let fieldName = e.colDef.field;
         loadPVolume(e.data.name, e.data.cluster);
+
+        Object.entries(pVolume?.annotations).forEach(([key, value]) => {
+            {
+                if (typeof value === "string") {
+                    try {
+                        const YAML = require("json-to-pretty-yaml");
+                        setYamlFile(YAML.stringify(JSON.parse(value)));
+                    } catch (e) {
+                        // metaData[key] = value;
+                        setMedaData({
+                            key: value,
+                        });
+                    }
+                }
+            }
+        });
+
         if (fieldName === "yaml") {
             handleOpenYaml();
         }
+        console.log(yamlFile);
     };
 
     const handleOpenYaml = () => {
         setOpen(true);
     };
+
     const handleCloseYaml = () => {
         setOpen(false);
     };
@@ -151,11 +171,11 @@ const VolumeListTab = observer(() => {
                     </div>
                     <ViewYaml
                         open={open}
-                        pVolume={pVolume}
+                        yaml={yamlFile}
                         onClose={handleCloseYaml}
                     />
                 </PanelBox>
-                <Detail pVolume={pVolume} />
+                <Detail pVolume={pVolume} metadata={null} />
             </CReflexBox>
         </>
     );
