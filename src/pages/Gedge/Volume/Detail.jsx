@@ -14,18 +14,6 @@ import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
 const Detail = observer(({ pVolume }) => {
-    Object.entries(pVolume?.annotations).forEach(([keys, value]) => {
-        {
-            if (typeof value === "string") {
-                try {
-                    console.log(JSON.parse(value));
-                } catch (e) {
-                    console.log(keys, value);
-                }
-            }
-        }
-    });
-
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -33,13 +21,6 @@ const Detail = observer(({ pVolume }) => {
         setTabvalue(newValue);
     };
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-    useEffect(() => {}, []);
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
