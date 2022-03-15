@@ -4,23 +4,30 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+    CCreateButton,
+    CSelectButton,
+    BtnCellRenderer,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-// import Detail from "../Detail";
+import Detail from "../Detail";
 import volumeStore from "../../../../store/Volume";
+import ViewYaml from "../Dialog/ViewYaml";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [yamlData, setYamlData] = useState();
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { volumeDetail, volumeList, totalElements, loadVolumeList } =
+    const { pVolume, pVolumes, totalElements, loadPVolumes, loadPVolume } =
         volumeStore;
 
     const [columDefs] = useState([
@@ -33,6 +40,20 @@ const VolumeListTab = observer(() => {
             headerName: "Capacity",
             field: "capacity",
             filter: true,
+            // valueFormatter: (params) =>
+            //     params.data.capacity.substring(
+            //         0,
+            //         params.data.capacity.length - 2
+            //     ).length > 4
+            //         ? params.data.capacity.substring(
+            //               0,
+            //               params.data.capacity.length - 2
+            //           )
+            //         : params.data.capacity.substring(
+            //               0,
+            //               params.data.capacity.length - 2
+            //           ),
+            // // params.data.number.toFixeD(2),
         },
         {
             headerName: "Status",
@@ -72,14 +93,37 @@ const VolumeListTab = observer(() => {
                     .format("YYYY-MM-DD HH:mm")}</span>`;
             },
         },
+        {
+            headerName: "Yaml",
+            field: "yaml",
+            maxWidth: 150,
+            cellRenderer: function () {
+                return `<button class="tb_volume_yaml" onClick>View</button>`;
+            },
+            cellStyle: { textAlign: "center" },
+        },
     ]);
+
+    const handleOpen = (e) => {
+        let fieldName = e.colDef.field;
+        loadPVolume(e.data.name, e.data.cluster);
+        if (fieldName === "yaml") {
+            handleOpenYaml();
+        }
+    };
+
+    const handleOpenYaml = () => {
+        setOpen(true);
+    };
+    const handleCloseYaml = () => {
+        setOpen(false);
+    };
 
     const history = useHistory();
 
     useEffect(() => {
-        loadVolumeList();
+        loadPVolumes();
     }, []);
-    console.log(volumeList);
     return (
         <>
             <CReflexBox>
@@ -89,14 +133,15 @@ const VolumeListTab = observer(() => {
                         isSelect={true}
                         keywordList={["이름"]}
                     >
-                        {/* <CCreateButton>생성</CCreateButton> */}
+                        <CCreateButton>생성</CCreateButton>
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
-                                    rowData={volumeList}
+                                    onCellClicked={handleOpen}
+                                    rowData={pVolumes}
                                     columnDefs={columDefs}
                                     isBottom={true}
                                     totalElements={totalElements}
@@ -104,8 +149,13 @@ const VolumeListTab = observer(() => {
                             </div>
                         </CTabPanel>
                     </div>
+                    <ViewYaml
+                        open={open}
+                        pVolume={pVolume}
+                        onClose={handleCloseYaml}
+                    />
                 </PanelBox>
-                {/* <Detail cluster={clusterDetail} /> */}
+                <Detail pVolume={pVolume} />
             </CReflexBox>
         </>
     );

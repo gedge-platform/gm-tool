@@ -93,7 +93,7 @@ const CreateDialog = observer((props) => {
   };
 
   const createDeployment = () => {
-    postDeployment(handleClose);
+    postDeployment();
   };
   const createDeployment2 = () => {
     let formData = new FormData();

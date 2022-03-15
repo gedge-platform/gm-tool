@@ -1,8 +1,13 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
+import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class Deployment {
+  deploymentList = [];
+  deploymentDetail = {};
+  totalElements = 0;
   deploymentName = "";
   podReplicas = "";
   containerImage = "";
@@ -56,6 +61,20 @@ class Deployment {
   constructor() {
     makeAutoObservable(this);
   }
+
+  loadDeploymentList = async (type) => {
+    await axios
+      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter((item) => item.projetType === type);
+          this.deploymentList = list;
+          this.deploymentDetail = list[0];
+          this.totalElements = list.length;
+        });
+      });
+  };
+
   setWorkspace = (workspace) => {
     runInAction(() => {
       this.workspace = workspace;
@@ -132,7 +151,7 @@ class Deployment {
     });
   };
 
-  postDeployment = async (callback) => {
+  postDeployment = async () => {
     const YAML = require("yamljs");
 
     await axios
@@ -144,7 +163,12 @@ class Deployment {
         }
       )
       .then((res) => {
-        if (res.status === 200) callback();
+        if (res.status === 200) {
+          const history = useHistory();
+          swalError("Deployment가 생성되었습니다.", () =>
+            history.push("/service/workload")
+          );
+        }
       });
   };
 }

@@ -11,7 +11,7 @@ const TableTitle = styled.p`
 `;
 
 const Detail = (props) => {
-  const { deployment } = props;
+  const { cronJob } = props;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -38,19 +38,19 @@ const Detail = (props) => {
             <tbody>
               <tr>
                 <th>클러스터</th>
-                <td>{deployment.cluster}</td>
+                <td></td>
                 <th>프로젝트</th>
-                <td>{deployment.project}</td>
+                <td></td>
               </tr>
               <tr>
                 <th>앱</th>
                 <td></td>
                 <th>생성일</th>
-                <td>{moment(deployment.createAt).format("YYYY-MM-DD")}</td>
+                <td></td>
               </tr>
               <tr>
                 <th>업데이트 날짜</th>
-                <td>{moment(deployment.updateAt).format("YYYY-MM-DD")}</td>
+                <td></td>
                 <th>생성자</th>
                 <td></td>
               </tr>

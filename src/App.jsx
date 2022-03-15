@@ -13,6 +13,7 @@ import {
   ServiceProject,
   ServiceWorkload,
   ServiceWorkSpace,
+  Volume,
 } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
 
@@ -28,6 +29,7 @@ export const App = () => {
         <AuthRoute path="/monitoring" component={Monitoring} />
         <AuthRoute path="/workSpace" component={WorkSpace} />
         <AuthRoute path="/user" component={User} />
+        <AuthRoute path="/volumes" component={Volume} />
 
         {/* SA */}
         <AuthRoute path="/service/project" component={ServiceProject} />

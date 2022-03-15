@@ -73,7 +73,7 @@ const PlatfromServiceListTab = observer(() => {
   useEffect(() => {
     loadProjectList("system");
   }, []);
-  console.log(projectList);
+
   return (
     <>
       <CReflexBox>
@@ -95,7 +95,7 @@ const PlatfromServiceListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail cluster={projectDetail} />
+        <Detail project={projectDetail} />
       </CReflexBox>
     </>
   );
