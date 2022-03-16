@@ -114,8 +114,8 @@ const CreateDeployment = observer((props) => {
     formData.append("callbackUrl", "http://127.0.0.1:8080/service/workload");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", toJS(clusters));
-    console.log(toJS(clusters));
+    formData.append("clusters", JSON.stringify(clusters));
+    console.log(JSON.stringify(clusters));
 
     axios
       .post("http://101.79.4.15:32527/yaml", formData)
