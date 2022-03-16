@@ -7,7 +7,7 @@ import styled from "styled-components";
 import moment from "moment";
 import projectStore from "../../../store/Project";
 import { keys } from "lodash";
-import ProjectCss from "./ProjectCss";
+import { TreeItem } from "./ProjectEvent";
 
 const TableTitle = styled.p`
   font-size: 16px;
