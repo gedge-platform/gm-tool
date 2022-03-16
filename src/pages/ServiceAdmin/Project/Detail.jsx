@@ -13,7 +13,7 @@ const TableTitle = styled.p`
 
 const Detail = observer((props) => {
   const { project } = props;
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = false;
   const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
@@ -29,10 +29,10 @@ const Detail = observer((props) => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="프로젝트 정보" />
-        <CTab label="파드 정보" />
-        <CTab label="게이트웨이 정보" />
-        <CTab label="프로젝트 할당" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Labels" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
