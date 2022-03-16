@@ -17,6 +17,7 @@ import DeploymentYaml from "./DeploymentYaml";
 import { useHistory } from "react-router";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
+import clusterStore from "../../../../store/Cluster";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -52,6 +53,7 @@ const CreateDeployment = observer((props) => {
     postDeployment,
     setResponseData,
   } = deploymentStore;
+  const { clusters } = clusterStore;
 
   const template = {
     apiVersion: "apps/v1",
@@ -106,22 +108,8 @@ const CreateDeployment = observer((props) => {
     formData.append("callbackUrl", "http://127.0.0.1:8081/service/workload");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", {
-      cluster: "gedgemgmt01",
-      type: "core",
-      nodes: [
-        {
-          name: "gedgemgmt01",
-          type: "master",
-          Ip: "101.79.4.15",
-        },
-        {
-          name: "gedgemgmt02",
-          type: "worker",
-          Ip: "101.79.4.16",
-        },
-      ],
-    });
+    formData.append("clusters", clusters);
+    console.log(clusters);
 
     axios
       .post("http://101.79.4.15:32527/yaml", formData)
