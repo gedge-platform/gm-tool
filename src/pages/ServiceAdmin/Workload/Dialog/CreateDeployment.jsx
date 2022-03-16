@@ -227,7 +227,7 @@ const CreateDeployment = observer((props) => {
     <CDialog
       id="myDialog"
       open={open}
-      maxWidth="lg"
+      maxWidth="xl"
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
