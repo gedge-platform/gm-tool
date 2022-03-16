@@ -4,7 +4,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import TreeItem from "@mui/lab/TreeItem";
 
-export default function ProjectCss() {
+const ProjectEvent = () => {
   return (
     <TreeView
       aria-label="file system navigator"
@@ -23,4 +23,6 @@ export default function ProjectCss() {
       </TreeItem>
     </TreeView>
   );
-}
+};
+
+export { ProjectEvent };
