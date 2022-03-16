@@ -45,7 +45,7 @@ const DeploymentBasicInformation = observer(() => {
           <th>
             Workspace <span className="requried">*</span>
           </th>
-          <td style={{ width: "20%" }}>
+          <td style={{ width: "50%" }}>
             <FormControl className="form_fullWidth">
               <select name="workspace" onChange={onChange}>
                 {workSpaceList.map((workspace) => (
@@ -81,7 +81,7 @@ const DeploymentBasicInformation = observer(() => {
           </td>
           <th></th>
         </tr>
-        <tr>
+        {/* <tr>
           <th>
             Cluster <span className="requried">*</span>
           </th>
@@ -102,7 +102,7 @@ const DeploymentBasicInformation = observer(() => {
             </FormControl>
           </td>
           <th></th>
-        </tr>
+        </tr> */}
         <tr>
           <th>
             Deployment Name
