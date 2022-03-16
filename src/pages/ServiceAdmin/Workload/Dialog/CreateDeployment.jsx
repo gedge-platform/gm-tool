@@ -105,7 +105,7 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://127.0.0.1:8081/service/workload");
+    formData.append("callbackUrl", "http://127.0.0.1:8080/service/workload");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
     formData.append("clusters", clusters);
