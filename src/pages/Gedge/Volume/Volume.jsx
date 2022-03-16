@@ -3,6 +3,7 @@ import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import VolumeListTab from "./TabList/VolumeListTab";
+import ClaimListTab from "./TabList/ClaimListTab";
 // import CoreClusterListTab from "./TabList/CoreClusterListTab";
 // import EdgeClusterListTab from "./TabList/EdgeClusterListTab";
 
@@ -19,6 +20,7 @@ const Volume = () => {
         <Layout currentPageTitle={currentPageTitle}>
             <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
                 <CTab label="볼륨 관리" />
+                <CTab label="클레임 관리" />
                 <CTab label="스토리지 클래스 관리" />
             </CTabs>
             <div className="tabPanelContainer">
@@ -26,6 +28,9 @@ const Volume = () => {
                     <VolumeListTab />
                 </CTabPanel>
                 <CTabPanel value={tabvalue} index={1}>
+                    <ClaimListTab />
+                </CTabPanel>
+                <CTabPanel value={tabvalue} index={2}>
                     {/* <EdgeClusterListTab /> */}
                 </CTabPanel>
             </div>

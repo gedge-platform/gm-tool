@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
-const Detail = observer(({ pVolume, metadata }) => {
+const ClaimDetail = observer(({ pvClaim, metadata, labels }) => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -21,24 +21,29 @@ const Detail = observer(({ pVolume, metadata }) => {
         setTabvalue(newValue);
     };
 
+    const annotationTable = [];
     const labelTable = [];
+    const eventTable = [];
 
     Object.entries(metadata).map(([key, value]) => {
-        labelTable.push(
+        annotationTable.push(
             <tr>
-                <th>{key}</th>
+                <th className="tb_volume_detail_th">{key}</th>
                 <td>{value}</td>
             </tr>
         );
     });
 
+    console.log(labels);
+
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
                 <CTab label="Detail" />
-                <CTab label="Claim" />
-                <CTab label="Metadata" />
+                <CTab label="Annotations" />
+                <CTab label="Label" />
                 <CTab label="Event" />
+                <CTab label="Finalizers" />
             </CTabs>
             <CTabPanel value={tabvalue} index={0}>
                 <div className="panelCont">
@@ -46,35 +51,33 @@ const Detail = observer(({ pVolume, metadata }) => {
                         <tbody>
                             <tr>
                                 <th className="tb_volume_detail_th">name</th>
-                                <td>{pVolume?.name}</td>
+                                <td className="tb_volume_detail_td">
+                                    {pvClaim?.name}
+                                </td>
                                 <th>capacity</th>
-                                <td>{pVolume?.capacity}</td>
+                                <td>{pvClaim?.capacity}</td>
                             </tr>
                             <tr>
                                 <th className="tb_volume_detail_th">
-                                    accessMode
+                                    namespace
                                 </th>
-                                <td>{pVolume?.accessMode}</td>
-                                <th>reclaimPolicy</th>
-                                <td>{pVolume?.reclaimPolicy}</td>
+                                <td className="tb_volume_detail_td">
+                                    {pvClaim?.namespace}
+                                </td>
+                                <th>accessMode</th>
+                                <td>{pvClaim?.accessMode}</td>
                             </tr>
                             <tr>
                                 <th>status</th>
-                                <td>{pVolume?.status}</td>
-                                <th>claim</th>
-                                <td>{pVolume?.claim?.name}</td>
+                                <td>{pvClaim?.status}</td>
+                                <th>volume</th>
+                                <td>{pvClaim?.volume}</td>
                             </tr>
                             <tr>
-                                <th>cluster</th>
-                                <td>{pVolume?.cluster}</td>
+                                <th>clusterName</th>
+                                <td>{pvClaim?.clusterName}</td>
                                 <th>storageClass</th>
-                                <td>{pVolume?.storageClass}</td>
-                            </tr>
-                            <tr>
-                                <th>volumeMode</th>
-                                <td>{pVolume?.volumeMode}</td>
-                                <th>createAt</th>
-                                <td>{pVolume?.createAt}</td>
+                                <td>{pvClaim?.storageClass}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -83,28 +86,7 @@ const Detail = observer(({ pVolume, metadata }) => {
             <CTabPanel value={tabvalue} index={1}>
                 <div className="panelCont">
                     <table className="tb_data">
-                        <tbody>
-                            <tr>
-                                <th className="tb_volume_detail_th">name</th>
-                                <td>{pVolume?.claim?.name}</td>
-                                <th className="tb_volume_detail_th">
-                                    capacity
-                                </th>
-                                <td>{pVolume?.claim?.namespace}</td>
-                            </tr>
-                            <tr>
-                                <th>accessMode</th>
-                                <td>{pVolume?.claim?.kind}</td>
-                                <th>reclaimPolicy</th>
-                                <td>{pVolume?.claim?.apiVersion}</td>
-                            </tr>
-                            <tr>
-                                <th>status</th>
-                                <td>{pVolume?.claim?.resourceVersion}</td>
-                                <th>uid</th>
-                                <td>{pVolume?.claim?.uid}</td>
-                            </tr>
-                        </tbody>
+                        <tbody>{annotationTable}</tbody>
                     </table>
                 </div>
             </CTabPanel>
@@ -113,12 +95,10 @@ const Detail = observer(({ pVolume, metadata }) => {
                     <table className="tb_data">
                         <tbody>
                             <tr>
-                                <th className="tb_volume_detail_th">
-                                    Label.Type
-                                </th>
-                                <td>{pVolume?.label?.type}</td>
+                                <th className="tb_volume_detail_th">Label</th>
+                                <td>{null}</td>
                             </tr>
-                            {labelTable}
+                            {null}
                         </tbody>
                     </table>
                 </div>
@@ -129,7 +109,7 @@ const Detail = observer(({ pVolume, metadata }) => {
                         <tbody>
                             <tr>
                                 <th className="tb_volume_detail_th">event</th>
-                                <td>{pVolume?.event}</td>
+                                <td>{null}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -138,4 +118,4 @@ const Detail = observer(({ pVolume, metadata }) => {
         </PanelBox>
     );
 });
-export default Detail;
+export default ClaimDetail;

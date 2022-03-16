@@ -1004,7 +1004,11 @@ const globalStyles = createGlobalStyle`
 }
 
 .tb_volume_detail_th{
-  width: 400px;
+  width: 300px;
+}
+
+.tb_volume_detail_td{
+  width: 500px;
 }
 
 `;

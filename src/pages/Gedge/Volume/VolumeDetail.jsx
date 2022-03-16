@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
-const Detail = observer(({ pVolume, metadata }) => {
+const VolumeDetail = observer(({ pVolume, metadata }) => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -138,4 +138,4 @@ const Detail = observer(({ pVolume, metadata }) => {
         </PanelBox>
     );
 });
-export default Detail;
+export default VolumeDetail;
