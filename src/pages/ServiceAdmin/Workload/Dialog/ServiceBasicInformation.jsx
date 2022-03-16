@@ -6,19 +6,16 @@ import deploymentStore from "../../../../store/Deployment";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import clusterStore from "../../../../store/Cluster";
+import serviceStore from "../../../../store/Service";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 
 const DeploymentBasicInformation = observer(() => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
   const { loadWorkSpaceList, workSpaceList } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const {
-    deploymentName,
-    setDeployName,
-    setCluster,
-    setWorkspace,
-    setProject,
-  } = deploymentStore;
+  const { serviceName, setServiceName, setCluster, setWorkspace, setProject } =
+    serviceStore;
   const { loadClusterList, clusterList } = clusterStore;
 
   const onChange = (e) => {
@@ -32,7 +29,7 @@ const DeploymentBasicInformation = observer(() => {
       loadClusterList();
       setProject(value);
       setClusterEnable(false);
-    } else if (name === "Deployment Name") setDeployName(value);
+    } else if (name === "Service Name") setServiceName(value);
     else if (name === "cluster") setCluster(value);
   };
   useEffect(() => {
@@ -81,43 +78,41 @@ const DeploymentBasicInformation = observer(() => {
           </td>
           <th></th>
         </tr>
-        {/* <tr>
+        <tr>
           <th>
             Cluster <span className="requried">*</span>
           </th>
           <td>
-            <FormControl className="form_fullWidth">
-              <select
-                disabled={clusterEnable && projectEnable}
-                name="cluster"
-                onChange={onChange}
-              >
-                {clusterList.map((cluster) => (
-                  <option value={cluster.clusterName}>
-                    {cluster.clusterName}
-                  </option>
-                ))}
-                <option value={"dafault"}>default</option>
-              </select>
-            </FormControl>
+            <FormGroup
+              className="form_fullWidth"
+              onChange={(e) => console.log(e.target.name)}
+            >
+              {clusterList.map((cluster) => (
+                <FormControlLabel
+                  control={<Checkbox name={cluster.clusterName} />}
+                  label={cluster.clusterName}
+                />
+              ))}
+            </FormGroup>
           </td>
           <th></th>
-        </tr> */}
+        </tr>
         <tr>
           <th>
-            Deployment Name
+            Service Name
             <span className="requried">*</span>
           </th>
-          <td colSpan={3}>
+          <td>
             <CTextField
               type="text"
-              placeholder="Deployment Name"
+              placeholder="Service Name"
               className="form_fullWidth"
-              name="Deployment Name"
+              name="Service Name"
               onChange={onChange}
-              value={deploymentName}
+              value={serviceName}
             />
           </td>
+          <th></th>
         </tr>
       </tbody>
     </table>

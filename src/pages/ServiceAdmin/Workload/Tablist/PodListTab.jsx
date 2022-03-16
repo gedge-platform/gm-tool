@@ -92,7 +92,11 @@ const PodListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreatePod open={open} onClose={handleClose} />
+          <CreatePod
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>

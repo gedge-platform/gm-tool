@@ -38,8 +38,8 @@ const CreatePod = observer((props) => {
   } = podStore;
 
   const template = {
-    apiVersion: "apps/v1",
-    kind: "Deployment",
+    apiVersion: "v1",
+    kind: "Pod",
     metadata: {
       name: podName,
     },
@@ -59,6 +59,7 @@ const CreatePod = observer((props) => {
   };
 
   const handleClose = () => {
+    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     clearAll();
   };
