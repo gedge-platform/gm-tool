@@ -1,18 +1,17 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, LOCAL_VOLUME_URL } from "../config";
 
 class Volume {
     pVolumes = [];
-    pVolume = {
-        annotations: {
-            "kubectl.kubernetes.io/last-applied-configuration": {},
-            "pv.kubernetes.io/bound-by-controller": {},
-        },
-    };
+    pVolume = {};
     totalElements = 0;
-    // pVolumeInfo = {};
+    pVolumeYamlFile = "";
+    pVolumeMetadata = {};
+    pvClaims = [];
     pvClaim = {};
+    storageClasses = [];
+    storageClass = {};
 
     constructor() {
         makeAutoObservable(this);
@@ -40,6 +39,22 @@ class Volume {
             .then((res) => {
                 runInAction(() => {
                     this.pVolume = res.data.data;
+                    this.pVolumeYamlFile = "";
+                    this.pVolumeMetadata = {};
+                    Object.entries(this.pVolume?.annotations).forEach(
+                        ([key, value]) => {
+                            try {
+                                const YAML = require("json-to-pretty-yaml");
+                                this.pVolumeYamlFile = YAML.stringify(
+                                    JSON.parse(value)
+                                );
+                            } catch (e) {
+                                if (key && value) {
+                                    this.pVolumeMetadata[key] = value;
+                                }
+                            }
+                        }
+                    );
                 });
             });
     };

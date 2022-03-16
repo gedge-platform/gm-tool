@@ -35,7 +35,6 @@ const ButtonNext = styled.button`
 
 const ViewDialog = observer((props) => {
     const { open, yaml } = props;
-    console.log(yaml);
     const handleClose = () => {
         props.onClose && props.onClose();
     };
