@@ -118,6 +118,7 @@ const DeploymentBasicInformation = observer(() => {
               value={deploymentName}
             />
           </td>
+          <th></th>
         </tr>
       </tbody>
     </table>

@@ -106,7 +106,22 @@ const CreateDeployment = observer((props) => {
     formData.append("callbackUrl", "http://127.0.0.1:8081/service/workload");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", "test");
+    formData.append("clusters", {
+      cluster: "gedgemgmt01",
+      type: "core",
+      nodes: [
+        {
+          name: "gedgemgmt01",
+          type: "master",
+          Ip: "101.79.4.15",
+        },
+        {
+          name: "gedgemgmt02",
+          type: "worker",
+          Ip: "101.79.4.16",
+        },
+      ],
+    });
 
     axios
       .post("http://101.79.4.15:32527/yaml", formData)
@@ -212,7 +227,7 @@ const CreateDeployment = observer((props) => {
     <CDialog
       id="myDialog"
       open={open}
-      maxWidth="md"
+      maxWidth="lg"
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
