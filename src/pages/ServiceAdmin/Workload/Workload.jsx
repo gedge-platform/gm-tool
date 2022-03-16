@@ -13,7 +13,7 @@ import DaemonSetListTab from "./Tablist/DaemonSetListTab";
 const Workload = () => {
   const currentPageTitle = Title.Workload;
 
-  const [tabvalue, setTabvalue] = useState(1);
+  const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
