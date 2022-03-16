@@ -7,6 +7,8 @@ class Cluster {
   clusterDetail = {};
   totalElements = 0;
 
+  clusters = [];
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -42,6 +44,12 @@ class Cluster {
           };
         });
       });
+  };
+
+  loadClusterInProject = async (project) => {
+    await axios
+      .get(`http://101.79.1.173:8010/clusterInfo?project=${project}`)
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 
   setDetail = (num) => {
