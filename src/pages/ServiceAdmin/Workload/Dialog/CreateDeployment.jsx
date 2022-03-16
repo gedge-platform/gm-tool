@@ -118,7 +118,7 @@ const CreateDeployment = observer((props) => {
     console.log(JSON.stringify(clusters));
 
     axios
-      .post("http://101.79.4.15:32527/yaml", formData)
+      .post(`http://101.79.4.15:32527/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
           setResponseData(response.data);
