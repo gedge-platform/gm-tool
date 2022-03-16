@@ -5,6 +5,9 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
+import projectStore from "../../../store/Project";
+import { keys } from "lodash";
+import ProjectCss from "./ProjectCss";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -12,10 +15,40 @@ const TableTitle = styled.p`
   margin: 8px 0;
 `;
 
-const Detail = observer((props) => {
-  const { project } = props;
+const Detail = observer(() => {
+  const { projectDetail } = projectStore;
+  const labelTable = [];
+  const eventTable = [];
+
+  // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  const labels = projectDetail.labels;
+  const events = projectDetail.events;
+
+  Object.entries(labels).map(([keys, value]) => {
+    labelTable.push(
+      <tr>
+        <th>{keys}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  // events.map((event) => {
+  //   Object.entries(event).map(([key, value]) => {
+  //     console.log(key, value);
+  //   });
+  // });
+
+  events.map((event, message) => {
+    eventTable.push(
+      <tr>
+        <th>{message}</th>
+        <td>{event["message"]}</td>
+      </tr>
+    );
+  });
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -31,31 +64,35 @@ const Detail = observer((props) => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="프로젝트 정보" />
-        <CTab label="파드 정보" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Labels" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세 정보</TableTitle>
+          {/* <TableTitle>상세 정보</TableTitle> */}
           <table className="tb_data">
             <tbody>
               <tr>
                 <th>클러스터</th>
-                <td>{project.clusterName}</td>
+                <td>{projectDetail.selectCluster}</td>
                 <th>프로젝트</th>
-                <td>{project.projectName}</td>
+                <td>{projectDetail.projectName}</td>
               </tr>
               <tr>
                 <th>status</th>
-                <td>{project.status}</td>
+                <td>{projectDetail.status}</td>
                 <th>워크스페이스</th>
-                <td>{project.workspaceName}</td>
+                <td>{projectDetail.workspaceName}</td>
               </tr>
               <tr>
                 <th>생성자</th>
-                <td>{project.projectCreator}</td>
+                <td>{projectDetail.projectCreator}</td>
                 <th>생성일</th>
-                <td>{moment(new Date()).format("YYYY-MM-DD HH:mm")}</td>
+                <td>
+                  {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -63,28 +100,56 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>파드</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>파드</th>
-                <td></td>
-                <th>클러스터</th>
-                <td></td>
+                <th>Deployments</th>
+                <td>{projectDetail.resource.deployment_count}</td>
               </tr>
               <tr>
-                <th>파드 IP</th>
-                <td></td>
-                <th>워크스페이스</th>
-                <td></td>
+                <th>Pods</th>
+                <td>{projectDetail.resource.pod_count}</td>
               </tr>
               <tr>
-                <th>생성자</th>
-                <td></td>
-                <th>생성일</th>
-                <td></td>
+                <th>Services</th>
+                <td>{projectDetail.resource.service_count}</td>
+              </tr>
+              <tr>
+                <th>Cronjob</th>
+                <td>{projectDetail.resource.cronjob_count}</td>
+              </tr>
+              <tr>
+                <th>Job</th>
+                <td>{projectDetail.resource.job_count}</td>
+              </tr>
+              <tr>
+                <th>Volume</th>
+                <td>{projectDetail.resource.volume_count}</td>
               </tr>
             </tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <table className="tb_data">
+            <tbody>{labelTable}</tbody>
+          </table>
+          <br />
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th>annotations</th>
+                <td>{projectDetail.annotations}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <table className="tb_data">
+            <tbody>{eventTable}</tbody>
           </table>
         </div>
       </CTabPanel>
