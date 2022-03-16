@@ -5,6 +5,6 @@
 
 // Gedge
 // export const SERVER_URL = "http://101.79.4.15:8010/gmcapi/v1";
-export const SERVER_URL = "http://101.79.4.15:8010/gmcapi/v1";
+export const SERVER_URL = "http://101.79.1.173:8011/gmcapi/v1";
 export const LOCAL_VOLUME_URL = "http://192.168.150.197:8101/gmcapi/v1";
 export const BASIC_AUTH = { username: "admin", password: "qwe1212!Q" };

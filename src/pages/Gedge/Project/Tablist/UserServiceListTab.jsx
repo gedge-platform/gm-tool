@@ -23,7 +23,7 @@ const UserServiceListTab = observer(() => {
     projectList,
     totalElements,
     loadProjectList,
-    loadProject,
+    loadProjectDetail,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -76,7 +76,8 @@ const UserServiceListTab = observer(() => {
   const history = useHistory();
 
   const handleClick = (e) => {
-    loadProject(e.data.projectName);
+    loadProjectDetail(e.data.projectName);
+    console.log(loadProjectDetail(e.data.projectName));
   };
 
   useEffect(() => {

@@ -11,9 +11,21 @@ import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import volumeStore from "../../../store/Volume";
 
-const Detail = observer((props) => {
-    const { cluster } = props;
+const Detail = observer(({ pVolume }) => {
+    Object.entries(pVolume?.annotations).forEach(([keys, value]) => {
+        {
+            if (typeof value === "string") {
+                try {
+                    console.log(JSON.parse(value));
+                } catch (e) {
+                    console.log(keys, value);
+                }
+            }
+        }
+    });
+
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -27,39 +39,50 @@ const Detail = observer((props) => {
     const handleClose = () => {
         setOpen(false);
     };
+    useEffect(() => {}, []);
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-                <CTab label="상세정보" />
-                <CTab label="리소스 사용량" />
+                <CTab label="Detail" />
+                <CTab label="Claim" />
+                <CTab label="Metadata" />
+                <CTab label="Event" />
             </CTabs>
             <CTabPanel value={tabvalue} index={0}>
-                <div className="tb_container">
+                <div className="panelCont">
                     <table className="tb_data">
                         <tbody>
                             <tr>
-                                <th>클러스터</th>
-                                <td>{cluster.clusterName}</td>
+                                <th className="tb_volume_detail_th">name</th>
+                                <td>{pVolume?.name}</td>
+                                <th>capacity</th>
+                                <td>{pVolume?.capacity}</td>
                             </tr>
                             <tr>
-                                <th>쿠버네티스 버전</th>
-                                <td>{cluster.kubeVersion}</td>
+                                <th className="tb_volume_detail_th">
+                                    accessMode
+                                </th>
+                                <td>{pVolume?.accessMode}</td>
+                                <th>reclaimPolicy</th>
+                                <td>{pVolume?.reclaimPolicy}</td>
                             </tr>
                             <tr>
-                                <th>역할</th>
-                                <td></td>
+                                <th>status</th>
+                                <td>{pVolume?.status}</td>
+                                <th>claim</th>
+                                <td>{pVolume?.claim?.name}</td>
                             </tr>
                             <tr>
-                                <th>생성자</th>
-                                <td>{cluster.clusterCreator}</td>
+                                <th>cluster</th>
+                                <td>{pVolume?.cluster}</td>
+                                <th>storageClass</th>
+                                <td>{pVolume?.storageClass}</td>
                             </tr>
                             <tr>
-                                <th>생성일</th>
-                                <td>{cluster.create_at}</td>
-                            </tr>
-                            <tr>
-                                <th>업데이트일</th>
-                                <td></td>
+                                <th>volumeMode</th>
+                                <td>{pVolume?.volumeMode}</td>
+                                <th>createAt</th>
+                                <td>{pVolume?.createAt}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -67,164 +90,52 @@ const Detail = observer((props) => {
             </CTabPanel>
             <CTabPanel value={tabvalue} index={1}>
                 <div className="panelCont">
-                    <div className="grid-height">123</div>
+                    <table className="tb_data">
+                        <tbody>
+                            <tr>
+                                <th className="tb_volume_detail_th">name</th>
+                                <td>{pVolume?.claim?.name}</td>
+                                <th className="tb_volume_detail_th">
+                                    capacity
+                                </th>
+                                <td>{pVolume?.claim?.namespace}</td>
+                            </tr>
+                            <tr>
+                                <th>accessMode</th>
+                                <td>{pVolume?.claim?.kind}</td>
+                                <th>reclaimPolicy</th>
+                                <td>{pVolume?.claim?.apiVersion}</td>
+                            </tr>
+                            <tr>
+                                <th>status</th>
+                                <td>{pVolume?.claim?.resourceVersion}</td>
+                                <th>uid</th>
+                                <td>{pVolume?.claim?.uid}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </CTabPanel>
+            <CTabPanel value={tabvalue} index={2}>
+                <div className="panelCont">
+                    <table className="tb_data">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </CTabPanel>
+            <CTabPanel value={tabvalue} index={3}>
+                <div className="panelCont">
+                    <table className="tb_data">
+                        <tbody>
+                            <tr>
+                                <th className="tb_volume_detail_th">event</th>
+                                <td>{pVolume?.event}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </CTabPanel>
         </PanelBox>
     );
 });
 export default Detail;
-
-/*
-    <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="노드 정보" />
-        <CTab label="채널 정보" />
-      </CTabs>
-      <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>네트워크 이름</th>
-                  <td>OOO 조회</td>
-                  <th>조직ID</th>
-                  <td>JSON</td>
-                </tr>
-                <tr>
-                  <th>Import 여부</th>
-                  <td colSpan={1}>N</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>Node Type</th>
-                  <th>Node 이름</th>
-                  <th>상태</th>
-                </tr>
-                <tr>
-                  <td>CA</td>
-                  <td>block-ca</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer(Endorser)</td>
-                  <td>block-peer1(Committer)</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer2</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer3</td>
-                  <td>운영 중</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>조직 이름</th>
-                  <th>채널 이름</th>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-1</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-2</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-3</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>Node Type</th>
-                    <th>Node 이름</th>
-                    <th>상태</th>
-                  </tr>
-                  <tr>
-                    <td>CA</td>
-                    <td>block-ca</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer(Endorser)</td>
-                    <td>block-peer1(Committer)</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer2</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer3</td>
-                    <td>운영 중</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>조직 이름</th>
-                    <th>채널 이름</th>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-1</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-2</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-3</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-4</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-      </div>
-    </PanelBox>
-*/

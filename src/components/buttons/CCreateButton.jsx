@@ -21,7 +21,8 @@ const useStyles = makeStyles(() =>
                     borderColor: "#007cdb",
                 },
                 "&.check .MuiButton-label::after": {
-                    backgroundImage: "url(../images/bullet/createBtn_check.png)",
+                    backgroundImage:
+                        "url(../images/bullet/createBtn_check.png)",
                 },
             },
         },
@@ -29,12 +30,27 @@ const useStyles = makeStyles(() =>
 );
 
 const CCreateButton = (props) => {
-    const { children, type, style, icon, buttonEventType = "button", onClick, role = "ROLE_USER", ...other } = props;
+    const {
+        children,
+        type,
+        style,
+        icon,
+        buttonEventType = "button",
+        onClick,
+        role = "ROLE_USER",
+        ...other
+    } = props;
     const classes = useStyles();
 
     return (
         <>
-            <Button type={buttonEventType} className={`btn_create ${icon}`} style={style} onClick={onClick} {...other}>
+            <Button
+                type={buttonEventType}
+                className={`btn_create ${icon}`}
+                style={style}
+                onClick={onClick}
+                {...other}
+            >
                 {children}
             </Button>
         </>

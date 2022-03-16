@@ -91,7 +91,7 @@ const CreateDialog = observer((props) => {
   };
 
   const createDeployment = () => {
-    postDeployment(handleClose);
+    postDeployment();
   };
   useEffect(() => {
     if (stepValue === 3) {

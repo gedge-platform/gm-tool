@@ -5,7 +5,7 @@
   "main": "index.jsx",
   "repository": "http://210.207.104.150:8100/inno-rndplan/hyperledger/hyper-web.git",
   "scripts": {
-    "start": "webpack-dev-server --open --watch",
+    "start": "webpack-dev-server -d --watch --history-api-fallback --host 0.0.0.0 --port 8080 --disable-host-check",
     "dev": "webpack-dev-server --open --watch",
     "build": "webpack",
     "production-build": "cross-env NODE_ENV=production webpack",
@@ -22,6 +22,7 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@mui/icons-material": "^5.0.4",
+    "@mui/lab": "^5.0.0-alpha.73",
     "@mui/material": "^5.0.4",
     "@mui/styled-engine-sc": "^5.0.3",
     "@mui/styles": "^5.0.1",
