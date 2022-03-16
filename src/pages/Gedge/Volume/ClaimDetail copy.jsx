@@ -13,13 +13,24 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
-const Detail = observer(({ pVolume }) => {
+const Detail = observer(({ pVolume, metadata }) => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
+
+    const labelTable = [];
+
+    Object.entries(metadata).map(([key, value]) => {
+        labelTable.push(
+            <tr>
+                <th>{key}</th>
+                <td>{value}</td>
+            </tr>
+        );
+    });
 
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
@@ -100,7 +111,15 @@ const Detail = observer(({ pVolume }) => {
             <CTabPanel value={tabvalue} index={2}>
                 <div className="panelCont">
                     <table className="tb_data">
-                        <tbody></tbody>
+                        <tbody>
+                            <tr>
+                                <th className="tb_volume_detail_th">
+                                    Label.Type
+                                </th>
+                                <td>{pVolume?.label?.type}</td>
+                            </tr>
+                            {labelTable}
+                        </tbody>
                     </table>
                 </div>
             </CTabPanel>
