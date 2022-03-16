@@ -157,12 +157,12 @@ class Deployment {
     });
   };
 
-  postDeployment = async () => {
+  postDeployment = async (callback) => {
     const YAML = require("yamljs");
 
     await axios
       .post(
-        `${SERVER_URL}/deployments?cluster=${this.cluster}&project=${this.project}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
         YAML.parse(this.content),
         {
           auth: BASIC_AUTH,
@@ -170,10 +170,7 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 200) {
-          const history = useHistory();
-          swalError("Deployment가 생성되었습니다.", () =>
-            history.push("/service/workload")
-          );
+          swalError("Deployment가 생성되었습니다.", callback);
         }
       });
   };

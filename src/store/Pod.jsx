@@ -7,6 +7,15 @@ class Pod {
   podDetail = {};
   totalElements = 0;
 
+  podName = "";
+  containerName = "";
+  containerImage = "";
+  containerPort = 0;
+  containerPortName = "";
+  workspace = "";
+  project = "";
+  content = "";
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -27,6 +36,64 @@ class Pod {
         });
       });
   };
+
+  setPodName = (podName) => {
+    runInAction(() => {
+      this.podName = podName;
+    });
+  };
+
+  setContainerName = (containerName) => {
+    runInAction(() => {
+      this.containerName = containerName;
+    });
+  };
+
+  setContainerImage = (containerImage) => {
+    runInAction(() => {
+      this.containerImage = containerImage;
+    });
+  };
+
+  setContainerPort = (containerPort) => {
+    runInAction(() => {
+      this.containerPort = containerPort;
+    });
+  };
+  setContainerPortName = (containerPortName) => {
+    runInAction(() => {
+      this.containerPortName = containerPortName;
+    });
+  };
+
+  setWorkspace = (workspace) => {
+    runInAction(() => {
+      this.workspace = workspace;
+    });
+  };
+
+  setProject = (project) => {
+    runInAction(() => {
+      this.project = project;
+    });
+  };
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
+  clearAll = () => {
+    runInAction(() => {
+      this.setPodName("");
+      this.setContainerImage("");
+      this.setContainerName("");
+      this.setContainerPort(0);
+    });
+  };
+
+  createPod = async () => {};
 }
 
 const podStore = new Pod();

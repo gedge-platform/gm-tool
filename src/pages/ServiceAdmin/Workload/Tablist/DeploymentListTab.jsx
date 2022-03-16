@@ -91,7 +91,11 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment open={open} onClose={handleClose} />
+          <CreateDeployment
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadDeploymentList}
+          />
         </PanelBox>
         <Detail deployment={deploymentDetail} />
       </CReflexBox>
