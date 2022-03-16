@@ -1,22 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { CDialog } from "@/components/dialogs";
-import { swalUpdate } from "@/utils/swal-utils";
-import FormControl from "@material-ui/core/FormControl";
-import { CTextField } from "@/components/textfields";
-import { SERVER_URL } from "@/config.jsx";
-import axios from "axios";
-import { CButton } from "@/components/buttons";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import workspacesStore from "../../../../store/WorkSpace";
-import projectStore from "../../../../store/Project";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
-import DeploymentPodSettins from "./DeploymentPodSettins";
-import deploymentStore from "../../../../store/Deployment";
-import DeploymentYaml from "./DeploymentYaml";
-import { useHistory } from "react-router";
-import * as FormData from "form-data";
-import DeploymentPopup from "./DeploymentPopup";
+import serviceStore from "../../../../store/Service";
+import ServiceBasicInformation from "../Dialog/ServiceBasicInformation";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -35,60 +22,31 @@ const ButtonNext = styled.button`
   box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
 `;
 
-const CreateDeployment = observer((props) => {
+const CreatePod = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const {
-    deploymentName,
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    responseData,
-    setContent,
-    clearAll,
-    postDeployment,
-    setResponseData,
-  } = deploymentStore;
+  const { serviceName, appName, protocol, port, targetPort, clearAll } =
+    serviceStore;
 
   const template = {
-    apiVersion: "apps/v1",
-    kind: "Deployment",
+    apiVersion: "v1",
+    kind: "Service",
     metadata: {
-      name: deploymentName,
-      labels: {
-        app: deploymentName,
-      },
+      name: serviceName,
     },
     spec: {
-      replicas: podReplicas,
       selector: {
-        matchLabels: {
-          app: deploymentName,
-        },
+        app: appName,
       },
-      template: {
-        metadata: {
-          labels: {
-            app: deploymentName,
-          },
+      ports: [
+        {
+          protocol: protocol,
+          port: port,
+          targetPort: targetPort,
         },
-        spec: {
-          containers: [
-            {
-              image: containerImage,
-              name: containerName,
-              ports: [
-                {
-                  containerPort: Number(containerPort),
-                },
-              ],
-            },
-          ],
-        },
-      },
+      ],
     },
   };
 
@@ -98,47 +56,10 @@ const CreateDeployment = observer((props) => {
     clearAll();
   };
 
-  const createDeployment = () => {
-    postDeployment(handleClose);
-  };
-  const createDeployment2 = () => {
-    let formData = new FormData();
-    formData.append("callbackUrl", "http://127.0.0.1:8081/service/workload");
-    formData.append("requestId", deploymentName);
-    formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", {
-      cluster: "gedgemgmt01",
-      type: "core",
-      nodes: [
-        {
-          name: "gedgemgmt01",
-          type: "master",
-          Ip: "101.79.4.15",
-        },
-        {
-          name: "gedgemgmt02",
-          type: "worker",
-          Ip: "101.79.4.16",
-        },
-      ],
-    });
-
-    axios
-      .post("http://101.79.4.15:32527/yaml", formData)
-      .then(function (response) {
-        if (response.status === 200) {
-          setResponseData(response.data);
-          setStepValue(4);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
   useEffect(() => {
     if (stepValue === 3) {
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      //   const YAML = require("json-to-pretty-yaml");
+      //   setContent(YAML.stringify(template));
     }
   });
 
@@ -146,7 +67,7 @@ const CreateDeployment = observer((props) => {
     if (stepValue === 1) {
       return (
         <>
-          <DeploymentBasicInformation />
+          <ServiceBasicInformation />
           <div
             style={{
               display: "flex",
@@ -170,7 +91,6 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
-          <DeploymentPodSettins />
           <div
             style={{
               display: "flex",
@@ -195,7 +115,6 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <DeploymentYaml />
           <div
             style={{
               display: "flex",
@@ -212,22 +131,24 @@ const CreateDeployment = observer((props) => {
             >
               <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment2}>
+              <ButtonNext onClick={() => console.log("")}>
                 Schedule Apply
               </ButtonNext>
-              <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext>
+              <ButtonNext onClick={() => console.log("")}>
+                Default Apply
+              </ButtonNext>
             </div>
           </div>
         </>
       );
-    } else return <DeploymentPopup />;
+    } else return <>4</>;
   };
 
   return (
     <CDialog
       id="myDialog"
       open={open}
-      maxWidth="xl"
+      maxWidth="md"
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
@@ -237,4 +158,4 @@ const CreateDeployment = observer((props) => {
     </CDialog>
   );
 });
-export default CreateDeployment;
+export default CreatePod;

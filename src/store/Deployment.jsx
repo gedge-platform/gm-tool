@@ -15,9 +15,10 @@ class Deployment {
   containerPort = "";
   podReplicas = 0;
 
-  workspace = "";
-  cluster = "";
-  project = "";
+  workspace = "default";
+  cluster = "default";
+  project = "default";
+  responseData = "";
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -138,6 +139,11 @@ class Deployment {
       this.content = content;
     });
   };
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
 
   clearAll = () => {
     runInAction(() => {
@@ -151,12 +157,12 @@ class Deployment {
     });
   };
 
-  postDeployment = async () => {
+  postDeployment = async (callback) => {
     const YAML = require("yamljs");
 
     await axios
       .post(
-        `${SERVER_URL}/deployments?cluster=${this.cluster}&project=${this.project}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
         YAML.parse(this.content),
         {
           auth: BASIC_AUTH,
@@ -164,10 +170,7 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 200) {
-          const history = useHistory();
-          swalError("Deployment가 생성되었습니다.", () =>
-            history.push("/service/workload")
-          );
+          swalError("Deployment가 생성되었습니다.", callback);
         }
       });
   };

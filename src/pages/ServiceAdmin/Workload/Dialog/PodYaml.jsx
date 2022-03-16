@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import React from "react";
-import deploymentStore from "../../../../store/Deployment";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import podStore from "../../../../store/Pod";
 
-const DeploymentYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
+const PodYaml = observer(() => {
+  const { content, setContent } = podStore;
 
   return (
     <AceEditor
@@ -35,4 +35,4 @@ const DeploymentYaml = observer(() => {
   );
 });
 
-export default DeploymentYaml;
+export default PodYaml;

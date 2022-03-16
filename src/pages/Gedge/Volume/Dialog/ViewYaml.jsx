@@ -8,6 +8,7 @@ import axios from "axios";
 import { CButton } from "@/components/buttons";
 import styled from "styled-components";
 import { observer } from "mobx-react";
+import VolumeYaml from "./VolumeYaml";
 // import workspacesStore from "../../../../store/WorkSpace";
 // import projectStore from "../../../../store/Project";
 // // import DeploymentBasicInformation from "./DeploymentBasicInformation";
@@ -33,10 +34,47 @@ const ButtonNext = styled.button`
 `;
 
 const ViewDialog = observer((props) => {
-    const { open, pVolume } = props;
+    const { open, yaml } = props;
+    const handleClose = () => {
+        props.onClose && props.onClose();
+    };
 
-    console.log(pVolume);
+    const ViewOfComponent = () => {
+        return (
+            <>
+                <VolumeYaml content={yaml} />
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        marginTop: "10px",
+                    }}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                        }}
+                    >
+                        <Button onClick={handleClose}>닫기</Button>
+                    </div>
+                </div>
+            </>
+        );
+    };
 
-    return null;
+    return (
+        <CDialog
+            id="myDialog"
+            open={open}
+            maxWidth="md"
+            title={"Create Deployment"}
+            onClose={handleClose}
+            bottomArea={false}
+            modules={["custom"]}
+        >
+            {ViewOfComponent()}
+        </CDialog>
+    );
 });
 export default ViewDialog;

@@ -7,6 +7,16 @@ class Service {
   serviceDetail = {};
   totalElements = 0;
 
+  serviceName = "";
+  appName = "";
+  protocol = "";
+  port = 0;
+  targetPort = 0;
+
+  clusterList = [];
+  workspace = "";
+  project = "";
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -26,6 +36,61 @@ class Service {
           this.totalElements = list.length;
         });
       });
+  };
+
+  setServiceName = (serviceName) => {
+    runInAction(() => {
+      this.serviceName = serviceName;
+    });
+  };
+
+  setAppName = (appName) => {
+    runInAction(() => {
+      this.appName = appName;
+    });
+  };
+
+  setProtocol = (protocol) => {
+    runInAction(() => {
+      this.protocol = protocol;
+    });
+  };
+
+  setPort = (port) => {
+    runInAction(() => {
+      this.port = port;
+    });
+  };
+
+  setTargetPort = (targetPort) => {
+    runInAction(() => {
+      this.targetPort = targetPort;
+    });
+  };
+
+  setCluster = (cluster) => {
+    runInAction(() => {
+      this.cluster = cluster;
+    });
+  };
+
+  setWorkspace = (workspace) => {
+    runInAction(() => {
+      this.workspace = workspace;
+    });
+  };
+
+  setProject = (project) => {
+    runInAction(() => {
+      this.project = project;
+    });
+  };
+
+  clearAll = () => {
+    this.setServiceName("");
+    this.setPort(0);
+    this.setTargetPort(0);
+    this.setProtocol("");
   };
 }
 

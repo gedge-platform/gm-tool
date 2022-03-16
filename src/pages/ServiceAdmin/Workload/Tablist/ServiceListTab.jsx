@@ -11,8 +11,10 @@ import { observer } from "mobx-react";
 import Detail from "../ServiceDetail";
 import serviceStore from "../../../../store/Service";
 import moment from "moment";
+import CreateService from "../Dialog/CreateService";
 
 const ServiceListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -52,6 +54,14 @@ const ServiceListTab = observer(() => {
     },
   ]);
 
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -63,7 +73,7 @@ const ServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -78,6 +88,11 @@ const ServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateService
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadServiceList}
+          />
         </PanelBox>
         <Detail service={serviceDetail} />
       </CReflexBox>

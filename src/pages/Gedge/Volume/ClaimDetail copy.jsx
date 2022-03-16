@@ -13,19 +13,7 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
-const Detail = observer(({ pVolume }) => {
-    Object.entries(pVolume?.annotations).forEach(([keys, value]) => {
-        {
-            if (typeof value === "string") {
-                try {
-                    console.log(JSON.parse(value));
-                } catch (e) {
-                    console.log(keys, value);
-                }
-            }
-        }
-    });
-
+const Detail = observer(({ pVolume, metadata }) => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -33,13 +21,17 @@ const Detail = observer(({ pVolume }) => {
         setTabvalue(newValue);
     };
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
-    useEffect(() => {}, []);
+    const labelTable = [];
+
+    Object.entries(metadata).map(([key, value]) => {
+        labelTable.push(
+            <tr>
+                <th>{key}</th>
+                <td>{value}</td>
+            </tr>
+        );
+    });
+
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -119,7 +111,15 @@ const Detail = observer(({ pVolume }) => {
             <CTabPanel value={tabvalue} index={2}>
                 <div className="panelCont">
                     <table className="tb_data">
-                        <tbody></tbody>
+                        <tbody>
+                            <tr>
+                                <th className="tb_volume_detail_th">
+                                    Label.Type
+                                </th>
+                                <td>{pVolume?.label?.type}</td>
+                            </tr>
+                            {labelTable}
+                        </tbody>
                     </table>
                 </div>
             </CTabPanel>

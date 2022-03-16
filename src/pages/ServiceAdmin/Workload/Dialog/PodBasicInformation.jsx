@@ -2,23 +2,17 @@ import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import workspacesStore from "../../../../store/WorkSpace";
 import projectStore from "../../../../store/Project";
-import deploymentStore from "../../../../store/Deployment";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import clusterStore from "../../../../store/Cluster";
+import podStore from "../../../../store/Pod";
 
-const DeploymentBasicInformation = observer(() => {
+const podBasicInformation = observer(() => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
   const { loadWorkSpaceList, workSpaceList } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const {
-    deploymentName,
-    setDeployName,
-    setCluster,
-    setWorkspace,
-    setProject,
-  } = deploymentStore;
+  const { podName, setPodName, setWorkspace, setProject } = podStore;
   const { loadClusterList, clusterList } = clusterStore;
 
   const onChange = (e) => {
@@ -32,8 +26,8 @@ const DeploymentBasicInformation = observer(() => {
       loadClusterList();
       setProject(value);
       setClusterEnable(false);
-    } else if (name === "Deployment Name") setDeployName(value);
-    else if (name === "cluster") setCluster(value);
+    } else if (name === "Pod Name") setPodName(value);
+    // else if (name === "cluster") setCluster(value);
   };
   useEffect(() => {
     loadWorkSpaceList();
@@ -48,12 +42,12 @@ const DeploymentBasicInformation = observer(() => {
           <td style={{ width: "50%" }}>
             <FormControl className="form_fullWidth">
               <select name="workspace" onChange={onChange}>
-                <option value={"dafault"}>default</option>
                 {workSpaceList.map((workspace) => (
                   <option value={workspace.workspaceName}>
                     {workspace.workspaceName}
                   </option>
                 ))}
+                <option value={"dafault"}>default</option>
               </select>
             </FormControl>
           </td>
@@ -105,24 +99,23 @@ const DeploymentBasicInformation = observer(() => {
         </tr> */}
         <tr>
           <th>
-            Deployment Name
+            Pod Name
             <span className="requried">*</span>
           </th>
-          <td>
+          <td colSpan={3}>
             <CTextField
               type="text"
-              placeholder="Deployment Name"
+              placeholder="Pod Name"
               className="form_fullWidth"
-              name="Deployment Name"
+              name="Pod Name"
               onChange={onChange}
-              value={deploymentName}
+              value={podName}
             />
           </td>
-          <th></th>
         </tr>
       </tbody>
     </table>
   );
 });
 
-export default DeploymentBasicInformation;
+export default podBasicInformation;

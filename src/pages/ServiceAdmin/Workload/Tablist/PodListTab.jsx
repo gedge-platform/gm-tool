@@ -11,8 +11,10 @@ import { observer } from "mobx-react";
 import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
 import moment from "moment";
+import CreatePod from "../Dialog/CreatePod";
 
 const PodListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -56,6 +58,14 @@ const PodListTab = observer(() => {
     },
   ]);
 
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -67,7 +77,7 @@ const PodListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -82,6 +92,11 @@ const PodListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreatePod
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>
