@@ -108,7 +108,7 @@ const DeploymentBasicInformation = observer(() => {
             Deployment Name
             <span className="requried">*</span>
           </th>
-          <td colSpan={3}>
+          <td>
             <CTextField
               type="text"
               placeholder="Deployment Name"
