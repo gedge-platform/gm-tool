@@ -19,7 +19,7 @@ const DeploymentBasicInformation = observer(() => {
     setWorkspace,
     setProject,
   } = deploymentStore;
-  const { loadClusterList, clusterList } = clusterStore;
+  const { loadClusterInProject, clusters } = clusterStore;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -29,7 +29,7 @@ const DeploymentBasicInformation = observer(() => {
       setProjectEnable(false);
       return;
     } else if (name === "project") {
-      loadClusterList();
+      loadClusterInProject(value);
       setProject(value);
       setClusterEnable(false);
     } else if (name === "Deployment Name") setDeployName(value);
@@ -108,7 +108,7 @@ const DeploymentBasicInformation = observer(() => {
             Deployment Name
             <span className="requried">*</span>
           </th>
-          <td colSpan={3}>
+          <td>
             <CTextField
               type="text"
               placeholder="Deployment Name"
@@ -118,6 +118,7 @@ const DeploymentBasicInformation = observer(() => {
               value={deploymentName}
             />
           </td>
+          <th></th>
         </tr>
       </tbody>
     </table>

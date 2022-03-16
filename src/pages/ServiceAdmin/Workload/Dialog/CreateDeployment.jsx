@@ -17,6 +17,8 @@ import DeploymentYaml from "./DeploymentYaml";
 import { useHistory } from "react-router";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
+import clusterStore from "../../../../store/Cluster";
+import { toJS } from "mobx";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -38,6 +40,7 @@ const ButtonNext = styled.button`
 const CreateDeployment = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const [size, setSize] = useState("md");
   const [loading, setLoading] = useState(false);
 
   const {
@@ -46,18 +49,21 @@ const CreateDeployment = observer((props) => {
     containerName,
     containerImage,
     containerPort,
+    project,
     responseData,
     setContent,
     clearAll,
     postDeployment,
     setResponseData,
   } = deploymentStore;
+  const { clusters } = clusterStore;
 
   const template = {
     apiVersion: "apps/v1",
     kind: "Deployment",
     metadata: {
       name: deploymentName,
+      namespace: project,
       labels: {
         app: deploymentName,
       },
@@ -95,6 +101,8 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setStepValue(1);
+    setSize("md");
     clearAll();
   };
 
@@ -103,13 +111,14 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://127.0.0.1:8081/service/workload");
+    formData.append("callbackUrl", "http://127.0.0.1:8080/service/workload");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", "test");
+    formData.append("clusters", JSON.stringify(clusters));
+    console.log(JSON.stringify(clusters));
 
     axios
-      .post("http://101.79.4.15:32527/yaml", formData)
+      .post(`http://101.79.4.15:32527/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
           setResponseData(response.data);
@@ -124,6 +133,7 @@ const CreateDeployment = observer((props) => {
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
+      setSize("xl");
     }
   });
 
@@ -212,7 +222,7 @@ const CreateDeployment = observer((props) => {
     <CDialog
       id="myDialog"
       open={open}
-      maxWidth="md"
+      maxWidth={size}
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
