@@ -108,7 +108,6 @@ const ClaimListTab = observer(() => {
     const handleOpen = (e) => {
         let fieldName = e.colDef.field;
         loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
-        console.log(pvClaimLables);
         if (fieldName === "yaml") {
             handleOpenYaml();
         }

@@ -4,69 +4,75 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+    CCreateButton,
+    CSelectButton,
+    BtnCellRenderer,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
+import StorageClassDetail from "../StorageClassDetail";
+import volumeStore from "../../../../store/Volume";
+import ViewYaml from "../Dialog/ViewYaml";
+import converterCapacity from "../VolumeFormatter";
 
-const CoreClusterListTab = observer(() => {
+const StorageClassListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
+    const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+    const {
+        storageClasses,
+        storageClass,
+        scYamlFile,
+        scParameters,
+        scLables,
+        scAnnotations,
+        totalElements,
+        loadStorageClasses,
+        loadStorageClass,
+    } = volumeStore;
 
     const [columDefs] = useState([
-        // {
-        //     headerName: "",
-        //     field: "check",
-        //     minWidth: 53,
-        //     maxWidth: 53,
-        //     filter: false,
-        //     headerCheckboxSelection: true,
-        //     headerCheckboxSelectionFilteredOnly: true,
-        //     checkboxSelection: true,
-        // },
         {
-            headerName: "No",
-            field: "clusterNum",
-            maxWidth: 80,
+            headerName: "Name",
+            field: "name",
             filter: true,
         },
         {
-            headerName: "이름",
-            field: "clusterName",
+            headerName: "Cluster",
+            field: "cluster",
             filter: true,
         },
         {
-            headerName: "타입",
-            field: "clusterType",
+            headerName: "ReclaimPolicy",
+            field: "reclaimPolicy",
             filter: true,
         },
         {
-            headerName: "상태",
-            field: "status",
+            headerName: "Storage Class",
+            field: "provisioner",
             filter: true,
         },
         {
-            headerName: "노드개수",
-            field: "node",
+            headerName: "Volume Mode",
+            field: "volumeBindingMode",
             filter: true,
         },
         {
-            headerName: "version",
-            field: "kubeVersion",
+            headerName: "Cluster",
+            field: "allowVolumeExpansion",
             filter: true,
         },
         {
-            headerName: "생성날짜",
-            field: "created_at",
+            headerName: "Create At",
+            field: "createAt",
             filter: "agDateColumnFilter",
             filterParams: agDateColumnFilter(),
             minWidth: 150,
@@ -77,14 +83,39 @@ const CoreClusterListTab = observer(() => {
                     .format("YYYY-MM-DD HH:mm")}</span>`;
             },
         },
+        {
+            headerName: "Yaml",
+            field: "yaml",
+            maxWidth: 150,
+            cellRenderer: function () {
+                return `<button class="tb_volume_yaml" onClick>View</button>`;
+            },
+            cellStyle: { textAlign: "center" },
+        },
     ]);
+
+    const handleOpen = (e) => {
+        let fieldName = e.colDef.field;
+        loadStorageClass(e.data.name, e.data.cluster);
+        if (fieldName === "yaml") {
+            handleOpenYaml();
+        }
+    };
+
+    const handleOpenYaml = () => {
+        setOpen(true);
+    };
+
+    const handleCloseYaml = () => {
+        setOpen(false);
+    };
 
     const history = useHistory();
 
     useEffect(() => {
-        loadClusterList("core");
+        loadStorageClasses();
     }, []);
-    console.log(clusterList);
+
     return (
         <>
             <CReflexBox>
@@ -95,24 +126,31 @@ const CoreClusterListTab = observer(() => {
                         keywordList={["이름"]}
                     >
                         <CCreateButton>생성</CCreateButton>
-                        {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
                     </CommActionBar>
 
                     <div className="tabPanelContainer">
                         <CTabPanel value={tabvalue} index={0}>
                             <div className="grid-height2">
                                 <AgGrid
-                                    rowData={clusterList}
+                                    onCellClicked={handleOpen}
+                                    rowData={storageClasses}
                                     columnDefs={columDefs}
                                     isBottom={true}
+                                    totalElements={totalElements}
                                 />
                             </div>
                         </CTabPanel>
                     </div>
+                    <ViewYaml
+                        open={open}
+                        yaml={scYamlFile}
+                        onClose={handleCloseYaml}
+                    />
                 </PanelBox>
-                <Detail cluster={clusterDetail} />
+                <StorageClassDetail />
             </CReflexBox>
         </>
     );
 });
-export default CoreClusterListTab;
+
+export default StorageClassListTab;
