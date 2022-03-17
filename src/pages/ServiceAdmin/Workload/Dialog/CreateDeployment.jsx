@@ -122,7 +122,14 @@ const CreateDeployment = observer((props) => {
       .then(function (response) {
         if (response.status === 200) {
           setResponseData(response.data);
-          setStepValue(4);
+          // setStepValue(4);
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            "width=1000,height=800"
+          );
+          popup.document.open().write(response.data);
+          popup.document.close();
         }
       })
       .catch(function (error) {
@@ -133,8 +140,7 @@ const CreateDeployment = observer((props) => {
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-      setSize("xl");
-    }
+    } else if (stepValue === 4) setSize("xl");
   });
 
   const stepOfComponent = () => {
