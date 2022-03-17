@@ -18,7 +18,7 @@ import axios from "axios";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "../../../../store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
-import converterCapacity from "../VolumeFormatter";
+import { converterCapacity, drawStatus } from "../VolumeFormatter";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
@@ -55,6 +55,9 @@ const VolumeListTab = observer(() => {
             headerName: "Status",
             field: "status",
             filter: true,
+            cellRenderer: ({ value }) => {
+                return drawStatus(value);
+            },
         },
         {
             headerName: "Storage Class",

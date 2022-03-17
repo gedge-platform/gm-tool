@@ -8,4 +8,18 @@ const converterCapacity = (capacity) => {
     }
 };
 
-export default converterCapacity;
+const drawStatus = (status) => {
+    switch (status) {
+        case "Bound":
+        case "true":
+            return `<span class="status_ico status_01">${status}</span>`;
+        case "Available":
+            return `<span class="status_ico status_02">${status}</span>`;
+        case "Pending":
+            return `<span class="status_ico status_03">${status}</span>`;
+        case "false":
+            return `<span class="status_ico status_04">${status}</span>`;
+    }
+};
+
+export { converterCapacity, drawStatus };
