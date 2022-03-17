@@ -19,6 +19,7 @@ import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
 import { toJS } from "mobx";
+import { form } from "react-dom-factories";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -111,7 +112,7 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://127.0.0.1:8080/service/workload");
+    formData.append("callbackUrl", "http://101.79.4.15:8080/callback");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
     formData.append("clusters", JSON.stringify(clusters));
@@ -122,6 +123,12 @@ const CreateDeployment = observer((props) => {
       .then(function (response) {
         if (response.status === 200) {
           setResponseData(response.data);
+          console.log(response.data);
+
+          const popup = window.open('', 'Gedge scheduler', 'width=600,height=400');
+          popup.document.open().write(response.data);
+          popup.document.close();
+
           setStepValue(4);
         }
       })
