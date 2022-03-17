@@ -16,9 +16,12 @@ import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import StorageClassDetail from "../StorageClassDetail";
-import volumeStore from "../../../../store/Volume";
+import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
-import { converterCapacity, drawStatus } from "../VolumeFormatter";
+import {
+    converterCapacity,
+    drawStatus,
+} from "@/components/datagrids/AggridFormatter";
 
 const StorageClassListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
