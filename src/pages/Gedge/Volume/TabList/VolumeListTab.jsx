@@ -16,9 +16,12 @@ import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import VolumeDetail from "../VolumeDetail";
-import volumeStore from "../../../../store/Volume";
+import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
-import converterCapacity from "../VolumeFormatter";
+import {
+    converterCapacity,
+    drawStatus,
+} from "@/components/datagrids/AggridFormatter";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
@@ -55,6 +58,9 @@ const VolumeListTab = observer(() => {
             headerName: "Status",
             field: "status",
             filter: true,
+            cellRenderer: ({ value }) => {
+                return drawStatus(value);
+            },
         },
         {
             headerName: "Storage Class",
