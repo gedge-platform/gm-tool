@@ -10,6 +10,10 @@ class Volume {
     pVolumeMetadata = {};
     pvClaims = [];
     pvClaim = {};
+    pvClaimYamlFile = "";
+    pvClaimAnnotations = {};
+    pvClaimLables = {};
+    pvClaimEvents = [];
     storageClasses = [];
     storageClass = {};
 
@@ -59,6 +63,24 @@ class Volume {
             });
     };
 
+    loadPVClaims = async () => {
+        await axios
+            .get(`${LOCAL_VOLUME_URL}/pvcs`, {
+                auth: BASIC_AUTH,
+            })
+            .then((res) => {
+                runInAction(() => {
+                    this.pvClaims = res.data.data;
+                    this.totalElements = this.pvClaims.length;
+                });
+            });
+        this.loadPVClaim(
+            this.pvClaims[0].name,
+            this.pvClaims[0].clusterName,
+            this.pvClaims[0].namespace
+        );
+    };
+
     loadPVClaim = async (pvClaimName, cluster, project) => {
         await axios
             .get(
@@ -70,6 +92,28 @@ class Volume {
             .then((res) => {
                 runInAction(() => {
                     this.pvClaim = res.data.data;
+                    this.pvClaimYamlFile = "";
+                    this.pvClaimAnnotations = {};
+                    this.pvClaimLables = {};
+
+                    Object.entries(this.pvClaim?.label).map(([key, value]) => {
+                        this.pvClaimLables[key] = value;
+                    });
+
+                    Object.entries(this.pvClaim?.annotations).forEach(
+                        ([key, value]) => {
+                            try {
+                                const YAML = require("json-to-pretty-yaml");
+                                this.pvClaimYamlFile = YAML.stringify(
+                                    JSON.parse(value)
+                                );
+                            } catch (e) {
+                                if (key && value) {
+                                    this.pvClaimAnnotations[key] = value;
+                                }
+                            }
+                        }
+                    );
                 });
             });
     };
