@@ -25,6 +25,7 @@ const ConfigmapsListTab = observer(() => {
     configmapsDetail,
     totalElements,
     loadconfigmapsList,
+    loadconfigmapsTabList,
   } = configmapsStore;
 
   const [columDefs] = useState([
@@ -78,6 +79,11 @@ const ConfigmapsListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadconfigmapsTabList(e.data.name, e.data.cluster, e.data.namespace);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -96,6 +102,7 @@ const ConfigmapsListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={configmapsList}
                   columnDefs={columDefs}
                   isBottom={true}
@@ -105,7 +112,7 @@ const ConfigmapsListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <ConfigmapsDetail configmaps={configmapsDetail} />
+        <ConfigmapsDetail configmapsDetail={configmapsDetail} />
       </CReflexBox>
     </>
   );

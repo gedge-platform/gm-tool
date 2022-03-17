@@ -18,6 +18,7 @@ import axios from "axios";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "../../../../store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
+import converterCapacity from "../VolumeFormatter";
 
 const VolumeListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
@@ -46,20 +47,9 @@ const VolumeListTab = observer(() => {
             headerName: "Capacity",
             field: "capacity",
             filter: true,
-            // valueFormatter: (params) =>
-            //     params.data.capacity.substring(
-            //         0,
-            //         params.data.capacity.length - 2
-            //     ).length > 4
-            //         ? params.data.capacity.substring(
-            //               0,
-            //               params.data.capacity.length - 2
-            //           )
-            //         : params.data.capacity.substring(
-            //               0,
-            //               params.data.capacity.length - 2
-            //           ),
-            // // params.data.number.toFixeD(2),
+            valueFormatter: ({ value }) => {
+                return converterCapacity(value);
+            },
         },
         {
             headerName: "Status",

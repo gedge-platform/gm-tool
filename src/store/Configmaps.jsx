@@ -1,11 +1,15 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
-class Confimaps {
+class Configmaps {
   configmapsList = [];
   configmapsDetail = {};
   totalElements = 0;
+  configmapsTabList = {
+    data: {},
+  };
+  configmapsData = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -13,7 +17,7 @@ class Confimaps {
 
   loadconfigmapsList = async () => {
     await axios
-      .get(`${SERVER_URL}/configmaps`, {
+      .get(`${SERVER_URL2}/configmaps`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -26,14 +30,14 @@ class Confimaps {
     this.loadconfigmapsTabList(
       this.configmapsList[0].name,
       this.configmapsList[0].cluster,
-      his.configmapsList[0].namespace
+      this.configmapsList[0].namespace
     );
   };
 
   loadconfigmapsTabList = async (name, cluster, namespace) => {
     await axios
       .get(
-        `${SERVER_URL}/configmaps/${name}?cluster=${cluster}&project=${namespace}`,
+        `${SERVER_URL2}/configmaps/${name}?cluster=${cluster}&project=${namespace}`,
         {
           auth: BASIC_AUTH,
         }
@@ -41,10 +45,14 @@ class Confimaps {
       .then((res) => {
         runInAction(() => {
           this.configmapsTabList = res.data.data;
+          this.configmapsData = {};
+          Object.entries(this.configmapsTabList?.data).map(([key, value]) => {
+            this.configmapsData[key] = value;
+          });
         });
       });
   };
 }
 
-const configmapsStore = new Confimaps();
+const configmapsStore = new Configmaps();
 export default configmapsStore;

@@ -9,6 +9,9 @@ class ServiceAccount {
       name: "",
     },
   };
+  serviceAccountTabList = {
+    data: {},
+  };
   totalElements = 0;
 
   constructor() {
@@ -25,6 +28,27 @@ class ServiceAccount {
           this.serviceAccountList = res.data.data;
           this.serviceAccountDetail = res.data.data[0];
           this.totalElements = res.data.data.length;
+        });
+      });
+    this.loadServiceAccountTabList(
+      this.serviceAccountList[0].name,
+      this.serviceAccountList[0].cluster,
+      this.serviceAccountList[0].namespace
+    );
+  };
+
+  loadServiceAccountTabList = async (name, cluster, namespace) => {
+    await axios
+      .get(
+        `${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`,
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.serviceAccountTabList = res.data.data;
+          console.log(this.serviceAccountTabList);
         });
       });
   };

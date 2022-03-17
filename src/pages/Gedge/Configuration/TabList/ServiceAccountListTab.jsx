@@ -12,7 +12,7 @@ import moment from "moment";
 import axios from "axios";
 import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import serviceAccountStore from "../../../../store/ServiceAccount";
-import Detail from "../SecretsDetail";
+import ServiceAccountsDetail from "../ServiceAccountsDetail";
 
 const ServiceAccountListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -100,7 +100,7 @@ const ServiceAccountListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail serviceAcccount={serviceAccountDetail} />
+        <ServiceAccountsDetail serviceAccount={serviceAccountDetail} />
       </CReflexBox>
     </>
   );

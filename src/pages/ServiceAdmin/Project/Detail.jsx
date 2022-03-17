@@ -13,19 +13,12 @@ const TableTitle = styled.p`
 
 const Detail = observer((props) => {
   const { project } = props;
-  const [open, setOpen] = false;
   const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>

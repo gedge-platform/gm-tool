@@ -20,8 +20,13 @@ const SecretListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { secretList, secretDetail, totalElements, loadsecretList } =
-    secretStore;
+  const {
+    secretList,
+    secretDetail,
+    totalElements,
+    loadsecretList,
+    loadsecretTabList,
+  } = secretStore;
 
   const [columDefs] = useState([
     {
@@ -79,6 +84,11 @@ const SecretListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadsecretTabList(e.data.name, e.data.clusterName, e.data.namespace);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -97,6 +107,7 @@ const SecretListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={secretList}
                   columnDefs={columDefs}
                   isBottom={true}

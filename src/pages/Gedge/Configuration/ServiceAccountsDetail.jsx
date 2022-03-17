@@ -11,18 +11,12 @@ import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
-import configmapsStore from "../../../store/Configmaps";
-import moment from "moment";
+import serviceAccountStore from "../../../store/ServiceAccount";
 
-const ConfigmapsDetail = observer(() => {
-  const {
-    configmapsList,
-    configmapsDetail,
-    configmapsData,
-    configmapsTabList,
-  } = configmapsStore;
-  const configmapsTable = [];
-  const metadata = configmapsTabList.data;
+const ServiceAccountsDetail = observer(() => {
+  const { serviceAccountTabList } = serviceAccountStore;
+  const serviceAccountTable = [];
+  const metadata = serviceAccountTabList.data;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -38,11 +32,13 @@ const ConfigmapsDetail = observer(() => {
   };
 
   Object.entries(metadata).map(([keys, value]) => {
-    configmapsTable.push(
+    serviceAccountTable.push(
       <tr>
         <th>{keys}</th>
-        <td>{value}</td>
-        {/* <td style={{ whiteSpace: "pre-line" }}>{value.String()}</td> */}
+        <td style={{ wordBreak: "break-all", wordWrap: "break-word" }}>
+          {/* 강제로 줄바꿈 */}
+          {value}
+        </td>
       </tr>
     );
   });
@@ -57,33 +53,8 @@ const ConfigmapsDetail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>Name</th>
-                <td>{configmapsTabList.name}</td>
-              </tr>
-              <tr>
-                <th>Project</th>
-                <td>{configmapsTabList.namespace}</td>
-              </tr>
-              <tr>
-                <th>Cluster</th>
-                <td>{configmapsTabList.cluster}</td>
-              </tr>
-              {configmapsTable}
-              <tr>
-                <th>Annotations</th>
-                <td>{configmapsTabList.annotations}</td>
-              </tr>
-              <tr>
-                <th>Data Count</th>
-                <td>{configmapsTabList.dataCnt}</td>
-              </tr>
-              <tr>
-                <th>Create Time</th>
-                <td>
-                  {moment(configmapsTabList.createAt).format(
-                    "YYYY-MM-DD HH:MM"
-                  )}
-                </td>
+                <th>nama</th>
+                <td>{serviceAccountTabList.name}</td>
               </tr>
             </tbody>
           </table>
@@ -93,4 +64,4 @@ const ConfigmapsDetail = observer(() => {
     </PanelBox>
   );
 });
-export default ConfigmapsDetail;
+export default ServiceAccountsDetail;

@@ -42,6 +42,7 @@ const Login = () => {
       .then(({ data, status }) => {
         if (status === 200) {
           setItem("userRole", data.userRole);
+          setItem("user", id);
           swalError("로그인 되었습니다.", () => history.push("/"));
         }
       })
