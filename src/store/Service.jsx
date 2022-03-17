@@ -13,7 +13,7 @@ class Service {
   port = 0;
   targetPort = 0;
 
-  clusterList = [];
+  cluster = [];
   workspace = "";
   project = "";
 
@@ -68,9 +68,10 @@ class Service {
     });
   };
 
-  setCluster = (cluster) => {
+  setClusterList = (clusterList) => {
+    console.log(clusterList);
     runInAction(() => {
-      this.cluster = cluster;
+      this.cluster = clusterList;
     });
   };
 

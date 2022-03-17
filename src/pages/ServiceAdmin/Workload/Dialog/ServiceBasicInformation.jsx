@@ -14,9 +14,23 @@ const DeploymentBasicInformation = observer(() => {
   const [clusterEnable, setClusterEnable] = useState(true);
   const { loadWorkSpaceList, workSpaceList } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const { serviceName, setServiceName, setCluster, setWorkspace, setProject } =
-    serviceStore;
+  const {
+    cluster,
+    serviceName,
+    setServiceName,
+    setClusterList,
+    setWorkspace,
+    setProject,
+  } = serviceStore;
   const { loadClusterList, clusterList } = clusterStore;
+
+  const checkChange = ({ target: { checked, name } }) => {
+    if (checked) {
+      setClusterList([...cluster, name]);
+    } else {
+      setClusterList(cluster.filter((item) => item !== name));
+    }
+  };
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -30,7 +44,9 @@ const DeploymentBasicInformation = observer(() => {
       setProject(value);
       setClusterEnable(false);
     } else if (name === "Service Name") setServiceName(value);
-    else if (name === "cluster") setCluster(value);
+    else if (name === "cluster") {
+      console.log(value, name);
+    }
   };
   useEffect(() => {
     loadWorkSpaceList();
@@ -83,10 +99,7 @@ const DeploymentBasicInformation = observer(() => {
             Cluster <span className="requried">*</span>
           </th>
           <td>
-            <FormGroup
-              className="form_fullWidth"
-              onChange={(e) => console.log(e.target.name)}
-            >
+            <FormGroup className="form_fullWidth" onChange={checkChange}>
               {clusterList.map((cluster) => (
                 <FormControlLabel
                   control={<Checkbox name={cluster.clusterName} />}
