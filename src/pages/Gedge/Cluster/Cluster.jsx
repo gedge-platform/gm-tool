@@ -6,7 +6,7 @@ import CoreClusterListTab from "./TabList/CoreClusterListTab";
 import EdgeClusterListTab from "./TabList/EdgeClusterListTab";
 
 const Cluster = () => {
-    const currentPageTitle = Title.Cluster;
+  const currentPageTitle = Title.Cluster;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -14,21 +14,21 @@ const Cluster = () => {
     setTabvalue(newValue);
   };
 
-    return (
-        <Layout currentPageTitle={currentPageTitle}>
-            <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-                <CTab label="코어 클라우드" />
-                <CTab label="클라우드 엣지" />
-            </CTabs>
-            <div className="tabPanelContainer">
-                <CTabPanel value={tabvalue} index={0}>
-                    <CoreClusterListTab />
-                </CTabPanel>
-                <CTabPanel value={tabvalue} index={1}>
-                    <EdgeClusterListTab />
-                </CTabPanel>
-            </div>
-        </Layout>
-    );
+  return (
+    <Layout currentPageTitle={currentPageTitle}>
+      <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
+        <CTab label="코어 클라우드" />
+        <CTab label="클라우드 엣지" />
+      </CTabs>
+      <div className="tabPanelContainer">
+        <CTabPanel value={tabvalue} index={0}>
+          <CoreClusterListTab />
+        </CTabPanel>
+        <CTabPanel value={tabvalue} index={1}>
+          <EdgeClusterListTab />
+        </CTabPanel>
+      </div>
+    </Layout>
+  );
 };
 export default Cluster;

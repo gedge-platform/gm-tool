@@ -11,9 +11,12 @@ import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import configmapsStore from "../../../store/Configmaps";
 
-const Detail = observer((props) => {
-  const { configuration } = props;
+const ConfigmapsDetail = observer(() => {
+  const { configmapsTabList } = configmapsStore;
+  const configmapsTable = [];
+  const metadata = configmapsTabList.data;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -28,50 +31,32 @@ const Detail = observer((props) => {
     setOpen(false);
   };
 
+  Object.entries(metadata).map(([keys, value]) => {
+    configmapsTable.push(
+      <tr>
+        <th>{keys}</th>
+        <td style={{ wordBreak: "break-all", wordWrap: "break-word" }}>
+          {/* 강제로 줄바꿈 */}
+          {value}
+        </td>
+      </tr>
+    );
+  });
+
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="리소스 사용량" />
+        <CTab label="Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>클러스터</th>
-                <td>{cluster.clusterName}</td>
-              </tr>
-              <tr>
-                <th>쿠버네티스 버전</th>
-                <td>{cluster.kubeVersion}</td>
-              </tr>
-              <tr>
-                <th>역할</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>생성자</th>
-                <td>{cluster.clusterCreator}</td>
-              </tr>
-              <tr>
-                <th>생성일</th>
-                <td>{cluster.create_at}</td>
-              </tr>
-              <tr>
-                <th>업데이트일</th>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody>{configmapsTable}</tbody>
           </table>
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={1}>
-        <div className="panelCont">
-          <div className="grid-height">123</div>
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>
   );
 });
-export default Detail;
+export default ConfigmapsDetail;
