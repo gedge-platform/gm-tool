@@ -94,9 +94,12 @@ class Volume {
                     this.pvClaim = res.data.data;
                     this.pvClaimYamlFile = "";
                     this.pvClaimAnnotations = {};
-                    console.log(this.pvClaim.label);
-                    this.pvClaimLables = this.pvClaim.label;
-                    this.pvClaimEvents = this.pvClaim.events;
+                    this.pvClaimLables = {};
+
+                    Object.entries(this.pvClaim?.label).map(([key, value]) => {
+                        this.pvClaimLables[key] = value;
+                    });
+
                     Object.entries(this.pvClaim?.annotations).forEach(
                         ([key, value]) => {
                             try {

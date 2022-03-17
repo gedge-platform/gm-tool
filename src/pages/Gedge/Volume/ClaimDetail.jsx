@@ -13,13 +13,15 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
 
-const ClaimDetail = observer(({ pvClaim, metadata, labels }) => {
+const ClaimDetail = observer(({ pvClaim, metadata }) => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
+
+    const { pvClaimLables } = volumeStore;
 
     const annotationTable = [];
     const labelTable = [];
@@ -34,7 +36,18 @@ const ClaimDetail = observer(({ pvClaim, metadata, labels }) => {
         );
     });
 
-    console.log(labels);
+    console.log(pvClaimLables);
+
+    if (pvClaimLables) {
+        Object.entries(pvClaimLables).map(([key, value]) => {
+            labelTable.push(
+                <tr>
+                    <th className="tb_volume_detail_th">{key}</th>
+                    <td>{value}</td>
+                </tr>
+            );
+        });
+    }
 
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
@@ -93,13 +106,7 @@ const ClaimDetail = observer(({ pvClaim, metadata, labels }) => {
             <CTabPanel value={tabvalue} index={2}>
                 <div className="panelCont">
                     <table className="tb_data">
-                        <tbody>
-                            <tr>
-                                <th className="tb_volume_detail_th">Label</th>
-                                <td>{null}</td>
-                            </tr>
-                            {null}
-                        </tbody>
+                        <tbody>{labelTable}</tbody>
                     </table>
                 </div>
             </CTabPanel>
@@ -110,6 +117,20 @@ const ClaimDetail = observer(({ pvClaim, metadata, labels }) => {
                             <tr>
                                 <th className="tb_volume_detail_th">event</th>
                                 <td>{null}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </CTabPanel>
+            <CTabPanel value={tabvalue} index={4}>
+                <div className="panelCont">
+                    <table className="tb_data">
+                        <tbody>
+                            <tr>
+                                <th className="tb_volume_detail_th">
+                                    Finalizers
+                                </th>
+                                <td>{pvClaim?.finalizers}</td>
                             </tr>
                         </tbody>
                     </table>
