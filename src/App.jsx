@@ -17,6 +17,7 @@ import {
   Configuration,
 } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
+import DeploymentPopup from "./pages/ServiceAdmin/Workload/Dialog/DeploymentPopup";
 
 export const App = () => {
   return (
@@ -39,6 +40,7 @@ export const App = () => {
         <AuthRoute path="/service/workspace" component={ServiceWorkSpace} />
 
         <Route path="/login" component={Login} />
+        <Route path="/callback" component={DeploymentPopup} />
 
         <Route component={NotFound} />
       </Switch>

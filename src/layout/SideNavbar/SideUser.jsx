@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "@/styles/theme";
 import { Menu, MenuItem } from "@material-ui/core";
 import axios from "axios";
-import { SERVER_URL } from "@/config.jsx";
+import { SERVER_URL, BASIC_AUTH } from "@/config.jsx";
 import { getItem, removeItem, setItem } from "../../utils/sessionStorageFn";
 import { useHistory } from "react-router-dom";
 
@@ -122,12 +122,11 @@ const SideUser = ({ userName }) => {
   };
   useEffect(async () => {
     await axios
-      .get(`${SERVER_URL}/users/${getItem("user")}`, {
-        auth: getItem("auth"),
+      .get(`${SERVER_URL}/members/${getItem("user")}`, {
+        auth: BASIC_AUTH,
       })
-      .then(({ data: { data }, status }) => {
-        setItem("info", data);
-        setName(data.name);
+      .then((res) => {
+        console.log(res);
       });
   }, []);
   return (

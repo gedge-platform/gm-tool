@@ -15,11 +15,16 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import VolumeDetail from "../VolumeDetail";
-import volumeStore from "../../../../store/Volume";
+// import VolumeDetail from "../VolumeDetail";
+import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
+import ClaimDetail from "../ClaimDetail";
+import {
+    converterCapacity,
+    drawStatus,
+} from "@/components/datagrids/AggridFormatter";
 
-const VolumeListTab = observer(() => {
+const ClaimListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
@@ -27,13 +32,16 @@ const VolumeListTab = observer(() => {
     };
 
     const {
-        pVolume,
-        pVolumes,
+        pvClaims,
+        pvClaim,
         totalElements,
-        pVolumeYamlFile,
-        pVolumeMetadata,
-        loadPVolumes,
-        loadPVolume,
+        pvClaimEvents,
+        pvClaimYamlFile,
+        pvClaimAnnotations,
+        pvClaimLables,
+        // pvClaimEvents,
+        loadPVClaims,
+        loadPVClaim,
     } = volumeStore;
 
     const [columDefs] = useState([
@@ -43,47 +51,41 @@ const VolumeListTab = observer(() => {
             filter: true,
         },
         {
+            headerName: "Namespace",
+            field: "namespace",
+            filter: true,
+        },
+        {
             headerName: "Capacity",
             field: "capacity",
             filter: true,
-            // valueFormatter: (params) =>
-            //     params.data.capacity.substring(
-            //         0,
-            //         params.data.capacity.length - 2
-            //     ).length > 4
-            //         ? params.data.capacity.substring(
-            //               0,
-            //               params.data.capacity.length - 2
-            //           )
-            //         : params.data.capacity.substring(
-            //               0,
-            //               params.data.capacity.length - 2
-            //           ),
-            // // params.data.number.toFixeD(2),
+        },
+        {
+            headerName: "Access Mode",
+            field: "accessMode",
+            filter: true,
         },
         {
             headerName: "Status",
             field: "status",
             filter: true,
+            cellRenderer: ({ value }) => {
+                return drawStatus(value);
+            },
         },
         {
-            headerName: "Storage Class",
+            headerName: "Volume",
+            field: "volume",
+            filter: true,
+        },
+        {
+            headerName: "StorageClass",
             field: "storageClass",
             filter: true,
         },
         {
-            headerName: "Volume Mode",
-            field: "volumeMode",
-            filter: true,
-        },
-        {
-            headerName: "Cluster",
-            field: "cluster",
-            filter: true,
-        },
-        {
-            headerName: "Claim",
-            field: "claim.name",
+            headerName: "Cluster Name",
+            field: "clusterName",
             filter: true,
         },
         {
@@ -112,8 +114,7 @@ const VolumeListTab = observer(() => {
 
     const handleOpen = (e) => {
         let fieldName = e.colDef.field;
-        loadPVolume(e.data.name, e.data.cluster);
-
+        loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
         if (fieldName === "yaml") {
             handleOpenYaml();
         }
@@ -127,11 +128,10 @@ const VolumeListTab = observer(() => {
         setOpen(false);
     };
 
-    const history = useHistory();
-
     useEffect(() => {
-        loadPVolumes();
+        loadPVClaims();
     }, []);
+
     return (
         <>
             <CReflexBox>
@@ -149,7 +149,7 @@ const VolumeListTab = observer(() => {
                             <div className="grid-height2">
                                 <AgGrid
                                     onCellClicked={handleOpen}
-                                    rowData={pVolumes}
+                                    rowData={pvClaims}
                                     columnDefs={columDefs}
                                     isBottom={true}
                                     totalElements={totalElements}
@@ -159,13 +159,18 @@ const VolumeListTab = observer(() => {
                     </div>
                     <ViewYaml
                         open={open}
-                        yaml={pVolumeYamlFile}
+                        yaml={pvClaimYamlFile}
                         onClose={handleCloseYaml}
                     />
                 </PanelBox>
-                <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />
+                <ClaimDetail
+                    pvClaim={pvClaim}
+                    metadata={pvClaimAnnotations}
+                    lables={pvClaimLables}
+                    // events={pvClaimEvents}
+                />
             </CReflexBox>
         </>
     );
 });
-export default VolumeListTab;
+export default ClaimListTab;

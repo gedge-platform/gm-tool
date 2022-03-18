@@ -18,6 +18,8 @@ import { useHistory } from "react-router";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
+import { toJS } from "mobx";
+import { form } from "react-dom-factories";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -39,6 +41,7 @@ const ButtonNext = styled.button`
 const CreateDeployment = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const [size, setSize] = useState("md");
   const [loading, setLoading] = useState(false);
 
   const {
@@ -47,6 +50,7 @@ const CreateDeployment = observer((props) => {
     containerName,
     containerImage,
     containerPort,
+    project,
     responseData,
     setContent,
     clearAll,
@@ -60,6 +64,7 @@ const CreateDeployment = observer((props) => {
     kind: "Deployment",
     metadata: {
       name: deploymentName,
+      namespace: project,
       labels: {
         app: deploymentName,
       },
@@ -97,6 +102,8 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setStepValue(1);
+    setSize("md");
     clearAll();
   };
 
@@ -105,17 +112,22 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://127.0.0.1:8080/service/workload");
+    formData.append("callbackUrl", "http://101.79.4.15:8080/callback");
     formData.append("requestId", deploymentName);
     formData.append("yaml", deploymentStore.content);
-    formData.append("clusters", clusters);
-    console.log(clusters);
+    formData.append("clusters", JSON.stringify(clusters));
+    console.log(JSON.stringify(clusters));
 
     axios
-      .post("http://101.79.4.15:32527/yaml", formData)
+      .post(`http://101.79.4.15:32527/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
           setResponseData(response.data);
+
+          const popup = window.open('', 'Gedge scheduler', 'width=600,height=400');
+          popup.document.open().write(response.data);
+          popup.document.close();
+
           setStepValue(4);
         }
       })
@@ -127,7 +139,7 @@ const CreateDeployment = observer((props) => {
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-    }
+    } else if (stepValue === 4) setSize("xl");
   });
 
   const stepOfComponent = () => {
@@ -215,7 +227,7 @@ const CreateDeployment = observer((props) => {
     <CDialog
       id="myDialog"
       open={open}
-      maxWidth="xl"
+      maxWidth={size}
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
