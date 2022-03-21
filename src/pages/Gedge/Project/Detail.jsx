@@ -7,7 +7,12 @@ import styled from "styled-components";
 import moment from "moment";
 import projectStore from "../../../store/Project";
 import { keys } from "lodash";
-import { TreeItem } from "./ProjectEvent";
+import "@grapecity/wijmo.styles/wijmo.css";
+
+import TreeView from "@mui/lab/TreeView";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import TreeItem from "@mui/lab/TreeItem";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -43,9 +48,64 @@ const Detail = observer(() => {
 
   events.map((event, message) => {
     eventTable.push(
-      <tr>
+      /*<tr>
         <th>{message}</th>
         <td>{event["message"]}</td>
+      </tr>*/
+
+      <tr>
+        <TreeView
+          aria-label="project-event"
+          defaultCollapseIcon={<ExpandMoreIcon />}
+          defaultExpandIcon={<ChevronRightIcon />}
+        >
+          <div>
+            <TreeItem nodeId="1" label={event["message"]}>
+              <tr>
+                <th>kind</th>
+                <td>
+                  <TreeItem nodeId="2" label={event["kind"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>name</th>
+                <td>
+                  <TreeItem nodeId="3" label={event["name"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>namespace</th>
+                <td>
+                  <TreeItem nodeId="4" label={event["namespace"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>cluster</th>
+                <td>
+                  <TreeItem nodeId="5" label={event["cluster"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>reson</th>
+                <td>
+                  <TreeItem nodeId="6" label={event["reson"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>type</th>
+                <td>
+                  <TreeItem nodeId="7" label={event["type"]} />
+                </td>
+              </tr>
+              <tr>
+                <th>eventTime</th>
+                <td>
+                  <TreeItem nodeId="8" label={event["evenTime"]} />
+                </td>
+              </tr>
+            </TreeItem>
+          </div>
+        </TreeView>
       </tr>
     );
   });
