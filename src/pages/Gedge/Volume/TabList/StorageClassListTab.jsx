@@ -15,7 +15,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import VolumeDetail from "../VolumeDetail";
+import StorageClassDetail from "../StorageClassDetail";
 import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
 import {
@@ -23,7 +23,7 @@ import {
     drawStatus,
 } from "@/components/datagrids/AggridFormatter";
 
-const VolumeListTab = observer(() => {
+const StorageClassListTab = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
@@ -31,13 +31,15 @@ const VolumeListTab = observer(() => {
     };
 
     const {
-        pVolume,
-        pVolumes,
+        storageClasses,
+        storageClass,
+        scYamlFile,
+        scParameters,
+        scLables,
+        scAnnotations,
         totalElements,
-        pVolumeYamlFile,
-        pVolumeMetadata,
-        loadPVolumes,
-        loadPVolume,
+        loadStorageClasses,
+        loadStorageClass,
     } = volumeStore;
 
     const [columDefs] = useState([
@@ -47,40 +49,32 @@ const VolumeListTab = observer(() => {
             filter: true,
         },
         {
-            headerName: "Capacity",
-            field: "capacity",
-            filter: true,
-            valueFormatter: ({ value }) => {
-                return converterCapacity(value);
-            },
-        },
-        {
-            headerName: "Status",
-            field: "status",
-            filter: true,
-            cellRenderer: ({ value }) => {
-                return drawStatus(value);
-            },
-        },
-        {
-            headerName: "Storage Class",
-            field: "storageClass",
-            filter: true,
-        },
-        {
-            headerName: "Volume Mode",
-            field: "volumeMode",
-            filter: true,
-        },
-        {
             headerName: "Cluster",
             field: "cluster",
             filter: true,
         },
         {
-            headerName: "Claim",
-            field: "claim.name",
+            headerName: "ReclaimPolicy",
+            field: "reclaimPolicy",
             filter: true,
+        },
+        {
+            headerName: "Storage Class",
+            field: "provisioner",
+            filter: true,
+        },
+        {
+            headerName: "Volume Mode",
+            field: "volumeBindingMode",
+            filter: true,
+        },
+        {
+            headerName: "Cluster",
+            field: "allowVolumeExpansion",
+            filter: true,
+            cellRenderer: ({ value }) => {
+                return drawStatus(value);
+            },
         },
         {
             headerName: "Create At",
@@ -108,8 +102,7 @@ const VolumeListTab = observer(() => {
 
     const handleOpen = (e) => {
         let fieldName = e.colDef.field;
-        loadPVolume(e.data.name, e.data.cluster);
-
+        loadStorageClass(e.data.name, e.data.cluster);
         if (fieldName === "yaml") {
             handleOpenYaml();
         }
@@ -126,8 +119,9 @@ const VolumeListTab = observer(() => {
     const history = useHistory();
 
     useEffect(() => {
-        loadPVolumes();
+        loadStorageClasses();
     }, []);
+
     return (
         <>
             <CReflexBox>
@@ -145,7 +139,7 @@ const VolumeListTab = observer(() => {
                             <div className="grid-height2">
                                 <AgGrid
                                     onCellClicked={handleOpen}
-                                    rowData={pVolumes}
+                                    rowData={storageClasses}
                                     columnDefs={columDefs}
                                     isBottom={true}
                                     totalElements={totalElements}
@@ -155,13 +149,14 @@ const VolumeListTab = observer(() => {
                     </div>
                     <ViewYaml
                         open={open}
-                        yaml={pVolumeYamlFile}
+                        yaml={scYamlFile}
                         onClose={handleCloseYaml}
                     />
                 </PanelBox>
-                <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />
+                <StorageClassDetail />
             </CReflexBox>
         </>
     );
 });
-export default VolumeListTab;
+
+export default StorageClassListTab;

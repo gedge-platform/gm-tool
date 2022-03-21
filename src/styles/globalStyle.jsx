@@ -1011,6 +1011,77 @@ const globalStyles = createGlobalStyle`
   width: 500px;
 }
 
+.state_ico {
+    position: relative;
+    padding-left: 18px;
+    color: #007aff;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+    &.ing {
+      background: no-repeat left center;
+      &::before { display: none }
+    }
+  }
+
+  .status_ico {
+    position: relative;
+    padding-left: 18px;
+    color: #007aff;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+      transform: translateY(-50%);
+      border-radius: 50%;
+    }
+    &.ing {
+      background: no-repeat left center;
+      &::before { display: none }
+    }
+  }
+
+  .status_01 {
+    color: #48af29;
+    &.status_ico::before {
+      background-color: #48af29;
+    }
+  }
+  .status_02 {
+    color: #2b38f3;
+    &.status_ico::before {
+      background-color: #2b38f3;
+    }
+  }
+  .status_03 {
+    color: #ffb833;
+    &.status_ico::before {
+      background-color: #ffb833;
+    }
+  }
+  .status_04 {
+    color: #ce1a14;
+    &.status_ico::before {
+      background-color: #ce1a14;
+    }
+  }
+  .status_05 {
+    color: #d8e5f0;
+    &.status_ico::before {
+      background-color: #d8e5f0;
+    }
+  }
+
 `;
 
 export default globalStyles;
