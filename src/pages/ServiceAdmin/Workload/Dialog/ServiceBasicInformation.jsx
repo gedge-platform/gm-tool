@@ -17,10 +17,18 @@ const DeploymentBasicInformation = observer(() => {
   const {
     cluster,
     serviceName,
+    protocol,
+    appName,
+    port,
+    targetPort,
+    setTargetPort,
+    setPort,
+    setProtocol,
     setServiceName,
     setClusterList,
     setWorkspace,
     setProject,
+    setAppName,
   } = serviceStore;
   const { loadClusterList, clusterList } = clusterStore;
 
@@ -44,8 +52,14 @@ const DeploymentBasicInformation = observer(() => {
       setProject(value);
       setClusterEnable(false);
     } else if (name === "Service Name") setServiceName(value);
-    else if (name === "cluster") {
-      console.log(value, name);
+    else if (name === "protocol") {
+      setProtocol(value);
+    } else if (name === "Port") {
+      setPort(Number(value));
+    } else if (name === "Target Port") {
+      setTargetPort(Number(value));
+    } else if (name === "App Name") {
+      setAppName(value);
     }
   };
   useEffect(() => {
@@ -123,6 +137,71 @@ const DeploymentBasicInformation = observer(() => {
               name="Service Name"
               onChange={onChange}
               value={serviceName}
+            />
+          </td>
+          <th></th>
+        </tr>
+        <tr>
+          <th>
+            App Name
+            <span className="requried">*</span>
+          </th>
+          <td>
+            <CTextField
+              type="text"
+              placeholder="App Name"
+              className="form_fullWidth"
+              name="App Name"
+              onChange={onChange}
+              value={appName}
+            />
+          </td>
+          <th></th>
+        </tr>
+        <tr>
+          <th>
+            Protocol <span className="requried">*</span>
+          </th>
+          <td style={{ width: "50%" }}>
+            <FormControl className="form_fullWidth">
+              <select name="protocol" onChange={onChange}>
+                <option value={"TCP"}>TCP</option>
+                <option value={"UDP"}>UDP</option>
+              </select>
+            </FormControl>
+          </td>
+          <th></th>
+        </tr>
+        <tr>
+          <th>
+            Port
+            <span className="requried">*</span>
+          </th>
+          <td>
+            <CTextField
+              type="text"
+              placeholder="Port"
+              className="form_fullWidth"
+              name="Port"
+              onChange={onChange}
+              value={port}
+            />
+          </td>
+          <th></th>
+        </tr>
+        <tr>
+          <th>
+            Target Port
+            <span className="requried">*</span>
+          </th>
+          <td>
+            <CTextField
+              type="text"
+              placeholder="Target Port"
+              className="form_fullWidth"
+              name="Target Port"
+              onChange={onChange}
+              value={targetPort}
             />
           </td>
           <th></th>

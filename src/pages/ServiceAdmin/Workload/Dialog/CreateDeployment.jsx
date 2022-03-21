@@ -47,10 +47,12 @@ const CreateDeployment = observer((props) => {
   const {
     deploymentName,
     podReplicas,
+    content,
     containerName,
     containerImage,
     containerPort,
     project,
+    workspace,
     responseData,
     setContent,
     clearAll,
@@ -112,10 +114,14 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://101.79.4.15:8080/callback");
+    formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
     formData.append("requestId", deploymentName);
-    formData.append("yaml", deploymentStore.content);
+    formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
+    formData.append("workspace", workspace);
+    formData.append("project", project);
+    formData.append("type", "deployment");
+    formData.append("date", new Date());
     console.log(JSON.stringify(clusters));
 
     axios
@@ -124,11 +130,16 @@ const CreateDeployment = observer((props) => {
         if (response.status === 200) {
           setResponseData(response.data);
 
-          const popup = window.open('', 'Gedge scheduler', 'width=600,height=400');
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            "width=1200,height=800"
+          );
           popup.document.open().write(response.data);
           popup.document.close();
 
-          setStepValue(4);
+          handleClose();
+          // setStepValue(4);
         }
       })
       .catch(function (error) {
@@ -140,7 +151,7 @@ const CreateDeployment = observer((props) => {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     } else if (stepValue === 4) setSize("xl");
-  });
+  }, [stepValue]);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
