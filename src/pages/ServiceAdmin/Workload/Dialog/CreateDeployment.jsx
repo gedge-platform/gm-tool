@@ -20,6 +20,8 @@ import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
 import { toJS } from "mobx";
 import { form } from "react-dom-factories";
+import { getItem } from "@/utils/sessionStorageFn";
+import { randomString } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -115,14 +117,14 @@ const CreateDeployment = observer((props) => {
   const createDeployment2 = () => {
     let formData = new FormData();
     formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
-    formData.append("requestId", deploymentName);
+    formData.append("requestId", `${getItem("user")}-${randomString()}`); // 수정 필요(user + random 값)
     formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
     formData.append("workspace", workspace);
     formData.append("project", project);
-    formData.append("type", "deployment");
+    formData.append("type", "Deployment");
     formData.append("date", new Date());
-    console.log(JSON.stringify(clusters));
+    // console.log(JSON.stringify(clusters));
 
     axios
       .post(`http://101.79.4.15:32527/yaml`, formData)

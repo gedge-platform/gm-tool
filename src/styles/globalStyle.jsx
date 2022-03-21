@@ -4,19 +4,19 @@ import theme from "@/styles/theme";
 import { createGlobalStyle } from "styled-components";
 import NotoR2 from "@/fonts/NotoSansKR/NotoSans-Regular.woff2";
 import NotoR from "@/fonts/NotoSansKR/NotoSans-Regular.woff";
-import NotoROtf from "@/fonts/NotoSansKR/NotoSans-Regular.otf";
+import NotoROtf from "@/fonts/NotoSansKR/NotoSansKR-Regular.otf";
 
 import NotoL2 from "@/fonts/NotoSansKR/NotoSans-Light.woff2";
 import NotoL from "@/fonts/NotoSansKR/NotoSans-Light.woff";
-import NotoLOtf from "@/fonts/NotoSansKR/NotoSans-Light.otf";
+import NotoLOtf from "@/fonts/NotoSansKR/NotoSansKR-Light.otf";
 
 import NotoM2 from "@/fonts/NotoSansKR/NotoSans-Medium.woff2";
 import NotoM from "@/fonts/NotoSansKR/NotoSans-Medium.woff";
-import NotoMOtf from "@/fonts/NotoSansKR/NotoSans-Medium.otf";
+import NotoMOtf from "@/fonts/NotoSansKR/NotoSansKR-Medium.otf";
 
 import NotoB2 from "@/fonts/NotoSansKR/NotoSans-Bold.woff2";
 import NotoB from "@/fonts/NotoSansKR/NotoSans-Bold.woff";
-import NotoBOtf from "@/fonts/NotoSansKR/NotoSans-Bold.otf";
+import NotoBOtf from "@/fonts/NotoSansKR/NotoSansKR-Bold.otf";
 
 import selectArr from "@/images/bullet/select_arr.png";
 import { PanelBox } from "@/components/styles/PanelBox";
@@ -28,36 +28,37 @@ const globalStyles = createGlobalStyle`
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 400;
-    src: url(${NotoR2}) format('woff2'),
-    url(${NotoR}) format('woff'),
-    url(${NotoROtf}) format('opentype');
+    src: url(${NotoROtf}) format('opentype'),
+    url(${NotoR2}) format('woff2'),
+    url(${NotoR}) format('woff');
+    
   }
 
   @font-face {
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 300;
-    src: url(${NotoL2}) format('woff2'),
-    url(${NotoL}) format('woff'),
-    url(${NotoLOtf}) format('opentype');
+    src: url(${NotoLOtf}) format('opentype'),
+    url(${NotoL2}) format('woff2'),
+    url(${NotoL}) format('woff');
   }
 
   @font-face {
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 500;
-    src: url(${NotoM2}) format('woff2'),
-    url(${NotoM}) format('woff'),
-    url(${NotoMOtf}) format('opentype');
+    src: url(${NotoMOtf}) format('opentype'),
+    url(${NotoM2}) format('woff2'),
+    url(${NotoM}) format('woff');
   }
 
   @font-face {
     font-family: 'Noto Sans';
     font-style: normal;
     font-weight: 700;
-    src: url(${NotoB2}) format('woff2'),
-    url(${NotoB}) format('woff'),
-    url(${NotoBOtf}) format('opentype');
+    src: url(${NotoBOtf}) format('opentype'),
+    url(${NotoB2}) format('woff2'),
+    url(${NotoB}) format('woff');
   }
   
   body, input, button, select, textarea, td {
