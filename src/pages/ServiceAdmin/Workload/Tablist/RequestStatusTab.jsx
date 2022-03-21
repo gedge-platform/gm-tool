@@ -8,26 +8,17 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../StatefulSetDetail";
-import statefulSetStore from "../../../../store/StatefulSet";
 import moment from "moment";
 
-const StatefulSetListTab = observer(() => {
+const RequestStatusTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const {
-    statefulSetList,
-    statefulSetDetail,
-    totalElements,
-    loadStatefulSetList,
-  } = statefulSetStore;
-
   const [columDefs] = useState([
     {
-      headerName: "스테이트풀셋 이름",
+      headerName: "잡 이름",
       field: "name",
       filter: true,
     },
@@ -58,34 +49,31 @@ const StatefulSetListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    loadStatefulSetList();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={statefulSetList}
+                  rowData={[]}
                   columnDefs={columDefs}
                   isBottom={true}
-                  totalElements={totalElements}
+                  totalElements={1}
                 />
               </div>
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail statefulSet={statefulSetDetail} />
       </CReflexBox>
     </>
   );
 });
-export default StatefulSetListTab;
+export default RequestStatusTab;

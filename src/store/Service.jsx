@@ -9,13 +9,15 @@ class Service {
 
   serviceName = "";
   appName = "";
-  protocol = "";
+  protocol = "TCP";
   port = 0;
   targetPort = 0;
 
-  clusterList = [];
+  cluster = [];
   workspace = "";
   project = "";
+
+  content = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -68,9 +70,9 @@ class Service {
     });
   };
 
-  setCluster = (cluster) => {
+  setClusterList = (clusterList) => {
     runInAction(() => {
-      this.cluster = cluster;
+      this.cluster = clusterList;
     });
   };
 
@@ -85,12 +87,44 @@ class Service {
       this.project = project;
     });
   };
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
 
   clearAll = () => {
     this.setServiceName("");
     this.setPort(0);
     this.setTargetPort(0);
-    this.setProtocol("");
+    this.setProtocol("TCP");
+    this.setWorkspace("");
+    this.setClusterList([]);
+    this.setProject("");
+  };
+
+  postService = (callback) => {
+    const YAML = require("yamljs");
+    let count = 0;
+    // console.log(this.cluster, this.workspace, this.project);
+    this.cluster.map(async (item) => {
+      await axios
+        .post(
+          `${SERVER_URL}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
+          YAML.parse(this.content),
+          {
+            auth: BASIC_AUTH,
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            count++;
+            if (count === this.cluster.length) {
+              swalError("Deployment가 생성되었습니다.", callback);
+            }
+          }
+        });
+    });
   };
 }
 
