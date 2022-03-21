@@ -117,7 +117,7 @@ const CreateDeployment = observer((props) => {
   const createDeployment2 = () => {
     let formData = new FormData();
     formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
-    formData.append("requestId", `${getItem("user")}-${randomString()}`); // 수정 필요(user + random 값)
+    formData.append("requestId", `${getItem("user")}-${randomString()}`);
     formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
     formData.append("workspace", workspace);
@@ -125,28 +125,35 @@ const CreateDeployment = observer((props) => {
     formData.append("type", "Deployment");
     formData.append("date", new Date());
     // console.log(JSON.stringify(clusters));
+    console.log("requestId", `${getItem("user")}-${randomString()}`); // 수정 필요(user + random 값)
+    console.log("yaml", content);
+    console.log("clusters", JSON.stringify(clusters));
+    console.log("workspace", workspace);
+    console.log("project", project);
+    console.log("type", "Deployment");
+    console.log("date", new Date());
 
-    axios
-      .post(`http://101.79.4.15:32527/yaml`, formData)
-      .then(function (response) {
-        if (response.status === 200) {
-          setResponseData(response.data);
+    // axios
+    //   .post(`http://101.79.4.15:32527/yaml`, formData)
+    //   .then(function (response) {
+    //     if (response.status === 200) {
+    //       setResponseData(response.data);
 
-          const popup = window.open(
-            "",
-            "Gedge scheduler",
-            "width=1200,height=800"
-          );
-          popup.document.open().write(response.data);
-          popup.document.close();
+    //       const popup = window.open(
+    //         "",
+    //         "Gedge scheduler",
+    //         "width=1200,height=800"
+    //       );
+    //       popup.document.open().write(response.data);
+    //       popup.document.close();
 
-          handleClose();
-          // setStepValue(4);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    //       handleClose();
+    //       // setStepValue(4);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   useEffect(() => {
     if (stepValue === 3) {
