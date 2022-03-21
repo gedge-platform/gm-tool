@@ -25,6 +25,7 @@ const ServiceAccountListTab = observer(() => {
     serviceAccountDetail,
     totalElements,
     loadServiceAccountList,
+    loadServiceAccountTabList,
   } = serviceAccountStore;
 
   const [columDefs] = useState([
@@ -73,6 +74,11 @@ const ServiceAccountListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadServiceAccountTabList(e.data.name, e.data.cluster, e.data.namespace);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -91,6 +97,7 @@ const ServiceAccountListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={serviceAccountList}
                   columnDefs={columDefs}
                   isBottom={true}

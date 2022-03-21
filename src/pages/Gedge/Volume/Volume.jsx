@@ -4,6 +4,7 @@ import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import VolumeListTab from "./TabList/VolumeListTab";
 import ClaimListTab from "./TabList/ClaimListTab";
+import StorageClassListTab from "./TabList/StorageClassListTab";
 // import CoreClusterListTab from "./TabList/CoreClusterListTab";
 // import EdgeClusterListTab from "./TabList/EdgeClusterListTab";
 
@@ -31,7 +32,7 @@ const Volume = () => {
                     <ClaimListTab />
                 </CTabPanel>
                 <CTabPanel value={tabvalue} index={2}>
-                    {/* <EdgeClusterListTab /> */}
+                    <StorageClassListTab />
                 </CTabPanel>
             </div>
         </Layout>

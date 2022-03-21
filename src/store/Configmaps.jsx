@@ -8,6 +8,7 @@ class Configmaps {
   totalElements = 0;
   configmapsTabList = {
     data: {},
+    annotations: {},
   };
   configmapsData = {};
 
@@ -46,9 +47,16 @@ class Configmaps {
         runInAction(() => {
           this.configmapsTabList = res.data.data;
           this.configmapsData = {};
+
           Object.entries(this.configmapsTabList?.data).map(([key, value]) => {
             this.configmapsData[key] = value;
           });
+
+          Object.entries(this.configmapsTabList?.annotations).map(
+            ([key, value]) => {
+              this.configmapsData[key] = value;
+            }
+          );
         });
       });
   };

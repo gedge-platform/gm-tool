@@ -16,6 +16,10 @@ class Volume {
   pvClaimEvents = [];
   storageClasses = [];
   storageClass = {};
+  scYamlFile = "";
+  scParameters = {};
+  scLables = {};
+  scAnnotations = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -108,6 +112,58 @@ class Volume {
               }
             }
           });
+        });
+      });
+  };
+
+  loadStorageClasses = async () => {
+    await axios
+      .get(`${LOCAL_VOLUME_URL}/storageclasses`, { auth: BASIC_AUTH })
+      .then((res) => {
+        this.storageClasses = res.data.data;
+        this.totalElements = this.storageClasses.length;
+      });
+
+    this.loadStorageClass(
+      this.storageClasses[0].name,
+      this.storageClasses[0].cluster
+    );
+  };
+
+  loadStorageClass = async (scName, cluster) => {
+    await axios
+      .get(`${LOCAL_VOLUME_URL}/storageclasses/${scName}?cluster=${cluster}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        this.storageClass = res.data.data;
+        this.scYamlFile = "";
+        this.scAnnotations = {};
+        this.scLables = {};
+        this.scParameters = {};
+
+        Object.entries(this.storageClass?.annotations).forEach(
+          ([key, value]) => {
+            try {
+              const YAML = require("json-to-pretty-yaml");
+              if (value === "true" || value === "false") {
+                throw e;
+              }
+              this.scYamlFile = YAML.stringify(JSON.parse(value));
+            } catch (e) {
+              if (key && value) {
+                this.scAnnotations[key] = value;
+              }
+            }
+          }
+        );
+
+        Object.entries(this.storageClass?.labels).map(([key, value]) => {
+          this.scLables[key] = value;
+        });
+
+        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
+          this.scParameters[key] = value;
         });
       });
   };

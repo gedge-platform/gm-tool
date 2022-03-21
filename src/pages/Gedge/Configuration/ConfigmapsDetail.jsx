@@ -13,6 +13,13 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import configmapsStore from "../../../store/Configmaps";
 import moment from "moment";
+import styled from "styled-components";
+
+const TableTitle = styled.p`
+  font-size: 16px;
+  font-weight: 500;
+  margin: 8px 0;
+`;
 
 const ConfigmapsDetail = observer(() => {
   const {
@@ -21,8 +28,13 @@ const ConfigmapsDetail = observer(() => {
     configmapsData,
     configmapsTabList,
   } = configmapsStore;
-  const configmapsTable = [];
+
+  const dataTable = [];
   const metadata = configmapsTabList.data;
+
+  const annotationsTable = [];
+  const annotations = configmapsTabList.annotations;
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -37,10 +49,19 @@ const ConfigmapsDetail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(metadata).map(([keys, value]) => {
-    configmapsTable.push(
+  Object.entries(metadata).map(([key, value]) => {
+    dataTable.push(
       <tr>
-        <th>{keys}</th>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotations).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th>{key}</th>
         <td>{value}</td>
         {/* <td style={{ whiteSpace: "pre-line" }}>{value.String()}</td> */}
       </tr>
@@ -68,11 +89,6 @@ const ConfigmapsDetail = observer(() => {
                 <th>Cluster</th>
                 <td>{configmapsTabList.cluster}</td>
               </tr>
-              {configmapsTable}
-              <tr>
-                <th>Annotations</th>
-                <td>{configmapsTabList.annotations}</td>
-              </tr>
               <tr>
                 <th>Data Count</th>
                 <td>{configmapsTabList.dataCnt}</td>
@@ -86,6 +102,16 @@ const ConfigmapsDetail = observer(() => {
                 </td>
               </tr>
             </tbody>
+          </table>
+          <br />
+          <TableTitle>Annotations</TableTitle>
+          <table className="tb_data">
+            <tbody>{annotationsTable}</tbody>
+          </table>
+          <br />
+          <TableTitle>Data</TableTitle>
+          <table className="tb_data">
+            <tbody>{dataTable}</tbody>
           </table>
           <br />
         </div>

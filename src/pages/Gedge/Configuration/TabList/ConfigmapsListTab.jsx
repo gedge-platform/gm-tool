@@ -13,6 +13,7 @@ import axios from "axios";
 import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import configmapsStore from "../../../../store/Configmaps";
 import ConfigmapsDetail from "../ConfigmapsDetail";
+import { LogoutTwoTone } from "@mui/icons-material";
 
 const ConfigmapsListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -55,11 +56,6 @@ const ConfigmapsListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "어노테이션",
-      field: "annotations",
-      filter: true,
-    },
-    {
       headerName: "데이터 개수",
       field: "dataCnt",
       filter: true,
@@ -82,6 +78,9 @@ const ConfigmapsListTab = observer(() => {
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadconfigmapsTabList(e.data.name, e.data.cluster, e.data.namespace);
+    console.log(
+      loadconfigmapsTabList(e.data.name, e.data.cluster, e.data.namespace)
+    );
   };
 
   const history = useHistory();

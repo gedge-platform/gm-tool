@@ -12,8 +12,9 @@ import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import volumeStore from "../../../store/Volume";
-
-const ClaimDetail = observer(({ pvClaim, metadata }) => {
+import { create } from "lodash";
+//
+const StorageClassDetail = observer(() => {
     const [open, setOpen] = useState(false);
     const [tabvalue, setTabvalue] = useState(0);
 
@@ -21,40 +22,43 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
         setTabvalue(newValue);
     };
 
-    const { pvClaimLables } = volumeStore;
+    const { storageClass, scAnnotations, scLables, scParameters } = volumeStore;
 
     const annotationTable = [];
     const labelTable = [];
-    const eventTable = [];
+    const parameterTable = [];
 
-    Object.entries(metadata).map(([key, value]) => {
-        annotationTable.push(
-            <tr>
-                <th className="tb_volume_detail_th">{key}</th>
-                <td>{value}</td>
-            </tr>
-        );
-    });
-
-    if (pvClaimLables) {
-        Object.entries(pvClaimLables).map(([key, value]) => {
-            labelTable.push(
+    const createTableTemplate = (table, param) => {
+        if (param) {
+            Object.entries(param).map(([key, value]) => {
+                table.push(
+                    <tr>
+                        <th className="tb_volume_detail_th">{key}</th>
+                        <td>{value}</td>
+                    </tr>
+                );
+            });
+        } else {
+            table.push(
                 <tr>
-                    <th className="tb_volume_detail_th">{key}</th>
-                    <td>{value}</td>
+                    <th className="tb_volume_detail_th">Emtpy</th>
+                    <td></td>
                 </tr>
             );
-        });
-    }
+        }
+    };
+
+    createTableTemplate(annotationTable, scAnnotations);
+    createTableTemplate(labelTable, scLables);
+    createTableTemplate(parameterTable, scParameters);
 
     return (
         <PanelBox style={{ overflowY: "scroll" }}>
             <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
                 <CTab label="Detail" />
                 <CTab label="Annotations" />
-                <CTab label="Label" />
-                <CTab label="Event" />
-                <CTab label="Finalizers" />
+                <CTab label="Labels" />
+                <CTab label="Parameters" />
             </CTabs>
             <CTabPanel value={tabvalue} index={0}>
                 <div className="panelCont">
@@ -63,32 +67,32 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
                             <tr>
                                 <th className="tb_volume_detail_th">name</th>
                                 <td className="tb_volume_detail_td">
-                                    {pvClaim?.name}
+                                    {storageClass?.name}
                                 </td>
                                 <th>capacity</th>
-                                <td>{pvClaim?.capacity}</td>
+                                <td>{storageClass?.cluster}</td>
                             </tr>
                             <tr>
                                 <th className="tb_volume_detail_th">
                                     namespace
                                 </th>
                                 <td className="tb_volume_detail_td">
-                                    {pvClaim?.namespace}
+                                    {storageClass?.reclaimPolicy}
                                 </td>
                                 <th>accessMode</th>
-                                <td>{pvClaim?.accessMode}</td>
+                                <td>{storageClass?.provisioner}</td>
                             </tr>
                             <tr>
                                 <th>status</th>
-                                <td>{pvClaim?.status}</td>
+                                <td>{storageClass?.volumeBindingMode}</td>
                                 <th>volume</th>
-                                <td>{pvClaim?.volume}</td>
+                                <td>{storageClass?.allowVolumeExpansion}</td>
                             </tr>
                             <tr>
                                 <th>clusterName</th>
-                                <td>{pvClaim?.clusterName}</td>
-                                <th>storageClass</th>
-                                <td>{pvClaim?.storageClass}</td>
+                                <td>{storageClass?.createAt}</td>
+                                <th>{null}</th>
+                                <td>{null}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,30 +115,12 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
             <CTabPanel value={tabvalue} index={3}>
                 <div className="panelCont">
                     <table className="tb_data">
-                        <tbody>
-                            <tr>
-                                <th className="tb_volume_detail_th">event</th>
-                                <td>{null}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </CTabPanel>
-            <CTabPanel value={tabvalue} index={4}>
-                <div className="panelCont">
-                    <table className="tb_data">
-                        <tbody>
-                            <tr>
-                                <th className="tb_volume_detail_th">
-                                    Finalizers
-                                </th>
-                                <td>{pvClaim?.finalizers}</td>
-                            </tr>
-                        </tbody>
+                        <tbody>{parameterTable}</tbody>
                     </table>
                 </div>
             </CTabPanel>
         </PanelBox>
     );
 });
-export default ClaimDetail;
+
+export default StorageClassDetail;

@@ -65,11 +65,6 @@ const SecretListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "이벤트",
-      field: "events",
-      filter: true,
-    },
-    {
       headerName: "생성날짜",
       field: "createAt",
       filter: "agDateColumnFilter",

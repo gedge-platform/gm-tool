@@ -1,17 +1,20 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class ServiceAccount {
   serviceAccountList = [];
-  serviceAccountDetail = {
-    secrets: {
-      name: "",
-    },
-  };
+  serviceAccountDetail = {};
   serviceAccountTabList = {
-    data: {},
+    secrets: [
+      {
+        name: "",
+      },
+    ],
+    label: {},
+    annotations: {},
   };
+  serviceAccountData = {};
   totalElements = 0;
 
   constructor() {
@@ -20,7 +23,7 @@ class ServiceAccount {
 
   loadServiceAccountList = async () => {
     await axios
-      .get(`${SERVER_URL}/serviceaccounts`, {
+      .get(`${SERVER_URL2}/serviceaccounts`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -40,7 +43,7 @@ class ServiceAccount {
   loadServiceAccountTabList = async (name, cluster, namespace) => {
     await axios
       .get(
-        `${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`,
+        `${SERVER_URL2}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`,
         {
           auth: BASIC_AUTH,
         }
@@ -48,7 +51,19 @@ class ServiceAccount {
       .then((res) => {
         runInAction(() => {
           this.serviceAccountTabList = res.data.data;
-          console.log(this.serviceAccountTabList);
+          this.serviceAccountData = {};
+
+          Object.entries(this.serviceAccountTabList?.label).map(
+            ([key, value]) => {
+              this.serviceAccountData[key] = value;
+            }
+          );
+
+          Object.entries(this.serviceAccountTabList?.annotations).map(
+            ([key, value]) => {
+              this.serviceAccountData[key] = value;
+            }
+          );
         });
       });
   };
