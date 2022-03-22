@@ -5,9 +5,10 @@ import styled from "styled-components";
 import moment from "moment";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = (props) => {
@@ -26,7 +27,7 @@ const Detail = (props) => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="리소스 상태" />
         <CTab label="메타데이터" />

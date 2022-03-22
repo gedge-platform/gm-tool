@@ -71,7 +71,22 @@ const DeploymentPodSettins = observer(() => {
   };
 
   return (
-    <div>
+    <>
+      <div className="step-container">
+        <div className="signup-step">
+          <div className="step">
+            <span>기본 정보</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step current">
+            <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>설정 검토</span>
+          </div>
+        </div>
+      </div>
       <HeaderContainer>
         <p>Pod Replicas</p>
         <ButtonBox>
@@ -81,7 +96,7 @@ const DeploymentPodSettins = observer(() => {
         </ButtonBox>
       </HeaderContainer>
 
-      <table className="tb_data tb_write">
+      <table className="tb_data_new tb_write">
         <tbody>
           <tr>
             <th>
@@ -146,7 +161,7 @@ const DeploymentPodSettins = observer(() => {
           </tr>
         </tbody>
       </table>
-    </div>
+    </>
   );
 });
 

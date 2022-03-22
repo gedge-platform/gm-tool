@@ -4,7 +4,7 @@ import { ClientSideRowModelModule } from "@ag-grid-community/all-modules";
 import { AgGridReact } from "@ag-grid-community/react";
 
 import "@ag-grid-community/core/dist/styles/ag-grid.css";
-import "@ag-grid-community/core/dist/styles/ag-theme-alpine.css";
+import "@ag-grid-community/core/dist/styles/ag-theme-balham-dark.css";
 import "@/styles/ag-custom.scss";
 
 ModuleRegistry.register(ClientSideRowModelModule);
@@ -87,6 +87,7 @@ const AgGrid = (props) => {
         suppressPaginationPanel={true}
         onCellClicked={onCellClicked}
         onSelectionChanged={onSelectionChanged}
+        cla
       />
       <div
         id="pagination"

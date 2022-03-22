@@ -22,27 +22,30 @@ import { toJS } from "mobx";
 import { form } from "react-dom-factories";
 import { getItem } from "@/utils/sessionStorageFn";
 import { randomString } from "@/utils/common-utils";
+import { CDialogNew } from "../../../../components/dialogs";
 
 const Button = styled.button`
-  background-color: ##eff4f9;
-  border: 1px solid #ccd3db;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 35px;
+  margin-right: 10px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
-  background-color: #242e42;
+  background-color: #0f5ce9;
   color: white;
-  border: 1px solid #242e42;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  border: none;
+  padding: 10px 35px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [stepValue, setStepValue] = useState(1);
+  const [stepValue, setStepValue] = useState(3);
   const [size, setSize] = useState("md");
   const [loading, setLoading] = useState(false);
 
@@ -115,38 +118,41 @@ const CreateDeployment = observer((props) => {
     postDeployment(handleClose);
   };
   const createDeployment2 = () => {
+    const requestId = `${getItem("user")}-${randomString()}`;
+    let body = {
+      requestId: requestId,
+      workspace: workspace,
+      project: project,
+      type: "Deployment",
+      status: "CREATED",
+    };
     let formData = new FormData();
     formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
-    formData.append("requestId", `${getItem("user")}-${randomString()}`); // 수정 필요(user + random 값)
+    formData.append("requestId", requestId);
     formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
-    formData.append("workspace", workspace);
-    formData.append("project", project);
-    formData.append("type", "Deployment");
-    formData.append("date", new Date());
-    // console.log(JSON.stringify(clusters));
 
-    axios
-      .post(`http://101.79.4.15:32527/yaml`, formData)
-      .then(function (response) {
-        if (response.status === 200) {
-          setResponseData(response.data);
+    // axios
+    //   .post(`http://101.79.4.15:32527/yaml`, formData)
+    //   .then(function (response) {
+    //     if (response.status === 200) {
+    //       setResponseData(response.data);
 
-          const popup = window.open(
-            "",
-            "Gedge scheduler",
-            "width=1200,height=800"
-          );
-          popup.document.open().write(response.data);
-          popup.document.close();
+    //       const popup = window.open(
+    //         "",
+    //         "Gedge scheduler",
+    //         "width=1200,height=800"
+    //       );
+    //       popup.document.open().write(response.data);
+    //       popup.document.close();
 
-          handleClose();
-          // setStepValue(4);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    //       handleClose();
+    //       // setStepValue(4);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   useEffect(() => {
     if (stepValue === 3) {
@@ -164,14 +170,14 @@ const CreateDeployment = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "150px",
-                justifyContent: "space-around",
+                width: "240px",
+                justifyContent: "center",
               }}
             >
               <Button onClick={handleClose}>취소</Button>
@@ -188,17 +194,16 @@ const CreateDeployment = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "230px",
-                justifyContent: "space-around",
+                width: "240px",
+                justifyContent: "center",
               }}
             >
-              <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(1)}>이전</Button>
               <ButtonNext onClick={() => setStepValue(3)}>다음</ButtonNext>
             </div>
@@ -213,22 +218,21 @@ const CreateDeployment = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "430px",
-                justifyContent: "space-around",
+                width: "300px",
+                justifyContent: "center",
               }}
             >
-              <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
               <ButtonNext onClick={createDeployment2}>
                 Schedule Apply
               </ButtonNext>
-              <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext>
+              {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>
           </div>
         </>
@@ -237,7 +241,7 @@ const CreateDeployment = observer((props) => {
   };
 
   return (
-    <CDialog
+    <CDialogNew
       id="myDialog"
       open={open}
       maxWidth={size}
@@ -247,7 +251,7 @@ const CreateDeployment = observer((props) => {
       modules={["custom"]}
     >
       {stepOfComponent()}
-    </CDialog>
+    </CDialogNew>
   );
 });
 export default CreateDeployment;

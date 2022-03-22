@@ -1,23 +1,23 @@
-import React from 'react';
+import React from "react";
 
 const fontSizes = {
-  root: '12px',
-  title: '14px',
-  subtitle: '13px',
-  paragraph: '13px',
-}
+  root: "12px",
+  title: "14px",
+  subtitle: "13px",
+  paragraph: "13px",
+};
 const colors = {
-  primary: '#1a5eda', // SideNav LogoArea
-  primaryDark: '#1355ce', // SideNav UserArea
-  navActive: '#1a5eda', // SideNav Nav Active
-  primaryBtn: '#0090ff', // SideNav Nav Active
-  defaultDark: '#071e3f',
-  defaultBorder: '#e0e2e5',
-  panelTit: '#f5f6f9',
-}
+  primary: "#2f3955", // SideNav LogoArea
+  primaryDark: "#25304b", // SideNav UserArea
+  navActive: "#268eff", // SideNav Nav Active
+  primaryBtn: "#0090ff", // SideNav Nav Active
+  defaultDark: "#071e3f",
+  defaultBorder: "#16213d",
+  panelTit: "#2f3855",
+};
 const sizes = {
-  sideNavWidth: '231px',
-}
+  sideNavWidth: "231px",
+};
 const mixins = {
   clearfix: `
     &::after {
@@ -51,13 +51,13 @@ const mixins = {
     color: transparent;
     white-space: nowrap;
     overflow: hidden;
-  `
-}
+  `,
+};
 
 const theme = {
   fontSizes,
   colors,
   sizes,
   mixins,
-}
+};
 export default theme;
