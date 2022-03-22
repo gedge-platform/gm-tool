@@ -9,6 +9,7 @@ import CronJobListTab from "./Tablist/CronJobListTab";
 import PodListTab from "./Tablist/PodListTab";
 import StatefulSetListTab from "./Tablist/StatefulSetListTab";
 import DaemonSetListTab from "./Tablist/DaemonSetListTab";
+import RequestStatusTab from "./Tablist/RequestStatusTab";
 
 const Workload = () => {
   const currentPageTitle = Title.Workload;
@@ -29,6 +30,7 @@ const Workload = () => {
         <CTab label="Pod" />
         <CTab label="StatefulSet" />
         <CTab label="DaemonSet" />
+        <CTab label="Request Status" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
@@ -51,6 +53,9 @@ const Workload = () => {
         </CTabPanel>
         <CTabPanel value={tabvalue} index={6}>
           <DaemonSetListTab />
+        </CTabPanel>
+        <CTabPanel value={tabvalue} index={7}>
+          <RequestStatusTab />
         </CTabPanel>
       </div>
     </Layout>

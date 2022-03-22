@@ -20,6 +20,8 @@ import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
 import { toJS } from "mobx";
 import { form } from "react-dom-factories";
+import { getItem } from "@/utils/sessionStorageFn";
+import { randomString } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -47,10 +49,12 @@ const CreateDeployment = observer((props) => {
   const {
     deploymentName,
     podReplicas,
+    content,
     containerName,
     containerImage,
     containerPort,
     project,
+    workspace,
     responseData,
     setContent,
     clearAll,
@@ -112,11 +116,15 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     let formData = new FormData();
-    formData.append("callbackUrl", "http://101.79.4.15:8080/callback");
-    formData.append("requestId", deploymentName);
-    formData.append("yaml", deploymentStore.content);
+    formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
+    formData.append("requestId", `${getItem("user")}-${randomString()}`); // 수정 필요(user + random 값)
+    formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
-    console.log(JSON.stringify(clusters));
+    formData.append("workspace", workspace);
+    formData.append("project", project);
+    formData.append("type", "Deployment");
+    formData.append("date", new Date());
+    // console.log(JSON.stringify(clusters));
 
     axios
       .post(`http://101.79.4.15:32527/yaml`, formData)
@@ -124,11 +132,16 @@ const CreateDeployment = observer((props) => {
         if (response.status === 200) {
           setResponseData(response.data);
 
-          const popup = window.open('', 'Gedge scheduler', 'width=600,height=400');
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            "width=1200,height=800"
+          );
           popup.document.open().write(response.data);
           popup.document.close();
 
-          setStepValue(4);
+          handleClose();
+          // setStepValue(4);
         }
       })
       .catch(function (error) {
@@ -140,7 +153,7 @@ const CreateDeployment = observer((props) => {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     } else if (stepValue === 4) setSize("xl");
-  });
+  }, [stepValue]);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {

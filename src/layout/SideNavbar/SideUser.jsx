@@ -101,6 +101,11 @@ const BtnArea = styled.div`
       text-align: left;
       background: url(../images/layout/sideUser_arr.png) no-repeat right center;
     }
+    .belong {
+      display: block;
+      font-size: 10px;
+      color: #fff;
+    }
   }
 `;
 
@@ -120,13 +125,19 @@ const SideUser = ({ userName }) => {
     removeItem("userRole");
     history.push("/login");
   };
+
+  const setRole = (role) => {
+    if (role === "PA") return "Platform Admin";
+    else return "Service Admin";
+  };
   useEffect(async () => {
     await axios
       .get(`${SERVER_URL}/members/${getItem("user")}`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
-        // console.log(res);
+        setName(res.data.data.memberName);
+        setItem("name", res.data.data.memberName);
       });
   }, []);
   return (
@@ -134,7 +145,11 @@ const SideUser = ({ userName }) => {
       <BtnArea>
         <button type="button" onClick={handleUserOpen}>
           <span className="avatar"></span>
-          <span className="name">{name}</span>
+          <span className="name">
+            {name}
+            <span className="belong">{setRole(getItem("userRole"))}</span>
+          </span>
+          {/* <span>{getItem("userRole")}</span> */}
         </button>
         <Menu
           id="simple-menu"
