@@ -83,7 +83,7 @@ const StatefulSetListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail statefulSet={statefulSetDetail} />
+        <Detail statefulSet={{}} />
       </CReflexBox>
     </>
   );
