@@ -12,7 +12,7 @@ import deploymentStore from "../../../../store/Deployment";
 import moment from "moment";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter } from "@/utils/common-utils";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -38,8 +38,8 @@ const DeploymentListTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
-      cellRenderer: ({ value }) => {
-        return drawStatus(value);
+      cellRenderer: function ({ value }) {
+        return drawStatus(value.toLowerCase());
       },
     },
     {

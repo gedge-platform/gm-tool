@@ -12,7 +12,8 @@ const MenuNav = styled.nav`
   color: #afbacb;
   font-size: 13px;
   flex-grow: 1;
-  border-top: 1px solid #06193c;
+  border-top: 1px solid #25304b;
+  background-color: #2f3955;
   //ul {
   //  position: absolute;
   //  top: 0;
@@ -23,7 +24,8 @@ const MenuNav = styled.nav`
   //  border-top: 1px solid #06193c;
   //}
   li {
-    border-bottom: 1px solid #06193c;
+    border-bottom: 1px solid #25304b;
+    background-color: #2f3955;
     
     a {
       position: relative;
@@ -61,7 +63,7 @@ const MenuNav = styled.nav`
           left: 0;
           bottom: 0;
           width: 4px;
-          background-color: #ff4e00
+          background-color:#00d3ff;
         }
         & + .subMenu {
           display: block

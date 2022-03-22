@@ -39,49 +39,65 @@ const DeploymentBasicInformation = observer(() => {
     loadWorkSpaceList();
   }, []);
   return (
-    <table className="tb_data tb_write">
-      <tbody>
-        <tr>
-          <th>
-            Workspace <span className="requried">*</span>
-          </th>
-          <td style={{ width: "50%" }}>
-            <FormControl className="form_fullWidth">
-              <select name="workspace" onChange={onChange}>
-                <option value={"dafault"}>default</option>
-                {workSpaceList.map((workspace) => (
-                  <option value={workspace.workspaceName}>
-                    {workspace.workspaceName}
-                  </option>
-                ))}
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            Project <span className="requried">*</span>
-          </th>
-          <td>
-            <FormControl className="form_fullWidth">
-              <select
-                disabled={projectEnable}
-                name="project"
-                onChange={onChange}
-              >
-                {projectListinWorkspace.map((project) => (
-                  <option value={project.projectName}>
-                    {project.projectName}
-                  </option>
-                ))}
-                <option value={"dafault"}>default</option>
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr>
-        {/* <tr>
+    <>
+      <div className="step-container">
+        <div className="signup-step">
+          <div className="step current">
+            <span>기본 정보</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>설정 검토</span>
+          </div>
+        </div>
+      </div>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td style={{ width: "50%" }}>
+              <FormControl className="form_fullWidth">
+                <select name="workspace" onChange={onChange}>
+                  <option value={"dafault"}>default</option>
+                  {workSpaceList.map((workspace) => (
+                    <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select
+                  disabled={projectEnable}
+                  name="project"
+                  onChange={onChange}
+                >
+                  {projectListinWorkspace.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
+                    </option>
+                  ))}
+                  <option value={"dafault"}>default</option>
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          {/* <tr>
           <th>
             Cluster <span className="requried">*</span>
           </th>
@@ -103,25 +119,26 @@ const DeploymentBasicInformation = observer(() => {
           </td>
           <th></th>
         </tr> */}
-        <tr>
-          <th>
-            Deployment Name
-            <span className="requried">*</span>
-          </th>
-          <td>
-            <CTextField
-              type="text"
-              placeholder="Deployment Name"
-              className="form_fullWidth"
-              name="Deployment Name"
-              onChange={onChange}
-              value={deploymentName}
-            />
-          </td>
-          <th></th>
-        </tr>
-      </tbody>
-    </table>
+          <tr>
+            <th>
+              Deployment Name
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Deployment Name"
+                className="form_fullWidth"
+                name="Deployment Name"
+                onChange={onChange}
+                value={deploymentName}
+              />
+            </td>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+    </>
   );
 });
 

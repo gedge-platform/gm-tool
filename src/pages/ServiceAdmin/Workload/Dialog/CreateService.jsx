@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import serviceStore from "../../../../store/Service";
 import ServiceBasicInformation from "../Dialog/ServiceBasicInformation";
+import ServiceYaml from "./ServiceYaml";
 
 const Button = styled.button`
   background-color: ##eff4f9;
@@ -27,8 +28,16 @@ const CreatePod = observer((props) => {
   const [stepValue, setStepValue] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const { serviceName, appName, protocol, port, targetPort, clearAll } =
-    serviceStore;
+  const {
+    serviceName,
+    appName,
+    protocol,
+    port,
+    targetPort,
+    clearAll,
+    setContent,
+    postService,
+  } = serviceStore;
 
   const template = {
     apiVersion: "v1",
@@ -56,12 +65,16 @@ const CreatePod = observer((props) => {
     clearAll();
   };
 
+  const createService = () => {
+    postService(handleClose);
+  };
+
   useEffect(() => {
-    if (stepValue === 3) {
-      //   const YAML = require("json-to-pretty-yaml");
-      //   setContent(YAML.stringify(template));
+    if (stepValue === 2) {
+      const YAML = require("json-to-pretty-yaml");
+      setContent(YAML.stringify(template));
     }
-  });
+  }, [stepValue]);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
@@ -91,6 +104,7 @@ const CreatePod = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
+          <ServiceYaml />
           <div
             style={{
               display: "flex",
@@ -101,13 +115,16 @@ const CreatePod = observer((props) => {
             <div
               style={{
                 display: "flex",
-                width: "230px",
+                width: "430px",
                 justifyContent: "space-around",
               }}
             >
               <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={() => setStepValue(3)}>다음</ButtonNext>
+              <ButtonNext onClick={() => console.log("")}>
+                Schedule Apply
+              </ButtonNext>
+              <ButtonNext onClick={createService}>Default Apply</ButtonNext>
             </div>
           </div>
         </>
@@ -149,7 +166,7 @@ const CreatePod = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Create Deployment"}
+      title={"Create Service"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}

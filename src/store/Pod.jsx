@@ -1,6 +1,5 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { IgnorePlugin } from "webpack";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {

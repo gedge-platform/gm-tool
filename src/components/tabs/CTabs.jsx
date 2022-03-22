@@ -2,7 +2,7 @@ import React from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "@/styles/theme";
 import Tabs from "@material-ui/core/Tabs";
-import tabBg from "@/images/component/tab_sprite_bg.png";
+import tabBg from "@/images/component/tab_sprite_bg_dark.png";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -55,7 +55,8 @@ const useStyles = makeStyles(() =>
           height: 35,
           zIndex: "10 !important",
           fontSize: "13px",
-          color: `${theme.colors.defaultDark}`,
+          // color: `${theme.colors.defaultDark}`,
+          color: `#fff`,
           "&::before": {
             backgroundPositionY: "-50px",
           },
@@ -108,7 +109,7 @@ const useStyles = makeStyles(() =>
           padding: "0 1px",
           fontWeight: 400,
           fontSize: "12px",
-          // borderBottom: '3px solid transparent',
+          borderBottom: "3px solid transparent",
         },
         "&.Mui-selected": {
           zIndex: "1",
