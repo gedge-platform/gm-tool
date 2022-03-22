@@ -78,9 +78,6 @@ const ConfigmapsListTab = observer(() => {
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadconfigmapsTabList(e.data.name, e.data.cluster, e.data.namespace);
-    console.log(
-      loadconfigmapsTabList(e.data.name, e.data.cluster, e.data.namespace)
-    );
   };
 
   const history = useHistory();

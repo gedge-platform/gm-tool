@@ -1,10 +1,26 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { IgnorePlugin } from "webpack";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {
   podList = [];
-  podDetail = {};
+  podDetail = {
+    label: {},
+    annotations: {},
+    events: [
+      {
+        kind: "",
+        name: "",
+        namespace: "",
+        cluster: "",
+        message: "",
+        reason: "",
+        type: "",
+        eventTime: "",
+      },
+    ],
+  };
   totalElements = 0;
 
   podName = "";
@@ -20,9 +36,35 @@ class Pod {
     makeAutoObservable(this);
   }
 
+  loadPodDetail = async (name, cluster, project) => {
+    await axios
+      .get(
+        `${SERVER_URL2}/pods/${name}?cluster=${cluster}&project=${project}`,
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.podDetail = res.data.data;
+          this.podMetadata = {};
+
+          // Object.entries(this.podDetail?.label).map(([key, value]) => {
+          //   [key] === "undefined"
+          //     ? "undefined"
+          //     : (this.podMetadata[key] = value);
+          // });
+
+          // Object.entries(this.podDetail?.annotations).map(([key, value]) => {
+          //   this.podMetadata[key] = value;
+          // });
+        });
+      });
+  };
+
   loadPodList = async (type) => {
     await axios
-      .get(`${SERVER_URL}/pods`, {
+      .get(`${SERVER_URL2}/pods`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -35,6 +77,11 @@ class Pod {
           this.totalElements = list.length;
         });
       });
+    this.loadPodDetail(
+      this.podList[0].name,
+      this.podList[0].cluster,
+      this.podList[0].project
+    );
   };
 
   setPodName = (podName) => {

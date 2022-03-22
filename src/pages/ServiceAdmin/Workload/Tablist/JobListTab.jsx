@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import Detail from "../JobDetail";
 import jobStore from "../../../../store/Job";
 import moment from "moment";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const JobListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -30,6 +31,13 @@ const JobListTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        if (value === 1) {
+          return drawStatus("True");
+        } else {
+          return drawStatus("False");
+        }
+      },
     },
     {
       headerName: "프로젝트명",

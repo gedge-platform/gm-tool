@@ -12,6 +12,7 @@ import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
 import moment from "moment";
 import CreatePod from "../Dialog/CreatePod";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,8 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalElements, loadPodList } = podStore;
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
 
   const [columDefs] = useState([
     {
@@ -32,6 +34,9 @@ const PodListTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
       headerName: "노드명",
@@ -66,6 +71,11 @@ const PodListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -84,6 +94,7 @@ const PodListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
