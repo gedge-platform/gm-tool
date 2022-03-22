@@ -1,3 +1,10 @@
+const unixCurrentTime = () => Math.ceil(new Date().getTime() / 1000);
+
+const unixStartTime = (interval) =>
+    // interval : (10m) -> 10 * 60s, (1h) -> 60 * 60s
+    // realtime => 5s
+    Math.ceil(unixCurrentTime() - interval * 60);
+
 const stepConverter = (time) => {
     if (time < 1) {
         return time * 60 + "s";
@@ -8,11 +15,18 @@ const stepConverter = (time) => {
     }
 };
 
-// realtime => 5s
+const combinationMetrics = (...metrics) => {
+    let result = "";
 
-const unixCurrentTime = () => Math.ceil(new Date().getTime() / 1000);
-const unixStartTime = (interval) =>
-    // interval : (10m) -> 10 * 60s, (1h) -> 60 * 60s
-    Math.ceil(unixCurrentTime() - interval * 60);
+    for (let index = 0; index < metrics.length; index++) {
+        if (index === metrics.length - 1) {
+            result += metrics[index];
+        } else {
+            result += metrics[index] + "|";
+        }
+    }
 
-export { stepConverter, unixCurrentTime, unixStartTime };
+    return result;
+};
+
+export { stepConverter, unixCurrentTime, unixStartTime, combinationMetrics };

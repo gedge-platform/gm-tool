@@ -1,5 +1,13 @@
-const ClusterMetricValues = {
-    CPU_UASGE: "cpu_uasge",
+const TargetTypes = {
+    CLUSTER: "cluster",
+    APPLICATION: "app",
+    NAMESPACE: "namespace",
+    POD: "pod",
+    NODE: "node",
+};
+
+const ClusterMetricTypes = {
+    CPU_USAGE: "cpu_usage",
     CPU_UTIL: "cpu_util",
     CPU_TOTAL: "cpu_total",
     MEMORY_USAGE: "memory_usage",
@@ -16,29 +24,27 @@ const ClusterMetricValues = {
     SCHEDULER_ATTEMPT_TOTAL: "scheduler_attempt_total",
     SCHEDULER_FAIL_TOTAL: "scheduler_fail_total",
     SCHEDULER_LATENCY: "scheduler_latency",
-    CPU_ALL: "cpu_uasge|cpu_util|cpu_total",
+    CPU_ALL: "cpu_usage|cpu_util|cpu_total",
     MEMORY_ALL: "memory_usage|memory_util|memory_total",
     DISK_ALL: "disk_usage|disk_util|disk_total",
     POD_ALL: "pod_quota|pod_running|pod_util",
     APISERVER_ALL: "apiserver_request_rate|apiserver_latency",
     SCHEDULER_ALL:
         "scheduler_attempt_total|scheduler_fail_total|scheduler_latency",
-    ALL: "cpu_uasge|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util|apiserver_request_rate|apiserver_latency|scheduler_attempt_total|scheduler_fail_total|scheduler_latency",
+    ALL: "cpu_usage|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util|apiserver_request_rate|apiserver_latency|scheduler_attempt_total|scheduler_fail_total|scheduler_latency",
 };
 
-const combinationMetrics = (array) => {};
-
 // const ApplicationMetricValues = {
-//     CPU_UASGE: "pod_count",
-//     CPU_UASGE: "service_count",
-//     CPU_UASGE: "deployment_count",
-//     CPU_UASGE: "cronjob_count",
-//     CPU_UASGE: "memory_total",
-//     CPU_UASGE: "job_count",
-//     CPU_UASGE: "pv_count",
-//     CPU_UASGE: "disk_total",
-//     CPU_UASGE: "pvc_count",
-//     CPU_UASGE: "namespace_count",
+//     POD_COUNT: "pod_count",
+//     SERVICE_COUNT: "service_count",
+//     DEVPLOYMENT_COUNT: "deployment_count",
+//     CRONJOB_COUNT: "cronjob_count",
+//     MEMORY_TOTAL: "memory_total",
+//     JOB_COUNT: "job_count",
+//     PV_COUNT: "pv_count",
+//     DISK_TOTAL: "disk_total",
+//     PVC_COUNT: "pvc_count",
+//     NAMESPACE_COUNT: "namespace_count",
 // };
 
 // const NamespaceMetricValues = {
@@ -79,8 +85,9 @@ const combinationMetrics = (array) => {};
 // };
 
 export {
+    ClusterMetricTypes,
+    TargetTypes,
     // ApplicationMetricValues,
-    ClusterMetricValues,
     // NamespaceMetricValues,
     // NodeMetricValues,
     // PodMetricValues,

@@ -19,9 +19,10 @@ import {
     stepConverter,
     unixCurrentTime,
     unixStartTime,
+    combinationMetrics,
 } from "../Utils/MetricsVariableFormatter";
 
-import { ClusterMetricValues } from "../Utils/MetricsVariables";
+import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
 import {
     AreaChart,
     Area,
@@ -39,12 +40,29 @@ const ClusterOverview = observer(() => {
         setTabvalue(newValue);
     };
 
-    const { clusterNames, loadClusters, loadClusterMetrics } = monitoringStore;
+    const test = (a, b, ...c) => {
+        console.log(c.length);
+    };
 
-    console.log(ClusterMetricValues.CPU_ALL, ClusterMetricValues.CPU_TOTAL);
+    test("abc", "b");
+
+    const { clusterNames, loadClusterNames, loadMetrics } = monitoringStore;
+
+    loadMetrics(
+        TargetTypes.CLUSTER,
+        unixStartTime(1),
+        unixCurrentTime(),
+        stepConverter(0.5),
+        clusterNames[0],
+        combinationMetrics(
+            ClusterMetricTypes.CPU_TOTAL,
+            ClusterMetricTypes.CPU_USAGE,
+            ClusterMetricTypes.CPU_UTIL
+        )
+    );
+
     useEffect(() => {
-        loadClusters();
-        // loadClusterMetrics();
+        loadClusterNames();
     }, []);
 
     return <PanelBox>{clusterNames}</PanelBox>;
