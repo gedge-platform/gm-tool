@@ -45,7 +45,7 @@ const ButtonNext = styled.button`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [stepValue, setStepValue] = useState(3);
+  const [stepValue, setStepValue] = useState(0);
   const [size, setSize] = useState("md");
   const [loading, setLoading] = useState(false);
 
