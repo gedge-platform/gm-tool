@@ -991,7 +991,7 @@ textarea {
   width: 126px;
   height: 126px;
   border-radius: 50%;
-  border: 3px solid #1355ce;
+  /* border: 3px solid #1355ce; */
   background-color: #fff;
   color: transparent;
   overflow: hidden;
@@ -1045,10 +1045,10 @@ textarea {
   display: none;
 }
 .signup-step .step.current ~ .arr {
-  background-position-y: -12px;
+  /* background-position-y: -12px; */
 }
 .signup-step .step.current .ico::after {
-  background-position-y: top;
+  /* background-position-y: top; */
 }
 .signup-step .step.current ~ .step {
   border: 0;
@@ -1060,12 +1060,13 @@ textarea {
   display: none;
 }
 .signup-step .step.current ~ .step .ico::after {
-  background-position-y: -50px;
+  /* background-position-y: -50px; */
 }
 .signup-step .arr {
   width: 7px;
   height: 12px;
   background: url(../images/ico_step_arr.png) no-repeat center top;
+  background-position-y: -12px;
 }
 
 .input_login,
