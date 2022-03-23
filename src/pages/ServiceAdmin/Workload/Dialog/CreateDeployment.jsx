@@ -1,26 +1,15 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { CDialog } from "@/components/dialogs";
-import { swalUpdate } from "@/utils/swal-utils";
-import FormControl from "@material-ui/core/FormControl";
-import { CTextField } from "@/components/textfields";
-import { SERVER_URL } from "@/config.jsx";
+import React, { useState, useEffect } from "react";
+import { REQUEST_URL } from "@/config.jsx";
 import axios from "axios";
-import { CButton } from "@/components/buttons";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import workspacesStore from "../../../../store/WorkSpace";
-import projectStore from "../../../../store/Project";
 import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
 import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
-import { useHistory } from "react-router";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
-import { toJS } from "mobx";
-import { form } from "react-dom-factories";
-import { getItem } from "@/utils/sessionStorageFn";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
 
@@ -119,40 +108,47 @@ const CreateDeployment = observer((props) => {
   };
   const createDeployment2 = () => {
     const requestId = `${deploymentName}-${randomString()}`;
+    // const requestId = `request_ksh1006`;
     let body = {
       requestId: requestId,
-      workspace: workspace,
-      project: project,
+      workspaceName: workspace,
+      projectName: project,
       type: "Deployment",
       status: "CREATED",
+      date: new Date(),
     };
     let formData = new FormData();
-    formData.append("callbackUrl", "http://101.79.4.15:8080/callback"); // 수정 필요
+    formData.append("callbackUrl", `${REQUEST_URL}/${requestId}`); // 수정 필요
     formData.append("requestId", requestId);
     formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
+    // console.log(content, JSON.stringify(clusters));
 
-    // axios
-    //   .post(`http://101.79.4.15:32527/yaml`, formData)
-    //   .then(function (response) {
-    //     if (response.status === 200) {
-    //       setResponseData(response.data);
+    axios
+      .post(REQUEST_URL, body)
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e.message));
+    axios
+      .post(`http://101.79.4.15:32527/yaml`, formData)
+      .then(function (response) {
+        if (response.status === 200) {
+          setResponseData(response.data);
 
-    //       const popup = window.open(
-    //         "",
-    //         "Gedge scheduler",
-    //         "width=1200,height=800"
-    //       );
-    //       popup.document.open().write(response.data);
-    //       popup.document.close();
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            "width=1200,height=800"
+          );
+          popup.document.open().write(response.data);
+          popup.document.close();
 
-    //       handleClose();
-    //       // setStepValue(4);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+          handleClose();
+          // setStepValue(4);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   useEffect(() => {
     if (stepValue === 3) {
