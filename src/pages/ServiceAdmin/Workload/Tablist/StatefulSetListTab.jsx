@@ -17,6 +17,7 @@ const StatefulSetListTab = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
+  //test
 
   const {
     statefulSetList,
