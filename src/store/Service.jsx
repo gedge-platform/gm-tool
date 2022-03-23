@@ -1,10 +1,14 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Service {
   serviceList = [];
-  serviceDetail = {};
+  serviceDetail = {
+    selector: {
+      app: "",
+    },
+  };
   totalElements = 0;
 
   serviceName = "";
@@ -23,9 +27,24 @@ class Service {
     makeAutoObservable(this);
   }
 
+  loadServiceDetail = async (name, cluster, project) => {
+    await axios
+      .get(
+        `${SERVER_URL2}/services/${name}?cluster=${cluster}&project=${project}`,
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.serviceDetail = res.data.data;
+        });
+      });
+  };
+
   loadServiceList = async (type) => {
     await axios
-      .get(`${SERVER_URL}/services`, {
+      .get(`${SERVER_URL2}/services`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -34,10 +53,15 @@ class Service {
             (item) => item.projectType === type
           );
           this.serviceList = list;
-          this.serviceDetail = list[0];
+          // this.serviceDetail = list[0];
           this.totalElements = list.length;
         });
       });
+    this.loadServiceDetail(
+      this.serviceList[0].name,
+      this.serviceList[0].cluster,
+      this.serviceList[0].project
+    );
   };
 
   setServiceName = (serviceName) => {

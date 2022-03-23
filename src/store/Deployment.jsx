@@ -1,12 +1,15 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
   deploymentDetail = {};
+  rollingUpdate = {};
+  labels = {};
+  annotations = {};
   totalElements = 0;
   deploymentName = "";
   podReplicas = "";
@@ -63,9 +66,35 @@ class Deployment {
     makeAutoObservable(this);
   }
 
+  loadDeploymentDetail = async (name, cluster, project) => {
+    await axios
+      .get(
+        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`,
+        { auth: BASIC_AUTH }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.deploymentDetail = res.data.data;
+          this.rollingUpdate = res.data.data.strategy.rollingUpdate;
+          this.labels = res.data.data.labels;
+          this.annotations = res.data.data.annotations;
+
+          // Object.entries(labels).map(([key, value]) => {
+          //   try {
+          //     Object.entries(labels).map([key, value])
+          //       ? null
+          //       : Object.entries(labels).map([key, value]);
+          //   } catch (error) {
+          //     console.log("에러");
+          //   }
+          // })
+        });
+      });
+  };
+
   loadDeploymentList = async (type) => {
     await axios
-      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
+      .get(`${SERVER_URL2}/deployments`, { auth: BASIC_AUTH })
       .then((res) => {
         runInAction(() => {
           const list = res.data.data.filter((item) => item.projetType === type);
@@ -74,6 +103,11 @@ class Deployment {
           this.totalElements = list.length;
         });
       });
+    this.loadDeploymentDetail(
+      this.deploymentList[0].name,
+      this.deploymentList[0].cluster,
+      this.deploymentList[0].project
+    );
   };
 
   setWorkspace = (workspace) => {
@@ -162,7 +196,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
+        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}`,
         YAML.parse(this.content),
         {
           auth: BASIC_AUTH,

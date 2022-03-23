@@ -26,6 +26,7 @@ const DeploymentListTab = observer(() => {
     deploymentDetail,
     totalElements,
     loadDeploymentList,
+    loadDeploymentDetail,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -36,11 +37,11 @@ const DeploymentListTab = observer(() => {
     },
     {
       headerName: "상태",
-      field: "status",
+      field: "ready",
       filter: true,
-      cellRenderer: function ({ value }) {
-        return drawStatus(value.toLowerCase());
-      },
+      // cellRenderer: function ({ value }) {
+      //   return drawStatus(value.toLowerCase());
+      // },
     },
     {
       headerName: "프로젝트명",
@@ -61,6 +62,11 @@ const DeploymentListTab = observer(() => {
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -87,6 +93,7 @@ const DeploymentListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={deploymentList}
                   columnDefs={columDefs}
                   isBottom={true}

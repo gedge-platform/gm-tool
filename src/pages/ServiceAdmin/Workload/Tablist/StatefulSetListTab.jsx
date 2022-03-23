@@ -23,6 +23,7 @@ const StatefulSetListTab = observer(() => {
     statefulSetDetail,
     totalElements,
     loadStatefulSetList,
+    loadStatefulSetDetail,
   } = statefulSetStore;
 
   const [columDefs] = useState([
@@ -32,29 +33,39 @@ const StatefulSetListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
-      filter: true,
-    },
-    {
       headerName: "프로젝트명",
       field: "project",
       filter: true,
     },
     {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "ready",
+      filter: true,
+    },
+    {
       headerName: "생성날짜",
-      field: "created_at",
+      field: "createAt",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${moment(new Date(data.value)).format(
+          "YYYY-MM-DD HH:mm"
+        )}</span>`;
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadStatefulSetDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -74,6 +85,7 @@ const StatefulSetListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={statefulSetList}
                   columnDefs={columDefs}
                   isBottom={true}

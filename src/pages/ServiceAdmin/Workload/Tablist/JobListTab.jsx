@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import Detail from "../JobDetail";
 import jobStore from "../../../../store/Job";
 import moment from "moment";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const JobListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -18,7 +19,8 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { jobList, jobDetail, totalElements, loadJobList } = jobStore;
+  const { jobList, jobDetail, totalElements, loadJobList, loadJobDetail } =
+    jobStore;
 
   const [columDefs] = useState([
     {
@@ -30,6 +32,13 @@ const JobListTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        if (value === 1) {
+          return drawStatus("True");
+        } else {
+          return drawStatus("False");
+        }
+      },
     },
     {
       headerName: "프로젝트명",
@@ -51,6 +60,11 @@ const JobListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadJobDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -69,6 +83,7 @@ const JobListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={jobList}
                   columnDefs={columDefs}
                   isBottom={true}

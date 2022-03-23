@@ -5,9 +5,10 @@ import styled from "styled-components";
 import moment from "moment";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = (props) => {
@@ -28,8 +29,10 @@ const Detail = (props) => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -92,6 +95,33 @@ const Detail = (props) => {
             </tbody>
           </table>
           <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data">
+            <tbody></tbody>
+          </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data">
+            <tbody></tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th>Events</th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>
