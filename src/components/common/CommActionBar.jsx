@@ -45,8 +45,11 @@ const SearchBox = styled.div`
     margin-right: -1px;
     border: 0 !important;
     color: #fff;
+    position: relative;
     .ico {
-      background-position-y: -40px;
+      position: absolute;
+      top: 5px;
+      /* background-position-y: -40px; */
     }
   }
   input {
@@ -123,7 +126,12 @@ const CommActionBar = (props) => {
                 // onKeyPress={}
                 value={search}
               />
-              <CIconButton icon="search" tooltip="검색" onClick={onClick} />
+              <CIconButton
+                icon="search"
+                type="btn1"
+                tooltip="검색"
+                onClick={onClick}
+              />
             </SearchBox>
           </SearchBar>
         )}

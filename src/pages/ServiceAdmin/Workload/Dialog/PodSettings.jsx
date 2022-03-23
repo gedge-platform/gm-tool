@@ -35,8 +35,23 @@ const PodSettings = observer(() => {
   };
 
   return (
-    <div>
-      <table className="tb_data tb_write">
+    <>
+      <div className="step-container">
+        <div className="signup-step">
+          <div className="step">
+            <span>기본 정보</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step current">
+            <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>설정 검토</span>
+          </div>
+        </div>
+      </div>
+      <table className="tb_data_new tb_write">
         <tbody>
           <tr>
             <th>
@@ -101,7 +116,7 @@ const PodSettings = observer(() => {
           </tr>
         </tbody>
       </table>
-    </div>
+    </>
   );
 });
 
