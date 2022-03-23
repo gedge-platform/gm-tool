@@ -8,9 +8,10 @@ import podStore from "../../../store/Pod";
 import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = observer(() => {
@@ -151,7 +152,7 @@ const Detail = observer(() => {
           <TableTitle>라벨</TableTitle>
           <table className="tb_data">
             <tbody>{}</tbody>
-            {/* <tbody>{labelTable}</tbody> */}
+            <tbody>{labelTable}</tbody>
           </table>
           <br />
           {/* <TableTitle>어노테이션</TableTitle>

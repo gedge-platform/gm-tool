@@ -12,7 +12,7 @@ import deploymentStore from "../../../../store/Deployment";
 import moment from "moment";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter } from "@/utils/common-utils";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -26,6 +26,7 @@ const DeploymentListTab = observer(() => {
     deploymentDetail,
     totalElements,
     loadDeploymentList,
+    loadDeploymentDetail,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -36,11 +37,11 @@ const DeploymentListTab = observer(() => {
     },
     {
       headerName: "상태",
-      field: "status",
+      field: "ready",
       filter: true,
-      cellRenderer: ({ value }) => {
-        return drawStatus(value);
-      },
+      // cellRenderer: function ({ value }) {
+      //   return drawStatus(value.toLowerCase());
+      // },
     },
     {
       headerName: "프로젝트명",
@@ -61,6 +62,11 @@ const DeploymentListTab = observer(() => {
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -87,6 +93,7 @@ const DeploymentListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={deploymentList}
                   columnDefs={columDefs}
                   isBottom={true}

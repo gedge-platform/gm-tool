@@ -19,6 +19,8 @@ import NotoB from "@/fonts/NotoSansKR/NotoSans-Bold.woff";
 import NotoBOtf from "@/fonts/NotoSansKR/NotoSansKR-Bold.otf";
 
 import selectArr from "@/images/bullet/select_arr.png";
+import passed from "@/images/bullet/ico_step_passed.png";
+
 import { PanelBox } from "@/components/styles/PanelBox";
 
 const globalStyles = createGlobalStyle`
@@ -61,6 +63,25 @@ const globalStyles = createGlobalStyle`
     url(${NotoB}) format('woff');
   }
   
+  html {
+  scrollbar-face-color: #646464;
+  scrollbar-base-color: #646464;
+  scrollbar-3dlight-color: #646464;
+  scrollbar-highlight-color: #646464;
+  scrollbar-track-color: #000;
+  scrollbar-arrow-color: #000;
+  scrollbar-shadow-color: #646464;
+  scrollbar-dark-shadow-color: #646464;
+}::-webkit-scrollbar { width: 8px; height: 5px;}
+::-webkit-scrollbar-button {  background-color: #666; }
+::-webkit-scrollbar-track {  background-color: #646464;}
+::-webkit-scrollbar-track-piece { background-color: #000;}
+::-webkit-scrollbar-thumb { height: 25px; background-color: #666; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #646464;}}
+::-webkit-resizer { background-color: #666;}
+
+
+
   body, input, button, select, textarea, td {
     font-family: "Noto Sans", sans-serif;
     color: #626b7a;
@@ -400,7 +421,7 @@ const globalStyles = createGlobalStyle`
       .panelTitBar {
         height: 43px;
         padding-bottom: 1px;
-        box-shadow: inset 0 -1px 0 #fff;
+        box-shadow: inset 0 -1px 0 #232f47;
         .tit { font-size: 13px }
       }
       .panelCont {
@@ -417,7 +438,7 @@ const globalStyles = createGlobalStyle`
       }
     }
     .tb_data {
-      border: 1px double #c5cad0;
+      border: 1px double #141a30;
     }
   }
 
@@ -454,8 +475,7 @@ const globalStyles = createGlobalStyle`
     }
   }
   
-  /* table */
-  .tb_data {
+  .tb_data_new {
     width: 100%;
     border-top: 1px double ${theme.colors.defaultDark};
     border-bottom: 1px double #c5cad0;
@@ -479,6 +499,46 @@ const globalStyles = createGlobalStyle`
       td {
         border: 1px solid #f6f7f9;
         line-height: 1.4em;
+      }
+    }
+    textarea {
+      width: 100%;
+      border: 1px solid #c5cad0;
+      border-radius: 2px;
+      padding-left: 10px;
+      &:hover {
+        border-color: #000
+      }
+    }
+  }
+
+  /* table */
+  .tb_data {
+    width: 100%;
+    border-top: 1px double ${theme.colors.defaultDark};
+    border-bottom: 1px double ${theme.colors.defaultDark};
+    border-left: 0 hidden;
+    border-right: 0 hidden;
+    border-collapse: collapse;
+    tbody {
+      th, td {
+        height: 33px;
+        padding: 8px 10px 8px 15px;
+        vertical-align: middle;
+        line-height: 1.3em;
+      }
+      th {
+        /* width: 15%; */
+        border: 1px solid #232f47;
+        background: #2f3855;
+        text-align: left;
+        color: rgba(255,255,255, 0.7);
+      }
+      td {
+        border: 1px solid #232f47;
+        background:#27314c;
+        line-height: 1.4em;
+        color: rgba(255,255,255, 0.5);
       }
     }
     textarea {
@@ -1082,6 +1142,55 @@ const globalStyles = createGlobalStyle`
       background-color: #d8e5f0;
     }
   }
+
+  .step-container {
+    width: 60%;
+    margin-bottom: 28px;
+  }
+
+  .signup-step {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 22px;
+  margin: 0 -4px;
+}
+.signup-step .step {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 126px;
+  height: 126px;
+  border-radius: 50%;
+  /* border: 3px solid #1355ce; */
+  background-color: #d0ddf5;
+  color: transparent;
+  overflow: hidden;
+}
+.signup-step .step::before,
+.signup-step .step::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.signup-step .step::before {
+  z-index: 1;
+  background: #1355ce;
+  opacity: 0.7;
+}
+.signup-step .step::after {
+  z-index: 2;
+  background: url(${passed}) no-repeat center center;
+}
+.signup-step .step span {
+  font-weight:700;
+  font-size: 16px;
+
+}
 
 `;
 

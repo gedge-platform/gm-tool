@@ -1,6 +1,5 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { IgnorePlugin } from "webpack";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {
@@ -49,15 +48,13 @@ class Pod {
           this.podDetail = res.data.data;
           this.podMetadata = {};
 
-          // Object.entries(this.podDetail?.label).map(([key, value]) => {
-          //   [key] === "undefined"
-          //     ? "undefined"
-          //     : (this.podMetadata[key] = value);
-          // });
+          Object.entries(this.podDetail?.label).map(([key, value]) => {
+            this.podMetadata[key] = value;
+          });
 
-          // Object.entries(this.podDetail?.annotations).map(([key, value]) => {
-          //   this.podMetadata[key] = value;
-          // });
+          Object.entries(this.podDetail?.annotations).map(([key, value]) => {
+            this.podMetadata[key] = value;
+          });
         });
       });
   };

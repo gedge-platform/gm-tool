@@ -7,9 +7,10 @@ import { observer } from "mobx-react";
 import jobStore from "../../../store/Job";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = observer(() => {
@@ -41,27 +42,27 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>이름</th>
+                <th>Name</th>
                 <td>{jobDetailData.name}</td>
-                <th>상태</th>
+                <th>Status</th>
                 <td>{jobDetailData.status}</td>
               </tr>
               <tr>
-                <th>클러스터</th>
+                <th>Cluster</th>
                 <td>{jobDetailData.cluster}</td>
-                <th>프로젝트</th>
+                <th>Project</th>
                 <td>{jobDetailData.project}</td>
               </tr>
               <tr>
-                <th>completions</th>
+                <th>Completions</th>
                 <td>{jobDetailData.completions}</td>
-                <th>백오프 제한 회수</th>
+                <th>BackOffLimit</th>
                 <td>{jobDetailData.backoffLimit}</td>
               </tr>
               <tr>
-                <th>생성일</th>
+                <th>Created</th>
                 <td>{moment(jobDetailData.created_at).format("YYYY-MM-DD")}</td>
-                <th>생성자</th>
+                <th>Creator</th>
                 <td></td>
               </tr>
             </tbody>

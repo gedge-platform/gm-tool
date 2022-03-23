@@ -19,7 +19,8 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { jobList, jobDetail, totalElements, loadJobList } = jobStore;
+  const { jobList, jobDetail, totalElements, loadJobList, loadJobDetail } =
+    jobStore;
 
   const [columDefs] = useState([
     {
@@ -59,6 +60,11 @@ const JobListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadJobDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -77,6 +83,7 @@ const JobListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={jobList}
                   columnDefs={columDefs}
                   isBottom={true}

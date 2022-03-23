@@ -7,9 +7,10 @@ import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = observer(() => {
