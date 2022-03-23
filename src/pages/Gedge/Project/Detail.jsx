@@ -8,11 +8,13 @@ import moment from "moment";
 import projectStore from "../../../store/Project";
 import { keys } from "lodash";
 import "@grapecity/wijmo.styles/wijmo.css";
+import theme from "@/styles/theme";
 
-import TreeView from "@mui/lab/TreeView";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import TreeItem from "@mui/lab/TreeItem";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 
 const TableTitle = styled.p`
   font-size: 16px;
@@ -48,65 +50,65 @@ const Detail = observer(() => {
 
   events.map((event, message) => {
     eventTable.push(
-      /*<tr>
-        <th>{message}</th>
-        <td>{event["message"]}</td>
-      </tr>*/
-
-      <tr>
-        <TreeView
-          aria-label="project-event"
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
-        >
-          <div>
-            <TreeItem nodeId="1" label={event["message"]}>
-              <tr>
-                <th>kind</th>
-                <td>
-                  <TreeItem nodeId="2" label={event["kind"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>name</th>
-                <td>
-                  <TreeItem nodeId="3" label={event["name"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>namespace</th>
-                <td>
-                  <TreeItem nodeId="4" label={event["namespace"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>cluster</th>
-                <td>
-                  <TreeItem nodeId="5" label={event["cluster"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>reson</th>
-                <td>
-                  <TreeItem nodeId="6" label={event["reson"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>type</th>
-                <td>
-                  <TreeItem nodeId="7" label={event["type"]} />
-                </td>
-              </tr>
-              <tr>
-                <th>eventTime</th>
-                <td>
-                  <TreeItem nodeId="8" label={event["evenTime"]} />
-                </td>
-              </tr>
-            </TreeItem>
-          </div>
-        </TreeView>
-      </tr>
+      <div>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+            aria-controls="ProjectEvent-content"
+            id="ProjectEvent-header"
+            sx={{ bgcolor: theme.colors.primaryDark }}
+          >
+            <Typography
+              sx={{
+                width: "10%",
+                fontSize: 13,
+                color: "white",
+              }}
+            >
+              Message
+            </Typography>
+            <Typography sx={{ fontSize: 13, color: "white" }}>
+              {event["message"]}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+            <Typography
+              sx={{
+                fontSize: 13,
+                color: "white",
+                bgcolor: theme.colors.primary,
+              }}
+            >
+              <table className="tb_data">
+                <tr>
+                  <th>Kind</th>
+                  <td>{event["kind"]}</td>
+                  <th>Name</th>
+                  <td>{event["name"]}</td>
+                </tr>
+                <tr>
+                  <th>Namespace</th>
+                  <td>{event["namespace"]}</td>
+                  <th>Cluster</th>
+                  <td>{event["cluster"]}</td>
+                </tr>
+                <tr>
+                  <th>Reason</th>
+                  <td>{event["reason"]}</td>
+                  <th>Type</th>
+                  <td>{event["type"]}</td>
+                </tr>
+                <tr>
+                  <th>Event Time</th>
+                  <td>{event["eventTime"]}</td>
+                  <th></th>
+                  <td></td>
+                </tr>
+              </table>
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      </div>
     );
   });
 
@@ -135,21 +137,21 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>클러스터</th>
+                <th>Cluster</th>
                 <td>{projectDetail.selectCluster}</td>
-                <th>프로젝트</th>
+                <th>Project</th>
                 <td>{projectDetail.projectName}</td>
               </tr>
               <tr>
-                <th>status</th>
+                <th>Status</th>
                 <td>{projectDetail.status}</td>
-                <th>워크스페이스</th>
+                <th>WorkSpace</th>
                 <td>{projectDetail.workspaceName}</td>
               </tr>
               <tr>
-                <th>생성자</th>
+                <th>Creator</th>
                 <td>{projectDetail.projectCreator}</td>
-                <th>생성일</th>
+                <th>Creation Date</th>
                 <td>
                   {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
                 </td>
@@ -199,7 +201,7 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>annotations</th>
+                <th>Annotations</th>
                 <td>{projectDetail.annotations}</td>
               </tr>
             </tbody>
