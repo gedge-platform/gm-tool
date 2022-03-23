@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const PlatfromServiceListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -31,6 +32,9 @@ const PlatfromServiceListTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
       headerName: "워크스페이스",
