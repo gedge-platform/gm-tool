@@ -8,7 +8,7 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
+import Detail from "../StatefulSetDetail";
 import statefulSetStore from "../../../../store/StatefulSet";
 import moment from "moment";
 
@@ -83,7 +83,7 @@ const StatefulSetListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail statefulSet={{}} />
+        <Detail statefulSet={statefulSetDetail} />
       </CReflexBox>
     </>
   );

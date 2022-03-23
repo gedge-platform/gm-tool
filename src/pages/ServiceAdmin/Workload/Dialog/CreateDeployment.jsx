@@ -118,7 +118,7 @@ const CreateDeployment = observer((props) => {
     postDeployment(handleClose);
   };
   const createDeployment2 = () => {
-    const requestId = `${getItem("user")}-${randomString()}`;
+    const requestId = `${deploymentName}-${randomString()}`;
     let body = {
       requestId: requestId,
       workspace: workspace,
