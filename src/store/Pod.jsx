@@ -48,15 +48,13 @@ class Pod {
           this.podDetail = res.data.data;
           this.podMetadata = {};
 
-          // Object.entries(this.podDetail?.label).map(([key, value]) => {
-          //   [key] === "undefined"
-          //     ? "undefined"
-          //     : (this.podMetadata[key] = value);
-          // });
+          Object.entries(this.podDetail?.label).map(([key, value]) => {
+            this.podMetadata[key] = value;
+          });
 
-          // Object.entries(this.podDetail?.annotations).map(([key, value]) => {
-          //   this.podMetadata[key] = value;
-          // });
+          Object.entries(this.podDetail?.annotations).map(([key, value]) => {
+            this.podMetadata[key] = value;
+          });
         });
       });
   };
