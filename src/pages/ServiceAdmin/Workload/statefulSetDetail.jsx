@@ -10,8 +10,8 @@ const TableTitle = styled.p`
   margin: 8px 0;
 `;
 
-const Detail = (props) => {
-  const { statefulSet } = props;
+const StatefulSetDetail = (props) => {
+  // const { statefulSet } = props;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -97,4 +97,4 @@ const Detail = (props) => {
     </PanelBox>
   );
 };
-export default Detail;
+export default StatefulSetDetail;
