@@ -6,8 +6,23 @@ import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
-  deploymentDetail = {};
-  rollingUpdate = {};
+  deploymentDetail = {
+    events: [
+      {
+        kind: "",
+        name: "",
+        namespace: "",
+        cluster: "",
+        message: "",
+        reason: "",
+        type: "",
+        eventTime: "",
+      },
+    ],
+  };
+  strategy = {
+    type: {},
+  };
   labels = {};
   annotations = {};
   totalElements = 0;
@@ -75,19 +90,16 @@ class Deployment {
       .then((res) => {
         runInAction(() => {
           this.deploymentDetail = res.data.data;
-          this.rollingUpdate = res.data.data.strategy.rollingUpdate;
+          this.strategy = res.data.data.strategy;
           this.labels = res.data.data.labels;
-          this.annotations = res.data.data.annotations;
 
-          // Object.entries(labels).map(([key, value]) => {
-          //   try {
-          //     Object.entries(labels).map([key, value])
-          //       ? null
-          //       : Object.entries(labels).map([key, value]);
-          //   } catch (error) {
-          //     console.log("에러");
-          //   }
-          // })
+          // if (res.data.data.labels !== "") {
+          //   this.labels = res.data.data.labels;
+          // } else {
+          //   this.labels = "null";
+          // }
+
+          this.annotations = res.data.data.annotations;
         });
       });
   };

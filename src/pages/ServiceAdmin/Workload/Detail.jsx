@@ -14,19 +14,18 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { deploymentDetail, rollingUpdate, labels, annotations } =
-    deploymentStore;
+  const { deploymentDetail, strategy, labels, annotations } = deploymentStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const strategyTable = [];
-  const strategy = rollingUpdate;
 
   const labelTable = [];
   const label = labels;
 
   const annotationTable = [];
   const annotation = annotations;
+
+  const eventsTable = [];
+  const events = deploymentDetail.events;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -39,14 +38,18 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(strategy).map(([key, value]) => {
-    strategyTable.push(
-      <>
-        <th>{key}</th>
-        <td>{value}</td>
-      </>
-    );
-  });
+  let strategyTable = [];
+  let strategyTemp = strategy;
+
+  if (strategyTemp.type === "Recreate") {
+    strategyTable = strategyTemp.type;
+  } else if (strategyTemp.type === "RollingUpdate") {
+    strategyTable =
+      "maxUnavailable : " +
+      strategyTemp.rollingUpdate.maxUnavailable +
+      "\n maxSurge : " +
+      strategyTemp.rollingUpdate.maxSurge;
+  }
 
   Object.entries(label).map(([key, value]) => {
     labelTable.push(
@@ -65,6 +68,16 @@ const Detail = observer(() => {
       </tr>
     );
   });
+
+  // events.map((event) => {
+  //   console.log(event);
+  //   eventsTable.push(
+  //     <tr>
+  //       <th>Message</th>
+  //       <td>{event["message"]}</td>
+  //     </tr>
+  //   );
+  // });
 
   return (
     <PanelBox>
@@ -95,7 +108,7 @@ const Detail = observer(() => {
                 <th>Status</th>
                 <td>{deploymentDetail.ready}</td>
                 <th>Strategy</th>
-                <tr>{strategyTable}</tr>
+                <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
               </tr>
               <tr>
                 <th>Created</th>
@@ -165,12 +178,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Events</th>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </CTabPanel>
