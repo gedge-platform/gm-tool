@@ -13,8 +13,9 @@ const TableTitle = styled.p`
   color: #fff;
 `;
 
-const Detail = observer(() => {
-  const { statefulSetDetail } = statefulSetStore;
+const StatefulSetDetail = (props) => {
+  // const { statefulSet } = props;
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -158,6 +159,6 @@ const Detail = observer(() => {
       </CTabPanel>
     </PanelBox>
   );
-});
+};
+export default StatefulSetDetail;
 
-export default Detail;

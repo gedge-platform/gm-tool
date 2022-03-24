@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { CDialog } from "@/components/dialogs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import podStore from "../../../../store/Pod";
 import PodBasicInformation from "./PodBasicInformation";
 import PodSettings from "./PodSettings";
 import PodYaml from "./PodYaml";
+import { CDialogNew } from "../../../../components/dialogs";
+
 const Button = styled.button`
-  background-color: ##eff4f9;
-  border: 1px solid #ccd3db;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 35px;
+  margin-right: 10px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
-  background-color: #242e42;
+  background-color: #0f5ce9;
   color: white;
-  border: 1px solid #242e42;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  border: none;
+  padding: 10px 35px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreatePod = observer((props) => {
@@ -80,14 +83,14 @@ const CreatePod = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "150px",
-                justifyContent: "space-around",
+                width: "240px",
+                justifyContent: "center",
               }}
             >
               <Button onClick={handleClose}>취소</Button>
@@ -104,17 +107,16 @@ const CreatePod = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "230px",
-                justifyContent: "space-around",
+                width: "240px",
+                justifyContent: "center",
               }}
             >
-              <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(1)}>이전</Button>
               <ButtonNext onClick={() => setStepValue(3)}>다음</ButtonNext>
             </div>
@@ -129,23 +131,19 @@ const CreatePod = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "430px",
-                justifyContent: "space-around",
+                width: "300px",
+                justifyContent: "center",
               }}
             >
-              <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
               <ButtonNext onClick={() => console.log("")}>
                 Schedule Apply
-              </ButtonNext>
-              <ButtonNext onClick={() => console.log("")}>
-                Default Apply
               </ButtonNext>
             </div>
           </div>
@@ -155,17 +153,17 @@ const CreatePod = observer((props) => {
   };
 
   return (
-    <CDialog
+    <CDialogNew
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Create Deployment"}
+      title={"Create Pod"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
     >
       {stepOfComponent()}
-    </CDialog>
+    </CDialogNew>
   );
 });
 export default CreatePod;
