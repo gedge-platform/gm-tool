@@ -23,7 +23,6 @@ const PodListTab = observer(() => {
 
   const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
     podStore;
-
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
