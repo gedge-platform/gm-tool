@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { REQUEST_URL } from "@/config.jsx";
+import { REQUEST_UR2, REQUEST_URL } from "@/config.jsx";
 import axios from "axios";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -10,6 +10,7 @@ import DeploymentYaml from "./DeploymentYaml";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
+import projectStore from "../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
 
@@ -34,7 +35,7 @@ const ButtonNext = styled.button`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [stepValue, setStepValue] = useState(0);
+  const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +55,7 @@ const CreateDeployment = observer((props) => {
     setResponseData,
   } = deploymentStore;
   const { clusters } = clusterStore;
+  const { setProjectListinWorkspace } = projectStore;
 
   const template = {
     apiVersion: "apps/v1",
@@ -98,6 +100,7 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setProjectListinWorkspace();
     setStepValue(1);
     setSize("md");
     clearAll();
@@ -118,7 +121,7 @@ const CreateDeployment = observer((props) => {
       date: new Date(),
     };
     let formData = new FormData();
-    formData.append("callbackUrl", `${REQUEST_URL}/${requestId}`); // 수정 필요
+    formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
     formData.append("requestId", requestId);
     formData.append("yaml", content);
     formData.append("clusters", JSON.stringify(clusters));
@@ -126,7 +129,7 @@ const CreateDeployment = observer((props) => {
 
     axios
       .post(REQUEST_URL, body)
-      .then((res) => console.log(res))
+      .then((res) => {})
       .catch((e) => console.log(e.message));
     axios
       .post(`http://101.79.4.15:32527/yaml`, formData)
@@ -137,7 +140,8 @@ const CreateDeployment = observer((props) => {
           const popup = window.open(
             "",
             "Gedge scheduler",
-            "width=1200,height=800"
+            `width=${screen.width},height=${screen.height}`,
+            "fullscreen=yes"
           );
           popup.document.open().write(response.data);
           popup.document.close();
@@ -151,10 +155,11 @@ const CreateDeployment = observer((props) => {
       });
   };
   useEffect(() => {
+    stepOfComponent();
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-    } else if (stepValue === 4) setSize("xl");
+    }
   }, [stepValue]);
 
   const stepOfComponent = () => {
@@ -240,7 +245,7 @@ const CreateDeployment = observer((props) => {
     <CDialogNew
       id="myDialog"
       open={open}
-      maxWidth={size}
+      maxWidth="md"
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
