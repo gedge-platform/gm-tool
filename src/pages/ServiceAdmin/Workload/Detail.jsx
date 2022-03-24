@@ -24,8 +24,8 @@ const Detail = observer(() => {
   const annotationTable = [];
   const annotation = annotations;
 
-  const eventsTable = [];
-  const events = deploymentDetail.events;
+  // const eventsTable = [];
+  // const events = deploymentDetail.events;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
