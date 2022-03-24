@@ -35,8 +35,18 @@ const ServiceListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "프로젝트명",
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
       field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "workspace",
       filter: true,
     },
     {

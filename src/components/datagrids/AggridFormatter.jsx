@@ -14,6 +14,7 @@ const drawStatus = (status) => {
     case "true":
     case "True":
     case "Active":
+    case "Running":
       // Green
       return `<span class="status_ico status_01">${status}</span>`;
     case "Available":
