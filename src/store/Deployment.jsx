@@ -23,6 +23,9 @@ class Deployment {
   project = "default";
   responseData = "";
 
+  deploymentResource = {};
+  pods = [];
+
   //   content = {
   //     apiVersion: "apps/v1",
   //     kind: "Deployment",
@@ -79,15 +82,8 @@ class Deployment {
           this.labels = res.data.data.labels;
           this.annotations = res.data.data.annotations;
 
-          // Object.entries(labels).map(([key, value]) => {
-          //   try {
-          //     Object.entries(labels).map([key, value])
-          //       ? null
-          //       : Object.entries(labels).map([key, value]);
-          //   } catch (error) {
-          //     console.log("에러");
-          //   }
-          // })
+          this.deploymentResource = res.data.involvesData;
+          this.pods = res.data.involvesData.pods;
         });
       });
   };

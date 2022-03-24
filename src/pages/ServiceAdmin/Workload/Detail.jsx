@@ -14,8 +14,14 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { deploymentDetail, rollingUpdate, labels, annotations } =
-    deploymentStore;
+  const {
+    deploymentDetail,
+    rollingUpdate,
+    labels,
+    annotations,
+    deploymentResource,
+    pods,
+  } = deploymentStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -27,6 +33,9 @@ const Detail = observer(() => {
 
   const annotationTable = [];
   const annotation = annotations;
+
+  const podInfoTable = [];
+  // const podInfo = deploymentResource;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -56,10 +65,29 @@ const Detail = observer(() => {
       </tr>
     );
   });
+  /*
+  Object.entries(pods).map((event) => {
+    podInfoTable.push(<tr>{console.log(event)}</tr>);
+  });
+*/
+  pods.map((event) => {
+    podInfoTable.push(
+      <div>
+        <tr>
+          <th>{event["name"]}</th>
+          <th>{event["status"]}</th>
+          <th>{event["node"]}</th>
+          <th>{event["podIP"]}</th>
+          <th>{event["restart"]}</th>
+        </tr>
+      </div>
+    );
+  });
 
   Object.entries(annotation).map(([key, value]) => {
     annotationTable.push(
       <tr>
+        {console.log(key, value)}
         <th>{key}</th>
         <td>{value}</td>
       </tr>
@@ -88,7 +116,7 @@ const Detail = observer(() => {
               <tr>
                 <th>Project</th>
                 <td>{deploymentDetail.project}</td>
-                <th>Workspave</th>
+                <th>Workspace</th>
                 <td>{deploymentDetail.workspace}</td>
               </tr>
               <tr>
@@ -113,35 +141,10 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
+          <TableTitle>Pod Info</TableTitle>
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
+              <tr>{podInfoTable}</tr>
             </tbody>
           </table>
           <br />
