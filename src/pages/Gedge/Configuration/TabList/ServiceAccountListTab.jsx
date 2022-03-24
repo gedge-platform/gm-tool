@@ -9,82 +9,80 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import Detail from "../Detail";
-import projectStore from "../../../../store/Project";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import axios from "axios";
+import { BASIC_AUTH, SERVER_URL } from "../../../../config";
+import serviceAccountStore from "../../../../store/ServiceAccount";
+import ServiceAccountsDetail from "../ServiceAccountsDetail";
 
-const UserServiceListTab = observer(() => {
+const ServiceAccountListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    projectDetail,
-    projectList,
+    serviceAccountList,
+    serviceAccountDetail,
     totalElements,
-    loadProjectList,
-    loadProjectDetail,
-  } = projectStore;
+    loadServiceAccountList,
+    loadServiceAccountTabList,
+  } = serviceAccountStore;
 
   const [columDefs] = useState([
     {
+      headerName: "",
+      field: "check",
+      minWidth: 53,
+      maxWidth: 53,
+      filter: false,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: true,
+    },
+    {
       headerName: "이름",
-      field: "projectName",
+      field: "name",
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
-      filter: true,
-      cellRenderer: ({ value }) => {
-        return drawStatus(value);
-      },
-    },
-    {
-      headerName: "워크스페이스",
-      field: "workspaceName",
+      headerName: "프로젝트",
+      field: "namespace",
       filter: true,
     },
     {
-      headerName: "클러스터 명",
-      field: "clusterName",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "CPU 사용량(core)",
-      field: "cpu",
+      headerName: "시크릿",
+      field: "name", // data[{ secrets: [{name}] }]
       filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-      },
     },
     {
-      headerName: "Memory 사용량(Gi)",
-      field: "memory",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_memory ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Pods 수(개)",
-      field: "resource",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_pod_count ?? 0}</span>`;
+      headerName: "생성날짜",
+      field: "createAt",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
   ]);
 
-  const history = useHistory();
-
   const handleClick = (e) => {
-    loadProjectDetail(e.data.projectName);
+    const fieldName = e.colDef.field;
+    loadServiceAccountTabList(e.data.name, e.data.cluster, e.data.namespace);
   };
 
+  const history = useHistory();
+
   useEffect(() => {
-    loadProjectList("user");
+    loadServiceAccountList();
   }, []);
 
   return (
@@ -99,19 +97,19 @@ const UserServiceListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={projectList}
+                  onCellClicked={handleClick}
+                  rowData={serviceAccountList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
-                  onCellClicks={handleClick}
                 />
               </div>
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail project={projectDetail} />
+        <ServiceAccountsDetail serviceAccount={serviceAccountDetail} />
       </CReflexBox>
     </>
   );
 });
-export default UserServiceListTab;
+export default ServiceAccountListTab;

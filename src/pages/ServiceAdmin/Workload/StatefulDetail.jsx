@@ -3,8 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
-import { Podcasts } from "@mui/icons-material";
-import podStore from "../../../store/Pod";
+import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
@@ -14,19 +13,20 @@ const TableTitle = styled.p`
   color: #fff;
 `;
 
-const Detail = observer(() => {
-  const { podDetail } = podStore;
+const StatefulSetDetail = (props) => {
+  // const { statefulSet } = props;
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const labelTable = [];
-  const label = podDetail.label;
+  const label = statefulSetDetail.label;
 
   const annotationsTable = [];
-  const annotations = podDetail.annotations;
+  const annotations = statefulSetDetail.annotations;
 
   const eventsTable = [];
-  const events = podDetail.events;
+  const events = statefulSetDetail.events;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -39,32 +39,32 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  // Object.entries(label).map(([key, value]) => {
-  //   labelTable.push(
-  //     <tr>
-  //       <th>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
+  Object.entries(label).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
 
-  // Object.entries(annotations).map(([key, value]) => {
-  //   annotationsTable.push(
-  //     <tr>
-  //       <th>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
+  Object.entries(annotations).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
 
-  // events.map((event) => {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th>Message</th>
-  //       <td>{event["message"]}</td>
-  //     </tr>
-  //   );
-  // });
+  events.map((event) => {
+    eventsTable.push(
+      <tr>
+        <th>Message</th>
+        <td>{event["message"]}</td>
+      </tr>
+    );
+  });
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -80,29 +80,17 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>Name</th>
-                <td>{podDetail.name}</td>
-                <th>Cluster</th>
-                <td>{podDetail.cluster}</td>
+                <th>이름</th>
+                <td>{statefulSetDetail.name}</td>
+                <th>프로젝트</th>
+                <td>{statefulSetDetail.project}</td>
               </tr>
               <tr>
-                <th>Project</th>
-                <td>{podDetail.project}</td>
-                <th>Status</th>
-                <td>{podDetail.status}</td>
-              </tr>
-              <tr>
-                <th>PodIP</th>
-                <td>{podDetail.podIP}</td>
-                <th>Node Name</th>
-                <td>{podDetail.node_name}</td>
-              </tr>
-              <tr>
-                <th>Qos Class</th>
-                <td>{podDetail.qosClass}</td>
-                <th>Created</th>
+                <th>클러스터</th>
+                <td>{statefulSetDetail.cluster}</td>
+                <th>생성날짜</th>
                 <td>
-                  {moment(podDetail.creationTimestamp).format(
+                  {moment(statefulSetDetail.createAt).format(
                     "YYYY-MM-DD HH:MM"
                   )}
                 </td>
@@ -151,27 +139,26 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
           <table className="tb_data">
-            <tbody>{}</tbody>
             <tbody>{labelTable}</tbody>
           </table>
           <br />
-          {/* <TableTitle>어노테이션</TableTitle>
+          <TableTitle>어노테이션</TableTitle>
           <table className="tb_data">
             <tbody>{annotationsTable}</tbody>
           </table>
-          <br /> */}
+          <br />
         </div>
       </CTabPanel>
-      {/* <CTabPanel value={tabvalue} index={3}>
+      <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
             <tbody>{eventsTable}</tbody>
           </table>
         </div>
-      </CTabPanel> */}
+      </CTabPanel>
     </PanelBox>
   );
-});
+};
+export default StatefulSetDetail;
 
-export default Detail;

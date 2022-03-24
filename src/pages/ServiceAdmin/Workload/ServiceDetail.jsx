@@ -3,15 +3,18 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import serviceStore from "../../../store/Service";
+import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
-const Detail = (props) => {
-  const { service } = props;
+const Detail = observer(() => {
+  const { serviceDetail } = serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -28,8 +31,10 @@ const Detail = (props) => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -37,22 +42,30 @@ const Detail = (props) => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td>{service.cluster}</td>
-                <th>프로젝트</th>
-                <td>{service.project}</td>
+                <th>Name</th>
+                <td>{serviceDetail.name}</td>
+                <th>Cluster</th>
+                <td>{serviceDetail.cluster}</td>
               </tr>
               <tr>
-                <th>앱</th>
-                <td></td>
-                <th>생성일</th>
-                <td>{moment(service.createAt).format("YYYY-MM-DD")}</td>
+                <th>Project</th>
+                <td>{serviceDetail.project}</td>
+                <th>Type</th>
+                <td>{serviceDetail.type}</td>
               </tr>
               <tr>
-                <th>업데이트 날짜</th>
+                <th>App</th>
                 <td></td>
-                <th>생성자</th>
-                <td></td>
+                <th>ClusterIP</th>
+                <td>{serviceDetail.clusterIp}</td>
+              </tr>
+              <tr>
+                <th>Session Affinity</th>
+                <td>{serviceDetail.sessionAffinity}</td>
+                <th>Created</th>
+                <td>
+                  {moment(serviceDetail.createAt).format("YYYY-MM-DD HH:mm")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -94,7 +107,35 @@ const Detail = (props) => {
           <br />
         </div>
       </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data">
+            <tbody></tbody>
+          </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data">
+            <tbody></tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th>Events</th>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
-};
+});
+
 export default Detail;

@@ -411,7 +411,8 @@ const globalStyles = createGlobalStyle`
   .paper_detail {
     &.reflex-element {
       height: 400px;
-    }    
+      max-height: 800px;
+    }
     .tabPanel {
       height: 100%;
       position: relative;
@@ -1058,9 +1059,9 @@ const globalStyles = createGlobalStyle`
   text-align: center;
   width: 60px;
   height: 25px;
-  color : ${theme.colors.panelTit};
+  color : #fff;
   border-radius: 3px;
-  background-color: ${theme.colors.primaryBtn};
+  background-color: ${theme.colors.navActive};
   border: none;
 }
 
@@ -1113,27 +1114,31 @@ const globalStyles = createGlobalStyle`
   }
 
   .status_01 {
-    color: #48af29;
+    /* 48af29 */
+    color: #239C62;
     &.status_ico::before {
-      background-color: #48af29;
+      background-color: #239C62;
     }
   }
   .status_02 {
-    color: #2b38f3;
+    /* 2b38f3 */
+    color: #2155DC;
     &.status_ico::before {
-      background-color: #2b38f3;
+      background-color: #2155DC;
     }
   }
   .status_03 {
-    color: #ffb833;
+    /* ffb833 */
+    color: #E5D332;
     &.status_ico::before {
-      background-color: #ffb833;
+      background-color: #E5D332;
     }
   }
   .status_04 {
-    color: #ce1a14;
+    /* ce1a14 */
+    color: #CE4C4C;
     &.status_ico::before {
-      background-color: #ce1a14;
+      background-color: #CE4C4C;
     }
   }
   .status_05 {

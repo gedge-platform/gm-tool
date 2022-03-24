@@ -30,7 +30,7 @@ const useStyles = makeStyles(() =>
         "& .ico": {
           width: 21,
           height: 20,
-          background: "no-repeat center top",
+          background: "no-repeat",
         },
       },
       ".iconBtnGrope": {
@@ -105,7 +105,7 @@ const CIconButton = (props) => {
           className="ico"
           style={{
             backgroundImage: `url(../images/ico-action/ico_${icon}.png)`,
-            backgroundPositionY: "-20px",
+            // backgroundPositionY: "-20px",
           }}
         />
       </IconButton>
