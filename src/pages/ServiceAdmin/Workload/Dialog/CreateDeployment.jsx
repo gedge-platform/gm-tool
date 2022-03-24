@@ -13,6 +13,7 @@ import clusterStore from "../../../../store/Cluster";
 import projectStore from "../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
+import schedulerStore from "../../../../store/Scheduler";
 
 const Button = styled.button`
   background-color: #fff;
@@ -55,6 +56,7 @@ const CreateDeployment = observer((props) => {
   } = deploymentStore;
   const { clusters } = clusterStore;
   const { setProjectListinWorkspace } = projectStore;
+  const { postWorkload, postScheduler } = schedulerStore;
 
   const template = {
     apiVersion: "apps/v1",
@@ -105,53 +107,43 @@ const CreateDeployment = observer((props) => {
     clearAll();
   };
 
+  // const createDeployment = () => {
+  //   postDeployment(handleClose);
+  // };
   const createDeployment = () => {
-    postDeployment(handleClose);
-  };
-  const createDeployment2 = () => {
     const requestId = `${deploymentName}-${randomString()}`;
-    // const requestId = `request_ksh1006`;
-    let body = {
-      requestId: requestId,
-      workspaceName: workspace,
-      projectName: project,
-      type: "Deployment",
-      status: "CREATED",
-      date: new Date(),
-    };
-    let formData = new FormData();
-    formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
-    formData.append("requestId", requestId);
-    formData.append("yaml", content);
-    formData.append("clusters", JSON.stringify(clusters));
-    // console.log(content, JSON.stringify(clusters));
 
-    axios
-      .post(REQUEST_URL, body)
-      .then((res) => {})
-      .catch((e) => console.log(e.message));
-    axios
-      .post(`http://101.79.4.15:32527/yaml`, formData)
-      .then(function (response) {
-        if (response.status === 200) {
-          setResponseData(response.data);
+    postWorkload(requestId, workspace, project, "Deployment");
+    postScheduler(requestId, content, handleClose);
 
-          const popup = window.open(
-            "",
-            "Gedge scheduler",
-            `width=${screen.width},height=${screen.height}`,
-            "fullscreen=yes"
-          );
-          popup.document.open().write(response.data);
-          popup.document.close();
+    // let formData = new FormData();
+    // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
+    // formData.append("requestId", requestId);
+    // formData.append("yaml", content);
+    // formData.append("clusters", JSON.stringify(clusters));
 
-          handleClose();
-          // setStepValue(4);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios
+    //   .post(`http://101.79.4.15:32527/yaml`, formData)
+    //   .then(function (response) {
+    //     if (response.status === 200) {
+    //       setResponseData(response.data);
+
+    //       const popup = window.open(
+    //         "",
+    //         "Gedge scheduler",
+    //         `width=${screen.width},height=${screen.height}`,
+    //         "fullscreen=yes"
+    //       );
+    //       popup.document.open().write(response.data);
+    //       popup.document.close();
+
+    //       handleClose();
+    //       // setStepValue(4);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   useEffect(() => {
     stepOfComponent();
@@ -229,9 +221,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment2}>
-                Schedule Apply
-              </ButtonNext>
+              <ButtonNext onClick={createDeployment}>Schedule Apply</ButtonNext>
               {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>
           </div>

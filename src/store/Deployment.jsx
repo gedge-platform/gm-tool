@@ -203,7 +203,7 @@ class Deployment {
     });
   };
 
-  postDeployment = async (callback) => {
+  postDeploymentGM = async (callback) => {
     const YAML = require("yamljs");
 
     await axios
