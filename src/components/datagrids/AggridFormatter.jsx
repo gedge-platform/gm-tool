@@ -15,17 +15,21 @@ const drawStatus = (status) => {
     case "True":
     case "Active":
     case "Running":
+    case "SUCCESS":
       // Green
       return `<span class="status_ico status_01">${status}</span>`;
     case "Available":
     case "1":
+    case "CREATED":
       // Blue
       return `<span class="status_ico status_02">${status}</span>`;
     case "Pending":
+    case "PENDING":
       // Orange
       return `<span class="status_ico status_03">${status}</span>`;
     case "false":
     case "False":
+    case "FAIL":
       // Red
       return `<span class="status_ico status_04">${status}</span>`;
   }

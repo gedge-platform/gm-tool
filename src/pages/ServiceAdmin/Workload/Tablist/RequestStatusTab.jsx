@@ -9,6 +9,9 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
+import requestStatusStore from "../../../../store/RequestStatus";
+import { toJS } from "mobx";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const RequestStatusTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -16,9 +19,15 @@ const RequestStatusTab = observer(() => {
     setTabvalue(newValue);
   };
 
+  const { requestList, loadRequestList } = requestStatusStore;
   const [columDefs] = useState([
     {
-      headerName: "잡 이름",
+      headerName: "requestId",
+      field: "requestId",
+      filter: true,
+    },
+    {
+      headerName: "이름",
       field: "name",
       filter: true,
     },
@@ -26,15 +35,31 @@ const RequestStatusTab = observer(() => {
       headerName: "상태",
       field: "status",
       filter: true,
+      cellRenderer: function ({ value }) {
+        return drawStatus(value.toUpperCase());
+      },
     },
     {
-      headerName: "프로젝트명",
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+      cellRenderer: function (data) {
+        if (data.value[0]) return `<span>${data.value[0].workspaceName}</span>`;
+        else return `<span>해당없음</span>`;
+      },
+    },
+    {
+      headerName: "프로젝트",
       field: "project",
       filter: true,
+      cellRenderer: function (data) {
+        if (data.value[0]) return `<span>${data.value[0].projectName}</span>`;
+        else return `<span>해당없음</span>`;
+      },
     },
     {
       headerName: "생성날짜",
-      field: "created_at",
+      field: "date",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -49,7 +74,9 @@ const RequestStatusTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadRequestList();
+  }, []);
 
   return (
     <>
@@ -63,10 +90,10 @@ const RequestStatusTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={[]}
+                  rowData={requestList}
                   columnDefs={columDefs}
                   isBottom={true}
-                  totalElements={1}
+                  totalElements={requestList.length}
                 />
               </div>
             </CTabPanel>

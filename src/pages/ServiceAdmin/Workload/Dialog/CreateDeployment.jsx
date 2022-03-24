@@ -37,7 +37,6 @@ const CreateDeployment = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
-  const [loading, setLoading] = useState(false);
 
   const {
     deploymentName,
