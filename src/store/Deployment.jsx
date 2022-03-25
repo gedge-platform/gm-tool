@@ -20,11 +20,13 @@ class Deployment {
       },
     ],
   };
+  deploymentInvolvesData = {};
   strategy = {
     type: {},
   };
   labels = {};
   annotations = {};
+  pods = [{}];
   totalElements = 0;
   deploymentName = "";
   podReplicas = "";
@@ -96,8 +98,6 @@ class Deployment {
           this.strategy = res.data.data.strategy;
           this.labels = res.data.data.labels;
 
-          this.deploymentResource = res.data.involvesData;
-          this.pods = res.data.involvesData.pods;
           // if (res.data.data.labels !== "") {
           //   this.labels = res.data.data.labels;
           // } else {
@@ -105,6 +105,9 @@ class Deployment {
           // }
 
           this.annotations = res.data.data.annotations;
+
+          this.deploymentInvolvesData = res.data.involvesData;
+          this.pods = res.data.involvesData.pods;
         });
       });
   };

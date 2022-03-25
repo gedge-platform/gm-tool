@@ -4,23 +4,22 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {
   podList = [];
-  podDetail = {
-    label: {},
-    annotations: {},
-    events: [
-      {
-        kind: "",
-        name: "",
-        namespace: "",
-        cluster: "",
-        message: "",
-        reason: "",
-        type: "",
-        eventTime: "",
-      },
-    ],
-  };
+  podDetail = {};
   totalElements = 0;
+  label = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
 
   podName = "";
   containerName = "";
@@ -47,14 +46,15 @@ class Pod {
         runInAction(() => {
           this.podDetail = res.data.data;
           this.podMetadata = {};
+          this.label = res.data.data.label;
+          this.annotations = res.data.data.annotations;
+          // this.events = res.data.data.events;
 
-          Object.entries(this.podDetail?.label).map(([key, value]) => {
-            this.podMetadata[key] = value;
-          });
-
-          Object.entries(this.podDetail?.annotations).map(([key, value]) => {
-            this.podMetadata[key] = value;
-          });
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };

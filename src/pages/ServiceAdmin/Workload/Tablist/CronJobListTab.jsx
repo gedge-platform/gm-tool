@@ -28,18 +28,42 @@ const CronJobListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
+
     {
-      headerName: "프로젝트명",
+      headerName: "프로젝트",
       field: "project",
       filter: true,
     },
     {
+      headerName: "워크스페이스",
+      field: "",
+      filter: true,
+    },
+    {
+      headerName: "스케줄",
+      field: "schedule",
+      filter: true,
+    },
+    {
       headerName: "생성날짜",
-      field: "created_at",
+      field: "creationTimestamp",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
+      },
+    },
+    {
+      headerName: "완료날짜",
+      field: "lastScheduleTime",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,

@@ -21,7 +21,7 @@ const StatefulSetListTab = observer(() => {
 
   const {
     statefulSetList,
-    statefulSetDetail,
+    statefulDetail,
     totalElements,
     loadStatefulSetList,
     loadStatefulSetDetail,
@@ -34,13 +34,18 @@ const StatefulSetListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "프로젝트명",
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
       field: "project",
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "cluster",
+      headerName: "워크스페이스",
+      field: "workspace",
       filter: true,
     },
     {
@@ -96,7 +101,7 @@ const StatefulSetListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail statefulSet={statefulSetDetail} />
+        <Detail statefulSet={statefulDetail} />
       </CReflexBox>
     </>
   );

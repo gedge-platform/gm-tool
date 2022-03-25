@@ -16,6 +16,7 @@ const TableTitle = styled.p`
 const Detail = observer(() => {
   const { deploymentDetail, strategy, labels, annotations, pods } =
     deploymentStore;
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -27,6 +28,8 @@ const Detail = observer(() => {
 
   const podInfoTable = [];
   // const podInfo = deploymentResource;
+
+  const podsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -99,6 +102,15 @@ const Detail = observer(() => {
   //   );
   // });
 
+  // pods.map((event) => {
+  //   podsTable.push(
+  //     <tr>
+  //       <th>Status</th>
+  //       <td>{event.status}</td>
+  //     </tr>
+  //   );
+  // });
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -148,9 +160,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod Info</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>{podInfoTable}</tr>
-            </tbody>
+            <tbody>{podInfoTable}</tbody>
           </table>
           <br />
         </div>

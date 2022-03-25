@@ -14,10 +14,54 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { jobDetailData, jobDetailInvolves } = jobStore;
+  const { jobDetailData, jobDetailInvolves, labels, annotations, events } =
+    jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
+  const labelTable = [];
+  const label = labels;
+
+  const annotationTable = [];
+  const annotation = annotations;
+
+  const eventsTable = [];
+
+  Object.entries(label).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotation).map(([key, value]) => {
+    annotationTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th>Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th>Message</th>
+        <td></td>
+      </tr>
+    );
+  }
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -44,20 +88,20 @@ const Detail = observer(() => {
               <tr>
                 <th>Name</th>
                 <td>{jobDetailData.name}</td>
+                <th>Cluster</th>
+                <td>{jobDetailData.cluster}</td>
+              </tr>
+              <tr>
+                <th>Project</th>
+                <td>{jobDetailData.project}</td>
                 <th>Status</th>
                 <td>{jobDetailData.status}</td>
               </tr>
               <tr>
-                <th>Cluster</th>
-                <td>{jobDetailData.cluster}</td>
-                <th>Project</th>
-                <td>{jobDetailData.project}</td>
-              </tr>
-              <tr>
-                <th>Completions</th>
-                <td>{jobDetailData.completions}</td>
                 <th>BackOffLimit</th>
                 <td>{jobDetailData.backoffLimit}</td>
+                <th>Completions</th>
+                <td>{jobDetailData.completions}</td>
               </tr>
               <tr>
                 <th>Created</th>
@@ -109,34 +153,12 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td>{jobDetailData.label.app}</td>
-              </tr>
-              <tr>
-                <th>ceph-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook_cluster</th>
-                <td>{jobDetailData.label.rook_cluster}</td>
-              </tr>
-            </tbody>
+            <tbody>{labelTable}</tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Annotations</th>
-                <td>{jobDetailData.annotations}</td>
-              </tr>
-            </tbody>
+            <tbody>{annotationTable}</tbody>
           </table>
           <br />
         </div>
@@ -145,12 +167,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th></th>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody>{eventsTable}</tbody>
           </table>
         </div>
       </CTabPanel>
