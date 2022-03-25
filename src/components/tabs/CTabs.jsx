@@ -64,7 +64,7 @@ const useStyles = makeStyles(() =>
             backgroundPositionY: "-150px",
           },
           "& .MuiTab-wrapper": {
-            backgroundPositionY: "-350px",
+            backgroundPositionY: "-349px",
             paddingTop: 9,
             fontWeight: "500",
           },

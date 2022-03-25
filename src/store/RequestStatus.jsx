@@ -13,6 +13,7 @@ class RequestStatus {
     await axios.get(`${REQUEST_URL}`).then(({ data }) => {
       runInAction(() => {
         this.requestList = data;
+        console.log(data);
       });
     });
   };

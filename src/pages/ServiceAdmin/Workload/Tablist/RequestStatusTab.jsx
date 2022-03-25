@@ -22,13 +22,8 @@ const RequestStatusTab = observer(() => {
   const { requestList, loadRequestList } = requestStatusStore;
   const [columDefs] = useState([
     {
-      headerName: "requestId",
-      field: "requestId",
-      filter: true,
-    },
-    {
-      headerName: "이름",
-      field: "name",
+      headerName: "request_id",
+      field: "request_id",
       filter: true,
     },
     {

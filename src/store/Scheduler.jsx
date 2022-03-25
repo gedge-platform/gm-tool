@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { REQUEST_URL, REQUEST_UR2 } from "../config";
+import { REQUEST_URL, REQUEST_URL2 } from "../config";
 import clusterStore from "./Cluster";
 import * as FormData from "form-data";
 
@@ -12,7 +12,7 @@ class Scheduler {
   postWorkload = (requestId, workspace, project, type) => {
     axios
       .post(REQUEST_URL, {
-        requestId: requestId,
+        request_id: requestId,
         workspaceName: workspace,
         projectName: project,
         type: type,
@@ -28,7 +28,7 @@ class Scheduler {
 
     let formData = new FormData();
 
-    formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
+    formData.append("callbackUrl", `${REQUEST_URL2}`); // 수정 필요
     formData.append("requestId", requestId);
     formData.append("yaml", yaml);
     formData.append("clusters", JSON.stringify(clusters));
