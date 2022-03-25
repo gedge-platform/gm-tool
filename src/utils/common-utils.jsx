@@ -29,8 +29,8 @@ export const agDateColumnFilter = () => {
   };
 };
 
-export const Toastify = () => {
-  toast.info("toast messge");
+export const Toastify = (message) => {
+  toast.info(message);
 };
 
 export const randomString = () => {

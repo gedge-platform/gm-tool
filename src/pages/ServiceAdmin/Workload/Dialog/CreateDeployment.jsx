@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { REQUEST_URL } from "@/config.jsx";
+import { REQUEST_UR2, REQUEST_URL } from "@/config.jsx";
 import axios from "axios";
 import styled from "styled-components";
 import { observer } from "mobx-react";
@@ -10,8 +10,10 @@ import DeploymentYaml from "./DeploymentYaml";
 import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
 import clusterStore from "../../../../store/Cluster";
+import projectStore from "../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
+import schedulerStore from "../../../../store/Scheduler";
 
 const Button = styled.button`
   background-color: #fff;
@@ -34,9 +36,8 @@ const ButtonNext = styled.button`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [stepValue, setStepValue] = useState(0);
+  const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
-  const [loading, setLoading] = useState(false);
 
   const {
     deploymentName,
@@ -54,6 +55,8 @@ const CreateDeployment = observer((props) => {
     setResponseData,
   } = deploymentStore;
   const { clusters } = clusterStore;
+  const { setProjectListinWorkspace } = projectStore;
+  const { postWorkload, postScheduler } = schedulerStore;
 
   const template = {
     apiVersion: "apps/v1",
@@ -98,63 +101,56 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setProjectListinWorkspace();
     setStepValue(1);
     setSize("md");
     clearAll();
   };
 
+  // const createDeployment = () => {
+  //   postDeployment(handleClose);
+  // };
   const createDeployment = () => {
-    postDeployment(handleClose);
-  };
-  const createDeployment2 = () => {
     const requestId = `${deploymentName}-${randomString()}`;
-    // const requestId = `request_ksh1006`;
-    let body = {
-      requestId: requestId,
-      workspaceName: workspace,
-      projectName: project,
-      type: "Deployment",
-      status: "CREATED",
-      date: new Date(),
-    };
-    let formData = new FormData();
-    formData.append("callbackUrl", `${REQUEST_URL}/${requestId}`); // 수정 필요
-    formData.append("requestId", requestId);
-    formData.append("yaml", content);
-    formData.append("clusters", JSON.stringify(clusters));
-    // console.log(content, JSON.stringify(clusters));
 
-    axios
-      .post(REQUEST_URL, body)
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e.message));
-    axios
-      .post(`http://101.79.4.15:32527/yaml`, formData)
-      .then(function (response) {
-        if (response.status === 200) {
-          setResponseData(response.data);
+    postWorkload(requestId, workspace, project, "Deployment");
+    postScheduler(requestId, content, handleClose);
 
-          const popup = window.open(
-            "",
-            "Gedge scheduler",
-            "width=1200,height=800"
-          );
-          popup.document.open().write(response.data);
-          popup.document.close();
+    // let formData = new FormData();
+    // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
+    // formData.append("requestId", requestId);
+    // formData.append("yaml", content);
+    // formData.append("clusters", JSON.stringify(clusters));
 
-          handleClose();
-          // setStepValue(4);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // axios
+    //   .post(`http://101.79.4.15:32527/yaml`, formData)
+    //   .then(function (response) {
+    //     if (response.status === 200) {
+    //       setResponseData(response.data);
+
+    //       const popup = window.open(
+    //         "",
+    //         "Gedge scheduler",
+    //         `width=${screen.width},height=${screen.height}`,
+    //         "fullscreen=yes"
+    //       );
+    //       popup.document.open().write(response.data);
+    //       popup.document.close();
+
+    //       handleClose();
+    //       // setStepValue(4);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
   useEffect(() => {
+    stepOfComponent();
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-    } else if (stepValue === 4) setSize("xl");
+    }
   }, [stepValue]);
 
   const stepOfComponent = () => {
@@ -225,9 +221,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment2}>
-                Schedule Apply
-              </ButtonNext>
+              <ButtonNext onClick={createDeployment}>Schedule Apply</ButtonNext>
               {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>
           </div>
@@ -240,7 +234,7 @@ const CreateDeployment = observer((props) => {
     <CDialogNew
       id="myDialog"
       open={open}
-      maxWidth={size}
+      maxWidth="md"
       title={"Create Deployment"}
       onClose={handleClose}
       bottomArea={false}
