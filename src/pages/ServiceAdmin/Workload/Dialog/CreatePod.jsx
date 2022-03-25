@@ -29,7 +29,6 @@ const ButtonNext = styled.button`
 const CreatePod = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   const {
     podName,

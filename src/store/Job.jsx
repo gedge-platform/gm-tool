@@ -5,13 +5,6 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 class Job {
   jobList = [];
   jobDetailData = {
-    label: {
-      app: "",
-      // ceph-version: "",
-      // rook-version: "",
-      rook_cluster: "",
-    },
-    annotations: "",
     containers: [
       {
         name: "",
@@ -49,9 +42,22 @@ class Job {
         },
       },
     ],
-    event: "",
   };
   totalElements = 0;
+  labels = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
 
   constructor() {
     makeAutoObservable(this);
@@ -91,6 +97,14 @@ class Job {
         runInAction(() => {
           this.jobDetailData = res.data.data;
           this.jobDetailInvolves = res.data.involves;
+          this.labels = res.data.data.label;
+          this.annotations = res.data.data.annotations;
+
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };

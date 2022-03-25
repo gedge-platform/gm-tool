@@ -14,9 +14,21 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail } = serviceStore;
+  const { serviceDetail, portTemp } = serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const port = portTemp;
+  const portTable = [];
+
+  port.map((event) => {
+    portTable.push(
+      <>
+        <th>Port</th>
+        <td>{event["port"]}</td>
+      </>
+    );
+  });
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -33,8 +45,6 @@ const Detail = observer(() => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
-        <CTab label="Metadata" />
-        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -54,9 +64,8 @@ const Detail = observer(() => {
                 <td>{serviceDetail.type}</td>
               </tr>
               <tr>
-                <th>App</th>
-                <td></td>
-                <th>ClusterIP</th>
+                {portTable}
+                <th>Cluster IP</th>
                 <td>{serviceDetail.clusterIp}</td>
               </tr>
               <tr>
@@ -105,33 +114,6 @@ const Detail = observer(() => {
             </tbody>
           </table>
           <br />
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
-        <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data">
-            <tbody></tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
-            <tbody></tbody>
-          </table>
-          <br />
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Events</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </CTabPanel>
     </PanelBox>

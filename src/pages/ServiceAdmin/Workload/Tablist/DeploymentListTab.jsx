@@ -36,17 +36,27 @@ const DeploymentListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
+      field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+    },
+    {
       headerName: "상태",
       field: "ready",
       filter: true,
       // cellRenderer: function ({ value }) {
       //   return drawStatus(value.toLowerCase());
       // },
-    },
-    {
-      headerName: "프로젝트명",
-      field: "project",
-      filter: true,
     },
     {
       headerName: "생성일",

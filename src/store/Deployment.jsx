@@ -6,10 +6,27 @@ import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
-  deploymentDetail = {};
-  rollingUpdate = {};
+  deploymentDetail = {
+    events: [
+      {
+        kind: "",
+        name: "",
+        namespace: "",
+        cluster: "",
+        message: "",
+        reason: "",
+        type: "",
+        eventTime: "",
+      },
+    ],
+  };
+  deploymentInvolvesData = {};
+  strategy = {
+    type: {},
+  };
   labels = {};
   annotations = {};
+  pods = [{}];
   totalElements = 0;
   deploymentName = "";
   podReplicas = "";
@@ -75,19 +92,19 @@ class Deployment {
       .then((res) => {
         runInAction(() => {
           this.deploymentDetail = res.data.data;
-          this.rollingUpdate = res.data.data.strategy.rollingUpdate;
+          this.strategy = res.data.data.strategy;
           this.labels = res.data.data.labels;
+
+          // if (res.data.data.labels !== "") {
+          //   this.labels = res.data.data.labels;
+          // } else {
+          //   this.labels = "null";
+          // }
+
           this.annotations = res.data.data.annotations;
 
-          // Object.entries(labels).map(([key, value]) => {
-          //   try {
-          //     Object.entries(labels).map([key, value])
-          //       ? null
-          //       : Object.entries(labels).map([key, value]);
-          //   } catch (error) {
-          //     console.log("에러");
-          //   }
-          // })
+          this.deploymentInvolvesData = res.data.involvesData;
+          this.pods = res.data.involvesData.pods;
         });
       });
   };
@@ -191,7 +208,7 @@ class Deployment {
     });
   };
 
-  postDeployment = async (callback) => {
+  postDeploymentGM = async (callback) => {
     const YAML = require("yamljs");
 
     await axios

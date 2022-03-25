@@ -14,15 +14,17 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { daemonSetDetail } = daemonSetStore;
+  const { daemonSetDetail, label, annotations, events } = daemonSetStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const labelTable = [];
-  const label = daemonSetDetail.label;
+  const labelTemp = label;
 
   const annotationsTable = [];
-  const annotations = daemonSetDetail.annotations;
+  const annotationsTemp = annotations;
+
+  const eventsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -35,23 +37,41 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(label).map(([key, value]) => {
+  Object.entries(labelTemp).map(([key, value]) => {
     labelTable.push(
       <tr>
         <th>{key}</th>
-        <td>{value}</td>
+        <td style={{ whiteSpace: "pre-line" }}>{value}</td>
       </tr>
     );
   });
 
-  Object.entries(annotations).map(([key, value]) => {
+  Object.entries(annotationsTemp).map(([key, value]) => {
     annotationsTable.push(
       <tr>
         <th>{key}</th>
-        <td>{value}</td>
+        <td style={{ whiteSpace: "pre-line" }}>{value}</td>
       </tr>
     );
   });
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th>Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th>Message</th>
+        <td></td>
+      </tr>
+    );
+  }
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -67,15 +87,15 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>이름</th>
+                <th>Name</th>
                 <td>{daemonSetDetail.name}</td>
-                <th>프로젝트</th>
-                <td>{daemonSetDetail.project}</td>
+                <th>Cluster</th>
+                <td>{daemonSetDetail.cluster}</td>
               </tr>
               <tr>
-                <th>클러스터</th>
-                <td>{daemonSetDetail.cluster}</td>
-                <th>생성날짜</th>
+                <th>Project</th>
+                <td>{daemonSetDetail.project}</td>
+                <th>Created</th>
                 <td>
                   {moment(daemonSetDetail.createAt).format("YYYY-MM-DD HH:MM")}
                 </td>
@@ -124,12 +144,12 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
           <table className="tb_data">
-            <tbody>{labelTable}</tbody>
+            <tbody style={{ whiteSpace: "pre-line" }}>{labelTable}</tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
           <table className="tb_data">
-            <tbody>{annotationsTable}</tbody>
+            <tbody style={{ whiteSpace: "pre-line" }}>{annotationsTable}</tbody>
           </table>
           <br />
         </div>
@@ -138,12 +158,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Events</th>
-                <td>{daemonSetDetail.events}</td>
-              </tr>
-            </tbody>
+            <tbody>{eventsTable}</tbody>
           </table>
         </div>
       </CTabPanel>

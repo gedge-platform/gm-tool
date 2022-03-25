@@ -15,18 +15,17 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { podDetail } = podStore;
+  const { podDetail, label, annotations, events } = podStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const labelTable = [];
-  const label = podDetail.label;
+  const labelTemp = label;
 
   const annotationsTable = [];
-  const annotations = podDetail.annotations;
+  const annotationsTemp = annotations;
 
   const eventsTable = [];
-  const events = podDetail.events;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -39,32 +38,41 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  // Object.entries(label).map(([key, value]) => {
-  //   labelTable.push(
-  //     <tr>
-  //       <th>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
+  Object.entries(labelTemp).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
 
-  // Object.entries(annotations).map(([key, value]) => {
-  //   annotationsTable.push(
-  //     <tr>
-  //       <th>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
+  Object.entries(annotationsTemp).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th>{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
 
-  // events.map((event) => {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th>Message</th>
-  //       <td>{event["message"]}</td>
-  //     </tr>
-  //   );
-  // });
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th>Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th>Message</th>
+        <td></td>
+      </tr>
+    );
+  }
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -72,6 +80,7 @@ const Detail = observer(() => {
         <CTab label="Overview" />
         <CTab label="Resources" />
         <CTab label="Metadata" />
+        <CTab label="Status" />
         <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
@@ -151,25 +160,32 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
           <table className="tb_data">
-            <tbody>{}</tbody>
             <tbody>{labelTable}</tbody>
           </table>
           <br />
-          {/* <TableTitle>어노테이션</TableTitle>
+          <TableTitle>어노테이션</TableTitle>
           <table className="tb_data">
             <tbody>{annotationsTable}</tbody>
           </table>
-          <br /> */}
+          <br />
         </div>
       </CTabPanel>
-      {/* <CTabPanel value={tabvalue} index={3}>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>상태</TableTitle>
+          <table className="tb_data">
+            <tbody></tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
             <tbody>{eventsTable}</tbody>
           </table>
         </div>
-      </CTabPanel> */}
+      </CTabPanel>
     </PanelBox>
   );
 });

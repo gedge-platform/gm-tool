@@ -23,11 +23,35 @@ const PodListTab = observer(() => {
 
   const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
     podStore;
-
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
       field: "name",
+      filter: true,
+    },
+    {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
+      field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "",
+      filter: true,
+    },
+    {
+      headerName: "호스트 IP",
+      field: "hostIP",
+      filter: true,
+    },
+    {
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
     },
     {
@@ -39,17 +63,7 @@ const PodListTab = observer(() => {
       },
     },
     {
-      headerName: "노드명",
-      field: "node_name",
-      filter: true,
-    },
-    {
-      headerName: "파드 IP",
-      field: "podIP",
-      filter: true,
-    },
-    {
-      headerName: "업데이트 날짜",
+      headerName: "생성 날짜",
       field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),

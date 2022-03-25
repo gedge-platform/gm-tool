@@ -5,15 +5,25 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 class DaemonSet {
   daemonSetList = [];
   daemonSetDetail = {
-    NodeSelector: {},
     status: {},
     strategy: {},
     containers: {},
-    label: {},
-    events: "",
-    annotations: {},
   };
   totalElements = 0;
+  label = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
 
   constructor() {
     makeAutoObservable(this);
@@ -52,17 +62,14 @@ class DaemonSet {
       .then((res) => {
         runInAction(() => {
           this.daemonSetDetail = res.data.data;
-          this.daemonSetMetadata = {};
+          this.label = res.data.data.label;
+          this.annotations = res.data.data.annotations;
 
-          Object.entries(this.daemonSetDetail?.label).map(([key, value]) => {
-            this.daemonSetMetadata[key] = value;
-          });
-
-          Object.entries(this.daemonSetDetail?.annotations).map(
-            ([key, value]) => {
-              this.daemonSetMetadata[key] = value;
-            }
-          );
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };
