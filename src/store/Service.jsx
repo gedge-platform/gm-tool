@@ -10,7 +10,16 @@ class Service {
     },
   };
   totalElements = 0;
+  portTemp = [
+    {
+      name: "",
+      port: 0,
+      protocol: "",
+      targerPort: 0,
+    },
+  ];
 
+  // 생성
   serviceName = "";
   appName = "";
   protocol = "TCP";
@@ -38,6 +47,7 @@ class Service {
       .then((res) => {
         runInAction(() => {
           this.serviceDetail = res.data.data;
+          this.portTemp = res.data.data.port;
         });
       });
   };

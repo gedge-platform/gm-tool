@@ -31,16 +31,23 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
-      cellRenderer: ({ value }) => {
-        return drawStatus(value);
-      },
     },
     {
-      headerName: "노드명",
-      field: "node_name",
+      headerName: "프로젝트",
+      field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "",
+      filter: true,
+    },
+    {
+      headerName: "호스트 IP",
+      field: "hostIP",
       filter: true,
     },
     {
@@ -49,7 +56,15 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "업데이트 날짜",
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
+    },
+    {
+      headerName: "생성 날짜",
       field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),

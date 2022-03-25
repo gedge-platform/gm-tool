@@ -14,7 +14,14 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { deploymentDetail, strategy, labels, annotations } = deploymentStore;
+  const {
+    deploymentDetail,
+    strategy,
+    labels,
+    annotations,
+    deploymentInvolvesData,
+    pods,
+  } = deploymentStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -26,6 +33,8 @@ const Detail = observer(() => {
 
   // const eventsTable = [];
   // const events = deploymentDetail.events;
+
+  const podsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -79,6 +88,15 @@ const Detail = observer(() => {
   //   );
   // });
 
+  // pods.map((event) => {
+  //   podsTable.push(
+  //     <tr>
+  //       <th>Status</th>
+  //       <td>{event.status}</td>
+  //     </tr>
+  //   );
+  // });
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -128,34 +146,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody>{podsTable}</tbody>
           </table>
           <br />
         </div>

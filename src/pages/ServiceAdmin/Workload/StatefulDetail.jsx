@@ -13,20 +13,19 @@ const TableTitle = styled.p`
   color: #fff;
 `;
 
-const StatefulSetDetail = (props) => {
-  // const { statefulSet } = props;
+const StatefulSetDetail = observer(() => {
+  const { statefulSetDetail, label, annotations, events } = statefulSetStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const labelTable = [];
-  const label = statefulSetDetail.label;
+  const labelTemp = label;
 
   const annotationsTable = [];
-  const annotations = statefulSetDetail.annotations;
+  const annotationsTemp = annotations;
 
   const eventsTable = [];
-  const events = statefulSetDetail.events;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -39,7 +38,7 @@ const StatefulSetDetail = (props) => {
     setOpen(false);
   };
 
-  Object.entries(label).map(([key, value]) => {
+  Object.entries(labelTemp).map(([key, value]) => {
     labelTable.push(
       <tr>
         <th>{key}</th>
@@ -48,7 +47,7 @@ const StatefulSetDetail = (props) => {
     );
   });
 
-  Object.entries(annotations).map(([key, value]) => {
+  Object.entries(annotationsTemp).map(([key, value]) => {
     annotationsTable.push(
       <tr>
         <th>{key}</th>
@@ -57,14 +56,23 @@ const StatefulSetDetail = (props) => {
     );
   });
 
-  events.map((event) => {
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th>Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
     eventsTable.push(
       <tr>
         <th>Message</th>
-        <td>{event["message"]}</td>
+        <td></td>
       </tr>
     );
-  });
+  }
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -80,15 +88,15 @@ const StatefulSetDetail = (props) => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th>이름</th>
+                <th>Name</th>
                 <td>{statefulSetDetail.name}</td>
-                <th>프로젝트</th>
-                <td>{statefulSetDetail.project}</td>
+                <th>Cluster</th>
+                <td>{statefulSetDetail.cluster}</td>
               </tr>
               <tr>
-                <th>클러스터</th>
-                <td>{statefulSetDetail.cluster}</td>
-                <th>생성날짜</th>
+                <th>Project</th>
+                <td>{statefulSetDetail.project}</td>
+                <th>Created</th>
                 <td>
                   {moment(statefulSetDetail.createAt).format(
                     "YYYY-MM-DD HH:MM"
@@ -159,6 +167,5 @@ const StatefulSetDetail = (props) => {
       </CTabPanel>
     </PanelBox>
   );
-};
+});
 export default StatefulSetDetail;
-

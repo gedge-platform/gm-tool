@@ -29,6 +29,21 @@ const JobListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
+      field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "",
+      filter: true,
+    },
+    {
       headerName: "상태",
       field: "status",
       filter: true,
@@ -41,13 +56,8 @@ const JobListTab = observer(() => {
       },
     },
     {
-      headerName: "프로젝트명",
-      field: "project",
-      filter: true,
-    },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "완료날짜",
+      field: "completionTime",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
