@@ -4,22 +4,21 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class StatefulSet {
   statefulSetList = [];
-  statefulSetDetail = {
-    label: {},
-    events: [
-      {
-        kind: "",
-        name: "",
-        namespace: "",
-        cluster: "",
-        message: "",
-        reason: "",
-        type: "",
-        eventTime: "",
-      },
-    ],
-    annotations: {},
-  };
+  statefulSetDetail = {};
+  label = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
   totalElements = 0;
 
   constructor() {
@@ -59,6 +58,13 @@ class StatefulSet {
       .then((res) => {
         runInAction(() => {
           this.statefulSetDetail = res.data.data;
+          this.label = res.data.data.label;
+          this.annotations = res.data.data.annotations;
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };

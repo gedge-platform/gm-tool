@@ -20,11 +20,13 @@ class Deployment {
       },
     ],
   };
+  deploymentInvolvesData = {};
   strategy = {
     type: {},
   };
   labels = {};
   annotations = {};
+  pods = [{}];
   totalElements = 0;
   deploymentName = "";
   podReplicas = "";
@@ -100,6 +102,9 @@ class Deployment {
           // }
 
           this.annotations = res.data.data.annotations;
+
+          this.deploymentInvolvesData = res.data.involvesData;
+          this.pods = res.data.involvesData.pods;
         });
       });
   };
