@@ -14,19 +14,10 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const {
-    deploymentDetail,
-    rollingUpdate,
-    labels,
-    annotations,
-    deploymentResource,
-    pods,
-  } = deploymentStore;
+  const { deploymentDetail, strategy, labels, annotations, pods } =
+    deploymentStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const strategyTable = [];
-  const strategy = rollingUpdate;
 
   const labelTable = [];
   const label = labels;
@@ -48,14 +39,18 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(strategy).map(([key, value]) => {
-    strategyTable.push(
-      <>
-        <th>{key}</th>
-        <td>{value}</td>
-      </>
-    );
-  });
+  let strategyTable = [];
+  let strategyTemp = strategy;
+
+  if (strategyTemp.type === "Recreate") {
+    strategyTable = strategyTemp.type;
+  } else if (strategyTemp.type === "RollingUpdate") {
+    strategyTable =
+      "maxUnavailable : " +
+      strategyTemp.rollingUpdate.maxUnavailable +
+      "\n maxSurge : " +
+      strategyTemp.rollingUpdate.maxSurge;
+  }
 
   Object.entries(label).map(([key, value]) => {
     labelTable.push(
@@ -94,6 +89,16 @@ const Detail = observer(() => {
     );
   });
 
+  // events.map((event) => {
+  //   console.log(event);
+  //   eventsTable.push(
+  //     <tr>
+  //       <th>Message</th>
+  //       <td>{event["message"]}</td>
+  //     </tr>
+  //   );
+  // });
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -123,7 +128,7 @@ const Detail = observer(() => {
                 <th>Status</th>
                 <td>{deploymentDetail.ready}</td>
                 <th>Strategy</th>
-                <tr>{strategyTable}</tr>
+                <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
               </tr>
               <tr>
                 <th>Created</th>
@@ -168,12 +173,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Events</th>
-                <td></td>
-              </tr>
-            </tbody>
+            <tbody></tbody>
           </table>
         </div>
       </CTabPanel>
