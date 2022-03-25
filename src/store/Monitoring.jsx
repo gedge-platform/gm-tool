@@ -28,7 +28,6 @@ class Monitoring {
             case TargetTypes.APPLICATION:
             case TargetTypes.NODE:
                 return `${MONITORING_URL}/${target}?start=${start}&end=${end}&step=${step}&cluster_filter=${clusterFilter}&metric_filter=${metricFilter}`;
-                break;
             case TargetTypes.NAMESPACE:
                 return `${MONITORING_URL}/pod?start=${start}&end=${end}&step=${step}&cluster_filter=${clusterFilter}&namespace_filter=${options[0]}&metric_filter=${metricFilter}`;
             case TargetTypes.POD:
@@ -64,13 +63,9 @@ class Monitoring {
             })
             .then((res) => {
                 runInAction(() => {
-                    res.data.data.forEach((element) => {
-                        Object.entries(element).map(([key, value]) => {
-                            if (key === "clusterName") {
-                                this.clusterNames.push(value);
-                            }
-                        });
-                    });
+                    this.clusterNames = res.data.data.map(
+                        (item) => item.clusterName
+                    );
                 });
             });
     };
@@ -99,7 +94,6 @@ class Monitoring {
             )
             .then((res) => {
                 this.convertResponseToMonit(res);
-                console.log(this.clusterMetrics);
             });
     };
 }
