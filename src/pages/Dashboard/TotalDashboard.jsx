@@ -186,9 +186,7 @@ const TotalDashboard = observer(() => {
           >
             <div className="panelTitBar panelTitBar_clear">
               <div className="tit">
-                <span style={{ marginRight: "10px" }}>
-                  블록체인 정보 서비스
-                </span>
+                <span style={{ marginRight: "10px" }}>정보 서비스</span>
                 <CSelectButton className="none_transform" items={actionList}>
                   네트워크 선택
                 </CSelectButton>
@@ -205,7 +203,7 @@ const TotalDashboard = observer(() => {
 
           <PanelBox className="panel_dashboard">
             <div className="panelTitBar panelTitBar_clear">
-              <div className="tit">블록체인 정보 서비스 모니터링</div>
+              <div className="tit"> 정보 서비스 모니터링</div>
               <div className="date">
                 {moment(Date()).format("YYYY-MM-DD HH:mm")}
               </div>
@@ -247,7 +245,7 @@ const TotalDashboard = observer(() => {
                 alignItems: "center",
               }}
             >
-              <span>블록체인 네트워크</span>
+              <span> 네트워크</span>
               <CommActionBar />
             </div>
             {/* <div className="date">
