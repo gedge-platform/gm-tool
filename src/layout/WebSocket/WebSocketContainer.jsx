@@ -8,41 +8,34 @@ const WebSocketContainer = (props) => {
   let ws = useRef(null);
 
   const connect = () => {
-    if (!ws.current) {
-      ws.current = new WebSocket(socketUrl);
-      ws.current.onopen = () => {
-        console.log("connect!!!");
-        setSocketConnected(true);
-      };
-      ws.current.onmessage = (evt) => {
-        // const data = JSON.parse(evt.data);
-        console.log(evt.data);
-        Toastify(evt.data);
-      };
-    }
+    ws.current = new WebSocket(socketUrl);
+    ws.current.onopen = () => {
+      console.log("connect!!!");
+      setSocketConnected(true);
+    };
+    ws.current.onclose = (e) => {
+      console.log("disconnect!!" + e);
+      setSocketConnected(false);
+    };
+    ws.current.onerror = (e) => {
+      console.log("error!!" + e);
+    };
+    ws.current.onmessage = (evt) => {
+      // const data = JSON.parse(evt.data);
+      console.log(evt.data);
+      Toastify(evt.data);
+    };
   };
 
   useEffect(() => {
     if (!ws.current) {
-      ws.current = new WebSocket(socketUrl);
-      ws.current.onopen = () => {
-        console.log("connect!!!");
-        setSocketConnected(true);
-      };
-      ws.current.onclose = (e) => {
-        console.log("disconnect!!" + e);
-        setSocketConnected(false);
-      };
-      ws.current.onerror = (e) => {
-        console.log("error!!" + e);
-      };
-      ws.current.onmessage = (evt) => {
-        // const data = JSON.parse(evt.data);
-        console.log(evt.data);
-        Toastify(evt.data);
-      };
+      connect();
     }
   }, []);
+
+  useEffect(() => {
+    if (!ws.current) connect();
+  }, [socketConnectd]);
 
   return <>{props.children}</>;
 };
