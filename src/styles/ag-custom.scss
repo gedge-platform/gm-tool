@@ -72,14 +72,14 @@
   }
   .ag-header-row {
     height: 36px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 13px;
     font-weight: 700;
     background: #2f3855;
     box-shadow: inset 0 1px 0 #071e3f;
   }
   .ag-header-cell {
-    color: #fff;
+    color: rgba(255, 255, 255, 0.7);
     border-left: 1px solid #03112c;
     border-right: 1px solid #03112c;
     box-shadow: inset 0 -1px 0 #03112c;
@@ -100,7 +100,7 @@
 
   .ag-row {
     height: 33px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.5);
     font-size: 12px;
     border-color: #03112c;
     background-color: #25304b;

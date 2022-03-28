@@ -30,7 +30,7 @@ const DeploymentBasicInformation = observer(() => {
     setProject,
     setAppName,
   } = serviceStore;
-  const { loadClusterList, clusterList } = clusterStore;
+  const { loadClusterInProject, clusterList } = clusterStore;
 
   const checkChange = ({ target: { checked, name } }) => {
     if (checked) {
@@ -48,7 +48,7 @@ const DeploymentBasicInformation = observer(() => {
       setProjectEnable(false);
       return;
     } else if (name === "project") {
-      loadClusterList();
+      loadClusterInProject(value);
       setProject(value);
       setClusterEnable(false);
     } else if (name === "Service Name") setServiceName(value);
@@ -66,49 +66,61 @@ const DeploymentBasicInformation = observer(() => {
     loadWorkSpaceList();
   }, []);
   return (
-    <table className="tb_data tb_write">
-      <tbody>
-        <tr>
-          <th>
-            Workspace <span className="requried">*</span>
-          </th>
-          <td style={{ width: "50%" }}>
-            <FormControl className="form_fullWidth">
-              <select name="workspace" onChange={onChange}>
-                <option value={"dafault"}>default</option>
-                {workSpaceList.map((workspace) => (
-                  <option value={workspace.workspaceName}>
-                    {workspace.workspaceName}
-                  </option>
-                ))}
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            Project <span className="requried">*</span>
-          </th>
-          <td>
-            <FormControl className="form_fullWidth">
-              <select
-                disabled={projectEnable}
-                name="project"
-                onChange={onChange}
-              >
-                {projectListinWorkspace.map((project) => (
-                  <option value={project.projectName}>
-                    {project.projectName}
-                  </option>
-                ))}
-                <option value={"dafault"}>default</option>
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr>
-        <tr>
+    <>
+      <div className="step-container2">
+        <div className="signup-step">
+          <div className="step current">
+            <span>기본 정보</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>설정 검토</span>
+          </div>
+        </div>
+      </div>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td style={{ width: "50%" }}>
+              <FormControl className="form_fullWidth">
+                <select name="workspace" onChange={onChange}>
+                  <option value={"dafault"}>default</option>
+                  {workSpaceList.map((workspace) => (
+                    <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select
+                  disabled={projectEnable}
+                  name="project"
+                  onChange={onChange}
+                >
+                  {projectListinWorkspace.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
+                    </option>
+                  ))}
+                  <option value={"dafault"}>default</option>
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          {/* <tr>
           <th>
             Cluster <span className="requried">*</span>
           </th>
@@ -123,91 +135,92 @@ const DeploymentBasicInformation = observer(() => {
             </FormGroup>
           </td>
           <th></th>
-        </tr>
-        <tr>
-          <th>
-            Service Name
-            <span className="requried">*</span>
-          </th>
-          <td>
-            <CTextField
-              type="text"
-              placeholder="Service Name"
-              className="form_fullWidth"
-              name="Service Name"
-              onChange={onChange}
-              value={serviceName}
-            />
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            App Name
-            <span className="requried">*</span>
-          </th>
-          <td>
-            <CTextField
-              type="text"
-              placeholder="App Name"
-              className="form_fullWidth"
-              name="App Name"
-              onChange={onChange}
-              value={appName}
-            />
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            Protocol <span className="requried">*</span>
-          </th>
-          <td style={{ width: "50%" }}>
-            <FormControl className="form_fullWidth">
-              <select name="protocol" onChange={onChange}>
-                <option value={"TCP"}>TCP</option>
-                <option value={"UDP"}>UDP</option>
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            Port
-            <span className="requried">*</span>
-          </th>
-          <td>
-            <CTextField
-              type="text"
-              placeholder="Port"
-              className="form_fullWidth"
-              name="Port"
-              onChange={onChange}
-              value={port}
-            />
-          </td>
-          <th></th>
-        </tr>
-        <tr>
-          <th>
-            Target Port
-            <span className="requried">*</span>
-          </th>
-          <td>
-            <CTextField
-              type="text"
-              placeholder="Target Port"
-              className="form_fullWidth"
-              name="Target Port"
-              onChange={onChange}
-              value={targetPort}
-            />
-          </td>
-          <th></th>
-        </tr>
-      </tbody>
-    </table>
+        </tr> */}
+          <tr>
+            <th>
+              Service Name
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Service Name"
+                className="form_fullWidth"
+                name="Service Name"
+                onChange={onChange}
+                value={serviceName}
+              />
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              App Name
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="App Name"
+                className="form_fullWidth"
+                name="App Name"
+                onChange={onChange}
+                value={appName}
+              />
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Protocol <span className="requried">*</span>
+            </th>
+            <td style={{ width: "50%" }}>
+              <FormControl className="form_fullWidth">
+                <select name="protocol" onChange={onChange}>
+                  <option value={"TCP"}>TCP</option>
+                  <option value={"UDP"}>UDP</option>
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Port
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Port"
+                className="form_fullWidth"
+                name="Port"
+                onChange={onChange}
+                value={port}
+              />
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Target Port
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Target Port"
+                className="form_fullWidth"
+                name="Target Port"
+                onChange={onChange}
+                value={targetPort}
+              />
+            </td>
+            <th></th>
+          </tr>
+        </tbody>
+      </table>
+    </>
   );
 });
 

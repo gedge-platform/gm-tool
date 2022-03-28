@@ -77,7 +77,7 @@ const useStyles = makeStyles(() =>
             backgroundPositionY: "-200px",
           },
           "&.Mui-selected::before": {
-            backgroundPositionY: "-250px",
+            backgroundPositionY: "-249px",
           },
         },
         "&:nth-child(2)": { zIndex: 8 },

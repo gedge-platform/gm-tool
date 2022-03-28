@@ -11,12 +11,14 @@ const Container = styled.div`
   align-items: center;
   font-size: 64px;
   font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: #141a30;
 
   a {
     padding-top: 12px;
     font-size: 24px;
     text-decoration: none;
-    color: #1355ce;
+    color: rgba(255, 255, 255, 0.5);
   }
 `;
 

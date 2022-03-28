@@ -6,6 +6,9 @@ import PodBasicInformation from "./PodBasicInformation";
 import PodSettings from "./PodSettings";
 import PodYaml from "./PodYaml";
 import { CDialogNew } from "../../../../components/dialogs";
+import projectStore from "../../../../store/Project";
+import schedulerStore from "../../../../store/Scheduler";
+import { randomString } from "../../../../utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,11 +33,17 @@ const CreatePod = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
+  const { setProjectListinWorkspace } = projectStore;
+  const { postWorkload, postScheduler } = schedulerStore;
+
   const {
     podName,
     containerName,
     containerImage,
     containerPort,
+    workspace,
+    project,
+    content,
     clearAll,
     setContent,
   } = podStore;
@@ -63,7 +72,16 @@ const CreatePod = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setProjectListinWorkspace();
+    setStepValue(1);
     clearAll();
+  };
+
+  const createPod = () => {
+    const requestId = `${podName}-${randomString()}`;
+
+    postWorkload(requestId, workspace, project, "Pod");
+    postScheduler(requestId, content, handleClose);
   };
 
   useEffect(() => {
@@ -71,7 +89,7 @@ const CreatePod = observer((props) => {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     }
-  });
+  }, [stepValue]);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
@@ -141,9 +159,7 @@ const CreatePod = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={() => console.log("")}>
-                Schedule Apply
-              </ButtonNext>
+              <ButtonNext onClick={createPod}>Schedule Apply</ButtonNext>
             </div>
           </div>
         </>
