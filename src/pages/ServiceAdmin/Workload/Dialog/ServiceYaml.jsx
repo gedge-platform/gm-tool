@@ -10,14 +10,10 @@ const ServiceYaml = observer(() => {
   // console.log(content);
   return (
     <>
-      <div className="step-container">
+      <div className="step-container2">
         <div className="signup-step">
           <div className="step">
             <span>기본 정보</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
-            <span>Pod 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">

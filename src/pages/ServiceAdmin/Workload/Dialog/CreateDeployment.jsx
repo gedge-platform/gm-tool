@@ -54,7 +54,6 @@ const CreateDeployment = observer((props) => {
     postDeployment,
     setResponseData,
   } = deploymentStore;
-  const { clusters } = clusterStore;
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
@@ -103,7 +102,6 @@ const CreateDeployment = observer((props) => {
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
-    setSize("md");
     clearAll();
   };
 
@@ -146,7 +144,6 @@ const CreateDeployment = observer((props) => {
     //   });
   };
   useEffect(() => {
-    stepOfComponent();
     if (stepValue === 3) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));

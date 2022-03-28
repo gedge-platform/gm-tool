@@ -22,8 +22,13 @@ const RequestStatusTab = observer(() => {
   const { requestList, loadRequestList } = requestStatusStore;
   const [columDefs] = useState([
     {
-      headerName: "request_id",
+      headerName: "ID",
       field: "request_id",
+      filter: true,
+    },
+    {
+      headerName: "타입",
+      field: "type",
       filter: true,
     },
     {
@@ -77,7 +82,12 @@ const RequestStatusTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+            reloadFunc={loadRequestList}
+          >
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 

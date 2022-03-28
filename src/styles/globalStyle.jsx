@@ -1153,6 +1153,10 @@ const globalStyles = createGlobalStyle`
     margin-bottom: 28px;
   }
 
+  .step-container2 {
+    width: 33%;
+    margin-bottom: 28px;
+  }
   .signup-step {
   display: flex;
   justify-content: space-between;
