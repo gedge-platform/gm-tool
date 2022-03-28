@@ -13,7 +13,7 @@ const podBasicInformation = observer(() => {
   const { loadWorkSpaceList, workSpaceList } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
   const { podName, setPodName, setWorkspace, setProject } = podStore;
-  const { loadClusterList, clusterList } = clusterStore;
+  const { loadClusterInProject, clusterList } = clusterStore;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -23,7 +23,7 @@ const podBasicInformation = observer(() => {
       setProjectEnable(false);
       return;
     } else if (name === "project") {
-      loadClusterList();
+      loadClusterInProject(value);
       setProject(value);
       setClusterEnable(false);
     } else if (name === "Pod Name") setPodName(value);
@@ -58,12 +58,12 @@ const podBasicInformation = observer(() => {
             <td style={{ width: "50%" }}>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
+                  <option value={"dafault"}>default</option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}
                     </option>
                   ))}
-                  <option value={"dafault"}>default</option>
                 </select>
               </FormControl>
             </td>

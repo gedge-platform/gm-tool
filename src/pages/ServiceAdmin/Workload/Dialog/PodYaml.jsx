@@ -7,7 +7,6 @@ import podStore from "../../../../store/Pod";
 
 const PodYaml = observer(() => {
   const { content, setContent } = podStore;
-
   return (
     <>
       <div className="step-container">
