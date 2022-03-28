@@ -5,6 +5,27 @@ const unixStartTime = (interval) =>
     // realtime => 5s
     Math.ceil(unixCurrentTime() - interval * 60);
 
+const unixToTime = (unixTimestamp) => {
+    const timestamp = new Date(unixTimestamp);
+    timestamp.for;
+    return (
+        ("0" + timestamp.getHours()).substring(
+            ("0" + timestamp.getHours()).length - 2,
+            ("0" + timestamp.getHours()).length
+        ) +
+        ":" +
+        ("0" + timestamp.getMinutes()).substring(
+            ("0" + timestamp.getMinutes()).length - 2,
+            ("0" + timestamp.getMinutes()).length
+        ) +
+        ":" +
+        ("0" + timestamp.getSeconds()).substring(
+            ("0" + timestamp.getSeconds()).length - 2,
+            ("0" + timestamp.getSeconds()).length
+        )
+    );
+};
+
 const stepConverter = (time) => {
     if (time < 1) {
         return time * 60 + "s";
@@ -29,4 +50,10 @@ const combinationMetrics = (...metrics) => {
     return result;
 };
 
-export { stepConverter, unixCurrentTime, unixStartTime, combinationMetrics };
+export {
+    stepConverter,
+    unixCurrentTime,
+    unixStartTime,
+    combinationMetrics,
+    unixToTime,
+};

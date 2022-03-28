@@ -5,7 +5,11 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { ChartCpuUsage, ChartPie } from "./MonitChart/ClusterOverviewChart";
+import {
+    ChartCpuUsage,
+    ChartPie,
+    ChartPie2,
+} from "./MonitChart/ClusterOverviewChart";
 import {
     CCreateButton,
     CSelectButton,
@@ -27,6 +31,7 @@ import {
 } from "../Utils/MetricsVariableFormatter";
 
 import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
+import { COButton } from "./ClusterOverviewComponent/COButton";
 
 const ClusterOverview = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
@@ -50,12 +55,31 @@ const ClusterOverview = observer(() => {
 
     useEffect(() => {
         loadClusterNames();
+        loadMetrics(
+            TargetTypes.CLUSTER,
+            unixStartTime(60 * 60),
+            unixCurrentTime(),
+            stepConverter(30),
+            clusterNames[0],
+            ClusterMetricTypes.CPU_USAGE
+        );
     }, []);
+
+    const a = () => {
+        loadMetrics(
+            TargetTypes.CLUSTER,
+            unixStartTime(60 * 60),
+            unixCurrentTime(),
+            stepConverter(30),
+            clusterNames[0],
+            ClusterMetricTypes.CPU_USAGE
+        );
+    };
 
     return (
         <PanelBoxM>
             <div className="panelTitBar panelTitBar_clear">
-                <div className="tit">
+                <div className="tit" onClick={a}>
                     <span style={{ marginRight: "10px", color: "white " }}>
                         Select Cluster
                     </span>
@@ -79,255 +103,13 @@ const ClusterOverview = observer(() => {
                         Cluster Resource Usage
                     </div>
                 </div>
-                <div
-                    // Panels Area
-                    style={{
-                        display: "flex",
-                        height: "400px",
-                        justifyContent: "space-around",
-                        alignItems: "center",
-                    }}
-                >
-                    <div
-                        // Buttons Area
-                        style={{
-                            width: "300px",
-                            height: "375px",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-around",
-                            alignItems: "center",
-                        }}
-                    >
-                        <div
-                            // Button Area
-                            style={{
-                                width: "300px",
-                                height: "87px",
-                                display: "flex",
-                                borderRadius: "5px",
-                                backgroundColor: "#007EFF",
-                                color: "white",
-                                display: "flex",
-                                justifyContent: "space-around",
-                            }}
-                        >
-                            <div
-                                // Circle Graph Area
-                                style={{
-                                    width: "49%",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                PieCHart
-                            </div>
-                            <div
-                                // Text/Value Area
-                                style={{ width: "49%" }}
-                            >
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "65%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    CPU(Core)
-                                </div>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "0%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <p
-                                        style={{
-                                            fontSize: "20px",
-                                            fontWeight: "bold",
-                                        }}
-                                    >
-                                        1.61
-                                        <span style={{ fontSize: "14px" }}>
-                                            /4
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            // Button Area
-                            style={{
-                                width: "300px",
-                                height: "87px",
-                                display: "flex",
-                                borderRadius: "5px",
-                                backgroundColor: "#1C263E",
-                                color: "#929da5",
-                                display: "flex",
-                                justifyContent: "space-around",
-                            }}
-                        >
-                            <div
-                                // Circle Graph Area
-                                style={{
-                                    width: "49%",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                PieCHart
-                            </div>
-                            <div
-                                // Text/Value Area
-                                style={{ width: "49%" }}
-                            >
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    CPU Core
-                                </div>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <span>1.61</span>
-                                    <span>/4</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            // Button Area
-                            style={{
-                                width: "300px",
-                                height: "87px",
-                                display: "flex",
-                                borderRadius: "5px",
-                                backgroundColor: "#1C263E",
-                                color: "#929da5",
-                                display: "flex",
-                                justifyContent: "space-around",
-                            }}
-                        >
-                            <div
-                                // Circle Graph Area
-                                style={{
-                                    width: "49%",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                PieCHart
-                            </div>
-                            <div
-                                // Text/Value Area
-                                style={{ width: "49%" }}
-                            >
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    CPU Core
-                                </div>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <span>1.61</span>
-                                    <span>/4</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            // Button Area
-                            style={{
-                                width: "300px",
-                                height: "87px",
-                                display: "flex",
-                                borderRadius: "5px",
-                                backgroundColor: "#1C263E",
-                                color: "#929da5",
-                                display: "flex",
-                                justifyContent: "space-around",
-                            }}
-                        >
-                            <div
-                                // Circle Graph Area
-                                style={{
-                                    width: "49%",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                PieCHart
-                            </div>
-                            <div
-                                // Text/Value Area
-                                style={{ width: "49%" }}
-                            >
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                        fontSize: "14px",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    CPU Core
-                                </div>
-                                <div
-                                    style={{
-                                        width: "100%",
-                                        height: "50%",
-                                        display: "flex",
-                                        justifyContent: "flex-start",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <span>1.61</span>
-                                    <span>/4</span>
-                                </div>
-                            </div>
-                        </div>
+
+                <div className="tab1-panel-area">
+                    <div className="tab1-button-area">
+                        <COButton isOn={true} />
+                        <COButton isOn={false} />
+                        <COButton isOn={false} />
+                        <COButton isOn={false} />
                     </div>
                     <div
                         style={{

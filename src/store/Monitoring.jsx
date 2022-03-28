@@ -4,8 +4,9 @@ import { BASIC_AUTH, LOCAL_CLUSTER_URL, MONITORING_URL } from "../config";
 import {
     ClusterMetricTypes,
     TargetTypes,
-} from "../pages/Gedge/Monitoring/Utils/MetricsVariables";
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariables";
 
+import { unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class Monitoring {
     clusterNames = [];
     clusterMetrics = [];
@@ -43,13 +44,15 @@ class Monitoring {
             Object.entries(res.data?.items).map(([key, value]) => {
                 const clusterMetric = {
                     metricType: "",
-                    metricTime: [],
-                    metricValue: [],
+                    metrics: [],
                 };
                 clusterMetric.metricType = key;
                 value[0]?.values.forEach((element) => {
-                    clusterMetric.metricTime.push(element[0]);
-                    clusterMetric.metricValue.push(element[1]);
+                    clusterMetric.metrics.push({
+                        time: unixToTime(element[0]),
+                        // time: element[0],
+                        value: element[1],
+                    });
                 });
                 this.clusterMetrics.push(clusterMetric);
             });
