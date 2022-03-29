@@ -600,11 +600,11 @@ const globalStyles = createGlobalStyle`
       font-size: 13px;
       font-weight: 300;
       word-break: break-all;
-      background: #ff7800;
+      background: #57addd;
       min-height: 41px
     }
     .Toastify__toast--info {
-      background: #ff7800;
+      background: #57addd;
     }
     .Toastify__close-button {
       position: absolute;
@@ -1142,9 +1142,9 @@ const globalStyles = createGlobalStyle`
     }
   }
   .status_05 {
-    color: #d8e5f0;
+    color: #9d27b0;
     &.status_ico::before {
-      background-color: #d8e5f0;
+      background-color: #9d27b0;
     }
   }
 
@@ -1153,6 +1153,10 @@ const globalStyles = createGlobalStyle`
     margin-bottom: 28px;
   }
 
+  .step-container2 {
+    width: 33%;
+    margin-bottom: 28px;
+  }
   .signup-step {
   display: flex;
   justify-content: space-between;

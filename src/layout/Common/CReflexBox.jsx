@@ -39,10 +39,10 @@ const CReflexBox = observer((props) => {
         <ReflexElement minSize={190} className="paper_main">
           {children}
         </ReflexElement>
-        <ReflexSplitter />
+        {/* <ReflexSplitter />
         <ReflexElement minSize={100} size={400} className="paper_detail">
-          {/* {children[1]} */}
-        </ReflexElement>
+          
+        </ReflexElement> */}
       </ReflexContainer>
     );
   }
