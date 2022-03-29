@@ -6,6 +6,22 @@ import moment from "moment";
 import deploymentStore from "../../../store/Deployment";
 import { observer } from "mobx-react-lite";
 
+import theme from "@/styles/theme";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+
+/*
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import theme from "@/styles/theme";
+*/
+
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -14,8 +30,16 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { deploymentDetail, strategy, labels, annotations, pods } =
-    deploymentStore;
+  const {
+    deploymentDetail,
+    strategy,
+    labels,
+    annotations,
+    pods,
+    depServices,
+
+    depServicesPort,
+  } = deploymentStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -27,9 +51,12 @@ const Detail = observer(() => {
   const annotation = annotations;
 
   const podInfoTable = [];
-  // const podInfo = deploymentResource;
 
-  const podsTable = [];
+  const port = depServicesPort;
+  const portTable = [];
+
+  const events = deploymentDetail.events;
+  const eventTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -63,11 +90,7 @@ const Detail = observer(() => {
       </tr>
     );
   });
-  /*
-  Object.entries(pods).map((event) => {
-    podInfoTable.push(<tr>{console.log(event)}</tr>);
-  });
-*/
+
   pods.map((event) => {
     podInfoTable.push(
       <div>
@@ -82,10 +105,88 @@ const Detail = observer(() => {
     );
   });
 
+  {
+    port &&
+      port.map((event) => {
+        portTable.push(
+          <>
+            <th>Port</th>
+            <td>{event["port"]}</td>
+          </>
+        );
+      });
+  }
+
+  {
+    events &&
+      events.map((event, message) => {
+        eventTable.push(
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+                aria-controls="ProjectEvent-content"
+                id="ProjectEvent-header"
+                sx={{ bgcolor: theme.colors.primaryDark }}
+              >
+                <Typography
+                  sx={{
+                    width: "10%",
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  Message
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: "white" }}>
+                  {event["message"]}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: "white",
+                    bgcolor: theme.colors.primary,
+                  }}
+                >
+                  <table className="tb_data">
+                    <tr>
+                      <th>Kind</th>
+                      <td>{event["kind"]}</td>
+                      <th>Name</th>
+                      <td>{event["name"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Namespace</th>
+                      <td>{event["namespace"]}</td>
+                      <th>Cluster</th>
+                      <td>{event["cluster"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Reason</th>
+                      <td>{event["reason"]}</td>
+                      <th>Type</th>
+                      <td>{event["type"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Event Time</th>
+                      <td>{event["eventTime"]}</td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </table>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
+  }
+
   Object.entries(annotation).map(([key, value]) => {
     annotationTable.push(
       <tr>
-        {console.log(key, value)}
         <th>{key}</th>
         <td>{value}</td>
       </tr>
@@ -163,6 +264,15 @@ const Detail = observer(() => {
             <tbody>{podInfoTable}</tbody>
           </table>
           <br />
+          <TableTitle>Deployment Services</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <th>Name</th>
+              <td>{depServices.name}</td>
+              <th>Port</th>
+              <td>{portTable}</td>
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
@@ -182,9 +292,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">
-            <tbody></tbody>
-          </table>
+          <table className="tb_data">{eventTable}</table>
         </div>
       </CTabPanel>
     </PanelBox>

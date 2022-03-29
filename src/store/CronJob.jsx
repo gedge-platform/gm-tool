@@ -20,6 +20,7 @@ class CronJob {
       eventTime: "",
     },
   ];
+  cronjobInvolvesJobs = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -60,6 +61,7 @@ class CronJob {
           this.cronJobDetail = res.data.data;
           this.label = res.data.data.label;
           this.annotations = res.data.data.annotations;
+          this.cronjobInvolvesJobs = res.data.involvesData.jobs;
 
           if (res.data.data.events !== null) {
             this.events = res.data.data.events;

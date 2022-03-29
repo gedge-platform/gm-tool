@@ -29,6 +29,7 @@ class Pod {
   workspace = "";
   project = "";
   content = "";
+  containerResources = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -48,6 +49,8 @@ class Pod {
           this.podMetadata = {};
           this.label = res.data.data.label;
           this.annotations = res.data.data.annotations;
+          this.containerResources = res.data.data.containerStatuses;
+
           // this.events = res.data.data.events;
 
           if (res.data.data.events !== null) {

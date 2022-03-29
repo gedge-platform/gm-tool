@@ -20,6 +20,9 @@ class Deployment {
       },
     ],
   };
+
+  deploymentEvents = [];
+
   deploymentInvolvesData = {};
   strategy = {
     type: {},
@@ -42,6 +45,16 @@ class Deployment {
 
   deploymentResource = {};
   pods = [];
+  deploymentInvolvesData = [{}];
+
+  depServices = {};
+  depServicesPort = [
+    {
+      name: "",
+      port: 0,
+      protocol: "",
+    },
+  ];
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -105,9 +118,12 @@ class Deployment {
           // }
 
           this.annotations = res.data.data.annotations;
-
           this.deploymentInvolvesData = res.data.involvesData;
           this.pods = res.data.involvesData.pods;
+          this.depServices = res.data.involvesData.services;
+          this.depServicesPort = res.data.involvesData.services.port;
+          this.deploymentEvents = res.data.data.events;
+          console.log(this.deploymentEvents);
         });
       });
   };

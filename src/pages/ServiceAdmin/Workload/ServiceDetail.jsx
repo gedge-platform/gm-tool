@@ -14,21 +14,63 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail, portTemp } = serviceStore;
+  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
+    serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const port = portTemp;
   const portTable = [];
 
-  port.map((event) => {
-    portTable.push(
-      <>
-        <th>Port</th>
-        <td>{event["port"]}</td>
-      </>
-    );
-  });
+  const podInfo = involvesPods;
+  const podTable = [];
+
+  const workloadInfo = involvesWorkloads;
+  const workloadTable = [];
+
+  {
+    port &&
+      port.map((event) => {
+        portTable.push(
+          <>
+            <th>Port</th>
+            <td>{event["port"]}</td>
+          </>
+        );
+      });
+  }
+
+  {
+    podInfo &&
+      podInfo.map((event) => {
+        podTable.push(
+          <>
+            <th>Pod</th>
+            <td>{event["ip"]}</td>
+            <th>Node name</th>
+            <td>{event["nodename"]}</td>
+            <th>Name</th>
+            <td>{event["name"]}</td>
+          </>
+        );
+      });
+  }
+
+  {
+    workloadInfo &&
+      workloadInfo.map((event) => {
+        workloadTable.push(
+          <>
+            <th>Name</th>
+            <td>{event["name"]}</td>
+            <th>Kind</th>
+            <td>{event["kind"]}</td>
+            <th>Replica Name</th>
+            <td>{event["replicaName"]}</td>
+          </>
+        );
+      });
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -43,6 +85,7 @@ const Detail = observer(() => {
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
+        ``
         <CTab label="Overview" />
         <CTab label="Resources" />
       </CTabs>
@@ -82,35 +125,17 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
+          <TableTitle>Pod</TableTitle>
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
+              <tr>{podTable}</tr>
             </tbody>
           </table>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Workload</TableTitle>
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
+              <tr>{workloadTable}</tr>
             </tbody>
           </table>
           <br />
