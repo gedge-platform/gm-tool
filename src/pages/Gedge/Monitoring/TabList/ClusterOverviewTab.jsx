@@ -5,11 +5,7 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import {
-    ChartCpuUsage,
-    ChartPie,
-    ChartPie2,
-} from "./MonitChart/ClusterOverviewChart";
+import { COAreaChart, COPieChart } from "./MonitChart/ClusterOverviewChart";
 import {
     CCreateButton,
     CSelectButton,
@@ -31,18 +27,120 @@ import {
 } from "../Utils/MetricsVariableFormatter";
 
 import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
-import { COButton } from "./ClusterOverviewComponent/COButton";
+import {
+    COButtonCPU,
+    COButtonMemory,
+    COButtonPod,
+    COButtonDisk,
+} from "./ClusterOverviewComponent/COButton";
 
 const ClusterOverview = observer(() => {
+    const [open1, setOpen1] = useState(true);
+    const [open2, setOpen2] = useState(false);
+    const [open3, setOpen3] = useState(false);
+    const [open4, setOpen4] = useState(false);
+    const [chartValue, setChartValue] = useState("CPU");
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
-    const [clusterName, setClusterName] = useState("");
+    // const [clusterName, setClusterName] = useState("");
     const handleTabChange = (event, newValue) => {
         setTabvalue(newValue);
     };
 
-    const { clusterNames, clusterMetrics, loadClusterNames, loadMetrics } =
-        monitoringStore;
+    const {
+        clusterName,
+        clusterNames,
+        loadClusterNames,
+        loadCoCPU,
+        loadCoMemory,
+        loadCoDisk,
+        loadCoPod,
+        setClusterName,
+    } = monitoringStore;
+
+    const changedState = (index) => {
+        switch (index) {
+            case 1:
+                setOpen1(true);
+                setOpen2(false);
+                setOpen3(false);
+                setOpen4(false);
+                loadCoCPU(
+                    TargetTypes.CLUSTER,
+                    unixStartTime(60 * 6),
+                    unixCurrentTime(),
+                    stepConverter(5),
+                    clusterName,
+                    combinationMetrics(
+                        ClusterMetricTypes.CPU_TOTAL,
+                        ClusterMetricTypes.CPU_USAGE,
+                        ClusterMetricTypes.CPU_UTIL
+                    )
+                );
+                setChartValue("CPU");
+                break;
+            case 2:
+                setOpen1(false);
+                setOpen2(true);
+                setOpen3(false);
+                setOpen4(false);
+                loadCoMemory(
+                    TargetTypes.CLUSTER,
+                    unixStartTime(60 * 6),
+                    unixCurrentTime(),
+                    stepConverter(5),
+                    clusterName,
+                    combinationMetrics(
+                        ClusterMetricTypes.MEMORY_TOTAL,
+                        ClusterMetricTypes.MEMORY_USAGE,
+                        ClusterMetricTypes.MEMORY_UTIL
+                    )
+                );
+                setChartValue("MEMORY");
+                break;
+            case 3:
+                setOpen1(false);
+                setOpen2(false);
+                setOpen3(true);
+                setOpen4(false);
+                loadCoDisk(
+                    TargetTypes.CLUSTER,
+                    unixStartTime(60 * 6),
+                    unixCurrentTime(),
+                    stepConverter(5),
+                    clusterName,
+                    combinationMetrics(
+                        ClusterMetricTypes.DISK_TOTAL,
+                        ClusterMetricTypes.DISK_USAGE,
+                        ClusterMetricTypes.DISK_UTIL
+                    )
+                );
+                setChartValue("DISK");
+                break;
+            case 4:
+                setOpen1(false);
+                setOpen2(false);
+                setOpen3(false);
+                setOpen4(true);
+                loadCoPod(
+                    TargetTypes.CLUSTER,
+                    unixStartTime(60 * 6),
+                    unixCurrentTime(),
+                    stepConverter(5),
+                    clusterName,
+                    combinationMetrics(
+                        ClusterMetricTypes.POD_QUOTA,
+                        ClusterMetricTypes.POD_RUNNING,
+                        ClusterMetricTypes.POD_UTIL
+                    )
+                );
+                setChartValue("POD");
+                break;
+
+            default:
+                break;
+        }
+    };
 
     const clusterNameActionList = clusterNames.map((item) => {
         return {
@@ -55,31 +153,12 @@ const ClusterOverview = observer(() => {
 
     useEffect(() => {
         loadClusterNames();
-        loadMetrics(
-            TargetTypes.CLUSTER,
-            unixStartTime(60 * 60),
-            unixCurrentTime(),
-            stepConverter(30),
-            clusterNames[0],
-            ClusterMetricTypes.CPU_USAGE
-        );
     }, []);
-
-    const a = () => {
-        loadMetrics(
-            TargetTypes.CLUSTER,
-            unixStartTime(60 * 60),
-            unixCurrentTime(),
-            stepConverter(30),
-            clusterNames[0],
-            ClusterMetricTypes.CPU_USAGE
-        );
-    };
 
     return (
         <PanelBoxM>
             <div className="panelTitBar panelTitBar_clear">
-                <div className="tit" onClick={a}>
+                <div className="tit">
                     <span style={{ marginRight: "10px", color: "white " }}>
                         Select Cluster
                     </span>
@@ -87,7 +166,7 @@ const ClusterOverview = observer(() => {
                         className="none_transform"
                         items={clusterNameActionList}
                     >
-                        {clusterName === "" ? clusterNames[0] : clusterName}
+                        {clusterName}
                     </CSelectButtonM>
                 </div>
                 <div className="date">
@@ -106,28 +185,26 @@ const ClusterOverview = observer(() => {
 
                 <div className="tab1-panel-area">
                     <div className="tab1-button-area">
-                        <COButton isOn={true} />
-                        <COButton isOn={false} />
-                        <COButton isOn={false} />
-                        <COButton isOn={false} />
+                        <COButtonCPU
+                            isOn={open1}
+                            onClick={() => changedState(1)}
+                        />
+                        <COButtonMemory
+                            isOn={open2}
+                            onClick={() => changedState(2)}
+                        />
+                        <COButtonDisk
+                            isOn={open3}
+                            onClick={() => changedState(3)}
+                        />
+                        <COButtonPod
+                            isOn={open4}
+                            onClick={() => changedState(4)}
+                        />
                     </div>
-                    <div
-                        style={{
-                            width: "1350px",
-                            height: "375px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <div
-                            style={{
-                                width: "1340px",
-                                height: "370px",
-                                backgroundColor: "#141A30",
-                            }}
-                        >
-                            <ChartCpuUsage />
+                    <div className="tab1-chart-area">
+                        <div className="tab-chart">
+                            <COAreaChart chartValue={chartValue} />
                         </div>
                     </div>
                 </div>

@@ -6,9 +6,10 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import {
-    ChartCpuUsage,
-    ChartPie,
-    ChartPie2,
+    COPieChartCPU,
+    COPieChartDisk,
+    COPieChartMemory,
+    COPieChartPod,
 } from "../MonitChart/ClusterOverviewChart";
 import {
     CCreateButton,
@@ -30,18 +31,39 @@ import {
     combinationMetrics,
 } from "../../Utils/MetricsVariableFormatter";
 
-const COButton = observer(({ isOn }) => {
+const COButtonCPU = observer(({ isOn, onClick }) => {
+    const { coPieCPU } = monitoringStore;
+
     return (
-        <div className={isOn ? "on-tab1-button" : "off-tab1-button"}>
-            <div className="tab1-button-circle-graph-area">
-                <ChartPie />
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartCPU isOn={isOn} />
             </div>
             <div className="tab1-button-key-value-area">
                 <div className="tab1-button-key-area">CPU(Core)</div>
                 <div className="tab1-button-value-area">
                     <p className="tab1-button-value-majer">
-                        1.61
-                        <span className="tab1-button-value-minor">/4</span>
+                        {
+                            coPieCPU[1]?.metrics[
+                                coPieCPU[1]?.metrics.length - 1
+                            ].value
+                        }
+                        <span className="tab1-button-value-minor">
+                            /
+                            {
+                                coPieCPU[0]?.metrics[
+                                    coPieCPU[0]?.metrics.length - 1
+                                ].value
+                            }
+                        </span>
                     </p>
                 </div>
             </div>
@@ -49,4 +71,124 @@ const COButton = observer(({ isOn }) => {
     );
 });
 
-export { COButton };
+const COButtonMemory = observer(({ isOn, onClick }) => {
+    const { coPieMemory } = monitoringStore;
+
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartMemory isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">Memory(GB)</div>
+                <div className="tab1-button-value-area">
+                    <p className="tab1-button-value-majer">
+                        {
+                            coPieMemory[1]?.metrics[
+                                coPieMemory[1]?.metrics.length - 1
+                            ].value
+                        }
+                        <span className="tab1-button-value-minor">
+                            /
+                            {
+                                coPieMemory[0]?.metrics[
+                                    coPieMemory[0]?.metrics.length - 1
+                                ].value
+                            }
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const COButtonDisk = observer(({ isOn, onClick }) => {
+    const { coPieDisk } = monitoringStore;
+
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartDisk isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">Disk(GB)</div>
+                <div className="tab1-button-value-area">
+                    <p className="tab1-button-value-majer">
+                        {
+                            coPieDisk[1]?.metrics[
+                                coPieDisk[1]?.metrics.length - 1
+                            ].value
+                        }
+                        <span className="tab1-button-value-minor">
+                            /
+                            {
+                                coPieDisk[0]?.metrics[
+                                    coPieDisk[0]?.metrics.length - 1
+                                ].value
+                            }
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const COButtonPod = observer(({ isOn, onClick }) => {
+    const { coPiePod } = monitoringStore;
+
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartPod isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">Pods</div>
+                <div className="tab1-button-value-area">
+                    <p className="tab1-button-value-majer">
+                        {
+                            coPiePod[1]?.metrics[
+                                coPiePod[1]?.metrics.length - 1
+                            ].value
+                        }
+                        <span className="tab1-button-value-minor">
+                            /
+                            {
+                                coPiePod[0]?.metrics[
+                                    coPiePod[0]?.metrics.length - 1
+                                ].value
+                            }
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+export { COButtonCPU, COButtonDisk, COButtonPod, COButtonMemory };

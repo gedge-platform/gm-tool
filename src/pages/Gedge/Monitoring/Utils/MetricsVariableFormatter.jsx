@@ -6,8 +6,7 @@ const unixStartTime = (interval) =>
     Math.ceil(unixCurrentTime() - interval * 60);
 
 const unixToTime = (unixTimestamp) => {
-    const timestamp = new Date(unixTimestamp);
-    timestamp.for;
+    const timestamp = new Date(unixTimestamp * 1000);
     return (
         ("0" + timestamp.getHours()).substring(
             ("0" + timestamp.getHours()).length - 2,

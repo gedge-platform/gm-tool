@@ -1,4 +1,4 @@
-import { padding } from "@mui/system";
+import { display, padding } from "@mui/system";
 import React, { useState, useEffect, PureComponent } from "react";
 import {
     AreaChart,
@@ -12,19 +12,32 @@ import {
 import { PieChart, Pie, Sector, Cell } from "recharts";
 import monitoringStore from "../../../../../store/Monitoring";
 
-// import monitoringStore from "../../../../store/Monitoring";
-// import {
-//     stepConverter,
-//     unixCurrentTime,
-//     unixStartTime,
-//     combinationMetrics,
-// } from "../Utils/MetricsVariableFormatter";
+const COAreaChart = ({ chartValue }) => {
+    const { coPieCPU, coPieMemory, coPieDisk, coPiePod } = monitoringStore;
+    let title = "";
+    let metrics = [];
 
-// import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
+    switch (chartValue) {
+        case "CPU":
+            title = "CPU Util(%)";
+            metrics = coPieCPU[2]?.metrics;
+            break;
+        case "MEMORY":
+            title = "Memory Util(%)";
+            metrics = coPieMemory[2]?.metrics;
+            break;
+        case "DISK":
+            title = "Disk Util(%)";
+            metrics = coPieDisk[2]?.metrics;
+            break;
+        case "POD":
+            title = "Pods";
+            metrics = coPiePod[2]?.metrics;
+            break;
 
-const ChartCpuUsage = () => {
-    const { clusterMetrics } = monitoringStore;
-
+        default:
+            break;
+    }
     return (
         <div style={{ width: "100%", height: "100%" }}>
             <div
@@ -35,11 +48,11 @@ const ChartCpuUsage = () => {
                     fontWeight: "bold",
                 }}
             >
-                Cpu Util (%)
+                {title}
             </div>
             <ResponsiveContainer>
                 <AreaChart
-                    data={clusterMetrics[0]?.metrics}
+                    data={metrics}
                     margin={{
                         top: 20,
                         right: 30,
@@ -53,11 +66,7 @@ const ChartCpuUsage = () => {
                         vertical={false}
                         strokeDasharray="3 5"
                     />
-                    <XAxis
-                        interval={clusterMetrics[0]?.metrics.length / 11}
-                        tickLine="false"
-                        dataKey="time"
-                    />
+                    <XAxis interval={5} tickLine="false" dataKey="time" />
                     <YAxis />
                     <Tooltip />
                     <Area
@@ -72,16 +81,33 @@ const ChartCpuUsage = () => {
     );
 };
 
-const ChartPie = () => {
+const COPieChartCPU = ({ isOn }) => {
+    const { coPieCPU } = monitoringStore;
+
     const data = [
-        { name: "Group A", value: 400 },
-        { name: "Group B", value: 300 },
+        {
+            value:
+                Number(
+                    coPieCPU[0]?.metrics[coPieCPU[0]?.metrics.length - 1].value
+                ) -
+                Number(
+                    coPieCPU[1]?.metrics[coPieCPU[1]?.metrics.length - 1].value
+                ),
+        },
+        {
+            value: Number(
+                coPieCPU[1]?.metrics[coPieCPU[1]?.metrics.length - 1].value
+            ),
+        },
     ];
 
-    const COLORS = ["#4DA5FF", " #FFFFFF"];
+    const COLORS = isOn ? ["#4DA5FF", " #FFFFFF"] : ["#2E374E", "#777D8B"];
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div
+            style={{ width: "100%", height: "100%" }}
+            className="pointer_container"
+        >
             <ResponsiveContainer>
                 <PieChart>
                     <Pie
@@ -105,16 +131,36 @@ const ChartPie = () => {
     );
 };
 
-const ChartPie2 = () => {
+const COPieChartMemory = ({ isOn }) => {
+    const { coPieMemory } = monitoringStore;
+
     const data = [
-        { name: "Group A", value: 400 },
-        { name: "Group B", value: 300 },
+        {
+            value:
+                Number(
+                    coPieMemory[0]?.metrics[coPieMemory[0]?.metrics.length - 1]
+                        .value
+                ) -
+                Number(
+                    coPieMemory[1]?.metrics[coPieMemory[1]?.metrics.length - 1]
+                        .value
+                ),
+        },
+        {
+            value: Number(
+                coPieMemory[1]?.metrics[coPieMemory[1]?.metrics.length - 1]
+                    .value
+            ),
+        },
     ];
 
-    const COLORS = ["#2E374E", "#777D8B"];
+    const COLORS = isOn ? ["#4DA5FF", " #FFFFFF"] : ["#2E374E", "#777D8B"];
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div
+            style={{ width: "100%", height: "100%" }}
+            className="pointer_container"
+        >
             <ResponsiveContainer>
                 <PieChart>
                     <Pie
@@ -137,4 +183,113 @@ const ChartPie2 = () => {
         </div>
     );
 };
-export { ChartCpuUsage, ChartPie, ChartPie2 };
+
+const COPieChartDisk = ({ isOn }) => {
+    const { coPieDisk } = monitoringStore;
+
+    const data = [
+        {
+            value:
+                Number(
+                    coPieDisk[0]?.metrics[coPieDisk[0]?.metrics.length - 1]
+                        .value
+                ) -
+                Number(
+                    coPieDisk[1]?.metrics[coPieDisk[1]?.metrics.length - 1]
+                        .value
+                ),
+        },
+        {
+            value: Number(
+                coPieDisk[1]?.metrics[coPieDisk[1]?.metrics.length - 1].value
+            ),
+        },
+    ];
+
+    const COLORS = isOn ? ["#4DA5FF", " #FFFFFF"] : ["#2E374E", "#777D8B"];
+
+    return (
+        <div
+            style={{ width: "100%", height: "100%" }}
+            className="pointer_container"
+        >
+            <ResponsiveContainer>
+                <PieChart>
+                    <Pie
+                        data={data}
+                        dataKey="value"
+                        startAngle={-180}
+                        innerRadius={20}
+                        outerRadius={30}
+                        strokeWidth={0}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                            />
+                        ))}
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};
+
+const COPieChartPod = ({ isOn }) => {
+    const { coPiePod } = monitoringStore;
+
+    const data = [
+        {
+            value:
+                Number(
+                    coPiePod[0]?.metrics[coPiePod[0]?.metrics.length - 1].value
+                ) -
+                Number(
+                    coPiePod[1]?.metrics[coPiePod[1]?.metrics.length - 1].value
+                ),
+        },
+        {
+            value: Number(
+                coPiePod[1]?.metrics[coPiePod[1]?.metrics.length - 1].value
+            ),
+        },
+    ];
+
+    const COLORS = isOn ? ["#4DA5FF", " #FFFFFF"] : ["#2E374E", "#777D8B"];
+
+    return (
+        <div
+            style={{ width: "100%", height: "100%" }}
+            className="pointer_container"
+        >
+            <ResponsiveContainer>
+                <PieChart>
+                    <Pie
+                        data={data}
+                        dataKey="value"
+                        startAngle={-180}
+                        innerRadius={20}
+                        outerRadius={30}
+                        strokeWidth={0}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                            />
+                        ))}
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
+    );
+};
+
+export {
+    COAreaChart,
+    COPieChartCPU,
+    COPieChartMemory,
+    COPieChartDisk,
+    COPieChartPod,
+};

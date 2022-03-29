@@ -8,13 +8,21 @@ import {
 
 import { unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class Monitoring {
+    clusterName = "";
     clusterNames = [];
     clusterMetrics = [];
+    coPieCPU = [];
+    coPieMemory = [];
+    coPieDisk = [];
+    coPiePod = [];
 
     constructor() {
         makeAutoObservable(this);
     }
 
+    setClusterName = (selectName) => {
+        this.clusterName = selectName;
+    };
     getMonitURL = (
         target,
         start,
@@ -38,26 +46,25 @@ class Monitoring {
         }
     };
 
-    convertResponseToMonit = (res) => {
-        runInAction(() => {
-            this.clusterMetrics = [];
-            Object.entries(res.data?.items).map(([key, value]) => {
-                const clusterMetric = {
-                    metricType: "",
-                    metrics: [],
-                };
-                clusterMetric.metricType = key;
-                value[0]?.values.forEach((element) => {
-                    clusterMetric.metrics.push({
-                        time: unixToTime(element[0]),
-                        // time: element[0],
-                        value: element[1],
-                    });
-                });
-                this.clusterMetrics.push(clusterMetric);
-            });
-        });
-    };
+    // convertResponseToMonit = (res, array) => {
+    //     runInAction(() => {
+    //         array = [];
+    //         Object.entries(res.data?.items).map(([key, value]) => {
+    //             const clusterMetric = {
+    //                 metricType: "",
+    //                 metrics: [],
+    //             };
+    //             clusterMetric.metricType = key;
+    //             value[0]?.values.forEach((element) => {
+    //                 clusterMetric.metrics.push({
+    //                     time: unixToTime(element[0]),
+    //                     value: element[1],
+    //                 });
+    //             });
+    //             array.push(clusterMetric);
+    //         });
+    //     });
+    // };
 
     loadClusterNames = async () => {
         await axios
@@ -66,14 +73,15 @@ class Monitoring {
             })
             .then((res) => {
                 runInAction(() => {
-                    this.clusterNames = res.data.data.map(
+                    this.clusterNames = res.data?.data.map(
                         (item) => item.clusterName
                     );
+                    this.clusterName = this.clusterNames[0];
                 });
             });
     };
 
-    loadMetrics = async (
+    loadCoCPU = async (
         target,
         start,
         end,
@@ -96,9 +104,181 @@ class Monitoring {
                 { auth: BASIC_AUTH }
             )
             .then((res) => {
-                this.convertResponseToMonit(res);
+                runInAction(() => {
+                    this.coPieCPU = [];
+                    Object.entries(res.data?.items).map(([key, value]) => {
+                        const clusterMetric = {
+                            metricType: "",
+                            metrics: [],
+                        };
+                        clusterMetric.metricType = key;
+                        value[0]?.values.forEach((element) => {
+                            clusterMetric.metrics.push({
+                                time: unixToTime(element[0]),
+                                value: element[1],
+                            });
+                        });
+                        this.coPieCPU.push(clusterMetric);
+                    });
+                });
             });
     };
+
+    loadCoMemory = async (
+        target,
+        start,
+        end,
+        step,
+        clusterFilter,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    clusterFilter,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPieMemory = [];
+                    Object.entries(res.data?.items).map(([key, value]) => {
+                        const clusterMetric = {
+                            metricType: "",
+                            metrics: [],
+                        };
+                        clusterMetric.metricType = key;
+                        value[0]?.values.forEach((element) => {
+                            clusterMetric.metrics.push({
+                                time: unixToTime(element[0]),
+                                value: element[1],
+                            });
+                        });
+                        this.coPieMemory.push(clusterMetric);
+                    });
+                });
+            });
+    };
+
+    loadCoDisk = async (
+        target,
+        start,
+        end,
+        step,
+        clusterFilter,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    clusterFilter,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPieDisk = [];
+                    Object.entries(res.data?.items).map(([key, value]) => {
+                        const clusterMetric = {
+                            metricType: "",
+                            metrics: [],
+                        };
+                        clusterMetric.metricType = key;
+                        value[0]?.values.forEach((element) => {
+                            clusterMetric.metrics.push({
+                                time: unixToTime(element[0]),
+                                value: element[1],
+                            });
+                        });
+                        this.coPieDisk.push(clusterMetric);
+                    });
+                });
+            });
+    };
+
+    loadCoPod = async (
+        target,
+        start,
+        end,
+        step,
+        clusterFilter,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    clusterFilter,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPiePod = [];
+                    Object.entries(res.data?.items).map(([key, value]) => {
+                        const clusterMetric = {
+                            metricType: "",
+                            metrics: [],
+                        };
+                        clusterMetric.metricType = key;
+                        value[0]?.values.forEach((element) => {
+                            clusterMetric.metrics.push({
+                                time: unixToTime(element[0]),
+                                value: element[1],
+                            });
+                        });
+                        this.coPiePod.push(clusterMetric);
+                    });
+                });
+            });
+    };
+
+    // loadMetrics = async (
+    //     target,
+    //     start,
+    //     end,
+    //     step,
+    //     clusterFilter,
+    //     metricFilter,
+    //     ...options
+    // ) => {
+    //     await axios
+    //         .get(
+    //             this.getMonitURL(
+    //                 target,
+    //                 start,
+    //                 end,
+    //                 step,
+    //                 clusterFilter,
+    //                 metricFilter,
+    //                 options
+    //             ),
+    //             { auth: BASIC_AUTH }
+    //         )
+    //         .then((res) => {
+    //             this.convertResponseToMonit(res);
+    //         });
+    // };
 }
 
 const monitoringStore = new Monitoring();

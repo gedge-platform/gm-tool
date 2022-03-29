@@ -1175,6 +1175,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .on-tab1-button{
+    cursor:pointer;
     width: 300px;
     height: 87px;
     display: flex;
@@ -1186,6 +1187,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .tab1-button-circle-graph-area{
+    cursor:pointer;
     width: 49%;
     display: flex;
     justify-content: center;
@@ -1223,7 +1225,7 @@ const globalStyles = createGlobalStyle`
     font-size: 14px 
   }
 
-  .on-tab1-chart-area{
+  .tab1-chart-area{
     width: 1350px;
     height: 375px;
     display: flex;
@@ -1238,6 +1240,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .off-tab1-button{
+    cursor:pointer;
     width: 300px;
     height: 87px;
     display: flex;
@@ -1291,6 +1294,15 @@ const globalStyles = createGlobalStyle`
   font-weight:700;
   font-size: 16px;
 
+}
+.pointer_container {
+        .recharts-wrapper {
+            cursor: pointer !important;
+        }
+    }
+
+.off-tab1-linearchart{
+  display: hidden;
 }
 
 `;
