@@ -17,26 +17,35 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = observer(() => {
-  const { projectDetail } = projectStore;
-  const labelTable = [];
-  const eventTable = [];
+  const { projectDetail, resource, labels, annotations, events } = projectStore;
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const labels = projectDetail.labels;
-  const events = projectDetail.events;
+  const labelsTable = [];
+  const annotationsTable = [];
+  const eventsTable = [];
 
-  Object.entries(labels).map(([keys, value]) => {
-    labelTable.push(
+  Object.entries(labels).map(([key, value]) => {
+    labelsTable.push(
       <tr>
-        <th>{keys}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotations).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -48,8 +57,74 @@ const Detail = observer(() => {
   //   });
   // });
 
-  events.map((event, message) => {
-    eventTable.push(
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+              aria-controls="ProjectEvent-content"
+              id="ProjectEvent-header"
+              sx={{ bgcolor: theme.colors.primaryDark }}
+            >
+              <Typography
+                sx={{
+                  width: "10%",
+                  fontSize: 13,
+                  color: "white",
+                }}
+              >
+                Message
+              </Typography>
+              <Typography sx={{ fontSize: 13, color: "white" }}>
+                {event["message"]}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: "white",
+                  bgcolor: theme.colors.primary,
+                }}
+              >
+                <table className="tb_data">
+                  <tr>
+                    <th>Kind</th>
+                    <td>{event["kind"]}</td>
+                    <th>Name</th>
+                    <td>{event["name"]}</td>
+                  </tr>
+                  <tr>
+                    <th>Namespace</th>
+                    <td>{event["namespace"]}</td>
+                    <th>Cluster</th>
+                    <td>{event["cluster"]}</td>
+                  </tr>
+                  <tr>
+                    <th>Reason</th>
+                    <td>{event["reason"]}</td>
+                    <th>Type</th>
+                    <td>{event["type"]}</td>
+                  </tr>
+                  <tr>
+                    <th>Event Time</th>
+                    <td>
+                      {moment(event["eventTime"]).format("YYYY-MM-DD HH:mm")}
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </table>
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      );
+    });
+  } else {
+    eventsTable.push(
       <div>
         <Accordion>
           <AccordionSummary
@@ -67,9 +142,7 @@ const Detail = observer(() => {
             >
               Message
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "white" }}>
-              {event["message"]}
-            </Typography>
+            <Typography sx={{ fontSize: 13, color: "white" }}></Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
             <Typography
@@ -81,28 +154,7 @@ const Detail = observer(() => {
             >
               <table className="tb_data">
                 <tr>
-                  <th>Kind</th>
-                  <td>{event["kind"]}</td>
-                  <th>Name</th>
-                  <td>{event["name"]}</td>
-                </tr>
-                <tr>
-                  <th>Namespace</th>
-                  <td>{event["namespace"]}</td>
-                  <th>Cluster</th>
-                  <td>{event["cluster"]}</td>
-                </tr>
-                <tr>
-                  <th>Reason</th>
-                  <td>{event["reason"]}</td>
-                  <th>Type</th>
-                  <td>{event["type"]}</td>
-                </tr>
-                <tr>
-                  <th>Event Time</th>
-                  <td>{event["eventTime"]}</td>
-                  <th></th>
-                  <td></td>
+                  <th>No Have Events List </th>
                 </tr>
               </table>
             </Typography>
@@ -110,7 +162,7 @@ const Detail = observer(() => {
         </Accordion>
       </div>
     );
-  });
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -124,34 +176,34 @@ const Detail = observer(() => {
   };
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
-        <CTab label="Labels" />
+        <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          {/* <TableTitle>상세 정보</TableTitle> */}
-          <table className="tb_data">
+          <TableTitle>상세정보</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Cluster</th>
-                <td>{projectDetail.selectCluster}</td>
-                <th>Project</th>
+                <th className="tb_workload_detail_th">Name</th>
                 <td>{projectDetail.projectName}</td>
+                <th className="tb_workload_detail_th">Cluster</th>
+                <td>{projectDetail.selectCluster}</td>
               </tr>
               <tr>
-                <th>Status</th>
-                <td>{projectDetail.status}</td>
-                <th>WorkSpace</th>
+                <th>Workspace</th>
                 <td>{projectDetail.workspaceName}</td>
-              </tr>
-              <tr>
                 <th>Creator</th>
                 <td>{projectDetail.projectCreator}</td>
-                <th>Creation Date</th>
+              </tr>
+              <tr>
+                <th>Owner</th>
+                <td>{projectDetail.projectOwner}</td>
+                <th>Created</th>
                 <td>
                   {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
                 </td>
@@ -162,31 +214,26 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <table className="tb_data">
+          <TableTitle>리소스 사용량</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Deployments</th>
-                <td>{projectDetail.resource.deployment_count}</td>
+                <th className="tb_workload_detail_th">Deployment</th>
+                <td>{resource.deployment_count}</td>
+                <th className="tb_workload_detail_th">Pod</th>
+                <td>{resource.pod_count}</td>
               </tr>
               <tr>
-                <th>Pods</th>
-                <td>{projectDetail.resource.pod_count}</td>
-              </tr>
-              <tr>
-                <th>Services</th>
-                <td>{projectDetail.resource.service_count}</td>
-              </tr>
-              <tr>
-                <th>Cronjob</th>
-                <td>{projectDetail.resource.cronjob_count}</td>
+                <th>Service</th>
+                <td>{resource.service_count}</td>
+                <th>CronJob</th>
+                <td>{resource.cronjob_count}</td>
               </tr>
               <tr>
                 <th>Job</th>
-                <td>{projectDetail.resource.job_count}</td>
-              </tr>
-              <tr>
+                <td>{resource.job_count}</td>
                 <th>Volume</th>
-                <td>{projectDetail.resource.volume_count}</td>
+                <td>{resource.volume_count}</td>
               </tr>
             </tbody>
           </table>
@@ -194,25 +241,25 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{labelTable}</tbody>
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{labelsTable}</tbody>
           </table>
           <br />
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Annotations</th>
-                <td>{projectDetail.annotations}</td>
-              </tr>
-            </tbody>
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationsTable}</tbody>
           </table>
+          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventTable}</tbody>
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
           </table>
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>

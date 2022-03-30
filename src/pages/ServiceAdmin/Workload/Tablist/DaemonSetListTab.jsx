@@ -18,8 +18,13 @@ const DaemonSetListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { daemonSetList, daemonSetDetail, totalElements, loadDaemonSetList } =
-    daemonSetStore;
+  const {
+    daemonSetList,
+    daemonSetDetail,
+    totalElements,
+    loadDaemonSetList,
+    loadDaemonSetDetail,
+  } = daemonSetStore;
 
   const [columDefs] = useState([
     {
@@ -28,7 +33,12 @@ const DaemonSetListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "프로젝트명",
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
       field: "project",
       filter: true,
     },
@@ -52,6 +62,11 @@ const DaemonSetListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -70,6 +85,7 @@ const DaemonSetListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={daemonSetList}
                   columnDefs={columDefs}
                   isBottom={true}

@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const UserServiceListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -28,13 +29,13 @@ const UserServiceListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "이름",
+      headerName: "프로젝트",
       field: "projectName",
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "selectCluster",
       filter: true,
     },
     {
@@ -43,32 +44,16 @@ const UserServiceListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "클러스터 명",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "CPU 사용량(core)",
-      field: "cpu",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Memory 사용량(Gi)",
-      field: "memory",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_memory ?? 0}</span>`;
-      },
-    },
-    {
-      headerName: "Pods 수(개)",
-      field: "resource",
-      filter: true,
-      cellRenderer: function ({ data: { resourceUsage } }) {
-        return `<span>${resourceUsage.namespace_pod_count ?? 0}</span>`;
+      headerName: "생성날짜",
+      field: "created_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
   ]);
@@ -76,8 +61,8 @@ const UserServiceListTab = observer(() => {
   const history = useHistory();
 
   const handleClick = (e) => {
+    const fieldName = e.colDef.field;
     loadProjectDetail(e.data.projectName);
-    console.log(loadProjectDetail(e.data.projectName));
   };
 
   useEffect(() => {
@@ -96,11 +81,11 @@ const UserServiceListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={projectList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
-                  onCellClicks={handleClick}
                 />
               </div>
             </CTabPanel>

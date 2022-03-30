@@ -18,8 +18,13 @@ const CronJobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { cronJobList, cronJobDetail, totalElements, loadCronJobList } =
-    cronJobStore;
+  const {
+    cronJobList,
+    cronJobDetail,
+    totalElements,
+    loadCronJobList,
+    loadCronJobDetail,
+  } = cronJobStore;
 
   const [columDefs] = useState([
     {
@@ -28,18 +33,42 @@ const CronJobListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
+
     {
-      headerName: "프로젝트명",
+      headerName: "프로젝트",
       field: "project",
       filter: true,
     },
     {
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+    },
+    {
+      headerName: "스케줄",
+      field: "schedule",
+      filter: true,
+    },
+    {
       headerName: "생성날짜",
-      field: "created_at",
+      field: "creationTimestamp",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${moment(new Date(data.value))
+          // .subtract(9, "h")
+          .format("YYYY-MM-DD HH:mm")}</span>`;
+      },
+    },
+    {
+      headerName: "완료날짜",
+      field: "lastScheduleTime",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -51,6 +80,11 @@ const CronJobListTab = observer(() => {
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -70,6 +104,7 @@ const CronJobListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={cronJobList}
                   columnDefs={columDefs}
                   isBottom={true}

@@ -12,6 +12,7 @@ import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
 import moment from "moment";
 import CreatePod from "../Dialog/CreatePod";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -20,8 +21,8 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalElements, loadPodList } = podStore;
-
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -29,13 +30,23 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "노드명",
-      field: "node_name",
+      headerName: "프로젝트",
+      field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+    },
+    {
+      headerName: "호스트 IP",
+      field: "hostIP",
       filter: true,
     },
     {
@@ -44,7 +55,15 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "업데이트 날짜",
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
+    },
+    {
+      headerName: "생성 날짜",
       field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -66,6 +85,11 @@ const PodListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -84,6 +108,7 @@ const PodListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}

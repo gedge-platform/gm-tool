@@ -30,7 +30,7 @@ const DeploymentYaml = observer(() => {
         mode="javascript"
         theme="monokai"
         name="editor"
-        width="100%"
+        width="90%"
         onChange={(value) => {
           // setContent(value);
         }}

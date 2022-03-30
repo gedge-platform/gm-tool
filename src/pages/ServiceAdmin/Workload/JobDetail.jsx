@@ -3,18 +3,65 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import { observer } from "mobx-react";
+import jobStore from "../../../store/Job";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
-const Detail = (props) => {
-  const { job } = props;
+const Detail = observer(() => {
+  const { jobDetailData, jobDetailInvolves, labels, annotations, events } =
+    jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
+  const labelTable = [];
+  const label = labels;
+
+  const annotationTable = [];
+  const annotation = annotations;
+
+  const eventsTable = [];
+
+  Object.entries(label).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotation).map(([key, value]) => {
+    annotationTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th className="tb_workload_detail_th">Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Message</th>
+        <td></td>
+      </tr>
+    );
+  }
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -26,32 +73,40 @@ const Detail = (props) => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td>{job.cluster}</td>
-                <th>프로젝트</th>
-                <td>{job.project}</td>
+                <th>Name</th>
+                <td>{jobDetailData.name}</td>
+                <th>Cluster</th>
+                <td>{jobDetailData.cluster}</td>
               </tr>
               <tr>
-                <th>앱</th>
-                <td></td>
-                <th>생성일</th>
-                <td>{moment(job.created_at).format("YYYY-MM-DD")}</td>
+                <th>Project</th>
+                <td>{jobDetailData.project}</td>
+                <th>Status</th>
+                <td>{jobDetailData.status}</td>
               </tr>
               <tr>
-                <th>업데이트 날짜</th>
-                <td></td>
-                <th>생성자</th>
+                <th>BackOffLimit</th>
+                <td>{jobDetailData.backoffLimit}</td>
+                <th>Completions</th>
+                <td>{jobDetailData.completions}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{moment(jobDetailData.created_at).format("YYYY-MM-DD")}</td>
+                <th>Creator</th>
                 <td></td>
               </tr>
             </tbody>
@@ -60,41 +115,63 @@ const Detail = (props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>app</th>
+                <td>{jobDetailInvolves.PodList}</td>
+              </tr>
+              <tr>
+                <th>ceph-version</th>
                 <td></td>
-                <th>app.gedge-platform.io/name</th>
+              </tr>
+              <tr>
+                <th>rook-version</th>
                 <td></td>
-                <th>app.Kubernates.io/version</th>
+              </tr>
+              <tr>
+                <th>rook_cluster</th>
                 <td></td>
               </tr>
             </tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
+                <th>Annotations</th>
+                <td>{jobDetailData.annotations}</td>
               </tr>
             </tbody>
           </table>
           <br />
         </div>
       </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{labelTable}</tbody>
+          </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
+          </table>
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
-};
+});
 export default Detail;

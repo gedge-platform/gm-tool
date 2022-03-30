@@ -3,17 +3,63 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import cronJobStore from "../../../store/CronJob";
+import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
-const Detail = (props) => {
-  const { cronJob } = props;
+const Detail = observer(() => {
+  const { cronJobDetail, label, annotations, events } = cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const labelTemp = label;
+  const annotationsTemp = annotations;
+  const labelTable = [];
+  const annotationsTable = [];
+
+  Object.entries(labelTemp).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotationsTemp).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  const eventsTable = [];
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th className="tb_workload_detail_th">Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Message</th>
+        <td></td>
+      </tr>
+    );
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -26,33 +72,49 @@ const Detail = (props) => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td></td>
-                <th>프로젝트</th>
-                <td></td>
+                <th className="tb_workload_detail_th">Name</th>
+                <td>{cronJobDetail.name}</td>
+                <th className="tb_workload_detail_th">Cluster</th>
+                <td>{cronJobDetail.cluster}</td>
               </tr>
               <tr>
-                <th>앱</th>
-                <td></td>
-                <th>생성일</th>
-                <td></td>
+                <th>Project</th>
+                <td>{cronJobDetail.project}</td>
+                <th>Schedule</th>
+                <td>{cronJobDetail.schedule}</td>
               </tr>
               <tr>
-                <th>업데이트 날짜</th>
-                <td></td>
-                <th>생성자</th>
-                <td></td>
+                <th>Concurrency Policy</th>
+                <td>{cronJobDetail.concurrencyPolicy}</td>
+                <th>Successful Jobs History Limit</th>
+                <td>{cronJobDetail.successfulJobsHistoryLimit}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>
+                  {moment(cronJobDetail.creationTimestamp).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+                </td>
+                <th>Lasted</th>
+                <td>
+                  {moment(cronJobDetail.lastScheduleTime).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -61,7 +123,7 @@ const Detail = (props) => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>app</th>
@@ -75,7 +137,7 @@ const Detail = (props) => {
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>gedge-platform.io/creator</th>
@@ -94,7 +156,29 @@ const Detail = (props) => {
           <br />
         </div>
       </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{labelTable}</tbody>
+          </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationsTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
+          </table>
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
-};
+});
 export default Detail;

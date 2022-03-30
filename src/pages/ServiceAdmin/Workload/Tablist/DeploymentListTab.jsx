@@ -26,6 +26,7 @@ const DeploymentListTab = observer(() => {
     deploymentDetail,
     totalElements,
     loadDeploymentList,
+    loadDeploymentDetail,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -35,17 +36,27 @@ const DeploymentListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
-      cellRenderer: function ({ value }) {
-        return drawStatus(value.toLowerCase());
-      },
     },
     {
-      headerName: "프로젝트명",
+      headerName: "프로젝트",
       field: "project",
       filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "ready",
+      filter: true,
+      // cellRenderer: function ({ value }) {
+      //   return drawStatus(value.toLowerCase());
+      // },
     },
     {
       headerName: "생성일",
@@ -61,6 +72,11 @@ const DeploymentListTab = observer(() => {
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -81,12 +97,16 @@ const DeploymentListTab = observer(() => {
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton style={{ marginLeft: "10px" }}>
+              Load YAML
+            </CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={deploymentList}
                   columnDefs={columDefs}
                   isBottom={true}

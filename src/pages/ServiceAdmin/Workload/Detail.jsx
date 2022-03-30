@@ -3,6 +3,8 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import deploymentStore from "../../../store/Deployment";
+import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -11,10 +13,29 @@ const TableTitle = styled.p`
   color: #fff;
 `;
 
-const Detail = (props) => {
-  const { deployment } = props;
+const Detail = observer(() => {
+  const {
+    deploymentDetail,
+    strategy,
+    labels,
+    annotations,
+    events,
+    deploymentInvolvesData,
+    pods,
+  } = deploymentStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const labelTable = [];
+  const label = labels;
+
+  const annotationTable = [];
+  const annotation = annotations;
+
+  const eventsTable = [];
+
+  const podsTable = [];
+
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -25,34 +46,105 @@ const Detail = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  let strategyTable = [];
+  let strategyTemp = strategy;
+
+  if (strategyTemp.type === "Recreate") {
+    strategyTable = strategyTemp.type;
+  } else if (strategyTemp.type === "RollingUpdate") {
+    strategyTable =
+      "maxUnavailable : " +
+      strategyTemp.rollingUpdate.maxUnavailable +
+      "\n maxSurge : " +
+      strategyTemp.rollingUpdate.maxSurge;
+  }
+
+  Object.entries(label).map(([key, value]) => {
+    labelTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotation).map(([key, value]) => {
+    annotationTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th className="tb_workload_detail_th">Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Message</th>
+        <td></td>
+      </tr>
+    );
+  }
+
+  // pods.map((event) => {
+  //   podsTable.push(
+  //     <tr>
+  //       <th>Status</th>
+  //       <td>{event.status}</td>
+  //     </tr>
+  //   );
+  // });
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td>{deployment.cluster}</td>
-                <th>프로젝트</th>
-                <td>{deployment.project}</td>
+                <th className="tb_workload_detail_th">Name</th>
+                <td>{deploymentDetail.name}</td>
+                <th className="tb_workload_detail_th">Cluster</th>
+                <td>{deploymentDetail.cluster}</td>
               </tr>
               <tr>
-                <th>앱</th>
-                <td></td>
-                <th>생성일</th>
-                <td>{moment(deployment.createAt).format("YYYY-MM-DD")}</td>
+                <th>Project</th>
+                <td>{deploymentDetail.project}</td>
+                <th>Workspave</th>
+                <td>{deploymentDetail.workspace}</td>
               </tr>
               <tr>
-                <th>업데이트 날짜</th>
-                <td>{moment(deployment.updateAt).format("YYYY-MM-DD")}</td>
-                <th>생성자</th>
-                <td></td>
+                <th>Status</th>
+                <td>{deploymentDetail.ready}</td>
+                <th>Strategy</th>
+                <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>
+                  {moment(deploymentDetail.createAt).format("YYYY-MM-DD HH:mm")}
+                </td>
+                <th>Updated</th>
+                <td>
+                  {moment(deploymentDetail.updateAt).format("YYYY-MM-DD HH:mm")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -61,40 +153,36 @@ const Detail = (props) => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
-            </tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{podsTable}</tbody>
           </table>
           <br />
         </div>
       </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{labelTable}</tbody>
+          </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
+          </table>
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
-};
+});
+
 export default Detail;

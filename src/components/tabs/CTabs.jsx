@@ -64,7 +64,7 @@ const useStyles = makeStyles(() =>
             backgroundPositionY: "-150px",
           },
           "& .MuiTab-wrapper": {
-            backgroundPositionY: "-350px",
+            backgroundPositionY: "-349px",
             paddingTop: 9,
             fontWeight: "500",
           },
@@ -77,7 +77,7 @@ const useStyles = makeStyles(() =>
             backgroundPositionY: "-200px",
           },
           "&.Mui-selected::before": {
-            backgroundPositionY: "-250px",
+            backgroundPositionY: "-249px",
           },
         },
         "&:nth-child(2)": { zIndex: 8 },

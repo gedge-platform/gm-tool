@@ -11,17 +11,22 @@ import { observer } from "mobx-react";
 import moment from "moment";
 import axios from "axios";
 import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import configurationStore from "../../../../store/Configuration";
-import Detail from "../Detail";
+import secretStore from "../../../../store/Secret";
+import SecretDetail from "../SecretsDetail";
 
-const ConfigurationListTab = observer(() => {
+const SecretListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { configurationList, configurationDetail, loadConfigurationList } =
-    configurationStore;
+  const {
+    secretList,
+    secretDetail,
+    totalElements,
+    loadsecretList,
+    loadsecretTabList,
+  } = secretStore;
 
   const [columDefs] = useState([
     {
@@ -45,18 +50,18 @@ const ConfigurationListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "cluster",
+      headerName: "타입",
+      field: "type",
       filter: true,
     },
     {
-      headerName: "어노테이션",
-      field: "annotations",
-      filter: true,
-    },
-    {
-      headerName: "dataCnt",
+      headerName: "데이터 개수",
       field: "dataCnt",
+      filter: true,
+    },
+    {
+      headerName: "클러스터",
+      field: "clusterName",
       filter: true,
     },
     {
@@ -74,10 +79,15 @@ const ConfigurationListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadsecretTabList(e.data.name, e.data.clusterName, e.data.namespace);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
-    loadConfigurationList();
+    loadsecretList();
   }, []);
 
   return (
@@ -92,17 +102,19 @@ const ConfigurationListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={configurationList}
+                  onCellClicked={handleClick}
+                  rowData={secretList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail configuration={configurationDetail} />
+        <SecretDetail secret={secretDetail} />
       </CReflexBox>
     </>
   );
 });
-export default ConfigurationListTab;
+export default SecretListTab;

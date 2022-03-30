@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import Detail from "../JobDetail";
 import jobStore from "../../../../store/Job";
 import moment from "moment";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const JobListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -18,7 +19,8 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { jobList, jobDetail, totalElements, loadJobList } = jobStore;
+  const { jobList, jobDetail, totalElements, loadJobList, loadJobDetail } =
+    jobStore;
 
   const [columDefs] = useState([
     {
@@ -27,18 +29,35 @@ const JobListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "프로젝트명",
+      headerName: "프로젝트",
       field: "project",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "워크스페이스",
+      field: "workspace",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        if (value === 1) {
+          return drawStatus("True");
+        } else {
+          return drawStatus("False");
+        }
+      },
+    },
+    {
+      headerName: "완료날짜",
+      field: "completionTime",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -50,6 +69,11 @@ const JobListTab = observer(() => {
       },
     },
   ]);
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadJobDetail(e.data.name, e.data.cluster, e.data.project);
+  };
 
   const history = useHistory();
 
@@ -69,6 +93,7 @@ const JobListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={jobList}
                   columnDefs={columDefs}
                   isBottom={true}

@@ -3,17 +3,36 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import moment from "moment";
+import serviceStore from "../../../store/Service";
+import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
-const Detail = (props) => {
-  const { service } = props;
+const Detail = observer(() => {
+  const { serviceDetail, portTemp } = serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const port = portTemp;
+  const portTable = [];
+
+  port.map((event) => {
+    portTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Port</th>
+        <td>{event["port"]}</td>
+        <th className="tb_workload_detail_th">Protocol</th>
+        <td>{event["protocol"]}</td>
+        <th className="tb_workload_detail_th">TargerPort</th>
+        <td>{event["targetPort"]}</td>
+      </tr>
+    );
+  });
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -26,33 +45,42 @@ const Detail = (props) => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="리소스 상태" />
-        <CTab label="메타데이터" />
+        <CTab label="Overview" />
+        <CTab label="Resources" />
+        <CTab label="Port Info" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td>{service.cluster}</td>
-                <th>프로젝트</th>
-                <td>{service.project}</td>
+                <th className="tb_workload_detail_th">Name</th>
+                <td>{serviceDetail.name}</td>
+                <th className="tb_workload_detail_th">Cluster</th>
+                <td>{serviceDetail.cluster}</td>
               </tr>
               <tr>
-                <th>앱</th>
+                <th>Project</th>
+                <td>{serviceDetail.project}</td>
+                <th>Workspace</th>
                 <td></td>
-                <th>생성일</th>
-                <td>{moment(service.createAt).format("YYYY-MM-DD")}</td>
               </tr>
               <tr>
-                <th>업데이트 날짜</th>
-                <td></td>
-                <th>생성자</th>
-                <td></td>
+                <th>Type</th>
+                <td>{serviceDetail.type}</td>
+                <th>Cluster IP</th>
+                <td>{serviceDetail.clusterIp}</td>
+              </tr>
+              <tr>
+                <th>Session Affinity</th>
+                <td>{serviceDetail.sessionAffinity}</td>
+                <th>Created</th>
+                <td>
+                  {moment(serviceDetail.createAt).format("YYYY-MM-DD HH:mm")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -61,7 +89,7 @@ const Detail = (props) => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>app</th>
@@ -75,7 +103,7 @@ const Detail = (props) => {
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>gedge-platform.io/creator</th>
@@ -94,7 +122,17 @@ const Detail = (props) => {
           <br />
         </div>
       </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>포트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{portTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
-};
+});
+
 export default Detail;

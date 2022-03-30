@@ -20,8 +20,13 @@ const ServiceListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { serviceList, serviceDetail, totalElements, loadServiceList } =
-    serviceStore;
+  const {
+    serviceList,
+    serviceDetail,
+    totalElements,
+    loadServiceList,
+    loadServiceDetail,
+  } = serviceStore;
 
   const [columDefs] = useState([
     {
@@ -30,8 +35,18 @@ const ServiceListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "프로젝트명",
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+    },
+    {
+      headerName: "프로젝트",
       field: "project",
+      filter: true,
+    },
+    {
+      headerName: "워크스페이스",
+      field: "workspace",
       filter: true,
     },
     {
@@ -62,6 +77,11 @@ const ServiceListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadServiceDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -80,6 +100,7 @@ const ServiceListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={serviceList}
                   columnDefs={columDefs}
                   isBottom={true}
