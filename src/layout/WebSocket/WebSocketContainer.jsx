@@ -29,7 +29,23 @@ const WebSocketContainer = (props) => {
 
   useEffect(() => {
     if (!ws.current) {
-      connect();
+      ws.current = new WebSocket(socketUrl);
+      ws.current.onopen = () => {
+        console.log("connect!!!");
+        setSocketConnected(true);
+      };
+      ws.current.onclose = (e) => {
+        console.log("disconnect!!" + e);
+        setSocketConnected(false);
+      };
+      ws.current.onerror = (e) => {
+        console.log("error!!" + e);
+      };
+      ws.current.onmessage = (evt) => {
+        // const data = JSON.parse(evt.data);
+        console.log(evt.data);
+        Toastify(evt.data);
+      };
     }
   }, []);
 
