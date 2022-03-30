@@ -15,7 +15,6 @@ const Detail = (props) => {
   const { deployment } = props;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
