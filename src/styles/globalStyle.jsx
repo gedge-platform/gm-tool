@@ -377,6 +377,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .paper_main, .paper_detail {
+    
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -414,11 +415,12 @@ const globalStyles = createGlobalStyle`
       max-height: 800px;
     }
     .tabPanel {
+      overflow-y:scroll;
       height: 100%;
       position: relative;
     }
     ${PanelBox} {
-      overflow: hidden;
+      overflow:hidden;
       .panelTitBar {
         height: 43px;
         padding-bottom: 1px;
@@ -440,6 +442,7 @@ const globalStyles = createGlobalStyle`
     }
     .tb_data {
       border: 1px double #141a30;
+
     }
   }
 
@@ -1195,6 +1198,15 @@ const globalStyles = createGlobalStyle`
   font-weight:700;
   font-size: 16px;
 
+}
+
+//yjy-----------------------
+.tb_workload_detail_th{
+  width: 15%;
+}
+
+.tb_workload_detail_labels_th{
+  width: 25%;
 }
 
 `;

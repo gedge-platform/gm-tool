@@ -29,7 +29,7 @@ const Detail = observer((props) => {
   };
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="상세정보" />
         <CTab label="리소스 사용량" />

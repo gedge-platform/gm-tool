@@ -19,6 +19,7 @@ const Detail = observer(() => {
     strategy,
     labels,
     annotations,
+    events,
     deploymentInvolvesData,
     pods,
   } = deploymentStore;
@@ -31,8 +32,7 @@ const Detail = observer(() => {
   const annotationTable = [];
   const annotation = annotations;
 
-  // const eventsTable = [];
-  // const events = deploymentDetail.events;
+  const eventsTable = [];
 
   const podsTable = [];
 
@@ -63,7 +63,7 @@ const Detail = observer(() => {
   Object.entries(label).map(([key, value]) => {
     labelTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -72,21 +72,29 @@ const Detail = observer(() => {
   Object.entries(annotation).map(([key, value]) => {
     annotationTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
   });
 
-  // events.map((event) => {
-  //   console.log(event);
-  //   eventsTable.push(
-  //     <tr>
-  //       <th>Message</th>
-  //       <td>{event["message"]}</td>
-  //     </tr>
-  //   );
-  // });
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th className="tb_workload_detail_th">Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Message</th>
+        <td></td>
+      </tr>
+    );
+  }
 
   // pods.map((event) => {
   //   podsTable.push(
@@ -108,12 +116,12 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Name</th>
+                <th className="tb_workload_detail_th">Name</th>
                 <td>{deploymentDetail.name}</td>
-                <th>Cluster</th>
+                <th className="tb_workload_detail_th">Cluster</th>
                 <td>{deploymentDetail.cluster}</td>
               </tr>
               <tr>
@@ -145,7 +153,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{podsTable}</tbody>
           </table>
           <br />
@@ -154,12 +162,12 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{labelTable}</tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationTable}</tbody>
           </table>
           <br />
@@ -168,8 +176,8 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">
-            <tbody></tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
           </table>
         </div>
       </CTabPanel>
