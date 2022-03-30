@@ -5,6 +5,7 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 class Service {
   serviceList = [];
   serviceDetail = {
+    externalIp: "",
     selector: {
       app: "",
     },
@@ -15,7 +16,7 @@ class Service {
       name: "",
       port: 0,
       protocol: "",
-      targerPort: 0,
+      targetPort: 0,
     },
   ];
 

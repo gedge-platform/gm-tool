@@ -20,6 +20,13 @@ class Pod {
       eventTime: "",
     },
   ];
+  statusConditions = [
+    {
+      lastTransitionTime: "",
+      status: "",
+      type: "",
+    },
+  ];
 
   podName = "";
   containerName = "";
@@ -45,16 +52,14 @@ class Pod {
       .then((res) => {
         runInAction(() => {
           this.podDetail = res.data.data;
-          this.podMetadata = {};
           this.label = res.data.data.label;
           this.annotations = res.data.data.annotations;
-          // this.events = res.data.data.events;
-
           if (res.data.data.events !== null) {
             this.events = res.data.data.events;
           } else {
             this.events = null;
           }
+          this.statusConditions = res.data.data.statusConditions;
         });
       });
   };

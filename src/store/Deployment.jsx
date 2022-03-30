@@ -6,26 +6,25 @@ import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
-  deploymentDetail = {
-    events: [
-      {
-        kind: "",
-        name: "",
-        namespace: "",
-        cluster: "",
-        message: "",
-        reason: "",
-        type: "",
-        eventTime: "",
-      },
-    ],
-  };
+  deploymentDetail = {};
   deploymentInvolvesData = {};
   strategy = {
     type: {},
   };
   labels = {};
   annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
   pods = [{}];
   totalElements = 0;
   deploymentName = "";
@@ -94,14 +93,13 @@ class Deployment {
           this.deploymentDetail = res.data.data;
           this.strategy = res.data.data.strategy;
           this.labels = res.data.data.labels;
-
-          // if (res.data.data.labels !== "") {
-          //   this.labels = res.data.data.labels;
-          // } else {
-          //   this.labels = "null";
-          // }
-
           this.annotations = res.data.data.annotations;
+
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
 
           this.deploymentInvolvesData = res.data.involvesData;
           this.pods = res.data.involvesData.pods;

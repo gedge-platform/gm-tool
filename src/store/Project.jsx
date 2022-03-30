@@ -1,36 +1,41 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Project {
   projectList = [];
-  projectDetail = {
-    // selectCluster: "",
-    resource: {
-      deployment_count: 0,
-      pod_count: 0,
-      service_count: 0,
-      cronjob_count: 0,
-      job_count: 0,
-      volume_count: 0,
+  projectDetail = {};
+  labels = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
     },
-    labels: {},
-    events: [
-      {
-        kind: "",
-        name: "",
-        namespace: "",
-        cluster: "",
-        message: "",
-        reason: "",
-        type: "",
-        eventTime: "",
-      },
-    ],
+  ];
+
+  resource = {
+    deployment_count: 0,
+    daemonset_count: 0,
+    Statefulset_count: 0,
+    pod_count: 0,
+    service_count: 0,
+    cronjob_count: 0,
+    job_count: 0,
+    volume_count: 0,
   };
+
   projectListinWorkspace = [];
 
   totalElements = 0;
+
+  systemProjectList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -38,7 +43,7 @@ class Project {
 
   loadProjectList = async (type) => {
     await axios
-      .get(`${SERVER_URL}/projects`, {
+      .get(`${SERVER_URL2}/userProjects`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -57,19 +62,27 @@ class Project {
 
   loadProjectDetail = async (projectName) => {
     await axios
-      .get(`${SERVER_URL}/projects/${projectName}`, {
+      .get(`${SERVER_URL2}/userProjects/${projectName}`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
         runInAction(() => {
           this.projectDetail = res.data.data;
+          this.resource = res.data.data.DetailInfo[0].resource;
+          this.labels = res.data.data.DetailInfo[0].labels;
+          this.annotations = res.data.data.DetailInfo[0].annotations;
+          if (res.data.data.DetailInfo[0].events !== null) {
+            this.events = res.data.data.DetailInfo[0].events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };
 
-  loadProjectListInWorkspace = async (workspace) => {
+  loadProjectListInWorkspace = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL}/projects?workspace=${workspace}`, {
+      .get(`${SERVER_URL2}/userProjects?workspace=${workspaceName}`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -77,6 +90,20 @@ class Project {
           this.projectListinWorkspace = res.data.data.filter(
             (item) => item.projectType === "user"
           );
+        });
+      });
+  };
+
+  loadSystemProjectList = async (type) => {
+    await axios
+      .get(`${SERVER_URL2}/systemProjects`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        runInAction(() => {
+          this.systemProjectList = res.data.data;
+          console.log(this.systemProjectList);
+          this.totalElements = res.data.data.length;
         });
       });
   };

@@ -40,7 +40,7 @@ const JobListTab = observer(() => {
     },
     {
       headerName: "워크스페이스",
-      field: "",
+      field: "workspace",
       filter: true,
     },
     {
