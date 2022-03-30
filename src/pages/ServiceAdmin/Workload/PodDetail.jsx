@@ -22,8 +22,14 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { podDetail, label, annotations, events, containerResources } =
-    podStore;
+  const {
+    podDetail,
+    label,
+    annotations,
+    events,
+    containerResources,
+    podContainerVolume,
+  } = podStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -35,6 +41,9 @@ const Detail = observer(() => {
 
   const podContainer = containerResources;
   const podContainerTable = [];
+
+  const podContainerVolumes = podContainerVolume;
+  const podContainerVolumesTable = [];
 
   const eventTable = [];
 
@@ -69,22 +78,22 @@ const Detail = observer(() => {
 
   {
     podContainer &&
-      podContainer.map((event) => {
+      podContainer.map((item) => {
         podContainerTable.push(
           <>
             <tr>
               <th>Container ID</th>
-              <td>{event["containerID"]}</td>
+              <td>{item["containerID"]}</td>
               <th>Name</th>
-              <td>{event["name"]}</td>
+              <td>{item["name"]}</td>
               <th>ready</th>
-              <td>{event["ready"]}</td>
+              <td>{item["ready"]}</td>
               <th>restartCount</th>
-              <td>{event["restartCount"]}</td>
+              <td>{item["restartCount"]}</td>
               <th>image</th>
-              <td>{event["image"]}</td>
+              <td>{item["image"]}</td>
               <th>started</th>
-              <td>{event["started"]}</td>
+              <td>{item["started"]}</td>
             </tr>
           </>
         );
@@ -155,6 +164,21 @@ const Detail = observer(() => {
           </div>
         );
       });
+  }
+  {
+    /*
+    podContainerVolumes &&
+      podContainerVolumes.map((item, index) => {
+        podContainerVolumesTable.push(
+          <>
+            <tr>
+              <th>Volumes</th>
+              <td>{item[index]}</td>
+            </tr>
+          </>
+        );
+      });
+    */
   }
 
   return (
@@ -234,7 +258,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>상태</TableTitle>
           <table className="tb_data">
-            <tbody></tbody>
+            <tbody>{podContainerVolumesTable}</tbody>
           </table>
         </div>
       </CTabPanel>

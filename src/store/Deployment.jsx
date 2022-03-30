@@ -123,7 +123,6 @@ class Deployment {
           this.depServices = res.data.involvesData.services;
           this.depServicesPort = res.data.involvesData.services.port;
           this.deploymentEvents = res.data.data.events;
-          console.log(this.deploymentEvents);
         });
       });
   };

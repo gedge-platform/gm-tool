@@ -56,12 +56,12 @@ const Detail = observer(() => {
 
   {
     InvolvesJobs &&
-      InvolvesJobs.map((event) => {
+      InvolvesJobs.map((item) => {
         InvolvesJobsTable.push(
           <>
             <th>Metadata</th>
-            <td>{event.metadata["name"]}</td>
-            <td>{event.metadata["namespace"]}</td>
+            <td>{item.metadata["name"]}</td>
+            <td>{item.metadata["namespace"]}</td>
           </>
         );
       });
@@ -144,6 +144,7 @@ const Detail = observer(() => {
   const handleClose = () => {
     setOpen(false);
   };
+
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -195,7 +196,7 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
+          <TableTitle>Pod list</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>{InvolvesJobsTable}</tr>

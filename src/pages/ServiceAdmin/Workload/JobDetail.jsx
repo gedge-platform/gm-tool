@@ -55,24 +55,24 @@ const Detail = observer(() => {
 
   {
     detailInvolvesPodList &&
-      detailInvolvesPodList.map((event) => {
+      detailInvolvesPodList.map((item) => {
         detailInvolvesPodListTable.push(
           <>
             <tr>
               <th>Metdata</th>
-              <td>{event.metadata["name"]}</td>
+              <td>{item.metadata["name"]}</td>
             </tr>
             <tr>
               <th>Phase</th>
-              <td>{event.status["phase"]}</td>
+              <td>{item.status["phase"]}</td>
               <th>Host IP</th>
-              <td>{event.status["hostIP"]}</td>
+              <td>{item.status["hostIP"]}</td>
               <th>Pod IP</th>
-              <td>{event.status["podIP"]}</td>
+              <td>{item.status["podIP"]}</td>
             </tr>
             <tr>
               <th>Node name</th>
-              <td>{event.spec["nodeName"]}</td>
+              <td>{item.spec["nodeName"]}</td>
             </tr>
           </>
         );

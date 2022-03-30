@@ -30,11 +30,11 @@ const Detail = observer(() => {
 
   {
     port &&
-      port.map((event) => {
+      port.map((item) => {
         portTable.push(
           <>
             <th>Port</th>
-            <td>{event["port"]}</td>
+            <td>{item["port"]}</td>
           </>
         );
       });
@@ -42,15 +42,15 @@ const Detail = observer(() => {
 
   {
     podInfo &&
-      podInfo.map((event) => {
+      podInfo.map((item) => {
         podTable.push(
           <>
             <th>Pod</th>
-            <td>{event["ip"]}</td>
+            <td>{item["ip"]}</td>
             <th>Node name</th>
-            <td>{event["nodename"]}</td>
+            <td>{item["nodename"]}</td>
             <th>Name</th>
-            <td>{event["name"]}</td>
+            <td>{item["name"]}</td>
           </>
         );
       });
@@ -58,15 +58,15 @@ const Detail = observer(() => {
 
   {
     workloadInfo &&
-      workloadInfo.map((event) => {
+      workloadInfo.map((item) => {
         workloadTable.push(
           <>
             <th>Name</th>
-            <td>{event["name"]}</td>
+            <td>{item["name"]}</td>
             <th>Kind</th>
-            <td>{event["kind"]}</td>
+            <td>{item["kind"]}</td>
             <th>Replica Name</th>
-            <td>{event["replicaName"]}</td>
+            <td>{item["replicaName"]}</td>
           </>
         );
       });

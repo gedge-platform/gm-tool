@@ -1,5 +1,5 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {
@@ -30,6 +30,7 @@ class Pod {
   project = "";
   content = "";
   containerResources = [];
+  podContainerVolume = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -50,7 +51,8 @@ class Pod {
           this.label = res.data.data.label;
           this.annotations = res.data.data.annotations;
           this.containerResources = res.data.data.containerStatuses;
-
+          this.podContainerVolume = res.data.data.Podcontainers;
+          console.log(this.podContainerVolume);
           // this.events = res.data.data.events;
 
           if (res.data.data.events !== null) {

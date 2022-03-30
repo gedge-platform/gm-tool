@@ -13,15 +13,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 
-/*
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import theme from "@/styles/theme";
-*/
-
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -91,15 +82,15 @@ const Detail = observer(() => {
     );
   });
 
-  pods.map((event) => {
+  pods.map((item) => {
     podInfoTable.push(
       <div>
         <tr>
-          <th>{event["name"]}</th>
-          <th>{event["status"]}</th>
-          <th>{event["node"]}</th>
-          <th>{event["podIP"]}</th>
-          <th>{event["restart"]}</th>
+          <th>{item["name"]}</th>
+          <th>{item["status"]}</th>
+          <th>{item["node"]}</th>
+          <th>{item["podIP"]}</th>
+          <th>{item["restart"]}</th>
         </tr>
       </div>
     );
@@ -107,11 +98,11 @@ const Detail = observer(() => {
 
   {
     port &&
-      port.map((event) => {
+      port.map((item) => {
         portTable.push(
           <>
             <th>Port</th>
-            <td>{event["port"]}</td>
+            <td>{item["port"]}</td>
           </>
         );
       });
