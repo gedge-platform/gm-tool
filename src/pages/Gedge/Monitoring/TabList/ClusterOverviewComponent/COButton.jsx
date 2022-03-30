@@ -10,6 +10,7 @@ import {
     COPieChartDisk,
     COPieChartMemory,
     COPieChartPod,
+    COPieChartETC,
 } from "../MonitChart/ClusterOverviewChart";
 import {
     CCreateButton,
@@ -191,4 +192,122 @@ const COButtonPod = observer(({ isOn, onClick }) => {
     );
 });
 
-export { COButtonCPU, COButtonDisk, COButtonPod, COButtonMemory };
+const COButtonAPILatency = observer(({ isOn, onClick }) => {
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartETC isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">API Server</div>
+                <div className="tab1-button-value-area">
+                    <span className="tab1-button-value-minor-bottom">
+                        Request/ Latency
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const COButtonAPIRate = observer(({ isOn, onClick }) => {
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartETC isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">API Server</div>
+                <div className="tab1-button-value-area">
+                    <span className="tab1-button-value-minor-bottom">
+                        Request Rate
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const COButtonSchedulerAttempts = observer(({ isOn, onClick }) => {
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartETC isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div className="tab1-button-key-area">Scheduler</div>
+                <div className="tab1-button-value-area">
+                    <span className="tab1-button-value-minor-bottom">
+                        Scheduling Attempts
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+const COButtonSchedulerRate = observer(({ isOn, onClick }) => {
+    return (
+        <div
+            onClick={onClick}
+            className={isOn ? "on-tab1-button" : "off-tab1-button"}
+        >
+            <div
+                className="tab1-button-circle-graph-area"
+                style={{
+                    cursor: "pointer",
+                }}
+            >
+                <COPieChartETC isOn={isOn} />
+            </div>
+            <div className="tab1-button-key-value-area">
+                <div
+                    className="tab1-button-key-area"
+                    style={{ fontSize: "12px" }}
+                >
+                    Scheduler
+                </div>
+                <div className="tab1-button-value-area">
+                    <span className="tab1-button-value-minor-bottom">
+                        Scheduling Rate
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+export {
+    COButtonCPU,
+    COButtonDisk,
+    COButtonPod,
+    COButtonMemory,
+    COButtonAPILatency,
+    COButtonAPIRate,
+    COButtonSchedulerAttempts,
+    COButtonSchedulerRate,
+};

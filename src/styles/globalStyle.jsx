@@ -1225,6 +1225,11 @@ const globalStyles = createGlobalStyle`
     font-size: 14px 
   }
 
+  .tab1-button-value-minor-bottom{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
   .tab1-chart-area{
     width: 1350px;
     height: 375px;

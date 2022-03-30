@@ -9,11 +9,21 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
+import { observer } from "mobx-react";
 import { PieChart, Pie, Sector, Cell } from "recharts";
 import monitoringStore from "../../../../../store/Monitoring";
 
-const COAreaChart = ({ chartValue }) => {
-    const { coPieCPU, coPieMemory, coPieDisk, coPiePod } = monitoringStore;
+const COAreaChartTop = observer(({ chartValue }) => {
+    const {
+        coPieCPU,
+        coPieMemory,
+        coPieDisk,
+        coPiePod,
+        coPieAPILatency,
+        coPieAPIRate,
+        coPieSchedulerAttempts,
+        coPieSchedulerRate,
+    } = monitoringStore;
     let title = "";
     let metrics = [];
 
@@ -33,6 +43,83 @@ const COAreaChart = ({ chartValue }) => {
         case "POD":
             title = "Pods";
             metrics = coPiePod[2]?.metrics;
+            break;
+        default:
+            break;
+    }
+    return (
+        <div style={{ width: "100%", height: "100%" }}>
+            <div
+                style={{
+                    paddingLeft: "20px",
+                    paddingTop: "20px",
+                    color: "#929da5",
+                    fontWeight: "bold",
+                }}
+            >
+                {title}
+            </div>
+            <ResponsiveContainer>
+                <AreaChart
+                    data={metrics}
+                    margin={{
+                        top: 20,
+                        right: 30,
+                        left: -15,
+                        bottom: 30,
+                    }}
+                >
+                    <CartesianGrid
+                        // horizontalPoints="3 3"
+                        strokeWidth={0.3}
+                        vertical={false}
+                        strokeDasharray="3 5"
+                    />
+                    <XAxis interval={5} tickLine="false" dataKey="time" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#007EFF"
+                        fill="#0080ff30"
+                    />
+                </AreaChart>
+            </ResponsiveContainer>
+        </div>
+    );
+});
+
+const COAreaChartBottom = observer(({ chartValue }) => {
+    const {
+        coPieCPU,
+        coPieMemory,
+        coPieDisk,
+        coPiePod,
+        coPieAPILatency,
+        coPieAPIRate,
+        coPieSchedulerAttempts,
+        coPieSchedulerRate,
+    } = monitoringStore;
+    let title = "";
+    let metrics = [];
+
+    switch (chartValue) {
+        case "APISERVER_LATENCY":
+            title = "Request Latency";
+            metrics = coPieAPILatency[0]?.metrics;
+            break;
+        case "APISERVER_REQUEST_RATEMORY":
+            title = "Request Rate";
+            metrics = coPieAPIRate[0]?.metrics;
+            break;
+        case "SCHEDULER_ATTEMPT_TOTAL":
+            title = "Scheduler Attempts";
+            metrics = coPieSchedulerAttempts[0]?.metrics;
+            break;
+        case "SCHEDULER_LATENCY":
+            title = "Scheduling Rate";
+            metrics = coPieSchedulerRate[0]?.metrics;
             break;
 
         default:
@@ -79,9 +166,9 @@ const COAreaChart = ({ chartValue }) => {
             </ResponsiveContainer>
         </div>
     );
-};
+});
 
-const COPieChartCPU = ({ isOn }) => {
+const COPieChartCPU = observer(({ isOn }) => {
     const { coPieCPU } = monitoringStore;
 
     const data = [
@@ -129,9 +216,9 @@ const COPieChartCPU = ({ isOn }) => {
             </ResponsiveContainer>
         </div>
     );
-};
+});
 
-const COPieChartMemory = ({ isOn }) => {
+const COPieChartMemory = observer(({ isOn }) => {
     const { coPieMemory } = monitoringStore;
 
     const data = [
@@ -182,9 +269,9 @@ const COPieChartMemory = ({ isOn }) => {
             </ResponsiveContainer>
         </div>
     );
-};
+});
 
-const COPieChartDisk = ({ isOn }) => {
+const COPieChartDisk = observer(({ isOn }) => {
     const { coPieDisk } = monitoringStore;
 
     const data = [
@@ -234,9 +321,9 @@ const COPieChartDisk = ({ isOn }) => {
             </ResponsiveContainer>
         </div>
     );
-};
+});
 
-const COPieChartPod = ({ isOn }) => {
+const COPieChartPod = observer(({ isOn }) => {
     const { coPiePod } = monitoringStore;
 
     const data = [
@@ -284,12 +371,54 @@ const COPieChartPod = ({ isOn }) => {
             </ResponsiveContainer>
         </div>
     );
-};
+});
+
+const COPieChartETC = observer(({ isOn }) => {
+    const data = [
+        {
+            value: 100,
+        },
+        {
+            value: 0,
+        },
+    ];
+
+    const COLORS = isOn ? ["#4DA5FF", " #FFFFFF"] : ["#2E374E", "#777D8B"];
+
+    return (
+        <div
+            style={{ width: "100%", height: "100%" }}
+            className="pointer_container"
+        >
+            <ResponsiveContainer>
+                <PieChart>
+                    <Pie
+                        data={data}
+                        dataKey="value"
+                        startAngle={-180}
+                        innerRadius={20}
+                        outerRadius={30}
+                        strokeWidth={0}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell
+                                key={`cell-${index}`}
+                                fill={COLORS[index % COLORS.length]}
+                            />
+                        ))}
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
+    );
+});
 
 export {
-    COAreaChart,
+    COAreaChartTop,
+    COAreaChartBottom,
     COPieChartCPU,
     COPieChartMemory,
     COPieChartDisk,
     COPieChartPod,
+    COPieChartETC,
 };

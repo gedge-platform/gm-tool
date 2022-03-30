@@ -22,7 +22,7 @@ const ClusterMetricTypes = {
     APISERVER_REQUEST_RATE: "apiserver_request_rate",
     APISERVER_LATENCY: "apiserver_latency",
     // Error : Not found metric
-    // SCHEDULER_ATTEMPT_TOTAL: "scheduler_attempt_total",
+    SCHEDULER_ATTEMPT_TOTAL: "scheduler_attempts_total",
     SCHEDULER_FAIL_TOTAL: "scheduler_fail_total",
     SCHEDULER_LATENCY: "scheduler_latency",
     CPU_ALL: "cpu_usage|cpu_util|cpu_total",

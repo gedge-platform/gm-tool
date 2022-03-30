@@ -7,6 +7,7 @@ import {
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariables";
 
 import { unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixCurrentTime } from "../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class Monitoring {
     clusterName = "";
     clusterNames = [];
@@ -15,6 +16,10 @@ class Monitoring {
     coPieMemory = [];
     coPieDisk = [];
     coPiePod = [];
+    coPieAPILatency = [];
+    coPieAPIRate = [];
+    coPieSchedulerAttempts = [];
+    coPieSchedulerRate = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -46,27 +51,42 @@ class Monitoring {
         }
     };
 
-    // convertResponseToMonit = (res, array) => {
-    //     runInAction(() => {
-    //         array = [];
-    //         Object.entries(res.data?.items).map(([key, value]) => {
-    //             const clusterMetric = {
-    //                 metricType: "",
-    //                 metrics: [],
-    //             };
-    //             clusterMetric.metricType = key;
-    //             value[0]?.values.forEach((element) => {
-    //                 clusterMetric.metrics.push({
-    //                     time: unixToTime(element[0]),
-    //                     value: element[1],
-    //                 });
-    //             });
-    //             array.push(clusterMetric);
-    //         });
-    //     });
-    // };
+    checkedNullValue = (res) => {
+        console.log(res.data.items.length);
+    };
 
-    loadClusterNames = async () => {
+    convertResponseToMonit = (res) => {
+        const array = [];
+        runInAction(() => {
+            Object.entries(res.data?.items).map(([key, value]) => {
+                const clusterMetric = {
+                    metricType: "",
+                    metrics: [],
+                };
+                clusterMetric.metricType = key;
+
+                if (value.length === 0) {
+                    clusterMetric.metrics.push({
+                        time: unixToTime(unixCurrentTime()),
+                        value: 0,
+                    });
+                    array.push(clusterMetric);
+                    return array;
+                }
+
+                value[0]?.values.forEach((element) => {
+                    clusterMetric.metrics.push({
+                        time: unixToTime(element[0]),
+                        value: element[1],
+                    });
+                });
+                array.push(clusterMetric);
+            });
+        });
+        return array;
+    };
+
+    loadClusterNames = async (callback) => {
         await axios
             .get(`${LOCAL_CLUSTER_URL}/clusters`, {
                 auth: BASIC_AUTH,
@@ -78,18 +98,11 @@ class Monitoring {
                     );
                     this.clusterName = this.clusterNames[0];
                 });
-            });
+            })
+            .then(() => callback());
     };
 
-    loadCoCPU = async (
-        target,
-        start,
-        end,
-        step,
-        clusterFilter,
-        metricFilter,
-        ...options
-    ) => {
+    loadCoCPU = async (target, start, end, step, metricFilter, ...options) => {
         await axios
             .get(
                 this.getMonitURL(
@@ -97,30 +110,14 @@ class Monitoring {
                     start,
                     end,
                     step,
-                    clusterFilter,
+                    this.clusterName,
                     metricFilter,
                     options
                 ),
                 { auth: BASIC_AUTH }
             )
             .then((res) => {
-                runInAction(() => {
-                    this.coPieCPU = [];
-                    Object.entries(res.data?.items).map(([key, value]) => {
-                        const clusterMetric = {
-                            metricType: "",
-                            metrics: [],
-                        };
-                        clusterMetric.metricType = key;
-                        value[0]?.values.forEach((element) => {
-                            clusterMetric.metrics.push({
-                                time: unixToTime(element[0]),
-                                value: element[1],
-                            });
-                        });
-                        this.coPieCPU.push(clusterMetric);
-                    });
-                });
+                this.coPieCPU = this.convertResponseToMonit(res);
             });
     };
 
@@ -129,7 +126,6 @@ class Monitoring {
         start,
         end,
         step,
-        clusterFilter,
         metricFilter,
         ...options
     ) => {
@@ -140,7 +136,26 @@ class Monitoring {
                     start,
                     end,
                     step,
-                    clusterFilter,
+                    this.clusterName,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                this.coPieMemory = this.convertResponseToMonit(res);
+            });
+    };
+
+    loadCoDisk = async (target, start, end, step, metricFilter, ...options) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    this.clusterName,
                     metricFilter,
                     options
                 ),
@@ -148,34 +163,12 @@ class Monitoring {
             )
             .then((res) => {
                 runInAction(() => {
-                    this.coPieMemory = [];
-                    Object.entries(res.data?.items).map(([key, value]) => {
-                        const clusterMetric = {
-                            metricType: "",
-                            metrics: [],
-                        };
-                        clusterMetric.metricType = key;
-                        value[0]?.values.forEach((element) => {
-                            clusterMetric.metrics.push({
-                                time: unixToTime(element[0]),
-                                value: element[1],
-                            });
-                        });
-                        this.coPieMemory.push(clusterMetric);
-                    });
+                    this.coPieDisk = this.convertResponseToMonit(res);
                 });
             });
     };
 
-    loadCoDisk = async (
-        target,
-        start,
-        end,
-        step,
-        clusterFilter,
-        metricFilter,
-        ...options
-    ) => {
+    loadCoPod = async (target, start, end, step, metricFilter, ...options) => {
         await axios
             .get(
                 this.getMonitURL(
@@ -183,7 +176,7 @@ class Monitoring {
                     start,
                     end,
                     step,
-                    clusterFilter,
+                    this.clusterName,
                     metricFilter,
                     options
                 ),
@@ -191,31 +184,16 @@ class Monitoring {
             )
             .then((res) => {
                 runInAction(() => {
-                    this.coPieDisk = [];
-                    Object.entries(res.data?.items).map(([key, value]) => {
-                        const clusterMetric = {
-                            metricType: "",
-                            metrics: [],
-                        };
-                        clusterMetric.metricType = key;
-                        value[0]?.values.forEach((element) => {
-                            clusterMetric.metrics.push({
-                                time: unixToTime(element[0]),
-                                value: element[1],
-                            });
-                        });
-                        this.coPieDisk.push(clusterMetric);
-                    });
+                    this.coPiePod = this.convertResponseToMonit(res);
                 });
             });
     };
 
-    loadCoPod = async (
+    loadCoAPILatency = async (
         target,
         start,
         end,
         step,
-        clusterFilter,
         metricFilter,
         ...options
     ) => {
@@ -226,7 +204,7 @@ class Monitoring {
                     start,
                     end,
                     step,
-                    clusterFilter,
+                    this.clusterName,
                     metricFilter,
                     options
                 ),
@@ -234,21 +212,92 @@ class Monitoring {
             )
             .then((res) => {
                 runInAction(() => {
-                    this.coPiePod = [];
-                    Object.entries(res.data?.items).map(([key, value]) => {
-                        const clusterMetric = {
-                            metricType: "",
-                            metrics: [],
-                        };
-                        clusterMetric.metricType = key;
-                        value[0]?.values.forEach((element) => {
-                            clusterMetric.metrics.push({
-                                time: unixToTime(element[0]),
-                                value: element[1],
-                            });
-                        });
-                        this.coPiePod.push(clusterMetric);
-                    });
+                    this.coPieAPILatency = this.convertResponseToMonit(res);
+                });
+            });
+    };
+
+    loadCoAPIRate = async (
+        target,
+        start,
+        end,
+        step,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    this.clusterName,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPieAPIRate = this.convertResponseToMonit(res);
+                });
+            });
+    };
+
+    loadCoSchedulerAttempts = async (
+        target,
+        start,
+        end,
+        step,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    this.clusterName,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPieSchedulerAttempts =
+                        this.convertResponseToMonit(res);
+                });
+            });
+    };
+
+    loadCoSchedulerRate = async (
+        target,
+        start,
+        end,
+        step,
+        metricFilter,
+        ...options
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    this.clusterName,
+                    metricFilter,
+                    options
+                ),
+                { auth: BASIC_AUTH }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.coPieSchedulerRate = this.convertResponseToMonit(res);
                 });
             });
     };
