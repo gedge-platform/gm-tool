@@ -15,7 +15,7 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { podDetail, label, annotations, events } = podStore;
+  const { podDetail, label, annotations, events, statusConditions } = podStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -26,6 +26,7 @@ const Detail = observer(() => {
   const annotationsTemp = annotations;
 
   const eventsTable = [];
+  const statusConditionsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -41,7 +42,7 @@ const Detail = observer(() => {
   Object.entries(labelTemp).map(([key, value]) => {
     labelTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -50,7 +51,7 @@ const Detail = observer(() => {
   Object.entries(annotationsTemp).map(([key, value]) => {
     annotationsTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -60,7 +61,7 @@ const Detail = observer(() => {
     events.map((event) => {
       eventsTable.push(
         <tr>
-          <th>Message</th>
+          <th className="tb_workload_detail_th">Message</th>
           <td>{event["message"]}</td>
         </tr>
       );
@@ -68,14 +69,27 @@ const Detail = observer(() => {
   } else {
     eventsTable.push(
       <tr>
-        <th>Message</th>
+        <th className="tb_workload_detail_th">Message</th>
         <td></td>
       </tr>
     );
   }
 
+  statusConditions.map((event) => {
+    statusConditionsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">LastTransition Time</th>
+        <td>{event["lastTransitionTime"]}</td>
+        <th className="tb_workload_detail_th">Status</th>
+        <td>{event["status"]}</td>
+        <th className="tb_workload_detail_th">Type</th>
+        <td>{event["type"]}</td>
+      </tr>
+    );
+  });
+
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
@@ -86,12 +100,12 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Name</th>
+                <th className="tb_workload_detail_th">Name</th>
                 <td>{podDetail.name}</td>
-                <th>Cluster</th>
+                <th className="tb_workload_detail_th">Cluster</th>
                 <td>{podDetail.cluster}</td>
               </tr>
               <tr>
@@ -123,7 +137,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>app</th>
@@ -137,7 +151,7 @@ const Detail = observer(() => {
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>gedge-platform.io/creator</th>
@@ -159,12 +173,12 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{labelTable}</tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationsTable}</tbody>
           </table>
           <br />
@@ -173,15 +187,15 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>상태</TableTitle>
-          <table className="tb_data">
-            <tbody></tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{statusConditionsTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{eventsTable}</tbody>
           </table>
         </div>
