@@ -5,28 +5,36 @@ import { observer } from "mobx-react";
 import serviceStore from "../../../../store/Service";
 import ServiceBasicInformation from "../Dialog/ServiceBasicInformation";
 import ServiceYaml from "./ServiceYaml";
+import { CDialogNew } from "../../../../components/dialogs";
+import projectStore from "../../../../store/Project";
+import schedulerStore from "../../../../store/Scheduler";
+import { randomString } from "../../../../utils/common-utils";
 
 const Button = styled.button`
-  background-color: ##eff4f9;
-  border: 1px solid #ccd3db;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 35px;
+  margin-right: 10px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
-  background-color: #242e42;
+  background-color: #0f5ce9;
   color: white;
-  border: 1px solid #242e42;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  border: none;
+  padding: 10px 35px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreatePod = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [loading, setLoading] = useState(false);
+  const { setProjectListinWorkspace } = projectStore;
+  const { postWorkload, postScheduler } = schedulerStore;
 
   const {
     serviceName,
@@ -34,6 +42,9 @@ const CreatePod = observer((props) => {
     protocol,
     port,
     targetPort,
+    workspace,
+    project,
+    content,
     clearAll,
     setContent,
     postService,
@@ -62,11 +73,16 @@ const CreatePod = observer((props) => {
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setProjectListinWorkspace();
+    setStepValue(1);
     clearAll();
   };
 
   const createService = () => {
-    postService(handleClose);
+    const requestId = `${serviceName}-${randomString()}`;
+
+    postWorkload(requestId, workspace, project, "Service");
+    postScheduler(requestId, content, handleClose);
   };
 
   useEffect(() => {
@@ -85,14 +101,14 @@ const CreatePod = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "150px",
-                justifyContent: "space-around",
+                width: "240px",
+                justifyContent: "center",
               }}
             >
               <Button onClick={handleClose}>취소</Button>
@@ -109,22 +125,18 @@ const CreatePod = observer((props) => {
             style={{
               display: "flex",
               justifyContent: "flex-end",
-              marginTop: "10px",
+              marginTop: "32px",
             }}
           >
             <div
               style={{
                 display: "flex",
-                width: "430px",
-                justifyContent: "space-around",
+                width: "300px",
+                justifyContent: "center",
               }}
             >
-              <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={() => console.log("")}>
-                Schedule Apply
-              </ButtonNext>
-              <ButtonNext onClick={createService}>Default Apply</ButtonNext>
+              <ButtonNext onClick={createService}>Schedule Apply</ButtonNext>
             </div>
           </div>
         </>
@@ -162,7 +174,7 @@ const CreatePod = observer((props) => {
   };
 
   return (
-    <CDialog
+    <CDialogNew
       id="myDialog"
       open={open}
       maxWidth="md"
@@ -172,7 +184,7 @@ const CreatePod = observer((props) => {
       modules={["custom"]}
     >
       {stepOfComponent()}
-    </CDialog>
+    </CDialogNew>
   );
 });
 export default CreatePod;

@@ -107,6 +107,12 @@ class Project {
         });
       });
   };
+
+  setProjectListinWorkspace = (projectList = []) => {
+    runInAction(() => {
+      this.projectListinWorkspace = projectList;
+    });
+  };
 }
 
 const projectStore = new Project();
