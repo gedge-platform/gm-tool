@@ -45,14 +45,14 @@ const DashboardWrap = styled.div`
         .MuiInputBase-input {
           background-color: #1c8be0;
           color: rgba(255, 255, 255, 0.9);
-          font-size: 20px;
+          font-size: 16px;
           text-align: center;
           font-weight: 700;
           border: none !important;
           border-radius: 8px;
         }
         svg {
-          font-size: 28px;
+          font-size: 24px;
           color: rgba(255, 255, 255, 0.9);
         }
         .cluster_detail {
@@ -73,16 +73,47 @@ const DashboardWrap = styled.div`
             line-height: 40px;
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 1.1rem;
+            font-size: 15px;
             background-color: #4047cc;
           }
           .cluster_detail_content {
-            height: 50px;
-            line-height: 50px;
-            font-size: 1.2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
             font-weight: 700;
             color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 20px;
+          }
+          .cluster_resources {
+            height: 288px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+
+            .cluster_resource {
+              width: 95px;
+              height: 95px;
+              border-radius: 50%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              background-color: #4047cc;
+              span {
+                font-size: 12px;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.9);
+              }
+              .resource_kind {
+                margin-bottom: 4px;
+              }
+              .resource_number {
+                font-size: 24px;
+                font-weight: 700;
+              }
+            }
           }
         }
       }
@@ -120,8 +151,37 @@ const TotalDashboard = observer(() => {
               <div className="cluster_detail">
                 <div className="cluster_detail_title">클러스터 API 주소</div>
                 <div className="cluster_detail_content">http://101.79.4.15</div>
-                <div className="cluster_detail_title">클러스터 API 주소</div>
-                <div className="cluster_detail_content">http://101.79.4.15</div>
+                <div className="cluster_detail_title">클러스터 타입</div>
+                <div className="cluster_detail_content">CORE</div>
+                <div className="cluster_detail_title">클러스터 Creator</div>
+                <div className="cluster_detail_content">innogrid</div>
+                <div className="cluster_detail_title">클러스터 Resource</div>
+                <div className="cluster_resources">
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Deployment</span>
+                    <span className="resource_number">26</span>
+                  </div>
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Pod</span>
+                    <span className="resource_number">76</span>
+                  </div>
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Service</span>
+                    <span className="resource_number">32</span>
+                  </div>
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Cronjob</span>
+                    <span className="resource_number">1</span>
+                  </div>
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Job</span>
+                    <span className="resource_number">4</span>
+                  </div>
+                  <div className="cluster_resource">
+                    <span className="resource_kind">Volume</span>
+                    <span className="resource_number">0</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="cluster_map">

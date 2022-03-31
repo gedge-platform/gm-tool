@@ -2,36 +2,31 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import deploymentStore from "../../../../store/Deployment";
+import Detail from "../PodDetail";
+import podStore from "../../../../store/Pod";
 import moment from "moment";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter } from "@/utils/common-utils";
-import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import CreatePod from "../Dialog/CreatePod";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateScheduler from "../Dialog/CreateScheduler";
 
-const DeploymentListTab = observer(() => {
+const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const {
-    deploymentList,
-    deploymentDetail,
-    totalElements,
-    loadDeploymentList,
-    loadDeploymentDetail,
-  } = deploymentStore;
-
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
   const [columDefs] = useState([
     {
-      headerName: "디플로이먼트 이름",
+      headerName: "파드 이름",
       field: "name",
       filter: true,
     },
@@ -47,20 +42,30 @@ const DeploymentListTab = observer(() => {
     },
     {
       headerName: "워크스페이스",
-      field: "workspace",
+      field: "",
+      filter: true,
+    },
+    {
+      headerName: "호스트 IP",
+      field: "hostIP",
+      filter: true,
+    },
+    {
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
     },
     {
       headerName: "상태",
-      field: "ready",
+      field: "status",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
-      headerName: "생성일",
-      field: "createAt",
+      headerName: "생성 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -73,16 +78,6 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
-  };
-
-  const history = useHistory();
-
-  useEffect(() => {
-    loadDeploymentList();
-  }, []);
   const handleCreateOpen = () => {
     setOpen(true);
   };
@@ -91,12 +86,23 @@ const DeploymentListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
+  const history = useHistory();
+
+  useEffect(() => {
+    loadPodList();
+  }, []);
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -104,7 +110,7 @@ const DeploymentListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={deploymentList}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
@@ -112,15 +118,14 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
+          <CreateScheduler
             open={open}
             onClose={handleClose}
-            reloadFunc={loadDeploymentList}
+            reloadFunc={loadPodList}
           />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
       </CReflexBox>
     </>
   );
 });
-export default DeploymentListTab;
+export default SchedulerListTab;
