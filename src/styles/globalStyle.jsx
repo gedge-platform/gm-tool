@@ -1053,7 +1053,7 @@ const globalStyles = createGlobalStyle`
   margin-right: 10px;
 }
 
-//cafe43-----------------------
+//cafe43 Volume-----------------------
 .tb_volume_metadata{
   width: 300px
 }
@@ -1160,6 +1160,106 @@ const globalStyles = createGlobalStyle`
     width: 33%;
     margin-bottom: 28px;
   }
+//cafe43 Monitoring-----------------------
+  .tab1-panel-area{
+    display: flex;
+    height: 400px;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .tab1-button-area{
+    width: 300px;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .on-tab1-button{
+    cursor:pointer;
+    width: 300px;
+    height: 87px;
+    display: flex;
+    border-radius: 5px;
+    background-color:#007EFF;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .tab1-button-circle-graph-area{
+    cursor:pointer;
+    width: 49%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab1-button-key-value-area{
+    width: 49% 
+  }
+
+  .tab1-button-key-area{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .tab1-button-value-area{
+    width: 100%;
+    height: 0%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .tab1-button-value-majer{
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .tab1-button-value-minor{
+    font-size: 14px 
+  }
+
+  .tab1-button-value-minor-bottom{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .tab1-chart-area{
+    width: 1350px;
+    height: 375px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab-chart{
+    width: 1340px;
+    height: 370px;
+    background-color: #141A30;
+  }
+
+  .off-tab1-button{
+    cursor:pointer;
+    width: 300px;
+    height: 87px;
+    display: flex;
+    border-radius: 5px;
+    background-color:#1C263E;
+    color: #929da5;
+    display: flex;
+    justify-content: space-around;
+  }
+
+//---------
   .signup-step {
   display: flex;
   justify-content: space-between;
@@ -1202,6 +1302,15 @@ const globalStyles = createGlobalStyle`
   font-weight:700;
   font-size: 16px;
 
+}
+.pointer_container {
+        .recharts-wrapper {
+            cursor: pointer !important;
+        }
+    }
+
+.off-tab1-linearchart{
+  display: hidden;
 }
 
 //yjy-----------------------

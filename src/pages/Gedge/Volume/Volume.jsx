@@ -5,8 +5,6 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import VolumeListTab from "./TabList/VolumeListTab";
 import ClaimListTab from "./TabList/ClaimListTab";
 import StorageClassListTab from "./TabList/StorageClassListTab";
-// import CoreClusterListTab from "./TabList/CoreClusterListTab";
-// import EdgeClusterListTab from "./TabList/EdgeClusterListTab";
 
 const Volume = () => {
     const currentPageTitle = Title.Volume;
@@ -24,6 +22,7 @@ const Volume = () => {
                 <CTab label="클레임 관리" />
                 <CTab label="스토리지 클래스 관리" />
             </CTabs>
+
             <div className="tabPanelContainer">
                 <CTabPanel value={tabvalue} index={0}>
                     <VolumeListTab />

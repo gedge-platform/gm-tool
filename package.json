@@ -69,7 +69,7 @@
     "react-toastify": "^7.0.4",
     "react-treeview": "^0.4.7",
     "reactstrap": "^8.10.0",
-    "recharts": "^2.1.4",
+    "recharts": "^2.1.9",
     "styled-reset": "^4.3.4",
     "sweetalert2": "^11.0.11",
     "ws": "^8.3.0",
