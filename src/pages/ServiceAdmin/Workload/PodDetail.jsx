@@ -7,6 +7,13 @@ import { Podcasts } from "@mui/icons-material";
 import podStore from "../../../store/Pod";
 import { observer } from "mobx-react-lite";
 
+import theme from "@/styles/theme";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -15,7 +22,14 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { podDetail, label, annotations, events, statusConditions } = podStore;
+  const {
+    podDetail,
+    label,
+    annotations,
+    events,
+    containerResources,
+    podContainerVolume,
+  } = podStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -25,8 +39,15 @@ const Detail = observer(() => {
   const annotationsTable = [];
   const annotationsTemp = annotations;
 
-  const eventsTable = [];
+  // const eventsTable = [];
   const statusConditionsTable = [];
+  const podContainer = containerResources;
+  const podContainerTable = [];
+
+  const podContainerVolumes = podContainerVolume;
+  const podContainerVolumesTable = [];
+
+  const eventTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -57,22 +78,125 @@ const Detail = observer(() => {
     );
   });
 
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th className="tb_workload_detail_th">Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">Message</th>
-        <td></td>
-      </tr>
-    );
+  // if (events !== null) {
+  //   events.map((event) => {
+  //     eventsTable.push(
+  //       <tr>
+  //         <th className="tb_workload_detail_th">Message</th>
+  //         <td>{event["message"]}</td>
+  //       </tr>
+  //     );
+  //   });
+  // } else {
+  //   eventsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Message</th>
+  //       <td></td>
+  //     </tr>
+  //   );
+  {
+    podContainer &&
+      podContainer.map((item) => {
+        podContainerTable.push(
+          <>
+            <tr>
+              <th>Container ID</th>
+              <td>{item["containerID"]}</td>
+              <th>Name</th>
+              <td>{item["name"]}</td>
+              <th>ready</th>
+              <td>{item["ready"]}</td>
+              <th>restartCount</th>
+              <td>{item["restartCount"]}</td>
+              <th>image</th>
+              <td>{item["image"]}</td>
+              <th>started</th>
+              <td>{item["started"]}</td>
+            </tr>
+          </>
+        );
+      });
+  }
+  {
+    events &&
+      events.map((event, message) => {
+        eventTable.push(
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+                aria-controls="ProjectEvent-content"
+                id="ProjectEvent-header"
+                sx={{ bgcolor: theme.colors.primaryDark }}
+              >
+                <Typography
+                  sx={{
+                    width: "10%",
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  Message
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: "white" }}>
+                  {event["message"]}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: "white",
+                    bgcolor: theme.colors.primary,
+                  }}
+                >
+                  <table className="tb_data">
+                    <tr>
+                      <th>Kind</th>
+                      <td>{event["kind"]}</td>
+                      <th>Name</th>
+                      <td>{event["name"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Namespace</th>
+                      <td>{event["namespace"]}</td>
+                      <th>Cluster</th>
+                      <td>{event["cluster"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Reason</th>
+                      <td>{event["reason"]}</td>
+                      <th>Type</th>
+                      <td>{event["type"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Event Time</th>
+                      <td>{event["eventTime"]}</td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </table>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
+  }
+  {
+    /*
+    podContainerVolumes &&
+      podContainerVolumes.map((item, index) => {
+        podContainerVolumesTable.push(
+          <>
+            <tr>
+              <th>Volumes</th>
+              <td>{item[index]}</td>
+            </tr>
+          </>
+        );
+      });
+    */
   }
 
   statusConditions.map((event) => {
@@ -136,34 +260,11 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+          <TableTitle>Pod Containers</TableTitle>
+          <table className="tb_data">
             <tbody>
               <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
+                <th>{podContainerTable}</th>
               </tr>
             </tbody>
           </table>
@@ -187,16 +288,16 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>상태</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{statusConditionsTable}</tbody>
+          <table className="tb_data">
+            <tbody>{podContainerVolumesTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsTable}</tbody>
+          <table className="tb_data">
+            <tbody>{eventTable}</tbody>
           </table>
         </div>
       </CTabPanel>

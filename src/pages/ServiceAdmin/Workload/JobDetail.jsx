@@ -6,6 +6,13 @@ import moment from "moment";
 import { observer } from "mobx-react";
 import jobStore from "../../../store/Job";
 
+import theme from "@/styles/theme";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -14,7 +21,7 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { jobDetailData, jobDetailInvolves, labels, annotations, events } =
+  const { jobDetailData, InvolvesPodList, labels, annotations, events } =
     jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -24,8 +31,9 @@ const Detail = observer(() => {
 
   const annotationTable = [];
   const annotation = annotations;
-
-  const eventsTable = [];
+  const detailInvolvesPodList = InvolvesPodList;
+  const detailInvolvesPodListTable = [];
+  const eventTable = [];
 
   Object.entries(label).map(([key, value]) => {
     labelTable.push(
@@ -45,6 +53,7 @@ const Detail = observer(() => {
     );
   });
 
+<<<<<<< HEAD
   if (events !== null) {
     events.map((event) => {
       eventsTable.push(
@@ -61,7 +70,101 @@ const Detail = observer(() => {
         <td></td>
       </tr>
     );
+=======
+  {
+    detailInvolvesPodList &&
+      detailInvolvesPodList.map((item) => {
+        detailInvolvesPodListTable.push(
+          <>
+            <tr>
+              <th>Metdata</th>
+              <td>{item.metadata["name"]}</td>
+            </tr>
+            <tr>
+              <th>Phase</th>
+              <td>{item.status["phase"]}</td>
+              <th>Host IP</th>
+              <td>{item.status["hostIP"]}</td>
+              <th>Pod IP</th>
+              <td>{item.status["podIP"]}</td>
+            </tr>
+            <tr>
+              <th>Node name</th>
+              <td>{item.spec["nodeName"]}</td>
+            </tr>
+          </>
+        );
+      });
+>>>>>>> master
   }
+
+  {
+    events &&
+      events.map((event, message) => {
+        eventTable.push(
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+                aria-controls="ProjectEvent-content"
+                id="ProjectEvent-header"
+                sx={{ bgcolor: theme.colors.primaryDark }}
+              >
+                <Typography
+                  sx={{
+                    width: "10%",
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  Message
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: "white" }}>
+                  {event["message"]}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: "white",
+                    bgcolor: theme.colors.primary,
+                  }}
+                >
+                  <table className="tb_data">
+                    <tr>
+                      <th>Kind</th>
+                      <td>{event["kind"]}</td>
+                      <th>Name</th>
+                      <td>{event["name"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Namespace</th>
+                      <td>{event["namespace"]}</td>
+                      <th>Cluster</th>
+                      <td>{event["cluster"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Reason</th>
+                      <td>{event["reason"]}</td>
+                      <th>Type</th>
+                      <td>{event["type"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Event Time</th>
+                      <td>{event["eventTime"]}</td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </table>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
+  }
+
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -115,6 +218,7 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
+<<<<<<< HEAD
           <TableTitle>라벨</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
@@ -144,6 +248,12 @@ const Detail = observer(() => {
                 <th>Annotations</th>
                 <td>{jobDetailData.annotations}</td>
               </tr>
+=======
+          <TableTitle>Pod List</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>{detailInvolvesPodListTable}</tr>
+>>>>>>> master
             </tbody>
           </table>
           <br />
@@ -166,8 +276,13 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
+<<<<<<< HEAD
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{eventsTable}</tbody>
+=======
+          <table className="tb_data">
+            <tbody>{eventTable}</tbody>
+>>>>>>> master
           </table>
         </div>
       </CTabPanel>

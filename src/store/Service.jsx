@@ -33,6 +33,10 @@ class Service {
 
   content = "";
 
+  serviceInvolvesData = {};
+  involvesPods = "";
+  involvesWorkloads = "";
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -49,6 +53,9 @@ class Service {
         runInAction(() => {
           this.serviceDetail = res.data.data;
           this.portTemp = res.data.data.port;
+          this.serviceInvolvesData = res.data.involvesData;
+          this.involvesPods = res.data.involvesData.pods;
+          this.involvesWorkloads = res.data.involvesData.workloads;
         });
       });
   };
