@@ -6,7 +6,23 @@ import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
-  deploymentDetail = {};
+  deploymentDetail = {
+    events: [
+      {
+        kind: "",
+        name: "",
+        namespace: "",
+        cluster: "",
+        message: "",
+        reason: "",
+        type: "",
+        eventTime: "",
+      },
+    ],
+  };
+
+  deploymentEvents = [];
+
   deploymentInvolvesData = {};
   strategy = {
     type: {},
@@ -38,6 +54,19 @@ class Deployment {
   cluster = "default";
   project = "default";
   responseData = "";
+
+  deploymentResource = {};
+  pods = [];
+  deploymentInvolvesData = [{}];
+
+  depServices = {};
+  depServicesPort = [
+    {
+      name: "",
+      port: 0,
+      protocol: "",
+    },
+  ];
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -103,6 +132,9 @@ class Deployment {
 
           this.deploymentInvolvesData = res.data.involvesData;
           this.pods = res.data.involvesData.pods;
+          this.depServices = res.data.involvesData.services;
+          this.depServicesPort = res.data.involvesData.services.port;
+          this.deploymentEvents = res.data.data.events;
         });
       });
   };

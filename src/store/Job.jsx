@@ -26,23 +26,29 @@ class Job {
       },
     ],
   };
-  jobDetailInvolves = {
-    podList: [
-      {
-        metadata: {
-          name: "",
-        },
-        status: {
-          phase: "",
-          hostIP: "",
-          podIP: "",
-        },
-        spec: {
-          nodeName: "",
-        },
+  depServicesPort = [
+    {
+      name: "",
+      port: 0,
+      protocol: "",
+    },
+  ];
+  InvolvesPodList = [
+    {
+      metadata: {
+        name: "",
       },
-    ],
-  };
+      status: {
+        phase: "",
+        hostIP: "",
+        podIP: "",
+      },
+      spec: {
+        nodeName: "",
+      },
+    },
+  ];
+
   totalElements = 0;
   labels = {};
   annotations = {};
@@ -99,6 +105,8 @@ class Job {
           this.jobDetailInvolves = res.data.involves;
           this.labels = res.data.data.label;
           this.annotations = res.data.data.annotations;
+          this.InvolvesPodList = res.data.involves.podList;
+          console.log(this.InvolvesPodList);
 
           if (res.data.data.events !== null) {
             this.events = res.data.data.events;
