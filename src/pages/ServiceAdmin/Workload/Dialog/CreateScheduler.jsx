@@ -139,7 +139,7 @@ const CreateScheduler = observer((props) => {
     //   });
   };
   useEffect(() => {
-    if (stepValue === 2) {
+    if (stepValue === 1) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     }
@@ -160,12 +160,12 @@ const CreateScheduler = observer((props) => {
             <div
               style={{
                 display: "flex",
-                width: "240px",
+                width: "300px",
                 justifyContent: "center",
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => setStepValue(2)}>다음</ButtonNext>
+              <ButtonNext onClick={createScheduler}>Schedule Apply</ButtonNext>
             </div>
           </div>
         </>
