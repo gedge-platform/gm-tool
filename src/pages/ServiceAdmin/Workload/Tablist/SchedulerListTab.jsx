@@ -41,11 +41,6 @@ const SchedulerListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "",
-      filter: true,
-    },
-    {
       headerName: "호스트 IP",
       field: "hostIP",
       filter: true,

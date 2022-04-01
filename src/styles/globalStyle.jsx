@@ -521,6 +521,16 @@ const globalStyles = createGlobalStyle`
     border-left: 0 hidden;
     border-right: 0 hidden;
     border-collapse: collapse;
+    .tb_data_detail{
+      th, td{
+        width:25%
+      }
+    }
+    .tb_data_nodeInfo{
+      th,td{
+        width: 20%
+      }
+    }
     tbody {
       th, td {
         height: 33px;
