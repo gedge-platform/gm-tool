@@ -8,72 +8,59 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../PodDetail";
+import podStore from "../../../../store/Pod";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+import CreatePod from "../Dialog/CreatePod";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateScheduler from "../Dialog/CreateScheduler";
 
-const EdgeClusterListTab = observer(() => {
+const SchedulerListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const {
-    clusterDetail,
-    clusterList,
-    totalElements,
-    loadClusterList,
-    loadCluster,
-    setDetail,
-  } = clusterStore;
-
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
+      headerName: "파드 이름",
+      field: "name",
       filter: true,
     },
     {
-      headerName: "이름",
-      field: "clusterName",
+      headerName: "클러스터",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "프로젝트",
+      field: "project",
       filter: true,
     },
     {
-      headerName: "생성자",
-      field: "clusterCreator",
+      headerName: "호스트 IP",
+      field: "hostIP",
       filter: true,
     },
     {
-      headerName: "노드개수",
-      field: "nodeCnt",
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
     },
     {
-      headerName: "IP",
-      field: "clusterEndpoint",
+      headerName: "상태",
+      field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "생성 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -86,14 +73,23 @@ const EdgeClusterListTab = observer(() => {
     },
   ]);
 
-  const history = useHistory();
-
-  const handleClick = (e) => {
-    loadCluster(e.data.clusterName);
+  const handleCreateOpen = () => {
+    setOpen(true);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
+  const history = useHistory();
+
   useEffect(() => {
-    loadClusterList("edge");
+    loadPodList();
   }, []);
 
   return (
@@ -101,26 +97,30 @@ const EdgeClusterListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  onCellClicked={handleClick}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
-                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
           </div>
+          <CreateScheduler
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
-        <Detail cluster={clusterDetail} />
       </CReflexBox>
     </>
   );
 });
-export default EdgeClusterListTab;
+export default SchedulerListTab;
