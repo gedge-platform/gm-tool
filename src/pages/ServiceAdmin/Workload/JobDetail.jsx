@@ -53,117 +53,98 @@ const Detail = observer(() => {
     );
   });
 
-<<<<<<< HEAD
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th className="tb_workload_detail_th">Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">Message</th>
-        <td></td>
-      </tr>
-    );
-=======
-  {
-    detailInvolvesPodList &&
-      detailInvolvesPodList.map((item) => {
-        detailInvolvesPodListTable.push(
-          <>
-            <tr>
-              <th>Metdata</th>
-              <td>{item.metadata["name"]}</td>
-            </tr>
-            <tr>
-              <th>Phase</th>
-              <td>{item.status["phase"]}</td>
-              <th>Host IP</th>
-              <td>{item.status["hostIP"]}</td>
-              <th>Pod IP</th>
-              <td>{item.status["podIP"]}</td>
-            </tr>
-            <tr>
-              <th>Node name</th>
-              <td>{item.spec["nodeName"]}</td>
-            </tr>
-          </>
-        );
-      });
->>>>>>> master
-  }
+  // {
+  //   detailInvolvesPodList &&
+  //     detailInvolvesPodList.map((item) => {
+  //       detailInvolvesPodListTable.push(
+  //         <>
+  //           <tr>
+  //             <th>Metdata</th>
+  //             <td>{item.metadata["name"]}</td>
+  //           </tr>
+  //           <tr>
+  //             <th>Phase</th>
+  //             <td>{item.status["phase"]}</td>
+  //             <th>Host IP</th>
+  //             <td>{item.status["hostIP"]}</td>
+  //             <th>Pod IP</th>
+  //             <td>{item.status["podIP"]}</td>
+  //           </tr>
+  //           <tr>
+  //             <th>Node name</th>
+  //             <td>{item.spec["nodeName"]}</td>
+  //           </tr>
+  //         </>
+  //       );
+  //     });
+  // }
 
-  {
-    events &&
-      events.map((event, message) => {
-        eventTable.push(
-          <div>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
-                aria-controls="ProjectEvent-content"
-                id="ProjectEvent-header"
-                sx={{ bgcolor: theme.colors.primaryDark }}
-              >
-                <Typography
-                  sx={{
-                    width: "10%",
-                    fontSize: 13,
-                    color: "white",
-                  }}
-                >
-                  Message
-                </Typography>
-                <Typography sx={{ fontSize: 13, color: "white" }}>
-                  {event["message"]}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-                <Typography
-                  sx={{
-                    fontSize: 13,
-                    color: "white",
-                    bgcolor: theme.colors.primary,
-                  }}
-                >
-                  <table className="tb_data">
-                    <tr>
-                      <th>Kind</th>
-                      <td>{event["kind"]}</td>
-                      <th>Name</th>
-                      <td>{event["name"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Namespace</th>
-                      <td>{event["namespace"]}</td>
-                      <th>Cluster</th>
-                      <td>{event["cluster"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Reason</th>
-                      <td>{event["reason"]}</td>
-                      <th>Type</th>
-                      <td>{event["type"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Event Time</th>
-                      <td>{event["eventTime"]}</td>
-                      <th></th>
-                      <td></td>
-                    </tr>
-                  </table>
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      });
-  }
+  // {
+  //   events &&
+  //     events.map((event, message) => {
+  //       eventTable.push(
+  //         <div>
+  //           <Accordion>
+  //             <AccordionSummary
+  //               expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+  //               aria-controls="ProjectEvent-content"
+  //               id="ProjectEvent-header"
+  //               sx={{ bgcolor: theme.colors.primaryDark }}
+  //             >
+  //               <Typography
+  //                 sx={{
+  //                   width: "10%",
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                 }}
+  //               >
+  //                 Message
+  //               </Typography>
+  //               <Typography sx={{ fontSize: 13, color: "white" }}>
+  //                 {event["message"]}
+  //               </Typography>
+  //             </AccordionSummary>
+  //             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+  //               <Typography
+  //                 sx={{
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                   bgcolor: theme.colors.primary,
+  //                 }}
+  //               >
+  //                 <table className="tb_data">
+  //                   <tr>
+  //                     <th>Kind</th>
+  //                     <td>{event["kind"]}</td>
+  //                     <th>Name</th>
+  //                     <td>{event["name"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Namespace</th>
+  //                     <td>{event["namespace"]}</td>
+  //                     <th>Cluster</th>
+  //                     <td>{event["cluster"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Reason</th>
+  //                     <td>{event["reason"]}</td>
+  //                     <th>Type</th>
+  //                     <td>{event["type"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Event Time</th>
+  //                     <td>{event["eventTime"]}</td>
+  //                     <th></th>
+  //                     <td></td>
+  //                   </tr>
+  //                 </table>
+  //               </Typography>
+  //             </AccordionDetails>
+  //           </Accordion>
+  //         </div>
+  //       );
+  //     });
+  // }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -218,42 +199,10 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-<<<<<<< HEAD
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td>{jobDetailInvolves.PodList}</td>
-              </tr>
-              <tr>
-                <th>ceph-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook_cluster</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>Annotations</th>
-                <td>{jobDetailData.annotations}</td>
-              </tr>
-=======
           <TableTitle>Pod List</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>{detailInvolvesPodListTable}</tr>
->>>>>>> master
             </tbody>
           </table>
           <br />
@@ -276,13 +225,8 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-<<<<<<< HEAD
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsTable}</tbody>
-=======
           <table className="tb_data">
             <tbody>{eventTable}</tbody>
->>>>>>> master
           </table>
         </div>
       </CTabPanel>

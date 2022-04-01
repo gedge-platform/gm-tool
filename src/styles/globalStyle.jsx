@@ -524,6 +524,16 @@ const globalStyles = createGlobalStyle`
     border-left: 0 hidden;
     border-right: 0 hidden;
     border-collapse: collapse;
+    .tb_data_detail{
+      th, td{
+        width:25%
+      }
+    }
+    .tb_data_nodeInfo{
+      th,td{
+        width: 20%
+      }
+    }
     tbody {
       th, td {
         height: 33px;
@@ -1327,8 +1337,8 @@ const globalStyles = createGlobalStyle`
 .leaflet-container {
   width: 100%;
   height: 100%;
-  opacity: 0;
-  animation: fadeInLeaflet 1.5s ease forwards 2s;
+  opacity: 1;
+  /* animation: fadeInLeaflet 1.5s ease forwards 2s; */
 }
 
 @keyframes fadeInLeaflet {
@@ -1417,11 +1427,11 @@ const globalStyles = createGlobalStyle`
   } */
   & #map {
     visibility: visible;
-    animation: fadeIn 1s 1.75s linear forwards;
+    /* animation: fadeIn 1s 1.75s linear forwards; */
   }
   & .paper-map {
-    animation: paperMapFadeIn 0.83s ease-in forwards,
-      fadeOut 1s 4s linear forwards;
+    /* animation: paperMapFadeIn 0.83s ease-in forwards,
+      fadeOut 1s 4s linear forwards; */
   }
   & .map-side {
     &:before {
@@ -1575,7 +1585,7 @@ const globalStyles = createGlobalStyle`
     -webkit-transform: translate(-50%, -100%);
     position: absolute;
 
-    animation: fadeInPopup 1s ease-out;
+    /* animation: fadeInPopup 0.01s ease-out; */
 
     @keyframes fadeInPopup {
       0% {

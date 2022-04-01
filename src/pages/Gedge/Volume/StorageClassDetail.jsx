@@ -53,11 +53,11 @@ const StorageClassDetail = observer(() => {
   createTableTemplate(parameterTable, scParameters);
 
   return (
-    <PanelBox style={{ overflowY: "hidden" }}>
+    <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Detail" />
+        <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Labels" />
+        <CTab label="Metadata" />
         <CTab label="Parameters" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>

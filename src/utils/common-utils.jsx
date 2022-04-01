@@ -43,3 +43,7 @@ export const randomString = () => {
   }
   return randomstring;
 };
+
+export const nullCheck = (str) => {
+  return str ?? "Null";
+};
