@@ -3,6 +3,7 @@ import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import ClusterOverview from "./TabList/ClusterOverviewTab";
+import PsysicalResource from "./TabList/PhysicalResourceTab";
 
 const Monitoring = () => {
     const currentPageTitle = Title.Monitoring;
@@ -27,7 +28,7 @@ const Monitoring = () => {
                     <ClusterOverview />
                 </CTabPanel>
                 <CTabPanel value={tabvalue} index={1}>
-                    {/* <ClaimListTab /> */}
+                    <PsysicalResource />
                 </CTabPanel>
             </div>
         </Layout>

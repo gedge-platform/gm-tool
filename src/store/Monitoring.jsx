@@ -20,6 +20,7 @@ class Monitoring {
     coPieAPIRate = [];
     coPieSchedulerAttempts = [];
     coPieSchedulerRate = [];
+    prAllMetrics = {};
 
     constructor() {
         makeAutoObservable(this);
@@ -298,6 +299,36 @@ class Monitoring {
             .then((res) => {
                 runInAction(() => {
                     this.coPieSchedulerRate = this.convertResponseToMonit(res);
+                });
+            });
+    };
+
+    loadPyAllMetrics = async (
+        target,
+        start,
+        end,
+        step,
+        metricFilter,
+        ...option
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    start,
+                    end,
+                    step,
+                    this.clusterName,
+                    metricFilter,
+                    option
+                ),
+                {
+                    auth: BASIC_AUTH,
+                }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.prAllMetrics = res.data.items;
                 });
             });
     };

@@ -31,6 +31,8 @@ const ClusterMetricTypes = {
     POD_ALL: "pod_quota|pod_running|pod_util",
     APISERVER_ALL: "apiserver_request_rate|apiserver_latency",
     SCHEDULER_ALL: "scheduler_fail_total|scheduler_latency",
+    PHYSICAL_ALL:
+        "cpu_usage|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util",
     ALL: "cpu_usage|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util|apiserver_request_rate|apiserver_latency|scheduler_fail_total|scheduler_latency",
 };
 

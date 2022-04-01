@@ -1259,6 +1259,20 @@ const globalStyles = createGlobalStyle`
     justify-content: space-around;
   }
 
+  .tab2-chart-area{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab2-chart{
+    width: 100%;
+    height: 200px;
+    background-color: #141A30;
+  }
+
 //---------
   .signup-step {
   display: flex;

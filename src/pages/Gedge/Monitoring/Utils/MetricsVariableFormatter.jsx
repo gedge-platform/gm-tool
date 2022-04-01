@@ -49,10 +49,33 @@ const combinationMetrics = (...metrics) => {
     return result;
 };
 
+const LastTimeList = [
+    { name: "10M", value: 10 },
+    { name: "20M", value: 20 },
+    { name: "30M", value: 30 },
+    { name: "1H", value: 60 },
+    { name: "2H", value: 120 },
+    { name: "3H", value: 180 },
+    { name: "5H", value: 300 },
+    { name: "12H", value: 720 },
+];
+
+const IntervalList = [
+    { name: "1M", value: 1 },
+    { name: "2M", value: 2 },
+    { name: "5M", value: 5 },
+    { name: "10M", value: 10 },
+    { name: "15M", value: 15 },
+    { name: "30M", value: 30 },
+    { name: "1H", value: 60 },
+];
+
 export {
     stepConverter,
     unixCurrentTime,
     unixStartTime,
     combinationMetrics,
     unixToTime,
+    LastTimeList,
+    IntervalList,
 };
