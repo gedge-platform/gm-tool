@@ -52,7 +52,7 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Label" />
+        <CTab label="Metadata" />
         <CTab label="Event" />
         <CTab label="Finalizers" />
       </CTabs>

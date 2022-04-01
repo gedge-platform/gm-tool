@@ -4,51 +4,97 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
+import projectStore from "../../../store/Project";
+import { toJS } from "mobx";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: #fff;
 `;
 
-const Detail = observer((props) => {
-  const { project } = props;
+const Detail = observer(() => {
+  const { projectDetail, resource, labels, annotations, events } = projectStore;
   const [tabvalue, setTabvalue] = useState(0);
+  // console.log(toJS(detailInfo)[0].resource);
+
+  const labelsTable = [];
+  const annotationsTable = [];
+  const eventsTable = [];
+
+  Object.entries(labels).map(([key, value]) => {
+    labelsTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  Object.entries(annotations).map(([key, value]) => {
+    annotationsTable.push(
+      <tr>
+        <th className="tb_workload_detail_labels_th">{key}</th>
+        <td>{value}</td>
+      </tr>
+    );
+  });
+
+  if (events !== null) {
+    events.map((event) => {
+      eventsTable.push(
+        <tr>
+          <th className="tb_workload_detail_th">Message</th>
+          <td>{event["message"]}</td>
+        </tr>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <tr>
+        <th className="tb_workload_detail_th">Message</th>
+        <td></td>
+      </tr>
+    );
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
-        <CTab label="Labels" />
+        <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>클러스터</th>
-                <td>{project.clusterName}</td>
-                <th>프로젝트</th>
-                <td>{project.projectName}</td>
+                <th className="tb_workload_detail_th">Name</th>
+                <td>{projectDetail.projectName}</td>
+                <th className="tb_workload_detail_th">Cluster</th>
+                <td>{projectDetail.selectCluster}</td>
               </tr>
               <tr>
-                <th>status</th>
-                <td>{project.status}</td>
-                <th>워크스페이스</th>
-                <td>{project.workspaceName}</td>
+                <th>Workspace</th>
+                <td>{projectDetail.workspaceName}</td>
+                <th>Creator</th>
+                <td>{projectDetail.projectCreator}</td>
               </tr>
               <tr>
-                <th>생성자</th>
-                <td>{project.projectCreator}</td>
-                <th>생성일</th>
-                <td>{moment(project.created_at).format("YYYY-MM-DD")}</td>
+                <th>Owner</th>
+                <td>{projectDetail.projectOwner}</td>
+                <th>Created</th>
+                <td>
+                  {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -56,26 +102,26 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>파드</TableTitle>
-          <table className="tb_data">
+          <TableTitle>리소스 사용량</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>파드</th>
-                <td></td>
-                <th>클러스터</th>
-                <td></td>
+                <th className="tb_workload_detail_th">Deployment</th>
+                <td>{resource.deployment_count}</td>
+                <th className="tb_workload_detail_th">Pod</th>
+                <td>{resource.pod_count}</td>
               </tr>
               <tr>
-                <th>파드 IP</th>
-                <td></td>
-                <th>워크스페이스</th>
-                <td></td>
+                <th>Service</th>
+                <td>{resource.service_count}</td>
+                <th>CronJob</th>
+                <td>{resource.cronjob_count}</td>
               </tr>
               <tr>
-                <th>생성자</th>
-                <td></td>
-                <th>생성일</th>
-                <td></td>
+                <th>Job</th>
+                <td>{resource.job_count}</td>
+                <th>Volume</th>
+                <td>{resource.volume_count}</td>
               </tr>
             </tbody>
           </table>
@@ -83,73 +129,23 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>인터넷 접근</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>게이트웨이</th>
-                <td></td>
-                <th>서브넷</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>상태</th>
-                <td></td>
-                <th>네트워크</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>생성일</th>
-                <td></td>
-                <th>설명</th>
-                <td></td>
-              </tr>
-            </tbody>
+          <TableTitle>라벨</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{labelsTable}</tbody>
           </table>
+          <br />
+          <TableTitle>어노테이션</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationsTable}</tbody>
+          </table>
+          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>컨테이너 기본 리소스</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>파드</th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>리소스 할당량</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th>Limits.cpu</th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <th>Limits.memory</th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <th>Pods</th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-              <tr>
-                <th>services</th>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
+          <TableTitle>이벤트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventsTable}</tbody>
           </table>
           <br />
         </div>

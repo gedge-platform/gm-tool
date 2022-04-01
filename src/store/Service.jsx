@@ -5,6 +5,7 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 class Service {
   serviceList = [];
   serviceDetail = {
+    externalIp: "",
     selector: {
       app: "",
     },
@@ -15,7 +16,7 @@ class Service {
       name: "",
       port: 0,
       protocol: "",
-      targerPort: 0,
+      targetPort: 0,
     },
   ];
 
@@ -31,6 +32,10 @@ class Service {
   project = "";
 
   content = "";
+
+  serviceInvolvesData = {};
+  involvesPods = "";
+  involvesWorkloads = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -48,6 +53,9 @@ class Service {
         runInAction(() => {
           this.serviceDetail = res.data.data;
           this.portTemp = res.data.data.port;
+          this.serviceInvolvesData = res.data.involvesData;
+          this.involvesPods = res.data.involvesData.pods;
+          this.involvesWorkloads = res.data.involvesData.workloads;
         });
       });
   };

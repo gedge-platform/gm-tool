@@ -14,21 +14,75 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail, portTemp } = serviceStore;
+  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
+    serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const port = portTemp;
   const portTable = [];
 
-  port.map((event) => {
-    portTable.push(
-      <>
-        <th>Port</th>
-        <td>{event["port"]}</td>
-      </>
-    );
-  });
+  // port.map((event) => {
+  //   portTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Port</th>
+  //       <td>{event["port"]}</td>
+  //       <th className="tb_workload_detail_th">Protocol</th>
+  //       <td>{event["protocol"]}</td>
+  //       <th className="tb_workload_detail_th">TargerPort</th>
+  //       <td>{event["targetPort"]}</td>
+  //     </tr>
+  //   );
+  // });
+  const podInfo = involvesPods;
+  const podTable = [];
+
+  const workloadInfo = involvesWorkloads;
+  const workloadTable = [];
+
+  {
+    port &&
+      port.map((item) => {
+        portTable.push(
+          <>
+            <th>Port</th>
+            <td>{item["port"]}</td>
+          </>
+        );
+      });
+  }
+
+  {
+    podInfo &&
+      podInfo.map((item) => {
+        podTable.push(
+          <>
+            <th>Pod</th>
+            <td>{item["ip"]}</td>
+            <th>Node name</th>
+            <td>{item["nodename"]}</td>
+            <th>Name</th>
+            <td>{item["name"]}</td>
+          </>
+        );
+      });
+  }
+
+  {
+    workloadInfo &&
+      workloadInfo.map((item) => {
+        workloadTable.push(
+          <>
+            <th>Name</th>
+            <td>{item["name"]}</td>
+            <th>Kind</th>
+            <td>{item["kind"]}</td>
+            <th>Replica Name</th>
+            <td>{item["replicaName"]}</td>
+          </>
+        );
+      });
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -41,30 +95,33 @@ const Detail = observer(() => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
+        ``
         <CTab label="Overview" />
         <CTab label="Resources" />
+        <CTab label="Port Info" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Name</th>
+                <th className="tb_workload_detail_th">Name</th>
                 <td>{serviceDetail.name}</td>
-                <th>Cluster</th>
+                <th className="tb_workload_detail_th">Cluster</th>
                 <td>{serviceDetail.cluster}</td>
               </tr>
               <tr>
                 <th>Project</th>
                 <td>{serviceDetail.project}</td>
-                <th>Type</th>
-                <td>{serviceDetail.type}</td>
+                <th>Workspace</th>
+                <td></td>
               </tr>
               <tr>
-                {portTable}
+                <th>Type</th>
+                <td>{serviceDetail.type}</td>
                 <th>Cluster IP</th>
                 <td>{serviceDetail.clusterIp}</td>
               </tr>
@@ -82,36 +139,27 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
+          <TableTitle>Pod</TableTitle>
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
+              <tr>{podTable}</tr>
             </tbody>
           </table>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Workload</TableTitle>
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
+              <tr>{workloadTable}</tr>
             </tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>포트</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{portTable}</tbody>
           </table>
           <br />
         </div>

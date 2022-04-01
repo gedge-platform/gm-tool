@@ -57,7 +57,7 @@ const StorageClassDetail = observer(() => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Labels" />
+        <CTab label="Metadata" />
         <CTab label="Parameters" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>

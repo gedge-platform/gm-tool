@@ -20,12 +20,27 @@ class Deployment {
       },
     ],
   };
+
+  deploymentEvents = [];
+
   deploymentInvolvesData = {};
   strategy = {
     type: {},
   };
   labels = {};
   annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
   pods = [{}];
   totalElements = 0;
   deploymentName = "";
@@ -39,6 +54,19 @@ class Deployment {
   cluster = "default";
   project = "default";
   responseData = "";
+
+  deploymentResource = {};
+  pods = [];
+  deploymentInvolvesData = [{}];
+
+  depServices = {};
+  depServicesPort = [
+    {
+      name: "",
+      port: 0,
+      protocol: "",
+    },
+  ];
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -94,17 +122,19 @@ class Deployment {
           this.deploymentDetail = res.data.data;
           this.strategy = res.data.data.strategy;
           this.labels = res.data.data.labels;
-
-          // if (res.data.data.labels !== "") {
-          //   this.labels = res.data.data.labels;
-          // } else {
-          //   this.labels = "null";
-          // }
-
           this.annotations = res.data.data.annotations;
+
+          if (res.data.data.events !== null) {
+            this.events = res.data.data.events;
+          } else {
+            this.events = null;
+          }
 
           this.deploymentInvolvesData = res.data.involvesData;
           this.pods = res.data.involvesData.pods;
+          this.depServices = res.data.involvesData.services;
+          this.depServicesPort = res.data.involvesData.services.port;
+          this.deploymentEvents = res.data.data.events;
         });
       });
   };

@@ -18,8 +18,13 @@ const CronJobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { cronJobList, cronJobDetail, totalElements, loadCronJobList } =
-    cronJobStore;
+  const {
+    cronJobList,
+    cronJobDetail,
+    totalElements,
+    loadCronJobList,
+    loadCronJobDetail,
+  } = cronJobStore;
 
   const [columDefs] = useState([
     {
@@ -40,7 +45,7 @@ const CronJobListTab = observer(() => {
     },
     {
       headerName: "워크스페이스",
-      field: "",
+      field: "workspace",
       filter: true,
     },
     {
@@ -76,6 +81,11 @@ const CronJobListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
@@ -94,6 +104,7 @@ const CronJobListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={cronJobList}
                   columnDefs={columDefs}
                   isBottom={true}

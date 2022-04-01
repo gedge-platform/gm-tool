@@ -44,7 +44,7 @@ const SecretDetail = observer(() => {
   });
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Data" />
       </CTabs>
