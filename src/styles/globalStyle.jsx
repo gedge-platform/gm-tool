@@ -377,6 +377,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .paper_main, .paper_detail {
+    
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -414,11 +415,12 @@ const globalStyles = createGlobalStyle`
       max-height: 800px;
     }
     .tabPanel {
+      overflow-y:scroll;
       height: 100%;
       position: relative;
     }
     ${PanelBox} {
-      overflow: hidden;
+      overflow:hidden;
       .panelTitBar {
         height: 43px;
         padding-bottom: 1px;
@@ -440,6 +442,7 @@ const globalStyles = createGlobalStyle`
     }
     .tb_data {
       border: 1px double #141a30;
+
     }
   }
 
@@ -521,6 +524,16 @@ const globalStyles = createGlobalStyle`
     border-left: 0 hidden;
     border-right: 0 hidden;
     border-collapse: collapse;
+    .tb_data_detail{
+      th, td{
+        width:25%
+      }
+    }
+    .tb_data_nodeInfo{
+      th,td{
+        width: 20%
+      }
+    }
     tbody {
       th, td {
         height: 33px;
@@ -1050,7 +1063,7 @@ const globalStyles = createGlobalStyle`
   margin-right: 10px;
 }
 
-//cafe43-----------------------
+//cafe43 Volume-----------------------
 .tb_volume_metadata{
   width: 300px
 }
@@ -1157,6 +1170,106 @@ const globalStyles = createGlobalStyle`
     width: 33%;
     margin-bottom: 28px;
   }
+//cafe43 Monitoring-----------------------
+  .tab1-panel-area{
+    display: flex;
+    height: 400px;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .tab1-button-area{
+    width: 300px;
+    height: 375px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .on-tab1-button{
+    cursor:pointer;
+    width: 300px;
+    height: 87px;
+    display: flex;
+    border-radius: 5px;
+    background-color:#007EFF;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .tab1-button-circle-graph-area{
+    cursor:pointer;
+    width: 49%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab1-button-key-value-area{
+    width: 49% 
+  }
+
+  .tab1-button-key-area{
+    width: 100%;
+    height: 65%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .tab1-button-value-area{
+    width: 100%;
+    height: 0%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .tab1-button-value-majer{
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .tab1-button-value-minor{
+    font-size: 14px 
+  }
+
+  .tab1-button-value-minor-bottom{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .tab1-chart-area{
+    width: 1350px;
+    height: 375px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab-chart{
+    width: 1340px;
+    height: 370px;
+    background-color: #141A30;
+  }
+
+  .off-tab1-button{
+    cursor:pointer;
+    width: 300px;
+    height: 87px;
+    display: flex;
+    border-radius: 5px;
+    background-color:#1C263E;
+    color: #929da5;
+    display: flex;
+    justify-content: space-around;
+  }
+
+//---------
   .signup-step {
   display: flex;
   justify-content: space-between;
@@ -1200,14 +1313,32 @@ const globalStyles = createGlobalStyle`
   font-size: 16px;
 
 }
+.pointer_container {
+        .recharts-wrapper {
+            cursor: pointer !important;
+        }
+    }
 
-//map
+.off-tab1-linearchart{
+  display: hidden;
+}
+
+//yjy-----------------------
+.tb_workload_detail_th{
+  width: 15%;
+}
+
+.tb_workload_detail_labels_th{
+  width: 25%;
+}
+
+//map-----------------------
 
 .leaflet-container {
   width: 100%;
   height: 100%;
-  opacity: 0;
-  animation: fadeInLeaflet 1.5s ease forwards 2s;
+  opacity: 1;
+  /* animation: fadeInLeaflet 1.5s ease forwards 2s; */
 }
 
 @keyframes fadeInLeaflet {
@@ -1296,11 +1427,11 @@ const globalStyles = createGlobalStyle`
   } */
   & #map {
     visibility: visible;
-    animation: fadeIn 1s 1.75s linear forwards;
+    /* animation: fadeIn 1s 1.75s linear forwards; */
   }
   & .paper-map {
-    animation: paperMapFadeIn 0.83s ease-in forwards,
-      fadeOut 1s 4s linear forwards;
+    /* animation: paperMapFadeIn 0.83s ease-in forwards,
+      fadeOut 1s 4s linear forwards; */
   }
   & .map-side {
     &:before {
@@ -1454,7 +1585,7 @@ const globalStyles = createGlobalStyle`
     -webkit-transform: translate(-50%, -100%);
     position: absolute;
 
-    animation: fadeInPopup 1s ease-out;
+    /* animation: fadeInPopup 0.01s ease-out; */
 
     @keyframes fadeInPopup {
       0% {

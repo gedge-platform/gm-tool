@@ -8,44 +8,59 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../PodDetail";
+import podStore from "../../../../store/Pod";
 import moment from "moment";
-import Detail from "../Detail";
-import projectStore from "../../../../store/Project";
+import CreatePod from "../Dialog/CreatePod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateScheduler from "../Dialog/CreateScheduler";
 
-const UserServiceListTab = observer(() => {
+const SchedulerListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const {
-    projectDetail,
-    projectList,
-    totalElements,
-    loadProjectList,
-    loadProjectDetail,
-  } = projectStore;
-
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
   const [columDefs] = useState([
     {
-      headerName: "프로젝트",
-      field: "projectName",
+      headerName: "파드 이름",
+      field: "name",
       filter: true,
     },
     {
       headerName: "클러스터",
-      field: "selectCluster",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspaceName",
+      headerName: "프로젝트",
+      field: "project",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "호스트 IP",
+      field: "hostIP",
+      filter: true,
+    },
+    {
+      headerName: "파드 IP",
+      field: "podIP",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
+    },
+    {
+      headerName: "생성 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -56,26 +71,25 @@ const UserServiceListTab = observer(() => {
           .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
-
-    // {
-    //   headerName: "CPU 사용량(core)",
-    //   field: "cpu",
-    //   filter: true,
-    //   cellRenderer: function ({ data: { resourceUsage } }) {
-    //     return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-    //   },
-    // },
   ]);
+
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    loadProjectDetail(e.data.projectName);
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
   const history = useHistory();
 
   useEffect(() => {
-    loadProjectList("user");
+    loadPodList();
   }, []);
 
   return (
@@ -83,7 +97,7 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -91,7 +105,7 @@ const UserServiceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={projectList}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
@@ -99,10 +113,14 @@ const UserServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateScheduler
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
-        <Detail project={projectDetail} />
       </CReflexBox>
     </>
   );
 });
-export default UserServiceListTab;
+export default SchedulerListTab;

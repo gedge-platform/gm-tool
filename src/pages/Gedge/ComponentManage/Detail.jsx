@@ -26,7 +26,7 @@ const Detail = observer((props) => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="리소스 상태" />
         <CTab label="메타데이터" />

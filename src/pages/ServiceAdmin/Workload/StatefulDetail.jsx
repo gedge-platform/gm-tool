@@ -6,6 +6,13 @@ import moment from "moment";
 import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 
+import theme from "@/styles/theme";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -25,7 +32,7 @@ const StatefulSetDetail = observer(() => {
   const annotationsTable = [];
   const annotationsTemp = annotations;
 
-  const eventsTable = [];
+  const eventTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -41,7 +48,7 @@ const StatefulSetDetail = observer(() => {
   Object.entries(labelTemp).map(([key, value]) => {
     labelTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -50,32 +57,97 @@ const StatefulSetDetail = observer(() => {
   Object.entries(annotationsTemp).map(([key, value]) => {
     annotationsTable.push(
       <tr>
-        <th>{key}</th>
+        <th className="tb_workload_detail_labels_th">{key}</th>
         <td>{value}</td>
       </tr>
     );
   });
 
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th>Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th>Message</th>
-        <td></td>
-      </tr>
-    );
+  // if (events !== null) {
+  //   events.map((event) => {
+  //     eventsTable.push(
+  //       <tr>
+  //         <th className="tb_workload_detail_th">Message</th>
+  //         <td>{event["message"]}</td>
+  //       </tr>
+  //     );
+  //   });
+  // } else {
+  //   eventsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Message</th>
+  //       <td></td>
+  //     </tr>
+  //   );
+  {
+    events &&
+      events.map((event, message) => {
+        eventTable.push(
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+                aria-controls="ProjectEvent-content"
+                id="ProjectEvent-header"
+                sx={{ bgcolor: theme.colors.primaryDark }}
+              >
+                <Typography
+                  sx={{
+                    width: "10%",
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  Message
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: "white" }}>
+                  {event["message"]}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: "white",
+                    bgcolor: theme.colors.primary,
+                  }}
+                >
+                  <table className="tb_data">
+                    <tr>
+                      <th>Kind</th>
+                      <td>{event["kind"]}</td>
+                      <th>Name</th>
+                      <td>{event["name"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Namespace</th>
+                      <td>{event["namespace"]}</td>
+                      <th>Cluster</th>
+                      <td>{event["cluster"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Reason</th>
+                      <td>{event["reason"]}</td>
+                      <th>Type</th>
+                      <td>{event["type"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Event Time</th>
+                      <td>{event["eventTime"]}</td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </table>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
   }
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
@@ -85,12 +157,12 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <TableTitle>상세정보</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th>Name</th>
+                <th className="tb_workload_detail_th">Name</th>
                 <td>{statefulSetDetail.name}</td>
-                <th>Cluster</th>
+                <th className="tb_workload_detail_th">Cluster</th>
                 <td>{statefulSetDetail.cluster}</td>
               </tr>
               <tr>
@@ -110,7 +182,7 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>워크로드</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>app</th>
@@ -124,7 +196,7 @@ const StatefulSetDetail = observer(() => {
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th>gedge-platform.io/creator</th>
@@ -146,12 +218,12 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{labelTable}</tbody>
           </table>
           <br />
           <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationsTable}</tbody>
           </table>
           <br />
@@ -160,8 +232,8 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{eventTable}</tbody>
           </table>
         </div>
       </CTabPanel>

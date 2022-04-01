@@ -11,9 +11,41 @@ import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import clusterStore from "../../../store/Cluster";
+import styled from "styled-components";
+import { nullCheck } from "../../../utils/common-utils";
+
+const TableTitle = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
 
 const Detail = observer((props) => {
-  const { cluster } = props;
+  const {
+    clusterDetail: {
+      clusterName,
+      clusterEndpoint,
+      clusterCreator,
+      gpu,
+      clusterType,
+      created_at,
+      events,
+      ipAddr,
+      nodes,
+      resource: {
+        cronjob_count,
+        deployment_count,
+        job_count,
+        pod_count,
+        service_count,
+        volume_count,
+      },
+    },
+  } = clusterStore;
+
+  console.log(nodes);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -29,203 +61,88 @@ const Detail = observer((props) => {
   };
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="리소스 사용량" />
+        <CTab label="Overview" />
+        <CTab label="Node Info" />
+        <CTab label="Metadata" />
       </CTabs>
-      <CTabPanel value={tabvalue} index={0}>
-        <div className="tb_container">
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
+        <div className="tb_container" style={{ width: "95%" }}>
+          <TableTitle>상세정보</TableTitle>
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
-                <th>클러스터</th>
-                <td>{cluster.clusterName}</td>
+                <th>Cluster Name</th>
+                <td>{clusterName}</td>
+                <th>IP</th>
+                <td>{ipAddr}</td>
               </tr>
               <tr>
-                <th>쿠버네티스 버전</th>
-                <td>{cluster.kubeVersion}</td>
+                <th>Type</th>
+                <td>{clusterType}</td>
+                <th>Creator</th>
+                <td>{clusterCreator}</td>
               </tr>
               <tr>
-                <th>역할</th>
-                <td></td>
+                <th>GPU</th>
+                <td>{nullCheck(gpu)}</td>
+                <th>Created</th>
+                <td>{created_at}</td>
+              </tr>
+            </tbody>
+          </table>
+          <TableTitle>리소스 상태</TableTitle>
+          <table className="tb_data">
+            <tbody className="tb_data_detail">
+              <tr>
+                <th>Deployment</th>
+                <td>{deployment_count}</td>
+                <th>Pod</th>
+                <td>{pod_count}</td>
               </tr>
               <tr>
-                <th>생성자</th>
-                <td>{cluster.clusterCreator}</td>
+                <th>Service</th>
+                <td>{service_count}</td>
+                <th>Cronjob</th>
+                <td>{cronjob_count}</td>
               </tr>
               <tr>
-                <th>생성일</th>
-                <td>{cluster.create_at}</td>
-              </tr>
-              <tr>
-                <th>업데이트일</th>
-                <td></td>
+                <th>Job</th>
+                <td>{job_count}</td>
+                <th>Volume</th>
+                <td>{volume_count}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={1}>
-        <div className="panelCont">
-          <div className="grid-height">123</div>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
+        <div className="tb_container" style={{ width: "95%" }}>
+          <TableTitle>Node List</TableTitle>
+          <table className="tb_data">
+            <tbody className="tb_data_nodeInfo">
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>IP</th>
+                <th>Kube-Version</th>
+                <th>OS</th>
+                <th>Created</th>
+              </tr>
+              <tr>
+                <td style={{ textAlign: "center" }}>No Nodes Information</td>
+              </tr>
+              {nodes ? (
+                nodes.map((node) => <tr></tr>)
+              ) : (
+                <tr>No Nodes Information</tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>
   );
 });
 export default Detail;
-
-/*
-    <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="노드 정보" />
-        <CTab label="채널 정보" />
-      </CTabs>
-      <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>네트워크 이름</th>
-                  <td>OOO 조회</td>
-                  <th>조직ID</th>
-                  <td>JSON</td>
-                </tr>
-                <tr>
-                  <th>Import 여부</th>
-                  <td colSpan={1}>N</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>Node Type</th>
-                  <th>Node 이름</th>
-                  <th>상태</th>
-                </tr>
-                <tr>
-                  <td>CA</td>
-                  <td>block-ca</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer(Endorser)</td>
-                  <td>block-peer1(Committer)</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer2</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer3</td>
-                  <td>운영 중</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>조직 이름</th>
-                  <th>채널 이름</th>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-1</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-2</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-3</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>Node Type</th>
-                    <th>Node 이름</th>
-                    <th>상태</th>
-                  </tr>
-                  <tr>
-                    <td>CA</td>
-                    <td>block-ca</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer(Endorser)</td>
-                    <td>block-peer1(Committer)</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer2</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer3</td>
-                    <td>운영 중</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>조직 이름</th>
-                    <th>채널 이름</th>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-1</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-2</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-3</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-4</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-      </div>
-    </PanelBox>
-*/

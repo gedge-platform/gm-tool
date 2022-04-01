@@ -5,7 +5,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
-import projectStore from "../../../store/Project";
+import platformProjectStore from "../../../store/PlatformProject";
 import { keys } from "lodash";
 import "@grapecity/wijmo.styles/wijmo.css";
 import theme from "@/styles/theme";
@@ -15,6 +15,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { EventSeatTwoTone } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -24,14 +25,32 @@ const TableTitle = styled.p`
 `;
 
 const Detail = observer(() => {
-  const { projectDetail, resource, labels, annotations, events } = projectStore;
+  const {
+    platformProjectList,
+    platformDetail,
+    labels,
+    annotations,
+    events,
+    resource,
+    clusterList,
+    resourceUsage,
+  } = platformProjectStore;
 
-  // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const labelsTable = [];
   const annotationsTable = [];
+  //   let eventsTemp = events;
   const eventsTable = [];
+  const clusterNameTable = [];
+
+  //   const clusterNameListTemp = platformProjectList.map(
+  //     (event) => event.clusterName
+  //   );
+
+  //   const clusterNameList = platformProjectList.filter(
+  //     (event) => event.clusterName === clusterNameListTemp[0]
+  //   );
 
   Object.entries(labels).map(([key, value]) => {
     labelsTable.push(
@@ -51,11 +70,24 @@ const Detail = observer(() => {
     );
   });
 
-  // events.map((event) => {
-  //   Object.entries(event).map(([key, value]) => {
-  //     console.log(key, value);
+  // if (events !== null) {
+  //   events.map((event) => {
+  //     console.log(event);
+  //     eventsTable.push(
+  //       <tr>
+  //         <th className="tb_workload_detail_th">Message</th>
+  //         <td>{event.message}</td>
+  //       </tr>
+  //     );
   //   });
-  // });
+  // } else {
+  //   eventsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Message</th>
+  //       <td></td>
+  //     </tr>
+  //   );
+  // }
 
   if (events !== null) {
     events.map((event) => {
@@ -190,23 +222,23 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{projectDetail.projectName}</td>
+                <td>{platformDetail.Name}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{projectDetail.selectCluster}</td>
+                <td>{platformDetail.clusterName}</td>
               </tr>
               <tr>
-                <th>Workspace</th>
-                <td>{projectDetail.workspaceName}</td>
-                <th>Creator</th>
-                <td>{projectDetail.projectCreator}</td>
-              </tr>
-              <tr>
-                <th>Owner</th>
-                <td>{projectDetail.projectOwner}</td>
+                <th>Status</th>
+                <td>{platformDetail.status}</td>
                 <th>Created</th>
                 <td>
-                  {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
+                  {moment(platformDetail.created_at).format("YYYY-MM-DD HH:mm")}
                 </td>
+              </tr>
+              <tr>
+                <th>CPU Usage</th>
+                <td>{resourceUsage.namespace_cpu}</td>
+                <th>Memory Usage</th>
+                <td>{resourceUsage.namespace_memory}</td>
               </tr>
             </tbody>
           </table>
@@ -266,157 +298,3 @@ const Detail = observer(() => {
   );
 });
 export default Detail;
-
-/*
-    <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="노드 정보" />
-        <CTab label="채널 정보" />
-      </CTabs>
-      <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>네트워크 이름</th>
-                  <td>OOO 조회</td>
-                  <th>조직ID</th>
-                  <td>JSON</td>
-                </tr>
-                <tr>
-                  <th>Import 여부</th>
-                  <td colSpan={1}>N</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>Node Type</th>
-                  <th>Node 이름</th>
-                  <th>상태</th>
-                </tr>
-                <tr>
-                  <td>CA</td>
-                  <td>block-ca</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer(Endorser)</td>
-                  <td>block-peer1(Committer)</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer2</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer3</td>
-                  <td>운영 중</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>조직 이름</th>
-                  <th>채널 이름</th>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-1</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-2</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-3</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>Node Type</th>
-                    <th>Node 이름</th>
-                    <th>상태</th>
-                  </tr>
-                  <tr>
-                    <td>CA</td>
-                    <td>block-ca</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer(Endorser)</td>
-                    <td>block-peer1(Committer)</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer2</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer3</td>
-                    <td>운영 중</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>조직 이름</th>
-                    <th>채널 이름</th>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-1</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-2</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-3</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-4</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-      </div>
-    </PanelBox>
-*/

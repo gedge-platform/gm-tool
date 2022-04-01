@@ -57,18 +57,18 @@ const EdgeClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "status",
+      headerName: "생성자",
+      field: "clusterCreator",
       filter: true,
     },
     {
       headerName: "노드개수",
-      field: "node",
+      field: "nodeCnt",
       filter: true,
     },
     {
-      headerName: "version",
-      field: "kubeVersion",
+      headerName: "IP",
+      field: "clusterEndpoint",
       filter: true,
     },
     {

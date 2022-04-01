@@ -53,6 +53,37 @@ class Scheduler {
         console.log(error);
       });
   };
+
+  postScheduler2 = (requestId, yaml, callback) => {
+    const { clusters } = clusterStore;
+
+    let formData = new FormData();
+
+    formData.append("callbackUrl", `${REQUEST_URL2}`); // 수정 필요
+    formData.append("requestId", requestId);
+    formData.append("yaml", yaml);
+    formData.append("clusters", JSON.stringify(clusters));
+
+    axios
+      .post(`http://101.79.4.15:32527/yaml2`, formData)
+      .then(function (response) {
+        if (response.status === 200) {
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            `width=${screen.width},height=${screen.height}`,
+            "fullscreen=yes"
+          );
+          popup.document.open().write(response.data);
+          popup.document.close();
+
+          callback();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 }
 
 const schedulerStore = new Scheduler();
