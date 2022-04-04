@@ -530,9 +530,17 @@ const globalStyles = createGlobalStyle`
       }
     }
     .tb_data_nodeInfo{
-      th,td{
-        width: 20%
+      tr{
+        td{
+          cursor:pointer;
+        }
+        &:hover{
+          td{
+            color: rgba(255,255,255,0.9)
+          }
+        }
       }
+      
     }
     tbody {
       th, td {
