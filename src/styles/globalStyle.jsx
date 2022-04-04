@@ -1345,7 +1345,15 @@ const globalStyles = createGlobalStyle`
 .tb_workload_detail_labels_th{
   width: 25%;
 }
-
+.tabN-chart-div-area{
+  display: flex;
+  justify-content:space-around;
+  align-items:center;
+}
+.tabN-chart-area{
+  width: 49%;
+  margin: 5px 0 5px 0;
+}
 //map-----------------------
 
 .leaflet-container {
@@ -1653,7 +1661,6 @@ const globalStyles = createGlobalStyle`
     }
   }
 }
-
 
 `;
 

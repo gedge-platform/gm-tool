@@ -1,3 +1,4 @@
+import { display, padding } from "@mui/system";
 import React, { useState, useEffect, PureComponent } from "react";
 import {
     AreaChart,
@@ -12,13 +13,13 @@ import { observer } from "mobx-react";
 import monitoringStore from "../../../../../store/Monitoring";
 import { ClusterMetricTypes } from "../../Utils/MetricsVariables";
 import {
-    unixCurrentTime,
-    unixStartTime,
     unixToTime,
+    unixStartTime,
+    unixCurrentTime,
 } from "../../Utils/MetricsVariableFormatter";
 
-const PrAreaChart = observer(({ value }) => {
-    const { lastTime, interval, allMetrics } = monitoringStore;
+const SchedulerAreaChart = observer(({ value }) => {
+    const { allMetrics, lastTime, interval } = monitoringStore;
 
     let title = "";
     let metrics = [];
@@ -26,64 +27,42 @@ const PrAreaChart = observer(({ value }) => {
     const searchMetrics = (filter) => {
         Object.entries(allMetrics).map(([key, value]) => {
             if (key === filter) {
-                value[0]?.values.forEach((element) => {
-                    const tempMetrics = {
-                        time: unixToTime(element[0]),
-                        value: element[1],
-                    };
-                    metrics.push(tempMetrics);
-                });
+                if (value?.length === 0) {
+                    for (
+                        let index = unixStartTime(lastTime.value);
+                        index < unixCurrentTime();
+                        index = index + 60 * interval.value
+                    ) {
+                        const tempMetrics = {
+                            time: unixToTime(index),
+                            value: 0,
+                        };
+                        metrics.push(tempMetrics);
+                    }
+                } else {
+                    value[0]?.values.forEach((element) => {
+                        const tempMetrics = {
+                            time: unixToTime(element[0]),
+                            value: element[1],
+                        };
+                        metrics.push(tempMetrics);
+                    });
+                }
             }
         });
     };
 
     switch (value) {
-        case ClusterMetricTypes.CPU_USAGE:
-            title = "CPU Usage (Core)";
+        case ClusterMetricTypes.SCHEDULER_ATTEMPTS_TOTAL:
+            title = "Scheduler Attpemts Total";
             searchMetrics(value);
             break;
-        case ClusterMetricTypes.CPU_UTIL:
-            title = "CPU Util (%)";
+        case ClusterMetricTypes.SCHEDULER_FAIL_TOTAL:
+            title = "Scheduler Fail Total";
             searchMetrics(value);
             break;
-        case ClusterMetricTypes.CPU_TOTAL:
-            title = "CPU Total (Core)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_USAGE:
-            title = "Memory Usage (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_UTIL:
-            title = "Memory Util (%)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_TOTAL:
-            title = "Memory Total (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_USAGE:
-            title = "Disk Usage (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_UTIL:
-            title = "Disk Util (%)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_TOTAL:
-            title = "Disk Total (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_QUOTA:
-            title = "Pod_Quota";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_RUNNING:
-            title = "Pod Running";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_UTIL:
-            title = "Pod Util (%)";
+        case ClusterMetricTypes.SCHEDULER_LATENCY:
+            title = "Scheduler Latency";
             searchMetrics(value);
             break;
         default:
@@ -133,4 +112,4 @@ const PrAreaChart = observer(({ value }) => {
     );
 });
 
-export { PrAreaChart };
+export { SchedulerAreaChart };

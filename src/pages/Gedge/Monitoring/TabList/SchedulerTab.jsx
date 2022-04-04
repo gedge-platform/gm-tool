@@ -1,7 +1,7 @@
 import React, { useState, useEffect, PureComponent } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { PanelBoxM } from "@/components/styles/PanelBoxM";
-import { APIAreaChart } from "./MonitChart/APIServerChart";
+import { SchedulerAreaChart } from "./MonitChart/SchedulerChart";
 import {
     CCreateButton,
     CSelectButton,
@@ -22,7 +22,7 @@ import {
 
 import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
 
-const APIServer = observer(() => {
+const Scheduler = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
@@ -74,7 +74,7 @@ const APIServer = observer(() => {
         loadAllMetrics(
             TargetTypes.CLUSTER,
             unixCurrentTime(),
-            ClusterMetricTypes.APISERVER_ALL
+            ClusterMetricTypes.SCHEDULER_ALL
         );
     };
 
@@ -143,9 +143,9 @@ const APIServer = observer(() => {
                             className="tab2-chart"
                             style={{ width: "100%", margin: "5px 0 5px 0" }}
                         >
-                            <APIAreaChart
+                            <SchedulerAreaChart
                                 value={
-                                    ClusterMetricTypes.APISERVER_REQUEST_RATE
+                                    ClusterMetricTypes.SCHEDULER_ATTEMPTS_TOTAL
                                 }
                             />
                         </div>
@@ -162,8 +162,25 @@ const APIServer = observer(() => {
                             className="tab2-chart"
                             style={{ width: "100%", margin: "5px 0 5px 0" }}
                         >
-                            <APIAreaChart
-                                value={ClusterMetricTypes.APISERVER_LATENCY}
+                            <SchedulerAreaChart
+                                value={ClusterMetricTypes.SCHEDULER_FAIL_TOTAL}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="tabN-chart-div-area">
+                    <div
+                        className="tab2-chart-area"
+                        style={{
+                            width: "100%",
+                        }}
+                    >
+                        <div
+                            className="tab2-chart"
+                            style={{ width: "100%", margin: "5px 0 5px 0" }}
+                        >
+                            <SchedulerAreaChart
+                                value={ClusterMetricTypes.SCHEDULER_LATENCY}
                             />
                         </div>
                     </div>
@@ -172,4 +189,4 @@ const APIServer = observer(() => {
         </PanelBoxM>
     );
 });
-export default APIServer;
+export default Scheduler;

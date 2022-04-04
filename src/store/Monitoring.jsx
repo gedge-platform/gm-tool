@@ -29,7 +29,7 @@ class Monitoring {
     coPieAPIRate = [];
     coPieSchedulerAttempts = [];
     coPieSchedulerRate = [];
-    prAllMetrics = {};
+    allMetrics = {};
     lastTime = LastTimeList[1];
     interval = IntervalList[1];
 
@@ -93,11 +93,18 @@ class Monitoring {
                 clusterMetric.metricType = key;
 
                 if (value.length === 0) {
-                    clusterMetric.metrics.push({
-                        time: unixToTime(unixCurrentTime()),
-                        value: 0,
-                    });
-                    array.push(clusterMetric);
+                    for (
+                        let index = unixStartTime(60 * 6);
+                        index < unixCurrentTime();
+                        index = index + 60 * 5
+                    ) {
+                        clusterMetric.metrics.push({
+                            time: unixToTime(index),
+                            value: 0,
+                        });
+                        array.push(clusterMetric);
+                    }
+
                     return array;
                 }
 
@@ -354,7 +361,7 @@ class Monitoring {
             )
             .then((res) => {
                 runInAction(() => {
-                    this.prAllMetrics = res.data.items;
+                    this.allMetrics = res.data.items;
                 });
             });
     };

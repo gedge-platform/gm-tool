@@ -10,19 +10,18 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { observer } from "mobx-react";
-import { PieChart, Pie, Sector, Cell } from "recharts";
 import monitoringStore from "../../../../../store/Monitoring";
 import { ClusterMetricTypes } from "../../Utils/MetricsVariables";
 import { unixToTime } from "../../Utils/MetricsVariableFormatter";
 
-const PrAreaChart = observer(({ value }) => {
-    const { prAllMetrics } = monitoringStore;
+const APIAreaChart = observer(({ value }) => {
+    const { allMetrics } = monitoringStore;
 
     let title = "";
     let metrics = [];
 
     const searchMetrics = (filter) => {
-        Object.entries(prAllMetrics).map(([key, value]) => {
+        Object.entries(allMetrics).map(([key, value]) => {
             if (key === filter) {
                 value[0]?.values.forEach((element) => {
                     const tempMetrics = {
@@ -36,52 +35,12 @@ const PrAreaChart = observer(({ value }) => {
     };
 
     switch (value) {
-        case ClusterMetricTypes.CPU_USAGE:
-            title = "CPU Usage (Core)";
+        case ClusterMetricTypes.APISERVER_REQUEST_RATE:
+            title = "API Server Request Rate";
             searchMetrics(value);
             break;
-        case ClusterMetricTypes.CPU_UTIL:
-            title = "CPU Util (%)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.CPU_TOTAL:
-            title = "CPU Total (Core)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_USAGE:
-            title = "Memory Usage (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_UTIL:
-            title = "Memory Util (%)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.MEMORY_TOTAL:
-            title = "Memory Total (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_USAGE:
-            title = "Disk Usage (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_UTIL:
-            title = "Disk Util (%)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.DISK_TOTAL:
-            title = "Disk Total (GB)";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_QUOTA:
-            title = "Pod_Quota";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_RUNNING:
-            title = "Pod Running";
-            searchMetrics(value);
-            break;
-        case ClusterMetricTypes.POD_UTIL:
-            title = "Pod Util (%)";
+        case ClusterMetricTypes.APISERVER_LATENCY:
+            title = "API Server Latency";
             searchMetrics(value);
             break;
         default:
@@ -131,4 +90,4 @@ const PrAreaChart = observer(({ value }) => {
     );
 });
 
-export { PrAreaChart };
+export { APIAreaChart };

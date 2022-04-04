@@ -22,7 +22,7 @@ const ClusterMetricTypes = {
     APISERVER_REQUEST_RATE: "apiserver_request_rate",
     APISERVER_LATENCY: "apiserver_latency",
     // Error : Not found metric
-    SCHEDULER_ATTEMPT_TOTAL: "scheduler_attempts_total",
+    SCHEDULER_ATTEMPTS_TOTAL: "scheduler_attempts_total",
     SCHEDULER_FAIL_TOTAL: "scheduler_fail_total",
     SCHEDULER_LATENCY: "scheduler_latency",
     CPU_ALL: "cpu_usage|cpu_util|cpu_total",
@@ -30,7 +30,8 @@ const ClusterMetricTypes = {
     DISK_ALL: "disk_usage|disk_util|disk_total",
     POD_ALL: "pod_quota|pod_running|pod_util",
     APISERVER_ALL: "apiserver_request_rate|apiserver_latency",
-    SCHEDULER_ALL: "scheduler_fail_total|scheduler_latency",
+    SCHEDULER_ALL:
+        "scheduler_fail_total|scheduler_latency|scheduler_attempts_total",
     PHYSICAL_ALL:
         "cpu_usage|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util",
     ALL: "cpu_usage|cpu_util|cpu_total|memory_usage|memory_util|memory_total|disk_usage|disk_util|disk_total|pod_quota|pod_running|pod_util|apiserver_request_rate|apiserver_latency|scheduler_fail_total|scheduler_latency",
