@@ -41,7 +41,7 @@ import {
 } from "./ClusterOverviewComponent/COButton";
 import { time } from "react-dom-factories";
 
-const PsysicalResource = observer(() => {
+const APIServer = observer(() => {
     const [tabvalue, setTabvalue] = useState(0);
     const [open, setOpen] = useState(false);
     const handleTabChange = (event, newValue) => {
@@ -94,7 +94,7 @@ const PsysicalResource = observer(() => {
             // unixStartTime(pyLastTime.value),
             unixCurrentTime(),
             // stepConverter(pyInterval.value),
-            combinationMetrics(ClusterMetricTypes.PHYSICAL_ALL)
+            combinationMetrics(ClusterMetricTypes.APISERVER_ALL)
         );
     };
 
@@ -174,13 +174,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -197,13 +191,7 @@ const PsysicalResource = observer(() => {
                         alignItems: "center",
                     }}
                 >
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -212,13 +200,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -235,13 +217,7 @@ const PsysicalResource = observer(() => {
                         alignItems: "center",
                     }}
                 >
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -250,13 +226,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -273,13 +243,7 @@ const PsysicalResource = observer(() => {
                         alignItems: "center",
                     }}
                 >
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -288,13 +252,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -311,13 +269,7 @@ const PsysicalResource = observer(() => {
                         alignItems: "center",
                     }}
                 >
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -326,13 +278,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -349,13 +295,7 @@ const PsysicalResource = observer(() => {
                         alignItems: "center",
                     }}
                 >
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -364,13 +304,7 @@ const PsysicalResource = observer(() => {
                             </div>
                         </div>
                     </PanelBox>
-                    <PanelBox
-                        className="panel_graph"
-                        style={{
-                            width: "49%",
-                            margin: "5px 0 5px 0",
-                        }}
-                    >
+                    <PanelBox className="panel_graph tabN-chart-area">
                         <div className="tab2-chart-area">
                             <div className="tab2-chart">
                                 <PrAreaChart
@@ -384,4 +318,4 @@ const PsysicalResource = observer(() => {
         </PanelBoxM>
     );
 });
-export default PsysicalResource;
+export default APIServer;

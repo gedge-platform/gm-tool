@@ -6,8 +6,17 @@ import {
     TargetTypes,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariables";
 
-import { unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
-import { unixCurrentTime } from "../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import {
+    unixToTime,
+    unixStartTime,
+    stepConverter,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import {
+    LastTimeList,
+    IntervalList,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+
 class Monitoring {
     clusterName = "";
     clusterNames = [];
@@ -21,14 +30,31 @@ class Monitoring {
     coPieSchedulerAttempts = [];
     coPieSchedulerRate = [];
     prAllMetrics = {};
+    lastTime = LastTimeList[1];
+    interval = IntervalList[1];
 
     constructor() {
         makeAutoObservable(this);
     }
 
     setClusterName = (selectName) => {
-        this.clusterName = selectName;
+        runInAction(() => {
+            this.clusterName = selectName;
+        });
     };
+
+    setLastTime = (time) => {
+        runInAction(() => {
+            this.lastTime = time;
+        });
+    };
+
+    setInterval = (interval) => {
+        runInAction(() => {
+            this.interval = interval;
+        });
+    };
+
     getMonitURL = (
         target,
         start,
@@ -52,9 +78,9 @@ class Monitoring {
         }
     };
 
-    checkedNullValue = (res) => {
-        console.log(res.data.items.length);
-    };
+    // checkedNullValue = (res) => {
+    //     console.log(res.data.items.length);
+    // };
 
     convertResponseToMonit = (res) => {
         const array = [];
@@ -303,11 +329,11 @@ class Monitoring {
             });
     };
 
-    loadPyAllMetrics = async (
+    loadAllMetrics = async (
         target,
-        start,
+        // start,
         end,
-        step,
+        // step,
         metricFilter,
         ...option
     ) => {
@@ -315,9 +341,9 @@ class Monitoring {
             .get(
                 this.getMonitURL(
                     target,
-                    start,
+                    unixStartTime(this.lastTime.value),
                     end,
-                    step,
+                    stepConverter(this.interval.value),
                     this.clusterName,
                     metricFilter,
                     option

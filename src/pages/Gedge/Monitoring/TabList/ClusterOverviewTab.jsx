@@ -74,8 +74,6 @@ const ClusterOverview = observer(() => {
         setClusterName,
     } = monitoringStore;
 
-    console.log(clusterName);
-
     const calledMetrics = () => {
         loadCoCPU(
             TargetTypes.CLUSTER,
