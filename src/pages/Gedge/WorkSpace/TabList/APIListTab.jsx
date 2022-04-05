@@ -38,11 +38,6 @@ const APIListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "설명",
-      field: "workspaceDescription",
-      filter: true,
-    },
-    {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,

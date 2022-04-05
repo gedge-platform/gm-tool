@@ -21,6 +21,43 @@ const TableTitle = styled.p`
   margin: 8px 0;
   color: rgba(255, 255, 255, 0.8);
 `;
+const TableSubTitle = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
 
 const Detail = observer((props) => {
   const {
@@ -45,9 +82,9 @@ const Detail = observer((props) => {
     },
   } = clusterStore;
 
-  console.log(nodes);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  const [nodeNum, setNodeNum] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -60,12 +97,47 @@ const Detail = observer((props) => {
     setOpen(false);
   };
 
+  const nodeList = () => {
+    return nodes.map((node, idx) => (
+      <tr onClick={() => setNodeNum(idx)}>
+        <td>{node.name}</td>
+        <td>{node.type}</td>
+        <td>{node.nodeIP}</td>
+        <td>{node.kubeVersion}</td>
+        <td>{node.os}</td>
+        <td>{node.created_at}</td>
+      </tr>
+    ));
+  };
+
+  const labelByNode = () => {
+    return Object.entries(nodes[nodeNum].labels).map(([key, value]) => (
+      <Label>
+        <span className="key">{key}</span>
+        <span className="value">{value}</span>
+      </Label>
+    ));
+  };
+  const annotationByNode = () => {
+    return Object.entries(nodes[nodeNum].annotations).map(([key, value]) => (
+      <tr>
+        <th style={{ width: "40%" }}>{key}</th>
+        <td>{value}</td>
+      </tr>
+    ));
+  };
+
+  useEffect(() => {
+    labelByNode();
+    annotationByNode();
+  }, [nodeNum]);
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Node Info" />
-        <CTab label="Metadata" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container" style={{ width: "95%" }}>
@@ -130,15 +202,22 @@ const Detail = observer((props) => {
                 <th>OS</th>
                 <th>Created</th>
               </tr>
-              <tr>
-                <td style={{ textAlign: "center" }}>No Nodes Information</td>
-              </tr>
-              {nodes ? (
-                nodes.map((node) => <tr></tr>)
+              {nodes.length >= 1 ? (
+                nodeList()
               ) : (
-                <tr>No Nodes Information</tr>
+                <tr>
+                  <td>No Nodes Information</td>
+                </tr>
               )}
             </tbody>
+          </table>
+
+          <TableSubTitle>Labels({nodes[nodeNum].name})</TableSubTitle>
+          <LabelContainer>{labelByNode()}</LabelContainer>
+
+          <TableSubTitle>Annotations({nodes[nodeNum].name})</TableSubTitle>
+          <table className="tb_data">
+            <tbody>{annotationByNode()}</tbody>
           </table>
         </div>
       </CTabPanel>

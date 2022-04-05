@@ -31,16 +31,6 @@ const ConfigmapsListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "",
-      field: "check",
-      minWidth: 53,
-      maxWidth: 53,
-      filter: false,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      checkboxSelection: true,
-    },
-    {
       headerName: "이름",
       field: "name",
       filter: true,

@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { AgGrid } from "@/components/datagrids";
 import styled from "styled-components";
 
-import { CSelectButton } from "@/components/buttons";
-import moment from "moment";
-import { observer } from "mobx-react";
-import CommActionBar from "@/components/common/CommActionBar";
-import { FormControl, MenuItem, Select } from "@mui/material";
-import theme from "../../styles/theme";
 import MapContent from "./DashboardCont/MapContent";
+import ClusterInfo from "./DashboardCont/ClusterInfo";
 
 const DashboardWrap = styled.div`
   display: flex;
@@ -125,65 +119,16 @@ const DashboardWrap = styled.div`
   }
 `;
 
-const clusters = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
-
-const TotalDashboard = observer(() => {
+const TotalDashboard = () => {
   const currentPageTitle = Title.Dashboard;
-
-  useEffect(() => {}, []);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
         <PanelBox className="panel_service">
           <div className="content_container">
-            <div className="cluster_info">
-              <FormControl className="form_dashboard">
-                <Select
-                  value={clusters[0]}
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  {clusters.map((cluster) => (
-                    <MenuItem value={cluster}>{cluster}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <div className="cluster_detail">
-                <div className="cluster_detail_title">클러스터 API 주소</div>
-                <div className="cluster_detail_content">http://101.79.4.15</div>
-                <div className="cluster_detail_title">클러스터 타입</div>
-                <div className="cluster_detail_content">CORE</div>
-                <div className="cluster_detail_title">클러스터 Creator</div>
-                <div className="cluster_detail_content">innogrid</div>
-                <div className="cluster_detail_title">클러스터 Resource</div>
-                <div className="cluster_resources">
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Deployment</span>
-                    <span className="resource_number">26</span>
-                  </div>
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Pod</span>
-                    <span className="resource_number">76</span>
-                  </div>
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Service</span>
-                    <span className="resource_number">32</span>
-                  </div>
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Cronjob</span>
-                    <span className="resource_number">1</span>
-                  </div>
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Job</span>
-                    <span className="resource_number">4</span>
-                  </div>
-                  <div className="cluster_resource">
-                    <span className="resource_kind">Volume</span>
-                    <span className="resource_number">0</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ClusterInfo />
+
             <div className="cluster_map">
               <MapContent />
             </div>
@@ -195,5 +140,5 @@ const TotalDashboard = observer(() => {
       </DashboardWrap>
     </Layout>
   );
-});
+};
 export default TotalDashboard;
