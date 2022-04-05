@@ -1277,6 +1277,20 @@ const globalStyles = createGlobalStyle`
     justify-content: space-around;
   }
 
+  .tab2-chart-area{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab2-chart{
+    width: 100%;
+    height: 200px;
+    background-color: #141A30;
+  }
+
 //---------
   .signup-step {
   display: flex;
@@ -1339,7 +1353,15 @@ const globalStyles = createGlobalStyle`
 .tb_workload_detail_labels_th{
   width: 25%;
 }
-
+.tabN-chart-div-area{
+  display: flex;
+  justify-content:space-around;
+  align-items:center;
+}
+.tabN-chart-area{
+  width: 49%;
+  margin: 5px 0 5px 0;
+}
 //map-----------------------
 
 .leaflet-container {
@@ -1647,7 +1669,6 @@ const globalStyles = createGlobalStyle`
     }
   }
 }
-
 
 `;
 

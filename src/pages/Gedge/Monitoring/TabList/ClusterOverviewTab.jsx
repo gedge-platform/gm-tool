@@ -138,7 +138,7 @@ const ClusterOverview = observer(() => {
             unixStartTime(60 * 6),
             unixCurrentTime(),
             stepConverter(5),
-            ClusterMetricTypes.SCHEDULER_ATTEMPT_TOTAL
+            ClusterMetricTypes.SCHEDULER_ATTEMPTS_TOTAL
         );
         loadCoSchedulerRate(
             TargetTypes.CLUSTER,
@@ -269,7 +269,7 @@ const ClusterOverview = observer(() => {
                     unixStartTime(60 * 6),
                     unixCurrentTime(),
                     stepConverter(5),
-                    ClusterMetricTypes.SCHEDULER_ATTEMPT_TOTAL
+                    ClusterMetricTypes.SCHEDULER_ATTEMPTS_TOTAL
                 );
                 setChartValueBottom("SCHEDULER_ATTEMPT_TOTAL");
                 break;
@@ -304,7 +304,9 @@ const ClusterOverview = observer(() => {
     });
 
     useEffect(() => {
-        loadClusterNames(calledMetrics);
+        if (clusterName === "") {
+            loadClusterNames(calledMetrics);
+        }
     }, []);
 
     return (

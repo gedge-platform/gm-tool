@@ -6,8 +6,17 @@ import {
     TargetTypes,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariables";
 
-import { unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
-import { unixCurrentTime } from "../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import {
+    unixToTime,
+    unixStartTime,
+    stepConverter,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import {
+    LastTimeList,
+    IntervalList,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+
 class Monitoring {
     clusterName = "";
     clusterNames = [];
@@ -20,14 +29,32 @@ class Monitoring {
     coPieAPIRate = [];
     coPieSchedulerAttempts = [];
     coPieSchedulerRate = [];
+    allMetrics = {};
+    lastTime = LastTimeList[1];
+    interval = IntervalList[1];
 
     constructor() {
         makeAutoObservable(this);
     }
 
     setClusterName = (selectName) => {
-        this.clusterName = selectName;
+        runInAction(() => {
+            this.clusterName = selectName;
+        });
     };
+
+    setLastTime = (time) => {
+        runInAction(() => {
+            this.lastTime = time;
+        });
+    };
+
+    setInterval = (interval) => {
+        runInAction(() => {
+            this.interval = interval;
+        });
+    };
+
     getMonitURL = (
         target,
         start,
@@ -51,9 +78,9 @@ class Monitoring {
         }
     };
 
-    checkedNullValue = (res) => {
-        console.log(res.data.items.length);
-    };
+    // checkedNullValue = (res) => {
+    //     console.log(res.data.items.length);
+    // };
 
     convertResponseToMonit = (res) => {
         const array = [];
@@ -66,11 +93,18 @@ class Monitoring {
                 clusterMetric.metricType = key;
 
                 if (value.length === 0) {
-                    clusterMetric.metrics.push({
-                        time: unixToTime(unixCurrentTime()),
-                        value: 0,
-                    });
-                    array.push(clusterMetric);
+                    for (
+                        let index = unixStartTime(60 * 6);
+                        index < unixCurrentTime();
+                        index = index + 60 * 5
+                    ) {
+                        clusterMetric.metrics.push({
+                            time: unixToTime(index),
+                            value: 0,
+                        });
+                        array.push(clusterMetric);
+                    }
+
                     return array;
                 }
 
@@ -298,6 +332,36 @@ class Monitoring {
             .then((res) => {
                 runInAction(() => {
                     this.coPieSchedulerRate = this.convertResponseToMonit(res);
+                });
+            });
+    };
+
+    loadAllMetrics = async (
+        target,
+        // start,
+        end,
+        // step,
+        metricFilter,
+        ...option
+    ) => {
+        await axios
+            .get(
+                this.getMonitURL(
+                    target,
+                    unixStartTime(this.lastTime.value),
+                    end,
+                    stepConverter(this.interval.value),
+                    this.clusterName,
+                    metricFilter,
+                    option
+                ),
+                {
+                    auth: BASIC_AUTH,
+                }
+            )
+            .then((res) => {
+                runInAction(() => {
+                    this.allMetrics = res.data.items;
                 });
             });
     };
