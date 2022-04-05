@@ -16,9 +16,10 @@ import moment from "moment";
 import styled from "styled-components";
 
 const TableTitle = styled.p`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const ConfigmapsDetail = observer(() => {
@@ -76,20 +77,16 @@ const ConfigmapsDetail = observer(() => {
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
                 <th>Name</th>
                 <td>{configmapsTabList.name}</td>
-              </tr>
-              <tr>
                 <th>Project</th>
                 <td>{configmapsTabList.namespace}</td>
               </tr>
               <tr>
                 <th>Cluster</th>
                 <td>{configmapsTabList.cluster}</td>
-              </tr>
-              <tr>
                 <th>Data Count</th>
                 <td>{configmapsTabList.dataCnt}</td>
               </tr>
@@ -106,8 +103,17 @@ const ConfigmapsDetail = observer(() => {
           <br />
           <TableTitle>Annotations</TableTitle>
           <table className="tb_data">
-            <tbody>{annotationsTable}</tbody>
+            <tbody>
+              {annotationsTable.length > 0 ? (
+                annotationsTable
+              ) : (
+                <tr>
+                  <td>No Annotations Info.</td>
+                </tr>
+              )}
+            </tbody>
           </table>
+
           <br />
           <TableTitle>Data</TableTitle>
           <table className="tb_data">

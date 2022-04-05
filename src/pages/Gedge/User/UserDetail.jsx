@@ -22,7 +22,7 @@ const UserDetail = observer((props) => {
         <CTabPanel value={tabvalue} index={0}>
           <div className="panelCont">
             <table className="tb_data">
-              <tbody>
+              <tbody className="tb_data_detail">
                 <tr>
                   <th>ID</th>
                   <td>{user.memberId}</td>

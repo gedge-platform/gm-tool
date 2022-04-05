@@ -8,7 +8,7 @@ import ServiceAccountListTab from "./TabList/ServiceAccountListTab";
 
 const Configuration = () => {
   const currentPageTitle = Title.Configuration;
-  const [tabvalue, setTabvalue] = useState(0);
+  const [tabvalue, setTabvalue] = useState(2);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
