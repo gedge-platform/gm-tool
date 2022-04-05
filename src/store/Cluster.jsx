@@ -4,6 +4,7 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Cluster {
   clusterList = [];
+  clusterNameList = [];
   clusterDetail = {
     clusterNum: 0,
     ipAddr: "",
@@ -82,6 +83,7 @@ class Cluster {
               ? res.data.data
               : res.data.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
+          this.clusterNameList = list.map((item) => item.clusterName);
           this.loadCluster(list[0].clusterName);
           // this.clusterDetail = list[0];
           this.totalElements = list.length;

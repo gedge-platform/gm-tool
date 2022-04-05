@@ -26,7 +26,7 @@ const MenuNav = styled.nav`
   li {
     border-bottom: 1px solid #25304b;
     background-color: #2f3955;
-    
+
     a {
       position: relative;
       display: flex;
@@ -35,9 +35,9 @@ const MenuNav = styled.nav`
       padding: 15px 27px 15px 40px;
       color: #afbacb;
       text-decoration: none;
-      transition: .2s;
+      transition: 0.2s;
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         left: 27px;
@@ -46,27 +46,28 @@ const MenuNav = styled.nav`
         border-radius: 50%;
         transform: translateY(-50%);
         background-color: #485770;
-        transition: background-color .2s;
+        transition: background-color 0.2s;
       }
-      &:hover, &.active {
+      &:hover,
+      &.active {
         color: #fff;
         background-color: ${theme.colors.navActive};
         &::before {
-          background-color: #fff
+          background-color: #fff;
         }
       }
       &.active {
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 0;
           left: 0;
           bottom: 0;
           width: 4px;
-          background-color:#00d3ff;
+          background-color: #00d3ff;
         }
         & + .subMenu {
-          display: block
+          display: block;
         }
       }
     }
@@ -88,14 +89,12 @@ const MenuNav = styled.nav`
         }
       }
     }
-
   }
-}
-.open {
-  .navChildren {
-    display: block;
+  .open {
+    .navChildren {
+      display: block;
+    }
   }
-}
 `;
 
 export const SideMenu = () => {
