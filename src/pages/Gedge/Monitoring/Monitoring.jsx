@@ -3,6 +3,9 @@ import Layout from "@/layout";
 import { Title, SubTitle } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import ClusterOverview from "./TabList/ClusterOverviewTab";
+import PsysicalResource from "./TabList/PhysicalResourceTab";
+import APIServer from "./TabList/APIServerTab";
+import Scheduler from "./TabList/SchedulerTab";
 
 const Monitoring = () => {
     const currentPageTitle = Title.Monitoring;
@@ -27,7 +30,13 @@ const Monitoring = () => {
                     <ClusterOverview />
                 </CTabPanel>
                 <CTabPanel value={tabvalue} index={1}>
-                    {/* <ClaimListTab /> */}
+                    <PsysicalResource />
+                </CTabPanel>
+                <CTabPanel value={tabvalue} index={2}>
+                    <APIServer />
+                </CTabPanel>
+                <CTabPanel value={tabvalue} index={3}>
+                    <Scheduler />
                 </CTabPanel>
             </div>
         </Layout>
