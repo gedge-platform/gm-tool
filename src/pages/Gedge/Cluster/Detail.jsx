@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from "react";
-import CommActionBar from "@/components/common/CommActionBar";
-import { CIconButton, CSelectButton } from "@/components/buttons";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { swalConfirm } from "@/utils/swal-utils";
-import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
-import LogDialog from "../../Template/Dialog/LogDialog";
-import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
 import clusterStore from "../../../store/Cluster";
 import styled from "styled-components";
 import { isValidJSON, nullCheck } from "../../../utils/common-utils";
@@ -125,7 +116,12 @@ const Detail = observer((props) => {
         <th style={{ width: "40%" }}>{key}</th>
         <td>
           {isValidJSON(value) ? (
-            <ReactJson src={JSON.parse(value)} theme="summerfruit" />
+            <ReactJson
+              src={JSON.parse(value)}
+              theme="summerfruit"
+              displayDataTypes={false}
+              displayObjectSize={false}
+            />
           ) : (
             value
           )}
