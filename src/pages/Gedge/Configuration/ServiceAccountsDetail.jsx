@@ -14,6 +14,8 @@ import { toJS } from "mobx";
 import styled from "styled-components";
 import moment from "moment";
 import serviceAccountStore from "../../../store/ServiceAccount";
+import { isValidJSON } from "../../../utils/common-utils";
+import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -135,8 +137,19 @@ const ServiceAccountsDetail = observer(() => {
               {annotations ? (
                 Object.entries(annotations).map(([key, value]) => (
                   <tr>
-                    <th>{key}</th>
-                    <td>{value}</td>
+                    <th style={{ width: "20%" }}>{key}</th>
+                    <td>
+                      {isValidJSON(value) ? (
+                        <ReactJson
+                          src={JSON.parse(value)}
+                          theme="summerfruit"
+                          displayDataTypes={false}
+                          displayObjectSize={false}
+                        />
+                      ) : (
+                        value
+                      )}
+                    </td>
                   </tr>
                 ))
               ) : (

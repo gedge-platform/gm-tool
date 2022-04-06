@@ -33,7 +33,7 @@ const VolumeDetail = observer(({ pVolume, metadata }) => {
   });
 
   return (
-    <PanelBox style={{ overflowY: "scroll" }}>
+    <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Claim" />

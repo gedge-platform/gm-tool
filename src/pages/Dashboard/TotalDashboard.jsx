@@ -128,16 +128,15 @@ const TotalDashboard = () => {
         <PanelBox className="panel_service">
           <div className="content_container">
             <ClusterInfo />
-
             <div className="cluster_map">
               <MapContent />
             </div>
           </div>
         </PanelBox>
       </DashboardWrap>
-      <DashboardWrap>
+      {/* <DashboardWrap>
         <PanelBox className="panel_service"></PanelBox>
-      </DashboardWrap>
+      </DashboardWrap> */}
     </Layout>
   );
 };

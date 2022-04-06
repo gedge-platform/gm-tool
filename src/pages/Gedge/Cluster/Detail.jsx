@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
-import CommActionBar from "@/components/common/CommActionBar";
-import { CIconButton, CSelectButton } from "@/components/buttons";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { swalConfirm } from "@/utils/swal-utils";
-import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
-import LogDialog from "../../Template/Dialog/LogDialog";
-import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
 import clusterStore from "../../../store/Cluster";
 import styled from "styled-components";
-import { nullCheck } from "../../../utils/common-utils";
+import { isValidJSON, nullCheck } from "../../../utils/common-utils";
+import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -122,7 +114,18 @@ const Detail = observer((props) => {
     return Object.entries(nodes[nodeNum].annotations).map(([key, value]) => (
       <tr>
         <th style={{ width: "40%" }}>{key}</th>
-        <td>{value}</td>
+        <td>
+          {isValidJSON(value) ? (
+            <ReactJson
+              src={JSON.parse(value)}
+              theme="summerfruit"
+              displayDataTypes={false}
+              displayObjectSize={false}
+            />
+          ) : (
+            value
+          )}
+        </td>
       </tr>
     ));
   };
@@ -141,7 +144,6 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container" style={{ width: "95%" }}>
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -164,7 +166,7 @@ const Detail = observer((props) => {
               </tr>
             </tbody>
           </table>
-          <TableTitle>리소스 상태</TableTitle>
+          <TableTitle>Resource Status</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>

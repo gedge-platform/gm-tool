@@ -14,26 +14,26 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 
 const TableTitle = styled.p`
-    font-size: 14px;
-    font-weight: 500;
-    margin: 8px 0;
-    color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
+  color: #fff;
 `;
 
 const Detail = observer(() => {
-    const { jobDetailData, InvolvesPodList, labels, annotations, events } =
-        jobStore;
-    const [open, setOpen] = useState(false);
-    const [tabvalue, setTabvalue] = useState(0);
+  const { jobDetailData, InvolvesPodList, labels, annotations, events } =
+    jobStore;
+  const [open, setOpen] = useState(false);
+  const [tabvalue, setTabvalue] = useState(0);
 
-    const labelTable = [];
-    const label = labels;
+  const labelTable = [];
+  const label = labels;
 
-    const annotationTable = [];
-    const annotation = annotations;
-    const detailInvolvesPodList = InvolvesPodList;
-    const detailInvolvesPodListTable = [];
-    const eventTable = [];
+  const annotationTable = [];
+  const annotation = annotations;
+  const detailInvolvesPodList = InvolvesPodList;
+  const detailInvolvesPodListTable = [];
+  const eventTable = [];
 
   Object.entries(label).map(([key, value]) => {
     labelTable.push(
@@ -146,81 +146,76 @@ const Detail = observer(() => {
   //     });
   // }
 
-    {
-        events &&
-            events.map((event, message) => {
-                eventTable.push(
-                    <div>
-                        <Accordion>
-                            <AccordionSummary
-                                expandIcon={
-                                    <ExpandMoreRoundedIcon
-                                        sx={{ color: "white" }}
-                                    />
-                                }
-                                aria-controls="ProjectEvent-content"
-                                id="ProjectEvent-header"
-                                sx={{ bgcolor: theme.colors.primaryDark }}
-                            >
-                                <Typography
-                                    sx={{
-                                        width: "10%",
-                                        fontSize: 13,
-                                        color: "white",
-                                    }}
-                                >
-                                    Message
-                                </Typography>
-                                <Typography
-                                    sx={{ fontSize: 13, color: "white" }}
-                                >
-                                    {event["message"]}
-                                </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails
-                                sx={{ bgcolor: theme.colors.panelTit }}
-                            >
-                                <Typography
-                                    sx={{
-                                        fontSize: 13,
-                                        color: "white",
-                                        bgcolor: theme.colors.primary,
-                                    }}
-                                >
-                                    <table className="tb_data">
-                                        <tr>
-                                            <th>Kind</th>
-                                            <td>{event["kind"]}</td>
-                                            <th>Name</th>
-                                            <td>{event["name"]}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Namespace</th>
-                                            <td>{event["namespace"]}</td>
-                                            <th>Cluster</th>
-                                            <td>{event["cluster"]}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Reason</th>
-                                            <td>{event["reason"]}</td>
-                                            <th>Type</th>
-                                            <td>{event["type"]}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Event Time</th>
-                                            <td>{event["eventTime"]}</td>
-                                            <th></th>
-                                            <td></td>
-                                        </tr>
-                                    </table>
-                                </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </div>
-                );
-            });
-    }
+  {
+    events &&
+      events.map((event, message) => {
+        eventTable.push(
+          <div>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+                aria-controls="ProjectEvent-content"
+                id="ProjectEvent-header"
+                sx={{ bgcolor: theme.colors.primaryDark }}
+              >
+                <Typography
+                  sx={{
+                    width: "10%",
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  Message
+                </Typography>
+                <Typography sx={{ fontSize: 13, color: "white" }}>
+                  {event["message"]}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    color: "white",
+                    bgcolor: theme.colors.primary,
+                  }}
+                >
+                  <table className="tb_data">
+                    <tr>
+                      <th>Kind</th>
+                      <td>{event["kind"]}</td>
+                      <th>Name</th>
+                      <td>{event["name"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Namespace</th>
+                      <td>{event["namespace"]}</td>
+                      <th>Cluster</th>
+                      <td>{event["cluster"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Reason</th>
+                      <td>{event["reason"]}</td>
+                      <th>Type</th>
+                      <td>{event["type"]}</td>
+                    </tr>
+                    <tr>
+                      <th>Event Time</th>
+                      <td>{event["eventTime"]}</td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </table>
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
+      });
+  }
 
+  const handleTabChange = (event, newValue) => {
+    setTabvalue(newValue);
+  };
   const handleOpen = () => {
     setOpen(true);
   };
