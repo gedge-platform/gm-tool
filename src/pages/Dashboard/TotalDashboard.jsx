@@ -134,9 +134,9 @@ const TotalDashboard = () => {
           </div>
         </PanelBox>
       </DashboardWrap>
-      <DashboardWrap>
+      {/* <DashboardWrap>
         <PanelBox className="panel_service"></PanelBox>
-      </DashboardWrap>
+      </DashboardWrap> */}
     </Layout>
   );
 };

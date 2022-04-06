@@ -4,16 +4,16 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CCreateButton } from "@/components/buttons";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import workspacesStore from "../../../../store/WorkSpace";
+import CreateWorkSpace from "../Dialog/CreateWorkSpace";
 
 const APIListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -22,16 +22,6 @@ const APIListTab = observer(() => {
   const { WorkSpaceDetail, workSpaceList, loadWorkSpaceList } = workspacesStore;
 
   const [columDefs] = useState([
-    {
-      headerName: "",
-      field: "check",
-      minWidth: 53,
-      maxWidth: 53,
-      filter: false,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      checkboxSelection: true,
-    },
     {
       headerName: "이름",
       field: "workspaceName",
@@ -68,7 +58,13 @@ const APIListTab = observer(() => {
   ]);
 
   const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -78,7 +74,7 @@ const APIListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
@@ -93,6 +89,7 @@ const APIListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateWorkSpace open={open} onClose={handleClose} />
         </PanelBox>
       </CReflexBox>
     </>
