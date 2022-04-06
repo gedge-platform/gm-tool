@@ -144,7 +144,6 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container" style={{ width: "95%" }}>
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -167,7 +166,7 @@ const Detail = observer((props) => {
               </tr>
             </tbody>
           </table>
-          <TableTitle>리소스 상태</TableTitle>
+          <TableTitle>Resource Status</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
