@@ -13,7 +13,8 @@ import { observer } from "mobx-react";
 import { toJS } from "mobx";
 import clusterStore from "../../../store/Cluster";
 import styled from "styled-components";
-import { nullCheck } from "../../../utils/common-utils";
+import { isValidJSON, nullCheck } from "../../../utils/common-utils";
+import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -122,7 +123,13 @@ const Detail = observer((props) => {
     return Object.entries(nodes[nodeNum].annotations).map(([key, value]) => (
       <tr>
         <th style={{ width: "40%" }}>{key}</th>
-        <td>{value}</td>
+        <td>
+          {isValidJSON(value) ? (
+            <ReactJson src={JSON.parse(value)} theme="summerfruit" />
+          ) : (
+            value
+          )}
+        </td>
       </tr>
     ));
   };

@@ -7,6 +7,39 @@ import { swalError } from "../utils/swal-utils";
 class Deployment {
   deploymentList = [];
   deploymentDetail = {
+    name: "",
+    project: "",
+    cluster: "",
+    workspace: "",
+    ready: "",
+    createAt: "",
+    replica: {
+      replicas: 0,
+      readyReplicas: 0,
+      updatedReplicas: 0,
+      availableReplicas: 0,
+      unavailableReplicas: 0,
+    },
+    strategy: {
+      rollingUpdate: {
+        maxSurge: "",
+        maxUnavailable: "",
+      },
+      type: "",
+    },
+    containers: [
+      {
+        env: [{ name: "", value: "" }],
+        image: "",
+        imagePullPolicy: "",
+        name: "",
+        ports: [{ containerPort: 0, protocol: "" }],
+        resources: {},
+        terminationMessagePath: "",
+        terminationMessagePolicy: "",
+      },
+    ],
+    lables: {},
     events: [
       {
         kind: "",
@@ -19,6 +52,8 @@ class Deployment {
         eventTime: "",
       },
     ],
+    annotations: {},
+    involvesData: {},
   };
 
   deploymentEvents = [];
