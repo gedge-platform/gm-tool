@@ -107,21 +107,21 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Deployment</th>
-                <td>{resource.deployment_count}</td>
+                <td>{resource?.deployment_count}</td>
                 <th className="tb_workload_detail_th">Pod</th>
-                <td>{resource.pod_count}</td>
+                <td>{resource?.pod_count}</td>
               </tr>
               <tr>
                 <th>Service</th>
-                <td>{resource.service_count}</td>
+                <td>{resource?.service_count}</td>
                 <th>CronJob</th>
-                <td>{resource.cronjob_count}</td>
+                <td>{resource?.cronjob_count}</td>
               </tr>
               <tr>
                 <th>Job</th>
-                <td>{resource.job_count}</td>
+                <td>{resource?.job_count}</td>
                 <th>Volume</th>
-                <td>{resource.volume_count}</td>
+                <td>{resource?.volume_count}</td>
               </tr>
             </tbody>
           </table>

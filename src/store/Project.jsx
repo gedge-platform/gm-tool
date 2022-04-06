@@ -20,22 +20,11 @@ class Project {
     },
   ];
 
-  resource = {
-    deployment_count: 0,
-    daemonset_count: 0,
-    Statefulset_count: 0,
-    pod_count: 0,
-    service_count: 0,
-    cronjob_count: 0,
-    job_count: 0,
-    volume_count: 0,
-  };
-
   projectListinWorkspace = [];
-
   totalElements = 0;
-
   systemProjectList = [];
+
+  DetailInfo = [{}];
 
   constructor() {
     makeAutoObservable(this);
@@ -52,8 +41,6 @@ class Project {
             (item) => item.projectType === type
           );
           this.projectList = list;
-          // this.projectDetail = this.loadProject(list[0].projectName);
-          //this.projectDetail = list[0];
           this.totalElements = list.length;
         });
       });
@@ -68,14 +55,19 @@ class Project {
       .then((res) => {
         runInAction(() => {
           this.projectDetail = res.data.data;
-          this.resource = res.data.data.DetailInfo[0].resource;
           this.labels = res.data.data.DetailInfo[0].labels;
           this.annotations = res.data.data.DetailInfo[0].annotations;
-          if (res.data.data.DetailInfo[0].events !== null) {
-            this.events = res.data.data.DetailInfo[0].events;
+          if (res.data.data.DetailInfo[0]?.events !== null) {
+            this.events = res.data.data.DetailInfo[0]?.events;
           } else {
             this.events = null;
           }
+          this.DetailInfo = res.data.data.DetailInfo;
+
+          // const temp = new Set(
+          //   res.data.data.map((cluster) => cluster.clusterName)
+          // );
+          // this.clusterList = [...temp];
         });
       });
   };
@@ -102,7 +94,6 @@ class Project {
       .then((res) => {
         runInAction(() => {
           this.systemProjectList = res.data.data;
-          console.log(this.systemProjectList);
           this.totalElements = res.data.data.length;
         });
       });

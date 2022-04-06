@@ -185,23 +185,23 @@ const Detail = observer(() => {
     );
   });
 
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th className="tb_workload_detail_th">Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">Message</th>
-        <td></td>
-      </tr>
-    );
-  }
+  // if (events !== null) {
+  //   events.map((event) => {
+  //     eventsTable.push(
+  //       <tr>
+  //         <th className="tb_workload_detail_th">Message</th>
+  //         <td>{event["message"]}</td>
+  //       </tr>
+  //     );
+  //   });
+  // } else {
+  //   eventsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Message</th>
+  //       <td></td>
+  //     </tr>
+  //   );
+  // }
 
   // pods.map((event) => {
   //   podsTable.push(

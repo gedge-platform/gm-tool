@@ -1206,7 +1206,9 @@ const globalStyles = createGlobalStyle`
 
 //yjy-----------------------
 .tb_workload_detail_th{
-  width: 15%;
+  th,td {
+    width: 25%;
+  }
 }
 
 .tb_workload_detail_labels_th{

@@ -23,6 +23,7 @@ const TableTitle = styled.p`
 const Detail = observer(() => {
   const { jobDetailData, InvolvesPodList, labels, annotations, events } =
     jobStore;
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -53,24 +54,22 @@ const Detail = observer(() => {
     );
   });
 
-<<<<<<< HEAD
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th className="tb_workload_detail_th">Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">Message</th>
-        <td></td>
-      </tr>
-    );
-=======
+  // if (events !== null) {
+  //   events.map((event) => {
+  //     eventsTable.push(
+  //       <tr>
+  //         <th className="tb_workload_detail_th">Message</th>
+  //         <td>{event["message"]}</td>
+  //       </tr>
+  //     );
+  //   });
+  // } else {
+  //   eventsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">Message</th>
+  //       <td></td>
+  //     </tr>
+  //   );
   {
     detailInvolvesPodList &&
       detailInvolvesPodList.map((item) => {
@@ -95,7 +94,6 @@ const Detail = observer(() => {
           </>
         );
       });
->>>>>>> master
   }
 
   {
@@ -218,42 +216,10 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-<<<<<<< HEAD
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td>{jobDetailInvolves.PodList}</td>
-              </tr>
-              <tr>
-                <th>ceph-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook-version</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>rook_cluster</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>Annotations</th>
-                <td>{jobDetailData.annotations}</td>
-              </tr>
-=======
           <TableTitle>Pod List</TableTitle>
           <table className="tb_data">
             <tbody>
               <tr>{detailInvolvesPodListTable}</tr>
->>>>>>> master
             </tbody>
           </table>
           <br />
@@ -276,13 +242,8 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>이벤트</TableTitle>
-<<<<<<< HEAD
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsTable}</tbody>
-=======
           <table className="tb_data">
             <tbody>{eventTable}</tbody>
->>>>>>> master
           </table>
         </div>
       </CTabPanel>

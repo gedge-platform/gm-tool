@@ -29,6 +29,7 @@ const Detail = observer(() => {
     events,
     containerResources,
     podContainerVolume,
+    statusConditions,
   } = podStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
