@@ -516,6 +516,13 @@ const globalStyles = createGlobalStyle`
     }
   }
 
+  .tb_data_container{
+    margin-bottom: 20px;
+    th{
+      width: 20%;
+    }
+  }
+
   /* table */
   .tb_data {
     width: 100%;
