@@ -5,13 +5,8 @@ import styled from "styled-components";
 import moment from "moment";
 import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
-
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { isValidJSON } from "../../../utils/common-utils";
+import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -20,8 +15,52 @@ const TableTitle = styled.p`
   color: #fff;
 `;
 
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
+
 const StatefulSetDetail = observer(() => {
-  const { statefulSetDetail, label, annotations, events } = statefulSetStore;
+  const {
+    statefulSetDetail: {
+      annotations,
+      cluster,
+      containers,
+      createAt,
+      events,
+      label,
+      name,
+      ownerReferences,
+      project,
+      status,
+    },
+  } = statefulSetStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -45,197 +84,227 @@ const StatefulSetDetail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(labelTemp).map(([key, value]) => {
-    labelTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  Object.entries(annotationsTemp).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  // if (events !== null) {
-  //   events.map((event) => {
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event["message"]}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
-  {
-    events &&
-      events.map((event, message) => {
-        eventTable.push(
-          <div>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
-                aria-controls="ProjectEvent-content"
-                id="ProjectEvent-header"
-                sx={{ bgcolor: theme.colors.primaryDark }}
-              >
-                <Typography
-                  sx={{
-                    width: "10%",
-                    fontSize: 13,
-                    color: "white",
-                  }}
-                >
-                  Message
-                </Typography>
-                <Typography sx={{ fontSize: 13, color: "white" }}>
-                  {event["message"]}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-                <Typography
-                  sx={{
-                    fontSize: 13,
-                    color: "white",
-                    bgcolor: theme.colors.primary,
-                  }}
-                >
-                  <table className="tb_data">
-                    <tr>
-                      <th>Kind</th>
-                      <td>{event["kind"]}</td>
-                      <th>Name</th>
-                      <td>{event["name"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Namespace</th>
-                      <td>{event["namespace"]}</td>
-                      <th>Cluster</th>
-                      <td>{event["cluster"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Reason</th>
-                      <td>{event["reason"]}</td>
-                      <th>Type</th>
-                      <td>{event["type"]}</td>
-                    </tr>
-                    <tr>
-                      <th>Event Time</th>
-                      <td>{event["eventTime"]}</td>
-                      <th></th>
-                      <td></td>
-                    </tr>
-                  </table>
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-        );
-      });
-  }
+  // {
+  //   events &&
+  //     events.map((event, message) => {
+  //       eventTable.push(
+  //         <div>
+  //           <Accordion>
+  //             <AccordionSummary
+  //               expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+  //               aria-controls="ProjectEvent-content"
+  //               id="ProjectEvent-header"
+  //               sx={{ bgcolor: theme.colors.primaryDark }}
+  //             >
+  //               <Typography
+  //                 sx={{
+  //                   width: "10%",
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                 }}
+  //               >
+  //                 Message
+  //               </Typography>
+  //               <Typography sx={{ fontSize: 13, color: "white" }}>
+  //                 {event["message"]}
+  //               </Typography>
+  //             </AccordionSummary>
+  //             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+  //               <Typography
+  //                 sx={{
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                   bgcolor: theme.colors.primary,
+  //                 }}
+  //               >
+  //                 <table className="tb_data">
+  //                   <tr>
+  //                     <th>Kind</th>
+  //                     <td>{event["kind"]}</td>
+  //                     <th>Name</th>
+  //                     <td>{event["name"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Namespace</th>
+  //                     <td>{event["namespace"]}</td>
+  //                     <th>Cluster</th>
+  //                     <td>{event["cluster"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Reason</th>
+  //                     <td>{event["reason"]}</td>
+  //                     <th>Type</th>
+  //                     <td>{event["type"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Event Time</th>
+  //                     <td>{event["eventTime"]}</td>
+  //                     <th></th>
+  //                     <td></td>
+  //                   </tr>
+  //                 </table>
+  //               </Typography>
+  //             </AccordionDetails>
+  //           </Accordion>
+  //         </div>
+  //       );
+  //     });
+  // }
 
   return (
-    <PanelBox style={{ overflowY: "hidden" }}>
+    <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{statefulSetDetail.name}</td>
+                <td>{name}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{statefulSetDetail.cluster}</td>
+                <td>{cluster}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{statefulSetDetail.project}</td>
+                <td>{project}</td>
                 <th>Created</th>
-                <td>
-                  {moment(statefulSetDetail.createAt).format(
-                    "YYYY-MM-DD HH:MM"
-                  )}
-                </td>
+                <td>{moment(createAt).format("YYYY-MM-DD HH:MM")}</td>
               </tr>
             </tbody>
           </table>
+          <TableTitle>Containers</TableTitle>
+          {containers
+            ? containers.map((container) => (
+                <table className="tb_data tb_data_container">
+                  <tbody>
+                    <tr>
+                      <th>Container Name</th>
+                      <td>{container.name}</td>
+                    </tr>
+                    <tr>
+                      <th>Image</th>
+                      <td>{container.image}</td>
+                    </tr>
+                    <tr>
+                      <th>Container Ports</th>
+                      <td>
+                        {container.ports?.map((port) => (
+                          <p>
+                            {port.containerPort}/{port.protocol}
+                          </p>
+                        ))}
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th>Environment</th>
+                      <td>
+                        {container.env ? (
+                          <table className="tb_data">
+                            <tbody>
+                              <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                                <th>Source</th>
+                              </tr>
+                              {container.env.map((item) => (
+                                <tr>
+                                  <td>{item.name}</td>
+                                  <td>{item.value}</td>
+                                  <td>{item.valueFrom?.fieldRef?.fieldPath}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ) : (
+                          "No Env Info."
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Args</th>
+                      <td>{JSON.stringify(container.args)}</td>
+                    </tr>
+                    <tr>
+                      <th>Volume Mounts</th>
+                      <td>
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Mount Path</th>
+                              <th>Propagation</th>
+                            </tr>
+                            {container.volumeMounts
+                              ? container.volumeMounts.map((volume) => (
+                                  <tr>
+                                    <td>{volume.name}</td>
+                                    <td>{volume.mountPath}</td>
+                                    <td></td>
+                                  </tr>
+                                ))
+                              : "No Volume Info."}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))
+            : "No Containers Info."}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>워크로드</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
+          <TableTitle>Annotations</TableTitle>
+          <table className="tb_data">
             <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
+              {annotations ? (
+                Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th style={{ width: "20%" }}>{key}</th>
+                    <td>
+                      {isValidJSON(value) ? (
+                        <ReactJson
+                          src={JSON.parse(value)}
+                          theme="summerfruit"
+                          displayDataTypes={false}
+                          displayObjectSize={false}
+                        />
+                      ) : (
+                        value
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td>No Annotations Info.</td>
+                </tr>
+              )}
             </tbody>
           </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-        <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{labelTable}</tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationsTable}</tbody>
-          </table>
-          <br />
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventTable}</tbody>
-          </table>
-        </div>
+        <div className="tb_container">No Events</div>
       </CTabPanel>
     </PanelBox>
   );

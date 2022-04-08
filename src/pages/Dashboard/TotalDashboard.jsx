@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import MapContent from "./DashboardCont/MapContent";
 import ClusterInfo from "./DashboardCont/ClusterInfo";
+import NodeList from "./DashboardCont/NodeList";
 
 const DashboardWrap = styled.div`
   display: flex;
@@ -15,7 +16,10 @@ const DashboardWrap = styled.div`
 
   .panel_service {
     width: 100%;
-    height: 800px;
+
+    .cluster_nodes {
+      padding: 25px;
+    }
 
     .panel_title {
       color: #fff;
@@ -23,10 +27,8 @@ const DashboardWrap = styled.div`
     .content_container {
       display: flex;
       width: 100%;
-      height: 100%;
+      height: 800px;
       padding: 25px;
-      .cluster_map {
-      }
 
       .cluster_info {
         flex: 1;
@@ -134,9 +136,13 @@ const TotalDashboard = () => {
           </div>
         </PanelBox>
       </DashboardWrap>
-      {/* <DashboardWrap>
-        <PanelBox className="panel_service"></PanelBox>
-      </DashboardWrap> */}
+      <DashboardWrap>
+        <PanelBox className="panel_service">
+          <div className="cluster_nodes">
+            <NodeList />
+          </div>
+        </PanelBox>
+      </DashboardWrap>
     </Layout>
   );
 };
