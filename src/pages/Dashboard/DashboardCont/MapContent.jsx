@@ -63,7 +63,7 @@ const MapContent = () => {
     cluster3.bindPopup(
       `<div class="leaflet-popup-content"><span>gs-cluster02</span></div>`
     );
-  });
+  }, []);
   return (
     <div
       id="map"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import UserServiceListTab from "./Tablist/UserServiceListTab";
 import PlatfromServiceListTab from "./Tablist/PlatfromServiceListTab";
