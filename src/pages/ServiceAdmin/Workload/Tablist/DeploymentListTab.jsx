@@ -97,9 +97,6 @@ const DeploymentListTab = observer(() => {
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
-            <CCreateButton style={{ marginLeft: "10px" }}>
-              Load YAML
-            </CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -121,7 +118,7 @@ const DeploymentListTab = observer(() => {
             reloadFunc={loadDeploymentList}
           />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <Detail />
       </CReflexBox>
     </>
   );

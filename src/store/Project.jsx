@@ -24,7 +24,9 @@ class Project {
   totalElements = 0;
   systemProjectList = [];
 
-  DetailInfo = [{}];
+  detailInfo = [{}];
+  clusterList = [];
+  selectCluster = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -35,11 +37,9 @@ class Project {
       .get(`${SERVER_URL2}/userProjects`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
+          const list = data.filter((item) => item.projectType === type);
           this.projectList = list;
           this.totalElements = list.length;
         });
@@ -52,17 +52,22 @@ class Project {
       .get(`${SERVER_URL2}/userProjects/${projectName}`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.projectDetail = res.data.data;
-          this.labels = res.data.data.DetailInfo[0].labels;
-          this.annotations = res.data.data.DetailInfo[0].annotations;
-          if (res.data.data.DetailInfo[0]?.events !== null) {
-            this.events = res.data.data.DetailInfo[0]?.events;
+          this.projectDetail = data;
+          this.labels = data.DetailInfo[0].labels;
+          this.annotations = data.DetailInfo[0].annotations;
+          if (data.DetailInfo[0]?.events !== null) {
+            this.events = data.DetailInfo[0]?.events;
           } else {
             this.events = null;
           }
-          this.DetailInfo = res.data.data.DetailInfo;
+
+          this.detailInfo = data.DetailInfo;
+          this.clusterList = this.detailInfo.map(
+            (cluster) => cluster.clusterName
+          );
+          this.selectCluster = this.clusterList[0];
 
           // const temp = new Set(
           //   res.data.data.map((cluster) => cluster.clusterName)
@@ -77,9 +82,9 @@ class Project {
       .get(`${SERVER_URL2}/userProjects?workspace=${workspaceName}`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.projectListinWorkspace = res.data.data.filter(
+          this.projectListinWorkspace = data.filter(
             (item) => item.projectType === "user"
           );
         });
@@ -91,10 +96,10 @@ class Project {
       .get(`${SERVER_URL2}/systemProjects`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.systemProjectList = res.data.data;
-          this.totalElements = res.data.data.length;
+          this.systemProjectList = data;
+          this.totalElements = data.length;
         });
       });
   };
@@ -102,6 +107,12 @@ class Project {
   setProjectListinWorkspace = (projectList = []) => {
     runInAction(() => {
       this.projectListinWorkspace = projectList;
+    });
+  };
+
+  changeCluster = (cluster) => {
+    runInAction(() => {
+      this.selectCluster = cluster;
     });
   };
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
@@ -23,7 +23,6 @@ const TableTitle = styled.p`
 const Detail = observer(() => {
   const { jobDetailData, InvolvesPodList, labels, annotations, events } =
     jobStore;
-
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -54,47 +53,98 @@ const Detail = observer(() => {
     );
   });
 
-  // if (events !== null) {
-  //   events.map((event) => {
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event["message"]}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
-  {
-    detailInvolvesPodList &&
-      detailInvolvesPodList.map((item) => {
-        detailInvolvesPodListTable.push(
-          <>
-            <tr>
-              <th>Metdata</th>
-              <td>{item.metadata["name"]}</td>
-            </tr>
-            <tr>
-              <th>Phase</th>
-              <td>{item.status["phase"]}</td>
-              <th>Host IP</th>
-              <td>{item.status["hostIP"]}</td>
-              <th>Pod IP</th>
-              <td>{item.status["podIP"]}</td>
-            </tr>
-            <tr>
-              <th>Node name</th>
-              <td>{item.spec["nodeName"]}</td>
-            </tr>
-          </>
-        );
-      });
-  }
+  // {
+  //   detailInvolvesPodList &&
+  //     detailInvolvesPodList.map((item) => {
+  //       detailInvolvesPodListTable.push(
+  //         <>
+  //           <tr>
+  //             <th>Metdata</th>
+  //             <td>{item.metadata["name"]}</td>
+  //           </tr>
+  //           <tr>
+  //             <th>Phase</th>
+  //             <td>{item.status["phase"]}</td>
+  //             <th>Host IP</th>
+  //             <td>{item.status["hostIP"]}</td>
+  //             <th>Pod IP</th>
+  //             <td>{item.status["podIP"]}</td>
+  //           </tr>
+  //           <tr>
+  //             <th>Node name</th>
+  //             <td>{item.spec["nodeName"]}</td>
+  //           </tr>
+  //         </>
+  //       );
+  //     });
+  // }
+
+  // {
+  //   events &&
+  //     events.map((event, message) => {
+  //       eventTable.push(
+  //         <div>
+  //           <Accordion>
+  //             <AccordionSummary
+  //               expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+  //               aria-controls="ProjectEvent-content"
+  //               id="ProjectEvent-header"
+  //               sx={{ bgcolor: theme.colors.primaryDark }}
+  //             >
+  //               <Typography
+  //                 sx={{
+  //                   width: "10%",
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                 }}
+  //               >
+  //                 Message
+  //               </Typography>
+  //               <Typography sx={{ fontSize: 13, color: "white" }}>
+  //                 {event["message"]}
+  //               </Typography>
+  //             </AccordionSummary>
+  //             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+  //               <Typography
+  //                 sx={{
+  //                   fontSize: 13,
+  //                   color: "white",
+  //                   bgcolor: theme.colors.primary,
+  //                 }}
+  //               >
+  //                 <table className="tb_data">
+  //                   <tr>
+  //                     <th>Kind</th>
+  //                     <td>{event["kind"]}</td>
+  //                     <th>Name</th>
+  //                     <td>{event["name"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Namespace</th>
+  //                     <td>{event["namespace"]}</td>
+  //                     <th>Cluster</th>
+  //                     <td>{event["cluster"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Reason</th>
+  //                     <td>{event["reason"]}</td>
+  //                     <th>Type</th>
+  //                     <td>{event["type"]}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>Event Time</th>
+  //                     <td>{event["eventTime"]}</td>
+  //                     <th></th>
+  //                     <td></td>
+  //                   </tr>
+  //                 </table>
+  //               </Typography>
+  //             </AccordionDetails>
+  //           </Accordion>
+  //         </div>
+  //       );
+  //     });
+  // }
 
   {
     events &&
@@ -162,10 +212,6 @@ const Detail = observer(() => {
         );
       });
   }
-
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
 
   const handleOpen = () => {
     setOpen(true);

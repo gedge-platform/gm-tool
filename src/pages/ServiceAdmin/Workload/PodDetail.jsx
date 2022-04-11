@@ -200,18 +200,18 @@ const Detail = observer(() => {
     */
   }
 
-  statusConditions.map((event) => {
-    statusConditionsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">LastTransition Time</th>
-        <td>{event["lastTransitionTime"]}</td>
-        <th className="tb_workload_detail_th">Status</th>
-        <td>{event["status"]}</td>
-        <th className="tb_workload_detail_th">Type</th>
-        <td>{event["type"]}</td>
-      </tr>
-    );
-  });
+  // statusConditions.map((event) => {
+  //   statusConditionsTable.push(
+  //     <tr>
+  //       <th className="tb_workload_detail_th">LastTransition Time</th>
+  //       <td>{event["lastTransitionTime"]}</td>
+  //       <th className="tb_workload_detail_th">Status</th>
+  //       <td>{event["status"]}</td>
+  //       <th className="tb_workload_detail_th">Type</th>
+  //       <td>{event["type"]}</td>
+  //     </tr>
+  //   );
+  // });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>

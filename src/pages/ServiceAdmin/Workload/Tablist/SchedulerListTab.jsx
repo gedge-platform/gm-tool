@@ -8,43 +8,59 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
+import Detail from "../PodDetail";
+import podStore from "../../../../store/Pod";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-import workspacesStore from "../../../../store/WorkSpace";
+import CreatePod from "../Dialog/CreatePod";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateScheduler from "../Dialog/CreateScheduler";
 
-const APIListTab = observer(() => {
+const SchedulerListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { WorkSpaceDetail, workSpaceList, loadWorkSpaceList } = workspacesStore;
-
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
+    podStore;
   const [columDefs] = useState([
     {
-      headerName: "이름",
-      field: "workspaceName",
+      headerName: "파드 이름",
+      field: "name",
       filter: true,
     },
     {
       headerName: "클러스터",
-      field: "selectCluster",
+      field: "cluster",
       filter: true,
     },
     {
-      headerName: "OWNER",
-      field: "workspaceOwner",
+      headerName: "프로젝트",
+      field: "project",
       filter: true,
     },
     {
-      headerName: "CREATOR",
-      field: "workspaceCreator",
+      headerName: "호스트 IP",
+      field: "hostIP",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
+      headerName: "파드 IP",
+      field: "podIP",
+      filter: true,
+    },
+    {
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
+    },
+    {
+      headerName: "생성 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -57,10 +73,23 @@ const APIListTab = observer(() => {
     },
   ]);
 
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
   const history = useHistory();
 
   useEffect(() => {
-    loadWorkSpaceList();
+    loadPodList();
   }, []);
 
   return (
@@ -68,25 +97,30 @@ const APIListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
+            <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={workSpaceList}
+                  onCellClicked={handleClick}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>
           </div>
+          <CreateScheduler
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
       </CReflexBox>
     </>
   );
 });
-
-export default APIListTab;
+export default SchedulerListTab;

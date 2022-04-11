@@ -40,11 +40,6 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
-      filter: true,
-    },
-    {
       headerName: "호스트 IP",
       field: "hostIP",
       filter: true,

@@ -15,10 +15,10 @@ class WorkSpace {
       .get(`${SERVER_URL}/workspaces`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.workSpaceList = res.data.data;
-          this.WorkSpaceDetail = res.data.data[0];
+          this.workSpaceList = data;
+          this.WorkSpaceDetail = data[0];
         });
       });
   };

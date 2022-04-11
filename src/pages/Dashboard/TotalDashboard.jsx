@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { AgGrid } from "@/components/datagrids";
 import styled from "styled-components";
 
-import { CSelectButton } from "@/components/buttons";
-import moment from "moment";
-import { observer } from "mobx-react";
-import CommActionBar from "@/components/common/CommActionBar";
-import { FormControl, MenuItem, Select } from "@mui/material";
-import theme from "../../styles/theme";
 import MapContent from "./DashboardCont/MapContent";
+import ClusterInfo from "./DashboardCont/ClusterInfo";
 
 const DashboardWrap = styled.div`
   display: flex;
@@ -45,14 +39,14 @@ const DashboardWrap = styled.div`
         .MuiInputBase-input {
           background-color: #1c8be0;
           color: rgba(255, 255, 255, 0.9);
-          font-size: 20px;
+          font-size: 16px;
           text-align: center;
           font-weight: 700;
           border: none !important;
           border-radius: 8px;
         }
         svg {
-          font-size: 28px;
+          font-size: 24px;
           color: rgba(255, 255, 255, 0.9);
         }
         .cluster_detail {
@@ -73,16 +67,47 @@ const DashboardWrap = styled.div`
             line-height: 40px;
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 1.1rem;
+            font-size: 15px;
             background-color: #4047cc;
           }
           .cluster_detail_content {
-            height: 50px;
-            line-height: 50px;
-            font-size: 1.2rem;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
             font-weight: 700;
             color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 20px;
+          }
+          .cluster_resources {
+            height: 288px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+
+            .cluster_resource {
+              width: 95px;
+              height: 95px;
+              border-radius: 50%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              background-color: #4047cc;
+              span {
+                font-size: 12px;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.9);
+              }
+              .resource_kind {
+                margin-bottom: 4px;
+              }
+              .resource_number {
+                font-size: 24px;
+                font-weight: 700;
+              }
+            }
           }
         }
       }
@@ -94,36 +119,16 @@ const DashboardWrap = styled.div`
   }
 `;
 
-const clusters = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
-
-const TotalDashboard = observer(() => {
+const TotalDashboard = () => {
   const currentPageTitle = Title.Dashboard;
-
-  useEffect(() => {}, []);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
         <PanelBox className="panel_service">
           <div className="content_container">
-            <div className="cluster_info">
-              <FormControl className="form_dashboard">
-                <Select
-                  value={clusters[0]}
-                  inputProps={{ "aria-label": "Without label" }}
-                >
-                  {clusters.map((cluster) => (
-                    <MenuItem value={cluster}>{cluster}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <div className="cluster_detail">
-                <div className="cluster_detail_title">클러스터 API 주소</div>
-                <div className="cluster_detail_content">http://101.79.4.15</div>
-                <div className="cluster_detail_title">클러스터 API 주소</div>
-                <div className="cluster_detail_content">http://101.79.4.15</div>
-              </div>
-            </div>
+            <ClusterInfo />
+
             <div className="cluster_map">
               <MapContent />
             </div>
@@ -135,5 +140,5 @@ const TotalDashboard = observer(() => {
       </DashboardWrap>
     </Layout>
   );
-});
+};
 export default TotalDashboard;

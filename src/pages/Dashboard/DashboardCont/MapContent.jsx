@@ -22,7 +22,7 @@ const MapContent = () => {
   const mapRef = useRef(null);
 
   const MAP_TILE = L.tileLayer(
-    "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+    "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=0f6be85b-e0ce-41a2-af27-e96c56b394fb",
     {
       maxZoom: 20,
       attribution:
@@ -50,6 +50,7 @@ const MapContent = () => {
   // components:
   useEffect(() => {
     mapRef.current = L.map("map", mapParams);
+    L.marker([37.481, 126.893]).addTo(mapRef.current);
   });
   return (
     <div

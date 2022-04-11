@@ -48,11 +48,11 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
   }
 
   return (
-    <PanelBox style={{ overflowY: "hidden" }}>
+    <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Detail" />
+        <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Label" />
+        <CTab label="Metadata" />
         <CTab label="Event" />
         <CTab label="Finalizers" />
       </CTabs>
