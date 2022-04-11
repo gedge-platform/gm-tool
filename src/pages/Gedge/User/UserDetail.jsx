@@ -49,7 +49,7 @@ const UserDetail = observer((props) => {
                 </tr> */}
                 <tr>
                   <th>등록일</th>
-                  <td>{moment(user.created_at).format("YYYY-MM-DD")}</td>
+                  <td>{moment(user.created_at).format("YYYY-MM-DD HH:mm")}</td>
                   <th></th>
                   <td></td>
                 </tr>

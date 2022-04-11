@@ -549,6 +549,11 @@ const globalStyles = createGlobalStyle`
       }
       
     }
+    .tb_data_podInfo {
+      th, td {
+        width: 10%
+      }
+    }
     tbody {
       th, td {
         height: 33px;

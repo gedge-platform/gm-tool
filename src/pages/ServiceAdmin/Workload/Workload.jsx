@@ -31,7 +31,7 @@ const Workload = () => {
         <CTab label="Pod" />
         <CTab label="Stateful Set" />
         <CTab label="Daemon Set" />
-        <CTab label="Scheduler" />
+        <CTab label="Load YAML" />
         <CTab label="Request Status" />
       </CTabs>
       <div className="tabPanelContainer">
