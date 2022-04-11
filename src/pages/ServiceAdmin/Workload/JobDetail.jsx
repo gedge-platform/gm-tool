@@ -213,6 +213,9 @@ const Detail = observer(() => {
       });
   }
 
+  const handleTabChange = (event, newValue) => {
+    setTabvalue(newValue);
+  };
   const handleOpen = () => {
     setOpen(true);
   };

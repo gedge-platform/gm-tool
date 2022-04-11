@@ -4,17 +4,17 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CCreateButton } from "@/components/buttons";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
+import CreateCluster from "../Dialog/CreateCluster";
 
 const CoreClusterListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -81,6 +81,14 @@ const CoreClusterListTab = observer(() => {
 
   const history = useHistory();
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     loadClusterList("core");
   }, []);
@@ -90,7 +98,7 @@ const CoreClusterListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
@@ -105,6 +113,7 @@ const CoreClusterListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateCluster type={"core"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

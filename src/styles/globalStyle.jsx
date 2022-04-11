@@ -516,6 +516,13 @@ const globalStyles = createGlobalStyle`
     }
   }
 
+  .tb_data_container{
+    margin-bottom: 20px;
+    th{
+      width: 20%;
+    }
+  }
+
   /* table */
   .tb_data {
     width: 100%;
@@ -1622,6 +1629,9 @@ const globalStyles = createGlobalStyle`
     transform: translate(-50%, -100%);
     -webkit-transform: translate(-50%, -100%);
     position: absolute;
+    color:#fff;
+    
+
 
     /* animation: fadeInPopup 0.01s ease-out; */
 
@@ -1644,12 +1654,13 @@ const globalStyles = createGlobalStyle`
     }
 
     .leaflet-popup-content {
-      width: 300px;
-      height: 100px;
+      width: 120px;
+      height: 50px;
       text-align: center;
       padding: 0;
-      margin: 0 0 0 10px;
-      overflow: hidden;
+      display:flex;
+      justify-content: center;
+      align-items: center;
 
       div {
         height: 100%;
@@ -1675,7 +1686,7 @@ const globalStyles = createGlobalStyle`
         }
       }
     }
-  }
+  }}
 `;
 
 export default globalStyles;

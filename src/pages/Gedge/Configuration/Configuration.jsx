@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import ConfigmapsListTab from "./TabList/ConfigmapsListTab";
 import SecretListTab from "./TabList/SecretListTab";
@@ -8,7 +8,7 @@ import ServiceAccountListTab from "./TabList/ServiceAccountListTab";
 
 const Configuration = () => {
   const currentPageTitle = Title.Configuration;
-  const [tabvalue, setTabvalue] = useState(2);
+  const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);

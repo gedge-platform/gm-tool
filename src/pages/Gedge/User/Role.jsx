@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import RoleListTab from "./TabList/RoleListTab";
 
 const Role = (props) => {
   const currentPageTitle = Title.User;
-  // const currentPage = SubTitle.Management.role;
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
   const handleTabChange = (event, newValue) => {

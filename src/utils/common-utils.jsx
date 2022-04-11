@@ -47,3 +47,13 @@ export const randomString = () => {
 export const nullCheck = (str) => {
   return str ?? "Null";
 };
+
+export const isValidJSON = (text) => {
+  if (text === "true" || parseInt(text)) return false;
+  try {
+    JSON.parse(text);
+    return true;
+  } catch {
+    return false;
+  }
+};

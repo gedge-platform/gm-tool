@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import theme from "@/styles/theme";
 import { NavScrollbar } from "@/components/scrollbars";
-import { SubTitle, Title } from "@/pages";
+import { Title } from "@/pages";
 import { useHistory } from "react-router-dom";
 import { getItem } from "@/utils/sessionStorageFn";
 
@@ -180,7 +180,7 @@ export const SideMenu = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/service/volume" activeClassName="active">
+              <NavLink to="/volumes" activeClassName="active">
                 {Title.Volume}
               </NavLink>
             </li>

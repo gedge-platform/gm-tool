@@ -17,6 +17,7 @@ import { SERVER_URL } from "@/config.jsx";
 import { getItem } from "../../../../utils/sessionStorageFn";
 import { swalError } from "../../../../utils/swal-utils";
 import UserAdd from "../../../Management/UserCont/UserAdd";
+import CommActionBar from "@/components/common/CommActionBar";
 
 const RoleListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -25,16 +26,6 @@ const RoleListTab = observer(() => {
   const { userList, userDetail, loadUserList, setDetail } = userStore;
 
   const [columnDefs] = useState([
-    {
-      headerName: "",
-      field: "check",
-      minWidth: 53,
-      maxWidth: 53,
-      filter: false,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      checkboxSelection: true,
-    },
     {
       headerName: "NO",
       field: "memberNum",
@@ -116,46 +107,9 @@ const RoleListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          {/* <div className="panelTitBar panelTitBar_clear">
-            <div className="tit"></div>
-          </div>
-          <CommActionBar isSearch={true}></CommActionBar>
-          <CommActionBar isSearch={false}>
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-            <UserAdd open={open} onClose={handleClose} />
-
-            <CSelectButton items={actionList}>액션</CSelectButton>
-
-            <div className="iconBtnGrope">
-              <CIconButton icon="edit" tooltip="수정" />
-              <CIconButton icon="del" tooltip="삭제" disabled />
-            </div>
-            <div>
-              <Button startIcon={<AddIcon />}>User 생성</Button>
-              <Button color="error" startIcon={<DeleteIcon />}>
-                User 삭제
-              </Button>
-            </div>
-          </CommActionBar> */}
-          <div className="panelTitBar panelTitBar_clear">
-            <div style={{ display: "flex" }}>
-              <div style={{ margin: "auto 10px auto auto" }} />
-            </div>
-            <div className="panelTitBar panelTitBar_clear">
-              <div>
-                <Button startIcon={<AddIcon />} onClick={handleCreateOpen}>
-                  생성
-                </Button>
-                <Button
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  onClick={deleteUser}
-                >
-                  삭제
-                </Button>
-              </div>
-            </div>
-          </div>
+          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+            {/* <CCreateButton>생성</CCreateButton> */}
+          </CommActionBar>
           <div className="grid-height2">
             <AgGrid
               rowData={userList}

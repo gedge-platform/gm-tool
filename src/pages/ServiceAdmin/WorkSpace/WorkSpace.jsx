@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import APIListTab from "./TabList/APIListTab";
 
@@ -26,11 +26,13 @@ const WorkSpace = () => {
 
 export default WorkSpace;
 
-{/* 
+{
+  /* 
  - app.jsx
 <AuthRoute path="/service/workspace" component={ServiceWorkspace} />
 
  - index.jsx
 export { default as ServiceWorkspace } from "./ServiceAdmin/Workspace/Workspace";
 
-*/}
+*/
+}

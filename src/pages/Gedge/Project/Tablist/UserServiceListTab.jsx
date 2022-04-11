@@ -12,8 +12,10 @@ import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateProject from "../../../ServiceAdmin/Project/Dialog/CreateProject";
 
 const UserServiceListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -59,6 +61,13 @@ const UserServiceListTab = observer(() => {
   ]);
 
   const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
@@ -74,7 +83,7 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -90,6 +99,7 @@ const UserServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateProject type={"user"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail project={projectDetail} />
       </CReflexBox>
