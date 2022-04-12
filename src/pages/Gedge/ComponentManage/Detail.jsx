@@ -8,6 +8,7 @@ const TableTitle = styled.p`
   font-size: 16px;
   font-weight: 500;
   margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const Detail = observer((props) => {
