@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import moment from "moment";
 
 //ag-grid filter
 export const agDateColumnFilter = () => {
@@ -56,4 +57,13 @@ export const isValidJSON = (text) => {
   } catch {
     return false;
   }
+};
+
+export const dateFormatter = (date) => {
+  return moment(new Date(date)).format("YYYY-MM-DD HH:mm");
+};
+
+export const strFormatByLength = (str, length = 200) => {
+  if (str.length >= length) return `${str.substr(0, length)}...`;
+  return str;
 };
