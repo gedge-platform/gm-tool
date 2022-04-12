@@ -99,7 +99,12 @@ const UserServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateProject type={"user"} open={open} onClose={handleClose} />
+          <CreateProject
+            reloadFunc={loadProjectList}
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <Detail project={projectDetail} />
       </CReflexBox>

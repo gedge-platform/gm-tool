@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { CDialogNew } from "../../../../components/dialogs";
-import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import { FormGroup } from "@mui/material";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
 import clusterStore from "../../../../store/Cluster";
+import { dateFormatter } from "../../../../utils/common-utils";
+import { CCreateButton } from "@/components/buttons";
+import workspacesStore from "../../../../store/WorkSpace";
+import { swalConfirm } from "../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -28,15 +29,45 @@ const ButtonNext = styled.button`
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
   const { loadClusterList, clusterList } = clusterStore;
+  const { createWorkspace, duplicateCheck } = workspacesStore;
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [workspaceDescription, setWorkspaceDescription] = useState("");
+  const [selectCluster, setSelectCluster] = useState("");
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setSelectCluster([]);
+    setWorkspaceName("");
+    setWorkspaceDescription("");
   };
 
-  const onChange = ({ target: { value } }) => {
-    console.log(value);
+  const onChange = ({ target: { name, value } }) => {
+    if (name === "workspaceName") setWorkspaceName(value);
+    else if (name === "workspaceDescription") setWorkspaceDescription(value);
+  };
+  const checkCluster = ({ target: { checked } }, clusterName) => {
+    if (checked) {
+      setSelectCluster([...selectCluster, clusterName]);
+    } else {
+      setSelectCluster(
+        selectCluster.filter((cluster) => cluster !== clusterName)
+      );
+    }
+  };
+
+  const postWorkspace = () => {
+    console.log(workspaceName, workspaceDescription, selectCluster);
+  };
+  const checkWorkspaceName = () => {
+    duplicateCheck(workspaceName);
+    // if (duplicateCheck(workspaceName)) {
+    //   swalConfirm("사용 가능한 이름입니다.");
+    // } else {
+    //   swalConfirm("이미 사용중인 이름입니다.");
+    //   setWorkspaceName("");
+    // }
   };
 
   useEffect(() => {
@@ -56,19 +87,25 @@ const CreateWorkSpace = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: "20%" }}>
               Workspace Name
               <span className="requried">*</span>
             </th>
-            <td>
+            <td style={{ display: "flex", justifyContent: "space-around" }}>
               <CTextField
                 type="text"
                 placeholder="Workspace Name"
-                className="form_fullWidth"
+                style={{ flex: 3 }}
                 name="workspaceName"
                 onChange={onChange}
-                value={""}
+                value={workspaceName}
               />
+              <ButtonNext
+                onClick={checkWorkspaceName}
+                style={{ height: "32px" }}
+              >
+                중복확인
+              </ButtonNext>
             </td>
           </tr>
           <tr>
@@ -83,7 +120,7 @@ const CreateWorkSpace = observer((props) => {
                 className="form_fullWidth"
                 name="workspaceDescription"
                 onChange={onChange}
-                value={""}
+                value={workspaceDescription}
               />
             </td>
           </tr>
@@ -91,15 +128,60 @@ const CreateWorkSpace = observer((props) => {
             <th>
               Cluster <span className="requried">*</span>
             </th>
-            <td>
-              <FormGroup className="form_fullWidth" onChange={""}>
+            {/* <td>
+              <FormGroup
+                className="form_fullWidth"
+                onChange={(e) => console.log(e.target.name)}
+              >
                 {clusterList?.map((cluster) => (
                   <FormControlLabel
-                    control={<Checkbox name={cluster.clusetrName} />}
-                    label={cluster.clusetrName}
+                    control={<Checkbox name={cluster.clusterName} />}
+                    label={cluster.clusterName}
                   />
                 ))}
               </FormGroup>
+            </td> */}
+
+            <td>
+              <table className="tb_data_new">
+                <tbody className="tb_data_nodeInfo">
+                  <tr>
+                    <th></th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>생성자</th>
+                    <th>노드개수</th>
+                    <th>IP</th>
+                    <th>생성날짜</th>
+                  </tr>
+                  {clusterList.map(
+                    ({
+                      clusterName,
+                      clusterType,
+                      clusterEndpoint,
+                      nodeCnt,
+                      clusterCreator,
+                      created_at,
+                    }) => (
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          <input
+                            type="checkbox"
+                            name="clusterCheck"
+                            onChange={(e) => checkCluster(e, clusterName)}
+                          />
+                        </td>
+                        <td>{clusterName}</td>
+                        <td>{clusterType}</td>
+                        <td>{clusterCreator}</td>
+                        <td>{nodeCnt}</td>
+                        <td>{clusterEndpoint}</td>
+                        <td>{dateFormatter(created_at)}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
             </td>
           </tr>
         </tbody>
@@ -119,7 +201,7 @@ const CreateWorkSpace = observer((props) => {
           }}
         >
           <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={handleClose}>생성</ButtonNext>
+          <ButtonNext onClick={postWorkspace}>생성</ButtonNext>
         </div>
       </div>
     </CDialogNew>

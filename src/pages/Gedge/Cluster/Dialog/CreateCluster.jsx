@@ -36,9 +36,7 @@ const CreateCluster = observer((props) => {
     console.log(value);
   };
 
-  useEffect(() => {
-    loadClusterList();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <CDialogNew
