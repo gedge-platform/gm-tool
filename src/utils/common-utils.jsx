@@ -62,3 +62,8 @@ export const isValidJSON = (text) => {
 export const dateFormatter = (date) => {
   return moment(new Date(date)).format("YYYY-MM-DD HH:mm");
 };
+
+export const strFormatByLength = (str, length = 200) => {
+  if (str.length >= length) return `${str.substr(0, length)}...`;
+  return str;
+};
