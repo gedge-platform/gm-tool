@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL, LOCAL_CLUSTER_URL } from "../config";
 
 class Cluster {
   clusterList = [];
@@ -13,7 +13,7 @@ class Cluster {
     clusterEndpoint: "",
     clusterCreator: "",
     created_at: "",
-    gpu: "",
+    gpu: [],
     resource: {
       deployment_count: 0,
       pod_count: 0,
@@ -21,6 +21,8 @@ class Cluster {
       cronjob_count: 0,
       job_count: 0,
       volume_count: 0,
+      Statefulset_count: 0,
+      daemonset_count: 0,
     },
     nodes: [
       {
@@ -83,6 +85,7 @@ class Cluster {
               ? res.data.data
               : res.data.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
+
           this.clusterNameList = list.map((item) => item.clusterName);
           this.loadCluster(list[0].clusterName);
           // this.clusterDetail = list[0];
@@ -107,6 +110,17 @@ class Cluster {
     await axios
       .get(`http://101.79.4.15:8010/clusterInfo?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
+  };
+  loadClusterInWorkspace = async (workspace) => {
+    console.log(workspace);
+    await axios
+      .get(`${SERVER_URL}/clusters?workspace=${workspace}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) =>
+        // console.log(res);
+        runInAction(() => (this.clusters = res.data.data))
+      );
   };
 
   setDetail = (num) => {

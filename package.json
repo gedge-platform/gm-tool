@@ -6,9 +6,10 @@
   "repository": "http://210.207.104.150:8100/inno-rndplan/hyperledger/hyper-web.git",
   "scripts": {
     "dev": "webpack-dev-server --open --watch",
-    "production-build": "cross-env NODE_ENV=production webpack",
+    "production-build": "cross-env NODE_ENV=production webpack --optimize-minimize",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node server.js"
+    "serve": "node server.js",
+    "build": "webpack --optimize-minimize"
   },
   "author": "innogrid",
   "license": "MIT",
@@ -105,6 +106,7 @@
     "style-loader": "^1.2.1",
     "styled-components": "^5.3.1",
     "terser-webpack-plugin": "^5.1.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^4.1.0",
     "vite": "^2.9.1",
     "webpack": "^4.43.0",

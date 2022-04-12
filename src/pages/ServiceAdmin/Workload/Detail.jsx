@@ -109,7 +109,7 @@ const Detail = observer(() => {
     ));
   };
 
-  pods.map((item) => {
+  pods?.map((item) => {
     podInfoTable.push(
       <tr>
         <th>Name</th>
