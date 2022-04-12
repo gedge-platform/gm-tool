@@ -549,6 +549,11 @@ const globalStyles = createGlobalStyle`
       }
       
     }
+    .tb_data_podInfo {
+      th, td {
+        width: 10%
+      }
+    }
     tbody {
       th, td {
         height: 33px;
@@ -1354,7 +1359,15 @@ const globalStyles = createGlobalStyle`
 
 //yjy-----------------------
 .tb_workload_detail_th{
-  width: 15%;
+  th,td {
+    width: 25%;
+  }
+}
+
+.tb_resources_detail_th{
+  th,td {
+    width: 50%;
+  }
 }
 
 .tb_workload_detail_labels_th{
@@ -1369,8 +1382,8 @@ const globalStyles = createGlobalStyle`
   width: 49%;
   margin: 5px 0 5px 0;
 }
-//map-----------------------
 
+//map-----------------------
 .leaflet-container {
   width: 100%;
   height: 100%;

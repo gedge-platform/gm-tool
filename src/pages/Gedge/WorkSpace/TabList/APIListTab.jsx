@@ -19,7 +19,7 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { WorkSpaceDetail, workSpaceList, loadWorkSpaceList } = workspacesStore;
+  const { workSpaceList, loadWorkSpaceList, totalElements } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -85,6 +85,7 @@ const APIListTab = observer(() => {
                   rowData={workSpaceList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>

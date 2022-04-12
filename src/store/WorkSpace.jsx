@@ -5,6 +5,7 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 class WorkSpace {
   workSpaceList = [];
   WorkSpaceDetail = {};
+  totalElements = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -15,10 +16,11 @@ class WorkSpace {
       .get(`${SERVER_URL}/workspaces`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.workSpaceList = res.data.data;
-          this.WorkSpaceDetail = res.data.data[0];
+          this.workSpaceList = data;
+          this.WorkSpaceDetail = data[0];
+          this.totalElements = data.length;
         });
       });
   };

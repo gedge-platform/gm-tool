@@ -49,14 +49,14 @@ class PlatformProject {
       .get(`${SERVER_URL2}/systemProjects`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.platformProjectList = res.data.data;
+          this.platformProjectList = data;
           // const temp = new Set(
           //   res.data.data.map((cluster) => cluster.clusterName)
           // );
           // this.clusterList = [...temp];
-          this.totalElements = res.data.data.length;
+          this.totalElements = data.length;
         });
       });
     this.loadPlatformDetail(this.platformProjectList[0].projectName);
@@ -72,12 +72,7 @@ class PlatformProject {
         auth: BASIC_AUTH,
       })
       .then((res) => {
-        runInAction(() => {
-          //this.platformDetail = res.data.data[0];
-          //this.labels = res.data.data[0].labels;
-          // this.annotations = res.data.data[0].annotations;
-          // this.resource = res.data.data[0].resource;
-        });
+        runInAction(() => {});
       });
   };
 
@@ -89,19 +84,18 @@ class PlatformProject {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.platformDetail = res.data.data;
-          this.labels = res.data.data.labels;
-          this.annotations = res.data.data.annotations;
-          this.resource = res.data.data.resource;
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.platformDetail = data;
+          this.labels = data.labels;
+          this.annotations = data.annotations;
+          this.resource = data.resource;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
-            // this.events = [];
           }
-          this.resourceUsage = res.data.data.resourceUsage;
+          this.resourceUsage = data.resourceUsage;
         });
       });
   };
