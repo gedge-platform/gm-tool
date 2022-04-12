@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { REQUEST_UR2, REQUEST_URL } from "@/config.jsx";
-import axios from "axios";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import BasicInformation from "./BasicInformation";
 import PodSettins from "./PodSettins";
 import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
-import * as FormData from "form-data";
 import DeploymentPopup from "./DeploymentPopup";
-import clusterStore from "../../../../store/Cluster";
 import projectStore from "../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";

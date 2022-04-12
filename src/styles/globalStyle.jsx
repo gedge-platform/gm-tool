@@ -486,6 +486,11 @@ const globalStyles = createGlobalStyle`
     border-left: 0 hidden;
     border-right: 0 hidden;
     border-collapse: collapse;
+    .tb_data_nodeInfo {
+      th, td{
+        text-align:center;
+      }
+    }
     tbody {
       th, td {
         height: 33px;
@@ -516,6 +521,13 @@ const globalStyles = createGlobalStyle`
     }
   }
 
+  .tb_data_container{
+    margin-bottom: 20px;
+    th{
+      width: 20%;
+    }
+  }
+
   /* table */
   .tb_data {
     width: 100%;
@@ -530,8 +542,21 @@ const globalStyles = createGlobalStyle`
       }
     }
     .tb_data_nodeInfo{
-      th,td{
-        width: 20%
+      tr{
+        td{
+          cursor:pointer;
+        }
+        &:hover{
+          td{
+            color: rgba(255,255,255,0.9)
+          }
+        }
+      }
+      
+    }
+    .tb_data_podInfo {
+      th, td {
+        width: 10%
       }
     }
     tbody {
@@ -1339,7 +1364,15 @@ const globalStyles = createGlobalStyle`
 
 //yjy-----------------------
 .tb_workload_detail_th{
-  width: 15%;
+  th,td {
+    width: 25%;
+  }
+}
+
+.tb_resources_detail_th{
+  th,td {
+    width: 50%;
+  }
 }
 
 .tb_workload_detail_labels_th{
@@ -1354,8 +1387,8 @@ const globalStyles = createGlobalStyle`
   width: 49%;
   margin: 5px 0 5px 0;
 }
-//map-----------------------
 
+//map-----------------------
 .leaflet-container {
   width: 100%;
   height: 100%;
@@ -1606,6 +1639,9 @@ const globalStyles = createGlobalStyle`
     transform: translate(-50%, -100%);
     -webkit-transform: translate(-50%, -100%);
     position: absolute;
+    color:#fff;
+    
+
 
     /* animation: fadeInPopup 0.01s ease-out; */
 
@@ -1628,12 +1664,13 @@ const globalStyles = createGlobalStyle`
     }
 
     .leaflet-popup-content {
-      width: 300px;
-      height: 100px;
+      width: 120px;
+      height: 50px;
       text-align: center;
       padding: 0;
-      margin: 0 0 0 10px;
-      overflow: hidden;
+      display:flex;
+      justify-content: center;
+      align-items: center;
 
       div {
         height: 100%;
@@ -1659,9 +1696,7 @@ const globalStyles = createGlobalStyle`
         }
       }
     }
-  }
-}
-
+  }}
 `;
 
 export default globalStyles;

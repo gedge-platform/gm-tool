@@ -9,8 +9,6 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import workspacesStore from "../../../../store/WorkSpace";
 
 const APIListTab = observer(() => {
@@ -19,27 +17,12 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { WorkSpaceDetail, workSpaceList, loadWorkSpaceList } = workspacesStore;
+  const { workSpaceList, loadWorkSpaceList, totalElements } = workspacesStore;
 
   const [columDefs] = useState([
     {
-      headerName: "",
-      field: "check",
-      minWidth: 53,
-      maxWidth: 53,
-      filter: false,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      checkboxSelection: true,
-    },
-    {
       headerName: "이름",
       field: "workspaceName",
-      filter: true,
-    },
-    {
-      headerName: "설명",
-      field: "workspaceDescription",
       filter: true,
     },
     {
@@ -94,6 +77,7 @@ const APIListTab = observer(() => {
                   rowData={workSpaceList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  totalElements={totalElements}
                 />
               </div>
             </CTabPanel>

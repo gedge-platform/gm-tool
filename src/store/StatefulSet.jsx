@@ -4,7 +4,28 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class StatefulSet {
   statefulSetList = [];
-  statefulSetDetail = {};
+  statefulSetDetail = {
+    name: "",
+    project: "",
+    cluster: "",
+    status: {
+      availableReplicas: 0,
+      collisionCount: 0,
+      currentReplicas: 0,
+      currentRevision: "",
+      observedGeneration: 0,
+      readyReplicas: 0,
+      replicas: 0,
+      updateRevision: "",
+      updatedReplicas: 0,
+    },
+    containers: [{ env: [], ports: [], volumeMounts: [] }],
+    ownerReferences: [],
+    label: {},
+    events: [],
+    annotations: {},
+    createAt: "",
+  };
   label = {};
   annotations = {};
   events = [

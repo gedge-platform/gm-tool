@@ -4,17 +4,21 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class ServiceAccount {
   serviceAccountList = [];
-  serviceAccountDetail = {};
-  serviceAccountTabList = {
+  serviceAccountDetail = {
+    name: "",
+    namespace: "",
+    cluster: "",
     secrets: [
       {
         name: "",
       },
     ],
+    secretCnt: 0,
     label: {},
     annotations: {},
+    createdAt: "",
   };
-  serviceAccountData = {};
+
   totalElements = 0;
 
   constructor() {
@@ -50,20 +54,7 @@ class ServiceAccount {
       )
       .then((res) => {
         runInAction(() => {
-          this.serviceAccountTabList = res.data.data;
-          this.serviceAccountData = {};
-
-          Object.entries(this.serviceAccountTabList?.label).map(
-            ([key, value]) => {
-              this.serviceAccountData[key] = value;
-            }
-          );
-
-          Object.entries(this.serviceAccountTabList?.annotations).map(
-            ([key, value]) => {
-              this.serviceAccountData[key] = value;
-            }
-          );
+          this.serviceAccountDetail = res.data.data;
         });
       });
   };

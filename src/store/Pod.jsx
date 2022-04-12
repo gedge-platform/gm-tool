@@ -51,22 +51,24 @@ class Pod {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.podDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          this.containerResources = res.data.data.containerStatuses;
-          this.podContainerVolume = res.data.data.Podcontainers;
-          console.log(this.podContainerVolume);
-          // this.events = res.data.data.events;
+          this.podDetail = data;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          if (data.containerStatuses !== null) {
+            this.containerResources = data.containerStatuses;
+          } else {
+            this.containerResources = null;
+          }
+          this.podContainerVolume = data.Podcontainers;
 
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }
-          this.statusConditions = res.data.data.statusConditions;
+          this.statusConditions = data.statusConditions;
         });
       });
   };
