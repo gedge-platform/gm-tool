@@ -6,6 +6,7 @@
 // Gedge
 // export const SERVER_URL = "http://101.79.4.15:8010/gmcapi/v1";
 export const SERVER_URL2 = "http://101.79.1.173:8011/gmcapi/v1";
+export const SERVER_URL3 = "http://101.79.1.173:8012/gmcapi/v1";
 export const LOCAL_VOLUME_URL = "http://101.79.1.173:8011/gmcapi/v1";
 export const LOCAL_CLUSTER_URL = "http://101.79.1.173:8011/gmcapi/v1";
 export const SERVER_URL = "http://101.79.4.15:8010/gmcapi/v1";

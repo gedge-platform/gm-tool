@@ -41,12 +41,6 @@ const EdgeClusterListTab = observer(() => {
     //     checkboxSelection: true,
     // },
     {
-      headerName: "No",
-      field: "clusterNum",
-      maxWidth: 80,
-      filter: true,
-    },
-    {
       headerName: "이름",
       field: "clusterName",
       filter: true,

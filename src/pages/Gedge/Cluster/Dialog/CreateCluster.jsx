@@ -4,6 +4,7 @@ import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
+import clusterStore from "../../../../store/Cluster";
 
 const Button = styled.button`
   background-color: #fff;
@@ -24,6 +25,7 @@ const ButtonNext = styled.button`
 
 const CreateCluster = observer((props) => {
   const { open } = props;
+  const { loadClusterList, clusterList } = clusterStore;
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();

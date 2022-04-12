@@ -1,6 +1,8 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
+import { getItem } from "@/utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class Project {
   projectList = [];
@@ -32,9 +34,9 @@ class Project {
     makeAutoObservable(this);
   }
 
-  loadProjectList = async (type) => {
+  loadProjectList = async (type = "user") => {
     await axios
-      .get(`${SERVER_URL2}/userProjects`, {
+      .get(`${SERVER_URL}/userProjects`, {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
@@ -49,7 +51,7 @@ class Project {
 
   loadProjectDetail = async (projectName) => {
     await axios
-      .get(`${SERVER_URL2}/userProjects/${projectName}`, {
+      .get(`${SERVER_URL}/userProjects/${projectName}`, {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
@@ -79,7 +81,7 @@ class Project {
 
   loadProjectListInWorkspace = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL2}/userProjects?workspace=${workspaceName}`, {
+      .get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`, {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
@@ -93,7 +95,7 @@ class Project {
 
   loadSystemProjectList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/systemProjects`, {
+      .get(`${SERVER_URL}/systemProjects`, {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
@@ -114,6 +116,39 @@ class Project {
     runInAction(() => {
       this.selectCluster = cluster;
     });
+  };
+
+  createProject = (
+    projectName,
+    projectDescription,
+    projectType,
+    workspaceName,
+    selectCluster,
+    callback
+  ) => {
+    const body = {
+      projectName,
+      projectDescription,
+      projectType,
+      selectCluster: selectCluster.join(","),
+      workspaceName,
+      projectCreator: getItem("user"),
+      projectOwner: getItem("user"),
+    };
+    console.log(body);
+    axios
+      .post(`${SERVER_URL}/projects`, body, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("Project가 생성되었습니다!", callback);
+        } else {
+          swalError("생성에 실패하였습니다.", callback);
+        }
+      })
+      .catch((err) => swalError("생성에 실패하였습니다.", callback));
   };
 }
 

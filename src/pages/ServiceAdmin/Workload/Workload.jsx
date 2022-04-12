@@ -29,8 +29,8 @@ const Workload = () => {
         <CTab label="Job" />
         <CTab label="CronJob" />
         <CTab label="Pod" />
-        <CTab label="Stateful Set" />
-        <CTab label="Daemon Set" />
+        <CTab label="StatefulSet" />
+        <CTab label="DaemonSet" />
         <CTab label="Load YAML" />
         <CTab label="Request Status" />
       </CTabs>
