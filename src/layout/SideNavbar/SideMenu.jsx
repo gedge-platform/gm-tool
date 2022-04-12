@@ -160,13 +160,13 @@ export const SideMenu = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/service/project" activeClassName="active">
-                {Title.Project}
+              <NavLink to="/service/Workspace" activeClassName="active">
+                {Title.WorkSpace}
               </NavLink>
             </li>
             <li>
-              <NavLink to="/service/Workspace" activeClassName="active">
-                {Title.WorkSpace}
+              <NavLink to="/service/project" activeClassName="active">
+                {Title.Project}
               </NavLink>
             </li>
             {/* <li>

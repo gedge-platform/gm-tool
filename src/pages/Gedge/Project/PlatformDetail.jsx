@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from "react";
-import CommActionBar from "@/components/common/CommActionBar";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
 import platformProjectStore from "../../../store/PlatformProject";
-import { keys } from "lodash";
 import "@grapecity/wijmo.styles/wijmo.css";
 import theme from "@/styles/theme";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import { EventSeatTwoTone } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -26,13 +22,11 @@ const TableTitle = styled.p`
 
 const Detail = observer(() => {
   const {
-    platformProjectList,
     platformDetail,
     labels,
     annotations,
     events,
     resource,
-    clusterList,
     resourceUsage,
   } = platformProjectStore;
 
@@ -40,17 +34,7 @@ const Detail = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const labelsTable = [];
   const annotationsTable = [];
-  //   let eventsTemp = events;
   const eventsTable = [];
-  const clusterNameTable = [];
-
-  //   const clusterNameListTemp = platformProjectList.map(
-  //     (event) => event.clusterName
-  //   );
-
-  //   const clusterNameList = platformProjectList.filter(
-  //     (event) => event.clusterName === clusterNameListTemp[0]
-  //   );
 
   Object.entries(labels).map(([key, value]) => {
     labelsTable.push(
@@ -69,25 +53,6 @@ const Detail = observer(() => {
       </tr>
     );
   });
-
-  // if (events !== null) {
-  //   events.map((event) => {
-  //     console.log(event);
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event.message}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
-  // }
 
   if (events !== null) {
     events.map((event) => {
@@ -217,7 +182,6 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -246,7 +210,6 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>리소스 사용량</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -273,12 +236,12 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
+          <TableTitle>Labels</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{labelsTable}</tbody>
           </table>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationsTable}</tbody>
           </table>
@@ -287,7 +250,6 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{eventsTable}</tbody>
           </table>
