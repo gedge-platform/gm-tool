@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL, LOCAL_CLUSTER_URL } from "../config";
 
 class Cluster {
   clusterList = [];
@@ -13,7 +13,7 @@ class Cluster {
     clusterEndpoint: "",
     clusterCreator: "",
     created_at: "",
-    gpu: "",
+    gpu: [],
     resource: {
       deployment_count: 0,
       pod_count: 0,
@@ -21,6 +21,8 @@ class Cluster {
       cronjob_count: 0,
       job_count: 0,
       volume_count: 0,
+      Statefulset_count: 0,
+      daemonset_count: 0,
     },
     nodes: [
       {

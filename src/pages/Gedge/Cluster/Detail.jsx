@@ -4,8 +4,13 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import clusterStore from "../../../store/Cluster";
 import styled from "styled-components";
-import { isValidJSON, nullCheck } from "../../../utils/common-utils";
+import {
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -51,6 +56,11 @@ const Label = styled.span`
   }
 `;
 
+const NoInfo = styled.div`
+  padding: 12px 12px;
+  background-color: #141a30;
+`;
+
 const Detail = observer((props) => {
   const {
     clusterDetail: {
@@ -70,6 +80,8 @@ const Detail = observer((props) => {
         pod_count,
         service_count,
         volume_count,
+        Statefulset_count,
+        daemonset_count,
       },
     },
   } = clusterStore;
@@ -139,6 +151,7 @@ const Detail = observer((props) => {
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
+        <CTab label="Resource Status" />
         <CTab label="Node Info" />
         <CTab label="Events" />
       </CTabs>
@@ -159,14 +172,43 @@ const Detail = observer((props) => {
                 <td>{clusterCreator}</td>
               </tr>
               <tr>
-                <th>GPU</th>
-                <td>{nullCheck(gpu)}</td>
                 <th>Created</th>
-                <td>{created_at}</td>
+                <td>{dateFormatter(created_at)}</td>
               </tr>
             </tbody>
           </table>
-          <TableTitle>Resource Status</TableTitle>
+
+          <TableTitle>GPU List</TableTitle>
+          {gpu ? (
+            <>
+              <table className="tb_data">
+                <tbody className="tb_data_detail">
+                  <tr>
+                    <th>container</th>
+                    <th>name</th>
+                    <th>node</th>
+                    <th>uuid</th>
+                    <th>vbios_version</th>
+                  </tr>
+                  {gpu.map(({ container, name, node, uuid, vbios_version }) => (
+                    <tr>
+                      <td>{container}</td>
+                      <td>{name}</td>
+                      <td>{node}</td>
+                      <td>{uuid}</td>
+                      <td>{vbios_version}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <NoInfo>No GPU Info.</NoInfo>
+          )}
+        </div>
+      </CTabPanel>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
+        <div className="tb_container" style={{ width: "95%" }}>
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -182,6 +224,12 @@ const Detail = observer((props) => {
                 <td>{cronjob_count}</td>
               </tr>
               <tr>
+                <th>StatefulSet</th>
+                <td>{Statefulset_count}</td>
+                <th>DaemonSet</th>
+                <td>{daemonset_count}</td>
+              </tr>
+              <tr>
                 <th>Job</th>
                 <td>{job_count}</td>
                 <th>Volume</th>
@@ -191,7 +239,7 @@ const Detail = observer((props) => {
           </table>
         </div>
       </CTabPanel>
-      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container" style={{ width: "95%" }}>
           <TableTitle>Node List</TableTitle>
           <table className="tb_data">
@@ -222,6 +270,9 @@ const Detail = observer((props) => {
             <tbody>{annotationByNode()}</tbody>
           </table>
         </div>
+      </CTabPanel>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );

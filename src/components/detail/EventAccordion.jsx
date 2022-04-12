@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { dateFormatter } from "../../utils/common-utils";
+import { dateFormatter, strFormatByLength } from "@/utils/common-utils";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -59,7 +59,7 @@ const EventAccordion = ({ events }) => {
                         color: "rgba(255,255,255,0.7)",
                       }}
                     >
-                      {message}
+                      {strFormatByLength(message)}
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>

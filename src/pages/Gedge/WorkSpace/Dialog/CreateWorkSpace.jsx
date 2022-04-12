@@ -6,6 +6,7 @@ import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { FormGroup } from "@mui/material";
 import { Checkbox, FormControlLabel } from "@material-ui/core";
+import clusterStore from "../../../../store/Cluster";
 
 const Button = styled.button`
   background-color: #fff;
@@ -26,7 +27,8 @@ const ButtonNext = styled.button`
 
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
-  const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
+  const { loadClusterList, clusterList } = clusterStore;
+  // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
@@ -37,7 +39,9 @@ const CreateWorkSpace = observer((props) => {
     console.log(value);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadClusterList();
+  }, []);
 
   return (
     <CDialogNew
@@ -89,10 +93,10 @@ const CreateWorkSpace = observer((props) => {
             </th>
             <td>
               <FormGroup className="form_fullWidth" onChange={""}>
-                {clusterList.map((cluster) => (
+                {clusterList?.map((cluster) => (
                   <FormControlLabel
-                    control={<Checkbox name={cluster} />}
-                    label={cluster}
+                    control={<Checkbox name={cluster.clusetrName} />}
+                    label={cluster.clusetrName}
                   />
                 ))}
               </FormGroup>

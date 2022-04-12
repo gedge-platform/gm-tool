@@ -50,7 +50,7 @@ export const nullCheck = (str) => {
 };
 
 export const isValidJSON = (text) => {
-  if (text === "true" || parseInt(text)) return false;
+  if (text === "true" || parseInt(text) || text === "0") return false;
   try {
     JSON.parse(text);
     return true;
