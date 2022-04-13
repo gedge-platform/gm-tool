@@ -17,7 +17,38 @@ const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
 `;
 
 const Detail = observer(() => {
@@ -32,18 +63,17 @@ const Detail = observer(() => {
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const labelsTable = [];
   const annotationsTable = [];
   const eventsTable = [];
 
-  Object.entries(labels).map(([key, value]) => {
-    labelsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
+  const labelsTable = () => {
+    return Object.entries(labels).map(([key, value]) => (
+      <Label>
+        <span className="key">{key}</span>
+        <span className="value">{value}</span>
+      </Label>
+    ));
+  };
 
   Object.entries(annotations).map(([key, value]) => {
     annotationsTable.push(
@@ -60,7 +90,11 @@ const Detail = observer(() => {
         <div>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                />
+              }
               aria-controls="ProjectEvent-content"
               id="ProjectEvent-header"
               sx={{ bgcolor: theme.colors.primaryDark }}
@@ -69,46 +103,52 @@ const Detail = observer(() => {
                 sx={{
                   width: "10%",
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                 }}
               >
                 Message
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "white" }}>
-                {event["message"]}
+              <Typography
+                sx={{
+                  width: "80%",
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                }}
+              >
+                {event?.message}
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
               <Typography
                 sx={{
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                   bgcolor: theme.colors.primary,
                 }}
               >
                 <table className="tb_data">
                   <tr>
                     <th>Kind</th>
-                    <td>{event["kind"]}</td>
+                    <td>{event?.kind}</td>
                     <th>Name</th>
-                    <td>{event["name"]}</td>
+                    <td>{event?.name}</td>
                   </tr>
                   <tr>
                     <th>Namespace</th>
-                    <td>{event["namespace"]}</td>
+                    <td>{event?.namespace}</td>
                     <th>Cluster</th>
-                    <td>{event["cluster"]}</td>
+                    <td>{event?.cluster}</td>
                   </tr>
                   <tr>
                     <th>Reason</th>
-                    <td>{event["reason"]}</td>
+                    <td>{event?.reason}</td>
                     <th>Type</th>
-                    <td>{event["type"]}</td>
+                    <td>{event?.type}</td>
                   </tr>
                   <tr>
                     <th>Event Time</th>
                     <td>
-                      {moment(event["eventTime"]).format("YYYY-MM-DD HH:mm")}
+                      {moment(event?.eventTime).format("YYYY-MM-DD HH:mm")}
                     </td>
                     <th></th>
                     <td></td>
@@ -125,7 +165,11 @@ const Detail = observer(() => {
       <div>
         <Accordion>
           <AccordionSummary
-            expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+            expandIcon={
+              <ExpandMoreRoundedIcon
+                sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+              />
+            }
             aria-controls="ProjectEvent-content"
             id="ProjectEvent-header"
             sx={{ bgcolor: theme.colors.primaryDark }}
@@ -134,18 +178,21 @@ const Detail = observer(() => {
               sx={{
                 width: "10%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
               }}
             >
               Message
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "white" }}></Typography>
+            <Typography
+              sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+            ></Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
             <Typography
               sx={{
+                width: "80%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
                 bgcolor: theme.colors.primary,
               }}
             >
@@ -237,9 +284,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{labelsTable}</tbody>
-          </table>
+          <LabelContainer>{labelsTable()}</LabelContainer>
           <br />
           <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
