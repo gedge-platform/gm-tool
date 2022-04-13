@@ -19,7 +19,7 @@ const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const LabelContainer = styled.div`
@@ -69,7 +69,7 @@ const Detail = observer(() => {
   const annotationsTable = [];
   const statusConditionsTable = [];
   const podContainer = containerResources;
-
+  const podContainerTable = [];
   const podContainerVolumesTable = [];
 
   const eventTable = [];
@@ -93,14 +93,6 @@ const Detail = observer(() => {
       </Label>
     ));
   };
-  // Object.entries(label).map(([key, value]) => {
-  //   labelTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_labels_th">{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
 
   Object.entries(annotations).map(([key, value]) => {
     annotationsTable.push(
@@ -111,70 +103,20 @@ const Detail = observer(() => {
     );
   });
 
-  const podContainerTable = [];
-  podContainer.map((item) => {
-    item?.ready === true && item?.started === true
-      ? podContainerTable.push(
-          <tr>
-            <th>Container ID</th>
-            <td>{item?.containerID}</td>
-            <th>Name</th>
-            <td>{item?.name}</td>
-            <th>ready</th>
-            <td>true</td>
-            <th>restartCount</th>
-            <td>{item?.restartCount}</td>
-            <th>image</th>
-            <td>{item?.image}</td>
-            <th>started</th>
-            <td>true</td>
-          </tr>
-        )
-      : podContainerTable.push(
-          <tr>
-            <th>Container ID</th>
-            <td>{item?.containerID}</td>
-            <th>Name</th>
-            <td>{item?.name}</td>
-            <th>ready</th>
-            <td>true</td>
-            <th>restartCount</th>
-            <td>{item?.restartCount}</td>
-            <th>image</th>
-            <td>{item?.image}</td>
-            <th>started</th>
-            <td>true</td>
-          </tr>
-        );
-  });
-
   const temp = podContainerVolume.map((item) => item?.volumemounts);
   const temp2 = temp.map((item) => toJS(item));
   const newArr = temp2.flat();
   newArr.map((vol) => {
-    {
-      vol?.readonly === true
-        ? podContainerVolumesTable.push(
-            <tr>
-              <th style={{ width: "10%" }}>Mountpath</th>
-              <td style={{ width: "30%" }}>{vol?.mountpath}</td>
-              <th style={{ width: "10%" }}>Name</th>
-              <td style={{ width: "20%" }}>{vol?.name}</td>
-              <th style={{ width: "10%" }}>Readonly</th>
-              <td style={{ width: "20%" }}>true</td>
-            </tr>
-          )
-        : podContainerVolumesTable.push(
-            <tr>
-              <th style={{ width: "10%" }}>Mountpath</th>
-              <td style={{ width: "30%" }}>{vol?.mountpath}</td>
-              <th style={{ width: "10%" }}>Name</th>
-              <td style={{ width: "20%" }}>{vol?.name}</td>
-              <th style={{ width: "10%" }}>Readonly</th>
-              <td style={{ width: "20%" }}>false</td>
-            </tr>
-          );
-    }
+    podContainerVolumesTable.push(
+      <tr>
+        <th style={{ width: "10%" }}>Mountpath</th>
+        <td style={{ width: "30%" }}>{vol?.mountpath}</td>
+        <th style={{ width: "10%" }}>Name</th>
+        <td style={{ width: "20%" }}>{vol?.name}</td>
+        <th style={{ width: "10%" }}>Readonly</th>
+        <td style={{ width: "20%" }}>{vol?.readonly ? "true" : "false"}</td>
+      </tr>
+    );
   });
 
   const eventsTable = [];
@@ -184,7 +126,11 @@ const Detail = observer(() => {
         <div>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                />
+              }
               aria-controls="ProjectEvent-content"
               id="ProjectEvent-header"
               sx={{ bgcolor: theme.colors.primaryDark }}
@@ -193,12 +139,14 @@ const Detail = observer(() => {
                 sx={{
                   width: "10%",
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                 }}
               >
                 Message
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "white" }}>
+              <Typography
+                sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 {events?.message}
               </Typography>
             </AccordionSummary>
@@ -206,7 +154,7 @@ const Detail = observer(() => {
               <Typography
                 sx={{
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                   bgcolor: theme.colors.primary,
                 }}
               >
@@ -249,7 +197,11 @@ const Detail = observer(() => {
       <div>
         <Accordion>
           <AccordionSummary
-            expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+            expandIcon={
+              <ExpandMoreRoundedIcon
+                sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+              />
+            }
             aria-controls="ProjectEvent-content"
             id="ProjectEvent-header"
             sx={{ bgcolor: theme.colors.primaryDark }}
@@ -258,18 +210,20 @@ const Detail = observer(() => {
               sx={{
                 width: "10%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
               }}
             >
               Message
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "white" }}></Typography>
+            <Typography
+              sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+            ></Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
             <Typography
               sx={{
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
                 bgcolor: theme.colors.primary,
               }}
             >
@@ -284,21 +238,6 @@ const Detail = observer(() => {
       </div>
     );
   }
-
-  // {
-  //   /* // statusConditions.map((event) => {
-  // //   statusConditionsTable.push(
-  // //     <tr>
-  // //       <th className="tb_workload_detail_th">LastTransition Time</th>
-  // //       <td>{event["lastTransitionTime"]}</td>
-  // //       <th className="tb_workload_detail_th">Status</th>
-  // //       <td>{event["status"]}</td>
-  // //       <th className="tb_workload_detail_th">Type</th>
-  // //       <td>{event["type"]}</td>
-  // //     </tr>
-  // //   );
-  // // }); */
-  // }
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
@@ -346,11 +285,39 @@ const Detail = observer(() => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
-        <div className="tb_container">
+        <div className="tb_container" style={{ tableLayout: "fixed" }}>
           <TableTitle>Pod Containers</TableTitle>
-          <table className="tb_data">
-            <tbody>{podContainerTable}</tbody>
-          </table>
+          {podContainer.map((item) => (
+            <>
+              <table className="tb_data">
+                <tbody>
+                  <tr>
+                    <th style={{ width: "10%" }}>Container ID</th>
+                    <td style={{ width: "40%" }}>{item?.containerID}</td>
+                    <th style={{ width: "10%" }}>Name</th>
+                    <td style={{ width: "40%" }}>{item?.name}</td>
+                  </tr>
+                  <tr>
+                    <th style={{ width: "10%" }}>ready</th>
+                    <td style={{ width: "40%" }}>
+                      {item?.ready ? "true" : "false"}
+                    </td>
+                    <th style={{ width: "10%" }}>restartCount</th>
+                    <td style={{ width: "40%" }}>{item?.restartCount}</td>
+                  </tr>
+                  <tr>
+                    <th style={{ width: "10%" }}>image</th>
+                    <td style={{ width: "40%" }}>{item?.image}</td>
+                    <th style={{ width: "10%" }}>started</th>
+                    <td style={{ width: "40%" }}>
+                      {item?.started ? "true" : "false"}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br />
+            </>
+          ))}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>

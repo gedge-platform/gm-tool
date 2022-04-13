@@ -33,7 +33,7 @@ class Job {
       protocol: "",
     },
   ];
-  InvolvesPodList = [
+  involvesPodList = [
     {
       metadata: {
         name: "",
@@ -99,17 +99,16 @@ class Job {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data, involves } }) => {
         runInAction(() => {
-          this.jobDetailData = res.data.data;
-          this.jobDetailInvolves = res.data.involves;
-          this.labels = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          this.InvolvesPodList = res.data.involves.podList;
-          console.log(this.InvolvesPodList);
+          this.jobDetailData = data;
+          this.jobDetailInvolves = involves;
+          this.labels = data.label;
+          this.annotations = data.annotations;
+          this.involvesPodList = involves.podList;
 
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }

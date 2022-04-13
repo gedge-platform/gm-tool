@@ -31,11 +31,9 @@ class CronJob {
       .get(`${SERVER_URL}/cronjobs`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
+          const list = data.filter((item) => item.projectType === type);
           this.cronJobList = list;
           // this.cronJobDetail = list[0];
           this.totalElements = list.length;
@@ -56,15 +54,14 @@ class CronJob {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.cronJobDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          this.cronjobInvolvesJobs = res.data.involvesData.jobs;
-
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.cronJobDetail = data;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.cronjobInvolvesJobs = involvesData.jobs;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }

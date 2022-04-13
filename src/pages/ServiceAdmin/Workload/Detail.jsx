@@ -17,7 +17,7 @@ const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 const LabelContainer = styled.div`
@@ -62,6 +62,7 @@ const Detail = observer(() => {
     depServices,
     depServicesPort,
     events,
+    containersTemp,
   } = deploymentStore;
 
   const [open, setOpen] = useState(false);
@@ -140,7 +141,11 @@ const Detail = observer(() => {
         <div>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255,255,255,0.7)" }}
+                />
+              }
               aria-controls="ProjectEvent-content"
               id="ProjectEvent-header"
               sx={{ bgcolor: theme.colors.primaryDark }}
@@ -149,12 +154,18 @@ const Detail = observer(() => {
                 sx={{
                   width: "10%",
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255,255,255,0.7)",
                 }}
               >
                 Message
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "white" }}>
+              <Typography
+                sx={{
+                  width: "80%",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
                 {events?.message}
               </Typography>
             </AccordionSummary>
@@ -162,7 +173,7 @@ const Detail = observer(() => {
               <Typography
                 sx={{
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255,255,255,0.7)",
                   bgcolor: theme.colors.primary,
                 }}
               >
@@ -205,7 +216,9 @@ const Detail = observer(() => {
       <div>
         <Accordion>
           <AccordionSummary
-            expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+            expandIcon={
+              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+            }
             aria-controls="ProjectEvent-content"
             id="ProjectEvent-header"
             sx={{ bgcolor: theme.colors.primaryDark }}
@@ -214,18 +227,24 @@ const Detail = observer(() => {
               sx={{
                 width: "10%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255,255,255,0.7)",
               }}
             >
               Message
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "white" }}></Typography>
+            <Typography
+              sx={{
+                width: "80%",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.7)",
+              }}
+            ></Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
             <Typography
               sx={{
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255,255,255,0.7)",
                 bgcolor: theme.colors.primary,
               }}
             >
@@ -287,7 +306,43 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>Pod Info</TableTitle>
+          <TableTitle>Containers</TableTitle>
+          {containersTemp.map((containers) => (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                <tr>
+                  <th>Image</th>
+                  <td>{containers?.image}</td>
+                </tr>
+                <tr>
+                  <th>ImagePullPolicy</th>
+                  <td>{containers?.imagePullPolicy}</td>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <td>{containers?.name}</td>
+                </tr>
+                <tr>
+                  <th>Ports</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Resources</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>TerminationMessagePath</th>
+                  <td>{containers?.terminationMessagePath}</td>
+                </tr>
+                <tr>
+                  <th>TerminationMessagePolicy</th>
+                  <td>{containers?.terminationMessagePolicy}</td>
+                </tr>
+              </tbody>
+            </table>
+          ))}
+          <br />
+          <TableTitle>Pod</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_podInfo">{podInfoTable}</tbody>
           </table>
