@@ -76,6 +76,22 @@ class Deployment {
       eventTime: "",
     },
   ];
+  containersTemp = [
+    {
+      image: "",
+      imagePullPolicy: "",
+      name: "",
+      ports: [
+        {
+          containerPort: 0,
+          protocol: "",
+        },
+      ],
+      resources: {},
+      terminationMessagePath: "",
+      terminationMessagePolicy: "",
+    },
+  ];
   pods = [{}];
   totalElements = 0;
   deploymentName = "";
@@ -152,24 +168,24 @@ class Deployment {
         `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`,
         { auth: BASIC_AUTH }
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.deploymentDetail = res.data.data;
-          this.strategy = res.data.data.strategy;
-          this.labels = res.data.data.labels;
-          this.annotations = res.data.data.annotations;
-
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.deploymentDetail = data;
+          this.strategy = data.strategy;
+          this.labels = data.labels;
+          this.annotations = data.annotations;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }
-
-          this.deploymentInvolvesData = res.data.involvesData;
-          this.pods = res.data.involvesData.pods;
-          this.depServices = res.data.involvesData.services;
-          this.depServicesPort = res.data.involvesData.services.port;
-          this.deploymentEvents = res.data.data.events;
+          this.deploymentInvolvesData = involvesData;
+          this.pods = involvesData.pods;
+          this.depServices = involvesData.services;
+          this.depServicesPort = involvesData.services.port;
+          this.deploymentEvents = data.events;
+          this.containersTemp = data.containers;
+          console.log(this.containersTemp);
         });
       });
   };
