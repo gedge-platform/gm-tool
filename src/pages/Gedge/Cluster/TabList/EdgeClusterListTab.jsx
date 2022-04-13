@@ -26,7 +26,6 @@ const EdgeClusterListTab = observer(() => {
     totalElements,
     loadClusterList,
     loadCluster,
-    setDetail,
   } = clusterStore;
 
   const [columDefs] = useState([

@@ -33,7 +33,8 @@ const CreateWorkSpace = observer((props) => {
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
-  const [selectCluster, setSelectCluster] = useState("");
+  const [selectCluster, setSelectCluster] = useState([]);
+  const [check, setCheck] = useState(false);
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
@@ -58,6 +59,14 @@ const CreateWorkSpace = observer((props) => {
   };
 
   const postWorkspace = () => {
+    if (!check) {
+      swalError("중복확인이 필요합니다!");
+      return;
+    }
+    if (selectCluster.length === 0) {
+      swalError("클러스터를 확인해주세요!");
+      return;
+    }
     createWorkspace(
       workspaceName,
       workspaceDescription,
@@ -67,12 +76,14 @@ const CreateWorkSpace = observer((props) => {
   };
   const checkWorkspaceName = async () => {
     const result = await duplicateCheck(workspaceName);
-    console.log(result);
+
     if (result) {
       swalError("사용 가능한 이름입니다.");
+      setCheck(true);
     } else {
       swalError("사용할 수 없는 이름입니다.");
       setWorkspaceName("");
+      setCheck(false);
     }
   };
 

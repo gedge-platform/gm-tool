@@ -53,6 +53,7 @@ class WorkSpace {
         swalError("워크스페이스 생성에 실패하였습니다.");
       });
   };
+
   duplicateCheck = async (workspaceName) => {
     return await axios
       .get(`${SERVER_URL}/duplicateCheck/${workspaceName}?type=workspace`, {
@@ -65,6 +66,20 @@ class WorkSpace {
       })
       .catch((err) => {
         return false;
+      });
+  };
+
+  deleteWorkspace = (workspaceName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        if (res.status === 200)
+          swalError("워크스페이스가 삭제되었습니다.", callback);
+      })
+      .catch((err) => {
+        swalError("삭제에 실패하였습니다.");
       });
   };
 }

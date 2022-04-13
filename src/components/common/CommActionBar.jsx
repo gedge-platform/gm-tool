@@ -136,7 +136,7 @@ const CommActionBar = (props) => {
           </SearchBar>
         )}
         <CIconButton
-          onClick={reloadFunc}
+          onClick={onClick}
           icon="refresh"
           type="btn1"
           tooltip="새로고침"
