@@ -13,6 +13,7 @@ import {
   ServiceProject,
   ServiceWorkload,
   ServiceWorkSpace,
+  ServiceMonitoring,
   Volume,
   Configuration,
 } from "@/pages";
@@ -38,6 +39,7 @@ export const App = () => {
         <AuthRoute path="/service/project" component={ServiceProject} />
         <AuthRoute path="/service/workload" component={ServiceWorkload} />
         <AuthRoute path="/service/workspace" component={ServiceWorkSpace} />
+        <AuthRoute path="/service/monitoring" component={ServiceMonitoring} />
 
         <Route path="/login" component={Login} />
         <Route path="/callback" component={DeploymentPopup} />

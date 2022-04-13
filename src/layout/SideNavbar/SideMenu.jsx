@@ -184,6 +184,11 @@ export const SideMenu = () => {
                 {Title.Volume}
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/service/monitoring" activeClassName="active">
+                {Title.Monitoring}
+              </NavLink>
+            </li>
           </ul>
         )}
       </NavScrollbar>

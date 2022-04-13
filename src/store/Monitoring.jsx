@@ -30,6 +30,7 @@ class Monitoring {
   coPieSchedulerAttempts = [];
   coPieSchedulerRate = [];
   allMetrics = {};
+  appMetrics = {};
   lastTime = LastTimeList[1];
   interval = IntervalList[1];
 
@@ -352,6 +353,36 @@ class Monitoring {
       .then((res) => {
         runInAction(() => {
           this.allMetrics = res.data.items;
+        });
+      });
+  };
+
+  loadAppMetrics = async (
+    target,
+    // start,
+    end,
+    // step,
+    metricFilter,
+    ...option
+  ) => {
+    await axios
+      .get(
+        this.getMonitURL(
+          target,
+          unixStartTime(this.lastTime.value),
+          end,
+          stepConverter(this.interval.value),
+          this.clusterName,
+          metricFilter,
+          option
+        ),
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.appMetrics = res.data.items;
         });
       });
   };
