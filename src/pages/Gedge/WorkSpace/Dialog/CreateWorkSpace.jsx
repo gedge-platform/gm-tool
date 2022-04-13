@@ -7,7 +7,7 @@ import clusterStore from "../../../../store/Cluster";
 import { dateFormatter } from "../../../../utils/common-utils";
 import { CCreateButton } from "@/components/buttons";
 import workspacesStore from "../../../../store/WorkSpace";
-import { swalConfirm } from "../../../../utils/swal-utils";
+import { swalConfirm, swalError } from "../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -58,16 +58,22 @@ const CreateWorkSpace = observer((props) => {
   };
 
   const postWorkspace = () => {
-    console.log(workspaceName, workspaceDescription, selectCluster);
+    createWorkspace(
+      workspaceName,
+      workspaceDescription,
+      selectCluster,
+      handleClose
+    );
   };
-  const checkWorkspaceName = () => {
-    duplicateCheck(workspaceName);
-    // if (duplicateCheck(workspaceName)) {
-    //   swalConfirm("사용 가능한 이름입니다.");
-    // } else {
-    //   swalConfirm("이미 사용중인 이름입니다.");
-    //   setWorkspaceName("");
-    // }
+  const checkWorkspaceName = async () => {
+    const result = await duplicateCheck(workspaceName);
+    console.log(result);
+    if (result) {
+      swalError("사용 가능한 이름입니다.");
+    } else {
+      swalError("사용할 수 없는 이름입니다.");
+      setWorkspaceName("");
+    }
   };
 
   useEffect(() => {

@@ -110,7 +110,9 @@ const globalStyles = createGlobalStyle`
   .msplist {
     width: 100%
   }
-
+  *:focus {
+    outline: 0;
+}
   .msplist th {
     background-color: #f5f6f9;
     height: 36px;

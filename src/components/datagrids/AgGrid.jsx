@@ -15,7 +15,7 @@ const AgGrid = (props) => {
     columnDefs,
     pagination = true,
     showPagination = true,
-    rowPerPage,
+    rowPerPage = 1000,
     autoWidth = true,
     onCellClicked,
     totalElements,
@@ -87,7 +87,6 @@ const AgGrid = (props) => {
         suppressPaginationPanel={true}
         onCellClicked={onCellClicked}
         onSelectionChanged={onSelectionChanged}
-        cla
       />
       <div
         id="pagination"

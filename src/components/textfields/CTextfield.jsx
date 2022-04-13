@@ -14,7 +14,7 @@ const useStyle = makeStyles(() =>
         fontFamily: "inherit",
         "&.Mui-focused": {
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#000",
+            border: "none",
             borderRadius: "4px",
           },
         },
