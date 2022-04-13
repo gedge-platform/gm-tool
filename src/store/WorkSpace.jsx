@@ -54,21 +54,6 @@ class WorkSpace {
       });
   };
 
-  duplicateCheck = async (workspaceName) => {
-    return await axios
-      .get(`${SERVER_URL}/duplicateCheck/${workspaceName}?type=workspace`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          return true;
-        }
-      })
-      .catch((err) => {
-        return false;
-      });
-  };
-
   deleteWorkspace = (workspaceName, callback) => {
     axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {

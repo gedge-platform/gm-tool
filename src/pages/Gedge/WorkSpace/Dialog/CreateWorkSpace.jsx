@@ -4,7 +4,7 @@ import { CDialogNew } from "../../../../components/dialogs";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import clusterStore from "../../../../store/Cluster";
-import { dateFormatter } from "../../../../utils/common-utils";
+import { dateFormatter, duplicateCheck } from "../../../../utils/common-utils";
 import { CCreateButton } from "@/components/buttons";
 import workspacesStore from "../../../../store/WorkSpace";
 import { swalConfirm, swalError } from "../../../../utils/swal-utils";
@@ -29,7 +29,7 @@ const ButtonNext = styled.button`
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
   const { loadClusterList, clusterList } = clusterStore;
-  const { createWorkspace, duplicateCheck } = workspacesStore;
+  const { createWorkspace } = workspacesStore;
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
@@ -75,7 +75,7 @@ const CreateWorkSpace = observer((props) => {
     );
   };
   const checkWorkspaceName = async () => {
-    const result = await duplicateCheck(workspaceName);
+    const result = await duplicateCheck(workspaceName, "workspace");
 
     if (result) {
       swalError("사용 가능한 이름입니다.");

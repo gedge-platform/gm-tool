@@ -12,7 +12,7 @@ import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import CreateProject from "../../../ServiceAdmin/Project/Dialog/CreateProject";
+import CreateProject from "../Dialog/CreateProject";
 
 const UserServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);

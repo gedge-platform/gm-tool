@@ -79,7 +79,7 @@ const CreateProject = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={`Create Workspace`}
+      title={`Create Project`}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
