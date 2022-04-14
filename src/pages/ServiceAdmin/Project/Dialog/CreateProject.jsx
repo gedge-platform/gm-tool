@@ -234,7 +234,7 @@ const CreateProject = observer((props) => {
                 <ToggleBtn onClick={clickedToggle} toggle={toggle}>
                   <Circle toggle={toggle} />
                 </ToggleBtn>
-                <span>Able</span>
+                <span>Enable</span>
               </ToggleWrapper>
             </td>
           </tr>
