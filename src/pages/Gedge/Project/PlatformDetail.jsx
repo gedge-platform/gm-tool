@@ -3,7 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import moment from "moment";
+import { dateFormatter } from "@/utils/common-utils";
 import platformProjectStore from "../../../store/PlatformProject";
 import "@grapecity/wijmo.styles/wijmo.css";
 import theme from "@/styles/theme";
@@ -147,9 +147,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(event?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(event?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -241,9 +239,7 @@ const Detail = observer(() => {
                 <th>Status</th>
                 <td>{platformDetail.status}</td>
                 <th>Created</th>
-                <td>
-                  {moment(platformDetail.created_at).format("YYYY-MM-DD HH:mm")}
-                </td>
+                <td>{dateFormatter(platformDetail.created_at)}</td>
               </tr>
               <tr>
                 <th>CPU Usage</th>

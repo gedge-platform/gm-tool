@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
-import moment from "moment";
+import { dateFormatter } from "@/utils/common-utils";
 import CreatePod from "../Dialog/CreatePod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
@@ -65,9 +65,7 @@ const PodListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -82,6 +80,11 @@ const PodListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
+    console.log(e);
+    const data = e.data.status;
+    if (data === "Failed") {
+      return;
+    }
     loadPodDetail(e.data.name, e.data.cluster, e.data.project);
   };
 

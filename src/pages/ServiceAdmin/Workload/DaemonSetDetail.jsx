@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import { observer } from "mobx-react";
 import daemonSetStore from "../../../store/DaemonSet";
-
+import { dateFormatter } from "@/utils/common-utils";
 import theme from "@/styles/theme";
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -141,9 +140,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(events?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -226,9 +223,7 @@ const Detail = observer(() => {
                 <th>Project</th>
                 <td>{daemonSetDetail.project}</td>
                 <th>Created</th>
-                <td>
-                  {moment(daemonSetDetail.createAt).format("YYYY-MM-DD HH:MM")}
-                </td>
+                <td>{dateFormatter(daemonSetDetail.createAt)}</td>
               </tr>
             </tbody>
           </table>

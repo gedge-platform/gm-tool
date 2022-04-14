@@ -3,7 +3,6 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import moment from "moment";
 import projectStore from "../../../store/Project";
 import "@grapecity/wijmo.styles/wijmo.css";
 import theme from "@/styles/theme";
@@ -18,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
 
 const EventWrap = styled.div`
   .MuiInputBase-input {
@@ -213,9 +213,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(events?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -391,9 +389,7 @@ const Detail = observer(() => {
                 <th>Owner</th>
                 <td>{projectDetail.projectOwner}</td>
                 <th>Created</th>
-                <td>
-                  {moment(projectDetail.created_at).format("YYYY-MM-DD HH:mm")}
-                </td>
+                <td>{dateFormatter(projectDetail.created_at)}</td>
               </tr>
             </tbody>
           </table>

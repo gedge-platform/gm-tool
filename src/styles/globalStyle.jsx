@@ -555,8 +555,13 @@ const globalStyles = createGlobalStyle`
       
     }
     .tb_data_podInfo {
-      th, td {
-        width: 10%
+      th {
+        width: 20%
+      }
+    }
+    .tb_data_container {
+      th {
+        width: 20%
       }
     }
     tbody {
@@ -1372,6 +1377,12 @@ const globalStyles = createGlobalStyle`
 .tb_resources_detail_th{
   th,td {
     width: 50%;
+  }
+}
+
+.tb_services_detail_th{
+  th,td {
+    width: 33%;
   }
 }
 
