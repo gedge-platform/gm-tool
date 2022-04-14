@@ -128,7 +128,7 @@ class Project {
     callback
   ) => {
     const body = {
-      projectName: projectName.toLowerCase(),
+      projectName: projectName,
       projectDescription,
       projectType,
       selectCluster,
@@ -152,6 +152,18 @@ class Project {
         swalError("프로젝트 생성에 실패하였습니다.", callback);
         console.error(err);
       });
+  };
+
+  deleteProject = (projectName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/projects/${projectName}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        if (res.status === 200)
+          swalError("프로젝트가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

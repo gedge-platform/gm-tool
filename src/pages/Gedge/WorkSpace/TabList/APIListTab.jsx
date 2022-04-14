@@ -74,10 +74,7 @@ const APIListTab = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClick = async ({
-    data: { workspaceName },
-    colDef: { field },
-  }) => {
+  const handleClick = ({ data: { workspaceName }, colDef: { field } }) => {
     if (field === "delete") {
       swalUpdate("삭제하시겠습니까?", () =>
         deleteWorkspace(workspaceName, loadWorkSpaceList)

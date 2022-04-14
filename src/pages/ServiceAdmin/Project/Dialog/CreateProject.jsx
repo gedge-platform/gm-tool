@@ -121,6 +121,12 @@ const CreateProject = observer((props) => {
   };
 
   const checkProjectName = async () => {
+    const regType1 = /^[a-z0-9+]*$/;
+    if (!regType1.test(projectName)) {
+      swalError("소문자와 숫자만 사용 가능합니다!");
+      setCheck(false);
+      return;
+    }
     const result = await duplicateCheck(projectName, "project");
 
     if (result) {

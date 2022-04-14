@@ -26,6 +26,7 @@ const UserServiceListTab = observer(() => {
     totalElements,
     loadProjectList,
     loadProjectDetail,
+    deleteProject,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -57,6 +58,16 @@ const UserServiceListTab = observer(() => {
           .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
   const history = useHistory();
@@ -68,9 +79,14 @@ const UserServiceListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadProjectDetail(e.data.projectName);
+  const handleClick = ({ data: { projectName }, colDef: { field } }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteProject(projectName, loadProjectList)
+      );
+      return;
+    }
+    loadProjectDetail(projectName);
   };
 
   useEffect(() => {
