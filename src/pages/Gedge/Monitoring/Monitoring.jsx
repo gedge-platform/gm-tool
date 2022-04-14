@@ -19,10 +19,10 @@ const Monitoring = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="클러스터 개요" />
-        <CTab label="물리 자원" />
-        <CTab label="API 서버" />
-        <CTab label="스케쥴러" />
+        <CTab label="Cluster Overview" />
+        <CTab label="Psysical Resource" />
+        <CTab label="API Server" />
+        <CTab label="Scheduler" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>

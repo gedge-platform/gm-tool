@@ -44,13 +44,13 @@ class Monitoring {
     });
   };
 
-  setLastTime = (time) => {
+  setMetricsLastTime = (time) => {
     runInAction(() => {
       this.lastTime = time;
     });
   };
 
-  setInterval = (interval) => {
+  setMetricsInterval = (interval) => {
     runInAction(() => {
       this.interval = interval;
     });
@@ -357,6 +357,36 @@ class Monitoring {
       });
   };
 
+  loadRealAllMetrics = async (
+    target,
+    // start,
+    end,
+    // step,
+    metricFilter,
+    ...option
+  ) => {
+    await axios
+      .get(
+        this.getMonitURL(
+          target,
+          unixStartTime(10),
+          end,
+          "5s",
+          this.clusterName,
+          metricFilter,
+          option
+        ),
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.allMetrics = res.data.items;
+        });
+      });
+  };
+
   loadAppMetrics = async (
     target,
     // start,
@@ -372,6 +402,36 @@ class Monitoring {
           unixStartTime(this.lastTime.value),
           end,
           stepConverter(this.interval.value),
+          this.clusterName,
+          metricFilter,
+          option
+        ),
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.appMetrics = res.data.items;
+        });
+      });
+  };
+
+  loadRealAppMetrics = async (
+    target,
+    // start,
+    end,
+    // step,
+    metricFilter,
+    ...option
+  ) => {
+    await axios
+      .get(
+        this.getMonitURL(
+          target,
+          unixStartTime(10),
+          end,
+          "5s",
           this.clusterName,
           metricFilter,
           option

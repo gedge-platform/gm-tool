@@ -16,7 +16,7 @@ const Monitoring = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="애플리케이션 자원" />
+        <CTab label="Application Resource" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
