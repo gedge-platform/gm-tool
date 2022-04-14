@@ -170,7 +170,7 @@ const ApplicationResource = observer(() => {
           </CSelectButtonM>
         </div>
         <div className="date">
-          {moment(new Date()).format("YYYY-MM-DD HH:mm")}
+          {moment(new Date()).format("YYYY-MM-DD")}
           <CIconButton
             onClick={calledMetrics}
             icon="refresh"

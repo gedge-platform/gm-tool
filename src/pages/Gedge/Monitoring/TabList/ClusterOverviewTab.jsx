@@ -321,9 +321,7 @@ const ClusterOverview = observer(() => {
             {clusterName}
           </CSelectButtonM>
         </div>
-        <div className="date">
-          {moment(new Date()).format("YYYY-MM-DD HH:mm")}
-        </div>
+        <div className="date">{moment(new Date()).format("YYYY-MM-DD")}</div>
       </div>
       <PanelBox
         className="panel_graph"
