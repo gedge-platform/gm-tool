@@ -121,9 +121,9 @@ const CreateProject = observer((props) => {
   };
 
   const checkProjectName = async () => {
-    const regType1 = /^[a-z0-9+]*$/;
+    const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     if (!regType1.test(projectName)) {
-      swalError("소문자와 숫자만 사용 가능합니다!");
+      swalError("사용할 수 없는 문자열이 포함되어 있습니다.");
       setCheck(false);
       return;
     }

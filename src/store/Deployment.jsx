@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Deployment {
@@ -165,7 +165,7 @@ class Deployment {
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`,
+        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`,
         { auth: BASIC_AUTH }
       )
       .then(({ data: { data, involvesData } }) => {
@@ -192,7 +192,7 @@ class Deployment {
 
   loadDeploymentList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/deployments`, { auth: BASIC_AUTH })
+      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
       .then((res) => {
         runInAction(() => {
           const list = res.data.data.filter((item) => item.projetType === type);
@@ -294,7 +294,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
         YAML.parse(this.content),
         {
           auth: BASIC_AUTH,

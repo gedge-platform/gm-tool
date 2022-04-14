@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -36,10 +36,19 @@ class WorkSpace {
     const body = {
       workspaceName,
       workspaceDescription,
-      selectCluster,
+      selectCluster:selectCluster.join(','),
       workspaceOwner: getItem("user"),
       workspaceCreator: getItem("user"),
     };
+    // axios
+    //   .post(`${SERVER_URL2}/workspace`, {
+    //     workspaceName,
+    //     workspaceDescription,
+    //     memberName: getItem("user"),
+    //     clusterName: selectCluster,
+    //   })
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.error(err));
     return axios
       .post(`${SERVER_URL}/workspaces`, body, {
         auth: BASIC_AUTH,
