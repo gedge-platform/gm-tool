@@ -4,16 +4,18 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CCreateButton } from "@/components/buttons";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import Detail from "../PlatformDetail";
 import platformProjectStore from "../../../../store/PlatformProject";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import CreateProject from "../../../ServiceAdmin/Project/Dialog/CreateProject";
 
 const PlatfromServiceListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -71,6 +73,13 @@ const PlatfromServiceListTab = observer(() => {
   };
 
   const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     loadPlatformProjectList("system");
@@ -80,8 +89,13 @@ const PlatfromServiceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+          <CommActionBar
+            reloadFunc={loadPlatformProjectList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -97,6 +111,12 @@ const PlatfromServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <CreateProject
+            reloadFunc={loadPlatformProjectList}
+            type={"admin"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <Detail platformDetil={platformDetil} />
       </CReflexBox>

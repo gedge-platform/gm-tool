@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Job {
   jobList = [];
@@ -33,7 +33,7 @@ class Job {
       protocol: "",
     },
   ];
-  InvolvesPodList = [
+  involvesPodList = [
     {
       metadata: {
         name: "",
@@ -71,7 +71,7 @@ class Job {
 
   loadJobList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/jobs`, {
+      .get(`${SERVER_URL}/jobs`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -93,23 +93,19 @@ class Job {
 
   loadJobDetail = async (name, cluster, project) => {
     await axios
-      .get(
-        `${SERVER_URL2}/jobs/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
-      )
-      .then((res) => {
+      .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`, {
+        auth: BASIC_AUTH,
+      })
+      .then(({ data: { data, involves } }) => {
         runInAction(() => {
-          this.jobDetailData = res.data.data;
-          this.jobDetailInvolves = res.data.involves;
-          this.labels = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          this.InvolvesPodList = res.data.involves.podList;
-          console.log(this.InvolvesPodList);
+          this.jobDetailData = data;
+          this.jobDetailInvolves = involves;
+          this.labels = data.label;
+          this.annotations = data.annotations;
+          this.involvesPodList = involves.podList;
 
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }

@@ -1,12 +1,45 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Deployment {
   deploymentList = [];
   deploymentDetail = {
+    name: "",
+    project: "",
+    cluster: "",
+    workspace: "",
+    ready: "",
+    createAt: "",
+    replica: {
+      replicas: 0,
+      readyReplicas: 0,
+      updatedReplicas: 0,
+      availableReplicas: 0,
+      unavailableReplicas: 0,
+    },
+    strategy: {
+      rollingUpdate: {
+        maxSurge: "",
+        maxUnavailable: "",
+      },
+      type: "",
+    },
+    containers: [
+      {
+        env: [{ name: "", value: "" }],
+        image: "",
+        imagePullPolicy: "",
+        name: "",
+        ports: [{ containerPort: 0, protocol: "" }],
+        resources: {},
+        terminationMessagePath: "",
+        terminationMessagePolicy: "",
+      },
+    ],
+    lables: {},
     events: [
       {
         kind: "",
@@ -19,6 +52,8 @@ class Deployment {
         eventTime: "",
       },
     ],
+    annotations: {},
+    involvesData: {},
   };
 
   deploymentEvents = [];
@@ -39,6 +74,22 @@ class Deployment {
       reason: "",
       type: "",
       eventTime: "",
+    },
+  ];
+  containersTemp = [
+    {
+      image: "",
+      imagePullPolicy: "",
+      name: "",
+      ports: [
+        {
+          containerPort: 0,
+          protocol: "",
+        },
+      ],
+      resources: {},
+      terminationMessagePath: "",
+      terminationMessagePolicy: "",
     },
   ];
   pods = [{}];
@@ -114,34 +165,34 @@ class Deployment {
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`,
+        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`,
         { auth: BASIC_AUTH }
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.deploymentDetail = res.data.data;
-          this.strategy = res.data.data.strategy;
-          this.labels = res.data.data.labels;
-          this.annotations = res.data.data.annotations;
-
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.deploymentDetail = data;
+          this.strategy = data.strategy;
+          this.labels = data.labels;
+          this.annotations = data.annotations;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }
-
-          this.deploymentInvolvesData = res.data.involvesData;
-          this.pods = res.data.involvesData.pods;
-          this.depServices = res.data.involvesData.services;
-          this.depServicesPort = res.data.involvesData.services.port;
-          this.deploymentEvents = res.data.data.events;
+          this.deploymentInvolvesData = involvesData;
+          this.pods = involvesData.pods;
+          this.depServices = involvesData.services;
+          this.depServicesPort = involvesData.services.port;
+          this.deploymentEvents = data.events;
+          this.containersTemp = data.containers;
+          console.log(this.containersTemp);
         });
       });
   };
 
   loadDeploymentList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/deployments`, { auth: BASIC_AUTH })
+      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
       .then((res) => {
         runInAction(() => {
           const list = res.data.data.filter((item) => item.projetType === type);
@@ -243,7 +294,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
         YAML.parse(this.content),
         {
           auth: BASIC_AUTH,

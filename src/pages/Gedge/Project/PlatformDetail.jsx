@@ -1,65 +1,79 @@
-import React, { useState, useEffect } from "react";
-import CommActionBar from "@/components/common/CommActionBar";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
 import platformProjectStore from "../../../store/PlatformProject";
-import { keys } from "lodash";
 import "@grapecity/wijmo.styles/wijmo.css";
 import theme from "@/styles/theme";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import { EventSeatTwoTone } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
 `;
 
 const Detail = observer(() => {
   const {
-    platformProjectList,
     platformDetail,
     labels,
     annotations,
     events,
     resource,
-    clusterList,
     resourceUsage,
   } = platformProjectStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const labelsTable = [];
   const annotationsTable = [];
-  //   let eventsTemp = events;
   const eventsTable = [];
-  const clusterNameTable = [];
 
-  //   const clusterNameListTemp = platformProjectList.map(
-  //     (event) => event.clusterName
-  //   );
-
-  //   const clusterNameList = platformProjectList.filter(
-  //     (event) => event.clusterName === clusterNameListTemp[0]
-  //   );
-
-  Object.entries(labels).map(([key, value]) => {
-    labelsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
+  const labelsTable = () => {
+    return Object.entries(labels).map(([key, value]) => (
+      <Label>
+        <span className="key">{key}</span>
+        <span className="value">{value}</span>
+      </Label>
+    ));
+  };
 
   Object.entries(annotations).map(([key, value]) => {
     annotationsTable.push(
@@ -70,32 +84,17 @@ const Detail = observer(() => {
     );
   });
 
-  // if (events !== null) {
-  //   events.map((event) => {
-  //     console.log(event);
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event.message}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
-  // }
-
   if (events !== null) {
     events.map((event) => {
       eventsTable.push(
         <div>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                />
+              }
               aria-controls="ProjectEvent-content"
               id="ProjectEvent-header"
               sx={{ bgcolor: theme.colors.primaryDark }}
@@ -104,46 +103,52 @@ const Detail = observer(() => {
                 sx={{
                   width: "10%",
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                 }}
               >
                 Message
               </Typography>
-              <Typography sx={{ fontSize: 13, color: "white" }}>
-                {event["message"]}
+              <Typography
+                sx={{
+                  width: "80%",
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                }}
+              >
+                {event?.message}
               </Typography>
             </AccordionSummary>
             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
               <Typography
                 sx={{
                   fontSize: 13,
-                  color: "white",
+                  color: "rgba(255, 255, 255, 0.7)",
                   bgcolor: theme.colors.primary,
                 }}
               >
                 <table className="tb_data">
                   <tr>
                     <th>Kind</th>
-                    <td>{event["kind"]}</td>
+                    <td>{event?.kind}</td>
                     <th>Name</th>
-                    <td>{event["name"]}</td>
+                    <td>{event?.name}</td>
                   </tr>
                   <tr>
                     <th>Namespace</th>
-                    <td>{event["namespace"]}</td>
+                    <td>{event?.namespace}</td>
                     <th>Cluster</th>
-                    <td>{event["cluster"]}</td>
+                    <td>{event?.cluster}</td>
                   </tr>
                   <tr>
                     <th>Reason</th>
-                    <td>{event["reason"]}</td>
+                    <td>{event?.reason}</td>
                     <th>Type</th>
-                    <td>{event["type"]}</td>
+                    <td>{event?.type}</td>
                   </tr>
                   <tr>
                     <th>Event Time</th>
                     <td>
-                      {moment(event["eventTime"]).format("YYYY-MM-DD HH:mm")}
+                      {moment(event?.eventTime).format("YYYY-MM-DD HH:mm")}
                     </td>
                     <th></th>
                     <td></td>
@@ -160,7 +165,11 @@ const Detail = observer(() => {
       <div>
         <Accordion>
           <AccordionSummary
-            expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
+            expandIcon={
+              <ExpandMoreRoundedIcon
+                sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+              />
+            }
             aria-controls="ProjectEvent-content"
             id="ProjectEvent-header"
             sx={{ bgcolor: theme.colors.primaryDark }}
@@ -169,18 +178,21 @@ const Detail = observer(() => {
               sx={{
                 width: "10%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
               }}
             >
               Message
             </Typography>
-            <Typography sx={{ fontSize: 13, color: "white" }}></Typography>
+            <Typography
+              sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+            ></Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
             <Typography
               sx={{
+                width: "80%",
                 fontSize: 13,
-                color: "white",
+                color: "rgba(255, 255, 255, 0.7)",
                 bgcolor: theme.colors.primary,
               }}
             >
@@ -217,7 +229,6 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -246,7 +257,6 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>리소스 사용량</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -273,12 +283,10 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{labelsTable}</tbody>
-          </table>
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>{labelsTable()}</LabelContainer>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationsTable}</tbody>
           </table>
@@ -287,7 +295,6 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{eventsTable}</tbody>
           </table>

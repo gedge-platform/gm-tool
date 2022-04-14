@@ -19,7 +19,9 @@ class Scheduler {
         status: "CREATED",
         date: new Date(),
       })
-      .then((res) => {})
+      .then((res) => {
+        console.log(res);
+      })
       .catch((e) => console.log(e.message));
   };
 

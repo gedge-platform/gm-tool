@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Service {
   serviceList = [];
@@ -11,14 +11,7 @@ class Service {
     },
   };
   totalElements = 0;
-  portTemp = [
-    {
-      name: "",
-      port: 0,
-      protocol: "",
-      targetPort: 0,
-    },
-  ];
+  portTemp = [];
 
   // 생성
   serviceName = "";
@@ -34,8 +27,8 @@ class Service {
   content = "";
 
   serviceInvolvesData = {};
-  involvesPods = "";
-  involvesWorkloads = "";
+  involvesPods = [];
+  involvesWorkloads = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -44,25 +37,25 @@ class Service {
   loadServiceDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/services/${name}?cluster=${cluster}&project=${project}`,
+        `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`,
         {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.serviceDetail = res.data.data;
-          this.portTemp = res.data.data.port;
-          this.serviceInvolvesData = res.data.involvesData;
-          this.involvesPods = res.data.involvesData.pods;
-          this.involvesWorkloads = res.data.involvesData.workloads;
+          this.serviceDetail = data;
+          this.portTemp = data.port;
+          this.serviceInvolvesData = involvesData;
+          this.involvesPods = involvesData.pods;
+          this.involvesWorkloads = involvesData.workloads;
         });
       });
   };
 
   loadServiceList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/services`, {
+      .get(`${SERVER_URL}/services`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {

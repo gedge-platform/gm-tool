@@ -40,13 +40,13 @@ const PodListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "호스트 IP",
-      field: "hostIP",
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
     },
     {
-      headerName: "파드 IP",
-      field: "podIP",
+      headerName: "재시작 수",
+      field: "restart",
       filter: true,
     },
     {
@@ -95,7 +95,12 @@ const PodListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadPodList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 

@@ -2,23 +2,6 @@ import React, { useEffect, useRef } from "react";
 import L from "leaflet";
 
 const MapContent = () => {
-  //   const mapFunc = () => {
-  //     const map = L.map("map", { crs: L.CRS.Simple }).setView([0, 0], 4);
-  //     L.tileLayer(
-  //       "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
-  //       {
-  //         maxZoom: 20,
-  //         attribution:
-  //           '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-  //       }
-  //     ).addTo(map);
-  //     map.setMaxBounds(L.latLngBounds(L.latLng(-150, -240), L.latLng(150, 240)));
-  //   };
-
-  //   useEffect(() => {
-  //     mapFunc();
-  //   }, []);
-
   const mapRef = useRef(null);
 
   const MAP_TILE = L.tileLayer(
@@ -45,13 +28,42 @@ const MapContent = () => {
     layers: [MAP_TILE],
   };
 
+  const CustomIcon = (color) =>
+    new L.Icon({
+      iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
   // This useEffect hook runs when the component is first mounted,
   // similar to componentDidMount() lifecycle method of class-based
   // components:
   useEffect(() => {
     mapRef.current = L.map("map", mapParams);
-    L.marker([37.481, 126.893]).addTo(mapRef.current);
-  });
+    const cluster1 = L.marker([37.481, 126.893], {
+      icon: CustomIcon("green"),
+    }).addTo(mapRef.current);
+    const cluster2 = L.marker([37.681, 126.793], {
+      icon: CustomIcon("violet"),
+    }).addTo(mapRef.current);
+    const cluster3 = L.marker([37.581, 127.003], {
+      icon: CustomIcon("red"),
+    }).addTo(mapRef.current);
+
+    cluster1.bindPopup(
+      `<div class="leaflet-popup-content"><span>gedgemgmt01</span></div>`
+    );
+    cluster2.bindPopup(
+      `<div class="leaflet-popup-content"><span>gs-cluster01</span></div>`
+    );
+    cluster3.bindPopup(
+      `<div class="leaflet-popup-content"><span>gs-cluster02</span></div>`
+    );
+  }, []);
   return (
     <div
       id="map"

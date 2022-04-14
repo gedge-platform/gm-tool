@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
-import { Title, SubTitle } from "@/pages";
+import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import DeploymentListTab from "./Tablist/DeploymentListTab";
 import ServiceListTab from "./Tablist/ServiceListTab";
@@ -31,7 +31,7 @@ const Workload = () => {
         <CTab label="Pod" />
         <CTab label="StatefulSet" />
         <CTab label="DaemonSet" />
-        <CTab label="Scheduler" />
+        <CTab label="Load YAML" />
         <CTab label="Request Status" />
       </CTabs>
       <div className="tabPanelContainer">

@@ -20,6 +20,8 @@ import NotoBOtf from "@/fonts/NotoSansKR/NotoSansKR-Bold.otf";
 
 import selectArr from "@/images/bullet/select_arr.png";
 import passed from "@/images/bullet/ico_step_passed.png";
+import deleteBtn from "@/images/bullet/dailog_close.png";
+import deleteBtn2 from "@/images/ico-action/ico_del.png";
 
 import { PanelBox } from "@/components/styles/PanelBox";
 
@@ -110,7 +112,9 @@ const globalStyles = createGlobalStyle`
   .msplist {
     width: 100%
   }
-
+  *:focus {
+    outline: 0;
+}
   .msplist th {
     background-color: #f5f6f9;
     height: 36px;
@@ -486,6 +490,11 @@ const globalStyles = createGlobalStyle`
     border-left: 0 hidden;
     border-right: 0 hidden;
     border-collapse: collapse;
+    .tb_data_nodeInfo {
+      th, td{
+        text-align:center;
+      }
+    }
     tbody {
       th, td {
         height: 33px;
@@ -516,6 +525,13 @@ const globalStyles = createGlobalStyle`
     }
   }
 
+  .tb_data_container{
+    margin-bottom: 20px;
+    th{
+      width: 20%;
+    }
+  }
+
   /* table */
   .tb_data {
     width: 100%;
@@ -530,8 +546,21 @@ const globalStyles = createGlobalStyle`
       }
     }
     .tb_data_nodeInfo{
-      th,td{
-        width: 20%
+      tr{
+        td{
+          cursor:pointer;
+        }
+        &:hover{
+          td{
+            color: rgba(255,255,255,0.9)
+          }
+        }
+      }
+      
+    }
+    .tb_data_podInfo {
+      th, td {
+        width: 10%
       }
     }
     tbody {
@@ -1106,6 +1135,21 @@ const globalStyles = createGlobalStyle`
     }
   }
 
+  .state_ico_new {
+    position: relative;
+    padding-left: 18px;
+    &.ing {
+      background: no-repeat left center;
+      &::before { display: none }
+    }
+  }
+  .state_ico_new.delete {
+    background: url(${deleteBtn2}) no-repeat 0px 2px;
+  }
+  .state_ico_new.delete:hover{
+    background-position: 0 -16px;
+  }
+
   .status_ico {
     position: relative;
     padding-left: 18px;
@@ -1269,6 +1313,20 @@ const globalStyles = createGlobalStyle`
     justify-content: space-around;
   }
 
+  .tab2-chart-area{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tab2-chart{
+    width: 100%;
+    height: 200px;
+    background-color: #141A30;
+  }
+
 //---------
   .signup-step {
   display: flex;
@@ -1325,15 +1383,31 @@ const globalStyles = createGlobalStyle`
 
 //yjy-----------------------
 .tb_workload_detail_th{
-  width: 15%;
+  th,td {
+    width: 25%;
+  }
+}
+
+.tb_resources_detail_th{
+  th,td {
+    width: 50%;
+  }
 }
 
 .tb_workload_detail_labels_th{
   width: 25%;
 }
+.tabN-chart-div-area{
+  display: flex;
+  justify-content:space-around;
+  align-items:center;
+}
+.tabN-chart-area{
+  width: 49%;
+  margin: 5px 0 5px 0;
+}
 
 //map-----------------------
-
 .leaflet-container {
   width: 100%;
   height: 100%;
@@ -1584,6 +1658,9 @@ const globalStyles = createGlobalStyle`
     transform: translate(-50%, -100%);
     -webkit-transform: translate(-50%, -100%);
     position: absolute;
+    color:#fff;
+    
+
 
     /* animation: fadeInPopup 0.01s ease-out; */
 
@@ -1606,12 +1683,13 @@ const globalStyles = createGlobalStyle`
     }
 
     .leaflet-popup-content {
-      width: 300px;
-      height: 100px;
+      width: 120px;
+      height: 50px;
       text-align: center;
       padding: 0;
-      margin: 0 0 0 10px;
-      overflow: hidden;
+      display:flex;
+      justify-content: center;
+      align-items: center;
 
       div {
         height: 100%;
@@ -1637,10 +1715,7 @@ const globalStyles = createGlobalStyle`
         }
       }
     }
-  }
-}
-
-
+  }}
 `;
 
 export default globalStyles;

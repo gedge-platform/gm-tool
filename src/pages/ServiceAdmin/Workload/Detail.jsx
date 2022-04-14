@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
@@ -17,7 +17,38 @@ const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
 `;
 
 const Detail = observer(() => {
@@ -30,23 +61,19 @@ const Detail = observer(() => {
     pods,
     depServices,
     depServicesPort,
+    events,
+    containersTemp,
   } = deploymentStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const labelTable = [];
-  const label = labels;
-
   const annotationTable = [];
-  const annotation = annotations;
-
   const podInfoTable = [];
 
   const port = depServicesPort;
   const portTable = [];
 
-  const events = deploymentDetail.events;
   const eventsTable = [];
 
   const handleTabChange = (event, newValue) => {
@@ -73,109 +100,33 @@ const Detail = observer(() => {
       strategyTemp.rollingUpdate.maxSurge;
   }
 
-  Object.entries(label).map(([key, value]) => {
-    labelTable.push(
+  const labelTable = () => {
+    return Object.entries(labels).map(([key, value]) => (
+      <Label>
+        <span className="key">{key}</span>
+        <span className="value">{value}</span>
+      </Label>
+    ));
+  };
+
+  pods?.map((item) => {
+    podInfoTable.push(
       <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
+        <th>Name</th>
+        <td>{item["name"]}</td>
+        <th>Status</th>
+        <td>{item["status"]}</td>
+        <th>Node</th>
+        <td>{item["node"]}</td>
+        <th>Pod IP</th>
+        <td>{item["podIP"]}</td>
+        <th>Restart</th>
+        <td>{item["restart"]}</td>
       </tr>
     );
   });
 
-  pods.map((item) => {
-    podInfoTable.push(
-      <div>
-        <tr>
-          <th>{item["name"]}</th>
-          <th>{item["status"]}</th>
-          <th>{item["node"]}</th>
-          <th>{item["podIP"]}</th>
-          <th>{item["restart"]}</th>
-        </tr>
-      </div>
-    );
-  });
-
-  // {
-  //   port &&
-  //     port.map((item) => {
-  //       portTable.push(
-  //         <>
-  //           <th>Port</th>
-  //           <td>{item["port"]}</td>
-  //         </>
-  //       );
-  //     });
-  // }
-
-  // {
-  //   events &&
-  //     events.map((event, message) => {
-  //       eventTable.push(
-  //         <div>
-  //           <Accordion>
-  //             <AccordionSummary
-  //               expandIcon={<ExpandMoreRoundedIcon sx={{ color: "white" }} />}
-  //               aria-controls="ProjectEvent-content"
-  //               id="ProjectEvent-header"
-  //               sx={{ bgcolor: theme.colors.primaryDark }}
-  //             >
-  //               <Typography
-  //                 sx={{
-  //                   width: "10%",
-  //                   fontSize: 13,
-  //                   color: "white",
-  //                 }}
-  //               >
-  //                 Message
-  //               </Typography>
-  //               <Typography sx={{ fontSize: 13, color: "white" }}>
-  //                 {event["message"]}
-  //               </Typography>
-  //             </AccordionSummary>
-  //             <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-  //               <Typography
-  //                 sx={{
-  //                   fontSize: 13,
-  //                   color: "white",
-  //                   bgcolor: theme.colors.primary,
-  //                 }}
-  //               >
-  //                 <table className="tb_data">
-  //                   <tr>
-  //                     <th>Kind</th>
-  //                     <td>{event["kind"]}</td>
-  //                     <th>Name</th>
-  //                     <td>{event["name"]}</td>
-  //                   </tr>
-  //                   <tr>
-  //                     <th>Namespace</th>
-  //                     <td>{event["namespace"]}</td>
-  //                     <th>Cluster</th>
-  //                     <td>{event["cluster"]}</td>
-  //                   </tr>
-  //                   <tr>
-  //                     <th>Reason</th>
-  //                     <td>{event["reason"]}</td>
-  //                     <th>Type</th>
-  //                     <td>{event["type"]}</td>
-  //                   </tr>
-  //                   <tr>
-  //                     <th>Event Time</th>
-  //                     <td>{event["eventTime"]}</td>
-  //                     <th></th>
-  //                     <td></td>
-  //                   </tr>
-  //                 </table>
-  //               </Typography>
-  //             </AccordionDetails>
-  //           </Accordion>
-  //         </div>
-  //       );
-  //     });
-  // }
-
-  Object.entries(annotation).map(([key, value]) => {
+  Object.entries(annotations).map(([key, value]) => {
     annotationTable.push(
       <tr>
         <th className="tb_workload_detail_labels_th">{key}</th>
@@ -184,32 +135,130 @@ const Detail = observer(() => {
     );
   });
 
-  // if (events !== null) {
-  //   events?.map((event) => {
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event["message"]}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
-  // }
-
-  // pods.map((event) => {
-  //   podsTable.push(
-  //     <tr>
-  //       <th>Status</th>
-  //       <td>{event.status}</td>
-  //     </tr>
-  //   );
-  // });
+  if (events !== null) {
+    events?.map((events) => {
+      eventsTable.push(
+        <div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255,255,255,0.7)" }}
+                />
+              }
+              aria-controls="ProjectEvent-content"
+              id="ProjectEvent-header"
+              sx={{ bgcolor: theme.colors.primaryDark }}
+            >
+              <Typography
+                sx={{
+                  width: "10%",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                Message
+              </Typography>
+              <Typography
+                sx={{
+                  width: "80%",
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                {events?.message}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: "rgba(255,255,255,0.7)",
+                  bgcolor: theme.colors.primary,
+                }}
+              >
+                <table className="tb_data">
+                  <tr>
+                    <th>Kind</th>
+                    <td>{events?.kind}</td>
+                    <th>Name</th>
+                    <td>{events?.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Namespace</th>
+                    <td>{events?.namespace}</td>
+                    <th>Cluster</th>
+                    <td>{events?.cluster}</td>
+                  </tr>
+                  <tr>
+                    <th>Reason</th>
+                    <td>{events?.reason}</td>
+                    <th>Type</th>
+                    <td>{events?.type}</td>
+                  </tr>
+                  <tr>
+                    <th>Event Time</th>
+                    <td>
+                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </table>
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      );
+    });
+  } else {
+    eventsTable.push(
+      <div>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={
+              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+            }
+            aria-controls="ProjectEvent-content"
+            id="ProjectEvent-header"
+            sx={{ bgcolor: theme.colors.primaryDark }}
+          >
+            <Typography
+              sx={{
+                width: "10%",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.7)",
+              }}
+            >
+              Message
+            </Typography>
+            <Typography
+              sx={{
+                width: "80%",
+                fontSize: 13,
+                color: "rgba(255,255,255,0.7)",
+              }}
+            ></Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+            <Typography
+              sx={{
+                fontSize: 13,
+                color: "rgba(255,255,255,0.7)",
+                bgcolor: theme.colors.primary,
+              }}
+            >
+              <table className="tb_data">
+                <tr>
+                  <th>No Have Events List </th>
+                </tr>
+              </table>
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    );
+  }
 
   return (
     <PanelBox>
@@ -221,7 +270,6 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -258,30 +306,64 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <TableTitle>Pod Info</TableTitle>
+          <TableTitle>Containers</TableTitle>
+          {containersTemp.map((containers) => (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                <tr>
+                  <th>Image</th>
+                  <td>{containers?.image}</td>
+                </tr>
+                <tr>
+                  <th>ImagePullPolicy</th>
+                  <td>{containers?.imagePullPolicy}</td>
+                </tr>
+                <tr>
+                  <th>Name</th>
+                  <td>{containers?.name}</td>
+                </tr>
+                <tr>
+                  <th>Ports</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Resources</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>TerminationMessagePath</th>
+                  <td>{containers?.terminationMessagePath}</td>
+                </tr>
+                <tr>
+                  <th>TerminationMessagePolicy</th>
+                  <td>{containers?.terminationMessagePolicy}</td>
+                </tr>
+              </tbody>
+            </table>
+          ))}
+          <br />
+          <TableTitle>Pod</TableTitle>
           <table className="tb_data">
-            <tbody>{podInfoTable}</tbody>
+            <tbody className="tb_data_podInfo">{podInfoTable}</tbody>
           </table>
           <br />
           <TableTitle>Deployment Services</TableTitle>
           <table className="tb_data">
             <tbody>
-              <th>Name</th>
-              <td>{depServices.name}</td>
-              <th>Port</th>
-              <td>{portTable}</td>
+              <th width="25%">Name</th>
+              <td width="25%">{depServices.name}</td>
+              <th width="25%">Port</th>
+              <td width="25%">{portTable}</td>
             </tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{labelTable}</tbody>
-          </table>
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>{labelTable()}</LabelContainer>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationTable}</tbody>
           </table>
@@ -290,8 +372,9 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
-          <table className="tb_data">{eventsTable}</table>
+          <table className="tb_data">
+            <tbody>{eventsTable}</tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>

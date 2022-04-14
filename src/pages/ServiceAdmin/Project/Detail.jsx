@@ -5,32 +5,349 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import moment from "moment";
 import projectStore from "../../../store/Project";
+import "@grapecity/wijmo.styles/wijmo.css";
+import theme from "@/styles/theme";
 import { toJS } from "mobx";
+import {
+  MenuItem,
+  FormControl,
+  Select,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
+import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+
+const EventWrap = styled.div`
+  .MuiInputBase-input {
+    color: rgba(255, 255, 255, 0.8);
+    width: 200px;
+    margin: 10px;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .MuiInputBase-root {
+    font: inherit;
+    line-height: inherit;
+  }
+
+  .MuiPopover-paper {
+    color: red;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border: none;
+  }
+
+  .MuiSvgIcon-root {
+    color: white;
+  }
+
+  .MuiOutlinedInput-input {
+    padding: 8px;
+    box-sizing: content-box;
+  }
+
+  .MuiPopover-paper {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .MuiPaper-elevation8 {
+    height: 40px;
+  }
+`;
 
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const ClusterTitle = styled.p`
+  font-size: 13px;
+  font-weight: 500;
+  margin: 6px 0;
+  color: rgba(255, 255, 255, 0.7);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
 `;
 
 const Detail = observer(() => {
-  const { projectDetail, resource, labels, annotations, events } = projectStore;
+  const {
+    projectDetail,
+    labels,
+    annotations,
+    detailInfo,
+    clusterList,
+    selectCluster,
+    changeCluster,
+  } = projectStore;
   const [tabvalue, setTabvalue] = useState(0);
-  // console.log(toJS(detailInfo)[0].resource);
 
-  const labelsTable = [];
   const annotationsTable = [];
-  const eventsTable = [];
 
-  Object.entries(labels).map(([key, value]) => {
-    labelsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
+  const eventsTable = () => {
+    return (
+      <EventWrap className="event-wrap">
+        <FormControl>
+          <Select
+            value={selectCluster}
+            inputProps={{ "aria-label": "Without label" }}
+            onChange={clusterChange}
+          >
+            {clusterList.map((cluster) => (
+              <MenuItem
+                style={{
+                  color: "black",
+                  backgroundColor: "white",
+                  fontSize: 15,
+                }}
+                value={cluster}
+              >
+                {cluster}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </EventWrap>
     );
+  };
+
+  const clusterChange = (e) => {
+    changeCluster(e.target.value);
+  };
+
+  const eventsMessageTable = [];
+  const eventsTemp = detailInfo.map((event) => event?.events);
+  const temp = eventsTemp.map((item) => toJS(item));
+  const newArr = temp.flat();
+  newArr.filter((events) => {
+    if (events?.cluster === selectCluster) {
+      eventsMessageTable.push(
+        <div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                />
+              }
+              aria-controls="ProjectEvent-content"
+              id="ProjectEvent-header"
+              sx={{ bgcolor: theme.colors.primaryDark }}
+            >
+              <Typography
+                sx={{
+                  width: "10%",
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                }}
+              >
+                Message
+              </Typography>
+              <Typography
+                sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+              >
+                {events?.message}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  bgcolor: theme.colors.primary,
+                }}
+              >
+                <table className="tb_data">
+                  <tr>
+                    <th>Kind</th>
+                    <td>{events?.kind}</td>
+                    <th>Name</th>
+                    <td>{events?.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Namespace</th>
+                    <td>{events?.namespace}</td>
+                    <th>Cluster</th>
+                    <td>{events?.cluster}</td>
+                  </tr>
+                  <tr>
+                    <th>Reason</th>
+                    <td>{events?.reason}</td>
+                    <th>Type</th>
+                    <td>{events?.type}</td>
+                  </tr>
+                  <tr>
+                    <th>Event Time</th>
+                    <td>
+                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </table>
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      );
+    } else {
+      eventsMessageTable.push(
+        <div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={
+                <ExpandMoreRoundedIcon
+                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
+                />
+              }
+              aria-controls="ProjectEvent-content"
+              id="ProjectEvent-header"
+              sx={{ bgcolor: theme.colors.primaryDark }}
+            >
+              <Typography
+                sx={{
+                  width: "10%",
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                }}
+              >
+                Message
+              </Typography>
+              <Typography
+                sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
+              ></Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+              <Typography
+                sx={{
+                  fontSize: 13,
+                  color: "rgba(255, 255, 255, 0.7)",
+                  bgcolor: theme.colors.primary,
+                }}
+              >
+                <table className="tb_data">
+                  <tr>
+                    <th>No Have Events List </th>
+                  </tr>
+                </table>
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      );
+    }
   });
+
+  const clusterResourceTable = () => {
+    return detailInfo.map((cluster) => (
+      <>
+        <ClusterTitle>{cluster.clusterName}</ClusterTitle>
+        <table className="tb_data">
+          <tbody className="tb_workload_detail_th">
+            <tr>
+              {cluster?.resourceUsage ? (
+                <>
+                  <th>CPU</th>
+                  <td>{cluster?.resourceUsage?.namespace_cpu}</td>
+                  <th>MEMORY</th>
+                  <td>{cluster?.resourceUsage?.namespace_memory}</td>
+                </>
+              ) : (
+                <></>
+              )}
+            </tr>
+          </tbody>
+        </table>
+        <br />
+      </>
+    ));
+  };
+
+  const resourcesTable = () => {
+    return detailInfo.map((resources) => (
+      <>
+        <ClusterTitle>{resources.clusterName}</ClusterTitle>
+        <table className="tb_data" style={{ tableLayout: "fixed" }}>
+          <tbody>
+            {resources?.resource ? (
+              <>
+                <tr>
+                  <th>Deployment</th>
+                  <td>{resources?.resource?.deployment_count}</td>
+                  <th>Pod</th>
+                  <td>{resources?.resource?.pod_count}</td>
+                </tr>
+                <tr>
+                  <th>Service</th>
+                  <td>{resources?.resource?.service_count}</td>
+                  <th>CronJob</th>
+                  <td>{resources?.resource?.cronjob_count}</td>
+                </tr>
+                <tr>
+                  <th>Job</th>
+                  <td>{resources?.resource?.job_count}</td>
+                  <th>Volume</th>
+                  <td>{resources?.resource?.volume_count}</td>
+                </tr>
+                <tr>
+                  <th>Statefulset</th>
+                  <td>{resources?.resource?.Statefulset_count}</td>
+                  <th>Daemonset</th>
+                  <td>{resources?.resource?.daemonset_count}</td>
+                </tr>
+              </>
+            ) : (
+              <></>
+            )}
+          </tbody>
+        </table>
+        <br />
+      </>
+    ));
+  };
+
+  const labelsTable = () => {
+    return Object.entries(labels).map(([key, value]) => (
+      <Label>
+        <span className="key">{key}</span>
+        <span className="value">{value}</span>
+      </Label>
+    ));
+  };
 
   Object.entries(annotations).map(([key, value]) => {
     annotationsTable.push(
@@ -40,24 +357,6 @@ const Detail = observer(() => {
       </tr>
     );
   });
-
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <tr>
-          <th className="tb_workload_detail_th">Message</th>
-          <td>{event["message"]}</td>
-        </tr>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <tr>
-        <th className="tb_workload_detail_th">Message</th>
-        <td></td>
-      </tr>
-    );
-  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -73,7 +372,6 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -98,43 +396,19 @@ const Detail = observer(() => {
               </tr>
             </tbody>
           </table>
+          <br />
+          {clusterResourceTable()}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
-        <div className="tb_container">
-          <TableTitle>리소스 사용량</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Deployment</th>
-                <td>{resource.deployment_count}</td>
-                <th className="tb_workload_detail_th">Pod</th>
-                <td>{resource.pod_count}</td>
-              </tr>
-              <tr>
-                <th>Service</th>
-                <td>{resource.service_count}</td>
-                <th>CronJob</th>
-                <td>{resource.cronjob_count}</td>
-              </tr>
-              <tr>
-                <th>Job</th>
-                <td>{resource.job_count}</td>
-                <th>Volume</th>
-                <td>{resource.volume_count}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <div className="tb_container">{resourcesTable()}</div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{labelsTable}</tbody>
-          </table>
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>{labelsTable()}</LabelContainer>
           <br />
-          <TableTitle>어노테이션</TableTitle>
+          <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>{annotationsTable}</tbody>
           </table>
@@ -143,9 +417,9 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>이벤트</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsTable}</tbody>
+            {eventsTable()}
+            <tbody>{eventsMessageTable}</tbody>
           </table>
           <br />
         </div>
