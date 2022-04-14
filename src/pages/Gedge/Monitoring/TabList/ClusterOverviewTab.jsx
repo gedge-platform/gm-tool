@@ -13,6 +13,7 @@ import {
   CCreateButton,
   CSelectButton,
   CSelectButtonM,
+  CIconButton,
 } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
@@ -321,7 +322,18 @@ const ClusterOverview = observer(() => {
             {clusterName}
           </CSelectButtonM>
         </div>
-        <div className="date">{moment(new Date()).format("YYYY-MM-DD")}</div>
+        <div className="date">
+          {moment(new Date()).format("YYYY-MM-DD")}
+          <CIconButton
+            onClick={calledMetrics}
+            icon="refresh"
+            type="btn1"
+            tooltip="Refresh"
+            style={{
+              marginLeft: "10px",
+            }}
+          ></CIconButton>
+        </div>
       </div>
       <PanelBox
         className="panel_graph"
