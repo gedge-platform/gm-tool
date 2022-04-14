@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -137,7 +137,19 @@ class Project {
       projectOwner: getItem("user"),
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
-    console.log(body);
+    const body2 = {
+      projectName,
+      projectDescription,
+      memberName: getItem("user"),
+      clusterName: selectCluster,
+      projectType,
+      workspaceName,
+      clusterName: selectCluster,
+    };
+    axios
+      .post(`${SERVER_URL2}/project`, body2)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
     axios
       .post(`${SERVER_URL}/projects`, body, {
         auth: BASIC_AUTH,

@@ -36,19 +36,20 @@ class WorkSpace {
     const body = {
       workspaceName,
       workspaceDescription,
-      selectCluster:selectCluster.join(','),
+      selectCluster: selectCluster.join(","),
       workspaceOwner: getItem("user"),
       workspaceCreator: getItem("user"),
     };
-    // axios
-    //   .post(`${SERVER_URL2}/workspace`, {
-    //     workspaceName,
-    //     workspaceDescription,
-    //     memberName: getItem("user"),
-    //     clusterName: selectCluster,
-    //   })
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.error(err));
+    const body2 = {
+      workspaceName,
+      workspaceDescription,
+      memberName: getItem("user"),
+      clusterName: selectCluster,
+    };
+    axios
+      .post(`${SERVER_URL2}/workspace`, body2)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
     return axios
       .post(`${SERVER_URL}/workspaces`, body, {
         auth: BASIC_AUTH,
