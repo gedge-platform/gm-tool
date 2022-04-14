@@ -36,7 +36,7 @@ class WorkSpace {
     const body = {
       workspaceName,
       workspaceDescription,
-      selectCluster: selectCluster.join(","),
+      selectCluster,
       workspaceOwner: getItem("user"),
       workspaceCreator: getItem("user"),
     };

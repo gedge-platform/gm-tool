@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -124,16 +124,18 @@ class Project {
     projectType,
     workspaceName,
     selectCluster,
+    istioCheck,
     callback
   ) => {
     const body = {
-      projectName,
+      projectName: projectName.toLowerCase(),
       projectDescription,
       projectType,
-      selectCluster: selectCluster.join(","),
+      selectCluster,
       workspaceName,
       projectCreator: getItem("user"),
       projectOwner: getItem("user"),
+      istioCheck: istioCheck ? "abled" : "disabled",
     };
     console.log(body);
     axios
@@ -144,11 +146,12 @@ class Project {
         console.log(res);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
-        } else {
-          swalError("생성에 실패하였습니다.", callback);
         }
       })
-      .catch((err) => swalError("생성에 실패하였습니다.", callback));
+      .catch((err) => {
+        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        console.error(err);
+      });
   };
 }
 

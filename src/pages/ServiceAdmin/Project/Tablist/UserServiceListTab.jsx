@@ -90,7 +90,12 @@ const UserServiceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadProjectList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 

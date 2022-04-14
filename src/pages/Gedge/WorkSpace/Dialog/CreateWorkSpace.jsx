@@ -42,6 +42,7 @@ const CreateWorkSpace = observer((props) => {
     setSelectCluster([]);
     setWorkspaceName("");
     setWorkspaceDescription("");
+    setCheck(false);
   };
 
   const onChange = ({ target: { name, value } }) => {
@@ -126,10 +127,7 @@ const CreateWorkSpace = observer((props) => {
             </td>
           </tr>
           <tr>
-            <th>
-              Workspace Description
-              <span className="requried">*</span>
-            </th>
+            <th>Workspace Description</th>
             <td>
               <CTextField
                 type="text"
