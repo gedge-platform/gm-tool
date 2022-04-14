@@ -98,7 +98,12 @@ const PodListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadPodList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 

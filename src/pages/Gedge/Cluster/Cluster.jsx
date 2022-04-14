@@ -19,6 +19,7 @@ const Cluster = () => {
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
         <CTab label="코어 클라우드" />
         <CTab label="클라우드 엣지" />
+        <CTab label="자격 증명" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>

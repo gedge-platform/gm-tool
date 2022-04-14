@@ -19,7 +19,8 @@ const CoreClusterListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList } = clusterStore;
+  const { clusterDetail, clusterList, loadClusterList, loadCluster } =
+    clusterStore;
 
   const [columDefs] = useState([
     // {
@@ -72,6 +73,10 @@ const CoreClusterListTab = observer(() => {
 
   const history = useHistory();
 
+  const handleClick = (e) => {
+    loadCluster(e.data.clusterName);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -100,6 +105,7 @@ const CoreClusterListTab = observer(() => {
                   rowData={clusterList}
                   columnDefs={columDefs}
                   isBottom={true}
+                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>

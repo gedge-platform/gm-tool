@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import workspacesStore from "../../../../store/WorkSpace";
 import CreateWorkSpace from "../Dialog/CreateWorkSpace";
 import clusterStore from "../../../../store/Cluster";
+import { swalUpdate } from "../../../../utils/swal-utils";
 
 const APIListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,8 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements } = workspacesStore;
+  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
+    workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -53,11 +55,28 @@ const APIListTab = observer(() => {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
   const history = useHistory();
   const handleOpen = () => {
     setOpen(true);
+  };
+  const handleClick = ({ data: { workspaceName }, colDef: { field } }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteWorkspace(workspaceName, loadWorkSpaceList)
+      );
+    }
   };
 
   const handleClose = () => {
@@ -71,7 +90,12 @@ const APIListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadWorkSpaceList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
@@ -84,11 +108,16 @@ const APIListTab = observer(() => {
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
+                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
           </div>
-          <CreateWorkSpace open={open} onClose={handleClose} />
+          <CreateWorkSpace
+            reloadFunc={loadWorkSpaceList}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
       </CReflexBox>
     </>

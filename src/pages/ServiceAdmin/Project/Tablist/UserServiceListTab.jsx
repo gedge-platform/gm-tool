@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
 import CreateProject from "../Dialog/CreateProject";
+import { swalUpdate } from "../../../../utils/swal-utils";
 
 const UserServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ const UserServiceListTab = observer(() => {
     totalElements,
     loadProjectList,
     loadProjectDetail,
+    deleteProject,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -54,20 +56,26 @@ const UserServiceListTab = observer(() => {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
-
-    // {
-    //   headerName: "CPU 사용량(core)",
-    //   field: "cpu",
-    //   filter: true,
-    //   cellRenderer: function ({ data: { resourceUsage } }) {
-    //     return `<span>${resourceUsage.namespace_cpu ?? 0}</span>`;
-    //   },
-    // },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadProjectDetail(e.data.projectName);
+  const handleClick = ({ data: { projectName }, colDef: { field } }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteProject(projectName, loadProjectList)
+      );
+      return;
+    }
+    loadProjectDetail(projectName);
   };
 
   const handleOpen = () => {
@@ -87,7 +95,12 @@ const UserServiceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadProjectList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 

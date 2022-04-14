@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class DaemonSet {
   daemonSetList = [];
@@ -31,7 +31,7 @@ class DaemonSet {
 
   loadDaemonSetList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/daemonsets`, {
+      .get(`${SERVER_URL}/daemonsets`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -54,7 +54,7 @@ class DaemonSet {
   loadDaemonSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/daemonsets/${name}?cluster=${cluster}&project=${project}`,
+        `${SERVER_URL}/daemonsets/${name}?cluster=${cluster}&project=${project}`,
         {
           auth: BASIC_AUTH,
         }
