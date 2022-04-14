@@ -135,7 +135,7 @@ class Project {
       workspaceName,
       projectCreator: getItem("user"),
       projectOwner: getItem("user"),
-      istioCheck: istioCheck ? "abled" : "disabled",
+      istioCheck: istioCheck ? "enabled" : "disabled",
     };
     console.log(body);
     axios
