@@ -4,15 +4,15 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CCreateButton } from "@/components/buttons";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateProject from "../../../ServiceAdmin/Project/Dialog/CreateProject";
+import { swalUpdate } from "../../../../utils/swal-utils";
 
 const UserServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -27,6 +27,7 @@ const UserServiceListTab = observer(() => {
     totalElements,
     loadProjectList,
     loadProjectDetail,
+    deleteProject,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -58,6 +59,16 @@ const UserServiceListTab = observer(() => {
           .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
   const history = useHistory();
@@ -69,9 +80,14 @@ const UserServiceListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadProjectDetail(e.data.projectName);
+  const handleClick = ({ data: { projectName }, colDef: { field } }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteProject(projectName, loadProjectList)
+      );
+      return;
+    }
+    loadProjectDetail(projectName);
   };
 
   useEffect(() => {
@@ -82,7 +98,12 @@ const UserServiceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadProjectList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 

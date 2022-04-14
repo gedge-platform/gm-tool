@@ -26,7 +26,6 @@ const EventWrap = styled.div`
     margin: 10px;
     font-weight: 400;
     font-size: 15px;
-    box-size: small;
   }
 
   .MuiInputBase-root {

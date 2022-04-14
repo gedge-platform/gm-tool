@@ -130,6 +130,12 @@ class Cluster {
       );
     });
   };
+
+  setClusters = (clusters) => {
+    runInAction(() => {
+      this.clusters = clusters;
+    });
+  };
 }
 
 const clusterStore = new Cluster();

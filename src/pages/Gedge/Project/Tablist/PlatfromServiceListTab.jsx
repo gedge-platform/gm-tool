@@ -89,7 +89,12 @@ const PlatfromServiceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadPlatformProjectList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 
@@ -106,7 +111,12 @@ const PlatfromServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateProject type={"admin"} open={open} onClose={handleClose} />
+          <CreateProject
+            reloadFunc={loadPlatformProjectList}
+            type={"admin"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <Detail platformDetil={platformDetil} />
       </CReflexBox>

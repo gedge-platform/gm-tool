@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Pod {
   podList = [];
@@ -45,12 +45,9 @@ class Pod {
 
   loadPodDetail = async (name, cluster, project) => {
     await axios
-      .get(
-        `${SERVER_URL2}/pods/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
-      )
+      .get(`${SERVER_URL}/pods/${name}?cluster=${cluster}&project=${project}`, {
+        auth: BASIC_AUTH,
+      })
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.podDetail = data;
@@ -75,7 +72,7 @@ class Pod {
 
   loadPodList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/pods`, {
+      .get(`${SERVER_URL}/pods`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import theme from "@/styles/theme";
 import { CIconButton } from "@/components/buttons";
-import { CDatePicker } from "@/components/textfields/CDatePicker";
+import { swalError } from "../../utils/swal-utils";
 
 const ActionArea = styled.div`
   display: flex;
@@ -94,7 +94,7 @@ const CommActionBar = (props) => {
   };
 
   const onClick = () => {
-    reloadFunc(true);
+    swalError("새로고침 되었습니다.", reloadFunc);
   };
 
   const handleSearch = ({ target: { value } }) => {
@@ -136,7 +136,7 @@ const CommActionBar = (props) => {
           </SearchBar>
         )}
         <CIconButton
-          onClick={reloadFunc}
+          onClick={onClick}
           icon="refresh"
           type="btn1"
           tooltip="새로고침"

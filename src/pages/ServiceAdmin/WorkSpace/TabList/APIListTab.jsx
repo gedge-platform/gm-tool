@@ -4,20 +4,24 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CCreateButton } from "@/components/buttons";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import workspacesStore from "../../../../store/WorkSpace";
+import workspacesStore from "@/store/WorkSpace";
+import CreateWorkSpace from "@/pages/Gedge/Workspace/Dialog/CreateWorkSpace";
+import { swalUpdate } from "@/utils/swal-utils";
 
 const APIListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements } = workspacesStore;
+  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
+    workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -53,10 +57,36 @@ const APIListTab = observer(() => {
           .format("YYYY-MM-DD HH:mm")}</span>`;
       },
     },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
   const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClick = async ({
+    data: { workspaceName },
+    colDef: { field },
+  }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteWorkspace(workspaceName, loadWorkSpaceList)
+      );
+    }
+  };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -65,8 +95,13 @@ const APIListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+          <CommActionBar
+            reloadFunc={loadWorkSpaceList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
@@ -78,14 +113,19 @@ const APIListTab = observer(() => {
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
+                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
           </div>
+          <CreateWorkSpace
+            reloadFunc={loadWorkSpaceList}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
       </CReflexBox>
     </>
   );
 });
-
 export default APIListTab;

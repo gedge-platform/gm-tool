@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Configmaps {
   configmapsList = [];
@@ -18,7 +18,7 @@ class Configmaps {
 
   loadconfigmapsList = async () => {
     await axios
-      .get(`${SERVER_URL2}/configmaps`, {
+      .get(`${SERVER_URL}/configmaps`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -38,7 +38,7 @@ class Configmaps {
   loadconfigmapsTabList = async (name, cluster, namespace) => {
     await axios
       .get(
-        `${SERVER_URL2}/configmaps/${name}?cluster=${cluster}&project=${namespace}`,
+        `${SERVER_URL}/configmaps/${name}?cluster=${cluster}&project=${namespace}`,
         {
           auth: BASIC_AUTH,
         }

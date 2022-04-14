@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Secret {
   secretList = [];
@@ -16,7 +16,7 @@ class Secret {
 
   loadsecretList = async () => {
     await axios
-      .get(`${SERVER_URL2}/secrets`, {
+      .get(`${SERVER_URL}/secrets`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -36,7 +36,7 @@ class Secret {
   loadsecretTabList = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${SERVER_URL2}/secrets/${name}?cluster=${clusterName}&project=${namespace}`,
+        `${SERVER_URL}/secrets/${name}?cluster=${clusterName}&project=${namespace}`,
         {
           auth: BASIC_AUTH,
         }

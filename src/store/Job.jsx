@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Job {
   jobList = [];
@@ -71,7 +71,7 @@ class Job {
 
   loadJobList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/jobs`, {
+      .get(`${SERVER_URL}/jobs`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -93,12 +93,9 @@ class Job {
 
   loadJobDetail = async (name, cluster, project) => {
     await axios
-      .get(
-        `${SERVER_URL2}/jobs/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
-      )
+      .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`, {
+        auth: BASIC_AUTH,
+      })
       .then(({ data: { data, involves } }) => {
         runInAction(() => {
           this.jobDetailData = data;
