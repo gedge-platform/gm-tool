@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
-import moment from "moment";
-
+import { dateFormatter } from "@/utils/common-utils";
 const UserDetail = observer((props) => {
   const { user } = props;
   const [open, setOpen] = useState(false);
@@ -49,7 +48,7 @@ const UserDetail = observer((props) => {
                 </tr> */}
                 <tr>
                   <th>등록일</th>
-                  <td>{moment(user.created_at).format("YYYY-MM-DD HH:mm")}</td>
+                  <td>{dateFormatter(user.created_at)}</td>
                   <th></th>
                   <td></td>
                 </tr>

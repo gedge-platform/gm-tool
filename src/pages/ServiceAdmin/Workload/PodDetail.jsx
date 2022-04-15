@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
+import { dateFormatter } from "@/utils/common-utils";
 import { Podcasts } from "@mui/icons-material";
 import podStore from "../../../store/Pod";
 import { observer } from "mobx-react-lite";
@@ -179,9 +179,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(events?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -274,11 +272,7 @@ const Detail = observer(() => {
                 <th>Qos Class</th>
                 <td>{podDetail.qosClass}</td>
                 <th>Created</th>
-                <td>
-                  {moment(podDetail.creationTimestamp).format(
-                    "YYYY-MM-DD HH:MM"
-                  )}
-                </td>
+                <td>{dateFormatter(podDetail.creationTimestamp)}</td>
               </tr>
             </tbody>
           </table>
