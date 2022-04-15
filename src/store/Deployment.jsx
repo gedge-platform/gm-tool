@@ -108,16 +108,15 @@ class Deployment {
 
   deploymentResource = {};
   pods = [];
-  deploymentInvolvesData = [{}];
 
   depServices = {};
-  depServicesPort = [
-    {
-      name: "",
-      port: 0,
-      protocol: "",
-    },
-  ];
+  // depServicesPort = [
+  //   {
+  //     name: "",
+  //     port: 0,
+  //     protocol: "",
+  //   },
+  // ];
 
   //   content = {
   //     apiVersion: "apps/v1",
@@ -179,13 +178,11 @@ class Deployment {
           } else {
             this.events = null;
           }
-          this.deploymentInvolvesData = involvesData;
           this.pods = involvesData.pods;
           this.depServices = involvesData.services;
-          this.depServicesPort = involvesData.services.port;
+          // this.depServicesPort = involvesData.services.port;
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
-          console.log(this.containersTemp);
         });
       });
   };
