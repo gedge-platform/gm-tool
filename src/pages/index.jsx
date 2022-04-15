@@ -16,6 +16,7 @@ export { default as Configuration } from "./Gedge/Configuration/Configuration";
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
 export { default as ServiceWorkSpace } from "./ServiceAdmin/WorkSpace/WorkSpace";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
+export { default as ServiceMonitoring } from "./ServiceAdmin/Monitoring/Monitoring";
 export { default as Volume } from "./Gedge/Volume/Volume";
 
 //공통

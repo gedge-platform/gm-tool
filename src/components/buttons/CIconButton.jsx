@@ -84,6 +84,7 @@ const CIconButton = (props) => {
     buttonEventType = "button",
     tooltip = "",
     onClick,
+    isPlay = false,
     ...other
   } = props;
   const classes = useStyles();
@@ -105,7 +106,7 @@ const CIconButton = (props) => {
           className="ico"
           style={{
             backgroundImage: `url(../images/ico-action/ico_${icon}.png)`,
-            // backgroundPositionY: "-20px",
+            backgroundPositionY: `${isPlay ? "-20px" : "0px"}`,
           }}
         />
       </IconButton>

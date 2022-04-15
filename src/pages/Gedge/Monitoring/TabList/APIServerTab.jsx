@@ -18,6 +18,7 @@ import {
   LastTimeList,
   IntervalList,
 } from "../Utils/MetricsVariableFormatter";
+import { CIconButton } from "@/components/buttons";
 
 import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
 
@@ -28,15 +29,19 @@ const APIServer = observer(() => {
     setTabvalue(newValue);
   };
 
+  const [play, setPlay] = useState(false);
+  const [playMetrics, setPlayMetrics] = useState(null);
+
   const {
     clusterName,
     clusterNames,
     lastTime,
     interval,
-    setLastTime,
-    setInterval,
+    setMetricsLastTime,
+    setMetricsInterval,
     setClusterName,
     loadAllMetrics,
+    loadRealAllMetrics,
   } = monitoringStore;
 
   const clusterNameActionList = clusterNames.map((item) => {
@@ -45,6 +50,7 @@ const APIServer = observer(() => {
       onClick: () => {
         setClusterName(item);
         calledMetrics();
+        ckeckedInterval();
       },
     };
   });
@@ -53,8 +59,9 @@ const APIServer = observer(() => {
     return {
       name: item.name,
       onClick: () => {
-        setLastTime(item);
+        setMetricsLastTime(item);
         calledMetrics();
+        ckeckedInterval();
       },
     };
   });
@@ -63,8 +70,9 @@ const APIServer = observer(() => {
     return {
       name: item.name,
       onClick: () => {
-        setInterval(item);
+        setMetricsInterval(item);
         calledMetrics();
+        ckeckedInterval();
       },
     };
   });
@@ -76,6 +84,27 @@ const APIServer = observer(() => {
       ClusterMetricTypes.APISERVER_ALL
     );
   };
+
+  const playCalledMetrics = () => {
+    setPlay(true);
+    setPlayMetrics(
+      setInterval(() => {
+        loadRealAllMetrics(
+          TargetTypes.CLUSTER,
+          unixCurrentTime(),
+          combinationMetrics(ClusterMetricTypes.APISERVER_ALL)
+        );
+      }, 5000)
+    );
+  };
+
+  const stopCalledMetrics = () => {
+    setPlay(false);
+    clearInterval(playMetrics);
+    setPlayMetrics(null);
+  };
+
+  const ckeckedInterval = () => (play ? stopCalledMetrics() : null);
 
   useEffect(() => {
     calledMetrics();
@@ -96,7 +125,16 @@ const APIServer = observer(() => {
           </CSelectButtonM>
         </div>
         <div className="date">
-          {moment(new Date()).format("YYYY-MM-DD HH:mm")}
+          {moment(new Date()).format("YYYY-MM-DD")}
+          <CIconButton
+            onClick={calledMetrics}
+            icon="refresh"
+            type="btn1"
+            tooltip="Refresh"
+            style={{
+              marginLeft: "10px",
+            }}
+          ></CIconButton>
         </div>
       </div>
       <PanelBox
@@ -104,7 +142,10 @@ const APIServer = observer(() => {
         style={{ height: "100%", margin: "5px 0 5px 0" }}
       >
         <div className="panelTitBar panelTitBar_clear">
-          <div className="tit" style={{ color: "white " }}>
+          <div
+            className="tit"
+            style={{ color: "white ", display: "flex", alignItems: "center" }}
+          >
             <span style={{ marginRight: "10px", color: "white " }}>Last :</span>
             <CSelectButtonM
               className="none_transform"
@@ -127,6 +168,27 @@ const APIServer = observer(() => {
             >
               {interval.name}
             </CSelectButtonM>
+            <div
+              style={{
+                width: "1104px",
+                display: "flex",
+                justifyContent: "right",
+              }}
+            >
+              <CIconButton
+                onClick={playCalledMetrics}
+                icon="play"
+                type="btn1"
+                tooltip="Play"
+                isPlay={play}
+              ></CIconButton>
+              <CIconButton
+                onClick={stopCalledMetrics}
+                icon="pause"
+                type="btn1"
+                tooltip="Pause"
+              ></CIconButton>
+            </div>
           </div>
         </div>
         <div className="tabN-chart-div-area">

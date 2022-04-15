@@ -1,17 +1,16 @@
 import React, { useState, useEffect, PureComponent } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { PanelBoxM } from "@/components/styles/PanelBoxM";
-import { PrAreaChart } from "./MonitChart/PhysicalResourceChart";
+import { AppAreaChart } from "./ApplicationResourceChart";
 import {
   CCreateButton,
   CSelectButton,
   CSelectButtonM,
+  CIconButton,
 } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons";
-import CommActionBar from "@/components/common/CommActionBar";
 import { observer } from "mobx-react";
 import moment from "moment";
-import monitoringStore from "../../../../store/Monitoring";
+import monitoringStore from "@/store/Monitoring";
 import {
   stepConverter,
   unixCurrentTime,
@@ -19,11 +18,15 @@ import {
   combinationMetrics,
   LastTimeList,
   IntervalList,
-} from "../Utils/MetricsVariableFormatter";
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 
-import { ClusterMetricTypes, TargetTypes } from "../Utils/MetricsVariables";
+import {
+  ClusterMetricTypes,
+  TargetTypes,
+  AppMetricValues,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariables";
 
-const PsysicalResource = observer(() => {
+const ApplicationResource = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
   const handleTabChange = (event, newValue) => {
@@ -42,6 +45,9 @@ const PsysicalResource = observer(() => {
     setMetricsInterval,
     setClusterName,
     loadAllMetrics,
+    loadClusterNames,
+    loadAppMetrics,
+    loadRealAppMetrics,
     loadRealAllMetrics,
   } = monitoringStore;
 
@@ -79,10 +85,45 @@ const PsysicalResource = observer(() => {
   });
 
   const calledMetrics = () => {
+    calledClusterMetrics();
+    calledAppMetrics();
+  };
+
+  const calledClusterMetrics = () => {
     loadAllMetrics(
       TargetTypes.CLUSTER,
       unixCurrentTime(),
-      combinationMetrics(ClusterMetricTypes.PHYSICAL_ALL)
+      combinationMetrics(
+        ClusterMetricTypes.CPU_USAGE,
+        ClusterMetricTypes.MEMORY_USAGE
+      )
+    );
+  };
+
+  const calledAppMetrics = () => {
+    loadAppMetrics(
+      TargetTypes.APPLICATION,
+      unixCurrentTime(),
+      combinationMetrics(AppMetricValues.ALL)
+    );
+  };
+
+  const calledRealClusterMetrics = () => {
+    loadRealAllMetrics(
+      TargetTypes.CLUSTER,
+      unixCurrentTime(),
+      combinationMetrics(
+        ClusterMetricTypes.CPU_USAGE,
+        ClusterMetricTypes.MEMORY_USAGE
+      )
+    );
+  };
+
+  const calledRealAppMetrics = () => {
+    loadRealAppMetrics(
+      TargetTypes.APPLICATION,
+      unixCurrentTime(),
+      combinationMetrics(AppMetricValues.ALL)
     );
   };
 
@@ -91,11 +132,8 @@ const PsysicalResource = observer(() => {
     console.log(play);
     setPlayMetrics(
       setInterval(() => {
-        loadRealAllMetrics(
-          TargetTypes.CLUSTER,
-          unixCurrentTime(),
-          combinationMetrics(ClusterMetricTypes.PHYSICAL_ALL)
-        );
+        calledRealClusterMetrics();
+        calledRealAppMetrics();
       }, 5000)
     );
   };
@@ -110,7 +148,11 @@ const PsysicalResource = observer(() => {
   const ckeckedInterval = () => (play ? stopCalledMetrics() : null);
 
   useEffect(() => {
-    calledMetrics();
+    if (clusterName === "") {
+      loadClusterNames(calledMetrics);
+    } else {
+      calledMetrics();
+    }
   }, []);
 
   return (
@@ -198,14 +240,42 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.CPU_UTIL} />
+                <AppAreaChart value={ClusterMetricTypes.CPU_USAGE} />
               </div>
             </div>
           </PanelBox>
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.MEMORY_UTIL} />
+                <AppAreaChart value={ClusterMetricTypes.MEMORY_USAGE} />
+              </div>
+            </div>
+          </PanelBox>
+        </div>
+      </PanelBox>
+      <PanelBox
+        className="panel_graph"
+        style={{ height: "100%", margin: "5px 0 5px 0" }}
+      >
+        <div className="panelTitBar panelTitBar_clear">
+          <div className="tit" style={{ color: "white " }}>
+            <span style={{ marginRight: "10px", color: "white " }}>
+              Application Resource
+            </span>
+          </div>
+        </div>
+        <div className="tabN-chart-div-area">
+          <PanelBox className="panel_graph tabN-chart-area">
+            <div className="tab2-chart-area">
+              <div className="tab2-chart">
+                <AppAreaChart value={AppMetricValues.POD_COUNT} />
+              </div>
+            </div>
+          </PanelBox>
+          <PanelBox className="panel_graph tabN-chart-area">
+            <div className="tab2-chart-area">
+              <div className="tab2-chart">
+                <AppAreaChart value={AppMetricValues.SERVICE_COUNT} />
               </div>
             </div>
           </PanelBox>
@@ -214,30 +284,14 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.CPU_USAGE} />
+                <AppAreaChart value={AppMetricValues.DEVPLOYMENT_COUNT} />
               </div>
             </div>
           </PanelBox>
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.MEMORY_USAGE} />
-              </div>
-            </div>
-          </PanelBox>
-        </div>
-        <div className="tabN-chart-div-area">
-          <PanelBox className="panel_graph tabN-chart-area">
-            <div className="tab2-chart-area">
-              <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.CPU_TOTAL} />
-              </div>
-            </div>
-          </PanelBox>
-          <PanelBox className="panel_graph tabN-chart-area">
-            <div className="tab2-chart-area">
-              <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.MEMORY_TOTAL} />
+                <AppAreaChart value={AppMetricValues.CRONJOB_COUNT} />
               </div>
             </div>
           </PanelBox>
@@ -246,30 +300,14 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.DISK_UTIL} />
+                <AppAreaChart value={AppMetricValues.PV_COUNT} />
               </div>
             </div>
           </PanelBox>
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.POD_UTIL} />
-              </div>
-            </div>
-          </PanelBox>
-        </div>
-        <div className="tabN-chart-div-area">
-          <PanelBox className="panel_graph tabN-chart-area">
-            <div className="tab2-chart-area">
-              <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.DISK_USAGE} />
-              </div>
-            </div>
-          </PanelBox>
-          <PanelBox className="panel_graph tabN-chart-area">
-            <div className="tab2-chart-area">
-              <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.POD_RUNNING} />
+                <AppAreaChart value={AppMetricValues.PVC_COUNT} />
               </div>
             </div>
           </PanelBox>
@@ -278,14 +316,7 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.DISK_TOTAL} />
-              </div>
-            </div>
-          </PanelBox>
-          <PanelBox className="panel_graph tabN-chart-area">
-            <div className="tab2-chart-area">
-              <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.POD_QUOTA} />
+                <AppAreaChart value={AppMetricValues.NAMESPACE_COUNT} />
               </div>
             </div>
           </PanelBox>
@@ -294,4 +325,4 @@ const PsysicalResource = observer(() => {
     </PanelBoxM>
   );
 });
-export default PsysicalResource;
+export default ApplicationResource;
