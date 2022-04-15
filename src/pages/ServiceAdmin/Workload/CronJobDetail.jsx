@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import cronJobStore from "../../../store/CronJob";
 import { observer } from "mobx-react-lite";
 import theme from "@/styles/theme";
@@ -11,6 +10,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -60,32 +60,6 @@ const Detail = observer(() => {
   const InvolvesJobs = cronjobInvolvesJobs;
   const InvolvesJobsTable = [];
   const containers = cronJobDetail.containers;
-  // const containersTable = [];
-
-  // const containersTable = () => {
-  //   return containers?.map((item) => {
-  //     <table className="tb_data">
-  //       <tbody>
-  //         <tr>
-  //           <th className="tb_workload_detail_th">Name</th>
-  //           <td>{item?.name}</td>
-  //           <th>Image</th>
-  //           <td>{item?.image}</td>
-  //         </tr>
-  //       </tbody>
-  //     </table>;
-  //   });
-  // };
-  // containers?.map((item) => {
-  //   containersTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Name</th>
-  //       <td>{item?.name}</td>
-  //       <th>Image</th>
-  //       <td>{item?.image}</td>
-  //     </tr>
-  //   );
-  // });
 
   const labelTable = () => {
     return Object.entries(label).map(([key, value]) => {
@@ -168,9 +142,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(events?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -273,17 +245,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Created</th>
-                <td>
-                  {moment(cronJobDetail.creationTimestamp).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-                </td>
+                <td>{dateFormatter(cronJobDetail.creationTimestamp)}</td>
                 <th>Lasted</th>
-                <td>
-                  {moment(cronJobDetail.lastScheduleTime).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-                </td>
+                <td>{dateFormatter(cronJobDetail.lastScheduleTime)}</td>
               </tr>
             </tbody>
           </table>

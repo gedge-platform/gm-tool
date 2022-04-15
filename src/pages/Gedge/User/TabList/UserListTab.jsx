@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CSelectButton } from "@/components/buttons";
 import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
 import userStore from "@/store/UserStore";
-import moment from "moment";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,6 +17,7 @@ import { getItem } from "../../../../utils/sessionStorageFn";
 import { swalError } from "../../../../utils/swal-utils";
 import UserAdd from "../../../Management/UserCont/UserAdd";
 import CommActionBar from "@/components/common/CommActionBar";
+import moment from "moment";
 
 const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -51,9 +51,7 @@ const UserListTab = observer(() => {
         if (moment(data.value).year() === 1) {
           return `<span>-</span>`;
         }
-        return `<span>${moment(new Date(data.value)).format(
-          "YYYY-MM-DD HH:mm"
-        )}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {
@@ -64,9 +62,7 @@ const UserListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {

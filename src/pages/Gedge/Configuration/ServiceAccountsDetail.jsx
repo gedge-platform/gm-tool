@@ -3,9 +3,8 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import moment from "moment";
 import serviceAccountStore from "../../../store/ServiceAccount";
-import { isValidJSON } from "../../../utils/common-utils";
+import { isValidJSON, dateFormatter } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
@@ -103,7 +102,7 @@ const ServiceAccountsDetail = observer(() => {
                 <th>Secrets Name</th>
                 <td>{secrets[0].name}</td>
                 <th>Create Time</th>
-                <td>{moment(createdAt).format("YYYY-MM-DD HH:MM")}</td>
+                <td>{dateFormatter(createdAt)}</td>
               </tr>
             </tbody>
           </table>

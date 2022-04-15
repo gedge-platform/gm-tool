@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
+import { dateFormatter } from "@/utils/common-utils";
 import serviceStore from "../../../store/Service";
 import { observer } from "mobx-react-lite";
 
@@ -65,9 +65,7 @@ const Detail = observer(() => {
                 <th>Session Affinity</th>
                 <td>{serviceDetail.sessionAffinity}</td>
                 <th>Created</th>
-                <td>
-                  {moment(serviceDetail.createAt).format("YYYY-MM-DD HH:mm")}
-                </td>
+                <td>{dateFormatter(serviceDetail.createAt)}</td>
               </tr>
             </tbody>
           </table>

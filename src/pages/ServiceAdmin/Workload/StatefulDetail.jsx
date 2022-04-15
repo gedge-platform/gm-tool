@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 import { isValidJSON } from "../../../utils/common-utils";
@@ -13,6 +12,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -70,12 +70,6 @@ const StatefulSetDetail = observer(() => {
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const labelTable = [];
-  const labelTemp = label;
-
-  const annotationsTable = [];
-  const annotationsTemp = annotations;
 
   const eventsTable = [];
 
@@ -153,9 +147,7 @@ const StatefulSetDetail = observer(() => {
                   </tr>
                   <tr>
                     <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
+                    <td>{dateFormatter(events?.eventTime)}</td>
                     <th></th>
                     <td></td>
                   </tr>
@@ -236,7 +228,7 @@ const StatefulSetDetail = observer(() => {
                 <th>Project</th>
                 <td>{project}</td>
                 <th>Created</th>
-                <td>{moment(createAt).format("YYYY-MM-DD HH:MM")}</td>
+                <td>{dateFormatter(createAt)}</td>
               </tr>
             </tbody>
           </table>

@@ -2,10 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import ClusterOverview from "./TabList/ClusterOverviewTab";
-import PsysicalResource from "./TabList/PhysicalResourceTab";
-import APIServer from "./TabList/APIServerTab";
-import Scheduler from "./TabList/SchedulerTab";
+import ApplicationResource from "./TabList/ApplicationResourceTab";
 
 const Monitoring = () => {
   const currentPageTitle = Title.Monitoring;
@@ -19,23 +16,11 @@ const Monitoring = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Cluster Overview" />
-        <CTab label="Psysical Resource" />
-        <CTab label="API Server" />
-        <CTab label="Scheduler" />
+        <CTab label="Application Resource" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <ClusterOverview />
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <PsysicalResource />
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <APIServer />
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={3}>
-          <Scheduler />
+          <ApplicationResource />
         </CTabPanel>
       </div>
     </Layout>

@@ -9,9 +9,9 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import deploymentStore from "../../../../store/Deployment";
-import moment from "moment";
+
 import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const DeploymentListTab = observer(() => {
@@ -66,9 +66,7 @@ const DeploymentListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);

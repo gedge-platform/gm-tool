@@ -3,9 +3,8 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import configmapsStore from "../../../store/Configmaps";
-import moment from "moment";
 import styled from "styled-components";
-import { isValidJSON } from "../../../utils/common-utils";
+import { dateFormatter, isValidJSON } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
@@ -95,11 +94,7 @@ const ConfigmapsDetail = observer(() => {
               </tr>
               <tr>
                 <th>Create Time</th>
-                <td>
-                  {moment(configmapsTabList.createAt).format(
-                    "YYYY-MM-DD HH:MM"
-                  )}
-                </td>
+                <td>{dateFormatter(configmapsTabList.createAt)}</td>
               </tr>
             </tbody>
           </table>
