@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
 import workspacesStore from "@/store/WorkSpace";
-import CreateWorkSpace from "@/pages/Gedge/Workspace/Dialog/CreateWorkSpace";
+import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
 
 const APIListTab = observer(() => {
