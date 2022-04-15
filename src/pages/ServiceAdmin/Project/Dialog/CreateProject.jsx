@@ -4,12 +4,12 @@ import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import { FormGroup } from "@mui/material";
-import { Checkbox, FormControlLabel } from "@material-ui/core";
 import projectStore from "../../../../store/Project";
 import workspacesStore from "../../../../store/WorkSpace";
 import clusterStore from "../../../../store/Cluster";
 import { dateFormatter } from "@/utils/common-utils";
+import { swalConfirm, swalError } from "../../../../utils/swal-utils";
+import { duplicateCheck } from "../../../../utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -28,9 +28,46 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
+const ToggleWrapper = styled.div`
+  display: flex;
+  margin-left: 12px;
+  width: 200px;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const ToggleBtn = styled.button`
+  width: 100px;
+  height: 30px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background-color: ${(props) => (!props.toggle ? "none" : "#0f5ce9")};
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+`;
+const Circle = styled.div`
+  background-color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50px;
+  position: absolute;
+  left: 5%;
+  transition: all 0.5s ease-in-out;
+  ${(props) =>
+    props.toggle &&
+    `
+      transform: translate(60px, 0);
+      transition: all 0.5s ease-in-out;
+    `}
+`;
+
 const CreateProject = observer((props) => {
   const { open } = props;
-  const { clusters, loadClusterInWorkspace } = clusterStore;
+  const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
   const { workSpaceList, loadWorkSpaceList } = workspacesStore;
   const { createProject } = projectStore;
 
@@ -38,6 +75,12 @@ const CreateProject = observer((props) => {
   const [projectDescription, setProjectDescription] = useState("");
   const [workspace, setWorkspace] = useState("");
   const [selectCluster, setSelectCluster] = useState([]);
+  const [check, setCheck] = useState(false);
+
+  const [toggle, setToggle] = useState(false);
+  const clickedToggle = () => {
+    setToggle((prev) => !prev);
+  };
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
@@ -46,11 +89,19 @@ const CreateProject = observer((props) => {
     setProjectDescription("");
     setWorkspace("");
     setSelectCluster([]);
+    setClusters([]);
+    setToggle(false);
+    setCheck(false);
   };
 
   const onChange = ({ target: { name, value } }) => {
     if (name === "workspace") {
+      if (value === "") {
+        setClusters([]);
+        return;
+      }
       loadClusterInWorkspace(value);
+      setSelectCluster([]);
       setWorkspace(value);
     } else if (name === "projectName") {
       setProjectName(value);
@@ -69,13 +120,45 @@ const CreateProject = observer((props) => {
     }
   };
 
+  const checkProjectName = async () => {
+    const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+    if (!regType1.test(projectName)) {
+      swalError("사용할 수 없는 문자열이 포함되어 있습니다.");
+      setCheck(false);
+      return;
+    }
+    const result = await duplicateCheck(projectName, "project");
+
+    if (result) {
+      swalError("사용 가능한 이름입니다.");
+      setCheck(true);
+    } else {
+      swalError("사용할 수 없는 이름입니다.");
+      setProjectName("");
+      setCheck(false);
+    }
+  };
+
   const postProject = () => {
+    if (!check) {
+      swalError("프로젝트 이름을 확인해주세요!");
+      return;
+    }
+    if (workspace === "") {
+      swalError("워크스페이스를 확인해주세요!");
+      return;
+    }
+    if (selectCluster.length === 0) {
+      swalError("클러스터를 확인해주세요!");
+      return;
+    }
     createProject(
       projectName,
       projectDescription,
       props.type,
       workspace,
       selectCluster,
+      toggle,
       handleClose
     );
   };
@@ -97,26 +180,26 @@ const CreateProject = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: "20%" }}>
               Project Name
               <span className="requried">*</span>
             </th>
-            <td>
+            <td style={{ display: "flex" }}>
               <CTextField
                 type="text"
                 placeholder="Project Name"
-                className="form_fullWidth"
+                style={{ flex: 3 }}
                 name="projectName"
                 onChange={onChange}
                 value={projectName}
               />
+              <ButtonNext onClick={checkProjectName} style={{ height: "32px" }}>
+                중복확인
+              </ButtonNext>
             </td>
           </tr>
           <tr>
-            <th>
-              Project Description
-              <span className="requried">*</span>
-            </th>
+            <th>Project Description</th>
             <td>
               <CTextField
                 type="text"
@@ -144,6 +227,18 @@ const CreateProject = observer((props) => {
             </td>
           </tr>
           <tr>
+            <th>Istio Check</th>
+            <td>
+              <ToggleWrapper>
+                <span>Disalbe</span>
+                <ToggleBtn onClick={clickedToggle} toggle={toggle}>
+                  <Circle toggle={toggle} />
+                </ToggleBtn>
+                <span>Enable</span>
+              </ToggleWrapper>
+            </td>
+          </tr>
+          <tr>
             <th>
               Workspace
               <span className="requried">*</span>
@@ -151,7 +246,7 @@ const CreateProject = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={"dafault"}>default</option>
+                  <option value={""}>Select Workspace</option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}

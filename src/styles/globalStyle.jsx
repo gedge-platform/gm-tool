@@ -20,6 +20,8 @@ import NotoBOtf from "@/fonts/NotoSansKR/NotoSansKR-Bold.otf";
 
 import selectArr from "@/images/bullet/select_arr.png";
 import passed from "@/images/bullet/ico_step_passed.png";
+import deleteBtn from "@/images/bullet/dailog_close.png";
+import deleteBtn2 from "@/images/ico-action/ico_del.png";
 
 import { PanelBox } from "@/components/styles/PanelBox";
 
@@ -110,7 +112,9 @@ const globalStyles = createGlobalStyle`
   .msplist {
     width: 100%
   }
-
+  *:focus {
+    outline: 0;
+}
   .msplist th {
     background-color: #f5f6f9;
     height: 36px;
@@ -1129,6 +1133,21 @@ const globalStyles = createGlobalStyle`
       background: no-repeat left center;
       &::before { display: none }
     }
+  }
+
+  .state_ico_new {
+    position: relative;
+    padding-left: 18px;
+    &.ing {
+      background: no-repeat left center;
+      &::before { display: none }
+    }
+  }
+  .state_ico_new.delete {
+    background: url(${deleteBtn2}) no-repeat 0px 2px;
+  }
+  .state_ico_new.delete:hover{
+    background-position: 0 -16px;
   }
 
   .status_ico {

@@ -124,18 +124,32 @@ class Project {
     projectType,
     workspaceName,
     selectCluster,
+    istioCheck,
     callback
   ) => {
     const body = {
-      projectName,
+      projectName: projectName,
       projectDescription,
       projectType,
-      selectCluster: selectCluster.join(","),
+      selectCluster,
       workspaceName,
       projectCreator: getItem("user"),
       projectOwner: getItem("user"),
+      istioCheck: istioCheck ? "enabled" : "disabled",
     };
-    console.log(body);
+    const body2 = {
+      projectName,
+      projectDescription,
+      memberName: getItem("user"),
+      clusterName: selectCluster,
+      projectType,
+      workspaceName,
+      clusterName: selectCluster,
+    };
+    axios
+      .post(`${SERVER_URL2}/project`, body2)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
     axios
       .post(`${SERVER_URL}/projects`, body, {
         auth: BASIC_AUTH,
@@ -144,11 +158,24 @@ class Project {
         console.log(res);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
-        } else {
-          swalError("생성에 실패하였습니다.", callback);
         }
       })
-      .catch((err) => swalError("생성에 실패하였습니다.", callback));
+      .catch((err) => {
+        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        console.error(err);
+      });
+  };
+
+  deleteProject = (projectName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/projects/${projectName}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        if (res.status === 200)
+          swalError("프로젝트가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

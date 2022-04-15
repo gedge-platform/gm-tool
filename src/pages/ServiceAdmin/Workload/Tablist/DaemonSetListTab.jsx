@@ -77,7 +77,12 @@ const DaemonSetListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadDaemonSetList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

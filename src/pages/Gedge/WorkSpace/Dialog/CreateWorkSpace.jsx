@@ -4,10 +4,10 @@ import { CDialogNew } from "../../../../components/dialogs";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import clusterStore from "../../../../store/Cluster";
-import { dateFormatter } from "../../../../utils/common-utils";
+import { dateFormatter, duplicateCheck } from "../../../../utils/common-utils";
 import { CCreateButton } from "@/components/buttons";
 import workspacesStore from "../../../../store/WorkSpace";
-import { swalConfirm } from "../../../../utils/swal-utils";
+import { swalConfirm, swalError } from "../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -29,11 +29,12 @@ const ButtonNext = styled.button`
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
   const { loadClusterList, clusterList } = clusterStore;
-  const { createWorkspace, duplicateCheck } = workspacesStore;
+  const { createWorkspace } = workspacesStore;
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
-  const [selectCluster, setSelectCluster] = useState("");
+  const [selectCluster, setSelectCluster] = useState([]);
+  const [check, setCheck] = useState(false);
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
@@ -41,6 +42,7 @@ const CreateWorkSpace = observer((props) => {
     setSelectCluster([]);
     setWorkspaceName("");
     setWorkspaceDescription("");
+    setCheck(false);
   };
 
   const onChange = ({ target: { name, value } }) => {
@@ -58,16 +60,32 @@ const CreateWorkSpace = observer((props) => {
   };
 
   const postWorkspace = () => {
-    console.log(workspaceName, workspaceDescription, selectCluster);
+    if (!check) {
+      swalError("중복확인이 필요합니다!");
+      return;
+    }
+    if (selectCluster.length === 0) {
+      swalError("클러스터를 확인해주세요!");
+      return;
+    }
+    createWorkspace(
+      workspaceName,
+      workspaceDescription,
+      selectCluster,
+      handleClose
+    );
   };
-  const checkWorkspaceName = () => {
-    duplicateCheck(workspaceName);
-    // if (duplicateCheck(workspaceName)) {
-    //   swalConfirm("사용 가능한 이름입니다.");
-    // } else {
-    //   swalConfirm("이미 사용중인 이름입니다.");
-    //   setWorkspaceName("");
-    // }
+  const checkWorkspaceName = async () => {
+    const result = await duplicateCheck(workspaceName, "workspace");
+
+    if (result) {
+      swalError("사용 가능한 이름입니다.");
+      setCheck(true);
+    } else {
+      swalError("사용할 수 없는 이름입니다.");
+      setWorkspaceName("");
+      setCheck(false);
+    }
   };
 
   useEffect(() => {
@@ -109,10 +127,7 @@ const CreateWorkSpace = observer((props) => {
             </td>
           </tr>
           <tr>
-            <th>
-              Workspace Description
-              <span className="requried">*</span>
-            </th>
+            <th>Workspace Description</th>
             <td>
               <CTextField
                 type="text"

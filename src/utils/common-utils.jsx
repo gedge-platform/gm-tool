@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
+import { BASIC_AUTH, SERVER_URL } from "../config";
+import axios from "axios";
 
 //ag-grid filter
 export const agDateColumnFilter = () => {
@@ -66,4 +68,19 @@ export const dateFormatter = (date) => {
 export const strFormatByLength = (str, length = 200) => {
   if (str.length >= length) return `${str.substr(0, length)}...`;
   return str;
+};
+
+export const duplicateCheck = async (name, type) => {
+  return await axios
+    .get(`${SERVER_URL}/duplicateCheck/${name}?type=${type}`, {
+      auth: BASIC_AUTH,
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        return true;
+      }
+    })
+    .catch((err) => {
+      return false;
+    });
 };

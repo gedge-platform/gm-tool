@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class ServiceAccount {
   serviceAccountList = [];
@@ -27,7 +27,7 @@ class ServiceAccount {
 
   loadServiceAccountList = async () => {
     await axios
-      .get(`${SERVER_URL2}/serviceaccounts`, {
+      .get(`${SERVER_URL}/serviceaccounts`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -47,7 +47,7 @@ class ServiceAccount {
   loadServiceAccountTabList = async (name, cluster, namespace) => {
     await axios
       .get(
-        `${SERVER_URL2}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`,
+        `${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`,
         {
           auth: BASIC_AUTH,
         }

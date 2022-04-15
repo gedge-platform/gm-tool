@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class StatefulSet {
   statefulSetList = [];
@@ -48,7 +48,7 @@ class StatefulSet {
 
   loadStatefulSetList = async (type) => {
     await axios
-      .get(`${SERVER_URL2}/statefulsets`, {
+      .get(`${SERVER_URL}/statefulsets`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -71,7 +71,7 @@ class StatefulSet {
   loadStatefulSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/statefulsets/${name}?cluster=${cluster}&project=${project}`,
+        `${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`,
         {
           auth: BASIC_AUTH,
         }
