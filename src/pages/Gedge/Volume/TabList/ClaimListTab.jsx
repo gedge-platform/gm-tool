@@ -129,7 +129,12 @@ const ClaimListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            reloadFunc={loadPVClaims}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 
