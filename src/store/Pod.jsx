@@ -20,14 +20,6 @@ class Pod {
       eventTime: "",
     },
   ];
-  statusConditions = [
-    {
-      lastTransitionTime: "",
-      status: "",
-      type: "",
-    },
-  ];
-
   podName = "";
   containerName = "";
   containerImage = "";
@@ -37,7 +29,75 @@ class Pod {
   project = "";
   content = "";
   containerResources = [];
-  podContainerVolume = [];
+  podContainers = [
+    {
+      name: "",
+      image: "",
+      ports: [
+        {
+          name: "",
+          containerPort: 0,
+          protocol: "",
+        },
+      ],
+      volumemounts: [
+        {
+          mountpath: "",
+          name: "",
+          readonly: true,
+        },
+      ],
+      env: [
+        {
+          name: "",
+          value: "",
+          valueFrom: {},
+        },
+      ],
+    },
+  ];
+  containerStatuses = [
+    {
+      containerID: "",
+      name: "",
+      ready: true,
+      restartCount: 0,
+      image: "",
+      started: true,
+    },
+  ];
+  involvesData = {
+    workloadList: {
+      name: "",
+      kind: "",
+      replicaName: "",
+    },
+    serviceList: [
+      {
+        metadata: {
+          name: "",
+          namespace: "",
+          creationTimestamp: "",
+        },
+        subsets: [
+          {
+            addresses: [
+              {
+                nodename: "",
+                ip: "",
+              },
+            ],
+            ports: [
+              {
+                port: 0,
+                protocol: "",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -48,24 +108,20 @@ class Pod {
       .get(`${SERVER_URL}/pods/${name}?cluster=${cluster}&project=${project}`, {
         auth: BASIC_AUTH,
       })
-      .then(({ data: { data } }) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.podDetail = data;
+          this.involvesData = involvesData;
           this.label = data.label;
           this.annotations = data.annotations;
-          if (data.containerStatuses !== null) {
-            this.containerResources = data.containerStatuses;
-          } else {
-            this.containerResources = null;
-          }
-          this.podContainerVolume = data.Podcontainers;
 
+          this.podContainers = data.Podcontainers;
+          this.containerStatuses = data.containerStatuses;
           if (data.events !== null) {
             this.events = data.events;
           } else {
             this.events = null;
           }
-          this.statusConditions = data.statusConditions;
         });
       });
   };

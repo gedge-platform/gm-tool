@@ -57,8 +57,6 @@ const Detail = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const annotationsTable = [];
   const eventsTable = [];
-  const InvolvesJobs = cronjobInvolvesJobs;
-  const InvolvesJobsTable = [];
   const containers = cronJobDetail.containers;
 
   const labelTable = () => {
@@ -220,6 +218,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -287,6 +286,39 @@ const Detail = observer(() => {
           <table className="tb_data">
             <tbody>{eventsTable}</tbody>
           </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
+        <div className="tb_container">
+          <TableTitle>References</TableTitle>
+          {cronjobInvolvesJobs
+            ? cronjobInvolvesJobs.map((job) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{job?.name}</td>
+                      </tr>
+                      <tr>
+                        <th>CompletionTime</th>
+                        <td>{dateFormatter(job?.completionTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>StartTime</th>
+                        <td>{dateFormatter(job?.startTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>Succeeded</th>
+                        <td>{job?.succeeded}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            : "No Info"}
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>

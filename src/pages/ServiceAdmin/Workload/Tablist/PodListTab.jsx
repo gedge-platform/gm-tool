@@ -80,7 +80,6 @@ const PodListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    console.log(e);
     const data = e.data.status;
     if (data === "Failed") {
       return;

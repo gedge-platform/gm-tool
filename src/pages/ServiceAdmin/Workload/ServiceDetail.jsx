@@ -16,7 +16,6 @@ const TableTitle = styled.p`
 const Detail = observer(() => {
   const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
     serviceStore;
-  console.log(portTemp);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -33,37 +32,65 @@ const Detail = observer(() => {
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        ``
         <CTab label="Overview" />
-        <CTab label="Resources" />
+        <CTab label="Involves Data" />
         <CTab label="Port Info" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
-                <th className="tb_workload_detail_th">Name</th>
+                <th style={{ width: "25%" }}>Service Name</th>
                 <td>{serviceDetail.name}</td>
-                <th className="tb_workload_detail_th">Cluster</th>
+              </tr>
+              <tr>
+                <th>Cluster</th>
                 <td>{serviceDetail.cluster}</td>
               </tr>
               <tr>
                 <th>Project</th>
                 <td>{serviceDetail.project}</td>
-                <th>Workspace</th>
-                <td></td>
+              </tr>
+              <tr>
+                <th>Selector</th>
+                <td>
+                  {serviceDetail.selector ? (
+                    Object.entries(serviceDetail.selector).map(
+                      ([key, value]) => (
+                        <>
+                          <table className="tb_data" style={{ width: "50%" }}>
+                            <tbody>
+                              <tr>
+                                <th>{key}</th>
+                              </tr>
+                              <tr>
+                                <td>{value}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <br />
+                        </>
+                      )
+                    )
+                  ) : (
+                    <>-</>
+                  )}
+                </td>
               </tr>
               <tr>
                 <th>Type</th>
                 <td>{serviceDetail.type}</td>
+              </tr>
+              <tr>
                 <th>Cluster IP</th>
                 <td>{serviceDetail.clusterIp}</td>
               </tr>
               <tr>
                 <th>Session Affinity</th>
                 <td>{serviceDetail.sessionAffinity}</td>
+              </tr>
+              <tr>
                 <th>Created</th>
                 <td>{dateFormatter(serviceDetail.createAt)}</td>
               </tr>
@@ -74,43 +101,63 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPods.map((pod) => (
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody>
-                <tr>
-                  <th>Name</th>
-                  <td>{pod?.name}</td>
-                </tr>
-                <tr>
-                  <th>IP</th>
-                  <td>{pod?.ip}</td>
-                </tr>
-                <tr>
-                  <th>Node Name</th>
-                  <td>{pod?.nodeName}</td>
-                </tr>
-              </tbody>
-            </table>
-          ))}
+          {involvesPods ? (
+            involvesPods.map((pod) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{pod?.name}</td>
+                    </tr>
+                    <tr>
+                      <th>IP</th>
+                      <td>{pod?.ip}</td>
+                    </tr>
+                    <tr>
+                      <th>Node Name</th>
+                      <td>{pod?.nodeName}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <></>
+          )}
           <br />
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads.map((workload) => (
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody>
-                <tr>
-                  <th>Name</th>
-                  <td>{workload?.name}</td>
-                </tr>
-                <tr>
-                  <th>Kind</th>
-                  <td>{workload?.kind}</td>
-                </tr>
-                <tr>
-                  <th>Replica Name</th>
-                  <td>{workload?.replicaName}</td>
-                </tr>
-              </tbody>
-            </table>
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
+                  <tr>
+                    <th style={{ width: "25%" }}>Name</th>
+                    <td>
+                      {workload?.name === undefined ? <>-</> : workload?.name}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Kind</th>
+                    <td>
+                      {workload?.kind === undefined ? <>-</> : workload?.kind}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Replica Name</th>
+                    <td>
+                      {workload?.replicaName === undefined ? (
+                        <>-</>
+                      ) : (
+                        workload?.replicaName
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <br />
+            </>
           ))}
         </div>
       </CTabPanel>
@@ -123,16 +170,12 @@ const Detail = observer(() => {
                   <tr>
                     <th>Name</th>
                     <td>{port?.name}</td>
-                  </tr>
-                  <tr>
                     <th>Port</th>
                     <td>{port?.port}</td>
                   </tr>
                   <tr>
                     <th>Protocol</th>
                     <td>{port?.protocol}</td>
-                  </tr>
-                  <tr>
                     <th>TargetPort</th>
                     <td>{port?.targetPort}</td>
                   </tr>

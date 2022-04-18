@@ -51,9 +51,14 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { jobDetailData, involvesPodList, labels, annotations, events } =
-    jobStore;
-  console.log(involvesPodList);
+  const {
+    jobDetailData,
+    involvesPodList,
+    labels,
+    annotations,
+    events,
+    ownerReferences,
+  } = jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const annotationTable = [];
@@ -220,6 +225,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -261,9 +267,25 @@ const Detail = observer(() => {
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
                     <tr>
+                      <th style={{ width: "25%" }}>Container Name</th>
+                      <td>{containers?.name}</td>
+                    </tr>
+                    <tr>
                       <th>Command</th>
-                      <td style={{ whiteSpace: "pre-wrap" }}>
-                        {containers?.command}
+                      <td>
+                        {containers?.command?.map((item) => (
+                          <p>{item}</p>
+                        ))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Args</th>
+                      <td>
+                        {containers?.args ? (
+                          containers?.args?.map((item) => <p>{item}</p>)
+                        ) : (
+                          <>-</>
+                        )}
                       </td>
                     </tr>
                     <tr>
@@ -273,10 +295,6 @@ const Detail = observer(() => {
                     <tr>
                       <th>ImagePullPolicy</th>
                       <td>{containers?.imagePullPolicy}</td>
-                    </tr>
-                    <tr>
-                      <th>Name</th>
-                      <td>{containers?.name}</td>
                     </tr>
                     <tr>
                       <th>resources</th>
@@ -295,13 +313,36 @@ const Detail = observer(() => {
               ))
             : "No Info"}
           <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>{labelTable()}</LabelContainer>
+          <br />
+          <TableTitle>Annotations</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="tb_container">
+          <table className="tb_data">
+            <tbody>{eventsTable}</tbody>
+          </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
+        <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {involvesPodList
             ? involvesPodList.map((pod) => (
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
                     <tr>
-                      <th>Name</th>
+                      <th style={{ width: "25%" }}>Name</th>
                       <td>{pod?.name}</td>
                     </tr>
                     <tr>
@@ -324,24 +365,19 @@ const Detail = observer(() => {
                 </table>
               ))
             : "No Info"}
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
-        <div className="tb_container">
-          <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelTable()}</LabelContainer>
           <br />
-          <TableTitle>Annotations</TableTitle>
+          <TableTitle>References</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationTable}</tbody>
-          </table>
-          <br />
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
+            <tbody>
+              {Object.entries(ownerReferences).map(([key, value]) => (
+                <tr>
+                  <th style={{ width: "25%" }}>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </th>
+                  <td>{value}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </CTabPanel>
