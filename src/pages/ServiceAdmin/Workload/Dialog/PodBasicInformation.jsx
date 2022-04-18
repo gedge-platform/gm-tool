@@ -58,7 +58,7 @@ const podBasicInformation = observer(() => {
             <td style={{ width: "50%" }}>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={"dafault"}>default</option>
+                  <option value={""}>Select Workspace</option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}
@@ -80,12 +80,12 @@ const podBasicInformation = observer(() => {
                   name="project"
                   onChange={onChange}
                 >
+                  <option value={""}>Select Project</option>
                   {projectListinWorkspace.map((project) => (
                     <option value={project.projectName}>
                       {project.projectName}
                     </option>
                   ))}
-                  <option value={"dafault"}>default</option>
                 </select>
               </FormControl>
             </td>

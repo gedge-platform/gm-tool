@@ -53,6 +53,7 @@ const CreatePod = observer((props) => {
     kind: "Pod",
     metadata: {
       name: podName,
+      namespace: project,
     },
     spec: {
       containers: [
