@@ -22,6 +22,22 @@ class User {
         });
       });
   };
+
+  postUser = async (data) => {
+    const body = {
+      ...data,
+      memberEnabled: 0,
+    };
+    return await axios
+      .post(`${SERVER_URL}/members`, body, {
+        auth: BASIC_AUTH,
+      })
+      .then(({ status }) => {
+        if (status === 201) return true;
+        return false;
+      })
+      .catch((err) => false);
+  };
 }
 
 const userStore = new User();
