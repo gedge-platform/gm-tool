@@ -3,21 +3,18 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CSelectButton } from "@/components/buttons";
 import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
 import userStore from "@/store/UserStore";
-import Button from "@mui/material/Button";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import { swalUpdate } from "@/utils/swal-utils";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
 import { getItem } from "../../../../utils/sessionStorageFn";
 import { swalError } from "../../../../utils/swal-utils";
-import UserAdd from "../../../Management/UserCont/UserAdd";
 import CommActionBar from "@/components/common/CommActionBar";
 import moment from "moment";
+import { CCreateButton } from "@/components/buttons";
+import CreateUser from "../Dialog/CreateUser";
 
 const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -93,7 +90,7 @@ const UserListTab = observer(() => {
     setOpen(true);
   };
   const handleClose = () => {
-    setOpen2(false);
+    setOpen(false);
   };
 
   const clickUser = (e) => {
@@ -127,8 +124,13 @@ const UserListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            {/* <CCreateButton>생성</CCreateButton> */}
+          <CommActionBar
+            reloadFunc={loadUserList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
+          >
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
           <div className="grid-height2">
             <AgGrid
@@ -140,7 +142,11 @@ const UserListTab = observer(() => {
               setDetail={setDetail}
             />
           </div>
-          <UserAdd open={open2} onClose={handleClose} />
+          <CreateUser
+            reloadFunc={loadUserList}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <UserDetail user={userDetail} />
       </CReflexBox>
