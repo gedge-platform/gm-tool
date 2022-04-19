@@ -9,7 +9,6 @@
     "dev": "webpack-dev-server --open --watch",
     "production-build": "cross-env NODE_ENV=production webpack --optimize-minimize",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node server.js",
     "build": "webpack --optimize-minimize"
   },
   "author": "innogrid",

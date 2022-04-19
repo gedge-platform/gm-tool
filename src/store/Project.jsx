@@ -144,7 +144,6 @@ class Project {
       clusterName: selectCluster,
       projectType,
       workspaceName,
-      clusterName: selectCluster,
     };
     axios
       .post(`${SERVER_URL2}/project`, body2)
