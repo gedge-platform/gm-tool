@@ -280,7 +280,7 @@ const Detail = observer(() => {
                   <tr>
                     <th>Ports</th>
                     <td>
-                      {pod?.ports.map((port) => (
+                      {pod?.ports ? (
                         <>
                           <table className="tb_data">
                             <tbody className="tb_services_detail_th">
@@ -289,19 +289,26 @@ const Detail = observer(() => {
                                 <th>ContainerPort</th>
                                 <th>Protocol</th>
                               </tr>
-                              <tr>
-                                <td>{port?.name ? port.name : "-"}</td>
-                                <td>
-                                  {port?.containerPort
-                                    ? port.containerPort
-                                    : "-"}
-                                </td>
-                                <td>{port?.protocol ? port.protocol : "-"}</td>
-                              </tr>
+                              {pod?.ports.map((port) => (
+                                <tr>
+                                  <td>{port?.name ? port.name : "-"}</td>
+                                  <td>
+                                    {port?.containerPort
+                                      ? port.containerPort
+                                      : "-"}
+                                  </td>
+                                  <td>
+                                    {port?.protocol ? port.protocol : "-"}
+                                  </td>
+                                </tr>
+                              ))}
                             </tbody>
                           </table>
+                          <br />
                         </>
-                      ))}
+                      ) : (
+                        <>-</>
+                      )}
                     </td>
                   </tr>
                   <tr>
@@ -324,6 +331,7 @@ const Detail = observer(() => {
                             ))}
                           </tbody>
                         </table>
+                        <br />
                       </>
                     </td>
                   </tr>
@@ -331,7 +339,7 @@ const Detail = observer(() => {
                     <th>Environment</th>
                     <td>
                       {/* 배열은 length */}
-                      {pod?.volumemounts?.length > 0 ? (
+                      {pod?.env?.length >= 1 ? (
                         <>
                           <table className="tb_data">
                             <tbody className="tb_resources_detail_th">
@@ -341,12 +349,13 @@ const Detail = observer(() => {
                               </tr>
                               {pod.env?.map((item) => (
                                 <tr>
-                                  <td>{item.name}</td>
-                                  <td>{item.value}</td>
+                                  <td>{item.name ? item.name : <>-</>}</td>
+                                  <td>{item.value ? item.value : <>-</>}</td>
                                 </tr>
                               ))}
                             </tbody>
                           </table>
+                          <br />
                         </>
                       ) : (
                         <>-</>
@@ -491,43 +500,47 @@ const Detail = observer(() => {
               <tr>
                 <th>Subsets</th>
                 <td>
-                  {involvesData?.serviceList?.map((item) =>
-                    Object.entries(item.subsets).map(([inx, value]) =>
-                      Object.entries(value).map(([key, value]) => (
-                        <>
-                          <TableTitle>Addresses</TableTitle>
-                          <table className="tb_data">
-                            <tbody className="tb_workload_pod_detail">
-                              <tr>
-                                <th>Nodename</th>
-                                <th>IP</th>
-                              </tr>
-                              {value.map((item) => (
+                  {involvesData?.serviceList === null ? (
+                    <>-</>
+                  ) : (
+                    involvesData?.serviceList?.map((item) =>
+                      Object.entries(item.subsets).map(([inx, value]) =>
+                        Object.entries(value).map(([key, value]) => (
+                          <>
+                            <TableTitle>Addresses</TableTitle>
+                            <table className="tb_data">
+                              <tbody className="tb_workload_pod_detail">
                                 <tr>
-                                  <td>{item?.nodename}</td>
-                                  <td>{item?.ip}</td>
+                                  <th>Nodename</th>
+                                  <th>IP</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          <br />
-                          <TableTitle>Ports</TableTitle>
-                          <table className="tb_data">
-                            <tbody className="tb_workload_pod_detail">
-                              <tr>
-                                <th>Port</th>
-                                <th>Protocol</th>
-                              </tr>
-                              {value.map((item) => (
+                                {value.map((item) => (
+                                  <tr>
+                                    <td>{item?.nodename}</td>
+                                    <td>{item?.ip}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            <br />
+                            <TableTitle>Ports</TableTitle>
+                            <table className="tb_data">
+                              <tbody className="tb_workload_pod_detail">
                                 <tr>
-                                  <td>{item?.port}</td>
-                                  <td>{item?.protocol}</td>
+                                  <th>Port</th>
+                                  <th>Protocol</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </>
-                      ))
+                                {value.map((item) => (
+                                  <tr>
+                                    <td>{item?.port}</td>
+                                    <td>{item?.protocol}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </>
+                        ))
+                      )
                     )
                   )}
                 </td>

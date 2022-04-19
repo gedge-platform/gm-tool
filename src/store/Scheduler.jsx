@@ -42,8 +42,8 @@ class Scheduler {
           const popup = window.open(
             "",
             "Gedge scheduler",
-            `width=${screen.width},height=${screen.height}`,
-            "fullscreen=yes"
+            `width=1552,height=900`
+            // "fullscreen=yes"
           );
           popup.document.open().write(response.data);
           popup.document.close();
