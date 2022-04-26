@@ -66,6 +66,11 @@ class WorkSpace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
+      .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err));
+
+    axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
         auth: BASIC_AUTH,
       })
