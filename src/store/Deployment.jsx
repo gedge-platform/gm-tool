@@ -95,19 +95,27 @@ class Deployment {
   pods = [{}];
   totalElements = 0;
   deploymentName = "";
+
   podReplicas = "";
   containerImage = "";
   containerName = "";
   containerPort = "";
   podReplicas = 0;
 
-  workspace = "default";
-  cluster = "default";
-  project = "default";
+  // workspace = "default";
+  // cluster = "default";
+  // project = "default";
+
+  workspace = "";
+  cluster = "";
+  project = "";
   responseData = "";
+  workspaceName = "";
+  projectName = "";
 
   deploymentResource = {};
   pods = [];
+  containerPortName = "";
 
   depServices = {};
   // depServicesPort = [
@@ -170,6 +178,9 @@ class Deployment {
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.deploymentDetail = data;
+          this.workspace = data.workspace;
+          this.workspaceName = data.workspace;
+          this.projectName = data.project;
           this.strategy = data.strategy;
           this.labels = data.labels;
           this.annotations = data.annotations;
@@ -224,6 +235,18 @@ class Deployment {
   setDeployName = (name) => {
     runInAction(() => {
       this.deploymentName = name;
+    });
+  };
+
+  setWorkspaceName = (workspace) => {
+    runInAction(() => {
+      this.workspaceName = workspace;
+    });
+  };
+
+  setProjectName = (project) => {
+    runInAction(() => {
+      this.projectName = project;
     });
   };
 
@@ -283,6 +306,7 @@ class Deployment {
       this.containerPortName = "";
       this.containerPort = 0;
       this.content = "";
+      this.workspace = "";
     });
   };
 

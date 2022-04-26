@@ -19,13 +19,41 @@ const TableTitle = styled.p`
   color: rgba(255, 255, 255, 0.8);
 `;
 
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
+
 const Detail = observer(() => {
   const { daemonSetDetail, label, annotations, events } = daemonSetStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const labelTable = [];
-  const labelTemp = label;
 
   const annotationsTable = [];
   const annotationsTemp = annotations;
@@ -43,15 +71,6 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(labelTemp).map(([key, value]) => {
-    labelTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td style={{ whiteSpace: "pre-line" }}>{value}</td>
-      </tr>
-    );
-  });
-
   Object.entries(annotationsTemp).map(([key, value]) => {
     annotationsTable.push(
       <tr>
@@ -61,22 +80,6 @@ const Detail = observer(() => {
     );
   });
 
-  // if (events !== null) {
-  //   events.map((event) => {
-  //     eventsTable.push(
-  //       <tr>
-  //         <th className="tb_workload_detail_th">Message</th>
-  //         <td>{event["message"]}</td>
-  //       </tr>
-  //     );
-  //   });
-  // } else {
-  //   eventsTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Message</th>
-  //       <td></td>
-  //     </tr>
-  //   );
   if (events !== null) {
     events?.map((events) => {
       eventsTable.push(
@@ -210,7 +213,6 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <TableTitle>상세정보</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
@@ -232,46 +234,23 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>라벨</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>app</th>
-                <td></td>
-                <th>app.gedge-platform.io/name</th>
-                <td></td>
-                <th>app.Kubernates.io/version</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
-          <TableTitle>어노테이션</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th>gedge-platform.io/creator</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>gedge-platform.io/workloadType</th>
-                <td></td>
-              </tr>
-              <tr>
-                <th>text</th>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody style={{ whiteSpace: "pre-line" }}>{labelTable}</tbody>
-          </table>
-          <br />
+          <LabelContainer>
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
           <TableTitle>Annotations</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody style={{ whiteSpace: "pre-line" }}>{annotationsTable}</tbody>

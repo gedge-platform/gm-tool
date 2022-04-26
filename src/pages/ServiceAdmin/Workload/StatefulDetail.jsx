@@ -211,6 +211,7 @@ const StatefulSetDetail = observer(() => {
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
+        <CTab label="Resource" />
         <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
@@ -232,6 +233,10 @@ const StatefulSetDetail = observer(() => {
               </tr>
             </tbody>
           </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={1}>
+        <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers
             ? containers.map((container) => (
@@ -314,7 +319,7 @@ const StatefulSetDetail = observer(() => {
             : "No Containers Info."}
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={1}>
+      <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
@@ -359,7 +364,7 @@ const StatefulSetDetail = observer(() => {
           </table>
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
+      <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <table className="tb_data">
             <tbody>{eventsTable}</tbody>

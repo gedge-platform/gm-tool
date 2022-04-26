@@ -101,8 +101,8 @@ const CreateScheduler = observer((props) => {
   // };
   const createScheduler = () => {
     const requestId = `workload-${randomString()}`;
-
     postWorkload(requestId, workspace, project);
+    // postWorkload(requestId, workspace, project);
     postScheduler2(requestId, content, handleClose);
 
     // let formData = new FormData();
