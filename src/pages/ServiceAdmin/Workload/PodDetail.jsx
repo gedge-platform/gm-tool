@@ -484,15 +484,31 @@ const Detail = observer(() => {
                         <th>Namespace</th>
                         <th>Created</th>
                       </tr>
-                      {involvesData?.serviceList?.map((item) => (
+                      {involvesData?.serviceList ? (
+                        involvesData?.serviceList?.map((item) => (
+                          <tr>
+                            <td>
+                              {item.metadata.name ? item.metadata.name : "-"}
+                            </td>
+                            <td>
+                              {item.metadata.namespace
+                                ? item.metadata.namespace
+                                : "-"}
+                            </td>
+                            <td>
+                              {item.metadata.creationTimestamp
+                                ? dateFormatter(item.metadata.creationTimestamp)
+                                : "-"}
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
                         <>
-                          <td>{item.metadata.name}</td>
-                          <td>{item.metadata.namespace}</td>
-                          <td>
-                            {dateFormatter(item.metadata.creationTimestamp)}
-                          </td>
+                          <td>-</td>
+                          <td>-</td>
+                          <td>-</td>
                         </>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </td>
@@ -500,49 +516,91 @@ const Detail = observer(() => {
               <tr>
                 <th>Subsets</th>
                 <td>
-                  {involvesData?.serviceList === null ? (
-                    <>-</>
-                  ) : (
-                    involvesData?.serviceList?.map((item) =>
-                      Object.entries(item.subsets).map(([inx, value]) =>
-                        Object.entries(value).map(([key, value]) => (
-                          <>
-                            <TableTitle>Addresses</TableTitle>
-                            <table className="tb_data">
-                              <tbody className="tb_workload_pod_detail">
-                                <tr>
-                                  <th>Nodename</th>
-                                  <th>IP</th>
-                                </tr>
-                                {value.map((item) => (
-                                  <tr>
-                                    <td>{item?.nodename}</td>
-                                    <td>{item?.ip}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                            <br />
-                            <TableTitle>Ports</TableTitle>
-                            <table className="tb_data">
-                              <tbody className="tb_workload_pod_detail">
-                                <tr>
-                                  <th>Port</th>
-                                  <th>Protocol</th>
-                                </tr>
-                                {value.map((item) => (
-                                  <tr>
-                                    <td>{item?.port}</td>
-                                    <td>{item?.protocol}</td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </>
-                        ))
-                      )
-                    )
-                  )}
+                  <TableTitle>Addresses</TableTitle>
+                  <table className="tb_data">
+                    <tbody className="tb_workload_pod_detail">
+                      <tr>
+                        <th>Nodename</th>
+                        <th>IP</th>
+                      </tr>
+                      {involvesData?.serviceList === null ? (
+                        <tr>
+                          <td>-</td>
+                          <td>-</td>
+                        </tr>
+                      ) : (
+                        involvesData?.serviceList?.map((item) =>
+                          Object.entries(item?.subsets).map(([inx, value]) =>
+                            value.addresses === undefined ? (
+                              <tr>
+                                <td>-</td>
+                                <td>-</td>
+                              </tr>
+                            ) : (
+                              involvesData?.serviceList?.map((item) =>
+                                Object.entries(item?.subsets).map(
+                                  ([inx, value]) =>
+                                    Object.entries(value?.addresses).map(
+                                      ([key, value]) => (
+                                        <tr>
+                                          <td>
+                                            {value?.nodename
+                                              ? value?.nodename
+                                              : "-"}
+                                          </td>
+                                          <td>{value?.ip ? value?.ip : "-"}</td>
+                                        </tr>
+                                      )
+                                    )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                  <br />
+                  <TableTitle>Ports</TableTitle>
+                  <table className="tb_data">
+                    <tbody className="tb_workload_pod_detail">
+                      <tr>
+                        <th>Name</th>
+                        <th>Port</th>
+                        <th>Protocol</th>
+                      </tr>
+                      {involvesData?.serviceList === null ? (
+                        <tr>
+                          <td>-</td>
+                          <td>-</td>
+                          <td>-</td>
+                        </tr>
+                      ) : (
+                        // ) : (
+                        //   involvesData?.serviceList?.map((item) =>
+                        //     Object.entries(item?.subsets).map(([inx, value]) =>
+                        //       value.ports === undefined ? (
+                        //         <tr>
+                        //           <td>-</td>
+                        //           <td>-</td>
+                        //           <td>-</td>
+                        //         </tr>
+                        involvesData?.serviceList?.map((item) =>
+                          Object.entries(item?.subsets).map(([inx, value]) =>
+                            Object.entries(value?.ports).map(([key, value]) => (
+                              <tr>
+                                <td>{value?.name ? value?.name : "-"}</td>
+                                <td>{value?.port ? value?.port : "-"}</td>
+                                <td>
+                                  {value?.protocol ? value?.protocol : "-"}
+                                </td>
+                              </tr>
+                            ))
+                          )
+                        )
+                      )}
+                    </tbody>
+                  </table>
                 </td>
               </tr>
             </tbody>

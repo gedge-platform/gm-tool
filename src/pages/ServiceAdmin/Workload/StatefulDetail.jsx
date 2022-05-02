@@ -211,7 +211,7 @@ const StatefulSetDetail = observer(() => {
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Resource" />
+        <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>

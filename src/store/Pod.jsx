@@ -112,6 +112,13 @@ class Pod {
         runInAction(() => {
           this.podDetail = data;
           this.involvesData = involvesData;
+          this.workloadList = involvesData.workloadList;
+          if (involvesData.serviceList !== null) {
+            this.serviceList = involvesData.serviceList;
+          } else {
+            this.serviceList = null;
+          }
+
           this.label = data.label;
           this.annotations = data.annotations;
 
