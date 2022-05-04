@@ -5,12 +5,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import jobStore from "../../../store/Job";
 import { dateFormatter } from "@/utils/common-utils";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -51,17 +46,18 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { jobDetailData, involvesPodList, labels, annotations, events } =
-    jobStore;
-  console.log(involvesPodList);
+  const {
+    jobDetailData,
+    involvesPodList,
+    labels,
+    annotations,
+    events,
+    ownerReferences,
+  } = jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const annotationTable = [];
-  // const detailInvolvesPodList = InvolvesPodList;
-  // const detailInvolvesPodListTable = [];
-  const eventsTable = [];
   const containers = jobDetailData.containers;
-  const containersTable = [];
 
   const labelTable = () => {
     return Object.entries(labels).map(([key, value]) => (
@@ -81,129 +77,6 @@ const Detail = observer(() => {
     );
   });
 
-  if (events !== null) {
-    events?.map((events) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255,255,255,0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                {events?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{events?.kind}</td>
-                    <th>Name</th>
-                    <td>{events?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{events?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{events?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{events?.reason}</td>
-                    <th>Type</th>
-                    <td>{events?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>{dateFormatter(events?.eventTime)}</td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -220,6 +93,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -261,9 +135,25 @@ const Detail = observer(() => {
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
                     <tr>
+                      <th style={{ width: "25%" }}>Container Name</th>
+                      <td>{containers?.name}</td>
+                    </tr>
+                    <tr>
                       <th>Command</th>
-                      <td style={{ whiteSpace: "pre-wrap" }}>
-                        {containers?.command}
+                      <td>
+                        {containers?.command?.map((item) => (
+                          <p>{item}</p>
+                        ))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Args</th>
+                      <td>
+                        {containers?.args ? (
+                          containers?.args?.map((item) => <p>{item}</p>)
+                        ) : (
+                          <>-</>
+                        )}
                       </td>
                     </tr>
                     <tr>
@@ -273,10 +163,6 @@ const Detail = observer(() => {
                     <tr>
                       <th>ImagePullPolicy</th>
                       <td>{containers?.imagePullPolicy}</td>
-                    </tr>
-                    <tr>
-                      <th>Name</th>
-                      <td>{containers?.name}</td>
                     </tr>
                     <tr>
                       <th>resources</th>
@@ -295,13 +181,32 @@ const Detail = observer(() => {
               ))
             : "No Info"}
           <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>{labelTable()}</LabelContainer>
+          <br />
+          <TableTitle>Annotations</TableTitle>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>{annotationTable}</tbody>
+          </table>
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <EventAccordion events={events} />
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
+        <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {involvesPodList
             ? involvesPodList.map((pod) => (
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
                     <tr>
-                      <th>Name</th>
+                      <th style={{ width: "25%" }}>Name</th>
                       <td>{pod?.name}</td>
                     </tr>
                     <tr>
@@ -324,24 +229,19 @@ const Detail = observer(() => {
                 </table>
               ))
             : "No Info"}
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
-        <div className="tb_container">
-          <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelTable()}</LabelContainer>
           <br />
-          <TableTitle>Annotations</TableTitle>
+          <TableTitle>References</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationTable}</tbody>
-          </table>
-          <br />
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
+            <tbody>
+              {Object.entries(ownerReferences).map(([key, value]) => (
+                <tr>
+                  <th style={{ width: "25%" }}>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                  </th>
+                  <td>{value}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </CTabPanel>

@@ -7,7 +7,6 @@ class DaemonSet {
   daemonSetDetail = {
     status: {},
     strategy: {},
-    containers: {},
   };
   totalElements = 0;
   label = {};
@@ -24,6 +23,21 @@ class DaemonSet {
       eventTime: "",
     },
   ];
+  pods = [
+    {
+      name: "",
+      status: "",
+      node: "",
+      podIP: "",
+      restart: 0,
+    },
+  ];
+  services = {
+    name: "",
+    port: 0,
+  };
+
+  containers = [{}];
 
   constructor() {
     makeAutoObservable(this);
@@ -59,14 +73,17 @@ class DaemonSet {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.daemonSetDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.daemonSetDetail = data;
+          this.involvesData = involvesData;
+          this.pods = involvesData.pods;
+          this.containers = data.containers;
+          this.services = involvesData.services;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }

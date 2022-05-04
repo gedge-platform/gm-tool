@@ -4,13 +4,8 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import cronJobStore from "../../../store/CronJob";
 import { observer } from "mobx-react-lite";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -56,9 +51,6 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const annotationsTable = [];
-  const eventsTable = [];
-  const InvolvesJobs = cronjobInvolvesJobs;
-  const InvolvesJobsTable = [];
   const containers = cronJobDetail.containers;
 
   const labelTable = () => {
@@ -79,128 +71,128 @@ const Detail = observer(() => {
     );
   });
 
-  if (events !== null) {
-    events?.map((events) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255,255,255,0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                {events?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{events?.kind}</td>
-                    <th>Name</th>
-                    <td>{events?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{events?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{events?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{events?.reason}</td>
-                    <th>Type</th>
-                    <td>{events?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>{dateFormatter(events?.eventTime)}</td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
+  // if (events !== null) {
+  //   events?.map((events) => {
+  //     eventsTable.push(
+  //       <div>
+  //         <Accordion>
+  //           <AccordionSummary
+  //             expandIcon={
+  //               <ExpandMoreRoundedIcon
+  //                 sx={{ color: "rgba(255,255,255,0.7)" }}
+  //               />
+  //             }
+  //             aria-controls="ProjectEvent-content"
+  //             id="ProjectEvent-header"
+  //             sx={{ bgcolor: theme.colors.primaryDark }}
+  //           >
+  //             <Typography
+  //               sx={{
+  //                 width: "10%",
+  //                 fontSize: 13,
+  //                 color: "rgba(255,255,255,0.7)",
+  //               }}
+  //             >
+  //               Message
+  //             </Typography>
+  //             <Typography
+  //               sx={{
+  //                 width: "80%",
+  //                 fontSize: 13,
+  //                 color: "rgba(255,255,255,0.7)",
+  //               }}
+  //             >
+  //               {events?.message}
+  //             </Typography>
+  //           </AccordionSummary>
+  //           <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+  //             <Typography
+  //               sx={{
+  //                 fontSize: 13,
+  //                 color: "rgba(255,255,255,0.7)",
+  //                 bgcolor: theme.colors.primary,
+  //               }}
+  //             >
+  //               <table className="tb_data">
+  //                 <tr>
+  //                   <th>Kind</th>
+  //                   <td>{events?.kind}</td>
+  //                   <th>Name</th>
+  //                   <td>{events?.name}</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <th>Namespace</th>
+  //                   <td>{events?.namespace}</td>
+  //                   <th>Cluster</th>
+  //                   <td>{events?.cluster}</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <th>Reason</th>
+  //                   <td>{events?.reason}</td>
+  //                   <th>Type</th>
+  //                   <td>{events?.type}</td>
+  //                 </tr>
+  //                 <tr>
+  //                   <th>Event Time</th>
+  //                   <td>{dateFormatter(events?.eventTime)}</td>
+  //                   <th></th>
+  //                   <td></td>
+  //                 </tr>
+  //               </table>
+  //             </Typography>
+  //           </AccordionDetails>
+  //         </Accordion>
+  //       </div>
+  //     );
+  //   });
+  // } else {
+  //   eventsTable.push(
+  //     <div>
+  //       <Accordion>
+  //         <AccordionSummary
+  //           expandIcon={
+  //             <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
+  //           }
+  //           aria-controls="ProjectEvent-content"
+  //           id="ProjectEvent-header"
+  //           sx={{ bgcolor: theme.colors.primaryDark }}
+  //         >
+  //           <Typography
+  //             sx={{
+  //               width: "10%",
+  //               fontSize: 13,
+  //               color: "rgba(255,255,255,0.7)",
+  //             }}
+  //           >
+  //             Message
+  //           </Typography>
+  //           <Typography
+  //             sx={{
+  //               width: "80%",
+  //               fontSize: 13,
+  //               color: "rgba(255,255,255,0.7)",
+  //             }}
+  //           ></Typography>
+  //         </AccordionSummary>
+  //         <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+  //           <Typography
+  //             sx={{
+  //               fontSize: 13,
+  //               color: "rgba(255,255,255,0.7)",
+  //               bgcolor: theme.colors.primary,
+  //             }}
+  //           >
+  //             <table className="tb_data">
+  //               <tr>
+  //                 <th>No Have Events List </th>
+  //               </tr>
+  //             </table>
+  //           </Typography>
+  //         </AccordionDetails>
+  //       </Accordion>
+  //     </div>
+  //   );
+  // }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -220,6 +212,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -283,10 +276,39 @@ const Detail = observer(() => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
+        <EventAccordion events={events} />
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
-          </table>
+          <TableTitle>References</TableTitle>
+          {cronjobInvolvesJobs
+            ? cronjobInvolvesJobs.map((job) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{job?.name}</td>
+                      </tr>
+                      <tr>
+                        <th>CompletionTime</th>
+                        <td>{dateFormatter(job?.completionTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>StartTime</th>
+                        <td>{dateFormatter(job?.startTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>Succeeded</th>
+                        <td>{job?.succeeded}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            : "No Info"}
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>

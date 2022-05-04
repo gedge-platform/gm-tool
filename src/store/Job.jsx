@@ -48,6 +48,7 @@ class Job {
       },
     },
   ];
+  ownerReferences = {};
 
   totalElements = 0;
   labels = {};
@@ -103,6 +104,7 @@ class Job {
           this.labels = data.label;
           this.annotations = data.annotations;
           this.involvesPodList = involves.podList;
+          this.ownerReferences = involves.ownerReferences;
 
           if (data.events !== null) {
             this.events = data.events;

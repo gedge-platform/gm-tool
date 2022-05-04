@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { dateFormatter, strFormatByLength } from "@/utils/common-utils";
 import Accordion from "@mui/material/Accordion";
@@ -15,8 +15,10 @@ const EventsContainer = styled.div`
 `;
 
 const EventAccordion = ({ events }) => {
-  if (events.length < 1)
+  if (events === null)
     return <EventsContainer>No Events Info.</EventsContainer>;
+  // if (events.length < 1)
+  // return <EventsContainer>No Events Info.</EventsContainer>;
   return (
     <div className="tb_container">
       <table className="tb_data">
