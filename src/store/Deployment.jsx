@@ -64,18 +64,7 @@ class Deployment {
   };
   labels = {};
   annotations = {};
-  events = [
-    {
-      kind: "",
-      name: "",
-      namespace: "",
-      cluster: "",
-      message: "",
-      reason: "",
-      type: "",
-      eventTime: "",
-    },
-  ];
+
   containersTemp = [
     {
       image: "",
