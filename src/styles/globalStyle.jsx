@@ -1393,6 +1393,13 @@ const globalStyles = createGlobalStyle`
   }
 }
 
+.tb_workload_pod_detail{
+  th {
+    width: 10%;
+  },
+  td {width: 40%}
+}
+
 .tb_resources_detail_th{
   th,td {
     width: 50%;

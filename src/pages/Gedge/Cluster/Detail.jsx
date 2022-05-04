@@ -109,7 +109,7 @@ const Detail = observer((props) => {
         <td>{node.nodeIP}</td>
         <td>{node.kubeVersion}</td>
         <td>{node.os}</td>
-        <td>{node.created_at}</td>
+        <td>{dateFormatter(node.created_at)}</td>
       </tr>
     ));
   };

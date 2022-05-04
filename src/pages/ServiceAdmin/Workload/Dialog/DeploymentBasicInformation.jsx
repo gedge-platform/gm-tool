@@ -6,8 +6,31 @@ import deploymentStore from "../../../../store/Deployment";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import clusterStore from "../../../../store/Cluster";
+import { CCreateButton } from "@/components/buttons";
+import { PanelBox } from "@/components/styles/PanelBox";
+import { swalError } from "../../../../utils/swal-utils";
+import styled from "styled-components";
+import DeploymentPodSettins from "./DeploymentPodSettins";
+import CreateDeployment from "./CreateDeployment";
 
-const DeploymentBasicInformation = observer(() => {
+const Button = styled.button`
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 35px;
+  margin-right: 10px;
+  border-radius: 4px;
+`;
+
+const ButtonNext = styled.button`
+  background-color: #0f5ce9;
+  color: white;
+  border: none;
+  padding: 10px 35px;
+  border-radius: 4px;
+`;
+
+const DeploymentBasicInformation = observer((props) => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
   const { loadWorkSpaceList, workSpaceList } = workspacesStore;
@@ -18,7 +41,10 @@ const DeploymentBasicInformation = observer(() => {
     setCluster,
     setWorkspace,
     setProject,
+    workspaceName,
+    setWorkspaceName,
   } = deploymentStore;
+
   const { loadClusterInProject, clusters } = clusterStore;
 
   const onChange = (e) => {
@@ -32,9 +58,12 @@ const DeploymentBasicInformation = observer(() => {
       loadClusterInProject(value);
       setProject(value);
       setClusterEnable(false);
-    } else if (name === "Deployment Name") setDeployName(value);
-    else if (name === "cluster") setCluster(value);
+    } else if (name === "Deployment Name") {
+      setDeployName(value);
+    }
+    // else if (name === "cluster") setCluster(value);
   };
+
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -65,9 +94,9 @@ const DeploymentBasicInformation = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
-                      {workspace.workspaceName}
+                  {workSpaceList.map((item) => (
+                    <option value={item.workspaceName}>
+                      {item.workspaceName}
                     </option>
                   ))}
                 </select>

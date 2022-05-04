@@ -27,6 +27,12 @@ class WorkSpace {
       });
   };
 
+  setWorkspaceList = (workspaceList = []) => {
+    runInAction(() => {
+      this.workSpaceList = workspaceList;
+    });
+  };
+
   createWorkspace = (
     workspaceName,
     workspaceDescription,

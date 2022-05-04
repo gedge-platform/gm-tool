@@ -27,6 +27,7 @@ const DeploymentListTab = observer(() => {
     totalElements,
     loadDeploymentList,
     loadDeploymentDetail,
+    setWorkspace,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -82,6 +83,7 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
   }, []);
   const handleCreateOpen = () => {
+    setWorkspace("");
     setOpen(true);
   };
 

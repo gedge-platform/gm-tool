@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { REQUEST_URL, REQUEST_URL2 } from "../config";
 import clusterStore from "./Cluster";
 import * as FormData from "form-data";
+import deploymentStore from "./Deployment";
 
 class Scheduler {
   constructor() {
@@ -58,13 +59,14 @@ class Scheduler {
 
   postScheduler2 = (requestId, yaml, callback) => {
     const { clusters } = clusterStore;
-
+    const { project } = deploymentStore;
     let formData = new FormData();
 
     formData.append("callbackUrl", `${REQUEST_URL2}`); // 수정 필요
     formData.append("requestId", requestId);
     formData.append("yaml", yaml);
     formData.append("clusters", JSON.stringify(clusters));
+    formData.append("project", project);
 
     axios
       .post(`http://101.79.4.15:32527/yaml2`, formData)

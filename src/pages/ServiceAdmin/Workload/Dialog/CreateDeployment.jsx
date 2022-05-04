@@ -7,9 +7,11 @@ import deploymentStore from "../../../../store/Deployment";
 import DeploymentYaml from "./DeploymentYaml";
 import DeploymentPopup from "./DeploymentPopup";
 import projectStore from "../../../../store/Project";
+import workspacesStore from "../../../../store/WorkSpace";
 import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
 import schedulerStore from "../../../../store/Scheduler";
+import { swalError } from "../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -37,6 +39,7 @@ const CreateDeployment = observer((props) => {
 
   const {
     deploymentName,
+    setDeployName,
     podReplicas,
     content,
     containerName,
@@ -44,13 +47,20 @@ const CreateDeployment = observer((props) => {
     containerPort,
     project,
     workspace,
+    setWorkspace,
     responseData,
     setContent,
     clearAll,
     postDeployment,
     setResponseData,
+    projectName,
+    setProjectName,
+    setProject,
+    containerPortName,
   } = deploymentStore;
+
   const { setProjectListinWorkspace } = projectStore;
+  const { setWorkspaceList } = workspacesStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
   const template = {
@@ -93,12 +103,66 @@ const CreateDeployment = observer((props) => {
     },
   };
 
+  const onClickStepOne = () => {
+    if (workspace === "") {
+      swalError("워크스페이스를 선택해주세요");
+      return;
+    }
+    if (project === "") {
+      swalError("프로젝트를 선택해주세요");
+      return;
+    }
+    if (deploymentName === "") {
+      swalError("이름을 입력해주세요");
+      return;
+    }
+    if (workspace !== "" && project !== "" && deploymentName !== "") {
+      setStepValue(2);
+    }
+  };
+
+  const onClickStepTwo = () => {
+    if (podReplicas === 0) {
+      swalError("레플리카 개수를 입력하세요!");
+      return;
+    }
+    if (containerName === "") {
+      swalError("컨테이너 이름을 입력하세요!");
+      return;
+    }
+    if (containerImage === "") {
+      swalError("컨테이너 이미지를 입력하세요!");
+      return;
+    }
+    if (containerPortName === "") {
+      swalError("포트 이름을 입력하세요!");
+      return;
+    }
+    if (containerPort === "") {
+      swalError("포트를 입력하세요!");
+      return;
+    }
+    if (
+      containerName !== "" &&
+      containerImage !== "" &&
+      containerPortName !== "" &&
+      containerPort !== ""
+    ) {
+      setStepValue(3);
+    }
+  };
+
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
     clearAll();
+  };
+
+  const handlePreStepValue = () => {
+    setWorkspace();
+    setProject();
   };
 
   // const createDeployment = () => {
@@ -166,7 +230,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => setStepValue(2)}>다음</ButtonNext>
+              <ButtonNext onClick={() => onClickStepOne()}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -189,8 +253,15 @@ const CreateDeployment = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={() => setStepValue(3)}>다음</ButtonNext>
+              <Button
+                onClick={() => {
+                  handlePreStepValue();
+                  setStepValue(1);
+                }}
+              >
+                이전
+              </Button>
+              <ButtonNext onClick={onClickStepTwo}>다음</ButtonNext>
             </div>
           </div>
         </>

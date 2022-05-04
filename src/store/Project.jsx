@@ -79,6 +79,20 @@ class Project {
       });
   };
 
+  // loadProjectListInWorkspace = async (workspaceName) => {
+  //   await axios
+  //     .get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`, {
+  //       auth: BASIC_AUTH,
+  //     })
+  //     .then(({ data: { data } }) => {
+  //       runInAction(() => {
+  //         this.projectListinWorkspace = data.filter(
+  //           (item) => item.projectType === "user"
+  //         );
+  //       });
+  //     });
+  // };
+
   loadProjectListInWorkspace = async (workspaceName) => {
     await axios
       .get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`, {
@@ -86,9 +100,7 @@ class Project {
       })
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.projectListinWorkspace = data.filter(
-            (item) => item.projectType === "user"
-          );
+          this.projectListinWorkspace = data;
         });
       });
   };
