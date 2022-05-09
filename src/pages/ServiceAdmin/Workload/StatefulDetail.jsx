@@ -6,12 +6,6 @@ import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 import { isValidJSON } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 
@@ -29,6 +23,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -71,8 +69,6 @@ const StatefulSetDetail = observer(() => {
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const eventsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);

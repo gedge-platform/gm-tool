@@ -35,7 +35,6 @@ const NodeList = observer(() => {
     clusterDetail: { nodes },
   } = clusterStore;
 
-  console.log(nodes);
   return (
     <TableContainer component={Paper} style={{ overflow: "unset" }}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">

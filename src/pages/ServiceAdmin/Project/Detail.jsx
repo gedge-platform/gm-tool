@@ -15,6 +15,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  formLabelClasses,
 } from "@mui/material";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
@@ -80,6 +81,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -115,8 +120,6 @@ const Detail = observer(() => {
     changeCluster,
   } = projectStore;
   const [tabvalue, setTabvalue] = useState(0);
-
-  const annotationsTable = [];
 
   const eventsTable = () => {
     return (
@@ -338,24 +341,6 @@ const Detail = observer(() => {
     ));
   };
 
-  const labelsTable = () => {
-    return Object.entries(labels).map(([key, value]) => (
-      <Label>
-        <span className="key">{key}</span>
-        <span className="value">{value}</span>
-      </Label>
-    ));
-  };
-
-  Object.entries(annotations).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -402,19 +387,44 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelsTable()}</LabelContainer>
+          <LabelContainer>
+            {labels ? (
+              Object.entries(labels).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
           <br />
+
           <TableTitle>Annotations</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationsTable}</tbody>
-          </table>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
           <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
+          {eventsTable()}
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            {eventsTable()}
             <tbody>{eventsMessageTable}</tbody>
           </table>
           <br />
