@@ -45,7 +45,7 @@ const ConfigmapsDetail = observer(() => {
   Object.entries(metadata).map(([key, value]) => {
     dataTable.push(
       <tr>
-        <th>{key}</th>
+        <th style={{ width: "15%" }}>{key}</th>
         <td>{value}</td>
       </tr>
     );
@@ -74,21 +74,17 @@ const ConfigmapsDetail = observer(() => {
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Data" />
+        <CTab label="Overview" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody className="tb_data_detail">
+            <tbody>
               <tr>
-                <th>Name</th>
+                <th style={{ width: "15%" }}>Name</th>
                 <td>{configmapsTabList.name}</td>
-                <th>Project</th>
-                <td>{configmapsTabList.namespace}</td>
               </tr>
               <tr>
-                <th>Cluster</th>
-                <td>{configmapsTabList.cluster}</td>
                 <th>Data Count</th>
                 <td>{configmapsTabList.dataCnt}</td>
               </tr>
@@ -99,6 +95,11 @@ const ConfigmapsDetail = observer(() => {
             </tbody>
           </table>
           <br />
+          <TableTitle>Data</TableTitle>
+          <table className="tb_data">
+            <tbody>{dataTable}</tbody>
+          </table>
+          <br />
           <TableTitle>Annotations</TableTitle>
           <table className="tb_data">
             <tbody>
@@ -106,18 +107,11 @@ const ConfigmapsDetail = observer(() => {
                 annotationsTable
               ) : (
                 <tr>
-                  <td>No Annotations Info.</td>
+                  <p>No Annotations Info.</p>
                 </tr>
               )}
             </tbody>
           </table>
-
-          <br />
-          <TableTitle>Data</TableTitle>
-          <table className="tb_data">
-            <tbody>{dataTable}</tbody>
-          </table>
-          <br />
         </div>
       </CTabPanel>
     </PanelBox>

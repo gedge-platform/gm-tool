@@ -6,12 +6,7 @@ import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
 import platformProjectStore from "../../../store/PlatformProject";
 import "@grapecity/wijmo.styles/wijmo.css";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -27,6 +22,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -63,148 +62,6 @@ const Detail = observer(() => {
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const annotationsTable = [];
-  const eventsTable = [];
-
-  const labelsTable = () => {
-    return Object.entries(labels).map(([key, value]) => (
-      <Label>
-        <span className="key">{key}</span>
-        <span className="value">{value}</span>
-      </Label>
-    ));
-  };
-
-  Object.entries(annotations).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  if (events !== null) {
-    events.map((event) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255, 255, 255, 0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255, 255, 255, 0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255, 255, 255, 0.7)",
-                }}
-              >
-                {event?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255, 255, 255, 0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{event?.kind}</td>
-                    <th>Name</th>
-                    <td>{event?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{event?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{event?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{event?.reason}</td>
-                    <th>Type</th>
-                    <td>{event?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>{dateFormatter(event?.eventTime)}</td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon
-                sx={{ color: "rgba(255, 255, 255, 0.7)" }}
-              />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255, 255, 255, 0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{ fontSize: 13, color: "rgba(255, 255, 255, 0.7)" }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255, 255, 255, 0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -280,22 +137,41 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelsTable()}</LabelContainer>
+          <LabelContainer>
+            {labels ? (
+              Object.entries(labels).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
           <br />
           <TableTitle>Annotations</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationsTable}</tbody>
-          </table>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
           <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsTable}</tbody>
-          </table>
-          <br />
-        </div>
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );
