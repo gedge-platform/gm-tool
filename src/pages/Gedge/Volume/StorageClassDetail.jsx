@@ -6,11 +6,18 @@ import { swalConfirm } from "@/utils/swal-utils";
 import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import ReactJson from "react-json-view";
+import {
+  agDateColumnFilter,
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
 import { create } from "lodash";
 //
@@ -52,12 +59,36 @@ const StorageClassDetail = observer(() => {
   createTableTemplate(labelTable, scLables);
   createTableTemplate(parameterTable, scParameters);
 
+  const metaTable = [];
+  if (storageClass?.annotations) {
+    Object.entries(storageClass?.annotations).map(([key, value]) => {
+      console.log(value);
+      console.log(isValidJSON(value));
+      metaTable.push(
+        <tr>
+          <th style={{ width: "20%" }}>{key}</th>
+          <td>
+            {isValidJSON(value) ? (
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
+            ) : (
+              value
+            )}
+          </td>
+        </tr>
+      );
+    });
+  }
+
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Metadata" />
         <CTab label="Parameters" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
@@ -97,18 +128,11 @@ const StorageClassDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>{annotationTable}</tbody>
+            <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>{labelTable}</tbody>
-          </table>
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>{parameterTable}</tbody>

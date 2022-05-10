@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, LOCAL_VOLUME_URL } from "../config";
+import { BASIC_AUTH, LOCAL_VOLUME_URL, SERVER_URL } from "../config";
 
 class Volume {
   pVolumes = [];
@@ -20,10 +20,27 @@ class Volume {
   scParameters = {};
   scLables = {};
   scAnnotations = {};
+  getYamlFile = "";
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  loadVolumeYaml = async (name, clusterName, projectName, kind) => {
+    await axios
+      .get(
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`,
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          const YAML = require("json-to-pretty-yaml");
+          this.getYamlFile = YAML.stringify(res.data.data);
+        });
+      });
+  };
 
   loadPVolumes = async () => {
     await axios
@@ -49,8 +66,6 @@ class Volume {
           this.pVolume = res.data.data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};
-          console.log(this.pVolume);
-          console.log(this.pVolume.annotations);
           Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");
