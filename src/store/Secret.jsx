@@ -6,9 +6,22 @@ class Secret {
   secretList = [];
   secretDetail = {};
   totalElements = 0;
-  secretTabList = {
-    data: {},
-  };
+  secretTabList = {};
+  data = {};
+  label = {};
+  annotations = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
 
   constructor() {
     makeAutoObservable(this);
@@ -19,11 +32,11 @@ class Secret {
       .get(`${SERVER_URL}/secrets`, {
         auth: BASIC_AUTH,
       })
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.secretList = res.data.data;
-          this.secretDetai = res.data.data[0];
-          this.totalElements = res.data.data.length;
+          this.secretList = data;
+          this.secretDetai = data[0];
+          this.totalElements = data.length;
         });
       });
     this.loadsecretTabList(
@@ -41,9 +54,13 @@ class Secret {
           auth: BASIC_AUTH,
         }
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.secretTabList = res.data.data;
+          this.secretTabList = data;
+          this.data = data.data;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.events = data.events;
         });
       });
   };

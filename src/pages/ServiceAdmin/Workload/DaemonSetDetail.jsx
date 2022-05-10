@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
@@ -21,6 +21,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -57,8 +61,6 @@ const Detail = observer(() => {
   } = daemonSetStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const annotationsTable = [];
-  const annotationsTemp = annotations;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -70,15 +72,6 @@ const Detail = observer(() => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  Object.entries(annotationsTemp).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td style={{ whiteSpace: "pre-line" }}>{value}</td>
-      </tr>
-    );
-  });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
@@ -232,10 +225,25 @@ const Detail = observer(() => {
               <p>No Labels Info.</p>
             )}
           </LabelContainer>
+          <br />
+
           <TableTitle>Annotations</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody style={{ whiteSpace: "pre-line" }}>{annotationsTable}</tbody>
-          </table>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
           <br />
         </div>
       </CTabPanel>
