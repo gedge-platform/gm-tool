@@ -132,9 +132,11 @@ class Secret {
           this.totalElements = data.length;
         });
       })
+      // then(() => this.convertList(defaultList, customFunc))
       .then(() => {
         this.convertList(this.secretList, this.setSecretList);
       })
+      // then(() => List Detail Change)
       .then(() => {
         this.loadsecretTabList(
           this.viewList[0].name,
