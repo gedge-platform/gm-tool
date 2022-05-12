@@ -241,7 +241,8 @@ const globalStyles = createGlobalStyle`
     border: 1px solid #bec3ca;
     border-radius: 3px;
     &:not(select) {
-      background: linear-gradient(#fdfdfd,#f6f6f9);
+      /* background: linear-gradient(#fdfdfd,#f6f6f9); */
+      background: #222C45;
       box-shadow: inset 0 0 1px #fff;
     }
   }

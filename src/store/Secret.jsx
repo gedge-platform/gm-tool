@@ -26,7 +26,7 @@ class Secret {
 
   //Pagenation Variable
   currentPage = 1;
-  totalPages = 0;
+  totalPages = 1;
   resultList = {};
   viewList = [];
 
@@ -39,7 +39,12 @@ class Secret {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.setViewList(this.currentPage);
+        this.loadsecretTabList(
+          this.viewList[0].name,
+          this.viewList[0].clusterName,
+          this.viewList[0].namespace
+        );
       }
     });
   };
@@ -49,6 +54,11 @@ class Secret {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage);
+        this.loadsecretTabList(
+          this.viewList[0].name,
+          this.viewList[0].clusterName,
+          this.viewList[0].namespace
+        );
       }
     });
   };
@@ -67,18 +77,19 @@ class Secret {
 
   convertList = (apiList, setFunc) => {
     runInAction(() => {
-      let cnt = 0;
+      let cnt = 1;
       let totalCnt = 0;
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
 
       Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
         tempList.push(toJS(value));
         cnt = cnt + 1;
-        if (cnt > 9) {
+        if (cnt > 10) {
           cntCheck = false;
-          cnt = 0;
+          cnt = 1;
           this.resultList[totalCnt] = tempList;
           totalCnt = totalCnt + 1;
           tempList = [];
@@ -89,11 +100,10 @@ class Secret {
         this.resultList[totalCnt] = tempList;
       }
 
-      totalCnt = totalCnt + 1;
-
       this.setTotalPages(totalCnt);
       setFunc(this.resultList);
       this.setViewList(0);
+      console.log(this.resultList);
     });
   };
 
