@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { toJS } from "mobx";
 import {
   agDateColumnFilter,
   dateFormatter,
@@ -24,6 +31,7 @@ import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import { SearchV1 } from "@/components/search/SearchV1";
 
 const VolumeListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -35,12 +43,22 @@ const VolumeListTab = observer(() => {
   const {
     pVolume,
     pVolumes,
+    totalPages,
+    currentPage,
     totalElements,
-    pVolumeYamlFile,
+    setPVolumes,
     pVolumeMetadata,
     loadPVolumes,
     loadPVolume,
     loadVolumeYaml,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    setViewList,
+    setCurrentPage,
+    setTotalPages,
+    convertList,
+    resultList,
     getYamlFile,
   } = volumeStore;
 
@@ -49,6 +67,9 @@ const VolumeListTab = observer(() => {
       headerName: "Name",
       field: "name",
       filter: true,
+      getQuickFilterText: (params) => {
+        return params.value.name;
+      },
     },
     {
       headerName: "Capacity",
@@ -112,7 +133,6 @@ const VolumeListTab = observer(() => {
     let fieldName = e.colDef.field;
     loadPVolume(e.data.name, e.data.cluster);
     loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
-
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -128,9 +148,11 @@ const VolumeListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadPVolumes();
   }, []);
+
+  console.log(viewList);
   return (
     <>
       <CReflexBox>
@@ -149,10 +171,14 @@ const VolumeListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={pVolumes}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
