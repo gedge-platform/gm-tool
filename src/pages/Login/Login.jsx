@@ -8,6 +8,8 @@ import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
 import { setItem } from "../../utils/sessionStorageFn";
 import { swalError } from "../../utils/swal-utils";
+import jwtDecode from "jwt-decode";
+//token의 playload 내용을 디코딩해줌
 
 const Login = () => {
   const history = useHistory();
@@ -38,11 +40,15 @@ const Login = () => {
     setCheck(false);
 
     await axios
-      .post(`${SERVER_URL}/auth`, inputs)
-      .then(({ data, status }) => {
+      .post(`http://101.79.1.173:8011/gmcapi/v2/auth`, inputs)
+      // .post(`${SERVER_URL}/auth`, inputs)
+      .then(({ data }) => {
+        const { accessToken, status } = data; // 이거 수정해야 해 access-token
         if (status === 200) {
+          axios.defaults.headers.common["token"] = accessToken;
           setItem("userRole", data.userRole);
           setItem("user", id);
+          setItem("token", accessToken);
           swalError("로그인 되었습니다.", () => history.push("/"));
         }
       })
