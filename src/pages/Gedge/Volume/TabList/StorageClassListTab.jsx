@@ -33,6 +33,8 @@ const StorageClassListTab = observer(() => {
     scLables,
     scAnnotations,
     totalElements,
+    getYamlFile,
+    loadVolumeYaml,
     loadStorageClasses,
     loadStorageClass,
   } = volumeStore;
@@ -96,6 +98,7 @@ const StorageClassListTab = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadStorageClass(e.data.name, e.data.cluster);
+    loadVolumeYaml(e.data.name, e.data.cluster, null, "storageclasses");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -141,7 +144,7 @@ const StorageClassListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={scYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
         </PanelBox>
         <StorageClassDetail />
       </CReflexBox>

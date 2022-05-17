@@ -34,6 +34,8 @@ const ClaimListTab = observer(() => {
     pvClaimYamlFile,
     pvClaimAnnotations,
     pvClaimLables,
+    loadVolumeYaml,
+    getYamlFile,
     // pvClaimEvents,
     loadPVClaims,
     loadPVClaim,
@@ -108,6 +110,12 @@ const ClaimListTab = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
+    loadVolumeYaml(
+      e.data.name,
+      e.data.clusterName,
+      e.data.namespace,
+      "persistentvolumeclaims"
+    );
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -151,11 +159,7 @@ const ClaimListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml
-            open={open}
-            yaml={pvClaimYamlFile}
-            onClose={handleCloseYaml}
-          />
+          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
         </PanelBox>
         <ClaimDetail
           pvClaim={pvClaim}

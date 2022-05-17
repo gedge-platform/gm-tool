@@ -1,10 +1,13 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, LOCAL_VOLUME_URL } from "../config";
+import { BASIC_AUTH, LOCAL_VOLUME_URL, SERVER_URL } from "../config";
 
 class Volume {
   pVolumes = [];
   pVolume = {};
+  viewList = [];
+  currentPage = 1;
+  totalPages = 0;
   totalElements = 0;
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
@@ -20,10 +23,115 @@ class Volume {
   scParameters = {};
   scLables = {};
   scAnnotations = {};
+  getYamlFile = "";
+  resultList = {};
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 0;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 9) {
+          cntCheck = false;
+          cnt = 0;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+      }
+
+      totalCnt = totalCnt + 1;
+      console.log(apiList);
+      console.log(this.resultList);
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+      console.log(this.viewList);
+    });
+  };
+
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+      } else {
+        console.log(this.currentPage);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage);
+      } else {
+        console.log(this.currentPage);
+      }
+    });
+  };
+
+  setMetricsLastTime = (time) => {
+    runInAction(() => {
+      this.lastTime = time;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pVolumes[n];
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  setPVolumes = (list) => {
+    runInAction(() => {
+      this.pVolumes = list;
+    });
+  };
+
+  loadVolumeYaml = async (name, clusterName, projectName, kind) => {
+    await axios
+      .get(
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`,
+        {
+          auth: BASIC_AUTH,
+        }
+      )
+      .then((res) => {
+        runInAction(() => {
+          const YAML = require("json-to-pretty-yaml");
+          this.getYamlFile = YAML.stringify(res.data.data);
+        });
+      });
+  };
 
   loadPVolumes = async () => {
     await axios
@@ -35,8 +143,13 @@ class Volume {
           this.pVolumes = res.data.data;
           this.totalElements = this.pVolumes.length;
         });
+      })
+      .then(() => {
+        this.convertList(this.pVolumes, this.setPVolumes);
+      })
+      .then(() => {
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
-    this.loadPVolume(this.pVolumes[0].name, this.pVolumes[0].cluster);
   };
 
   loadPVolume = async (volumeName, cluster) => {
@@ -49,8 +162,6 @@ class Volume {
           this.pVolume = res.data.data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};
-          console.log(this.pVolume);
-          console.log(this.pVolume.annotations);
           Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");

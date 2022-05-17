@@ -1,14 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { toJS } from "mobx";
+import {
+  agDateColumnFilter,
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import axios from "axios";
+import ReactJson from "react-json-view";
+
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "@/store/Volume";
@@ -17,6 +31,7 @@ import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import { SearchV1 } from "@/components/search/SearchV1";
 
 const VolumeListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -28,11 +43,23 @@ const VolumeListTab = observer(() => {
   const {
     pVolume,
     pVolumes,
+    totalPages,
+    currentPage,
     totalElements,
-    pVolumeYamlFile,
+    setPVolumes,
     pVolumeMetadata,
     loadPVolumes,
     loadPVolume,
+    loadVolumeYaml,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    setViewList,
+    setCurrentPage,
+    setTotalPages,
+    convertList,
+    resultList,
+    getYamlFile,
   } = volumeStore;
 
   const [columDefs] = useState([
@@ -40,6 +67,9 @@ const VolumeListTab = observer(() => {
       headerName: "Name",
       field: "name",
       filter: true,
+      getQuickFilterText: (params) => {
+        return params.value.name;
+      },
     },
     {
       headerName: "Capacity",
@@ -102,7 +132,7 @@ const VolumeListTab = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadPVolume(e.data.name, e.data.cluster);
-
+    loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -118,9 +148,11 @@ const VolumeListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadPVolumes();
   }, []);
+
+  console.log(viewList);
   return (
     <>
       <CReflexBox>
@@ -139,19 +171,19 @@ const VolumeListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={pVolumes}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml
-            open={open}
-            yaml={pVolumeYamlFile}
-            onClose={handleCloseYaml}
-          />
+          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
         </PanelBox>
         <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />
       </CReflexBox>

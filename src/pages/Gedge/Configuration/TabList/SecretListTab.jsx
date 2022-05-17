@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+//Pagenation Import useLayoutEffect
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -23,6 +24,13 @@ const SecretListTab = observer(() => {
     totalElements,
     loadsecretList,
     loadsecretTabList,
+
+    //Pagenation Variable
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = secretStore;
 
   const [columDefs] = useState([
@@ -71,7 +79,8 @@ const SecretListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  //Pagenation useEffect -> useLayoutEffect
+  useLayoutEffect(() => {
     loadsecretList();
   }, []);
 
@@ -93,10 +102,17 @@ const SecretListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={secretList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  //Pagenation isBottom = false
+                  // isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  //Pagenation AgGrid Function
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

@@ -6,17 +6,25 @@ import { swalConfirm } from "@/utils/swal-utils";
 import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import ReactJson from "react-json-view";
+import {
+  agDateColumnFilter,
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
 
-const VolumeDetail = observer(({ pVolume, metadata }) => {
+const VolumeDetail = observer(({ pVolume1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
+  const { pVolume } = volumeStore;
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -32,12 +40,53 @@ const VolumeDetail = observer(({ pVolume, metadata }) => {
     );
   });
 
+  // Object.entries(pVolume?.annotations).map(([key, value]) => {
+  //   <tr>
+  //     <th style={{ width: "40%" }}>{key}</th>
+  //     {/* <td>
+  //       {isValidJSON(value) ? (
+  //         <ReactJson
+  //           src={JSON.parse(value)}
+  //           theme="summerfruit"
+  //           displayDataTypes={false}
+  //           displayObjectSize={false}
+  //         />
+  //       ) : (
+  //         value
+  //       )}
+  //     </td> */}
+  //     <td></td>
+  //   </tr>;
+  // });
+  const metaTable = [];
+  if (pVolume?.annotations) {
+    Object.entries(pVolume?.annotations).map(([key, value]) => {
+      metaTable.push(
+        <tr>
+          <th style={{ width: "20%" }}>{key}</th>
+          <td>
+            {isValidJSON(value) ? (
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
+            ) : (
+              value
+            )}
+          </td>
+        </tr>
+      );
+    });
+  }
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Claim" />
-        <CTab label="Metadata" />
+        <CTab label="Annotations" />
         <CTab label="Event" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
@@ -85,17 +134,17 @@ const VolumeDetail = observer(({ pVolume, metadata }) => {
               <tr>
                 <th className="tb_volume_detail_th">name</th>
                 <td>{pVolume?.claim?.name}</td>
-                <th className="tb_volume_detail_th">capacity</th>
+                <th className="tb_volume_detail_th">namespace</th>
                 <td>{pVolume?.claim?.namespace}</td>
               </tr>
               <tr>
-                <th>accessMode</th>
+                <th>kind</th>
                 <td>{pVolume?.claim?.kind}</td>
-                <th>reclaimPolicy</th>
+                <th>apiVersion</th>
                 <td>{pVolume?.claim?.apiVersion}</td>
               </tr>
               <tr>
-                <th>status</th>
+                <th>resourceVersion</th>
                 <td>{pVolume?.claim?.resourceVersion}</td>
                 <th>uid</th>
                 <td>{pVolume?.claim?.uid}</td>
@@ -107,27 +156,12 @@ const VolumeDetail = observer(({ pVolume, metadata }) => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">Label.Type</th>
-                <td>{pVolume?.label?.type}</td>
-              </tr>
-              {labelTable}
-            </tbody>
+            <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">event</th>
-                <td>{pVolume?.event}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <EventAccordion events={pVolume.events} />
       </CTabPanel>
     </PanelBox>
   );

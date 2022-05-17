@@ -6,14 +6,16 @@ import { swalConfirm } from "@/utils/swal-utils";
 import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
+import ReactJson from "react-json-view";
+import { isValidJSON } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
 
-const ClaimDetail = observer(({ pvClaim, metadata }) => {
+const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -21,10 +23,9 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables } = volumeStore;
+  const { pvClaimLables, pvClaim } = volumeStore;
 
   const annotationTable = [];
-  const labelTable = [];
   const eventTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
@@ -36,12 +37,26 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
     );
   });
 
-  if (pvClaimLables) {
-    Object.entries(pvClaimLables).map(([key, value]) => {
-      labelTable.push(
+  const metaTable = [];
+  if (pvClaim?.annotations) {
+    Object.entries(pvClaim?.annotations).map(([key, value]) => {
+      console.log(value);
+      console.log(isValidJSON(value));
+      metaTable.push(
         <tr>
-          <th className="tb_volume_detail_th">{key}</th>
-          <td>{value}</td>
+          <th style={{ width: "20%" }}>{key}</th>
+          <td>
+            {isValidJSON(value) ? (
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
+            ) : (
+              value
+            )}
+          </td>
         </tr>
       );
     });
@@ -52,7 +67,6 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Annotations" />
-        <CTab label="Metadata" />
         <CTab label="Event" />
         <CTab label="Finalizers" />
       </CTabs>
@@ -91,30 +105,14 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>{annotationTable}</tbody>
+            <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>{labelTable}</tbody>
-          </table>
-        </div>
+        <EventAccordion events={pvClaim.events} />
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">event</th>
-                <td>{null}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={4}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
