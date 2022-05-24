@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -27,6 +27,11 @@ const UserServiceListTab = observer(() => {
     loadProjectList,
     loadProjectDetail,
     deleteProject,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -87,7 +92,7 @@ const UserServiceListTab = observer(() => {
     loadProjectDetail(projectName);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadProjectList("user");
   }, []);
 
@@ -96,7 +101,8 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadProjectList}
+            // reloadFunc={loadProjectList}
+            reloadFunc={viewList}
             isSearch={true}
             isSelect={true}
             keywordList={["이름"]}
@@ -109,16 +115,21 @@ const UserServiceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={projectList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <CreateProject
-            reloadFunc={loadProjectList}
+            // reloadFunc={loadProjectList}
+            reloadFunc={viewList}
             type={"user"}
             open={open}
             onClose={handleClose}

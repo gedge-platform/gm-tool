@@ -39,7 +39,7 @@ class Secret {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage);
+        this.setViewList(this.currentPage - 1);
         this.loadsecretTabList(
           this.viewList[0].name,
           this.viewList[0].clusterName,
@@ -53,7 +53,7 @@ class Secret {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage);
+        this.setViewList(this.currentPage - 1);
         this.loadsecretTabList(
           this.viewList[0].name,
           this.viewList[0].clusterName,
@@ -98,12 +98,12 @@ class Secret {
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
       }
 
       this.setTotalPages(totalCnt);
       setFunc(this.resultList);
       this.setViewList(0);
-      console.log(this.resultList);
     });
   };
 

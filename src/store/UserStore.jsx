@@ -5,10 +5,21 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 class User {
   userList = [];
   userDetail = {};
+  user = {
+    id: "",
+    role: "",
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setUser = (user) => {
+    runInAction(() => {
+      this.user = user;
+      this.role = user.role;
+    });
+  };
 
   loadUserList = async () => {
     await axios

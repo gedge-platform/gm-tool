@@ -132,7 +132,7 @@ const SideUser = ({ userName }) => {
   };
   useEffect(async () => {
     await axios
-      .get(`${SERVER_URL}/members/${getItem("user")}`, {
+      .get(`http://101.79.1.173:8010/gmcapi/v2/members/${getItem("user")}`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {

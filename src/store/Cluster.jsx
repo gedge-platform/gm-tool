@@ -1,10 +1,11 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL, LOCAL_CLUSTER_URL } from "../config";
 
 class Cluster {
   clusterList = [];
   clusterNameList = [];
+  totalElements = 0;
   clusterDetail = {
     clusterNum: 0,
     ipAddr: "",
@@ -65,13 +66,93 @@ class Cluster {
       },
     ],
   };
-  totalElements = 0;
 
   clusters = [];
+
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadCluster(this.viewList[0].clusterName);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadCluster(this.viewList[0].clusterName);
+      }
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+  setClusterList = (list) => {
+    runInAction(() => {
+      this.clusterList = list;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.clusterList[n];
+    });
+  };
 
   loadClusterList = async (type = "") => {
     await axios
@@ -85,18 +166,22 @@ class Cluster {
               ? res.data.data
               : res.data.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
-
           this.clusterNameList = list.map((item) => item.clusterName);
-          this.loadCluster(list[0].clusterName);
-          // this.clusterDetail = list[0];
           this.totalElements = list.length;
         });
+      })
+      .then(() => {
+        this.convertList(this.clusterList, this.setClusterList);
+      })
+      .then(() => {
+        this.loadCluster(this.viewList[0].clusterName);
       });
+    // this.clusterDetail = list[0];
   };
 
-  loadCluster = async (name) => {
+  loadCluster = async (clusterName) => {
     await axios
-      .get(`${SERVER_URL}/clusters/${name}`, {
+      .get(`${SERVER_URL}/clusters/${clusterName}`, {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
@@ -112,15 +197,11 @@ class Cluster {
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {
-    console.log(workspace);
     await axios
       .get(`${SERVER_URL}/clusters?workspace=${workspace}`, {
         auth: BASIC_AUTH,
       })
-      .then((res) =>
-        // console.log(res);
-        runInAction(() => (this.clusters = res.data.data))
-      );
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 
   setDetail = (num) => {

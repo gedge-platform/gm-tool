@@ -1,13 +1,20 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, LOCAL_VOLUME_URL, SERVER_URL } from "../config";
+import {
+  BASIC_AUTH,
+  LOCAL_VOLUME_URL,
+  SERVER_URL,
+  BEARER_TOKEN,
+} from "../config";
+import { getItem } from "../utils/sessionStorageFn";
+import { setItem } from "../utils/sessionStorageFn";
 
 class Volume {
-  pVolumes = [];
+  pVolumesList = [];
   pVolume = {};
   viewList = [];
   currentPage = 1;
-  totalPages = 0;
+  totalPages = 1;
   totalElements = 0;
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
@@ -26,52 +33,21 @@ class Volume {
   getYamlFile = "";
   resultList = {};
 
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
+
   constructor() {
     makeAutoObservable(this);
   }
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 0;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 9) {
-          cntCheck = false;
-          cnt = 0;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-      }
-
-      totalCnt = totalCnt + 1;
-      console.log(apiList);
-      console.log(this.resultList);
-
-      this.setTotalPages(totalCnt);
-      setFunc(this.resultList);
-      this.setViewList(0);
-      console.log(this.viewList);
-    });
-  };
 
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-      } else {
-        console.log(this.currentPage);
+        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
       }
     });
   };
@@ -80,22 +56,9 @@ class Volume {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage);
-      } else {
-        console.log(this.currentPage);
+        this.setViewList(this.currentPage - 1);
+        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
       }
-    });
-  };
-
-  setMetricsLastTime = (time) => {
-    runInAction(() => {
-      this.lastTime = time;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.pVolumes[n];
     });
   };
 
@@ -111,9 +74,53 @@ class Volume {
     });
   };
 
-  setPVolumes = (list) => {
+  convertList = (apiList, setFunc) => {
     runInAction(() => {
-      this.pVolumes = list;
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+  setPVolumesList = (list) => {
+    runInAction(() => {
+      this.pVolumesList = list;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pVolumesList[n];
+    });
+  };
+
+  setMetricsLastTime = (time) => {
+    runInAction(() => {
+      this.lastTime = time;
     });
   };
 
@@ -135,30 +142,28 @@ class Volume {
 
   loadPVolumes = async () => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${LOCAL_VOLUME_URL}/pvs`)
       .then((res) => {
         runInAction(() => {
-          this.pVolumes = res.data.data;
+          console.log(res);
+          this.pVolumesList = res.data.data;
           this.totalElements = this.pVolumes.length;
         });
       })
       .then(() => {
-        this.convertList(this.pVolumes, this.setPVolumes);
+        this.convertList(this.pVolumesList, this.setPVolumesList);
       })
       .then(() => {
-        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
+        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
       });
   };
 
   loadPVolume = async (volumeName, cluster) => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}?cluster=${cluster}`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}?cluster=${cluster}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           this.pVolume = res.data.data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};

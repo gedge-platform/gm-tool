@@ -41,19 +41,38 @@ const Login = () => {
 
     await axios
       .post(`http://101.79.1.173:8011/gmcapi/v2/auth`, inputs)
-      // .post(`${SERVER_URL}/auth`, inputs)
       .then(({ data }) => {
-        const { accessToken, status } = data; // 이거 수정해야 해 access-token
+        const { accessToken, status } = data;
         if (status === 200) {
-          axios.defaults.headers.common["token"] = accessToken;
-          setItem("userRole", data.userRole);
-          setItem("user", id);
-          setItem("token", accessToken);
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+          setItem("user", jwtDecode(accessToken));
+          setItem("userRole", jwtDecode(accessToken).role);
+          setItem("token", accessToken); // local storage에 저장
+
           swalError("로그인 되었습니다.", () => history.push("/"));
+        } else {
+          swalError("로그인 정보를 확인해주세요.", () => setCheck(true));
+          setInputs({
+            id: "",
+            password: "",
+          });
+          return;
         }
       })
-      .catch((e) => alert("아이디와 비밀번호를 확인해주세요"));
+      .catch((e) => console.log(e));
   };
+
+  // const onSilentRefresh = () => {
+  //   axios
+  //     .post("/silent-refresh", data)
+  //     .then(onLoginSuccess)
+  //     .catch((error) => {
+  //       // ... 로그인 실패 처리
+  //     });
+  // };
+
   return (
     <div id="login" className="wrap">
       <BrandArea />

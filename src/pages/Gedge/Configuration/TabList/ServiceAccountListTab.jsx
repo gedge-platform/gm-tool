@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -23,6 +23,12 @@ const ServiceAccountListTab = observer(() => {
     totalElements,
     loadServiceAccountList,
     loadServiceAccountTabList,
+
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = serviceAccountStore;
 
   const [columDefs] = useState([
@@ -66,7 +72,7 @@ const ServiceAccountListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadServiceAccountList();
   }, []);
 
@@ -88,10 +94,14 @@ const ServiceAccountListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={serviceAccountList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
