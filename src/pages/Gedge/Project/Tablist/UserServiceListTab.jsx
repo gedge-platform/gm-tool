@@ -101,8 +101,7 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadProjectList}
-            reloadFunc={viewList}
+            reloadFunc={() => loadProjectList()}
             isSearch={true}
             isSelect={true}
             keywordList={["이름"]}
@@ -128,8 +127,7 @@ const UserServiceListTab = observer(() => {
             </CTabPanel>
           </div>
           <CreateProject
-            // reloadFunc={loadProjectList}
-            reloadFunc={viewList}
+            reloadFunc={() => loadProjectList()}
             type={"user"}
             open={open}
             onClose={handleClose}

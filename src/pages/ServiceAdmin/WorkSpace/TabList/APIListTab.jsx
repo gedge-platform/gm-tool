@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import workspacesStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
+import Detail from "../Detail";
 
 const APIListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -19,8 +20,14 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
-    workspacesStore;
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    totalElements,
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkSpaceDetail,
+  } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -79,11 +86,13 @@ const APIListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
+    loadWorkSpaceDetail(workspaceName);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -121,6 +130,7 @@ const APIListTab = observer(() => {
             onClose={handleClose}
           />
         </PanelBox>
+        <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
     </>
   );

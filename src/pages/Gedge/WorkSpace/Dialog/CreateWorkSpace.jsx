@@ -29,8 +29,6 @@ const ButtonNext = styled.button`
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
   const { loadClusterList, clusterList, viewList } = clusterStore;
-  console.log(clusterList);
-  console.log(viewList);
   const { createWorkspace } = workspacesStore;
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
