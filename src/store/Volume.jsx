@@ -145,9 +145,9 @@ class Volume {
       .get(`${LOCAL_VOLUME_URL}/pvs`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
+          console.log("데이터는 가져옴");
           this.pVolumesList = res.data.data;
-          this.totalElements = this.pVolumes.length;
+          this.totalElements = this.pVolumesList.length;
         });
       })
       .then(() => {

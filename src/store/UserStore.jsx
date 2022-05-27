@@ -110,6 +110,7 @@ class User {
       })
       .then(({ data: { data } }) => {
         runInAction(() => {
+          console.log("새로고침");
           this.userList = data;
           this.totalElements = data.length;
           // this.userDetail = res.data.data[0];
