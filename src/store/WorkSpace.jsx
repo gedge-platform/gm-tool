@@ -5,15 +5,32 @@ import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
 class WorkSpace {
-  workSpaceList = [];
-  WorkSpaceDetail = {};
+  workspaceList = [];
+  workspaceDetail = {};
   totalElements = 0;
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
+
+  detailInfo = [{}];
+  projectList = [];
+  selectProject = "";
+  selectCluster = "";
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadWorkSpaceList = async () => {
+  loadWorkSpaceList = async (type = "user") => {
     await axios
       .get(`${SERVER_URL}/workspaces`, {
         auth: BASIC_AUTH,
@@ -25,6 +42,34 @@ class WorkSpace {
           this.totalElements = data.length;
         });
       });
+      this.loadWorkSpaceDetail(this.workSpaceList[0].workspaceName);
+  };
+
+  loadWorkSpaceDetail = async (workspaceName) => {
+    await axios
+    .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
+      auth: BASIC_AUTH,
+    })
+    .then(({ data: { data } }) => {
+      runInAction(() => {
+        this.workspaceDetail = data;
+        this.dataUsage = this.workspaceDetail.resourceUsage;
+        if (data.events !== null) {
+          this.events = this.workspaceDetail.events;
+        } else {
+          this.events = null;
+        }
+        this.detailInfo = data.projectList;
+        this.projectList = this.detailInfo.map(
+          (project) => project.projectName
+        );        
+        this.selectProject = this.projectList[0];
+        this.clusterList = this.detailInfo.map(
+          (cluster) => cluster.clusterName
+        );
+        this.selectCluster = this.clusterList[0];
+      });
+    });
   };
 
   setWorkspaceList = (workspaceList = []) => {
@@ -68,6 +113,12 @@ class WorkSpace {
       .catch((err) => {
         swalError("워크스페이스 생성에 실패하였습니다.");
       });
+  };
+
+  changeCluster = (cluster) => {
+    runInAction(() => {
+      this.selectCluster = cluster;
+    });
   };
 
   deleteWorkspace = (workspaceName, callback) => {
