@@ -32,6 +32,19 @@ class Volume {
   scAnnotations = {};
   getYamlFile = "";
   resultList = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
+  label = {};
 
   currentPage = 1;
   totalPages = 1;
@@ -47,7 +60,7 @@ class Volume {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       }
     });
   };
@@ -57,7 +70,7 @@ class Volume {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       }
     });
   };
@@ -140,12 +153,12 @@ class Volume {
       });
   };
 
+  // 볼륨 관리
   loadPVolumes = async () => {
     await axios
       .get(`${LOCAL_VOLUME_URL}/pvs`)
       .then((res) => {
         runInAction(() => {
-          console.log("데이터는 가져옴");
           this.pVolumesList = res.data.data;
           this.totalElements = this.pVolumesList.length;
         });
@@ -154,19 +167,19 @@ class Volume {
         this.convertList(this.pVolumesList, this.setPVolumesList);
       })
       .then(() => {
-        this.loadPVolume(this.viewList[0].volumeName, this.viewList[0].cluster);
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
   };
 
-  loadPVolume = async (volumeName, cluster) => {
+  loadPVolume = async (name, cluster) => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}?cluster=${cluster}`)
-      .then((res) => {
+      .get(`${LOCAL_VOLUME_URL}/pvs/${name}?cluster=${cluster}`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(res);
-          this.pVolume = res.data.data;
+          this.pVolume = data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};
+          this.events = data.events;
           Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");
@@ -181,17 +194,14 @@ class Volume {
       });
   };
 
+  // 클레임 관리
   loadPVClaims = async () => {
-    await axios
-      .get(`${LOCAL_VOLUME_URL}/pvcs`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          this.pvClaims = res.data.data;
-          this.totalElements = this.pvClaims.length;
-        });
+    await axios.get(`${LOCAL_VOLUME_URL}/pvcs`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pvClaims = data;
+        this.totalElements = data.length;
       });
+    });
     this.loadPVClaim(
       this.pvClaims[0].name,
       this.pvClaims[0].clusterName,
@@ -199,20 +209,20 @@ class Volume {
     );
   };
 
-  loadPVClaim = async (pvClaimName, cluster, project) => {
+  loadPVClaim = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${LOCAL_VOLUME_URL}/pvcs/${pvClaimName}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${LOCAL_VOLUME_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.pvClaim = res.data.data;
+          this.pvClaim = data;
           this.pvClaimYamlFile = "";
           this.pvClaimAnnotations = {};
           this.pvClaimLables = {};
+          this.events = data.events;
+          this.label = data.label;
+          console.log(this.label);
 
           Object.entries(this.pvClaim?.label).map(([key, value]) => {
             this.pvClaimLables[key] = value;

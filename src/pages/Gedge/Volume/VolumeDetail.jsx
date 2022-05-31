@@ -1,34 +1,65 @@
 import React, { useState, useEffect } from "react";
-import CommActionBar from "@/components/common/CommActionBar";
-import { CIconButton, CSelectButton } from "@/components/buttons";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { swalConfirm } from "@/utils/swal-utils";
-import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { AgGrid } from "@/components/datagrids";
-import LogDialog from "../../Template/Dialog/LogDialog";
-import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
-import { toJS } from "mobx";
 import ReactJson from "react-json-view";
-import {
-  agDateColumnFilter,
-  dateFormatter,
-  isValidJSON,
-  nullCheck,
-} from "@/utils/common-utils";
+import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
+import styled from "styled-components";
+
+const TableTitle = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+const TableSubTitle = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
 
 const VolumeDetail = observer(({ pVolume1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const { pVolume } = volumeStore;
+  const { pVolume, events } = volumeStore;
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-
   const labelTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
@@ -81,26 +112,28 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
     });
   }
 
+  useEffect(() => {});
+
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Claim" />
         <CTab label="Annotations" />
-        <CTab label="Event" />
+        <CTab label="Events" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
-                <th className="tb_volume_detail_th">name</th>
+                <th>name</th>
                 <td>{pVolume?.name}</td>
                 <th>capacity</th>
                 <td>{pVolume?.capacity}</td>
               </tr>
               <tr>
-                <th className="tb_volume_detail_th">accessMode</th>
+                <th>accessMode</th>
                 <td>{pVolume?.accessMode}</td>
                 <th>reclaimPolicy</th>
                 <td>{pVolume?.reclaimPolicy}</td>
@@ -130,24 +163,34 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
                 <th className="tb_volume_detail_th">name</th>
-                <td>{pVolume?.claim?.name}</td>
+                <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
                 <th className="tb_volume_detail_th">namespace</th>
-                <td>{pVolume?.claim?.namespace}</td>
+                <td>
+                  {pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}
+                </td>
               </tr>
               <tr>
                 <th>kind</th>
-                <td>{pVolume?.claim?.kind}</td>
+                <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
                 <th>apiVersion</th>
-                <td>{pVolume?.claim?.apiVersion}</td>
+                <td>
+                  {pVolume?.claim?.apiVersion
+                    ? pVolume?.claim?.apiVersion
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>resourceVersion</th>
-                <td>{pVolume?.claim?.resourceVersion}</td>
+                <td>
+                  {pVolume?.claim?.resourceVersion
+                    ? pVolume?.claim?.resourceVersion
+                    : "-"}
+                </td>
                 <th>uid</th>
-                <td>{pVolume?.claim?.uid}</td>
+                <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -161,7 +204,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <EventAccordion events={pVolume.events} />
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );

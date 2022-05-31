@@ -73,30 +73,32 @@ const EventAccordion = ({ events }) => {
                       }}
                     >
                       <table className="tb_data">
-                        <tr>
-                          <th>Kind</th>
-                          <td>{kind}</td>
-                          <th>Name</th>
-                          <td>{name}</td>
-                        </tr>
-                        <tr>
-                          <th>Namespace</th>
-                          <td>{namespace}</td>
-                          <th>Cluster</th>
-                          <td>{cluster}</td>
-                        </tr>
-                        <tr>
-                          <th>Reason</th>
-                          <td>{reason}</td>
-                          <th>Type</th>
-                          <td>{type}</td>
-                        </tr>
-                        <tr>
-                          <th>Event Time</th>
-                          <td>{dateFormatter(eventTime)}</td>
-                          <th></th>
-                          <td></td>
-                        </tr>
+                        <tbody className="tb_data_detail">
+                          <tr>
+                            <th>Kind</th>
+                            <td>{kind ? kind : "-"}</td>
+                            <th>Name</th>
+                            <td>{name ? name : "_"}</td>
+                          </tr>
+                          <tr>
+                            <th>Namespace</th>
+                            <td>{namespace ? namespace : "_"}</td>
+                            <th>Cluster</th>
+                            <td>{cluster ? cluster : "_"}</td>
+                          </tr>
+                          <tr>
+                            <th>Reason</th>
+                            <td>{reason ? reason : "_"}</td>
+                            <th>Type</th>
+                            <td>{type ? type : "_"}</td>
+                          </tr>
+                          <tr>
+                            <th>Event Time</th>
+                            <td>{dateFormatter(eventTime)}</td>
+                            <th></th>
+                            <td></td>
+                          </tr>
+                        </tbody>
                       </table>
                     </Typography>
                   </AccordionDetails>
