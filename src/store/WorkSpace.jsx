@@ -3,17 +3,35 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
+import { ThirtyFpsRounded } from "@mui/icons-material";
 
-class WorkSpace {
+class Workspace {
   workSpaceList = [];
   workSpaceDetail = {};
   totalElements = 0;
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      mesage: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
+  //clusterList = [];
+  detailInfo = [{}];
+  selectProject = "";
+  selectCluster = "";
+  dataUsage = {};
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadWorkSpaceList = async () => {
+  loadWorkSpaceList = async (type = "user") => {
     await axios
       .get(`${SERVER_URL}/workspaces`, {
         auth: BASIC_AUTH,
@@ -21,28 +39,41 @@ class WorkSpace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          // this.WorkSpaceDetail = data[0];
+          this.workspaceDetail = data[0];
           this.totalElements = data.length;
         });
       });
+      this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
   };
 
-  loadWorkSpaceDetail = async () => {
+  loadWorkspaceDetail = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          this.workSpaceDetail = res.data.data;
-          console.log(this.workSpaceDetail);
-        });
+    .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
+      auth: BASIC_AUTH,
+    })
+    .then(({ data: { data } }) => {
+      runInAction(() => {
+        this.workSpaceDetail = data;
+        this.dataUsage = this.workSpaceDetail.resourceUsage;
+        if (data.events !== null) {
+          this.events = this.workSpaceDetail.events;
+        } else {
+          this.events = null;
+        }
+        this.detailInfo = data.projectList;
+        this.projectList = this.detailInfo.map(
+          (project) => project.projectName
+        );
+        this.selectProject = this.projectList[0];
+        //this.clusterList = data.selectCluster;
+        // this.selectCluster = this.clusterList[0];
       });
+    });
   };
 
-  setWorkspaceList = (workspaceList = []) => {
+  setWorkSpaceList = (workSpaceList = []) => {
     runInAction(() => {
-      this.workSpaceList = workspaceList;
+      this.workSpaceList = workSpaceList;
     });
   };
 
@@ -83,6 +114,18 @@ class WorkSpace {
       });
   };
 
+  changeCluster = (cluster) => {
+    runInAction(() => {
+      this.selectCluster = cluster;
+    });
+  };
+
+  changeProject = (project) => {
+    runInAction(() => {
+      this.selectProject = project;
+    });
+  };
+
   deleteWorkspace = (workspaceName, callback) => {
     axios
       .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
@@ -91,7 +134,7 @@ class WorkSpace {
 
     axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASIC_AUTH,
+        auth: BASICAUTH,
       })
       .then((res) => {
         if (res.status === 200)
@@ -103,5 +146,5 @@ class WorkSpace {
   };
 }
 
-const workspacesStore = new WorkSpace();
-export default workspacesStore;
+const workspacestore = new Workspace();
+export default workspacestore;

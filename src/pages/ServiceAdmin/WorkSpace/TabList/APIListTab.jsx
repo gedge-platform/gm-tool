@@ -13,7 +13,7 @@ import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
 import Detail from "../Detail";
 
-const APIListTab = observer(() => {
+const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -26,7 +26,7 @@ const APIListTab = observer(() => {
     totalElements,
     deleteWorkspace,
     workSpaceDetail,
-    loadWorkSpaceDetail,
+    loadWorkspaceDetail,
   } = workspacesStore;
 
   const [columDefs] = useState([
@@ -86,7 +86,7 @@ const APIListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
-    loadWorkSpaceDetail(workspaceName);
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
@@ -115,17 +115,18 @@ const APIListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={workSpaceList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
-                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
           </div>
           <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
+            type={"user"}
             open={open}
             onClose={handleClose}
           />
@@ -135,4 +136,4 @@ const APIListTab = observer(() => {
     </>
   );
 });
-export default APIListTab;
+export default WorkspaceListTab;

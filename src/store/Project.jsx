@@ -150,13 +150,11 @@ class Project {
           } else {
             this.events = null;
           }
-
           this.detailInfo = data.DetailInfo;
           this.clusterList = this.detailInfo.map(
             (cluster) => cluster.clusterName
           );
           this.selectCluster = this.clusterList[0];
-
           // const temp = new Set(
           //   res.data.data.map((cluster) => cluster.clusterName)
           // );
