@@ -8,10 +8,10 @@ import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../WorkspaceDetail";
 import workspacesStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
+import Detail from "../Detail";
 
 const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -19,15 +19,15 @@ const WorkspaceListTab = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
- 
-  const { 
-    workspaceDetail,
-    workSpaceList, 
-    totalElements, 
-    loadWorkSpaceList, 
-    loadWorkSpaceDetail,
-    deleteWorkspace, 
-   } = workspacesStore;
+
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    totalElements,
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkspaceDetail,
+  } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -86,7 +86,7 @@ const WorkspaceListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
-    loadWorkSpaceList(workspaceName);
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
@@ -131,7 +131,7 @@ const WorkspaceListTab = observer(() => {
             onClose={handleClose}
           />
         </PanelBox>
-        <Detail workspace={workspaceDetail} />
+        <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
     </>
   );

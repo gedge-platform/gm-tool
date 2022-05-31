@@ -416,7 +416,7 @@ const globalStyles = createGlobalStyle`
   
   .paper_detail {
     &.reflex-element {
-      height: 400px;
+      height: 800px;
       max-height: 800px;
     }
     .tabPanel {

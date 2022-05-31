@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -9,7 +9,6 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import configmapsStore from "../../../../store/Configmaps";
 import ConfigmapsDetail from "../ConfigmapsDetail";
 import { LogoutTwoTone } from "@mui/icons-material";
@@ -26,6 +25,12 @@ const ConfigmapsListTab = observer(() => {
     totalElements,
     loadconfigmapsList,
     loadconfigmapsTabList,
+
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = configmapsStore;
 
   const [columDefs] = useState([
@@ -69,7 +74,7 @@ const ConfigmapsListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadconfigmapsList();
   }, []);
 
@@ -91,10 +96,14 @@ const ConfigmapsListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={configmapsList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

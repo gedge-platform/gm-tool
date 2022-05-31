@@ -3,10 +3,11 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
+import { ThirtyFpsRounded } from "@mui/icons-material";
 
-class WorkSpace {
-  workspaceList = [];
-  workspaceDetail = {};
+class Workspace {
+  workSpaceList = [];
+  workSpaceDetail = {};
   totalElements = 0;
   events = [
     {
@@ -14,17 +15,17 @@ class WorkSpace {
       name: "",
       namespace: "",
       cluster: "",
-      message: "",
+      mesage: "",
       reason: "",
       type: "",
       eventTime: "",
     },
   ];
-
+  //clusterList = [];
   detailInfo = [{}];
-  projectList = [];
   selectProject = "";
   selectCluster = "";
+  dataUsage = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -38,43 +39,41 @@ class WorkSpace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          this.WorkSpaceDetail = data[0];
+          this.workspaceDetail = data[0];
           this.totalElements = data.length;
         });
       });
-      this.loadWorkSpaceDetail(this.workSpaceList[0].workspaceName);
+      this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
   };
 
-  loadWorkSpaceDetail = async (workspaceName) => {
+  loadWorkspaceDetail = async (workspaceName) => {
     await axios
     .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
       auth: BASIC_AUTH,
     })
     .then(({ data: { data } }) => {
       runInAction(() => {
-        this.workspaceDetail = data;
-        this.dataUsage = this.workspaceDetail.resourceUsage;
+        this.workSpaceDetail = data;
+        this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (data.events !== null) {
-          this.events = this.workspaceDetail.events;
+          this.events = this.workSpaceDetail.events;
         } else {
           this.events = null;
         }
         this.detailInfo = data.projectList;
         this.projectList = this.detailInfo.map(
           (project) => project.projectName
-        );        
-        this.selectProject = this.projectList[0];
-        this.clusterList = this.detailInfo.map(
-          (cluster) => cluster.clusterName
         );
-        this.selectCluster = this.clusterList[0];
+        this.selectProject = this.projectList[0];
+        //this.clusterList = data.selectCluster;
+        // this.selectCluster = this.clusterList[0];
       });
     });
   };
 
-  setWorkspaceList = (workspaceList = []) => {
+  setWorkSpaceList = (workSpaceList = []) => {
     runInAction(() => {
-      this.workSpaceList = workspaceList;
+      this.workSpaceList = workSpaceList;
     });
   };
 
@@ -121,6 +120,12 @@ class WorkSpace {
     });
   };
 
+  changeProject = (project) => {
+    runInAction(() => {
+      this.selectProject = project;
+    });
+  };
+
   deleteWorkspace = (workspaceName, callback) => {
     axios
       .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
@@ -129,7 +134,7 @@ class WorkSpace {
 
     axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASIC_AUTH,
+        auth: BASICAUTH,
       })
       .then((res) => {
         if (res.status === 200)
@@ -141,5 +146,5 @@ class WorkSpace {
   };
 }
 
-const workspacesStore = new WorkSpace();
-export default workspacesStore;
+const workspacestore = new Workspace();
+export default workspacestore;

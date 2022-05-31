@@ -4,6 +4,7 @@ import { REQUEST_URL } from "../config";
 
 class RequestStatus {
   requestList = [];
+  cluster = [{}];
 
   constructor() {
     makeAutoObservable(this);

@@ -28,7 +28,7 @@ const ButtonNext = styled.button`
 
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
-  const { loadClusterList, clusterList } = clusterStore;
+  const { loadClusterList, clusterList, viewList } = clusterStore;
   const { createWorkspace } = workspacesStore;
   // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
@@ -169,7 +169,8 @@ const CreateWorkSpace = observer((props) => {
                     <th>IP</th>
                     <th>생성날짜</th>
                   </tr>
-                  {clusterList.map(
+                  {/* paginetion 때문에 clusterList -> viewList */}
+                  {viewList.map(
                     ({
                       clusterName,
                       clusterType,

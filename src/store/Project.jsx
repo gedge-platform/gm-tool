@@ -1,5 +1,5 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
@@ -30,9 +30,90 @@ class Project {
   clusterList = [];
   selectCluster = "";
 
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
+
   constructor() {
     makeAutoObservable(this);
   }
+
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadProjectDetail(this.viewList[0].projectName);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadProjectDetail(this.viewList[0].projectName);
+      }
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+  setProjectList = (list) => {
+    runInAction(() => {
+      this.projectList = list;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.projectList[n];
+    });
+  };
 
   loadProjectList = async (type = "user") => {
     await axios
@@ -45,8 +126,13 @@ class Project {
           this.projectList = list;
           this.totalElements = list.length;
         });
+      })
+      .then(() => {
+        this.convertList(this.projectList, this.setProjectList);
+      })
+      .then(() => {
+        this.loadProjectDetail(this.viewList[0].projectName);
       });
-    this.loadProjectDetail(this.projectList[0].projectName);
   };
 
   loadProjectDetail = async (projectName) => {

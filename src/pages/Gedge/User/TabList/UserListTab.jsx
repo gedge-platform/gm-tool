@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
@@ -20,7 +20,17 @@ const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
 
-  const { userList, userDetail, loadUserList, setDetail } = userStore;
+  const {
+    userDetail,
+    loadUserList,
+    loadUserDetail,
+    totalElements,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+  } = userStore;
 
   const [columnDefs] = useState([
     {
@@ -93,8 +103,9 @@ const UserListTab = observer(() => {
     setOpen(false);
   };
 
-  const clickUser = (e) => {
-    setDetail(e.data.id);
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    loadUserDetail(e.data.memberId);
   };
 
   const deleteUser = () => {
@@ -116,7 +127,7 @@ const UserListTab = observer(() => {
       .catch((e) => console.log(e));
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadUserList();
   }, []);
 
@@ -134,12 +145,15 @@ const UserListTab = observer(() => {
           </CommActionBar>
           <div className="grid-height2">
             <AgGrid
-              rowData={userList}
+              rowData={viewList}
               columnDefs={columnDefs}
-              totalElements={userList.length}
-              isBottom={true}
-              onCellClicked={clickUser}
-              setDetail={setDetail}
+              totalElements={totalElements}
+              isBottom={false}
+              onCellClicked={handleClick}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
           <CreateUser

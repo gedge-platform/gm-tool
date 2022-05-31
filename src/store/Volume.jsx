@@ -1,13 +1,20 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, LOCAL_VOLUME_URL, SERVER_URL } from "../config";
+import {
+  BASIC_AUTH,
+  LOCAL_VOLUME_URL,
+  SERVER_URL,
+  BEARER_TOKEN,
+} from "../config";
+import { getItem } from "../utils/sessionStorageFn";
+import { setItem } from "../utils/sessionStorageFn";
 
 class Volume {
-  pVolumes = [];
+  pVolumesList = [];
   pVolume = {};
   viewList = [];
   currentPage = 1;
-  totalPages = 0;
+  totalPages = 1;
   totalElements = 0;
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
@@ -25,53 +32,35 @@ class Volume {
   scAnnotations = {};
   getYamlFile = "";
   resultList = {};
+  events = [
+    {
+      kind: "",
+      name: "",
+      namespace: "",
+      cluster: "",
+      message: "",
+      reason: "",
+      type: "",
+      eventTime: "",
+    },
+  ];
+  label = {};
+
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
 
   constructor() {
     makeAutoObservable(this);
   }
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 0;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 9) {
-          cntCheck = false;
-          cnt = 0;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-      }
-
-      totalCnt = totalCnt + 1;
-      console.log(apiList);
-      console.log(this.resultList);
-
-      this.setTotalPages(totalCnt);
-      setFunc(this.resultList);
-      this.setViewList(0);
-      console.log(this.viewList);
-    });
-  };
 
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-      } else {
-        console.log(this.currentPage);
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       }
     });
   };
@@ -80,22 +69,9 @@ class Volume {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage);
-      } else {
-        console.log(this.currentPage);
+        this.setViewList(this.currentPage - 1);
+        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       }
-    });
-  };
-
-  setMetricsLastTime = (time) => {
-    runInAction(() => {
-      this.lastTime = time;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.pVolumes[n];
     });
   };
 
@@ -111,9 +87,53 @@ class Volume {
     });
   };
 
-  setPVolumes = (list) => {
+  convertList = (apiList, setFunc) => {
     runInAction(() => {
-      this.pVolumes = list;
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+  setPVolumesList = (list) => {
+    runInAction(() => {
+      this.pVolumesList = list;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pVolumesList[n];
+    });
+  };
+
+  setMetricsLastTime = (time) => {
+    runInAction(() => {
+      this.lastTime = time;
     });
   };
 
@@ -133,35 +153,33 @@ class Volume {
       });
   };
 
+  // 볼륨 관리
   loadPVolumes = async () => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${LOCAL_VOLUME_URL}/pvs`)
       .then((res) => {
         runInAction(() => {
-          this.pVolumes = res.data.data;
-          this.totalElements = this.pVolumes.length;
+          this.pVolumesList = res.data.data;
+          this.totalElements = this.pVolumesList.length;
         });
       })
       .then(() => {
-        this.convertList(this.pVolumes, this.setPVolumes);
+        this.convertList(this.pVolumesList, this.setPVolumesList);
       })
       .then(() => {
         this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
   };
 
-  loadPVolume = async (volumeName, cluster) => {
+  loadPVolume = async (name, cluster) => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs/${volumeName}?cluster=${cluster}`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
+      .get(`${LOCAL_VOLUME_URL}/pvs/${name}?cluster=${cluster}`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.pVolume = res.data.data;
+          this.pVolume = data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};
+          this.events = data.events;
           Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");
@@ -176,17 +194,14 @@ class Volume {
       });
   };
 
+  // 클레임 관리
   loadPVClaims = async () => {
-    await axios
-      .get(`${LOCAL_VOLUME_URL}/pvcs`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          this.pvClaims = res.data.data;
-          this.totalElements = this.pvClaims.length;
-        });
+    await axios.get(`${LOCAL_VOLUME_URL}/pvcs`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pvClaims = data;
+        this.totalElements = data.length;
       });
+    });
     this.loadPVClaim(
       this.pvClaims[0].name,
       this.pvClaims[0].clusterName,
@@ -194,20 +209,20 @@ class Volume {
     );
   };
 
-  loadPVClaim = async (pvClaimName, cluster, project) => {
+  loadPVClaim = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${LOCAL_VOLUME_URL}/pvcs/${pvClaimName}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${LOCAL_VOLUME_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.pvClaim = res.data.data;
+          this.pvClaim = data;
           this.pvClaimYamlFile = "";
           this.pvClaimAnnotations = {};
           this.pvClaimLables = {};
+          this.events = data.events;
+          this.label = data.label;
+          console.log(this.label);
 
           Object.entries(this.pvClaim?.label).map(([key, value]) => {
             this.pvClaimLables[key] = value;

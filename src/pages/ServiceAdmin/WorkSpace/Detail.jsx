@@ -111,15 +111,16 @@ const Label = styled.span`
 
 const Detail = observer(() => {
   const {
-    workspaceDetail,
+    workSpaceDetail,
     labels,
     annotations,
     detailInfo,
     clusterList,
     projectList,
-    selectCluster,
     selectProject,
+    // selectProject,
     changeCluster,
+    changeProject,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -128,20 +129,20 @@ const Detail = observer(() => {
       <EventWrap className="event-wrap">
         <FormControl>
           <Select
-            value={selectCluster}
+            value={selectProject}
             inputProps={{ "aria-label": "Without label" }}
-            onChange={clusterChange}
+            onChange={projectChange}
           >
-            {clusterList.map((cluster) => (
+            {projectList.map((project) => (
               <MenuItem
                 style={{
                   color: "black",
                   backgroundColor: "white",
                   fontSize: 15,
                 }}
-                value={cluster}
+                value={project}
               >
-                {cluster}
+                {project}
               </MenuItem>
             ))}
           </Select>
@@ -150,8 +151,8 @@ const Detail = observer(() => {
     );
   };
 
-  const clusterChange = (e) => {
-    changeCluster(e.target.value);
+  const projectChange = (e) => {
+    changeProject(e.target.value);
   };
 
   const eventsMessageTable = [];
@@ -159,7 +160,7 @@ const Detail = observer(() => {
   const temp = eventsTemp.map((item) => toJS(item));
   const newArr = temp.flat();
   newArr.filter((events) => {
-    if (events?.cluster === selectCluster) {
+    if (events?.cluster === selectProject) {
       eventsMessageTable.push(
         <div>
           <Accordion>
@@ -362,21 +363,21 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{workspaceDetail.workspaceName}</td>
+                <td>{workSpaceDetail.workspaceName}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{workspaceDetail.selectCluster}</td>
+                <td>{workSpaceDetail.selectProject}</td>
               </tr>
               <tr>
                 <th>Workspace</th>
-                <td>{workspaceDetail.workspaceName}</td>
+                <td>{workSpaceDetail.workspaceName}</td>
                 <th>Creator</th>
-                <td>{workspaceDetail.workspaceCreator}</td>
+                <td>{workSpaceDetail.workspaceCreator}</td>
               </tr>
               <tr>
                 <th>Owner</th>
-                <td>{workspaceDetail.workspaceOwner}</td>
+                <td>{workSpaceDetail.workspaceOwner}</td>
                 <th>Created</th>
-                <td>{dateFormatter(workspaceDetail.created_at)}</td>
+                <td>{dateFormatter(workSpaceDetail.created_at)}</td>
               </tr>
             </tbody>
           </table>

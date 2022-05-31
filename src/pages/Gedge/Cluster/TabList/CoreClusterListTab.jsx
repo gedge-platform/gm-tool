@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -19,8 +19,18 @@ const CoreClusterListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList, loadCluster } =
-    clusterStore;
+  const {
+    clusterDetail,
+    clusterList,
+    loadClusterList,
+    loadCluster,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
+  } = clusterStore;
 
   const [columDefs] = useState([
     // {
@@ -85,7 +95,7 @@ const CoreClusterListTab = observer(() => {
     setOpen(false);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadClusterList("core");
   }, []);
 
@@ -107,10 +117,15 @@ const CoreClusterListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   onCellClicked={handleClick}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
