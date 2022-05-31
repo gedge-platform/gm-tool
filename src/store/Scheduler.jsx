@@ -40,6 +40,7 @@ class Scheduler {
       .post(`http://101.79.4.15:32527/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
+          console.log(response);
           const popup = window.open(
             "",
             "Gedge scheduler",
@@ -72,6 +73,7 @@ class Scheduler {
       .post(`http://101.79.4.15:32527/yaml2`, formData)
       .then(function (response) {
         if (response.status === 200) {
+          console.log(response);
           const popup = window.open(
             "",
             "Gedge scheduler",

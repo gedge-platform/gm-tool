@@ -42,24 +42,24 @@ const VolumeListTab = observer(() => {
 
   const {
     pVolume,
-    pVolumes,
-    totalPages,
-    currentPage,
+    pVolumesList,
     totalElements,
     setPVolumes,
     pVolumeMetadata,
     loadPVolumes,
     loadPVolume,
     loadVolumeYaml,
-    viewList,
-    goPrevPage,
-    goNextPage,
     setViewList,
     setCurrentPage,
     setTotalPages,
     convertList,
     resultList,
     getYamlFile,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = volumeStore;
 
   const [columDefs] = useState([
@@ -152,7 +152,6 @@ const VolumeListTab = observer(() => {
     loadPVolumes();
   }, []);
 
-  console.log(viewList);
   return (
     <>
       <CReflexBox>

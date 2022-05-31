@@ -177,6 +177,7 @@ const Detail = observer((props) => {
               </tr>
             </tbody>
           </table>
+          <br />
 
           <TableTitle>GPU List</TableTitle>
           {gpu ? (

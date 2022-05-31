@@ -6,7 +6,7 @@ import { swalError } from "../utils/swal-utils";
 
 class WorkSpace {
   workSpaceList = [];
-  WorkSpaceDetail = {};
+  workSpaceDetail = {};
   totalElements = 0;
 
   constructor() {
@@ -21,8 +21,21 @@ class WorkSpace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          this.WorkSpaceDetail = data[0];
+          // this.WorkSpaceDetail = data[0];
           this.totalElements = data.length;
+        });
+      });
+  };
+
+  loadWorkSpaceDetail = async () => {
+    await axios
+      .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
+        auth: BASIC_AUTH,
+      })
+      .then((res) => {
+        runInAction(() => {
+          this.workSpaceDetail = res.data.data;
+          console.log(this.workSpaceDetail);
         });
       });
   };

@@ -102,6 +102,7 @@ const SecretListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
+                  //Pagenation rowData={viewList}
                   rowData={viewList}
                   columnDefs={columDefs}
                   //Pagenation isBottom = false

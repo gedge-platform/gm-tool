@@ -87,7 +87,7 @@ const BasicInformation = observer(() => {
                   {projectListinWorkspace.map((project) => (
                     <option value={project.projectName}>
                       {project.projectName}
-                      {console.log(project.projectName)}
+                      {/* {console.log(project.projectName)} */}
                     </option>
                   ))}
                 </select>

@@ -14,6 +14,51 @@ import ReactJson from "react-json-view";
 import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
+import styled from "styled-components";
+
+const TableTitle = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+const TableSubTitle = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
 
 const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   const [open, setOpen] = useState(false);
@@ -23,10 +68,9 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables, pvClaim } = volumeStore;
+  const { pvClaimLables, pvClaim, events, label } = volumeStore;
 
   const annotationTable = [];
-  const eventTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
     annotationTable.push(
@@ -40,8 +84,6 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   const metaTable = [];
   if (pvClaim?.annotations) {
     Object.entries(pvClaim?.annotations).map(([key, value]) => {
-      console.log(value);
-      console.log(isValidJSON(value));
       metaTable.push(
         <tr>
           <th style={{ width: "20%" }}>{key}</th>
@@ -66,23 +108,23 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Annotations" />
-        <CTab label="Event" />
+        <CTab label="Metadata" />
+        <CTab label="Events" />
         <CTab label="Finalizers" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
-                <th className="tb_volume_detail_th">name</th>
-                <td className="tb_volume_detail_td">{pvClaim?.name}</td>
+                <th>name</th>
+                <td>{pvClaim?.name}</td>
                 <th>capacity</th>
                 <td>{pvClaim?.capacity}</td>
               </tr>
               <tr>
-                <th className="tb_volume_detail_th">namespace</th>
-                <td className="tb_volume_detail_td">{pvClaim?.namespace}</td>
+                <th>namespace</th>
+                <td>{pvClaim?.namespace}</td>
                 <th>accessMode</th>
                 <td>{pvClaim?.accessMode}</td>
               </tr>
@@ -104,20 +146,36 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
+
+          <br />
+          <TableTitle>Annotaions</TableTitle>
           <table className="tb_data">
             <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-        <EventAccordion events={pvClaim.events} />
+        <EventAccordion events={events} />
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
               <tr>
-                <th className="tb_volume_detail_th">Finalizers</th>
+                <th className="tb_volume_detail_th">value</th>
                 <td>{pvClaim?.finalizers}</td>
               </tr>
             </tbody>

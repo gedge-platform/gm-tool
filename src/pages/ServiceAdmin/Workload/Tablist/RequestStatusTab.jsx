@@ -19,6 +19,11 @@ const RequestStatusTab = observer(() => {
   };
 
   const { requestList, loadRequestList } = requestStatusStore;
+
+  const clusterName = requestList.map((list) =>
+    list.cluster.map((cluster) => cluster.clusterName)
+  );
+
   const [columDefs] = useState([
     {
       headerName: "ID",
@@ -29,6 +34,16 @@ const RequestStatusTab = observer(() => {
       headerName: "타입",
       field: "type",
       filter: true,
+    },
+    {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+      cellRenderer: function ({ data: { cluster } }) {
+        return `<sapn>${cluster.map(
+          (clusters) => clusters.clusterName
+        )}</span>`;
+      },
     },
     {
       headerName: "상태",
