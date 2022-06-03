@@ -27,6 +27,11 @@ const UserServiceListTab = observer(() => {
     loadProjectList,
     loadProjectDetail,
     deleteProject,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -109,16 +114,20 @@ const UserServiceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={projectList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <CreateProject
-            reloadFunc={loadProjectList}
+            reloadFunc={() => loadProjectList()}
             type={"user"}
             open={open}
             onClose={handleClose}

@@ -3,7 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import {
   BASIC_AUTH,
   LOCAL_VOLUME_URL,
-  SERVER_URL,
+  SERVER_URL2,
   BEARER_TOKEN,
 } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
@@ -140,10 +140,7 @@ class Volume {
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
-        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
       )
       .then((res) => {
         runInAction(() => {
@@ -156,7 +153,7 @@ class Volume {
   // 볼륨 관리
   loadPVolumes = async () => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs`)
+      .get(`${SERVER_URL2}/pvs`)
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
@@ -173,7 +170,7 @@ class Volume {
 
   loadPVolume = async (name, cluster) => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/pvs/${name}?cluster=${cluster}`)
+      .get(`${SERVER_URL2}/pvs/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.pVolume = data;
@@ -196,7 +193,7 @@ class Volume {
 
   // 클레임 관리
   loadPVClaims = async () => {
-    await axios.get(`${LOCAL_VOLUME_URL}/pvcs`).then(({ data: { data } }) => {
+    await axios.get(`${SERVER_URL2}/pvcs`).then(({ data: { data } }) => {
       runInAction(() => {
         this.pvClaims = data;
         this.totalElements = data.length;
@@ -212,7 +209,7 @@ class Volume {
   loadPVClaim = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${LOCAL_VOLUME_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
+        `${SERVER_URL2}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
       .then(({ data: { data } }) => {
         runInAction(() => {
@@ -222,8 +219,6 @@ class Volume {
           this.pvClaimLables = {};
           this.events = data.events;
           this.label = data.label;
-          console.log(this.label);
-
           Object.entries(this.pvClaim?.label).map(([key, value]) => {
             this.pvClaimLables[key] = value;
           });
@@ -244,9 +239,9 @@ class Volume {
 
   loadStorageClasses = async () => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/storageclasses`, { auth: BASIC_AUTH })
-      .then((res) => {
-        this.storageClasses = res.data.data;
+      .get(`${SERVER_URL2}/storageclasses`)
+      .then(({ data: { data } }) => {
+        this.storageClasses = data;
         this.totalElements = this.storageClasses.length;
       });
 
@@ -256,17 +251,16 @@ class Volume {
     );
   };
 
-  loadStorageClass = async (scName, cluster) => {
+  loadStorageClass = async (name, cluster) => {
     await axios
-      .get(`${LOCAL_VOLUME_URL}/storageclasses/${scName}?cluster=${cluster}`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        this.storageClass = res.data.data;
+      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
+      .then(({ data: { data } }) => {
+        this.storageClass = data;
         this.scYamlFile = "";
         this.scAnnotations = {};
         this.scLables = {};
-        this.scParameters = {};
+        this.scParameters = data.parameters;
+        this.label = data.labels;
 
         Object.entries(this.storageClass?.annotations).forEach(
           ([key, value]) => {

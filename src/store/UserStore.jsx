@@ -1,14 +1,14 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class User {
   userList = [];
   userDetail = {};
-  user = {
-    id: "",
-    role: "",
-  };
+  // user = {
+  //   id: "",
+  //   role: "",
+  // };
 
   totalElements = 0;
   currentPage = 1;
@@ -105,14 +105,12 @@ class User {
 
   loadUserList = async () => {
     await axios
-      .get(`${SERVER_URL}/members`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL2}/members`)
+      .then((res) => {
         runInAction(() => {
-          console.log("새로고침");
-          this.userList = data;
-          this.totalElements = data.length;
+          console.log(res);
+          this.userList = res.data;
+          this.totalElements = res.data.length;
           // this.userDetail = res.data.data[0];
         });
       })
@@ -125,15 +123,11 @@ class User {
   };
 
   loadUserDetail = async (memberId) => {
-    await axios
-      .get(`${SERVER_URL}/members/${memberId}`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          this.userDetail = res.data.data;
-        });
+    await axios.get(`${SERVER_URL2}/members/${memberId}`).then((res) => {
+      runInAction(() => {
+        this.userDetail = res.data;
       });
+    });
   };
 
   postUser = async (data) => {
@@ -142,9 +136,7 @@ class User {
       memberEnabled: 0,
     };
     return await axios
-      .post(`${SERVER_URL}/members`, body, {
-        auth: BASIC_AUTH,
-      })
+      .post(`${SERVER_URL2}/members`, body)
       .then(({ status }) => {
         if (status === 201) return true;
         return false;

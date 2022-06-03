@@ -30,9 +30,9 @@ const UserDetail = observer((props) => {
                 </tr>
                 <tr>
                   <th>E-mail</th>
-                  <td>{user.memberEmail}</td>
-                  <th>부서</th>
-                  <td>{user.department}</td>
+                  <td>{user.email}</td>
+                  <th></th>
+                  <td></td>
                 </tr>
                 {/* <tr>
                   <th>승인여부</th>
@@ -48,7 +48,9 @@ const UserDetail = observer((props) => {
                 </tr> */}
                 <tr>
                   <th>등록일</th>
-                  <td>{dateFormatter(user.created_at)}</td>
+                  <td>
+                    {user.created_at ? dateFormatter(user.created_at) : "-"}
+                  </td>
                   <th></th>
                   <td></td>
                 </tr>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Service {
   serviceList = [];
@@ -34,13 +34,26 @@ class Service {
     makeAutoObservable(this);
   }
 
+  loadServiceList = async (type) => {
+    await axios.get(`${SERVER_URL2}/services`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projectType === type);
+        this.serviceList = list;
+        // this.serviceDetail = list[0];
+        this.totalElements = list.length;
+      });
+    });
+    this.loadServiceDetail(
+      this.serviceList[0].name,
+      this.serviceList[0].cluster,
+      this.serviceList[0].project
+    );
+  };
+
   loadServiceDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/services/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
@@ -51,28 +64,6 @@ class Service {
           this.involvesWorkloads = involvesData.workloads;
         });
       });
-  };
-
-  loadServiceList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/services`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.serviceList = list;
-          // this.serviceDetail = list[0];
-          this.totalElements = list.length;
-        });
-      });
-    this.loadServiceDetail(
-      this.serviceList[0].name,
-      this.serviceList[0].cluster,
-      this.serviceList[0].project
-    );
   };
 
   setServiceName = (serviceName) => {
@@ -145,11 +136,8 @@ class Service {
     this.cluster.map(async (item) => {
       await axios
         .post(
-          `${SERVER_URL}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
-          YAML.parse(this.content),
-          {
-            auth: BASIC_AUTH,
-          }
+          `${SERVER_URL2}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
+          YAML.parse(this.content)
         )
         .then((res) => {
           if (res.status === 200) {

@@ -5,10 +5,11 @@ import "./css/Login.css";
 import tit_welcome from "./images/tit_welcome.png";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { SERVER_URL } from "@/config.jsx";
+import { SERVER_URL2 } from "@/config.jsx";
 import { setItem } from "../../utils/sessionStorageFn";
 import { swalError } from "../../utils/swal-utils";
 import jwtDecode from "jwt-decode";
+import userStore from "../../store/UserStore";
 //token의 playload 내용을 디코딩해줌
 
 const Login = () => {
@@ -19,6 +20,7 @@ const Login = () => {
   });
   const [check, setCheck] = useState(false);
   const { id, password } = inputs;
+  const { setUser } = userStore;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -40,10 +42,9 @@ const Login = () => {
     setCheck(false);
 
     await axios
-      .post(`http://101.79.1.173:8011/gmcapi/v2/auth`, inputs)
+      .post(`${SERVER_URL2}/auth`, inputs)
       // .post(`${SERVER_URL}/auth`, inputs)
       .then(({ data }) => {
-        console.log(data);
         const { accessToken, status } = data;
         if (status === 200) {
           // setItem("userRole", data.userRole);
@@ -55,6 +56,8 @@ const Login = () => {
           setItem("user", jwtDecode(accessToken));
           setItem("userRole", jwtDecode(accessToken).role);
           setItem("token", accessToken); // local storage에 저장
+          setUser(jwtDecode(accessToken));
+          console.log(jwtDecode(accessToken));
           swalError("로그인 되었습니다.", () => history.push("/"));
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));

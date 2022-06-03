@@ -63,6 +63,7 @@ const ServiceAccountsDetail = observer(() => {
     },
   } = serviceAccountStore;
 
+  console.log(secrets);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -105,7 +106,11 @@ const ServiceAccountsDetail = observer(() => {
               <tr>
                 <th style={{ width: "15%" }}>Secrets Name</th>
                 <td style={{ whiteSpace: "pre-wrap" }}>
-                  {secrets.map((secret) => secret.name + "\n")}
+                  {secrets !== null ? (
+                    secrets.map((secret) => secret.name + "\n")
+                  ) : (
+                    <></>
+                  )}
                 </td>
               </tr>
               <tr>

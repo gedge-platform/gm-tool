@@ -13,6 +13,41 @@ const TableTitle = styled.p`
   color: rgba(255, 255, 255, 0.8);
 `;
 
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
+
 const Detail = observer(() => {
   const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
     serviceStore;
@@ -101,7 +136,11 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPods ? (
+          {involvesPods === null ? (
+            <LabelContainer>
+              <p>No Pods Info.</p>
+            </LabelContainer>
+          ) : (
             involvesPods.map((pod) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -123,42 +162,46 @@ const Detail = observer(() => {
                 <br />
               </>
             ))
-          ) : (
-            <></>
           )}
           <br />
           <TableTitle>Workload</TableTitle>
-          {involvesWorkloads.map((workload) => (
-            <>
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>Name</th>
-                    <td>
-                      {workload?.name === undefined ? <>-</> : workload?.name}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Kind</th>
-                    <td>
-                      {workload?.kind === undefined ? <>-</> : workload?.kind}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Replica Name</th>
-                    <td>
-                      {workload?.replicaName === undefined ? (
-                        <>-</>
-                      ) : (
-                        workload?.replicaName
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </>
-          ))}
+          {involvesWorkloads !== null ? (
+            involvesWorkloads.map((workload) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>
+                        {workload?.name === null ? <>-</> : workload?.name}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Kind</th>
+                      <td>
+                        {workload?.kind === null ? <>-</> : workload?.kind}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Replica Name</th>
+                      <td>
+                        {workload?.replicaName === null ? (
+                          <>-</>
+                        ) : (
+                          workload?.replicaName
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Workloads Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { REQUEST_URL, REQUEST_URL2 } from "../config";
+import { SERVER_URL3, REQUEST_URL2 } from "../config";
 import clusterStore from "./Cluster";
 import * as FormData from "form-data";
 import deploymentStore from "./Deployment";
@@ -12,7 +12,7 @@ class Scheduler {
 
   postWorkload = (requestId, workspace, project, type) => {
     axios
-      .post(REQUEST_URL, {
+      .post(SERVER_URL3, {
         request_id: requestId,
         workspaceName: workspace,
         projectName: project,
@@ -20,12 +20,11 @@ class Scheduler {
         status: "CREATED",
         date: new Date(),
       })
-      .then((res) => {
-        console.log(res);
-      })
+      .then((res) => {})
       .catch((e) => console.log(e.message));
   };
 
+  // deplotment에서 생성하면 이걸로 post
   postScheduler = (requestId, yaml, callback) => {
     const { clusters } = clusterStore;
 
@@ -40,7 +39,6 @@ class Scheduler {
       .post(`http://101.79.4.15:32527/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
-          console.log(response);
           const popup = window.open(
             "",
             "Gedge scheduler",
@@ -58,6 +56,7 @@ class Scheduler {
       });
   };
 
+  // Load YAML에서 생성하면 이걸로 post
   postScheduler2 = (requestId, yaml, callback) => {
     const { clusters } = clusterStore;
     const { project } = deploymentStore;
@@ -73,7 +72,6 @@ class Scheduler {
       .post(`http://101.79.4.15:32527/yaml2`, formData)
       .then(function (response) {
         if (response.status === 200) {
-          console.log(response);
           const popup = window.open(
             "",
             "Gedge scheduler",
