@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL, LOCAL_CLUSTER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Cluster {
   clusterList = [];
@@ -166,6 +166,7 @@ class Cluster {
               ? res.data.data
               : res.data.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
+          console.log(this.clusterList);
           this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = list.length;
         });
@@ -193,7 +194,9 @@ class Cluster {
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`http://101.79.4.15:8010/clusterInfo?project=${project}`)
+      .get(`${SERVER_URL}/clusterInfo?project=${project}`, {
+        auth: BASIC_AUTH,
+      })
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {

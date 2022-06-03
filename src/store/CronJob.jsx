@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class CronJob {
   cronJobList = [];
@@ -27,18 +27,14 @@ class CronJob {
   }
 
   loadCronJobList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/cronjobs`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          const list = data.filter((item) => item.projectType === type);
-          this.cronJobList = list;
-          // this.cronJobDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/cronjobs`).then(({ data: { data } }) => {
+      runInAction(() => {
+        const list = data.filter((item) => item.projectType === type);
+        this.cronJobList = list;
+        // this.cronJobDetail = list[0];
+        this.totalElements = list.length;
       });
+    });
     this.loadCronJobDetail(
       this.cronJobList[0].name,
       this.cronJobList[0].cluster,
@@ -49,10 +45,7 @@ class CronJob {
   loadCronJobDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/cronjobs/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {

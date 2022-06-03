@@ -5,9 +5,10 @@ import { createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "@/styles/theme";
 import { Menu, MenuItem } from "@material-ui/core";
 import axios from "axios";
-import { SERVER_URL, BASIC_AUTH } from "@/config.jsx";
+import { SERVER_URL2, BASIC_AUTH } from "@/config.jsx";
 import { getItem, removeItem, setItem } from "../../utils/sessionStorageFn";
 import { useHistory } from "react-router-dom";
+console.log(getItem());
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -131,9 +132,10 @@ const SideUser = ({ userName }) => {
     else return "Service Admin";
   };
   useEffect(async () => {
+    const { memberId } = getItem("user");
     await axios
-      .get(`http://101.79.1.173:8010/gmcapi/v2/members/${getItem("user")}`, {
-        auth: BASIC_AUTH,
+      .get(`${SERVER_URL2}/members`, {
+        params: { id: memberId },
       })
       .then((res) => {
         setName(res.data.data.memberName);
