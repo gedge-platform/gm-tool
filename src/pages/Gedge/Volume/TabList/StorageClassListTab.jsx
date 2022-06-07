@@ -51,22 +51,22 @@ const StorageClassListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "ReclaimPolicy",
+      headerName: "Reclaim Policy",
       field: "reclaimPolicy",
       filter: true,
     },
     {
-      headerName: "Storage Class",
+      headerName: "Provisioner",
       field: "provisioner",
       filter: true,
     },
     {
-      headerName: "Volume Mode",
+      headerName: "VolumeBindingMode",
       field: "volumeBindingMode",
       filter: true,
     },
     {
-      headerName: "Cluster",
+      headerName: "AllowVolumeExpansion",
       field: "allowVolumeExpansion",
       filter: true,
       cellRenderer: ({ value }) => {
@@ -74,7 +74,7 @@ const StorageClassListTab = observer(() => {
       },
     },
     {
-      headerName: "Create At",
+      headerName: "Created",
       field: "createAt",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),

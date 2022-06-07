@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, LOCAL_CLUSTER_URL, MONITORING_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL, MONITORING_URL } from "../config";
 import {
   ClusterMetricTypes,
   TargetTypes,
@@ -123,7 +123,7 @@ class Monitoring {
 
   loadClusterNames = async (callback) => {
     await axios
-      .get(`${LOCAL_CLUSTER_URL}/clusters`, {
+      .get(`${SERVER_URL}/clusters`, {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -346,9 +346,7 @@ class Monitoring {
           metricFilter,
           option
         ),
-        {
-          auth: BASIC_AUTH,
-        }
+        { auth: BASIC_AUTH }
       )
       .then((res) => {
         runInAction(() => {
@@ -376,9 +374,7 @@ class Monitoring {
           metricFilter,
           option
         ),
-        {
-          auth: BASIC_AUTH,
-        }
+        { auth: BASIC_AUTH }
       )
       .then((res) => {
         runInAction(() => {
@@ -406,9 +402,7 @@ class Monitoring {
           metricFilter,
           option
         ),
-        {
-          auth: BASIC_AUTH,
-        }
+        { auth: BASIC_AUTH }
       )
       .then((res) => {
         runInAction(() => {
@@ -436,9 +430,7 @@ class Monitoring {
           metricFilter,
           option
         ),
-        {
-          auth: BASIC_AUTH,
-        }
+        { auth: BASIC_AUTH }
       )
       .then((res) => {
         runInAction(() => {

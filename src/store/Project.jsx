@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -243,7 +243,7 @@ class Project {
       workspaceName,
     };
     axios
-      .post(`${SERVER_URL2}/project`, body2)
+      .post(`${SERVER_URL}/project`, body2)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
     axios

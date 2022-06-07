@@ -31,6 +31,8 @@ const CoreClusterListTab = observer(() => {
     goNextPage,
     totalElements,
   } = clusterStore;
+  console.log(clusterList);
+  console.log(viewList);
 
   const [columDefs] = useState([
     // {

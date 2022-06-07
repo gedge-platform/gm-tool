@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Deployment {
@@ -161,8 +161,7 @@ class Deployment {
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`,
-        { auth: BASIC_AUTH }
+        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
@@ -188,16 +187,14 @@ class Deployment {
   };
 
   loadDeploymentList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/deployments`, { auth: BASIC_AUTH })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter((item) => item.projetType === type);
-          this.deploymentList = list;
-          this.deploymentDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/deployments`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projetType === type);
+        this.deploymentList = list;
+        this.deploymentDetail = list[0];
+        this.totalElements = list.length;
       });
+    });
     this.loadDeploymentDetail(
       this.deploymentList[0].name,
       this.deploymentList[0].cluster,
@@ -304,11 +301,8 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}`,
-        YAML.parse(this.content),
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}`,
+        YAML.parse(this.content)
       )
       .then((res) => {
         if (res.status === 200) {

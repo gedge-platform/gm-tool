@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class DaemonSet {
   daemonSetList = [];
@@ -44,20 +44,14 @@ class DaemonSet {
   }
 
   loadDaemonSetList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/daemonsets`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.daemonSetList = list;
-          // this.daemonSetDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/daemonsets`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projectType === type);
+        this.daemonSetList = list;
+        // this.daemonSetDetail = list[0];
+        this.totalElements = list.length;
       });
+    });
     this.loadDaemonSetDetail(
       this.daemonSetList[0].name,
       this.daemonSetList[0].cluster,
@@ -68,10 +62,7 @@ class DaemonSet {
   loadDaemonSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL}/daemonsets/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/daemonsets/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {

@@ -28,17 +28,13 @@ const UserDetail = observer((props) => {
                   <th>Name</th>
                   <td>{user.memberName}</td>
                 </tr>
-                <tr>
-                  <th>E-mail</th>
-                  <td>{user.memberEmail}</td>
-                  <th>Member Role</th>
-                  <td>{user.memberRole}</td>
-                </tr>
+  
                 <tr>
                   <th>Contact</th>
-                  <td>{user.memberContact}</td>
-                  <th>Created</th>
-                  <td>{dateFormatter(user.created_at)}</td>
+                  <td>{user.contact}</td>
+                  <th>E-mail</th>
+                  <td>{user.email}</td>
+             
                 </tr>
                 {/* <tr>
                   <th>승인여부</th>
@@ -49,14 +45,15 @@ const UserDetail = observer((props) => {
                       <span class="state_ico state_04">승인 대기</span>
                     )}
                   </td>
-                  <th>Last Login</th>
-                  <td>{moment(userDetail.logined_at).format("YYYY-MM-DD")}</td>
                 </tr> */}
                 <tr>
-                  <th>Last Longin</th>
-                  <td>{dateFormatter(user.logined_at)}</td>
-                  <th></th>
-                  <td></td>
+                <th>Created</th>
+                  <td>
+                    {user.created_at ? dateFormatter(user.created_at) : "-"}
+                  </td>
+                 <th>Last Longin</th>
+                  <td>{dateFormatter(user.logined_at)}</td> 
+                
                 </tr>
               </tbody>
             </table>
