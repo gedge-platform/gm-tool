@@ -86,27 +86,41 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th>Name</th>
-                <td>{jobDetailData.name}</td>
+                <td>{jobDetailData.name ? jobDetailData.name : "-"}</td>
                 <th>Cluster</th>
-                <td>{jobDetailData.cluster}</td>
+                <td>{jobDetailData.cluster ? jobDetailData.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{jobDetailData.project}</td>
+                <td>{jobDetailData.project ? jobDetailData.project : "-"}</td>
                 <th>Status</th>
-                <td>{jobDetailData.status}</td>
+                <td>{jobDetailData.status ? jobDetailData.status : "-"}</td>
               </tr>
               <tr>
                 <th>BackOffLimit</th>
-                <td>{jobDetailData.backoffLimit}</td>
+                <td>
+                  {jobDetailData.backoffLimit
+                    ? jobDetailData.backoffLimit
+                    : "-"}
+                </td>
                 <th>Completions</th>
-                <td>{jobDetailData.completions}</td>
+                <td>
+                  {jobDetailData.completions ? jobDetailData.completions : "-"}
+                </td>
               </tr>
               <tr>
+                <th>Start Time</th>
+                <td>
+                  {jobDetailData.startTime
+                    ? dateFormatter(jobDetailData.startTime)
+                    : "-"}
+                </td>
                 <th>Created</th>
-                <td>{dateFormatter(jobDetailData.created_at)}</td>
-                <th>Creator</th>
-                <td></td>
+                <td>
+                  {jobDetailData.created_at
+                    ? dateFormatter(jobDetailData.created_at)
+                    : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
