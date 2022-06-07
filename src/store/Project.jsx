@@ -183,6 +183,7 @@ class Project {
         auth: BASIC_AUTH,
       })
       .then(({ data: { data } }) => {
+        console.log(data);
         runInAction(() => {
           this.projectListinWorkspace = data;
         });

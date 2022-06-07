@@ -94,8 +94,11 @@ const CommActionBar = (props) => {
   };
 
   const onClick = () => {
-    swalError("새로고침 되었습니다.", reloadFunc);
-  };
+   swalError("새로고침 되었습니다.", reloadFunc);
+ };
+
+
+
 
   const handleSearch = ({ target: { value } }) => {
     setSearch(value);

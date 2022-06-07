@@ -157,10 +157,10 @@ const VolumeListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadPVolumes}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadPVolumes}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>

@@ -106,10 +106,10 @@ const CoreClusterListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={() => loadClusterList("core")}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={() => loadClusterList("core")}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
