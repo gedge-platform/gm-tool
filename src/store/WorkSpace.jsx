@@ -7,7 +7,7 @@ import { ThirtyFpsRounded } from "@mui/icons-material";
 
 class Workspace {
   workSpaceList = [];
-  workSpaceDetail = {};
+  workSpaceDetail = [];
   totalElements = 0;
   events = [
     {
@@ -21,7 +21,8 @@ class Workspace {
       eventTime: "",
     },
   ];
-  //clusterList = [];
+  projectList = [];
+  clusterList = [];
   detailInfo = [{}];
   selectProject = "";
   selectCluster = "";
@@ -39,7 +40,7 @@ class Workspace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          this.workspaceDetail = data[0];
+          this.workSpaceDetail = data[0];
           this.totalElements = data.length;
         });
       });
@@ -61,12 +62,13 @@ class Workspace {
           this.events = null;
         }
         this.detailInfo = data.projectList;
+
         this.projectList = this.detailInfo.map(
           (project) => project.projectName
         );
         this.selectProject = this.projectList[0];
         //this.clusterList = data.selectCluster;
-        // this.selectCluster = this.clusterList[0];
+        this.selectCluster = this.clusterList[0];
       });
     });
   };
@@ -134,7 +136,7 @@ class Workspace {
 
     axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASICAUTH,
+        auth: BASIC_AUTH,
       })
       .then((res) => {
         if (res.status === 200)

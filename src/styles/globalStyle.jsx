@@ -1426,6 +1426,14 @@ const globalStyles = createGlobalStyle`
   margin: 5px 0 5px 0;
 }
 
+//hansl--------------------
+.project_table{
+  th,td {
+    width: 350px;
+    margin: 5px 0 5px 0;
+  }
+}
+
 //map-----------------------
 .leaflet-container {
   width: 100%;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import WorkspaceListTab from "./TabList/WorkspaceListTab";
+import WorkspaceListTab from "./TabList/APIListTab";
 
 const WorkSpace = () => {
   const currentPageTitle = Title.WorkSpace;
