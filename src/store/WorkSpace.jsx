@@ -7,7 +7,7 @@ import { ThirtyFpsRounded } from "@mui/icons-material";
 
 class Workspace {
   workSpaceList = [];
-  workSpaceDetail = {};
+  workSpaceDetail = [];
   totalElements = 0;
   events = [
     {
@@ -21,7 +21,8 @@ class Workspace {
       eventTime: "",
     },
   ];
-  //clusterList = [];
+  projectList = [];
+  clusterList = [];
   detailInfo = [{}];
   selectProject = "";
   selectCluster = "";
@@ -49,28 +50,29 @@ class Workspace {
 
   loadWorkspaceDetail = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.workSpaceDetail = data;
-          this.dataUsage = this.workSpaceDetail.resourceUsage;
-          if (data.events !== null) {
-            this.events = this.workSpaceDetail.events;
-          } else {
-            this.events = null;
-          }
-          this.detailInfo = data.projectList;
-          this.projectList = this.detailInfo.map(
-            (project) => project.projectName
-          );
-          this.selectProject = this.projectList[0];
-          //this.clusterList = data.selectCluster;
-          // this.selectCluster = this.clusterList[0];
-        });
+    .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
+      auth: BASIC_AUTH,
+    })
+    .then(({ data: { data } }) => {
+      runInAction(() => {
+        this.workSpaceDetail = data;
+        this.dataUsage = this.workSpaceDetail.resourceUsage;
+        if (data.events !== null) {
+          this.events = this.workSpaceDetail.events;
+        } else {
+          this.events = null;
+        }
+        this.detailInfo = data.projectList;
+
+        this.projectList = this.detailInfo.map(
+          (project) => project.projectName
+        );
+        this.selectProject = this.projectList[0];
+        //this.clusterList = data.selectCluster;
+        this.selectCluster = this.clusterList[0];
       });
-  };
+    }
+    )} 
 
   setWorkSpaceList = (workSpaceList = []) => {
     runInAction(() => {
