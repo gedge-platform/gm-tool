@@ -20,6 +20,15 @@ const UserServiceListTab = observer(() => {
     setTabvalue(newValue);
   };
 
+  // const {
+  //   projectDetail,
+  //   projectList,
+  //   totalElements,
+  //   loadProjectList,
+  //   loadProjectDetail,
+  //   deleteProject,
+  // } = projectStore;
+
   const {
     projectDetail,
     projectList,
@@ -73,6 +82,16 @@ const UserServiceListTab = observer(() => {
     },
   ]);
 
+
+  const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleClick = ({ data: { projectName }, colDef: { field } }) => {
     if (field === "delete") {
       swalUpdate("삭제하시겠습니까?", () =>
@@ -83,14 +102,7 @@ const UserServiceListTab = observer(() => {
     loadProjectDetail(projectName);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const history = useHistory();
+ 
 
   useEffect(() => {
     loadProjectList("user");
@@ -101,12 +113,12 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadProjectList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadProjectList}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+           
           </CommActionBar>
 
           <div className="tabPanelContainer">

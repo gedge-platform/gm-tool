@@ -86,6 +86,7 @@ const ConfigmapsDetail = observer(() => {
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
+        <CTab label="Metadata" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -136,7 +137,12 @@ const ConfigmapsDetail = observer(() => {
           </table> */}
           <br />
 
-          <TableTitle>Annotations</TableTitle>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={1}>
+
+      <div className="tb_container" style={{ width: "95%" }}>
+        <TableTitle>Annotations</TableTitle>
           {/* {annotationsTable.length > 0 ? ( */}
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
