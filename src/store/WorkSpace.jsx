@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 import { ThirtyFpsRounded } from "@mui/icons-material";
@@ -27,6 +27,7 @@ class Workspace {
   selectProject = "";
   selectCluster = "";
   dataUsage = {};
+  projectList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -44,7 +45,7 @@ class Workspace {
           this.totalElements = data.length;
         });
       });
-      this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+    this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
   };
 
   loadWorkspaceDetail = async (workspaceName) => {
@@ -70,8 +71,8 @@ class Workspace {
         //this.clusterList = data.selectCluster;
         this.selectCluster = this.clusterList[0];
       });
-    });
-  };
+    }
+    )} 
 
   setWorkSpaceList = (workSpaceList = []) => {
     runInAction(() => {
@@ -99,7 +100,7 @@ class Workspace {
       clusterName: selectCluster,
     };
     axios
-      .post(`${SERVER_URL2}/workspace`, body2)
+      .post(`${SERVER_URL}/workspace`, body2)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
     return axios
@@ -130,7 +131,7 @@ class Workspace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
+      .delete(`${SERVER_URL}/workspace/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 

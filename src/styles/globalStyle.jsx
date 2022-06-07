@@ -1429,7 +1429,7 @@ const globalStyles = createGlobalStyle`
 //hansl--------------------
 .project_table{
   th,td {
-    width: 350px;
+    width: 410px;
     margin: 5px 0 5px 0;
   }
 }

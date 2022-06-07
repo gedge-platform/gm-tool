@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 //Pagenation Import toJS
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 
@@ -122,9 +122,7 @@ class Secret {
 
   loadsecretList = async () => {
     await axios
-      .get(`${SERVER_URL}/secrets`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${SERVER_URL2}/secrets`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.secretList = data;
@@ -171,10 +169,7 @@ class Secret {
   loadsecretTabList = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${SERVER_URL}/secrets/${name}?cluster=${clusterName}&project=${namespace}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/secrets/${name}?cluster=${clusterName}&project=${namespace}`
       )
       .then(({ data: { data } }) => {
         runInAction(() => {
