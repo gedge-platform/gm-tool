@@ -15,7 +15,7 @@ const UserDetail = observer((props) => {
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
+        <CTab label="Overview" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
@@ -25,14 +25,20 @@ const UserDetail = observer((props) => {
                 <tr>
                   <th>ID</th>
                   <td>{user.memberId}</td>
-                  <th>이름</th>
+                  <th>Name</th>
                   <td>{user.memberName}</td>
                 </tr>
                 <tr>
                   <th>E-mail</th>
                   <td>{user.memberEmail}</td>
-                  <th>부서</th>
-                  <td>{user.department}</td>
+                  <th>Member Role</th>
+                  <td>{user.memberRole}</td>
+                </tr>
+                <tr>
+                  <th>Contact</th>
+                  <td>{user.memberContact}</td>
+                  <th>Created</th>
+                  <td>{dateFormatter(user.created_at)}</td>
                 </tr>
                 {/* <tr>
                   <th>승인여부</th>
@@ -47,8 +53,8 @@ const UserDetail = observer((props) => {
                   <td>{moment(userDetail.logined_at).format("YYYY-MM-DD")}</td>
                 </tr> */}
                 <tr>
-                  <th>등록일</th>
-                  <td>{dateFormatter(user.created_at)}</td>
+                  <th>Last Longin</th>
+                  <td>{dateFormatter(user.logined_at)}</td>
                   <th></th>
                   <td></td>
                 </tr>

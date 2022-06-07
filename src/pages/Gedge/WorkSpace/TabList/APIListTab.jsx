@@ -91,10 +91,10 @@ const APIListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadWorkSpaceList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadWorkSpaceList}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}

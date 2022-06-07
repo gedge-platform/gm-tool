@@ -81,10 +81,10 @@ const ServiceAccountListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadServiceAccountList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadServiceAccountList}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>

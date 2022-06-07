@@ -89,10 +89,10 @@ const SecretListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadsecretList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadsecretList}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>

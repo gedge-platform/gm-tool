@@ -110,9 +110,9 @@ class User {
       })
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("새로고침");
+          console.log(data);
           this.userList = data;
-          this.totalElements = data.length;
+          //this.totalElements = data.length;
           // this.userDetail = res.data.data[0];
         });
       })
@@ -126,7 +126,7 @@ class User {
 
   loadUserDetail = async (memberId) => {
     await axios
-      .get(`${SERVER_URL}/members/${memberId}`, {
+      .get(`${SERVER_URL}/members/${memberId}`,  {
         auth: BASIC_AUTH,
       })
       .then((res) => {
@@ -142,7 +142,7 @@ class User {
       memberEnabled: 0,
     };
     return await axios
-      .post(`${SERVER_URL}/members`, body, {
+      .post(`${SERVER_URL}/members`, body,  {
         auth: BASIC_AUTH,
       })
       .then(({ status }) => {

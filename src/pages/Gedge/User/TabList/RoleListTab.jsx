@@ -116,7 +116,8 @@ const RoleListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          {/* <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}> */}
+          <CommActionBar>
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
           <div className="grid-height2">

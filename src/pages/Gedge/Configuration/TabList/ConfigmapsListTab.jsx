@@ -83,10 +83,10 @@ const ConfigmapsListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadconfigmapsList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+            // reloadFunc={loadconfigmapsList}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
