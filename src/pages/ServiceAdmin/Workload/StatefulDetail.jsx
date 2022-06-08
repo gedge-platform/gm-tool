@@ -95,15 +95,15 @@ const StatefulSetDetail = observer(() => {
             <tbody className="tb_data_detail">
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{name}</td>
+                <td>{name ? name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cluster}</td>
+                <td>{cluster ? cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{project}</td>
+                <td>{project ? project : "-"}</td>
                 <th>Created</th>
-                <td>{dateFormatter(createAt)}</td>
+                <td>{createAt ? dateFormatter(createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>

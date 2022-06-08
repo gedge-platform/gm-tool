@@ -21,8 +21,17 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
-    podStore;
+  const { 
+    podList, 
+    podDetail, 
+    totalElements, 
+    loadPodList, 
+    loadPodDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+  } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -113,8 +122,12 @@ const PodListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={podList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

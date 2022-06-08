@@ -12,6 +12,7 @@ import workspacesStore from "../../../../store/WorkSpace";
 import CreateWorkSpace from "../Dialog/CreateWorkSpace";
 import clusterStore from "../../../../store/Cluster";
 import { swalUpdate } from "../../../../utils/swal-utils";
+import Detail from "../Detail";
 
 const APIListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -20,8 +21,14 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
-    workspacesStore;
+  const { 
+    workSpaceList, 
+    loadWorkSpaceList, 
+    totalElements, 
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkspaceDetail, 
+  } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -77,6 +84,7 @@ const APIListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
@@ -91,10 +99,10 @@ const APIListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadWorkSpaceList}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+            reloadFunc={loadWorkSpaceList}
+            isSearch={true}
+            isSelect={true}
+            keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
@@ -115,10 +123,12 @@ const APIListTab = observer(() => {
           </div>
           <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
+            type={"user"}
             open={open}
             onClose={handleClose}
           />
         </PanelBox>
+        <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
     </>
   );
