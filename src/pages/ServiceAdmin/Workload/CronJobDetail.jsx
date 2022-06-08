@@ -78,27 +78,25 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{cronJobDetail.name}</td>
+                <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cronJobDetail.cluster}</td>
+                <td>{cronJobDetail.cluster ? cronJobDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{cronJobDetail.project}</td>
+                <td>{cronJobDetail.project ? cronJobDetail.project : "-"}</td>
                 <th>Schedule</th>
-                <td>{cronJobDetail.schedule}</td>
+                <td>{cronJobDetail.schedule ? cronJobDetail.schedule : "-"}</td>
               </tr>
               <tr>
                 <th>Concurrency Policy</th>
-                <td>{cronJobDetail.concurrencyPolicy}</td>
+                <td>{cronJobDetail.concurrencyPolicy ? cronJobDetail.concurrencyPolicy : "-"}</td>
                 <th>Successful Jobs History Limit</th>
-                <td>{cronJobDetail.successfulJobsHistoryLimit}</td>
+                <td>{cronJobDetail.successfulJobsHistoryLimit ? cronJobDetail.successfulJobsHistoryLimit : "-"}</td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{dateFormatter(cronJobDetail.creationTimestamp)}</td>
-                <th>Lasted</th>
-                <td>{dateFormatter(cronJobDetail.lastScheduleTime)}</td>
+                <td>{cronJobDetail.creationTimestamp ? dateFormatter(cronJobDetail.creationTimestamp) : "-"}</td>
               </tr>
             </tbody>
           </table>

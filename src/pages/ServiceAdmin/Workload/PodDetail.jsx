@@ -90,27 +90,27 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{podDetail.name}</td>
+                <td>{podDetail.name? podDetail.name : "-"}</td>
                 <th>Cluster</th>
-                <td>{podDetail.cluster}</td>
+                <td>{podDetail.cluster ? podDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{podDetail.project}</td>
+                <td>{podDetail.project ? podDetail.project : "-"}</td>
                 <th>Status</th>
-                <td>{podDetail.status}</td>
+                <td>{podDetail.status ? podDetail.status : "-"}</td>
               </tr>
               <tr>
                 <th>Pod IP</th>
-                <td>{podDetail.podIP}</td>
+                <td>{podDetail.podIP ? podDetail.podIP : "-"}</td>
                 <th>Node Name</th>
-                <td>{podDetail.node_name}</td>
+                <td>{podDetail.node_name ? podDetail.node_name : "-"}</td>
               </tr>
               <tr>
                 <th>Qos Class</th>
-                <td>{podDetail.qosClass}</td>
+                <td>{podDetail.qosClass ? podDetail.qosClass : "-"}</td>
                 <th>Created</th>
-                <td>{dateFormatter(podDetail.creationTimestamp)}</td>
+                <td>{podDetail.creationTimestamp ? dateFormatter(podDetail.creationTimestamp) : "-"}</td>
               </tr>
             </tbody>
           </table>

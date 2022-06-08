@@ -28,6 +28,11 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList,
     loadDeploymentDetail,
     setWorkspace,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -50,6 +55,9 @@ const DeploymentListTab = observer(() => {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
+      cellRenderer: function (data) {
+        return `<span>${data.value ? data.value : "-"}</span>`;
+      },
     },
     {
       headerName: "상태",
@@ -111,8 +119,12 @@ const DeploymentListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={deploymentList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

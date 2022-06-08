@@ -402,7 +402,6 @@ const globalStyles = createGlobalStyle`
   
   .paper_main {
     ${PanelBox} {
-
     }
   }
   
@@ -415,7 +414,8 @@ const globalStyles = createGlobalStyle`
   }
   
   .paper_detail {
-    &.reflex-element {
+    &
+    .reflex-element {
       height: 800px;
       max-height: 800px;
     }
@@ -1424,6 +1424,14 @@ const globalStyles = createGlobalStyle`
 .tabN-chart-area{
   width: 49%;
   margin: 5px 0 5px 0;
+}
+
+//hansl--------------------
+.project_table{
+  th,td {
+    width: 410px;
+    margin: 5px 0 5px 0;
+  }
 }
 
 //map-----------------------
