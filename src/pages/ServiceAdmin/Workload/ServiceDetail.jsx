@@ -147,15 +147,15 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Name</th>
-                      <td>{pod?.name}</td>
+                      <td>{pod?.name ? pod?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>IP</th>
-                      <td>{pod?.ip}</td>
+                      <td>{pod?.ip ? pod?.ip : "-"}</td>
                     </tr>
                     <tr>
                       <th>Node Name</th>
-                      <td>{pod?.nodeName}</td>
+                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -172,24 +172,16 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Name</th>
-                      <td>
-                        {workload?.name === null ? <>-</> : workload?.name}
-                      </td>
+                      <td>{workload?.name ? workload?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>Kind</th>
-                      <td>
-                        {workload?.kind === null ? <>-</> : workload?.kind}
-                      </td>
+                      <td>{workload?.kind ? workload?.kind : "-"}</td>
                     </tr>
                     <tr>
                       <th>Replica Name</th>
                       <td>
-                        {workload?.replicaName === null ? (
-                          <>-</>
-                        ) : (
-                          workload?.replicaName
-                        )}
+                        {workload?.replicaName ? workload?.replicaName : "-"}
                       </td>
                     </tr>
                   </tbody>
@@ -212,15 +204,15 @@ const Detail = observer(() => {
                 <tbody>
                   <tr>
                     <th>Name</th>
-                    <td>{port?.name}</td>
+                    <td>{port?.name ? port?.name : "-"}</td>
                     <th>Port</th>
-                    <td>{port?.port}</td>
+                    <td>{port?.port ? port?.port : "-"}</td>
                   </tr>
                   <tr>
                     <th>Protocol</th>
-                    <td>{port?.protocol}</td>
+                    <td>{port?.protocol ? port?.protocol : "-"}</td>
                     <th>TargetPort</th>
-                    <td>{port?.targetPort}</td>
+                    <td>{port?.targetPort ? port?.targetPort : "-"}</td>
                   </tr>
                 </tbody>
               </table>

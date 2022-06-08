@@ -108,23 +108,25 @@ const Detail = observer(() => {
                 <th className="tb_workload_detail_th">Name</th>
                 <td>{deploymentDetail.name ? deploymentDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{deploymentDetail.cluster}</td>
+                <td>
+                  {deploymentDetail.cluster ? deploymentDetail.cluster : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{deploymentDetail.project}</td>
+                <td>
+                  {deploymentDetail.project ? deploymentDetail.project : "-"}
+                </td>
                 <th>Workspace</th>
                 <td>
-                  {deploymentDetail.workspace === undefined ? (
-                    <>-</>
-                  ) : (
-                    <>{deploymentDetail.workspace}</>
-                  )}
+                  {deploymentDetail.workspace
+                    ? deploymentDetail.workspace
+                    : "-"}
                 </td>
               </tr>
               <tr>
                 <th>Status</th>
-                <td>{deploymentDetail.ready}</td>
+                <td>{deploymentDetail.ready ? deploymentDetail.ready : "-"}</td>
                 <th>Strategy</th>
                 <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
               </tr>

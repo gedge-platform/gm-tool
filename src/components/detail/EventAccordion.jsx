@@ -8,15 +8,33 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import theme from "@/styles/theme";
 
+// const EventsContainer = styled.div`
+//   margin: 8px 8px;
+//   padding: 12px 12px;
+//   background-color: #141a30;
+// `;
+
 const EventsContainer = styled.div`
-  margin: 8px 8px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 99%;
+  margin: 8px 8px 8px 8px;
   padding: 12px 12px;
-  background-color: #141a30;
+  border-radius: 4px;
+  background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const EventAccordion = ({ events }) => {
   if (events === null)
-    return <EventsContainer>No Events Info.</EventsContainer>;
+    return (
+      <EventsContainer>
+        <p>No Events Info.</p>
+      </EventsContainer>
+    );
   // if (events.length < 1)
   // return <EventsContainer>No Events Info.</EventsContainer>;
   return (

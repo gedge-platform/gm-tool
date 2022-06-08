@@ -402,7 +402,6 @@ const globalStyles = createGlobalStyle`
   
   .paper_main {
     ${PanelBox} {
-
     }
   }
   
@@ -415,7 +414,8 @@ const globalStyles = createGlobalStyle`
   }
   
   .paper_detail {
-    &.reflex-element {
+    &
+    .reflex-element {
       height: 800px;
       max-height: 800px;
     }

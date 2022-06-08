@@ -32,6 +32,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -157,7 +161,7 @@ const Detail = observer((props) => {
         <CTab label="Events" />
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -205,12 +209,14 @@ const Detail = observer((props) => {
               </table>
             </>
           ) : (
-            <NoInfo>No GPU Info.</NoInfo>
+            <LabelContainer>
+              <p>No GPU Info.</p>
+            </LabelContainer>
           )}
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -242,7 +248,7 @@ const Detail = observer((props) => {
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <TableTitle>Node List</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_nodeInfo">
@@ -263,20 +269,18 @@ const Detail = observer((props) => {
               )}
             </tbody>
           </table>
-
-     
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
-        <div className="tb_container" style={{ width: "95%" }}>
-          <TableSubTitle>Labels({nodes[nodeNum].name})</TableSubTitle>
-            <LabelContainer>{labelByNode()}</LabelContainer>
+        <div className="tb_container">
+          <TableTitle>Labels({nodes[nodeNum].name})</TableTitle>
+          <LabelContainer>{labelByNode()}</LabelContainer>
 
-            <TableSubTitle>Annotations({nodes[nodeNum].name})</TableSubTitle>
-            <table className="tb_data">
-              <tbody>{annotationByNode()}</tbody>
+          <TableTitle>Annotations({nodes[nodeNum].name})</TableTitle>
+          <table className="tb_data">
+            <tbody>{annotationByNode()}</tbody>
           </table>
-          </div>
+        </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={4}>
         <EventAccordion events={events} />
