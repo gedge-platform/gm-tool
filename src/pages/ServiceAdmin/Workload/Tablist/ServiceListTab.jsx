@@ -25,6 +25,10 @@ const ServiceListTab = observer(() => {
     totalElements,
     loadServiceList,
     loadServiceDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
   } = serviceStore;
 
   const [columDefs] = useState([
@@ -105,8 +109,12 @@ const ServiceListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={serviceList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

@@ -106,7 +106,7 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{deploymentDetail.name}</td>
+                <td>{deploymentDetail.name ? deploymentDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
                 <td>{deploymentDetail.cluster}</td>
               </tr>

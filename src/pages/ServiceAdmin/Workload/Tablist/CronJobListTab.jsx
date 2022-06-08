@@ -23,6 +23,10 @@ const CronJobListTab = observer(() => {
     totalElements,
     loadCronJobList,
     loadCronJobDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
   } = cronJobStore;
 
   const [columDefs] = useState([
@@ -107,8 +111,12 @@ const CronJobListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={cronJobList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

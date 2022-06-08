@@ -39,6 +39,11 @@ const ClaimListTab = observer(() => {
     // pvClaimEvents,
     loadPVClaims,
     loadPVClaim,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = volumeStore;
 
   const [columDefs] = useState([
@@ -153,8 +158,12 @@ const ClaimListTab = observer(() => {
                   onCellClicked={handleOpen}
                   rowData={pvClaims}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

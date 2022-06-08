@@ -28,6 +28,11 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList,
     loadDeploymentDetail,
     setWorkspace,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -111,8 +116,12 @@ const DeploymentListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={deploymentList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

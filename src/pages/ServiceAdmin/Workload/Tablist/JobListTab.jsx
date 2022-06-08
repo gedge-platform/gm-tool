@@ -19,8 +19,17 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { jobList, jobDetail, totalElements, loadJobList, loadJobDetail } =
-    jobStore;
+  const { 
+    jobList, 
+    jobDetail, 
+    totalElements, 
+    loadJobList, 
+    loadJobDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+   } = jobStore;
 
   const [columDefs] = useState([
     {
@@ -104,8 +113,12 @@ const JobListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={jobList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

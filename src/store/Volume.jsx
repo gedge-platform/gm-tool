@@ -20,6 +20,7 @@ class Volume {
   pVolumeMetadata = {};
   pvClaims = [];
   pvClaim = {};
+  pvClaimList = [];
   pvClaimYamlFile = "";
   pvClaimAnnotations = {};
   pvClaimLables = {};
@@ -49,7 +50,6 @@ class Volume {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -125,6 +125,12 @@ class Volume {
     });
   };
 
+  setPVClaimList = (list) => {
+    runInAction(() => {
+      this.pvClaimList = list;
+    })
+  }
+
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
@@ -198,6 +204,8 @@ class Volume {
         this.pvClaims = data;
         this.totalElements = data.length;
       });
+    }).then(() => {
+      this.convertList(this.pvClaimList, this.setPVClaimList);
     });
     this.loadPVClaim(
       this.pvClaims[0].name,
