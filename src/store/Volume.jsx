@@ -242,19 +242,28 @@ class Volume {
       .get(`${SERVER_URL2}/storageclasses`)
       .then(({ data: { data } }) => {
         this.storageClasses = data;
-        this.totalElements = this.storageClasses.length;
+        this.totalElements = data.length;
+      })
+      .then(() => {
+        this.convertList(this.storageClasses, this.setStorageClasses);
+      })
+      .then(() => {
+        this.loadStorageClass(
+          this.viewList[0].name, this.viewList[0].cluster
+       );
       });
 
-    this.loadStorageClass(
-      this.storageClasses[0].name,
-      this.storageClasses[0].cluster
-    );
+    //  this.loadStorageClass(
+    //    this.storageClasses[0].name,
+    //  this.storageClasses[0].cluster
+    // );
   };
 
   loadStorageClass = async (name, cluster) => {
     await axios
       .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
+        console.log(data);
         this.storageClass = data;
         this.scYamlFile = "";
         this.scAnnotations = {};
