@@ -88,15 +88,15 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{daemonSetDetail.name}</td>
+                <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{daemonSetDetail.cluster}</td>
+                <td>{daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{daemonSetDetail.project}</td>
+                <td>{daemonSetDetail.project ? daemonSetDetail.project : "-"}</td>
                 <th>Created</th>
-                <td>{dateFormatter(daemonSetDetail.createAt)}</td>
+                <td>{daemonSetDetail.createAt ? dateFormatter(daemonSetDetail.createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
