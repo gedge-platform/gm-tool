@@ -7,6 +7,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import theme from "@/styles/theme";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { color } from "@mui/system";
 
 // const EventsContainer = styled.div`
 //   margin: 8px 8px;
@@ -71,7 +73,7 @@ const EventAccordion = ({ events }) => {
                         color: "rgba(255,255,255,0.7)",
                       }}
                     >
-                      Message
+                      {type}
                     </Typography>
                     <Typography
                       sx={{

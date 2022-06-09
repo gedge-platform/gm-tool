@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
+import { toJS } from "mobx";
 
 class Deployment {
   currentPage = 1;
@@ -162,13 +163,17 @@ class Deployment {
   constructor() {
     makeAutoObservable(this);
   }
-  
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -178,7 +183,11 @@ class Deployment {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -227,17 +236,17 @@ class Deployment {
     });
   };
 
-      setPDeploymentList = (list) => {
-        runInAction(() => {
-          this.pDeploymentList = list;
-        })
-      };
+  setPDeploymentList = (list) => {
+    runInAction(() => {
+      this.pDeploymentList = list;
+    });
+  };
 
-      setViewList = (n) => {
-        runInAction(() => {
-          this.viewList = this.pDeploymentList[n];
-        });
-      };
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pDeploymentList[n];
+    });
+  };
 
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
@@ -268,17 +277,19 @@ class Deployment {
   };
 
   loadDeploymentList = async (type) => {
-    await axios.get(`${SERVER_URL2}/deployments`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projetType === type);
-        this.deploymentList = list;
-        this.deploymentDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL2}/deployments`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter((item) => item.projetType === type);
+          this.deploymentList = list;
+          this.deploymentDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.deploymentList, this.setPDeploymentList);
       });
-    })
-    .then(() => {
-      this.convertList(this.deploymentList, this.setPDeploymentList);
-    })
     this.loadDeploymentDetail(
       this.deploymentList[0].name,
       this.deploymentList[0].cluster,
