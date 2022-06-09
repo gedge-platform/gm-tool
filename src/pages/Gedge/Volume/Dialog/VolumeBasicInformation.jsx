@@ -1,17 +1,13 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import workspacesStore from "../../../../store/WorkSpace";
-import projectStore from "../../../../store/Project";
-import deploymentStore from "../../../../store/Deployment";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
-import clusterStore from "../../../../store/Cluster";
 import { CCreateButton } from "@/components/buttons";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { swalError } from "../../../../utils/swal-utils";
 import styled from "styled-components";
-import DeploymentPodSettins from "./DeploymentPodSettins";
-import CreateDeployment from "./CreateDeployment";
+import workspacestore from "../../../../store/WorkSpace";
+import projectStore from "../../../../store/Project";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,44 +26,16 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const DeploymentBasicInformation = observer((props) => {
-  const [projectEnable, setProjectEnable] = useState(true);
-  const [clusterEnable, setClusterEnable] = useState(true);
-  const { loadWorkSpaceList, workSpaceList } = workspacesStore;
+const VolumeBasicInformation = observer((props) => {
+  const { loadWorkSpaceList, workSpaceList } = workspacestore;
+  // const [projectEnable, setProjectEnable] = useState(true);
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const {
-    deploymentName,
-    setDeployName,
-    setCluster,
-    setWorkspace,
-    setProject,
-    workspaceName,
-    setWorkspaceName,
-  } = deploymentStore;
-  console.log(deploymentName);
-
-  const { loadClusterInProject, clusters } = clusterStore;
-
   const onChange = (e) => {
-    const { value, name } = e.target;
-    if (name === "workspace") {
-      loadProjectListInWorkspace(value);
-      setWorkspace(value);
-      setProjectEnable(false);
-      return;
-    } else if (name === "project") {
-      loadClusterInProject(value);
-      setProject(value);
-      setClusterEnable(false);
-    } else if (name === "Deployment Name") {
-      setDeployName(value);
-    }
-    // else if (name === "cluster") setCluster(value);
+    console.log(e.target.value);
   };
 
-  useEffect(() => {
-    loadWorkSpaceList();
-  }, []);
+  useEffect(() => {}, []);
+
   return (
     <>
       <div className="step-container">
@@ -77,7 +45,7 @@ const DeploymentBasicInformation = observer((props) => {
           </div>
           <div className="arr"></div>
           <div className="step">
-            <span>Pod 설정</span>
+            <span>고급 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step">
@@ -87,6 +55,23 @@ const DeploymentBasicInformation = observer((props) => {
       </div>
       <table className="tb_data_new tb_write">
         <tbody>
+          <tr>
+            <th>
+              Volume Name
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Volume Name"
+                className="form_fullWidth"
+                name="Volume Name"
+                onChange={onChange}
+                // value={volumeName}
+              />
+            </td>
+            <th></th>
+          </tr>
           <tr>
             <th>
               Workspace <span className="requried">*</span>
@@ -112,7 +97,7 @@ const DeploymentBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={projectEnable}
+                  // disabled={projectEnable}
                   name="project"
                   onChange={onChange}
                 >
@@ -127,41 +112,36 @@ const DeploymentBasicInformation = observer((props) => {
             </td>
             <th></th>
           </tr>
-          {/* <tr>
-          <th>
-            Cluster <span className="requried">*</span>
-          </th>
-          <td>
-            <FormControl className="form_fullWidth">
-              <select
-                disabled={clusterEnable && projectEnable}
-                name="cluster"
-                onChange={onChange}
-              >
-                {clusterList.map((cluster) => (
-                  <option value={cluster.clusterName}>
-                    {cluster.clusterName}
-                  </option>
-                ))}
-                <option value={"dafault"}>default</option>
-              </select>
-            </FormControl>
-          </td>
-          <th></th>
-        </tr> */}
           <tr>
             <th>
-              Deployment Name
+              Access Mode <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select name="accessMode" onChange={onChange}>
+                  <option value={0}>Select Access Mode</option>
+                  <option value={1}>ReadWriteOnce</option>
+                  <option value={2}>ReadOnlyMany</option>
+                  <option value={3}>ReadWriteMany</option>
+                  <option value={4}>ReadWriteOncePod</option>
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Volume Capacity
               <span className="requried">*</span>
             </th>
             <td>
               <CTextField
                 type="text"
-                placeholder="Deployment Name"
+                placeholder="Volume Capacity"
                 className="form_fullWidth"
-                name="Deployment Name"
+                name="Volume Capacity"
                 onChange={onChange}
-                value={deploymentName}
+                // value={volumeName}
               />
             </td>
             <th></th>
@@ -172,4 +152,4 @@ const DeploymentBasicInformation = observer((props) => {
   );
 });
 
-export default DeploymentBasicInformation;
+export default VolumeBasicInformation;

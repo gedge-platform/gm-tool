@@ -32,10 +32,12 @@ import {
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
 import { SearchV1 } from "@/components/search/SearchV1";
+import CreateVolume from "../Dialog/CreateVolume";
 
 const VolumeListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openYaml, setOpenYaml] = useState(false);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -139,11 +141,11 @@ const VolumeListTab = observer(() => {
   };
 
   const handleOpenYaml = () => {
-    setOpen(true);
+    setOpenYaml(true);
   };
 
   const handleCloseYaml = () => {
-    setOpen(false);
+    setOpenYaml(false);
   };
 
   const history = useHistory();
@@ -152,17 +154,26 @@ const VolumeListTab = observer(() => {
     loadPVolumes();
   }, []);
 
+  const handleCreateOpen = () => {
+    // setWorkspace("");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadPVolumes}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={loadPVolumes}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -182,7 +193,16 @@ const VolumeListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml
+            open={openYaml}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+          />
+          <CreateVolume
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPVolumes}
+          />
         </PanelBox>
         <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />
       </CReflexBox>

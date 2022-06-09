@@ -166,7 +166,6 @@ class Cluster {
               ? res.data.data
               : res.data.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
-          console.log(this.clusterList);
           this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = list.length;
         });
