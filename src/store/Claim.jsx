@@ -9,21 +9,18 @@ import {
 import { getItem } from "../utils/sessionStorageFn";
 import { setItem } from "../utils/sessionStorageFn";
 
-class Volume {
-  pVolumesList = [];
-  pVolume = {};
-  viewList = [];
+class Claim {
+    viewList = [];
   currentPage = 1;
   totalPages = 1;
   totalElements = 0;
-  pVolumeYamlFile = "";
-  pVolumeMetadata = {};
-  storageClasses = [];
-  storageClass = {};
-  scYamlFile = "";
-  scParameters = {};
-  scLables = {};
-  scAnnotations = {};
+  pvClaims = [];
+  pvClaim = {};
+  pvClaimList = [];
+  pvClaimYamlFile = "";
+  pvClaimAnnotations = {};
+  pvClaimLables = {};
+  pvClaimEvents = [];
   getYamlFile = "";
   resultList = {};
   events = [
@@ -109,10 +106,10 @@ class Volume {
     });
   };
 
-  setPVolumesList = (list) => {
+  setPVClaimList = (list) => {
     runInAction(() => {
-      this.pVolumesList = list;
-    });
+      this.pvClaimList = list;
+    })
   };
 
   setViewList = (n) => {
@@ -140,40 +137,47 @@ class Volume {
       });
   };
 
-  // 볼륨 관리
-  loadPVolumes = async () => {
-    await axios
-      .get(`${SERVER_URL2}/pvs`)
-      .then((res) => {
-        runInAction(() => {
-          this.pVolumesList = res.data.data;
-          this.totalElements = this.pVolumesList.length;
-        });
-      })
-      .then(() => {
-        this.convertList(this.pVolumesList, this.setPVolumesList);
-      })
-      .then(() => {
-        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
+  // 클레임 관리
+  loadPVClaims = async () => {
+    await axios.get(`${SERVER_URL2}/pvcs`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pvClaims = data;
+        this.totalElements = data.length;
       });
+    }).then(() => {
+      this.convertList(this.pvClaimList, this.setPVClaimList);
+    });
+    this.loadPVClaim(
+      this.pvClaims[0].name,
+      this.pvClaims[0].clusterName,
+      this.pvClaims[0].namespace
+    );
   };
 
-  loadPVolume = async (name, cluster) => {
+  loadPVClaim = async (name, clusterName, namespace) => {
     await axios
-      .get(`${SERVER_URL2}/pvs/${name}?cluster=${cluster}`)
+      .get(
+        `${SERVER_URL2}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
+      )
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.pVolume = data;
-          this.pVolumeYamlFile = "";
-          this.pVolumeMetadata = {};
+          this.pvClaim = data;
+          this.pvClaimYamlFile = "";
+          this.pvClaimAnnotations = {};
+          this.pvClaimLables = {};
           this.events = data.events;
-          Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
+          this.label = data.label;
+          Object.entries(this.pvClaim?.label).map(([key, value]) => {
+            this.pvClaimLables[key] = value;
+          });
+
+          Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");
-              this.pVolumeYamlFile = YAML.stringify(JSON.parse(value));
+              this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
             } catch (e) {
               if (key && value) {
-                this.pVolumeMetadata[key] = value;
+                this.pvClaimAnnotations[key] = value;
               }
             }
           });
@@ -181,57 +185,6 @@ class Volume {
       });
   };
 
-  loadStorageClasses = async () => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses`)
-      .then(({ data: { data } }) => {
-        this.storageClasses = data;
-        this.totalElements = this.storageClasses.length;
-      });
-
-    this.loadStorageClass(
-      this.storageClasses[0].name,
-      this.storageClasses[0].cluster
-    );
-  };
-
-  loadStorageClass = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        this.storageClass = data;
-        this.scYamlFile = "";
-        this.scAnnotations = {};
-        this.scLables = {};
-        this.scParameters = data.parameters;
-        this.label = data.labels;
-
-        Object.entries(this.storageClass?.annotations).forEach(
-          ([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              if (value === "true" || value === "false") {
-                throw e;
-              }
-              this.scYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.scAnnotations[key] = value;
-              }
-            }
-          }
-        );
-
-        Object.entries(this.storageClass?.labels).map(([key, value]) => {
-          this.scLables[key] = value;
-        });
-
-        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-          this.scParameters[key] = value;
-        });
-      });
-  };
 }
-
-const volumeStore = new Volume();
-export default volumeStore;
+  const claimStore = new Claim();
+  export default claimStore;

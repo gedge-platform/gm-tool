@@ -1434,6 +1434,10 @@ const globalStyles = createGlobalStyle`
   }
 }
 
+.grid-height2{
+  height: 100%;
+}
+
 //map-----------------------
 .leaflet-container {
   width: 100%;

@@ -20,6 +20,7 @@ const JobListTab = observer(() => {
   };
 
   const { 
+    viewList,
     jobList, 
     jobDetail, 
     totalElements, 
@@ -111,7 +112,7 @@ const JobListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={jobList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

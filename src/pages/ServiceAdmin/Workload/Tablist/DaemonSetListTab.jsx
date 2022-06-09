@@ -23,6 +23,11 @@ const DaemonSetListTab = observer(() => {
     totalElements,
     loadDaemonSetList,
     loadDaemonSetDetail,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = daemonSetStore;
 
   const [columDefs] = useState([
@@ -88,10 +93,14 @@ const DaemonSetListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={daemonSetList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

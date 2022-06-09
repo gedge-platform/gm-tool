@@ -1,5 +1,5 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Service {
@@ -44,7 +44,7 @@ class Service {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
@@ -54,7 +54,7 @@ class Service {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
@@ -78,7 +78,7 @@ class Service {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-
+      console.log(apiList);
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
         tempList.push(toJS(value));
@@ -119,19 +119,21 @@ class Service {
     await axios.get(`${SERVER_URL2}/services`).then((res) => {
       runInAction(() => {
         const list = res.data.data.filter((item) => item.projectType === type);
-        this.serviceList = list;
+        this.pServiceList = list;
         // this.serviceDetail = list[0];
-        this.totalElements = list.length;
+        this.totalElements = this.pServiceList.length;
       });
     }).then(() => {
-      this.convertList(this.serviceList, this.setPServiceList);
+      this.convertList(this.pServiceList, this.setPServiceList);
     })
-    this.loadServiceDetail(
-      this.serviceList[0].name,
-      this.serviceList[0].cluster,
-      this.serviceList[0].project
-    );
-  };
+    .then(() => {
+      this.loadServiceDetail(
+        this.viewList[0].name,
+        this.viewList[0].cluster,
+        this.viewList[0].project
+        );
+      });
+    };
 
   loadServiceDetail = async (name, cluster, project) => {
     await axios

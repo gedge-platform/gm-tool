@@ -1,5 +1,5 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
@@ -227,17 +227,17 @@ class Deployment {
     });
   };
 
-      setPDeploymentList = (list) => {
-        runInAction(() => {
-          this.pDeploymentList = list;
-        })
-      };
+  setPDeploymentList = (list) => {
+    runInAction(() => {
+      this.pDeploymentList = list;
+    })
+  };
 
-      setViewList = (n) => {
-        runInAction(() => {
-          this.viewList = this.pDeploymentList[n];
-        });
-      };
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pDeploymentList[n];
+    });
+  };
 
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios

@@ -13,7 +13,7 @@ import { toJS } from "mobx";
 import ReactJson from "react-json-view";
 import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
-import volumeStore from "../../../store/Volume";
+import claimStore from "../../../store/Claim";
 import styled from "styled-components";
 
 const TableTitle = styled.p`
@@ -68,7 +68,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables, pvClaim, events, label } = volumeStore;
+  const { pvClaimLables, pvClaim, events, label } = claimStore;
 
   const annotationTable = [];
 
