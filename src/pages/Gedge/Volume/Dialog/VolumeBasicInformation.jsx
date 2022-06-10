@@ -8,6 +8,9 @@ import { swalError } from "../../../../utils/swal-utils";
 import styled from "styled-components";
 import workspacestore from "../../../../store/WorkSpace";
 import projectStore from "../../../../store/Project";
+import deploymentStore from "../../../../store/Deployment";
+import clusterStore from "../../../../store/Cluster";
+import volumeStore from "../../../../store/Volume";
 
 const Button = styled.button`
   background-color: #fff;
@@ -28,13 +31,42 @@ const ButtonNext = styled.button`
 
 const VolumeBasicInformation = observer((props) => {
   const { loadWorkSpaceList, workSpaceList } = workspacestore;
-  // const [projectEnable, setProjectEnable] = useState(true);
+  const [projectEnable, setProjectEnable] = useState(true);
+  const [clusterEnable, setClusterEnable] = useState(true);
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+  const {
+    setCluster,
+    setWorkspace,
+    setProject,
+    workspaceName,
+    setWorkspaceName,
+  } = deploymentStore;
+  const { loadClusterInProject } = clusterStore;
+  const { setVolumeName, setAccessMode, setVolumeCapacity } = volumeStore;
+
   const onChange = (e) => {
-    console.log(e.target.value);
+    const { value, name } = e.target;
+    if (name === "VolumeName") {
+      setVolumeName(value);
+    } else if (name === "workspace") {
+      loadProjectListInWorkspace(value);
+      setWorkspace(value);
+      setProjectEnable(false);
+      return;
+    } else if (name === "project") {
+      loadClusterInProject(value);
+      setProject(value);
+      setClusterEnable(false);
+    } else if (name === "accessMode") {
+      setAccessMode(value);
+    } else if (name === "volumeCapacity") {
+      setVolumeCapacity(value);
+    }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadWorkSpaceList();
+  }, []);
 
   return (
     <>
@@ -65,7 +97,7 @@ const VolumeBasicInformation = observer((props) => {
                 type="text"
                 placeholder="Volume Name"
                 className="form_fullWidth"
-                name="Volume Name"
+                name="VolumeName"
                 onChange={onChange}
                 // value={volumeName}
               />
@@ -97,7 +129,7 @@ const VolumeBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select
-                  // disabled={projectEnable}
+                  disabled={projectEnable}
                   name="project"
                   onChange={onChange}
                 >
@@ -139,7 +171,7 @@ const VolumeBasicInformation = observer((props) => {
                 type="text"
                 placeholder="Volume Capacity"
                 className="form_fullWidth"
-                name="Volume Capacity"
+                name="volumeCapacity"
                 onChange={onChange}
                 // value={volumeName}
               />

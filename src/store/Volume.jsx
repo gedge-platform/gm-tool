@@ -51,6 +51,10 @@ class Volume {
   totalPages = 1;
   resultList = {};
 
+  volumeName = "";
+  accessMode = "";
+  volumeCapacity = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -128,8 +132,8 @@ class Volume {
   setPVClaimList = (list) => {
     runInAction(() => {
       this.pvClaimList = list;
-    })
-  }
+    });
+  };
 
   setViewList = (n) => {
     runInAction(() => {
@@ -140,6 +144,37 @@ class Volume {
   setMetricsLastTime = (time) => {
     runInAction(() => {
       this.lastTime = time;
+    });
+  };
+
+  setVolumeName = (name) => {
+    runInAction(() => {
+      this.volumeName = name;
+    });
+  };
+
+  setAccessMode = (name) => {
+    runInAction(() => {
+      this.accessMode = name;
+    });
+  };
+
+  setVolumeCapacity = (name) => {
+    runInAction(() => {
+      this.volumeCapacity = name;
+    });
+  };
+
+  clearAll = () => {
+    runInAction(() => {
+      this.volumeName = "";
+      // this.podReplicas = 0;
+      // this.containerName = "";
+      // this.containerImage = "";
+      // this.containerPortName = "";
+      // this.containerPort = 0;
+      // this.content = "";
+      // this.workspace = "";
     });
   };
 
@@ -199,14 +234,17 @@ class Volume {
 
   // 클레임 관리
   loadPVClaims = async () => {
-    await axios.get(`${SERVER_URL2}/pvcs`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.pvClaims = data;
-        this.totalElements = data.length;
+    await axios
+      .get(`${SERVER_URL2}/pvcs`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.pvClaims = data;
+          this.totalElements = data.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.pvClaimList, this.setPVClaimList);
       });
-    }).then(() => {
-      this.convertList(this.pvClaimList, this.setPVClaimList);
-    });
     this.loadPVClaim(
       this.pvClaims[0].name,
       this.pvClaims[0].clusterName,

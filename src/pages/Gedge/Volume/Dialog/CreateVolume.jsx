@@ -6,6 +6,9 @@ import { CDialogNew } from "../../../../components/dialogs";
 import { swalError } from "../../../../utils/swal-utils";
 import { Projection } from "leaflet";
 import VolumeBasicInformation from "./VolumeBasicInformation";
+import deploymentStore from "../../../../store/Deployment";
+import volumeStore from "../../../../store/Volume";
+import VolumeAdvancedSetting from "./VolumeAdvancedSetting";
 
 const Button = styled.button`
   background-color: #fff;
@@ -28,43 +31,78 @@ const CreateVolume = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
-  //     const template = {
-  //         apiVersion: "v1",
-  //         kind: "PersistentVolumeClaim",
-  //         metadata: {
-  //             namespace: Projection,
-  //             name: VolumeName,
-  //             labels: {}
-  //         },
-  //         spec:
-  //   accessModes:
-  //     - ReadWriteOnce
-  //   resources:
-  //     requests:
-  //       storage: 10Gi
-  //   storageClassName: local
-  //     }
+  const { volumeName, accessMode, volumeCapacity } = volumeStore;
+  const { project, workspace, setContent, clearAll } = deploymentStore;
+
+  const template = {
+    apiVersion: "v1",
+    kind: "PersistentVolumeClaim",
+    metadata: {
+      namespace: project,
+      name: volumeName,
+      labels: {},
+    },
+    spec: {
+      accessModes: {
+        accessMode,
+      },
+      resources: {
+        requests: {
+          storage: volumeCapacity,
+        },
+      },
+      storageClassName: volumeName,
+    },
+  };
+
+  const onClickStepOne = () => {
+    if (volumeName === "") {
+      swalError("Volume 이름을 입력해주세요");
+      return;
+    }
+    if (workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    if (accessMode === "") {
+      swalError("Access Mode를 선택해주세요");
+      return;
+    }
+    if (volumeCapacity === 0) {
+      swalError("Volume 용량을 입력해주세요");
+      return;
+    }
+    if (
+      volumeName !== "" &&
+      workspace !== "" &&
+      project !== "" &&
+      accessMode !== "" &&
+      volumeCapacity !== 0
+    ) {
+      setStepValue(2);
+    }
+  };
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
-    // setProjectListinWorkspace();s
+    setProjectListinWorkspace();
     setStepValue(1);
     // clearAll();
-  };
-
-  const onClickStepOne = () => {
-    setStepValue(2);
   };
 
   const onClickStepTwo = () => {
     setStepValue(3);
   };
 
-  //   const handlePreStepValue = () => {
-  //     setWorkspace();
-  //     setProject();
-  //   };
+  const handlePreStepValue = () => {
+    setWorkspace();
+    setProject();
+  };
 
   useEffect(() => {
     if (stepValue === 3) {
@@ -101,7 +139,7 @@ const CreateVolume = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
-          고급 설정
+          <VolumeAdvancedSetting />
           <div
             style={{
               display: "flex",
@@ -118,7 +156,7 @@ const CreateVolume = observer((props) => {
             >
               <Button
                 onClick={() => {
-                  //   handlePreStepValue();
+                  handlePreStepValue();
                   setStepValue(1);
                 }}
               >
@@ -129,7 +167,7 @@ const CreateVolume = observer((props) => {
           </div>
         </>
       );
-    } else if (stepValue === 3) {
+    } else {
       return (
         <>
           Yaml
@@ -153,7 +191,7 @@ const CreateVolume = observer((props) => {
           </div>
         </>
       );
-    } else return <DeploymentPopup />;
+    }
   };
 
   return (
