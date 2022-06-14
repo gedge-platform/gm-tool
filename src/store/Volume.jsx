@@ -53,7 +53,12 @@ class Volume {
 
   volumeName = "";
   accessMode = "";
-  volumeCapacity = 0;
+  volumeCapacity = "";
+
+  content = "";
+  responseData = "";
+  clusterName = "";
+  project = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -147,9 +152,9 @@ class Volume {
     });
   };
 
-  setVolumeName = (name) => {
+  setVolumeName = (value) => {
     runInAction(() => {
-      this.volumeName = name;
+      this.volumeName = value;
     });
   };
 
@@ -159,22 +164,40 @@ class Volume {
     });
   };
 
-  setVolumeCapacity = (name) => {
+  setVolumeCapacity = (value) => {
     runInAction(() => {
-      this.volumeCapacity = name;
+      this.volumeCapacity = value;
+    });
+  };
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
+
+  setCluster = (clusterName) => {
+    runInAction(() => {
+      this.cluster = clusterName;
+    });
+  };
+  setProject = (project) => {
+    runInAction(() => {
+      this.project = project;
     });
   };
 
   clearAll = () => {
     runInAction(() => {
       this.volumeName = "";
-      // this.podReplicas = 0;
-      // this.containerName = "";
-      // this.containerImage = "";
-      // this.containerPortName = "";
-      // this.containerPort = 0;
-      // this.content = "";
-      // this.workspace = "";
+      this.content = "";
+      this.volumeCapacity = 0;
     });
   };
 
@@ -331,6 +354,27 @@ class Volume {
         Object.entries(this.storageClass?.parameters).map(([key, value]) => {
           this.scParameters[key] = value;
         });
+      });
+  };
+
+  createVolume = (template) => {
+    const body = {
+      template,
+    };
+    axios
+      .post(
+        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${clusterName}`,
+        body
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("Volume이 생성되었습니다!", callback);
+        }
+      })
+      .catch((err) => {
+        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        console.error(err);
       });
   };
 }

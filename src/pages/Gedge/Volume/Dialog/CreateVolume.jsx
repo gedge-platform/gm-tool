@@ -9,6 +9,10 @@ import VolumeBasicInformation from "./VolumeBasicInformation";
 import deploymentStore from "../../../../store/Deployment";
 import volumeStore from "../../../../store/Volume";
 import VolumeAdvancedSetting from "./VolumeAdvancedSetting";
+import VolumYamlPopup from "./VolumYamlPopup";
+import VolumePopup from "./VolumePopup";
+import projectStore from "../../../../store/Project";
+import schedulerStore from "../../../../store/Scheduler";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,28 +34,40 @@ const ButtonNext = styled.button`
 const CreateVolume = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-
-  const { volumeName, accessMode, volumeCapacity } = volumeStore;
-  const { project, workspace, setContent, clearAll } = deploymentStore;
+  const { setProjectListinWorkspace } = projectStore;
+  const {
+    volumeName,
+    setVolumeName,
+    accessMode,
+    volumeCapacity,
+    setVolumeCapacity,
+    responseData,
+    setResponseData,
+    content,
+    setContent,
+    clearAll,
+    createVolume,
+  } = volumeStore;
+  const { workspace, setWorkspace, project, setProject } = deploymentStore;
 
   const template = {
     apiVersion: "v1",
     kind: "PersistentVolumeClaim",
     metadata: {
-      namespace: project,
       name: volumeName,
+      namespace: project,
       labels: {},
     },
     spec: {
+      storageClassName: "manual",
       accessModes: {
         accessMode,
       },
       resources: {
         requests: {
-          storage: volumeCapacity,
+          storage: Number(volumeCapacity) + "Gi",
         },
       },
-      storageClassName: volumeName,
     },
   };
 
@@ -72,7 +88,7 @@ const CreateVolume = observer((props) => {
       swalError("Access Mode를 선택해주세요");
       return;
     }
-    if (volumeCapacity === 0) {
+    if (volumeCapacity === "") {
       swalError("Volume 용량을 입력해주세요");
       return;
     }
@@ -81,7 +97,7 @@ const CreateVolume = observer((props) => {
       workspace !== "" &&
       project !== "" &&
       accessMode !== "" &&
-      volumeCapacity !== 0
+      volumeCapacity !== ""
     ) {
       setStepValue(2);
     }
@@ -92,7 +108,7 @@ const CreateVolume = observer((props) => {
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
-    // clearAll();
+    clearAll();
   };
 
   const onClickStepTwo = () => {
@@ -102,6 +118,10 @@ const CreateVolume = observer((props) => {
   const handlePreStepValue = () => {
     setWorkspace();
     setProject();
+  };
+
+  const CreateVolume = () => {
+    createVolume(require("json-to-pretty-yaml").stringify(template));
   };
 
   useEffect(() => {
@@ -167,10 +187,10 @@ const CreateVolume = observer((props) => {
           </div>
         </>
       );
-    } else {
+    } else if (stepValue === 3) {
       return (
         <>
-          Yaml
+          <VolumYamlPopup />
           <div
             style={{
               display: "flex",
@@ -191,7 +211,7 @@ const CreateVolume = observer((props) => {
           </div>
         </>
       );
-    }
+    } else <VolumePopup />;
   };
 
   return (
