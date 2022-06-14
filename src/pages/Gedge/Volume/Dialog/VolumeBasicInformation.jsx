@@ -8,6 +8,9 @@ import { swalError } from "../../../../utils/swal-utils";
 import styled from "styled-components";
 import workspacestore from "../../../../store/WorkSpace";
 import projectStore from "../../../../store/Project";
+import deploymentStore from "../../../../store/Deployment";
+import clusterStore from "../../../../store/Cluster";
+import volumeStore from "../../../../store/Volume";
 
 const Button = styled.button`
   background-color: #fff;
@@ -26,15 +29,52 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const VolumeBasicInformation = observer((props) => {
+const volumeBasicInformation = observer((props) => {
   const { loadWorkSpaceList, workSpaceList } = workspacestore;
-  // const [projectEnable, setProjectEnable] = useState(true);
+  const [projectEnable, setProjectEnable] = useState(true);
+  const [clusterEnable, setClusterEnable] = useState(true);
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+  const {
+    setCluster,
+    setWorkspace,
+    setProject,
+    workspaceName,
+    setWorkspaceName,
+  } = deploymentStore;
+  const { loadClusterInProject, clusters, setClusters } = clusterStore;
+  console.log(clusters);
+  console.log(loadClusterInProject);
+  const {
+    setVolumeName,
+    setAccessMode,
+    setVolumeCapacity,
+    volumeCapacity,
+    volumeName,
+  } = volumeStore;
+
   const onChange = (e) => {
-    console.log(e.target.value);
+    const { value, name } = e.target;
+    if (name === "VolumeName") {
+      setVolumeName(value);
+    } else if (name === "workspace") {
+      loadProjectListInWorkspace(value);
+      setWorkspace(value);
+      setProjectEnable(false);
+      return;
+    } else if (name === "project") {
+      loadClusterInProject(value);
+      setProject(value);
+      setClusterEnable(false);
+    } else if (name === "accessMode") {
+      setAccessMode(value);
+    } else if (name === "volumeCapacity") {
+      setVolumeCapacity(value);
+    }
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    loadWorkSpaceList();
+  }, []);
 
   return (
     <>
@@ -65,9 +105,9 @@ const VolumeBasicInformation = observer((props) => {
                 type="text"
                 placeholder="Volume Name"
                 className="form_fullWidth"
-                name="Volume Name"
+                name="VolumeName"
                 onChange={onChange}
-                // value={volumeName}
+                value={volumeName}
               />
             </td>
             <th></th>
@@ -97,7 +137,7 @@ const VolumeBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select
-                  // disabled={projectEnable}
+                  disabled={projectEnable}
                   name="project"
                   onChange={onChange}
                 >
@@ -114,16 +154,62 @@ const VolumeBasicInformation = observer((props) => {
           </tr>
           <tr>
             <th>
+              Cluster <span className="requried">*</span>
+            </th>
+            <td>
+              <table className="tb_data_new">
+                <tbody className="tb_data_nodeInfo">
+                  <tr>
+                    <th></th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>생성자</th>
+                    <th>노드개수</th>
+                    <th>IP</th>
+                    <th>생성날짜</th>
+                  </tr>
+                  {clusters.map(
+                    ({
+                      clusterName,
+                      clusterType,
+                      clusterEndpoint,
+                      nodeCnt,
+                      clusterCreator,
+                      created_at,
+                    }) => (
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          <input
+                            type="checkbox"
+                            name="clusterCheck"
+                            onChange={(e) => checkCluster(e, clusterName)}
+                          />
+                        </td>
+                        <td>{clusterName}</td>
+                        <td>{clusterType}</td>
+                        <td>{clusterCreator}</td>
+                        <td>{nodeCnt}</td>
+                        <td>{clusterEndpoint}</td>
+                        <td>{dateFormatter(created_at)}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th>
               Access Mode <span className="requried">*</span>
             </th>
             <td>
               <FormControl className="form_fullWidth">
                 <select name="accessMode" onChange={onChange}>
-                  <option value={0}>Select Access Mode</option>
-                  <option value={1}>ReadWriteOnce</option>
-                  <option value={2}>ReadOnlyMany</option>
-                  <option value={3}>ReadWriteMany</option>
-                  <option value={4}>ReadWriteOncePod</option>
+                  <option value="Select Access Mode">Select Access Mode</option>
+                  <option value="ReadWriteOnce">ReadWriteOnce</option>
+                  <option value="ReadWriteOnce">ReadWriteOnce</option>
+                  <option value="ReadWriteOnce">ReadWriteOnce</option>
+                  <option value="ReadWriteOncePod">ReadWriteOncePod</option>
                 </select>
               </FormControl>
             </td>
@@ -136,12 +222,12 @@ const VolumeBasicInformation = observer((props) => {
             </th>
             <td>
               <CTextField
-                type="text"
+                type="number"
                 placeholder="Volume Capacity"
                 className="form_fullWidth"
-                name="Volume Capacity"
+                name="volumeCapacity"
                 onChange={onChange}
-                // value={volumeName}
+                value={volumeCapacity}
               />
             </td>
             <th></th>
@@ -152,4 +238,4 @@ const VolumeBasicInformation = observer((props) => {
   );
 });
 
-export default VolumeBasicInformation;
+export default volumeBasicInformation;

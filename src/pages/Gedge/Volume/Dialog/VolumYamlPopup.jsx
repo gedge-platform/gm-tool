@@ -1,13 +1,12 @@
 import { observer } from "mobx-react";
 import React from "react";
-import deploymentStore from "../../../../store/Deployment";
+import volumeStore from "../../../../store/Volume";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const DeploymentYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
-  console.log(content);
+const VolumYamlPopup = observer(() => {
+  const { content, setContent } = volumeStore;
 
   return (
     <>
@@ -18,7 +17,7 @@ const DeploymentYaml = observer(() => {
           </div>
           <div className="arr"></div>
           <div className="step">
-            <span>Pod 설정</span>
+            <span>고급 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">
@@ -33,7 +32,7 @@ const DeploymentYaml = observer(() => {
         name="editor"
         width="90%"
         onChange={(value) => {
-          // setContent(value);
+          //   setContent(value);
         }}
         fontSize={14}
         showPrintMargin={true}
@@ -53,4 +52,4 @@ const DeploymentYaml = observer(() => {
   );
 });
 
-export default DeploymentYaml;
+export default VolumYamlPopup;

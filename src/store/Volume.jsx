@@ -51,6 +51,15 @@ class Volume {
   totalPages = 1;
   resultList = {};
 
+  volumeName = "";
+  accessMode = "";
+  volumeCapacity = "";
+
+  content = "";
+  responseData = "";
+  clusterName = "";
+  project = "";
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -128,8 +137,8 @@ class Volume {
   setPVClaimList = (list) => {
     runInAction(() => {
       this.pvClaimList = list;
-    })
-  }
+    });
+  };
 
   setViewList = (n) => {
     runInAction(() => {
@@ -140,6 +149,55 @@ class Volume {
   setMetricsLastTime = (time) => {
     runInAction(() => {
       this.lastTime = time;
+    });
+  };
+
+  setVolumeName = (value) => {
+    runInAction(() => {
+      this.volumeName = value;
+    });
+  };
+
+  setAccessMode = (name) => {
+    runInAction(() => {
+      this.accessMode = name;
+    });
+  };
+
+  setVolumeCapacity = (value) => {
+    runInAction(() => {
+      this.volumeCapacity = value;
+    });
+  };
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
+
+  setCluster = (clusterName) => {
+    runInAction(() => {
+      this.cluster = clusterName;
+    });
+  };
+  setProject = (project) => {
+    runInAction(() => {
+      this.project = project;
+    });
+  };
+
+  clearAll = () => {
+    runInAction(() => {
+      this.volumeName = "";
+      this.content = "";
+      this.volumeCapacity = 0;
     });
   };
 
@@ -199,14 +257,17 @@ class Volume {
 
   // 클레임 관리
   loadPVClaims = async () => {
-    await axios.get(`${SERVER_URL2}/pvcs`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.pvClaims = data;
-        this.totalElements = data.length;
+    await axios
+      .get(`${SERVER_URL2}/pvcs`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.pvClaims = data;
+          this.totalElements = data.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.pvClaimList, this.setPVClaimList);
       });
-    }).then(() => {
-      this.convertList(this.pvClaimList, this.setPVClaimList);
-    });
     this.loadPVClaim(
       this.pvClaims[0].name,
       this.pvClaims[0].clusterName,
@@ -293,6 +354,27 @@ class Volume {
         Object.entries(this.storageClass?.parameters).map(([key, value]) => {
           this.scParameters[key] = value;
         });
+      });
+  };
+
+  createVolume = (template) => {
+    const body = {
+      template,
+    };
+    axios
+      .post(
+        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${clusterName}`,
+        body
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("Volume이 생성되었습니다!", callback);
+        }
+      })
+      .catch((err) => {
+        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        console.error(err);
       });
   };
 }

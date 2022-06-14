@@ -44,7 +44,6 @@ const DeploymentBasicInformation = observer((props) => {
     workspaceName,
     setWorkspaceName,
   } = deploymentStore;
-  console.log(deploymentName);
 
   const { loadClusterInProject, clusters } = clusterStore;
 
