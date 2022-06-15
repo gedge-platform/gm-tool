@@ -272,9 +272,9 @@ const Detail = observer(() => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
+        <CTab label="Projects" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-        <CTab label="Projects" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -292,8 +292,13 @@ const Detail = observer(() => {
                 <th>Creator</th>
                 <td>{workSpaceDetail.memberName}</td>
               </tr>
-              <tr>
-                <th>Resource Usage</th>
+            </tbody>
+          </table>
+        </div>
+        <div className="tb_container">
+        <TableTitle>Resource Usage</TableTitle>
+            <tbody>
+            <tr className="tb_workload_detail_th">
                 <td colSpan={4}>
                   {dataUsage ? (
                     <>
@@ -318,13 +323,16 @@ const Detail = observer(() => {
                 </td>
               </tr>
             </tbody>
-          </table>
+
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">{resourcesTable()}</div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">{clusterProjectTable()}</div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
@@ -361,7 +369,7 @@ const Detail = observer(() => {
           <br />
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
+      <CTabPanel value={tabvalue} index={4}>
         <EventAccordion events={events} />
         {/* <div className="tb_container">
           {eventsTable()}
@@ -371,9 +379,7 @@ const Detail = observer(() => {
           <br />
         </div> */}
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={4}>
-        <div className="tb_container">{clusterProjectTable()}</div>
-      </CTabPanel>
+  
     </PanelBox>
   );
 });
