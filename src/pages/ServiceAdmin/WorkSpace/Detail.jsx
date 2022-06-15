@@ -125,6 +125,7 @@ const Detail = observer(() => {
     // selectProject,
     changeCluster,
     changeProject,
+    selectClusters,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
   const eventsTable = () => {
@@ -191,22 +192,25 @@ const Detail = observer(() => {
             <tr>
               {detailInfo ? (
                 <>
-                <tr>
-                  <th> Name</th>
-                  <td>{project?.projectName}</td>
-                  <th>Cluster</th>
-                  <td>{project?.selectCluster}</td>
-                </tr>
-                <tr>
-                  <th> Create</th>
-                  <td>{dateFormatter(project?.created_at)}</td>
-                  <th>Creator</th>
-                  <td>{project?.projectCreator}</td>
-                </tr>
+                  <tr>
+                    <th> Name</th>
+                    <td>{project?.projectName}</td>
+                    <th>Cluster</th>
+                    <td>
+                      {selectClusters.map((item) => item.clusterName + " ")}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>{dateFormatter(project?.created_at)}</td>
+                    <th>Creator</th>
+                    <td>
+                      {project?.projectCreator ? project?.projectCreator : "-"}
+                    </td>
+                  </tr>
                 </>
               ) : (
-                <>
-                </>
+                <></>
               )}
             </tr>
           </tbody>
@@ -215,7 +219,6 @@ const Detail = observer(() => {
       </>
     ));
   };
-  
 
   const resourcesTable = () => {
     return (
@@ -223,7 +226,7 @@ const Detail = observer(() => {
         {/* <ClusterTitle>{workSpaceDetail.workspaceName}</ClusterTitle> */}
         <table className="tb_data" style={{ tableLayout: "fixed" }}>
           <tbody>
-            {workSpaceDetail.resource? (
+            {workSpaceDetail.resource ? (
               <>
                 <tr>
                   <th>Deployment</th>
@@ -278,38 +281,36 @@ const Detail = observer(() => {
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr className="tb_workload_detail_th">
-                <th>Name</th>
+                <th>Workspace Name</th>
                 <td>{workSpaceDetail.workspaceName}</td>
-                <th>Cluster</th>
-                <td>{workSpaceDetail.selectProject ? workSpaceDetail.selectProject : "-"}</td>
+                <th>Description</th>
+                <td>{workSpaceDetail.workspaceDescription}</td>
               </tr>
               <tr>
-                <th>Workspace</th>
-                <td>{workSpaceDetail.workspaceName}</td>
+                <th>Cluster Name</th>
+                <td>{selectClusters.map((item) => item.clusterName + " ")}</td>
                 <th>Creator</th>
-                <td>{workSpaceDetail.workspaceCreator}</td>
-              </tr>
-              <tr>
-                <th>Owner</th>
-                <td>{workSpaceDetail.workspaceOwner}</td>
-                <th>Created</th>
-                <td>{dateFormatter(workSpaceDetail.created_at)}</td>
+                <td>{workSpaceDetail.memberName}</td>
               </tr>
               <tr>
                 <th>Resource Usage</th>
                 <td colSpan={4}>
                   {dataUsage ? (
                     <>
-                    <table className="tb_data">
-                      <tbody>
-                        <tr>
-                        <th>CPU</th>
-                        <td>{dataUsage?.cpu_usage}</td>
-                        <th>MEMORY</th>
-                        <td>{dataUsage?.memory_usage}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "307px" }}>CPU</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.cpu_usage}
+                            </td>
+                            <th style={{ width: "307px" }}>MEMORY</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.memory_usage}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </>
                   ) : (
                     <>-</>

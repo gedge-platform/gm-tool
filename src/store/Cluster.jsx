@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { apiV2, SERVER_URL2 } from "../config";
 
 class Cluster {
   clusterList = [];
@@ -156,15 +156,13 @@ class Cluster {
 
   loadClusterList = async (type = "") => {
     await axios
-      .get(`${SERVER_URL}/clusters`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${SERVER_URL2}/cluster`)
       .then((res) => {
         runInAction(() => {
           const list =
             type === ""
-              ? res.data.data
-              : res.data.data.filter((item) => item.clusterType === type);
+              ? res.data
+              : res.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
           this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = list.length;
@@ -180,29 +178,21 @@ class Cluster {
   };
 
   loadCluster = async (clusterName) => {
-    await axios
-      .get(`${SERVER_URL}/clusters/${clusterName}`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.clusterDetail = data;
-        });
+    await axios.get(`${SERVER_URL2}/cluster/${clusterName}`).then((res) => {
+      runInAction(() => {
+        this.clusterDetail = res.data;
       });
+    });
   };
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`${SERVER_URL}/clusterInfo?project=${project}`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${apiV2}/clusterInfo?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {
     await axios
-      .get(`${SERVER_URL}/clusters?workspace=${workspace}`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${SERVER_URL2}/clusters?workspace=${workspace}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 

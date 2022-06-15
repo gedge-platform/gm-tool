@@ -53,11 +53,17 @@ const UserServiceListTab = observer(() => {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "워크스페이스",
       field: "workspaceName",
       filter: true,
+      cellRenderer: function ({ data: { workspace } }) {
+        return `<span>${workspace.workspaceName}</span>`;
+      },
     },
     {
       headerName: "생성날짜",
