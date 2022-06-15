@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { CDialog } from "@/components/dialogs";
+import { CDialogNew } from "../../../../components/dialogs";
 import { swalUpdate } from "@/utils/swal-utils";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
@@ -10,28 +11,13 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import VolumeYaml from "./VolumeYaml";
 import volumeStore from "@/store/Volume";
-// import workspacesStore from "../../../../store/WorkSpace";
-// import projectStore from "../../../../store/Project";
-// // import DeploymentBasicInformation from "./DeploymentBasicInformation";
-// import DeploymentPodSettins from "./DeploymentPodSettins";
-// import deploymentStore from "../../../../store/Deployment";
-// import DeploymentYaml from "./DeploymentYaml";
 
 const Button = styled.button`
-  background-color: ##eff4f9;
-  border: 1px solid #ccd3db;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
-`;
-
-const ButtonNext = styled.button`
-  background-color: #242e42;
+  background-color: #0f5ce9;
   color: white;
-  border: 1px solid #242e42;
-  padding: 10px 20px;
-  border-radius: 20px;
-  box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%);
+  border: none;
+  padding: 10px 35px;
+  border-radius: 4px;
 `;
 
 const ViewDialog = observer((props) => {
@@ -66,17 +52,17 @@ const ViewDialog = observer((props) => {
   };
 
   return (
-    <CDialog
+    <CDialogNew
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Create Deployment"}
+      title={"Create Volume"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
     >
       {ViewOfComponent()}
-    </CDialog>
+    </CDialogNew>
   );
 });
 export default ViewDialog;

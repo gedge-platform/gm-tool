@@ -68,6 +68,7 @@ const Circle = styled.div`
 const CreateProject = observer((props) => {
   const { open } = props;
   const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
+  console.log(clusters);
   const { workSpaceList, loadWorkSpaceList } = workspacesStore;
   const { createProject } = projectStore;
 
