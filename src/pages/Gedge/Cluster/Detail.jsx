@@ -163,7 +163,7 @@ const Detail = observer((props) => {
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody className="tb_data_detail">
+            {/* <tbody className="tb_data_detail">
               <tr>
                 <th>Cluster Name</th>
                 <td>{clusterName}</td>
@@ -180,7 +180,7 @@ const Detail = observer((props) => {
                 <th>Created</th>
                 <td>{dateFormatter(created_at)}</td>
               </tr>
-            </tbody>
+            </tbody> */}
           </table>
           <br />
 

@@ -36,18 +36,21 @@ const WorkspaceListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "selectCluster",
+      headerName: "설명",
+      field: "workspaceDescription",
       filter: true,
     },
     {
-      headerName: "OWNER",
-      field: "workspaceOwner",
+      headerName: "클러스터",
+      field: "memberName",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "CREATOR",
-      field: "workspaceCreator",
+      field: "memberName",
       filter: true,
     },
     {
