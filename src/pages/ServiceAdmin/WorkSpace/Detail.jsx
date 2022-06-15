@@ -126,34 +126,9 @@ const Detail = observer(() => {
     changeCluster,
     changeProject,
     selectClusters,
+    selectClusterInfo,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
-  const eventsTable = () => {
-    return (
-      <EventWrap className="event-wrap">
-        <FormControl>
-          <Select
-            value={selectProject}
-            inputProps={{ "aria-label": "Without label" }}
-            onChange={projectChange}
-          >
-            {projectList.map((project) => (
-              <MenuItem
-                style={{
-                  color: "black",
-                  backgroundColor: "white",
-                  fontSize: 15,
-                }}
-                value={project}
-              >
-                {project}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </EventWrap>
-    );
-  };
 
   const projectChange = (e) => {
     changeProject(e.target.value);
@@ -197,7 +172,7 @@ const Detail = observer(() => {
                     <td>{project?.projectName}</td>
                     <th>Cluster</th>
                     <td>
-                      {selectClusters.map((item) => item.clusterName + " ")}
+                      {selectClusterInfo.map((item) => item.clusterName + " ")}
                     </td>
                   </tr>
                   <tr>
@@ -288,7 +263,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td>{selectClusters.map((item) => item.clusterName + " ")}</td>
+                <td>
+                  {selectClusterInfo.map((item) => item.clusterName + " ")}
+                </td>
                 <th>Creator</th>
                 <td>{workSpaceDetail.memberName}</td>
               </tr>
@@ -304,6 +281,8 @@ const Detail = observer(() => {
                             <td style={{ width: "307px" }}>
                               {dataUsage?.cpu_usage}
                             </td>
+                          </tr>
+                          <tr>
                             <th style={{ width: "307px" }}>MEMORY</th>
                             <td style={{ width: "307px" }}>
                               {dataUsage?.memory_usage}
@@ -363,13 +342,6 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          {eventsTable()}
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsMessageTable}</tbody>
-          </table>
-          <br />
-        </div> */}
       </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">{clusterProjectTable()}</div>

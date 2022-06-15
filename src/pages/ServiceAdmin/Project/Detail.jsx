@@ -137,10 +137,6 @@ const Detail = observer(() => {
             <tr>
               {cluster?.resourceUsage ? (
                 <>
-                  <th>Cluster Type</th>
-                  <td>{cluster?.resourceUsage?.cpu_usage}</td>
-                  <th>Cluster Endpoint</th>
-                  <td>{cluster?.resourceUsage?.memory_usage}</td>
                   <th>CPU</th>
                   <td>{cluster?.resourceUsage?.cpu_usage}</td>
                   <th>MEMORY</th>
