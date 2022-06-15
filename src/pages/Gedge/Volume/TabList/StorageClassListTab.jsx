@@ -9,9 +9,14 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import axios from "axios";
+
+
+
+
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import StorageClassDetail from "../StorageClassDetail";
-import volumeStore from "@/store/Volume";
+//import volumeStore from "@/store/Volume";
+import volumeStore from "@/store/StorageClass"
 import ViewYaml from "../Dialog/ViewYaml";
 import {
   converterCapacity,
@@ -26,6 +31,7 @@ const StorageClassListTab = observer(() => {
   };
 
   const {
+    storageClassMetadata,
     storageClasses,
     storageClass,
     scYamlFile,
@@ -33,10 +39,17 @@ const StorageClassListTab = observer(() => {
     scLables,
     scAnnotations,
     totalElements,
+    setCurrentPage,
+    setTotalPages,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
     getYamlFile,
     loadVolumeYaml,
     loadStorageClasses,
     loadStorageClass,
+    viewList,
   } = volumeStore;
 
   const [columDefs] = useState([
@@ -118,6 +131,9 @@ const StorageClassListTab = observer(() => {
     loadStorageClasses();
   }, []);
 
+
+  
+
   return (
     <>
       <CReflexBox>
@@ -135,18 +151,23 @@ const StorageClassListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  onCellClicked={handleOpen}
-                  rowData={storageClasses}
-                  columnDefs={columDefs}
-                  isBottom={true}
-                  totalElements={totalElements}
+                     onCellClicked={handleOpen}
+                    //  rowData={viewList}
+                     rowData={viewList}
+                     columnDefs={columDefs}
+                     isBottom={false}
+                     totalElements={totalElements}
+                     totalPages={totalPages}
+                     currentPage={currentPage}
+                     goNextPage={goNextPage}
+                     goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
         </PanelBox>
-        <StorageClassDetail />
+        <StorageClassDetail/>
       </CReflexBox>
     </>
   );
