@@ -17,9 +17,10 @@ import {
   nullCheck,
 } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
-import volumeStore from "../../../store/Volume";
+
 import { create } from "lodash";
 import styled from "styled-components";
+import StorageClassStore from "../../../store/StorageClass";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -63,7 +64,7 @@ const Label = styled.span`
   }
 `;
 
-const StorageClassDetail = observer(() => {
+const StorageClassDetail = observer(({ }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -71,36 +72,11 @@ const StorageClassDetail = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { storageClass, scAnnotations, scLables, scParameters, label } =
-    volumeStore;
+  const { storageClass,events, annotations,label } =
+  StorageClassStore;
 
-  const annotationTable = [];
-  const labelTable = [];
-  const parameterTable = [];
 
-  // const createTableTemplate = (table, param) => {
-  //   if (param) {
-  //     Object.entries(param).map(([key, value]) => {
-  //       table.push(
-  //         <tr>
-  //           <th style={{ width: "30%" }}>{key}</th>
-  //           <td>{value}</td>
-  //         </tr>
-  //       );
-  //     });
-  //   } else {
-  //     table.push(
-  //       <tr>
-  //         <th className="tb_volume_detail_th">Emtpy</th>
-  //         <td></td>
-  //       </tr>
-  //     );
-  //   }
-  // };
 
-  // createTableTemplate(annotationTable, scAnnotations);
-  // createTableTemplate(labelTable, scLables);
-  // createTableTemplate(parameterTable, scParameters);
 
   const metaTable = [];
   if (storageClass?.annotations) {
@@ -183,7 +159,7 @@ const StorageClassDetail = observer(() => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
-        <div className="panelCont">
+      <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
             {label ? (
@@ -199,34 +175,39 @@ const StorageClassDetail = observer(() => {
           </LabelContainer>
           <br />
 
-          <TableTitle>Annotaions</TableTitle>
-          <table className="tb_data">
-            <tbody>{metaTable}</tbody>
-          </table>
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
-        <div className="panelCont">
-          {scParameters ? (
-            <table className="tb_data">
-              <tbody>
-                {Object.entries(scParameters).map(([key, value]) => (
+          <TableTitle>Annotations</TableTitle>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(annotations).map(([key, value]) => (
                   <tr>
-                    <th style={{ width: "30%" }}>{key}</th>
-                    <td>{value}</td>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
             <LabelContainer>
-              <p>No Parameters Info.</p>
+              <p>No Annotations Info.</p>
             </LabelContainer>
           )}
-
-          {/* <table className="tb_data">
-            <tbody>{scParameters ? parameterTable : "-"}</tbody>
-          </table> */}
+          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={2}>
+      <EventAccordion events={events} />
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
+        <div className="panelCont">
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th className="tb_volume_detail_th">value</th>
+                <td>{storageClass?.finalizers}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>

@@ -9,7 +9,7 @@ import {
 import { getItem } from "../utils/sessionStorageFn";
 import { setItem } from "../utils/sessionStorageFn";
 
-class Volume {
+class StorageClass {
   viewList = [];
   currentPage = 1;
   totalPages = 1;
@@ -35,6 +35,7 @@ class Volume {
     },
   ];
   label = {};
+  annotations = {};
 
   currentPage = 1;
   totalPages = 1;
@@ -169,6 +170,7 @@ class Volume {
         this.scLables = {};
         this.scParameters = data.parameters;
         this.label = data.labels;
+        this.annotations = data.annotations;
 
         Object.entries(this.storageClass?.annotations).forEach(
           ([key, value]) => {
@@ -197,5 +199,5 @@ class Volume {
   };
 }
 
-const volumeStore = new Volume();
-export default volumeStore;
+const StorageClassStore = new StorageClass();
+export default StorageClassStore;
