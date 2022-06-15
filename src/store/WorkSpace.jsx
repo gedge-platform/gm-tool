@@ -28,7 +28,7 @@ class Workspace {
   selectCluster = "";
   dataUsage = {};
   projectList = [];
-  selectClusters = [
+  selectClusterInfo = [
     {
       clusterEndpoint: "",
       clusterType: "",
@@ -65,7 +65,7 @@ class Workspace {
         }
         this.detailInfo = res.data.projectList;
         // this.selectCluster = this.clusterList[0];
-        this.selectClusters = res.data.selectCluster;
+        this.selectClusterInfo = res.data.selectCluster;
 
         // this.projectList = this.detailInfo.map(
         //   (project) => project.projectName
@@ -145,6 +145,12 @@ class Workspace {
       .catch((err) => {
         swalError("삭제에 실패하였습니다.");
       });
+  };
+
+  setSelectClusterInfo = (selectClusterInfo) => {
+    runInAction(() => {
+      this.selectClusterInfo = selectClusterInfo;
+    });
   };
 }
 

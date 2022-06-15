@@ -68,8 +68,12 @@ const Circle = styled.div`
 const CreateProject = observer((props) => {
   const { open } = props;
   const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
-  const { workSpaceList, loadWorkSpaceList, selectCluster } = workspacesStore;
-  console.log(workSpaceList);
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    selectClusterInfo,
+    setSelectClusterInfo,
+  } = workspacesStore;
   const { createProject } = projectStore;
 
   const [projectName, setProjectName] = useState("");
@@ -90,7 +94,8 @@ const CreateProject = observer((props) => {
     setProjectDescription("");
     setWorkspace("");
     setSelectClusters([]);
-    setClusters([]);
+    // setClusters([]);
+    setSelectClusterInfo([]);
     setToggle(false);
     setCheck(false);
   };
@@ -98,10 +103,11 @@ const CreateProject = observer((props) => {
   const onChange = ({ target: { name, value } }) => {
     if (name === "workspace") {
       if (value === "") {
-        setClusters([]);
+        // setClusters([]);
+        setSelectClusterInfo([]);
         return;
       }
-      loadClusterInWorkspace(value);
+      // loadClusterInWorkspace(value);
       setSelectClusters([]);
       setWorkspace(value);
     } else if (name === "projectName") {
@@ -149,7 +155,7 @@ const CreateProject = observer((props) => {
       swalError("워크스페이스를 확인해주세요!");
       return;
     }
-    if (selectCluster.length === 0) {
+    if (selectClusters.length === 0) {
       swalError("클러스터를 확인해주세요!");
       return;
     }
@@ -261,7 +267,7 @@ const CreateProject = observer((props) => {
             <th>
               Cluster <span className="requried">*</span>
             </th>
-            {/* <td>
+            <td>
               <table className="tb_data_new">
                 <tbody className="tb_data_nodeInfo">
                   <tr>
@@ -270,7 +276,7 @@ const CreateProject = observer((props) => {
                     <th>타입</th>
                     <th>IP</th>
                   </tr>
-                  {selectCluster.map(
+                  {selectClusterInfo.map(
                     ({ clusterName, clusterType, clusterEndpoint }) => (
                       <tr>
                         <td style={{ textAlign: "center" }}>
@@ -288,7 +294,7 @@ const CreateProject = observer((props) => {
                   )}
                 </tbody>
               </table>
-            </td> */}
+            </td>
           </tr>
         </tbody>
       </table>
