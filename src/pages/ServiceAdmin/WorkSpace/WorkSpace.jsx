@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import APIListTab from "./TabList/APIListTab";
+import WorkspaceListTab from "./TabList/APIListTab";
 
 const WorkSpace = () => {
-  const currentPageTitle = Title.WorkSpace;
+  // const currentPageTitle = Title.WorkSpace;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -14,10 +14,11 @@ const WorkSpace = () => {
   };
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <Layout currentPageTitle="워크스페이스">
+      <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}></CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <APIListTab />
+          <WorkspaceListTab />
         </CTabPanel>
       </div>
     </Layout>

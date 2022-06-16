@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import requestStatusStore from "../../../../store/RequestStatus";
 import { toJS } from "mobx";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
@@ -20,6 +19,11 @@ const RequestStatusTab = observer(() => {
   };
 
   const { requestList, loadRequestList } = requestStatusStore;
+
+  const clusterName = requestList.map((list) =>
+    list.cluster.map((cluster) => cluster.clusterName)
+  );
+
   const [columDefs] = useState([
     {
       headerName: "ID",
@@ -30,6 +34,16 @@ const RequestStatusTab = observer(() => {
       headerName: "타입",
       field: "type",
       filter: true,
+    },
+    {
+      headerName: "클러스터",
+      field: "cluster",
+      filter: true,
+      cellRenderer: function ({ data: { cluster } }) {
+        return `<sapn>${cluster.map(
+          (clusters) => clusters.clusterName
+        )}</span>`;
+      },
     },
     {
       headerName: "상태",
@@ -65,9 +79,7 @@ const RequestStatusTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);

@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import statefulSetStore from "../../../store/StatefulSet";
 import { observer } from "mobx-react-lite";
 import { isValidJSON } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -28,6 +23,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -71,14 +70,6 @@ const StatefulSetDetail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const labelTable = [];
-  const labelTemp = label;
-
-  const annotationsTable = [];
-  const annotationsTemp = annotations;
-
-  const eventsTable = [];
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -90,135 +81,11 @@ const StatefulSetDetail = observer(() => {
     setOpen(false);
   };
 
-  if (events !== null) {
-    events?.map((events) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255,255,255,0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                {events?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{events?.kind}</td>
-                    <th>Name</th>
-                    <td>{events?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{events?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{events?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{events?.reason}</td>
-                    <th>Type</th>
-                    <td>{events?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
-
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
+        <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
@@ -228,18 +95,22 @@ const StatefulSetDetail = observer(() => {
             <tbody className="tb_data_detail">
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{name}</td>
+                <td>{name ? name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cluster}</td>
+                <td>{cluster ? cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{project}</td>
+                <td>{project ? project : "-"}</td>
                 <th>Created</th>
-                <td>{moment(createAt).format("YYYY-MM-DD HH:MM")}</td>
+                <td>{createAt ? dateFormatter(createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={1}>
+        <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers
             ? containers.map((container) => (
@@ -322,7 +193,7 @@ const StatefulSetDetail = observer(() => {
             : "No Containers Info."}
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={1}>
+      <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
@@ -367,12 +238,8 @@ const StatefulSetDetail = observer(() => {
           </table>
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
-        <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
-          </table>
-        </div>
+      <CTabPanel value={tabvalue} index={3}>
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );

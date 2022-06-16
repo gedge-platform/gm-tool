@@ -1,13 +1,12 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class DaemonSet {
   daemonSetList = [];
   daemonSetDetail = {
     status: {},
     strategy: {},
-    containers: {},
   };
   totalElements = 0;
   label = {};
@@ -24,26 +23,35 @@ class DaemonSet {
       eventTime: "",
     },
   ];
+  pods = [
+    {
+      name: "",
+      status: "",
+      node: "",
+      podIP: "",
+      restart: 0,
+    },
+  ];
+  services = {
+    name: "",
+    port: 0,
+  };
+
+  containers = [{}];
 
   constructor() {
     makeAutoObservable(this);
   }
 
   loadDaemonSetList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/daemonsets`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.daemonSetList = list;
-          // this.daemonSetDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/daemonsets`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projectType === type);
+        this.daemonSetList = list;
+        // this.daemonSetDetail = list[0];
+        this.totalElements = list.length;
       });
+    });
     this.loadDaemonSetDetail(
       this.daemonSetList[0].name,
       this.daemonSetList[0].cluster,
@@ -54,19 +62,19 @@ class DaemonSet {
   loadDaemonSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL}/daemonsets/${name}?cluster=${cluster}&project=${project}`,
-        {
-          auth: BASIC_AUTH,
-        }
+        `${SERVER_URL2}/daemonsets/${name}?cluster=${cluster}&project=${project}`
       )
-      .then((res) => {
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          this.daemonSetDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
+          this.daemonSetDetail = data;
+          this.involvesData = involvesData;
+          this.pods = involvesData.pods;
+          this.containers = data.containers;
+          this.services = involvesData.services;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }

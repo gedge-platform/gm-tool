@@ -16,6 +16,7 @@ export { default as Configuration } from "./Gedge/Configuration/Configuration";
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
 export { default as ServiceWorkSpace } from "./ServiceAdmin/WorkSpace/WorkSpace";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
+export { default as ServiceMonitoring } from "./ServiceAdmin/Monitoring/Monitoring";
 export { default as Volume } from "./Gedge/Volume/Volume";
 
 //공통
@@ -26,7 +27,7 @@ const Title = {
   Dashboard: "통합 대시보드",
   Cluster: "클러스터 관리",
   WorkSpace: "워크스페이스 관리",
-  Configuration: "환경설정 관리",
+  Configuration: "시스템 환경설정",
   Project: "프로젝트 관리",
   Component: "컴포넌트 관리",
   Volume: "볼륨 관리",

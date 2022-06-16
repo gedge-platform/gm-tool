@@ -241,7 +241,8 @@ const globalStyles = createGlobalStyle`
     border: 1px solid #bec3ca;
     border-radius: 3px;
     &:not(select) {
-      background: linear-gradient(#fdfdfd,#f6f6f9);
+      /* background: linear-gradient(#fdfdfd,#f6f6f9); */
+      background: #222C45;
       box-shadow: inset 0 0 1px #fff;
     }
   }
@@ -401,7 +402,6 @@ const globalStyles = createGlobalStyle`
   
   .paper_main {
     ${PanelBox} {
-
     }
   }
   
@@ -414,8 +414,9 @@ const globalStyles = createGlobalStyle`
   }
   
   .paper_detail {
-    &.reflex-element {
-      height: 400px;
+    &
+    .reflex-element {
+      height: 800px;
       max-height: 800px;
     }
     .tabPanel {
@@ -559,8 +560,13 @@ const globalStyles = createGlobalStyle`
       
     }
     .tb_data_podInfo {
-      th, td {
-        width: 10%
+      th {
+        width: 20%
+      }
+    }
+    .tb_data_container {
+      th {
+        width: 20%
       }
     }
     tbody {
@@ -1388,9 +1394,22 @@ const globalStyles = createGlobalStyle`
   }
 }
 
+.tb_workload_pod_detail{
+  th {
+    width: 10%;
+  },
+  td {width: 40%}
+}
+
 .tb_resources_detail_th{
   th,td {
     width: 50%;
+  }
+}
+
+.tb_services_detail_th{
+  th,td {
+    width: 33%;
   }
 }
 
@@ -1405,6 +1424,14 @@ const globalStyles = createGlobalStyle`
 .tabN-chart-area{
   width: 49%;
   margin: 5px 0 5px 0;
+}
+
+//hansl--------------------
+.project_table{
+  th,td {
+    width: 410px;
+    margin: 5px 0 5px 0;
+  }
 }
 
 //map-----------------------

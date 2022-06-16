@@ -1,8 +1,13 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Pod {
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
+  pPodList = [];
   podList = [];
   podDetail = {};
   totalElements = 0;
@@ -20,14 +25,6 @@ class Pod {
       eventTime: "",
     },
   ];
-  statusConditions = [
-    {
-      lastTransitionTime: "",
-      status: "",
-      type: "",
-    },
-  ];
-
   podName = "";
   containerName = "";
   containerImage = "";
@@ -37,54 +34,195 @@ class Pod {
   project = "";
   content = "";
   containerResources = [];
-  podContainerVolume = [];
+  podContainers = [
+    {
+      name: "",
+      image: "",
+      ports: [
+        {
+          name: "",
+          containerPort: 0,
+          protocol: "",
+        },
+      ],
+      volumemounts: [
+        {
+          mountpath: "",
+          name: "",
+          readonly: true,
+        },
+      ],
+      env: [
+        {
+          name: "",
+          value: "",
+          valueFrom: {},
+        },
+      ],
+    },
+  ];
+  containerStatuses = [
+    {
+      containerID: "",
+      name: "",
+      ready: true,
+      restartCount: 0,
+      image: "",
+      started: true,
+    },
+  ];
+  involvesData = {
+    workloadList: {
+      name: "",
+      kind: "",
+      replicaName: "",
+    },
+    serviceList: [
+      {
+        metadata: {
+          name: "",
+          namespace: "",
+          creationTimestamp: "",
+        },
+        subsets: [
+          {
+            addresses: [
+              {
+                nodename: "",
+                ip: "",
+              },
+            ],
+            ports: [
+              {
+                port: 0,
+                protocol: "",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
   constructor() {
     makeAutoObservable(this);
   }
 
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadPodDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadPodDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+      }
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+      setPPodList = (list) => {
+        runInAction(() => {
+          this.pPodList = list;
+        })
+      };
+
+      setViewList = (n) => {
+        runInAction(() => {
+          this.viewList = this.pPodList[n];
+        });
+      };
+
   loadPodDetail = async (name, cluster, project) => {
     await axios
-      .get(`${SERVER_URL}/pods/${name}?cluster=${cluster}&project=${project}`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL2}/pods/${name}?cluster=${cluster}&project=${project}`)
+      .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.podDetail = data;
+          this.involvesData = involvesData;
+          this.workloadList = involvesData.workloadList;
+          if (involvesData.serviceList !== null) {
+            this.serviceList = involvesData.serviceList;
+          } else {
+            this.serviceList = null;
+          }
+
           this.label = data.label;
           this.annotations = data.annotations;
-          if (data.containerStatuses !== null) {
-            this.containerResources = data.containerStatuses;
-          } else {
-            this.containerResources = null;
-          }
-          this.podContainerVolume = data.Podcontainers;
 
+          this.podContainers = data.Podcontainers;
+          this.containerStatuses = data.containerStatuses;
           if (data.events !== null) {
             this.events = data.events;
           } else {
             this.events = null;
           }
-          this.statusConditions = data.statusConditions;
         });
       });
   };
 
   loadPodList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/pods`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.podList = list;
-          this.podDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/pods`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projectType === type);
+        this.podList = list;
+        this.podDetail = list[0];
+        this.totalElements = list.length;
       });
+    }).then(() => {
+      this.convertList(this.podList, this.setPPodList);
+    })
     this.loadPodDetail(
       this.podList[0].name,
       this.podList[0].cluster,

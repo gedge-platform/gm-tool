@@ -9,7 +9,6 @@
     "dev": "webpack-dev-server --open --watch",
     "production-build": "cross-env NODE_ENV=production webpack --optimize-minimize",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "node server.js",
     "build": "webpack --optimize-minimize"
   },
   "author": "innogrid",
@@ -42,6 +41,7 @@
     "dotenv": "^9.0.0",
     "form-data": "^4.0.0",
     "json-to-pretty-yaml": "^1.2.2",
+    "jwt-decode": "^3.1.2",
     "kubernetes-container-terminal": "^3.0.1",
     "leaflet": "^1.7.1",
     "lodash": "^4.17.21",
@@ -61,6 +61,7 @@
     "react-dom-factories": "^1.0.2",
     "react-drag-sizing": "^0.1.0-alpha.1",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.31.3",
     "react-json-view": "^1.21.3",
     "react-leaflet": "^3.2.5",
     "react-private-public-route": "^1.1.1",

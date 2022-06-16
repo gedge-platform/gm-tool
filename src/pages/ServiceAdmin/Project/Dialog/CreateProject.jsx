@@ -68,13 +68,18 @@ const Circle = styled.div`
 const CreateProject = observer((props) => {
   const { open } = props;
   const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
-  const { workSpaceList, loadWorkSpaceList } = workspacesStore;
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    selectClusterInfo,
+    setSelectClusterInfo,
+  } = workspacesStore;
   const { createProject } = projectStore;
 
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
   const [workspace, setWorkspace] = useState("");
-  const [selectCluster, setSelectCluster] = useState([]);
+  const [selectClusters, setSelectClusters] = useState([]);
   const [check, setCheck] = useState(false);
 
   const [toggle, setToggle] = useState(false);
@@ -88,8 +93,9 @@ const CreateProject = observer((props) => {
     setProjectName("");
     setProjectDescription("");
     setWorkspace("");
-    setSelectCluster([]);
-    setClusters([]);
+    setSelectClusters([]);
+    // setClusters([]);
+    setSelectClusterInfo([]);
     setToggle(false);
     setCheck(false);
   };
@@ -97,11 +103,12 @@ const CreateProject = observer((props) => {
   const onChange = ({ target: { name, value } }) => {
     if (name === "workspace") {
       if (value === "") {
-        setClusters([]);
+        // setClusters([]);
+        setSelectClusterInfo([]);
         return;
       }
-      loadClusterInWorkspace(value);
-      setSelectCluster([]);
+      // loadClusterInWorkspace(value);
+      setSelectClusters([]);
       setWorkspace(value);
     } else if (name === "projectName") {
       setProjectName(value);
@@ -112,10 +119,10 @@ const CreateProject = observer((props) => {
 
   const checkCluster = ({ target: { checked } }, clusterName) => {
     if (checked) {
-      setSelectCluster([...selectCluster, clusterName]);
+      setSelectClusters([...selectClusters, clusterName]);
     } else {
-      setSelectCluster(
-        selectCluster.filter((cluster) => cluster !== clusterName)
+      setSelectClusters(
+        selectClusters.filter((cluster) => cluster !== clusterName)
       );
     }
   };
@@ -148,7 +155,7 @@ const CreateProject = observer((props) => {
       swalError("워크스페이스를 확인해주세요!");
       return;
     }
-    if (selectCluster.length === 0) {
+    if (selectClusters.length === 0) {
       swalError("클러스터를 확인해주세요!");
       return;
     }
@@ -157,7 +164,7 @@ const CreateProject = observer((props) => {
       projectDescription,
       props.type,
       workspace,
-      selectCluster,
+      selectClusters,
       toggle,
       handleClose
     );
@@ -246,7 +253,7 @@ const CreateProject = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={""}>Select Workspace</option>
+                  <option value={" "}>Select Workspace</option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}
@@ -267,20 +274,10 @@ const CreateProject = observer((props) => {
                     <th></th>
                     <th>이름</th>
                     <th>타입</th>
-                    <th>생성자</th>
-                    <th>노드개수</th>
                     <th>IP</th>
-                    <th>생성날짜</th>
                   </tr>
-                  {clusters.map(
-                    ({
-                      clusterName,
-                      clusterType,
-                      clusterEndpoint,
-                      nodeCnt,
-                      clusterCreator,
-                      created_at,
-                    }) => (
+                  {selectClusterInfo.map(
+                    ({ clusterName, clusterType, clusterEndpoint }) => (
                       <tr>
                         <td style={{ textAlign: "center" }}>
                           <input
@@ -291,10 +288,7 @@ const CreateProject = observer((props) => {
                         </td>
                         <td>{clusterName}</td>
                         <td>{clusterType}</td>
-                        <td>{clusterCreator}</td>
-                        <td>{nodeCnt}</td>
                         <td>{clusterEndpoint}</td>
-                        <td>{dateFormatter(created_at)}</td>
                       </tr>
                     )
                   )}

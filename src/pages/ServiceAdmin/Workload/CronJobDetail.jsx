@@ -2,15 +2,10 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import cronJobStore from "../../../store/CronJob";
 import { observer } from "mobx-react-lite";
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -55,180 +50,7 @@ const Detail = observer(() => {
     cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const annotationsTable = [];
-  const eventsTable = [];
-  const InvolvesJobs = cronjobInvolvesJobs;
-  const InvolvesJobsTable = [];
   const containers = cronJobDetail.containers;
-  // const containersTable = [];
-
-  // const containersTable = () => {
-  //   return containers?.map((item) => {
-  //     <table className="tb_data">
-  //       <tbody>
-  //         <tr>
-  //           <th className="tb_workload_detail_th">Name</th>
-  //           <td>{item?.name}</td>
-  //           <th>Image</th>
-  //           <td>{item?.image}</td>
-  //         </tr>
-  //       </tbody>
-  //     </table>;
-  //   });
-  // };
-  // containers?.map((item) => {
-  //   containersTable.push(
-  //     <tr>
-  //       <th className="tb_workload_detail_th">Name</th>
-  //       <td>{item?.name}</td>
-  //       <th>Image</th>
-  //       <td>{item?.image}</td>
-  //     </tr>
-  //   );
-  // });
-
-  const labelTable = () => {
-    return Object.entries(label).map(([key, value]) => {
-      <Label>
-        <span className="key">{key}</span>
-        <span className="value">{value}</span>
-      </Label>;
-    });
-  };
-
-  Object.entries(annotations).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  if (events !== null) {
-    events?.map((events) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255,255,255,0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                {events?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{events?.kind}</td>
-                    <th>Name</th>
-                    <td>{events?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{events?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{events?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{events?.reason}</td>
-                    <th>Type</th>
-                    <td>{events?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -248,6 +70,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -255,35 +78,25 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{cronJobDetail.name}</td>
+                <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cronJobDetail.cluster}</td>
+                <td>{cronJobDetail.cluster ? cronJobDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{cronJobDetail.project}</td>
+                <td>{cronJobDetail.project ? cronJobDetail.project : "-"}</td>
                 <th>Schedule</th>
-                <td>{cronJobDetail.schedule}</td>
+                <td>{cronJobDetail.schedule ? cronJobDetail.schedule : "-"}</td>
               </tr>
               <tr>
                 <th>Concurrency Policy</th>
-                <td>{cronJobDetail.concurrencyPolicy}</td>
+                <td>{cronJobDetail.concurrencyPolicy ? cronJobDetail.concurrencyPolicy : "-"}</td>
                 <th>Successful Jobs History Limit</th>
-                <td>{cronJobDetail.successfulJobsHistoryLimit}</td>
+                <td>{cronJobDetail.successfulJobsHistoryLimit ? cronJobDetail.successfulJobsHistoryLimit : "-"}</td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>
-                  {moment(cronJobDetail.creationTimestamp).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-                </td>
-                <th>Lasted</th>
-                <td>
-                  {moment(cronJobDetail.lastScheduleTime).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-                </td>
+                <td>{cronJobDetail.creationTimestamp ? dateFormatter(cronJobDetail.creationTimestamp) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -309,20 +122,73 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelTable()}</LabelContainer>
+          <LabelContainer>
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
           <br />
+
           <TableTitle>Annotations</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationsTable}</tbody>
-          </table>
-          <br />
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
+        <EventAccordion events={events} />
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
-          </table>
+          <TableTitle>References</TableTitle>
+          {cronjobInvolvesJobs
+            ? cronjobInvolvesJobs.map((job) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{job?.name}</td>
+                      </tr>
+                      <tr>
+                        <th>CompletionTime</th>
+                        <td>{dateFormatter(job?.completionTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>StartTime</th>
+                        <td>{dateFormatter(job?.startTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>Succeeded</th>
+                        <td>{job?.succeeded}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            : "No Info"}
+          <br />
         </div>
       </CTabPanel>
     </PanelBox>

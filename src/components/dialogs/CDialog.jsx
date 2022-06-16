@@ -39,7 +39,7 @@ const useStyles = makeStyles(() =>
       ".MuiDialog-paper": {
         padding: 2,
         borderRadius: 3,
-        backgroundColor: "#1355CE",
+        // backgroundColor: "#1355CE",
         boxShadow: "none",
         "& .requried": {
           color: "#f45343",
@@ -59,13 +59,13 @@ const useStyles = makeStyles(() =>
         },
         "& .MuiDialogContent-root": {
           padding: 14,
-          border: "1px solid #0085eb",
+          // border: "1px solid #0085eb",
           borderBottom: "0",
           backgroundColor: "#fff",
         },
         "& .MuiDialogActions-root": {
           padding: "11px 10px 10px",
-          border: "1px solid #0085eb",
+          // border: "1px solid #0085eb",
           borderTop: "0",
           boxShadow: "inset 0 1px 0 #ebecef",
           backgroundColor: "#f5f6f9",

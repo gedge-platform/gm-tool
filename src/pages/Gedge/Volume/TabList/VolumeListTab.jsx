@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { toJS } from "mobx";
+import {
+  agDateColumnFilter,
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import axios from "axios";
+import ReactJson from "react-json-view";
+
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "@/store/Volume";
@@ -18,22 +31,37 @@ import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import { SearchV1 } from "@/components/search/SearchV1";
+import CreateVolume from "../Dialog/CreateVolume";
 
 const VolumeListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openYaml, setOpenYaml] = useState(false);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
     pVolume,
-    pVolumes,
+    pVolumesList,
     totalElements,
-    pVolumeYamlFile,
+    setPVolumes,
     pVolumeMetadata,
     loadPVolumes,
     loadPVolume,
+    loadVolumeYaml,
+    setViewList,
+    setCurrentPage,
+    setTotalPages,
+    convertList,
+    resultList,
+    getYamlFile,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = volumeStore;
 
   const [columDefs] = useState([
@@ -41,6 +69,9 @@ const VolumeListTab = observer(() => {
       headerName: "Name",
       field: "name",
       filter: true,
+      getQuickFilterText: (params) => {
+        return params.value.name;
+      },
     },
     {
       headerName: "Capacity",
@@ -86,9 +117,7 @@ const VolumeListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {
@@ -105,31 +134,46 @@ const VolumeListTab = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadPVolume(e.data.name, e.data.cluster);
-
+    loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
   };
 
   const handleOpenYaml = () => {
-    setOpen(true);
+    setOpenYaml(true);
   };
 
   const handleCloseYaml = () => {
-    setOpen(false);
+    setOpenYaml(false);
   };
 
   const history = useHistory();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadPVolumes();
   }, []);
+
+  const handleCreateOpen = () => {
+    // setWorkspace("");
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+          <CommActionBar
+          // reloadFunc={loadPVolumes}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
+          >
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -137,18 +181,27 @@ const VolumeListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={pVolumes}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <ViewYaml
-            open={open}
-            yaml={pVolumeYamlFile}
+            open={openYaml}
+            yaml={getYamlFile}
             onClose={handleCloseYaml}
+          />
+          <CreateVolume
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPVolumes}
           />
         </PanelBox>
         <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />

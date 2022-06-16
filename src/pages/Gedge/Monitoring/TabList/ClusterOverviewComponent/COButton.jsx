@@ -5,6 +5,10 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
+import offAPILogo from "@/images/ico-action/api_icon_normal.png";
+import onAPILogo from "@/images/ico-action/api_icon_select.png";
+import offScheduleLogo from "@/images/ico-action/schedule_icon_normal.png";
+import onScheduleLogo from "@/images/ico-action/schedule_icon_select.png";
 import {
   COPieChartCPU,
   COPieChartDisk,
@@ -171,7 +175,7 @@ const COButtonAPILatency = observer(({ isOn, onClick }) => {
           cursor: "pointer",
         }}
       >
-        <COPieChartETC isOn={isOn} />
+        <img src={isOn ? onAPILogo : offAPILogo} />
       </div>
       <div className="tab1-button-key-value-area">
         <div className="tab1-button-key-area">API Server</div>
@@ -197,7 +201,7 @@ const COButtonAPIRate = observer(({ isOn, onClick }) => {
           cursor: "pointer",
         }}
       >
-        <COPieChartETC isOn={isOn} />
+        <img src={isOn ? onAPILogo : offAPILogo} />
       </div>
       <div className="tab1-button-key-value-area">
         <div className="tab1-button-key-area">API Server</div>
@@ -221,7 +225,7 @@ const COButtonSchedulerAttempts = observer(({ isOn, onClick }) => {
           cursor: "pointer",
         }}
       >
-        <COPieChartETC isOn={isOn} />
+        <img src={isOn ? onScheduleLogo : offScheduleLogo} />
       </div>
       <div className="tab1-button-key-value-area">
         <div className="tab1-button-key-area">Scheduler</div>
@@ -247,7 +251,8 @@ const COButtonSchedulerRate = observer(({ isOn, onClick }) => {
           cursor: "pointer",
         }}
       >
-        <COPieChartETC isOn={isOn} />
+        {/* <COPieChartETC isOn={isOn} /> */}
+        <img src={isOn ? onScheduleLogo : offScheduleLogo} />
       </div>
       <div className="tab1-button-key-value-area">
         <div className="tab1-button-key-area" style={{ fontSize: "12px" }}>

@@ -101,8 +101,8 @@ const CreateScheduler = observer((props) => {
   // };
   const createScheduler = () => {
     const requestId = `workload-${randomString()}`;
-
     postWorkload(requestId, workspace, project);
+    // postWorkload(requestId, workspace, project);
     postScheduler2(requestId, content, handleClose);
 
     // let formData = new FormData();
@@ -114,6 +114,7 @@ const CreateScheduler = observer((props) => {
     // axios
     //   .post(`http://101.79.4.15:32527/yaml`, formData)
     //   .then(function (response) {
+    //     console.log(response);
     //     if (response.status === 200) {
     //       setResponseData(response.data);
 

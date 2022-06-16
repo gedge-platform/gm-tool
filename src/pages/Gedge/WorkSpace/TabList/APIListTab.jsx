@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import workspacesStore from "../../../../store/WorkSpace";
 import CreateWorkSpace from "../Dialog/CreateWorkSpace";
 import clusterStore from "../../../../store/Cluster";
 import { swalUpdate } from "../../../../utils/swal-utils";
+import Detail from "../Detail";
 
 const APIListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -21,8 +21,14 @@ const APIListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
-    workspacesStore;
+  const { 
+    workSpaceList, 
+    loadWorkSpaceList, 
+    totalElements, 
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkspaceDetail, 
+  } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -53,9 +59,7 @@ const APIListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {
@@ -80,6 +84,7 @@ const APIListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
@@ -118,10 +123,12 @@ const APIListTab = observer(() => {
           </div>
           <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
+            type={"user"}
             open={open}
             onClose={handleClose}
           />
         </PanelBox>
+        <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
     </>
   );

@@ -32,6 +32,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -109,7 +113,7 @@ const Detail = observer((props) => {
         <td>{node.nodeIP}</td>
         <td>{node.kubeVersion}</td>
         <td>{node.os}</td>
-        <td>{node.created_at}</td>
+        <td>{dateFormatter(node.created_at)}</td>
       </tr>
     ));
   };
@@ -153,12 +157,13 @@ const Detail = observer((props) => {
         <CTab label="Overview" />
         <CTab label="Resource Status" />
         <CTab label="Node Info" />
+        <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <table className="tb_data">
-            <tbody className="tb_data_detail">
+            {/* <tbody className="tb_data_detail">
               <tr>
                 <th>Cluster Name</th>
                 <td>{clusterName}</td>
@@ -175,8 +180,9 @@ const Detail = observer((props) => {
                 <th>Created</th>
                 <td>{dateFormatter(created_at)}</td>
               </tr>
-            </tbody>
+            </tbody> */}
           </table>
+          <br />
 
           <TableTitle>GPU List</TableTitle>
           {gpu ? (
@@ -203,12 +209,14 @@ const Detail = observer((props) => {
               </table>
             </>
           ) : (
-            <NoInfo>No GPU Info.</NoInfo>
+            <LabelContainer>
+              <p>No GPU Info.</p>
+            </LabelContainer>
           )}
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
@@ -240,7 +248,7 @@ const Detail = observer((props) => {
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
-        <div className="tb_container" style={{ width: "95%" }}>
+        <div className="tb_container">
           <TableTitle>Node List</TableTitle>
           <table className="tb_data">
             <tbody className="tb_data_nodeInfo">
@@ -261,17 +269,20 @@ const Detail = observer((props) => {
               )}
             </tbody>
           </table>
-
-          <TableSubTitle>Labels({nodes[nodeNum].name})</TableSubTitle>
+        </div>
+      </CTabPanel>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
+        <div className="tb_container">
+          <TableTitle>Labels({nodes[nodeNum].name})</TableTitle>
           <LabelContainer>{labelByNode()}</LabelContainer>
 
-          <TableSubTitle>Annotations({nodes[nodeNum].name})</TableSubTitle>
+          <TableTitle>Annotations({nodes[nodeNum].name})</TableTitle>
           <table className="tb_data">
             <tbody>{annotationByNode()}</tbody>
           </table>
         </div>
       </CTabPanel>
-      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
+      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={4}>
         <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>

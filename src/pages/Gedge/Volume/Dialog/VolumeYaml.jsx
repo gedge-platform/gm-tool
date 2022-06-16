@@ -5,30 +5,30 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
 const VolumeYaml = observer((props) => {
-    const { content } = props;
+  const { content } = props;
 
-    return (
-        <AceEditor
-            placeholder="Empty"
-            mode="javascript"
-            theme="monokai"
-            name="editor"
-            width="100%"
-            fontSize={14}
-            showPrintMargin={true}
-            showGutter={true}
-            highlightActiveLine={true}
-            value={content}
-            setOptions={{
-                enableBasicAutocompletion: false,
-                enableLiveAutocompletion: false,
-                enableSnippets: false,
-                showLineNumbers: true,
-                tabSize: 4,
-            }}
-            readOnly={true}
-        />
-    );
+  return (
+    <AceEditor
+      placeholder="Empty"
+      mode="javascript"
+      theme="monokai"
+      name="editor"
+      width="100%"
+      fontSize={14}
+      showPrintMargin={true}
+      showGutter={true}
+      highlightActiveLine={true}
+      value={content}
+      setOptions={{
+        enableBasicAutocompletion: false,
+        enableLiveAutocompletion: false,
+        enableSnippets: false,
+        showLineNumbers: true,
+        tabSize: 4,
+      }}
+      readOnly={true}
+    />
+  );
 });
 
 export default VolumeYaml;

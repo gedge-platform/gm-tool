@@ -34,6 +34,7 @@ const CreateProject = observer((props) => {
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
   const [selectCluster, setSelectCluster] = useState("");
+  const [check, setCheck] = useState(false);
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
@@ -41,6 +42,7 @@ const CreateProject = observer((props) => {
     setSelectCluster([]);
     setWorkspaceName("");
     setWorkspaceDescription("");
+    setCheck(false);
   };
 
   const onChange = ({ target: { name, value } }) => {

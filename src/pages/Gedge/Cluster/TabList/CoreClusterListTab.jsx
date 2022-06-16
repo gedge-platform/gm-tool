@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
@@ -20,8 +19,20 @@ const CoreClusterListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, loadClusterList, loadCluster } =
-    clusterStore;
+  const {
+    clusterDetail,
+    clusterList,
+    loadClusterList,
+    loadCluster,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
+  } = clusterStore;
+  console.log(clusterList);
+  console.log(viewList);
 
   const [columDefs] = useState([
     // {
@@ -67,9 +78,7 @@ const CoreClusterListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -88,7 +97,7 @@ const CoreClusterListTab = observer(() => {
     setOpen(false);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadClusterList("core");
   }, []);
 
@@ -96,7 +105,12 @@ const CoreClusterListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+            // reloadFunc={() => loadClusterList("core")}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
@@ -105,10 +119,15 @@ const CoreClusterListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={clusterList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   onCellClicked={handleClick}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

@@ -1,17 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import moment from "moment";
 import deploymentStore from "../../../store/Deployment";
 import { observer } from "mobx-react";
-
-import theme from "@/styles/theme";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { dateFormatter } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -27,6 +21,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -54,27 +52,17 @@ const Label = styled.span`
 const Detail = observer(() => {
   const {
     deploymentDetail,
+    events,
     strategy,
     labels,
     annotations,
-    deploymentInvolvesData,
     pods,
     depServices,
-    depServicesPort,
-    events,
     containersTemp,
   } = deploymentStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-
-  const annotationTable = [];
-  const podInfoTable = [];
-
-  const port = depServicesPort;
-  const portTable = [];
-
-  const eventsTable = [];
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -96,169 +84,12 @@ const Detail = observer(() => {
     strategyTable =
       "maxUnavailable : " +
       strategyTemp.rollingUpdate.maxUnavailable +
-      "\n maxSurge : " +
+      "\n" +
+      "maxSurge : " +
       strategyTemp.rollingUpdate.maxSurge;
   }
 
-  const labelTable = () => {
-    return Object.entries(labels).map(([key, value]) => (
-      <Label>
-        <span className="key">{key}</span>
-        <span className="value">{value}</span>
-      </Label>
-    ));
-  };
-
-  pods?.map((item) => {
-    podInfoTable.push(
-      <tr>
-        <th>Name</th>
-        <td>{item["name"]}</td>
-        <th>Status</th>
-        <td>{item["status"]}</td>
-        <th>Node</th>
-        <td>{item["node"]}</td>
-        <th>Pod IP</th>
-        <td>{item["podIP"]}</td>
-        <th>Restart</th>
-        <td>{item["restart"]}</td>
-      </tr>
-    );
-  });
-
-  Object.entries(annotations).map(([key, value]) => {
-    annotationTable.push(
-      <tr>
-        <th className="tb_workload_detail_labels_th">{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  if (events !== null) {
-    events?.map((events) => {
-      eventsTable.push(
-        <div>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={
-                <ExpandMoreRoundedIcon
-                  sx={{ color: "rgba(255,255,255,0.7)" }}
-                />
-              }
-              aria-controls="ProjectEvent-content"
-              id="ProjectEvent-header"
-              sx={{ bgcolor: theme.colors.primaryDark }}
-            >
-              <Typography
-                sx={{
-                  width: "10%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Message
-              </Typography>
-              <Typography
-                sx={{
-                  width: "80%",
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                {events?.message}
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-              <Typography
-                sx={{
-                  fontSize: 13,
-                  color: "rgba(255,255,255,0.7)",
-                  bgcolor: theme.colors.primary,
-                }}
-              >
-                <table className="tb_data">
-                  <tr>
-                    <th>Kind</th>
-                    <td>{events?.kind}</td>
-                    <th>Name</th>
-                    <td>{events?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Namespace</th>
-                    <td>{events?.namespace}</td>
-                    <th>Cluster</th>
-                    <td>{events?.cluster}</td>
-                  </tr>
-                  <tr>
-                    <th>Reason</th>
-                    <td>{events?.reason}</td>
-                    <th>Type</th>
-                    <td>{events?.type}</td>
-                  </tr>
-                  <tr>
-                    <th>Event Time</th>
-                    <td>
-                      {moment(events?.eventTime).format("YYYY-MM-DD HH:mm")}
-                    </td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </table>
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
-    });
-  } else {
-    eventsTable.push(
-      <div>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={
-              <ExpandMoreRoundedIcon sx={{ color: "rgba(255,255,255,0.7)" }} />
-            }
-            aria-controls="ProjectEvent-content"
-            id="ProjectEvent-header"
-            sx={{ bgcolor: theme.colors.primaryDark }}
-          >
-            <Typography
-              sx={{
-                width: "10%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            >
-              Message
-            </Typography>
-            <Typography
-              sx={{
-                width: "80%",
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-              }}
-            ></Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
-            <Typography
-              sx={{
-                fontSize: 13,
-                color: "rgba(255,255,255,0.7)",
-                bgcolor: theme.colors.primary,
-              }}
-            >
-              <table className="tb_data">
-                <tr>
-                  <th>No Have Events List </th>
-                </tr>
-              </table>
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-    );
-  }
+  useEffect(() => {});
 
   return (
     <PanelBox>
@@ -267,6 +98,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -274,31 +106,35 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{deploymentDetail.name}</td>
+                <td>{deploymentDetail.name ? deploymentDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{deploymentDetail.cluster}</td>
+                <td>
+                  {deploymentDetail.cluster ? deploymentDetail.cluster : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{deploymentDetail.project}</td>
+                <td>
+                  {deploymentDetail.project ? deploymentDetail.project : "-"}
+                </td>
                 <th>Workspace</th>
-                <td>{deploymentDetail.workspace}</td>
+                <td>
+                  {deploymentDetail.workspace
+                    ? deploymentDetail.workspace
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Status</th>
-                <td>{deploymentDetail.ready}</td>
+                <td>{deploymentDetail.ready ? deploymentDetail.ready : "-"}</td>
                 <th>Strategy</th>
                 <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>
-                  {moment(deploymentDetail.createAt).format("YYYY-MM-DD HH:mm")}
-                </td>
+                <td>{dateFormatter(deploymentDetail.createAt)}</td>
                 <th>Updated</th>
-                <td>
-                  {moment(deploymentDetail.updateAt).format("YYYY-MM-DD HH:mm")}
-                </td>
+                <td>{dateFormatter(deploymentDetail.updateAt)}</td>
               </tr>
             </tbody>
           </table>
@@ -309,7 +145,11 @@ const Detail = observer(() => {
           <TableTitle>Containers</TableTitle>
           {containersTemp.map((containers) => (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody>
+              <tbody className="tb_data_container">
+                <tr>
+                  <th>Container Name</th>
+                  <td>{containers?.name}</td>
+                </tr>
                 <tr>
                   <th>Image</th>
                   <td>{containers?.image}</td>
@@ -318,63 +158,260 @@ const Detail = observer(() => {
                   <th>ImagePullPolicy</th>
                   <td>{containers?.imagePullPolicy}</td>
                 </tr>
+
                 <tr>
-                  <th>Name</th>
-                  <td>{containers?.name}</td>
+                  <th>Environment</th>
+                  <td>
+                    {containers?.env === undefined ? (
+                      <>-</>
+                    ) : (
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "33%" }}>Name</th>
+                            <th style={{ width: "33%" }}>Value</th>
+                            <th style={{ width: "33%" }}>Source</th>
+                          </tr>
+                          {containers.env.map((env) => (
+                            <tr>
+                              <td>{env.name}</td>
+                              <td>{env.value}</td>
+                              <td>{env.valueFrom?.fieldRef?.fieldPath}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Args</th>
+                  <td>
+                    {containers.args ? JSON.stringify(containers.args) : <>-</>}
+                  </td>
                 </tr>
                 <tr>
                   <th>Ports</th>
-                  <td></td>
+                  <td>
+                    {containers.ports === undefined ? (
+                      <>-</>
+                    ) : (
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "50%" }}>ContainerPort</th>
+                            <th style={{ width: "50%" }}>Protocol</th>
+                          </tr>
+                          {containers.ports?.map((port) => (
+                            <tr>
+                              <td>{port.containerPort}</td>
+                              <td>{port.protocol}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <th>Resources</th>
-                  <td></td>
-                </tr>
+                  <td>
+                    <table className="tb_data">
+                      <tbody>
+                        <tr>
+                          <th style={{ width: "50%" }}>Limits</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {Object.entries(containers?.resources).map(
+                              ([key, value]) =>
+                                Object.entries(value).map(([key1, value1]) => (
+                                  <tr>
+                                    <th>{key1}</th>
+                                    <td>{value1}</td>
+                                  </tr>
+                                ))
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr> */}
+                {/* <tr>
+                  <th>SecurityContext</th>
+                  <td>
+                  {containers?.securityContext === undefined ? (
+                      <>-</>
+                    ) : (
+                      Object.entries(containers?.securityContext).map(
+                        ([key, value]) => (
+                          <table className="tb_data" style={{ width: "30%" }}>
+                            <tbody>
+                              <tr>
+                                <th>{key}</th>
+                              </tr>
+                              <tr>
+                                <td>{value}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        )
+                      )
+                    )}
+                  </td>
+                </tr> */}
+
                 <tr>
-                  <th>TerminationMessagePath</th>
-                  <td>{containers?.terminationMessagePath}</td>
-                </tr>
-                <tr>
-                  <th>TerminationMessagePolicy</th>
-                  <td>{containers?.terminationMessagePolicy}</td>
+                  <th>VolumeMounts</th>
+                  <td>
+                    {containers.volumeMounts ? (
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "33%" }}>Name</th>
+                            <th style={{ width: "33%" }}>MountPath</th>
+                            <th style={{ width: "33%" }}>Propagation</th>
+                          </tr>
+                          {containers.volumeMounts?.map((vol) => (
+                            <tr>
+                              <td>{vol.name}</td>
+                              <td>{vol.mountPath}</td>
+                              <td></td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <>-</>
+                    )}
+                  </td>
                 </tr>
               </tbody>
             </table>
           ))}
-          <br />
-          <TableTitle>Pod</TableTitle>
-          <table className="tb_data">
-            <tbody className="tb_data_podInfo">{podInfoTable}</tbody>
-          </table>
-          <br />
-          <TableTitle>Deployment Services</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              <th width="25%">Name</th>
-              <td width="25%">{depServices.name}</td>
-              <th width="25%">Port</th>
-              <td width="25%">{portTable}</td>
-            </tbody>
-          </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
-          <LabelContainer>{labelTable()}</LabelContainer>
+          <LabelContainer>
+            {labels ? (
+              Object.entries(labels).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
+
           <br />
           <TableTitle>Annotations</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{annotationTable}</tbody>
-          </table>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
           <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <div className="tb_container">
+        <EventAccordion events={events} />
+        {/* <div className="tb_container">
           <table className="tb_data">
             <tbody>{eventsTable}</tbody>
           </table>
+        </div> */}
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
+        <div className="tb_container">
+          <TableTitle>Pod</TableTitle>
+          {pods ? (
+            pods?.map((pod) => (
+              <>
+                <table className="tb_data">
+                  <tbody className="tb_workload_detail_th">
+                    <tr>
+                      <th>Name</th>
+                      <td>{pod?.name}</td>
+
+                      <th>Status</th>
+                      <td>{pod?.status}</td>
+                    </tr>
+                    <tr>
+                      <th>Node</th>
+                      <td>{pod?.node === "" ? <>-</> : <>{pod?.node}</>}</td>
+
+                      <th>Restarts</th>
+                      <td>{pod?.restart}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <>
+              <p>No Data</p>
+            </>
+          )}
+
+          {depServices.name === "" ? (
+            <></>
+          ) : (
+            <>
+              <TableTitle>Service</TableTitle>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
+                  <tr>
+                    <th style={{ width: "25%" }}>Name</th>
+                    <td>{depServices?.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Port</th>
+                    <td>
+                      <table className="tb_data">
+                        <tbody className="tb_services_detail_th">
+                          <tr>
+                            <th>Name</th>
+                            <th>Port</th>
+                            <th>Protocol</th>
+                          </tr>
+                          {depServices.port?.map((port) => (
+                            <tr>
+                              <td>
+                                {port.name === undefined ? (
+                                  <>-</>
+                                ) : (
+                                  <>{port?.name}</>
+                                )}
+                              </td>
+                              <td>{port.port}</td>
+                              <td>{port.protocol}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>
