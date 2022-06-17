@@ -28,28 +28,42 @@ class Workspace {
   selectCluster = "";
   dataUsage = {};
   projectList = [];
-  selectClusterInfo = [
-    {
-      clusterEndpoint: "",
-      clusterType: "",
-      clusterName: "",
-      token: "",
-    },
-  ];
+  selectClusterInfo = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadWorkSpaceList = async (type = "user") => {
-    await axios.get(`${SERVER_URL2}/workspace`).then((res) => {
-      runInAction(() => {
-        this.workSpaceList = res.data;
-        this.workSpaceDetail = res.data[0];
-        this.totalElements = res.data.length;
+  // loadWorkSpaceList = async (type = "user") => {
+  //   await axios
+  //     .get(`${SERVER_URL2}/workspace`)
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         this.workSpaceList = res.data;
+  //         // this.workSpaceDetail = res.data[0];
+  //         this.totalElements = res.data.length;
+  //       });
+  //     })
+  //     .then(() => {
+  //       this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+  //     });
+  // };
+
+  loadWorkSpaceList = async (type = false) => {
+    await axios
+      .get(`${SERVER_URL2}/workspace`)
+      .then((res) => {
+        runInAction(() => {
+          this.workSpaceList = res.data;
+          // this.workSpaceDetail = res.data[0];
+          this.totalElements = res.data.length;
+        });
+      })
+      .then(() => {
+        type
+          ? null
+          : this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
       });
-    });
-    this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
   };
 
   // 워크스페이스에서 클러스터 불러오면 된다
