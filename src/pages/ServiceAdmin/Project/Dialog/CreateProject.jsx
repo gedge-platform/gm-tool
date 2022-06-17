@@ -73,6 +73,7 @@ const CreateProject = observer((props) => {
     loadWorkSpaceList,
     selectClusterInfo,
     setSelectClusterInfo,
+    loadWorkspaceDetail,
   } = workspacesStore;
   const { createProject } = projectStore;
 
@@ -94,22 +95,20 @@ const CreateProject = observer((props) => {
     setProjectDescription("");
     setWorkspace("");
     setSelectClusters([]);
-    // setClusters([]);
     setSelectClusterInfo([]);
     setToggle(false);
     setCheck(false);
   };
 
-  const onChange = ({ target: { name, value } }) => {
+  const onChange = async ({ target: { name, value } }) => {
     if (name === "workspace") {
       if (value === "") {
-        // setClusters([]);
         setSelectClusterInfo([]);
         return;
       }
-      // loadClusterInWorkspace(value);
-      setSelectClusters([]);
       setWorkspace(value);
+      await loadWorkspaceDetail(value);
+      setSelectClusters([...selectClusterInfo]);
     } else if (name === "projectName") {
       setProjectName(value);
     } else if (name === "projectDescription") {
@@ -171,8 +170,13 @@ const CreateProject = observer((props) => {
   };
 
   useEffect(() => {
-    loadWorkSpaceList();
+    loadWorkSpaceList(true);
+    setSelectClusterInfo([]);
   }, []);
+
+  useEffect(() => {
+    setSelectClusters([...selectClusterInfo]);
+  }, [workspace]);
 
   return (
     <CDialogNew

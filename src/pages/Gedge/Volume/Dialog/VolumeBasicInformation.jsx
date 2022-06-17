@@ -30,20 +30,29 @@ const ButtonNext = styled.button`
 `;
 
 const volumeBasicInformation = observer((props) => {
-  const { loadWorkSpaceList, workSpaceList } = workspacestore;
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
+    workspacestore;
+
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
-  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+
+  const {
+    loadProjectListInWorkspace,
+    projectListinWorkspace,
+    selectClusterInfo,
+    setSelectClusterInfo,
+    loadProjectDetail,
+  } = projectStore;
+
   const {
     setCluster,
-    setWorkspace,
     setProject,
     workspaceName,
     setWorkspaceName,
+    setWorkspace,
   } = deploymentStore;
+
   const { loadClusterInProject, clusters, setClusters } = clusterStore;
-  console.log(clusters);
-  console.log(loadClusterInProject);
   const {
     setVolumeName,
     setAccessMode,
@@ -52,7 +61,9 @@ const volumeBasicInformation = observer((props) => {
     volumeName,
   } = volumeStore;
 
-  const onChange = (e) => {
+  const [selectClusters, setSelectClusters] = useState([]);
+
+  const onChange = async (e) => {
     const { value, name } = e.target;
     if (name === "VolumeName") {
       setVolumeName(value);
@@ -62,8 +73,14 @@ const volumeBasicInformation = observer((props) => {
       setProjectEnable(false);
       return;
     } else if (name === "project") {
-      loadClusterInProject(value);
+      if (value === "") {
+        setSelectClusterInfo([]);
+        return;
+      }
+      // loadClusterInProject(value);
       setProject(value);
+      await loadProjectDetail(value);
+      setSelectClusters([...selectClusterInfo]);
       setClusterEnable(false);
     } else if (name === "accessMode") {
       setAccessMode(value);
@@ -71,9 +88,15 @@ const volumeBasicInformation = observer((props) => {
       setVolumeCapacity(value);
     }
   };
+  console.log(onChange);
 
   useEffect(() => {
-    loadWorkSpaceList();
+    loadWorkSpaceList(true);
+    setSelectClusterInfo([]);
+  }, []);
+
+  useEffect(() => {
+    setSelectClusters([...selectClusterInfo]);
   }, []);
 
   return (
@@ -163,20 +186,10 @@ const volumeBasicInformation = observer((props) => {
                     <th></th>
                     <th>이름</th>
                     <th>타입</th>
-                    <th>생성자</th>
-                    <th>노드개수</th>
                     <th>IP</th>
-                    <th>생성날짜</th>
                   </tr>
-                  {clusters.map(
-                    ({
-                      clusterName,
-                      clusterType,
-                      clusterEndpoint,
-                      nodeCnt,
-                      clusterCreator,
-                      created_at,
-                    }) => (
+                  {selectClusterInfo.map(
+                    ({ clusterName, clusterType, clusterEndpoint }) => (
                       <tr>
                         <td style={{ textAlign: "center" }}>
                           <input
@@ -187,10 +200,7 @@ const volumeBasicInformation = observer((props) => {
                         </td>
                         <td>{clusterName}</td>
                         <td>{clusterType}</td>
-                        <td>{clusterCreator}</td>
-                        <td>{nodeCnt}</td>
                         <td>{clusterEndpoint}</td>
-                        <td>{dateFormatter(created_at)}</td>
                       </tr>
                     )
                   )}
