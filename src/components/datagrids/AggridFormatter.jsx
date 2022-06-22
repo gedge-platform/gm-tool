@@ -27,7 +27,8 @@ const drawStatus = (status) => {
       return `<span class="status_ico status_02">${status}</span>`;
     case "Pending":
     case "PENDING":
-      // Orange
+    case "Released":
+      // Yellow
       return `<span class="status_ico status_03">${status}</span>`;
     case "false":
     case "False":

@@ -30,7 +30,7 @@ const ButtonNext = styled.button`
 `;
 
 const volumeBasicInformation = observer((props) => {
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
     workspacestore;
 
   const [projectEnable, setProjectEnable] = useState(true);
@@ -44,31 +44,29 @@ const volumeBasicInformation = observer((props) => {
     loadProjectDetail,
   } = projectStore;
 
-  const {
-    setCluster,
-    setProject,
-    workspaceName,
-    setWorkspaceName,
-    setWorkspace,
-  } = deploymentStore;
+  const { setCluster, workspaceName, setWorkspaceName, setWorkspace } =
+    deploymentStore;
 
-  const { loadClusterInProject, clusters, setClusters } = clusterStore;
   const {
     setVolumeName,
     setAccessMode,
     setVolumeCapacity,
     volumeCapacity,
     volumeName,
+    setProject,
+    selectClusters,
+    setSelectClusters,
   } = volumeStore;
 
-  const [selectClusters, setSelectClusters] = useState([]);
+  // const [selectClusters, setSelectClusters] = useState([]);
 
   const onChange = async (e) => {
     const { value, name } = e.target;
     if (name === "VolumeName") {
       setVolumeName(value);
     } else if (name === "workspace") {
-      loadProjectListInWorkspace(value);
+      // loadProjectListInWorkspace(value); // project list 가져옴
+      loadWorkspaceDetail(value); // project 가져옴
       setWorkspace(value);
       setProjectEnable(false);
       return;
@@ -79,16 +77,27 @@ const volumeBasicInformation = observer((props) => {
       }
       // loadClusterInProject(value);
       setProject(value);
-      await loadProjectDetail(value);
+      await loadProjectDetail(value); // cluster list 가져옴
       setSelectClusters([...selectClusterInfo]);
       setClusterEnable(false);
+    } else if (name === "selectClusters") {
+      setSelectClusters(value);
     } else if (name === "accessMode") {
       setAccessMode(value);
     } else if (name === "volumeCapacity") {
       setVolumeCapacity(value);
     }
   };
-  console.log(onChange);
+
+  const checkCluster = ({ target: { checked } }, clusterName) => {
+    if (checked) {
+      setSelectClusters([...selectClusters, clusterName]);
+    } else {
+      setSelectClusters(
+        selectClusters.filter((cluster) => cluster !== clusterName)
+      );
+    }
+  };
 
   useEffect(() => {
     loadWorkSpaceList(true);
@@ -165,7 +174,7 @@ const volumeBasicInformation = observer((props) => {
                   onChange={onChange}
                 >
                   <option value={""}>Select Project</option>
-                  {projectListinWorkspace.map((project) => (
+                  {projectList.map((project) => (
                     <option value={project.projectName}>
                       {project.projectName}
                     </option>
@@ -194,7 +203,8 @@ const volumeBasicInformation = observer((props) => {
                         <td style={{ textAlign: "center" }}>
                           <input
                             type="checkbox"
-                            name="clusterCheck"
+                            // name="clusterCheck"
+                            name="selectClusters"
                             onChange={(e) => checkCluster(e, clusterName)}
                           />
                         </td>
@@ -207,6 +217,7 @@ const volumeBasicInformation = observer((props) => {
                 </tbody>
               </table>
             </td>
+            <th></th>
           </tr>
           <tr>
             <th>

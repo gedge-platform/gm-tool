@@ -71,24 +71,6 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
     );
   });
 
-  // Object.entries(pVolume?.annotations).map(([key, value]) => {
-  //   <tr>
-  //     <th style={{ width: "40%" }}>{key}</th>
-  //     {/* <td>
-  //       {isValidJSON(value) ? (
-  //         <ReactJson
-  //           src={JSON.parse(value)}
-  //           theme="summerfruit"
-  //           displayDataTypes={false}
-  //           displayObjectSize={false}
-  //         />
-  //       ) : (
-  //         value
-  //       )}
-  //     </td> */}
-  //     <td></td>
-  //   </tr>;
-  // });
   const metaTable = [];
   if (pVolume?.annotations) {
     Object.entries(pVolume?.annotations).map(([key, value]) => {
@@ -142,7 +124,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
                 <th>status</th>
                 <td>{pVolume?.status}</td>
                 <th>claim</th>
-                <td>{pVolume?.claim?.name}</td>
+                <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
               </tr>
               <tr>
                 <th>cluster</th>

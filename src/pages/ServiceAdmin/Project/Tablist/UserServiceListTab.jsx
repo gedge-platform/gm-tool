@@ -20,15 +20,6 @@ const UserServiceListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  // const {
-  //   projectDetail,
-  //   projectList,
-  //   totalElements,
-  //   loadProjectList,
-  //   loadProjectDetail,
-  //   deleteProject,
-  // } = projectStore;
-
   const {
     projectDetail,
     projectList,

@@ -59,18 +59,23 @@ const EventAccordion = ({ events }) => {
                   <AccordionSummary
                     expandIcon={
                       <ExpandMoreRoundedIcon
-                        sx={{ color: "rgba(255,255,255,0.7)" }}
+                        sx={{
+                          backgroundColor: "#2f3855",
+                          color: "rgba(255,255,255,0.7)",
+                        }}
                       />
                     }
                     aria-controls="ProjectEvent-content"
                     id="ProjectEvent-header"
-                    sx={{ bgcolor: theme.colors.primaryDark }}
+                    // sx={{ bgcolor: theme.colors.primaryDark }}
+                    sx={{ backgroundColor: "#2f3855" }}
                   >
                     <Typography
                       sx={{
                         width: "10%",
                         fontSize: 13,
                         color: "rgba(255,255,255,0.7)",
+                        backgroundColor: "#2f3855",
                       }}
                     >
                       {type}
@@ -79,17 +84,20 @@ const EventAccordion = ({ events }) => {
                       sx={{
                         fontSize: 13,
                         color: "rgba(255,255,255,0.7)",
+                        backgroundColor: "#2f3855",
                       }}
                     >
                       {strFormatByLength(message)}
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}>
+                  {/* <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}> */}
+                  <AccordionDetails sx={{ backgroundColor: "#2f3855" }}>
                     <Typography
                       sx={{
                         fontSize: 13,
                         color: "rgba(255,255,255,0.7)",
-                        bgcolor: theme.colors.primary,
+                        // bgcolor: theme.colors.primary,
+                        backgroundColor: "#2f3855",
                       }}
                     >
                       <table className="tb_data">

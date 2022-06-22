@@ -8,26 +8,25 @@ import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import workspacesStore from "../../../../store/WorkSpace";
-import CreateWorkSpace from "../Dialog/CreateWorkSpace";
-import clusterStore from "../../../../store/Cluster";
-import { swalUpdate } from "../../../../utils/swal-utils";
+import workspacesStore from "@/store/WorkSpace";
+import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
+import { swalUpdate } from "@/utils/swal-utils";
 import Detail from "../Detail";
 
-const APIListTab = observer(() => {
+const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { 
-    workSpaceList, 
-    loadWorkSpaceList, 
-    totalElements, 
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    totalElements,
     deleteWorkspace,
     workSpaceDetail,
-    loadWorkspaceDetail, 
+    loadWorkspaceDetail,
   } = workspacesStore;
 
   const [columDefs] = useState([
@@ -37,18 +36,21 @@ const APIListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "selectCluster",
+      headerName: "설명",
+      field: "workspaceDescription",
       filter: true,
     },
     {
-      headerName: "OWNER",
-      field: "workspaceOwner",
+      headerName: "클러스터",
+      field: "memberName",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "CREATOR",
-      field: "workspaceCreator",
+      field: "memberName",
       filter: true,
     },
     {
@@ -78,7 +80,10 @@ const APIListTab = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClick = ({ data: { workspaceName }, colDef: { field } }) => {
+  const handleClick = async ({
+    data: { workspaceName },
+    colDef: { field },
+  }) => {
     if (field === "delete") {
       swalUpdate("삭제하시겠습니까?", () =>
         deleteWorkspace(workspaceName, loadWorkSpaceList)
@@ -90,6 +95,7 @@ const APIListTab = observer(() => {
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -112,11 +118,11 @@ const APIListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={workSpaceList}
                   columnDefs={columDefs}
                   isBottom={true}
                   totalElements={totalElements}
-                  onCellClicked={handleClick}
                 />
               </div>
             </CTabPanel>
@@ -133,4 +139,4 @@ const APIListTab = observer(() => {
     </>
   );
 });
-export default APIListTab;
+export default WorkspaceListTab;

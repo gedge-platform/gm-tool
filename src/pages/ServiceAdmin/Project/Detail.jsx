@@ -5,19 +5,6 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import projectStore from "../../../store/Project";
 import "@grapecity/wijmo.styles/wijmo.css";
-import theme from "@/styles/theme";
-import { toJS } from "mobx";
-import {
-  MenuItem,
-  FormControl,
-  Select,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-  formLabelClasses,
-} from "@mui/material";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 

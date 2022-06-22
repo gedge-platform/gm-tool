@@ -54,11 +54,14 @@ class Volume {
   volumeName = "";
   accessMode = "";
   volumeCapacity = "";
+  project = "";
 
   content = "";
   responseData = "";
   clusterName = "";
-  project = "";
+  projectList = "";
+
+  selectClusters = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -187,9 +190,16 @@ class Volume {
       this.cluster = clusterName;
     });
   };
-  setProject = (project) => {
+
+  setProject = (value) => {
     runInAction(() => {
-      this.project = project;
+      this.project = value;
+    });
+  };
+
+  setSelectClusters = (selectClusters) => {
+    runInAction(() => {
+      this.selectClusters = selectClusters;
     });
   };
 
@@ -198,6 +208,7 @@ class Volume {
       this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
+      this.projectList = "";
     });
   };
 
@@ -317,9 +328,7 @@ class Volume {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
-        this.loadStorageClass(
-          this.viewList[0].name, this.viewList[0].cluster
-       );
+        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       });
 
     //  this.loadStorageClass(
