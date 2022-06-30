@@ -15,6 +15,7 @@ import projectStore from "../../../../store/Project";
 import schedulerStore from "../../../../store/Scheduler";
 import workspacestore from "../../../../store/WorkSpace";
 import volumeBasicInformation from "./VolumeBasicInformation";
+import { values } from "lodash";
 
 const Button = styled.button`
   background-color: #fff;
@@ -53,6 +54,7 @@ const CreateVolume = observer((props) => {
     project,
     selectClusters,
     setSelectClusters,
+    clusterName,
   } = volumeStore;
   const { workspace, setWorkspace } = deploymentStore;
 
@@ -68,9 +70,7 @@ const CreateVolume = observer((props) => {
     },
     spec: {
       storageClassName: "manual",
-      accessModes: {
-        accessMode,
-      },
+      accessModes: [accessMode],
       resources: {
         requests: {
           storage: Number(volumeCapacity) + "Gi",
@@ -128,7 +128,9 @@ const CreateVolume = observer((props) => {
   };
 
   const CreateVolume = () => {
+    // for문으로 복수의 클러스터이름 보내게
     createVolume(require("json-to-pretty-yaml").stringify(template));
+    // setSelectClusters();
   };
 
   useEffect(() => {
@@ -213,7 +215,9 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={CreateVolume}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={() => CreateVolume()}>
+                Schedule Apply
+              </ButtonNext>
             </div>
           </div>
         </>

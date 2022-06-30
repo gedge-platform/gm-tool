@@ -11,6 +11,7 @@ import projectStore from "../../../../store/Project";
 import deploymentStore from "../../../../store/Deployment";
 import clusterStore from "../../../../store/Cluster";
 import volumeStore from "../../../../store/Volume";
+import StorageClassStore from "../../../../store/StorageClass";
 
 const Button = styled.button`
   background-color: #fff;
@@ -35,6 +36,7 @@ const volumeBasicInformation = observer((props) => {
 
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
+  const [storageClasstEnable, setStorageClassEnable] = useState(true);
 
   const {
     loadProjectListInWorkspace,
@@ -57,6 +59,13 @@ const volumeBasicInformation = observer((props) => {
     selectClusters,
     setSelectClusters,
   } = volumeStore;
+
+  const { storageClassList } = StorageClassStore;
+  console.log(
+    Object.entries(storageClassList).map(([key, value]) =>
+      console.log(key, value)
+    )
+  );
 
   // const [selectClusters, setSelectClusters] = useState([]);
 
@@ -221,6 +230,28 @@ const volumeBasicInformation = observer((props) => {
           </tr>
           <tr>
             <th>
+              StorageClass <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select
+                  disabled={storageClasstEnable}
+                  name="storageClass"
+                  onChange={onChange}
+                >
+                  <option value={""}>Select StorageClass</option>
+                  {/* {storageClassList.map((storageClass) => (
+                    <option value={storageClass.storageClass}>
+                      {storageClass.storageClass}
+                    </option>
+                  ))} */}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
               Access Mode <span className="requried">*</span>
             </th>
             <td>
@@ -228,8 +259,8 @@ const volumeBasicInformation = observer((props) => {
                 <select name="accessMode" onChange={onChange}>
                   <option value="Select Access Mode">Select Access Mode</option>
                   <option value="ReadWriteOnce">ReadWriteOnce</option>
-                  <option value="ReadWriteOnce">ReadWriteOnce</option>
-                  <option value="ReadWriteOnce">ReadWriteOnce</option>
+                  <option value="ReadOnlyMany">ReadOnlyMany</option>
+                  <option value="ReadWriteMany">ReadWriteMany</option>
                   <option value="ReadWriteOncePod">ReadWriteOncePod</option>
                 </select>
               </FormControl>

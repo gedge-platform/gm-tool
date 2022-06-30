@@ -41,6 +41,7 @@ class StorageClass {
   totalPages = 1;
   resultList = {};
   viewList = [];
+  storageClassList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -110,11 +111,11 @@ class StorageClass {
     });
   };
 
-   setStorageClasses  = (list) => {
-     runInAction(() => {
+  setStorageClasses = (list) => {
+    runInAction(() => {
       this.storageClasses = list;
     });
-   };
+  };
 
   setViewList = (n) => {
     runInAction(() => {
@@ -129,35 +130,35 @@ class StorageClass {
   };
 
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
-     await axios
-       .get(
-         `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
-       )
-       .then((res) => {
-         runInAction(() => {
-           const YAML = require("json-to-pretty-yaml");
-           this.getYamlFile = YAML.stringify(res.data.data);
+    await axios
+      .get(
+        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+      )
+      .then((res) => {
+        runInAction(() => {
+          const YAML = require("json-to-pretty-yaml");
+          this.getYamlFile = YAML.stringify(res.data.data);
         });
-       });
-   };
-
+      });
+  };
 
   loadStorageClasses = async () => {
     await axios
       .get(`${SERVER_URL2}/storageclasses`)
       .then((res) => {
-         runInAction(() => {
-         this.storageClasses = res.data.data;
-         this.totalElements = res.data.data.length;
+        runInAction(() => {
+          this.storageClasses = res.data.data;
+          this.totalElements = res.data.data.length;
+          this.storageClassList = this.storageClasses.map((item) => item.name);
         });
-       })
-       .then(() => {
-         this.convertList(this.storageClasses, this.setStorageClasses);
-       })
-       .then(() => {
-         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster
-        );
-       });
+        console.log(this.storageClassList);
+      })
+      .then(() => {
+        this.convertList(this.storageClasses, this.setStorageClasses);
+      })
+      .then(() => {
+        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+      });
   };
 
   loadStorageClass = async (name, cluster) => {

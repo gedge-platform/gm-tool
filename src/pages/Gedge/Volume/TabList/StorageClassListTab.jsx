@@ -10,13 +10,10 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import axios from "axios";
 
-
-
-
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import StorageClassDetail from "../StorageClassDetail";
 //import volumeStore from "@/store/Volume";
-import volumeStore from "@/store/StorageClass"
+import volumeStore from "@/store/StorageClass";
 import ViewYaml from "../Dialog/ViewYaml";
 import {
   converterCapacity,
@@ -131,18 +128,15 @@ const StorageClassListTab = observer(() => {
     loadStorageClasses();
   }, []);
 
-
-  
-
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadStorageClasses}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={loadStorageClasses}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
@@ -151,23 +145,23 @@ const StorageClassListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                     onCellClicked={handleOpen}
-                    //  rowData={viewList}
-                     rowData={viewList}
-                     columnDefs={columDefs}
-                     isBottom={false}
-                     totalElements={totalElements}
-                     totalPages={totalPages}
-                     currentPage={currentPage}
-                     goNextPage={goNextPage}
-                     goPrevPage={goPrevPage}
+                  onCellClicked={handleOpen}
+                  //  rowData={viewList}
+                  rowData={viewList}
+                  columnDefs={columDefs}
+                  isBottom={false}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
         </PanelBox>
-        <StorageClassDetail/>
+        <StorageClassDetail />
       </CReflexBox>
     </>
   );

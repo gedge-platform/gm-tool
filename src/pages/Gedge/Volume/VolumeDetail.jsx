@@ -7,6 +7,7 @@ import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
 import styled from "styled-components";
+import { dateFormatter } from "@/utils/common-utils";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -135,8 +136,8 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
               <tr>
                 <th>volumeMode</th>
                 <td>{pVolume?.volumeMode}</td>
-                <th>createAt</th>
-                <td>{pVolume?.createAt}</td>
+                <th>created</th>
+                <td>{dateFormatter(pVolume?.createAt)}</td>
               </tr>
             </tbody>
           </table>

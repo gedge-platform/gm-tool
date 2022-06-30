@@ -8,6 +8,7 @@ import {
 } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
 import { setItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
@@ -341,7 +342,6 @@ class Volume {
     await axios
       .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
-        console.log(data);
         this.storageClass = data;
         this.scYamlFile = "";
         this.scAnnotations = {};
@@ -375,14 +375,13 @@ class Volume {
       });
   };
 
-  createVolume = (template) => {
-    const body = {
-      template,
-    };
+  createVolume = (template, callback) => {
+    const YAML = require("yamljs");
     axios
       .post(
-        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${clusterName}`,
-        body
+        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+
+        YAML.parse(this.content)
       )
       .then((res) => {
         console.log(res);
