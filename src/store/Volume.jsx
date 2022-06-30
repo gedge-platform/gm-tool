@@ -18,13 +18,6 @@ class Volume {
   totalElements = 0;
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
-  pvClaims = [];
-  pvClaim = {};
-  pvClaimList = [];
-  pvClaimYamlFile = "";
-  pvClaimAnnotations = {};
-  pvClaimLables = {};
-  pvClaimEvents = [];
   storageClasses = [];
   storageClass = {};
   scYamlFile = "";
@@ -47,6 +40,8 @@ class Volume {
   ];
   label = {};
 
+<<<<<<< HEAD
+=======
   currentPage = 1;
   totalPages = 1;
   resultList = {};
@@ -60,6 +55,7 @@ class Volume {
   clusterName = "";
   project = "";
 
+>>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   constructor() {
     makeAutoObservable(this);
   }
@@ -103,6 +99,7 @@ class Volume {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
+      console.log(apiList);
 
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
@@ -134,12 +131,15 @@ class Volume {
     });
   };
 
+<<<<<<< HEAD
+=======
   setPVClaimList = (list) => {
     runInAction(() => {
       this.pvClaimList = list;
     });
   };
 
+>>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
@@ -255,6 +255,8 @@ class Volume {
       });
   };
 
+<<<<<<< HEAD
+=======
   // 클레임 관리
   loadPVClaims = async () => {
     await axios
@@ -306,6 +308,7 @@ class Volume {
       });
   };
 
+>>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   loadStorageClasses = async () => {
     await axios
       .get(`${SERVER_URL2}/storageclasses`)

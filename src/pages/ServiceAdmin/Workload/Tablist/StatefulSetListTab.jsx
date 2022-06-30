@@ -23,6 +23,11 @@ const StatefulSetListTab = observer(() => {
     totalElements,
     loadStatefulSetList,
     loadStatefulSetDetail,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = statefulSetStore;
 
   const [columDefs] = useState([
@@ -88,10 +93,14 @@ const StatefulSetListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={statefulSetList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

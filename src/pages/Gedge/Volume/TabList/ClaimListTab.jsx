@@ -11,7 +11,7 @@ import { observer } from "mobx-react";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 // import VolumeDetail from "../VolumeDetail";
-import volumeStore from "@/store/Volume";
+import claimStore from "@/store/Claim";
 import ViewYaml from "../Dialog/ViewYaml";
 import ClaimDetail from "../ClaimDetail";
 import {
@@ -44,7 +44,7 @@ const ClaimListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
-  } = volumeStore;
+  } = claimStore;
 
   const [columDefs] = useState([
     {
