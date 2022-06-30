@@ -8,6 +8,7 @@ import {
 } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
 import { setItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
@@ -40,22 +41,6 @@ class Volume {
   ];
   label = {};
 
-<<<<<<< HEAD
-=======
-  currentPage = 1;
-  totalPages = 1;
-  resultList = {};
-
-  volumeName = "";
-  accessMode = "";
-  volumeCapacity = "";
-
-  content = "";
-  responseData = "";
-  clusterName = "";
-  project = "";
-
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   constructor() {
     makeAutoObservable(this);
   }
@@ -131,15 +116,6 @@ class Volume {
     });
   };
 
-<<<<<<< HEAD
-=======
-  setPVClaimList = (list) => {
-    runInAction(() => {
-      this.pvClaimList = list;
-    });
-  };
-
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
@@ -187,9 +163,16 @@ class Volume {
       this.cluster = clusterName;
     });
   };
-  setProject = (project) => {
+
+  setProject = (value) => {
     runInAction(() => {
-      this.project = project;
+      this.project = value;
+    });
+  };
+
+  setSelectClusters = (selectClusters) => {
+    runInAction(() => {
+      this.selectClusters = selectClusters;
     });
   };
 
@@ -198,6 +181,7 @@ class Volume {
       this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
+      this.projectList = "";
     });
   };
 
@@ -255,8 +239,6 @@ class Volume {
       });
   };
 
-<<<<<<< HEAD
-=======
   // 클레임 관리
   loadPVClaims = async () => {
     await axios
@@ -308,7 +290,6 @@ class Volume {
       });
   };
 
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   loadStorageClasses = async () => {
     await axios
       .get(`${SERVER_URL2}/storageclasses`)
@@ -320,9 +301,7 @@ class Volume {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
-        this.loadStorageClass(
-          this.viewList[0].name, this.viewList[0].cluster
-       );
+        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       });
 
     //  this.loadStorageClass(
@@ -335,7 +314,6 @@ class Volume {
     await axios
       .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
-        console.log(data);
         this.storageClass = data;
         this.scYamlFile = "";
         this.scAnnotations = {};
@@ -369,14 +347,13 @@ class Volume {
       });
   };
 
-  createVolume = (template) => {
-    const body = {
-      template,
-    };
+  createVolume = (template, callback) => {
+    const YAML = require("yamljs");
     axios
       .post(
-        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${clusterName}`,
-        body
+        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+
+        YAML.parse(this.content)
       )
       .then((res) => {
         console.log(res);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
-import CreateProject from "../../../ServiceAdmin/Project/Dialog/CreateProject";
+import CreateProject from "../Dialog/CreateProject";
 import { swalUpdate } from "../../../../utils/swal-utils";
 
 const UserServiceListTab = observer(() => {
@@ -44,11 +44,17 @@ const UserServiceListTab = observer(() => {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "워크스페이스",
       field: "workspaceName",
       filter: true,
+      cellRenderer: function ({ data: { workspace } }) {
+        return `<span>${workspace.workspaceName}</span>`;
+      },
     },
     {
       headerName: "생성날짜",
@@ -92,7 +98,7 @@ const UserServiceListTab = observer(() => {
     loadProjectDetail(projectName);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     loadProjectList("user");
   }, []);
 
@@ -101,12 +107,12 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={() => loadProjectList()}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={loadProjectList}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
- 
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
