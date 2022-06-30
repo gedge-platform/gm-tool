@@ -41,25 +41,6 @@ class Volume {
   ];
   label = {};
 
-<<<<<<< HEAD
-=======
-  currentPage = 1;
-  totalPages = 1;
-  resultList = {};
-
-  volumeName = "";
-  accessMode = "";
-  volumeCapacity = "";
-  project = "";
-
-  content = "";
-  responseData = "";
-  clusterName = "";
-  projectList = "";
-
-  selectClusters = [];
-
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   constructor() {
     makeAutoObservable(this);
   }
@@ -135,15 +116,6 @@ class Volume {
     });
   };
 
-<<<<<<< HEAD
-=======
-  setPVClaimList = (list) => {
-    runInAction(() => {
-      this.pvClaimList = list;
-    });
-  };
-
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
@@ -267,8 +239,6 @@ class Volume {
       });
   };
 
-<<<<<<< HEAD
-=======
   // 클레임 관리
   loadPVClaims = async () => {
     await axios
@@ -320,7 +290,6 @@ class Volume {
       });
   };
 
->>>>>>> 71a26a72b4e458d230bd7d118d5ac5d3a6a76d24
   loadStorageClasses = async () => {
     await axios
       .get(`${SERVER_URL2}/storageclasses`)
