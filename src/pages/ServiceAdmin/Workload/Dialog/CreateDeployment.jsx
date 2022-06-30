@@ -172,7 +172,9 @@ const CreateDeployment = observer((props) => {
     const requestId = `${deploymentName}-${randomString()}`;
 
     postWorkload(requestId, workspace, project, "Deployment");
+    console.log(requestId, workspace, project, "Deployment");
     postScheduler(requestId, content, handleClose);
+    console.log(requestId, content, handleClose);
 
     // let formData = new FormData();
     // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요

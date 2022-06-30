@@ -96,10 +96,6 @@ class Deployment {
   containerPort = "";
   podReplicas = 0;
 
-  // workspace = "default";
-  // cluster = "default";
-  // project = "default";
-
   workspace = "";
   cluster = "";
   project = "";
@@ -119,43 +115,6 @@ class Deployment {
   //     protocol: "",
   //   },
   // ];
-
-  //   content = {
-  //     apiVersion: "apps/v1",
-  //     kind: "Deployment",
-  //     metadata: {
-  //       name: this.deploymentName,
-  //       labels: {
-  //         app: this.deploymentName,
-  //       },
-  //     },
-  //     spec: {
-  //       replicas: this.podReplicas,
-  //       selector: {
-  //         matchLabels: {
-  //           app: this.deploymentName,
-  //         },
-  //       },
-  //       template: {
-  //         metadata: {
-  //           labels: {
-  //             app: this.deploymentName,
-  //           },
-  //         },
-  //         spec: {
-  //           containers: [
-  //             {
-  //               image: this.containerImage,
-  //               name: this.containerName,
-  //               ports: {
-  //                 containerPort: this.containerPort,
-  //               },
-  //             },
-  //           ],
-  //         },
-  //       },
-  //     },
-  //   };
 
   content = "";
 

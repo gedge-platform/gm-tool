@@ -103,7 +103,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
       );
     });
   }
-
+  console.log(pvClaim);
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>

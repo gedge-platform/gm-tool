@@ -6,6 +6,13 @@ import { CDialogNew } from "../../../../components/dialogs";
 import { swalError } from "../../../../utils/swal-utils";
 import { Projection } from "leaflet";
 import VolumeBasicInformation from "./VolumeBasicInformation";
+import deploymentStore from "../../../../store/Deployment";
+import volumeStore from "../../../../store/Volume";
+import VolumeAdvancedSetting from "./VolumeAdvancedSetting";
+import VolumYamlPopup from "./VolumYamlPopup";
+import VolumePopup from "./VolumePopup";
+import projectStore from "../../../../store/Project";
+import schedulerStore from "../../../../store/Scheduler";
 
 const Button = styled.button`
   background-color: #fff;
@@ -27,44 +34,95 @@ const ButtonNext = styled.button`
 const CreateVolume = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const { setProjectListinWorkspace } = projectStore;
+  const {
+    volumeName,
+    setVolumeName,
+    accessMode,
+    volumeCapacity,
+    setVolumeCapacity,
+    responseData,
+    setResponseData,
+    content,
+    setContent,
+    clearAll,
+    createVolume,
+  } = volumeStore;
+  const { workspace, setWorkspace, project, setProject } = deploymentStore;
 
-  //     const template = {
-  //         apiVersion: "v1",
-  //         kind: "PersistentVolumeClaim",
-  //         metadata: {
-  //             namespace: Projection,
-  //             name: VolumeName,
-  //             labels: {}
-  //         },
-  //         spec:
-  //   accessModes:
-  //     - ReadWriteOnce
-  //   resources:
-  //     requests:
-  //       storage: 10Gi
-  //   storageClassName: local
-  //     }
+  const template = {
+    apiVersion: "v1",
+    kind: "PersistentVolumeClaim",
+    metadata: {
+      name: volumeName,
+      namespace: project,
+      labels: {},
+    },
+    spec: {
+      storageClassName: "manual",
+      accessModes: {
+        accessMode,
+      },
+      resources: {
+        requests: {
+          storage: Number(volumeCapacity) + "Gi",
+        },
+      },
+    },
+  };
+
+  const onClickStepOne = () => {
+    if (volumeName === "") {
+      swalError("Volume 이름을 입력해주세요");
+      return;
+    }
+    if (workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    if (accessMode === "") {
+      swalError("Access Mode를 선택해주세요");
+      return;
+    }
+    if (volumeCapacity === "") {
+      swalError("Volume 용량을 입력해주세요");
+      return;
+    }
+    if (
+      volumeName !== "" &&
+      workspace !== "" &&
+      project !== "" &&
+      accessMode !== "" &&
+      volumeCapacity !== ""
+    ) {
+      setStepValue(2);
+    }
+  };
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
-    // setProjectListinWorkspace();s
+    setProjectListinWorkspace();
     setStepValue(1);
-    // clearAll();
-  };
-
-  const onClickStepOne = () => {
-    setStepValue(2);
+    clearAll();
   };
 
   const onClickStepTwo = () => {
     setStepValue(3);
   };
 
-  //   const handlePreStepValue = () => {
-  //     setWorkspace();
-  //     setProject();
-  //   };
+  const handlePreStepValue = () => {
+    setWorkspace();
+    setProject();
+  };
+
+  const CreateVolume = () => {
+    createVolume(require("json-to-pretty-yaml").stringify(template));
+  };
 
   useEffect(() => {
     if (stepValue === 3) {
@@ -101,7 +159,7 @@ const CreateVolume = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
-          고급 설정
+          <VolumeAdvancedSetting />
           <div
             style={{
               display: "flex",
@@ -118,7 +176,7 @@ const CreateVolume = observer((props) => {
             >
               <Button
                 onClick={() => {
-                  //   handlePreStepValue();
+                  handlePreStepValue();
                   setStepValue(1);
                 }}
               >
@@ -132,7 +190,7 @@ const CreateVolume = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          Yaml
+          <VolumYamlPopup />
           <div
             style={{
               display: "flex",
@@ -153,7 +211,7 @@ const CreateVolume = observer((props) => {
           </div>
         </>
       );
-    } else return <DeploymentPopup />;
+    } else <VolumePopup />;
   };
 
   return (

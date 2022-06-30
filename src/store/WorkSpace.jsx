@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 import { ThirtyFpsRounded } from "@mui/icons-material";
@@ -28,51 +28,68 @@ class Workspace {
   selectCluster = "";
   dataUsage = {};
   projectList = [];
+  selectClusterInfo = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  loadWorkSpaceList = async (type = "user") => {
+  // loadWorkSpaceList = async (type = "user") => {
+  //   await axios
+  //     .get(`${SERVER_URL2}/workspace`)
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         this.workSpaceList = res.data;
+  //         // this.workSpaceDetail = res.data[0];
+  //         this.totalElements = res.data.length;
+  //       });
+  //     })
+  //     .then(() => {
+  //       this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+  //     });
+  // };
+
+  loadWorkSpaceList = async (type = false) => {
     await axios
-      .get(`${SERVER_URL}/workspaces`, {
-        auth: BASIC_AUTH,
-      })
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL2}/workspace`)
+      .then((res) => {
         runInAction(() => {
-          this.workSpaceList = data;
-          this.workSpaceDetail = data[0];
-          this.totalElements = data.length;
+          this.workSpaceList = res.data;
+          // this.workSpaceDetail = res.data[0];
+          this.totalElements = res.data.length;
         });
+      })
+      .then(() => {
+        type
+          ? null
+          : this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
       });
-    this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
   };
 
+  // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
-    await axios
-    .get(`${SERVER_URL}/workspaces/${workspaceName}`, {
-      auth: BASIC_AUTH,
-    })
-    .then(({ data: { data } }) => {
+    await axios.get(`${SERVER_URL2}/workspace/${workspaceName}`).then((res) => {
       runInAction(() => {
-        this.workSpaceDetail = data;
+        this.workSpaceDetail = res.data;
         this.dataUsage = this.workSpaceDetail.resourceUsage;
-        if (data.events !== null) {
+        if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;
         } else {
           this.events = null;
         }
-        this.detailInfo = data.projectList;
+        this.detailInfo = res.data.projectList;
+        // this.selectCluster = this.clusterList[0];
+        this.selectClusterInfo = res.data.selectCluster;
 
-        this.projectList = this.detailInfo.map(
-          (project) => project.projectName
-        );
-        this.selectProject = this.projectList[0];
-        //this.clusterList = data.selectCluster;
-        this.selectCluster = this.clusterList[0];
+        // this.projectList = this.detailInfo.map(
+        //   (project) => project.projectName
+        // );
+        // this.selectProject = this.projectList[0];
+        // //this.clusterList = data.selectCluster;
+        // console.log(this.selectCluster);
       });
-    }
-    )} 
+    });
+  };
 
   setWorkSpaceList = (workSpaceList = []) => {
     runInAction(() => {
@@ -100,13 +117,11 @@ class Workspace {
       clusterName: selectCluster,
     };
     axios
-      .post(`${SERVER_URL}/workspace`, body2)
+      .post(`${SERVER_URL2}/workspace`, body2)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
     return axios
-      .post(`${SERVER_URL}/workspaces`, body, {
-        auth: BASIC_AUTH,
-      })
+      .post(`${SERVER_URL2}/workspaces`, body)
       .then((res) => {
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
@@ -131,14 +146,12 @@ class Workspace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL}/workspace/${workspaceName}`)
+      .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 
     axios
-      .delete(`${SERVER_URL}/workspaces/${workspaceName}`, {
-        auth: BASIC_AUTH,
-      })
+      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
       .then((res) => {
         if (res.status === 200)
           swalError("워크스페이스가 삭제되었습니다.", callback);
@@ -146,6 +159,12 @@ class Workspace {
       .catch((err) => {
         swalError("삭제에 실패하였습니다.");
       });
+  };
+
+  setSelectClusterInfo = (selectClusterInfo) => {
+    runInAction(() => {
+      this.selectClusterInfo = selectClusterInfo;
+    });
   };
 }
 
