@@ -113,7 +113,7 @@ const DeploymentListTab = observer(() => {
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
-              <div style={{height:"410px"}}>
+              <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
                   rowData={viewList}
@@ -134,9 +134,7 @@ const DeploymentListTab = observer(() => {
             reloadFunc={loadDeploymentList}
             />
         </PanelBox>
-        <div>
         <Detail />
-        </div>
       </CReflexBox>
     </>
   );

@@ -57,7 +57,7 @@ const Login = () => {
           setItem("userRole", jwtDecode(accessToken).role);
           setItem("token", accessToken); // local storage에 저장
           setUser(jwtDecode(accessToken));
-          console.log(jwtDecode(accessToken));
+          setTimeout;
           swalError("로그인 되었습니다.", () => history.push("/"));
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));

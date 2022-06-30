@@ -97,7 +97,6 @@ const ServiceListTab = observer(() => {
   return (
     <>
       <CReflexBox>
-      <div>
         <PanelBox>
           <CommActionBar
             reloadFunc={loadServiceList}
@@ -109,7 +108,7 @@ const ServiceListTab = observer(() => {
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
-              <div style={{height:"410px", zIndex:"1"}}>
+              <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
                   rowData={viewList}
@@ -130,8 +129,7 @@ const ServiceListTab = observer(() => {
             reloadFunc={loadServiceList}
             />
         </PanelBox>
-            </div>
-        <Detail service={serviceDetail} style={{zIndex: "2"}} />
+        <Detail service={serviceDetail} />
       </CReflexBox>
     </>
   );

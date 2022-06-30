@@ -162,13 +162,17 @@ class Deployment {
   constructor() {
     makeAutoObservable(this);
   }
-  
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -178,7 +182,11 @@ class Deployment {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -268,17 +276,19 @@ class Deployment {
   };
 
   loadDeploymentList = async (type) => {
-    await axios.get(`${SERVER_URL2}/deployments`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projetType === type);
-        this.deploymentList = list;
-        this.deploymentDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL2}/deployments`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter((item) => item.projetType === type);
+          this.deploymentList = list;
+          this.deploymentDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.deploymentList, this.setPDeploymentList);
       });
-    })
-    .then(() => {
-      this.convertList(this.deploymentList, this.setPDeploymentList);
-    })
     this.loadDeploymentDetail(
       this.deploymentList[0].name,
       this.deploymentList[0].cluster,
