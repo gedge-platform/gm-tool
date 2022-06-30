@@ -22,6 +22,7 @@ import selectArr from "@/images/bullet/select_arr.png";
 import passed from "@/images/bullet/ico_step_passed.png";
 import deleteBtn from "@/images/bullet/dailog_close.png";
 import deleteBtn2 from "@/images/ico-action/ico_del.png";
+import terminalBtn from "@/images/ico-action/ico_terminal.png";
 
 import { PanelBox } from "@/components/styles/PanelBox";
 
@@ -271,6 +272,7 @@ const globalStyles = createGlobalStyle`
       color: #0a2348 !important;
     }
   }
+
 
   .state_ico {
     position: relative;
@@ -1155,6 +1157,11 @@ const globalStyles = createGlobalStyle`
   .state_ico_new.delete:hover{
     background-position: 0 -16px;
   }
+  .state_ico_new.terminal {
+    background: url(${terminalBtn}) no-repeat 0px 2px;
+  }.state_ico_new.terminal:hover{
+    background-position: 0 -16px;
+  }
 
   .status_ico {
     position: relative;
@@ -1258,7 +1265,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .tab1-button-key-value-area{
-    width: 49% 
+    width: 49%
   }
 
   .tab1-button-key-area{
@@ -1270,7 +1277,7 @@ const globalStyles = createGlobalStyle`
     font-size: 14px;
     font-weight: bold;
   }
-  
+
   .tab1-button-value-area{
     width: 100%;
     height: 0%;
@@ -1285,7 +1292,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .tab1-button-value-minor{
-    font-size: 14px 
+    font-size: 14px
   }
 
   .tab1-button-value-minor-bottom{
@@ -1432,6 +1439,10 @@ const globalStyles = createGlobalStyle`
     width: 410px;
     margin: 5px 0 5px 0;
   }
+}
+
+.grid-height2{
+  height: 100%;
 }
 
 //map-----------------------

@@ -9,7 +9,7 @@ const CTabPanel = (props) => {
     } = props;
 
     return (
-        <div
+        <div 
             role="tabpanel"
             hidden={value !== index}
             id={`ctabpanel-${index}`}

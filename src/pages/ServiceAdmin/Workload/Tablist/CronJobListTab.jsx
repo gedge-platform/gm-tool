@@ -18,6 +18,7 @@ const CronJobListTab = observer(() => {
   };
 
   const {
+    viewList,
     cronJobList,
     cronJobDetail,
     totalElements,
@@ -109,7 +110,7 @@ const CronJobListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={cronJobList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

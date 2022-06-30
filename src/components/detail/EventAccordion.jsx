@@ -37,6 +37,7 @@ const EventAccordion = ({ events }) => {
         <p>No Events Info.</p>
       </EventsContainer>
     );
+    var color = null;
   // if (events.length < 1)
   // return <EventsContainer>No Events Info.</EventsContainer>;
   return (
@@ -70,16 +71,43 @@ const EventAccordion = ({ events }) => {
                     // sx={{ bgcolor: theme.colors.primaryDark }}
                     sx={{ backgroundColor: "#2f3855" }}
                   >
-                    <Typography
+                   {/* {type === "Warning" ? (
+                        color = "rgba(255,0,0,0.9)"
+                      ) : (
+                        color =  "rgba(255,255,255,0.7)"
+                      )}
+                        <Typography
+                      sx={{
+                        width: "10%",
+                        fontSize: 13,
+                        color,
+                      }}
+                      >
+                      {type}
+                    </Typography> */}
+                    {type === "Warning" ? (
+                      <Typography
+                      sx={{
+                        width: "10%",
+                        fontSize: 13,
+                        color: "rgba(255,0,0,0.9)",
+                      }}
+                      >
+                      {type}
+                    </Typography>
+                    ) : (
+                      <Typography
                       sx={{
                         width: "10%",
                         fontSize: 13,
                         color: "rgba(255,255,255,0.7)",
                         backgroundColor: "#2f3855",
                       }}
-                    >
+                      >
                       {type}
                     </Typography>
+                    )}
+
                     <Typography
                       sx={{
                         fontSize: 13,

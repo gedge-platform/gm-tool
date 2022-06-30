@@ -5,12 +5,16 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
+import { CIconButton } from "@/components/buttons"
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
+import Terminal from "../Dialog/Terminal";
+// import TerminalIcon from '@mui/icons-material/Terminal';
+// import { images } from '../../../../images/ico-action/ico_terminal.png';
 
 const CoreClusterListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -18,7 +22,7 @@ const CoreClusterListTab = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-
+  const [openTerminal, setOpenTerminal] = useState(false);
   const {
     clusterDetail,
     clusterList,
@@ -32,17 +36,8 @@ const CoreClusterListTab = observer(() => {
     totalElements,
   } = clusterStore;
 
+
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
       headerName: "이름",
       field: "clusterName",
@@ -79,21 +74,47 @@ const CoreClusterListTab = observer(() => {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
+    {
+      headerName: "",
+      field: "terminal",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        // return `<span class="state_ico_new terminal" onClick></span> `;
+        return `<button class="tb_volume_yaml" onClick>Terminal</button>`
+      },
+      cellStyle: { textAlign: "center" },
+    },
   ]);
 
   const history = useHistory();
 
   const handleClick = (e) => {
+    let fieldName = e.colDef.field;
     loadCluster(e.data.clusterName);
+    if (fieldName === "terminal") {
+      handleOpenTerminal();
+    }
   };
 
-  const handleOpen = () => {
+  const handleOpen = (e) => {
     setOpen(true);
+
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const handleOpenTerminal = () => {
+    setOpenTerminal(true);
+  };
+
+  const handleCloseTerminal = () => {
+    setOpenTerminal(false);
+  };
+
 
   useLayoutEffect(() => {
     loadClusterList("core");
@@ -130,6 +151,11 @@ const CoreClusterListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
+          <Terminal
+            open={openTerminal}
+            // yaml={getYamlFile}
+            onClose={handleCloseTerminal}
+          />
           <CreateCluster type={"core"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
