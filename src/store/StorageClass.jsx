@@ -41,7 +41,8 @@ class StorageClass {
   totalPages = 1;
   resultList = {};
   viewList = [];
-  storageClassList = [];
+  storageClassName = "";
+  storageClassNameData = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -149,15 +150,16 @@ class StorageClass {
         runInAction(() => {
           this.storageClasses = res.data.data;
           this.totalElements = res.data.data.length;
-          this.storageClassList = this.storageClasses.map((item) => item.name);
         });
-        console.log(this.storageClassList);
       })
       .then(() => {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+      })
+      .then(() => {
+        this.loadStorageClassName(this.viewList[0].cluster);
       });
   };
 
@@ -172,6 +174,7 @@ class StorageClass {
         this.scParameters = data.parameters;
         this.label = data.labels;
         this.annotations = data.annotations;
+        this.storageClassList = data.name;
 
         Object.entries(this.storageClass?.annotations).forEach(
           ([key, value]) => {
@@ -197,6 +200,34 @@ class StorageClass {
           this.scParameters[key] = value;
         });
       });
+  };
+
+  loadStorageClassName = async (cluster) => {
+    await axios
+      .get(`${SERVER_URL2}/storageclasses?cluster=${cluster}`)
+      .then((res) => {
+        runInAction(() => {
+          this.storageClassNameData = res.data.data;
+        });
+      });
+  };
+
+  setStorageClassNameData = (value) => {
+    runInAction(() => {
+      this.storageClassNameData = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
+    });
+  };
+
+  setStorageClassName = (value) => {
+    runInAction(() => {
+      this.storageClassName = value;
+    });
   };
 }
 
