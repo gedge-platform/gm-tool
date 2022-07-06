@@ -7,6 +7,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 
 const DeploymentYaml = observer(() => {
   const { content, setContent } = deploymentStore;
+  console.log(content);
 
   return (
     <>

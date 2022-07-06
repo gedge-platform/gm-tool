@@ -33,21 +33,16 @@ const ButtonNext = styled.button`
 const volumeBasicInformation = observer((props) => {
   const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
     workspacestore;
+  console.log(projectList);
 
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
-  const [storageClasstEnable, setStorageClassEnable] = useState(true);
+  const [storageClassEnable, setStorageClassEnable] = useState(true);
 
-  const {
-    loadProjectListInWorkspace,
-    projectListinWorkspace,
-    selectClusterInfo,
-    setSelectClusterInfo,
-    loadProjectDetail,
-  } = projectStore;
+  const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
+    projectStore;
 
-  const { setCluster, workspaceName, setWorkspaceName, setWorkspace } =
-    deploymentStore;
+  const { setWorkspace } = deploymentStore;
 
   const {
     setVolumeName,
@@ -60,18 +55,12 @@ const volumeBasicInformation = observer((props) => {
     setSelectClusters,
   } = volumeStore;
 
-  const { storageClassList } = StorageClassStore;
-  console.log(
-    Object.entries(storageClassList).map(([key, value]) =>
-      console.log(key, value)
-    )
-  );
-
-  // const [selectClusters, setSelectClusters] = useState([]);
+  const { loadStorageClassName, setStorageClass, storageClassNameData } =
+    StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;
-    if (name === "VolumeName") {
+    if (name === "volumeName") {
       setVolumeName(value);
     } else if (name === "workspace") {
       // loadProjectListInWorkspace(value); // project list 가져옴
@@ -84,13 +73,15 @@ const volumeBasicInformation = observer((props) => {
         setSelectClusterInfo([]);
         return;
       }
-      // loadClusterInProject(value);
       setProject(value);
       await loadProjectDetail(value); // cluster list 가져옴
       setSelectClusters([...selectClusterInfo]);
       setClusterEnable(false);
+      setStorageClassEnable(false);
     } else if (name === "selectClusters") {
       setSelectClusters(value);
+    } else if (name === "storageClass") {
+      setStorageClass(value);
     } else if (name === "accessMode") {
       setAccessMode(value);
     } else if (name === "volumeCapacity") {
@@ -99,13 +90,18 @@ const volumeBasicInformation = observer((props) => {
   };
 
   const checkCluster = ({ target: { checked } }, clusterName) => {
+    // checked가 true일 때
     if (checked) {
-      setSelectClusters([...selectClusters, clusterName]);
-    } else {
-      setSelectClusters(
-        selectClusters.filter((cluster) => cluster !== clusterName)
-      );
+      // setSelectClusters([...selectClusters, clusterName]); //cluster 배열
+      setSelectClusters(clusterName);
+      loadStorageClassName(clusterName);
     }
+    // checked가 false일 때
+    // else {
+    // setSelectClusters(
+    //   selectClusters.filter((cluster) => cluster !== clusterName)
+    // );
+    // }
   };
 
   useEffect(() => {
@@ -146,7 +142,7 @@ const volumeBasicInformation = observer((props) => {
                 type="text"
                 placeholder="Volume Name"
                 className="form_fullWidth"
-                name="VolumeName"
+                name="volumeName"
                 onChange={onChange}
                 value={volumeName}
               />
@@ -212,7 +208,6 @@ const volumeBasicInformation = observer((props) => {
                         <td style={{ textAlign: "center" }}>
                           <input
                             type="checkbox"
-                            // name="clusterCheck"
                             name="selectClusters"
                             onChange={(e) => checkCluster(e, clusterName)}
                           />
@@ -235,16 +230,18 @@ const volumeBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={storageClasstEnable}
+                  disabled={storageClassEnable}
                   name="storageClass"
                   onChange={onChange}
                 >
                   <option value={""}>Select StorageClass</option>
-                  {/* {storageClassList.map((storageClass) => (
-                    <option value={storageClass.storageClass}>
-                      {storageClass.storageClass}
-                    </option>
-                  ))} */}
+                  {storageClassNameData
+                    ? storageClassNameData.map((storageClass) => (
+                        <option value={storageClass.name}>
+                          {storageClass.name}
+                        </option>
+                      ))
+                    : ""}
                 </select>
               </FormControl>
             </td>
@@ -279,7 +276,7 @@ const volumeBasicInformation = observer((props) => {
                 className="form_fullWidth"
                 name="volumeCapacity"
                 onChange={onChange}
-                value={volumeCapacity}
+                value={volumeCapacity || ""}
               />
             </td>
             <th></th>

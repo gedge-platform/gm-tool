@@ -101,7 +101,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Claim" />
+        <CTab label="Claim Info" />
         <CTab label="Annotations" />
         <CTab label="Events" />
       </CTabs>

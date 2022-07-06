@@ -69,6 +69,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   };
 
   const { pvClaimLables, pvClaim, events, label } = claimStore;
+  console.log(pvClaim);
 
   const annotationTable = [];
 
@@ -103,7 +104,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
       );
     });
   }
-  console.log(pvClaim);
+
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -117,28 +118,28 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
-                <th>name</th>
-                <td>{pvClaim?.name}</td>
+                <th>Claim Name</th>
+                <td>{pvClaim.name ? pvClaim?.name : "-"}</td>
                 <th>capacity</th>
-                <td>{pvClaim?.capacity}</td>
+                <td>{pvClaim?.capacity ? pvClaim?.capacity : "-"}</td>
               </tr>
               <tr>
                 <th>namespace</th>
-                <td>{pvClaim?.namespace}</td>
+                <td>{pvClaim?.namespace ? pvClaim?.namespace : "-"}</td>
                 <th>accessMode</th>
-                <td>{pvClaim?.accessMode}</td>
+                <td>{pvClaim?.accessMode ? pvClaim?.accessMode : "-"}</td>
               </tr>
               <tr>
                 <th>status</th>
-                <td>{pvClaim?.status}</td>
-                <th>volume</th>
-                <td>{pvClaim?.volume}</td>
+                <td>{pvClaim?.status ? pvClaim?.status : "-"}</td>
+                <th>volume Name</th>
+                <td>{pvClaim?.volume ? pvClaim?.volume : "-"}</td>
               </tr>
               <tr>
-                <th>clusterName</th>
-                <td>{pvClaim?.clusterName}</td>
+                <th>cluster Name</th>
+                <td>{pvClaim?.clusterName ? pvClaim?.clusterName : "-"}</td>
                 <th>storageClass</th>
-                <td>{pvClaim?.storageClass}</td>
+                <td>{pvClaim?.storageClass ? pvClaim?.storageClass : "-"}</td>
               </tr>
             </tbody>
           </table>

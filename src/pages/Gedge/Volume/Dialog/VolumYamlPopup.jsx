@@ -32,7 +32,7 @@ const VolumYamlPopup = observer(() => {
         name="editor"
         width="90%"
         onChange={(value) => {
-          //   setContent(value);
+          // setContent(value);
         }}
         fontSize={14}
         showPrintMargin={true}

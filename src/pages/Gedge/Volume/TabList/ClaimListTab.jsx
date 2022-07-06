@@ -143,10 +143,10 @@ const ClaimListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadPVClaims}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={loadPVClaims}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
@@ -156,7 +156,7 @@ const ClaimListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={pvClaims}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

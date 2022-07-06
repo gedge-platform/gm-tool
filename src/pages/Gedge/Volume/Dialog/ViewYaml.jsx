@@ -56,7 +56,7 @@ const ViewDialog = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Create Volume"}
+      title={"Volume Yaml"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}

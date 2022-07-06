@@ -40,6 +40,7 @@ class Volume {
     },
   ];
   label = {};
+  content = ""; //초기화를 잘 합시다
 
   constructor() {
     makeAutoObservable(this);
@@ -84,7 +85,6 @@ class Volume {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-      console.log(apiList);
 
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
@@ -178,7 +178,7 @@ class Volume {
 
   clearAll = () => {
     runInAction(() => {
-      this.volumeName = "";
+      // this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
       this.projectList = "";
@@ -232,57 +232,6 @@ class Volume {
             } catch (e) {
               if (key && value) {
                 this.pVolumeMetadata[key] = value;
-              }
-            }
-          });
-        });
-      });
-  };
-
-  // 클레임 관리
-  loadPVClaims = async () => {
-    await axios
-      .get(`${SERVER_URL2}/pvcs`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pvClaims = data;
-          this.totalElements = data.length;
-        });
-      })
-      .then(() => {
-        this.convertList(this.pvClaimList, this.setPVClaimList);
-      });
-    this.loadPVClaim(
-      this.pvClaims[0].name,
-      this.pvClaims[0].clusterName,
-      this.pvClaims[0].namespace
-    );
-  };
-
-  loadPVClaim = async (name, clusterName, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL2}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
-      )
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pvClaim = data;
-          this.pvClaimYamlFile = "";
-          this.pvClaimAnnotations = {};
-          this.pvClaimLables = {};
-          this.events = data.events;
-          this.label = data.label;
-          Object.entries(this.pvClaim?.label).map(([key, value]) => {
-            this.pvClaimLables[key] = value;
-          });
-
-          Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.pvClaimAnnotations[key] = value;
               }
             }
           });
@@ -351,7 +300,7 @@ class Volume {
     const YAML = require("yamljs");
     axios
       .post(
-        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+        `http://192.168.160.235:8011/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
 
         YAML.parse(this.content)
       )
