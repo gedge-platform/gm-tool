@@ -21,14 +21,14 @@ class Workspace {
       eventTime: "",
     },
   ];
-  projectList = [];
+  projectList = [{}];
   clusterList = [];
   detailInfo = [{}];
   selectProject = "";
   selectCluster = "";
   dataUsage = {};
-  projectList = [];
   selectClusterInfo = [];
+  workspace = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -57,6 +57,7 @@ class Workspace {
           this.workSpaceList = res.data;
           // this.workSpaceDetail = res.data[0];
           this.totalElements = res.data.length;
+          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
       })
       .then(() => {
@@ -78,15 +79,8 @@ class Workspace {
           this.events = null;
         }
         this.detailInfo = res.data.projectList;
-        // this.selectCluster = this.clusterList[0];
         this.selectClusterInfo = res.data.selectCluster;
-
-        // this.projectList = this.detailInfo.map(
-        //   (project) => project.projectName
-        // );
-        // this.selectProject = this.projectList[0];
-        // //this.clusterList = data.selectCluster;
-        // console.log(this.selectCluster);
+        this.projectList = res.data.projectList;
       });
     });
   };
@@ -141,6 +135,18 @@ class Workspace {
   changeProject = (project) => {
     runInAction(() => {
       this.selectProject = project;
+    });
+  };
+
+  setWorkspace = (workspace) => {
+    runInAction(() => {
+      this.workspace = workspace;
+    });
+  };
+
+  setProjectList = (value) => {
+    runInAction(() => {
+      this.projectList = value;
     });
   };
 

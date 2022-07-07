@@ -7,6 +7,7 @@ import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import volumeStore from "../../../store/Volume";
 import styled from "styled-components";
+import { dateFormatter } from "@/utils/common-utils";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -71,24 +72,6 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
     );
   });
 
-  // Object.entries(pVolume?.annotations).map(([key, value]) => {
-  //   <tr>
-  //     <th style={{ width: "40%" }}>{key}</th>
-  //     {/* <td>
-  //       {isValidJSON(value) ? (
-  //         <ReactJson
-  //           src={JSON.parse(value)}
-  //           theme="summerfruit"
-  //           displayDataTypes={false}
-  //           displayObjectSize={false}
-  //         />
-  //       ) : (
-  //         value
-  //       )}
-  //     </td> */}
-  //     <td></td>
-  //   </tr>;
-  // });
   const metaTable = [];
   if (pVolume?.annotations) {
     Object.entries(pVolume?.annotations).map(([key, value]) => {
@@ -118,7 +101,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Claim" />
+        <CTab label="Claim Info" />
         <CTab label="Annotations" />
         <CTab label="Events" />
       </CTabs>
@@ -142,7 +125,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
                 <th>status</th>
                 <td>{pVolume?.status}</td>
                 <th>claim</th>
-                <td>{pVolume?.claim?.name}</td>
+                <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
               </tr>
               <tr>
                 <th>cluster</th>
@@ -153,8 +136,8 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
               <tr>
                 <th>volumeMode</th>
                 <td>{pVolume?.volumeMode}</td>
-                <th>createAt</th>
-                <td>{pVolume?.createAt}</td>
+                <th>created</th>
+                <td>{dateFormatter(pVolume?.createAt)}</td>
               </tr>
             </tbody>
           </table>

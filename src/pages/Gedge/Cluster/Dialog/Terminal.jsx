@@ -9,8 +9,10 @@ import axios from "axios";
 import { CButton } from "@/components/buttons";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import VolumeYaml from "./VolumeYaml";
-import volumeStore from "@/store/Volume";
+import { XTerm } from 'xterm-for-react'
+import { TerminalUI } from "./TerminalUI";
+// import VolumeYaml from "./VolumeYaml";
+// import volumeStore from "@/store/Volume";
 
 const Button = styled.button`
   background-color: #0f5ce9;
@@ -20,9 +22,9 @@ const Button = styled.button`
   border-radius: 4px;
 `;
 
-const ViewDialog = observer((props) => {
-  const { open, yaml } = props;
-  const { getYamlFile } = volumeStore;
+const Terminal = observer((props) => {
+  const { open } = props;
+  // const { getYamlFile } = volumeStore;
   const handleClose = () => {
     props.onClose && props.onClose();
   };
@@ -30,7 +32,9 @@ const ViewDialog = observer((props) => {
   const ViewOfComponent = () => {
     return (
       <>
-        <VolumeYaml content={yaml} />
+
+        <TerminalUI />
+        {/* <TerminalUI2 /> */}
         <div
           style={{
             display: "flex",
@@ -56,7 +60,7 @@ const ViewDialog = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Volume Yaml"}
+      title={"CMD"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
@@ -65,4 +69,4 @@ const ViewDialog = observer((props) => {
     </CDialogNew>
   );
 });
-export default ViewDialog;
+export default Terminal;

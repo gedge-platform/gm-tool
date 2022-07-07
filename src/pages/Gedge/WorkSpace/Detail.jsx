@@ -5,19 +5,6 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import workspaceStore from "../../../store/WorkSpace";
 import "@grapecity/wijmo.styles/wijmo.css";
-import theme from "@/styles/theme";
-import { toJS } from "mobx";
-import {
-  MenuItem,
-  FormControl,
-  Select,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-  formLabelClasses,
-} from "@mui/material";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
 import { Projection } from "leaflet";
 import EventAccordion from "@/components/detail/EventAccordion";
@@ -117,42 +104,12 @@ const Detail = observer(() => {
     labels,
     annotations,
     detailInfo,
-    clusterList,
-    projectList,
-    selectProject,
     dataUsage,
     events,
-    // selectProject,
-    changeCluster,
     changeProject,
+    selectClusterInfo,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
-  const eventsTable = () => {
-    return (
-      <EventWrap className="event-wrap">
-        <FormControl>
-          <Select
-            value={selectProject}
-            inputProps={{ "aria-label": "Without label" }}
-            onChange={projectChange}
-          >
-            {projectList.map((project) => (
-              <MenuItem
-                style={{
-                  color: "black",
-                  backgroundColor: "white",
-                  fontSize: 15,
-                }}
-                value={project}
-              >
-                {project}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </EventWrap>
-    );
-  };
 
   const projectChange = (e) => {
     changeProject(e.target.value);
@@ -191,22 +148,25 @@ const Detail = observer(() => {
             <tr>
               {detailInfo ? (
                 <>
-                <tr>
-                  <th> Name</th>
-                  <td>{project?.projectName}</td>
-                  <th>Cluster</th>
-                  <td>{project?.selectCluster}</td>
-                </tr>
-                <tr>
-                  <th> Create</th>
-                  <td>{dateFormatter(project?.created_at)}</td>
-                  <th>Creator</th>
-                  <td>{project?.projectCreator}</td>
-                </tr>
+                  <tr>
+                    <th> Name</th>
+                    <td>{project?.projectName}</td>
+                    <th>Cluster</th>
+                    <td>
+                      {selectClusterInfo.map((item) => item.clusterName + " ")}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>{dateFormatter(project?.created_at)}</td>
+                    <th>Creator</th>
+                    <td>
+                      {project?.projectCreator ? project?.projectCreator : "-"}
+                    </td>
+                  </tr>
                 </>
               ) : (
-                <>
-                </>
+                <></>
               )}
             </tr>
           </tbody>
@@ -215,7 +175,6 @@ const Detail = observer(() => {
       </>
     ));
   };
-  
 
   const resourcesTable = () => {
     return (
@@ -223,7 +182,7 @@ const Detail = observer(() => {
         {/* <ClusterTitle>{workSpaceDetail.workspaceName}</ClusterTitle> */}
         <table className="tb_data" style={{ tableLayout: "fixed" }}>
           <tbody>
-            {workSpaceDetail.resource? (
+            {workSpaceDetail.resource ? (
               <>
                 <tr>
                   <th>Deployment</th>
@@ -269,61 +228,70 @@ const Detail = observer(() => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
+        <CTab label="Projects" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-        <CTab label="Projects" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr className="tb_workload_detail_th">
-                <th>Name</th>
+                <th>Workspace Name</th>
                 <td>{workSpaceDetail.workspaceName}</td>
-                <th>Cluster</th>
-                <td>{workSpaceDetail.selectProject ? workSpaceDetail.selectProject : "-"}</td>
+                <th>Description</th>
+                <td>{workSpaceDetail.workspaceDescription}</td>
               </tr>
               <tr>
-                <th>Workspace</th>
-                <td>{workSpaceDetail.workspaceName}</td>
-                <th>Creator</th>
-                <td>{workSpaceDetail.workspaceCreator}</td>
-              </tr>
-              <tr>
-                <th>Owner</th>
-                <td>{workSpaceDetail.workspaceOwner}</td>
-                <th>Created</th>
-                <td>{dateFormatter(workSpaceDetail.created_at)}</td>
-              </tr>
-              <tr>
-                <th>Resource Usage</th>
-                <td colSpan={4}>
-                  {dataUsage ? (
-                    <>
-                    <table className="tb_data">
-                      <tbody>
-                        <tr>
-                        <th>CPU</th>
-                        <td>{dataUsage?.cpu_usage}</td>
-                        <th>MEMORY</th>
-                        <td>{dataUsage?.memory_usage}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    </>
-                  ) : (
-                    <>-</>
-                  )}
+                <th>Cluster Name</th>
+                <td>
+                  {selectClusterInfo.map((item) => item.clusterName + " ")}
                 </td>
+                <th>Creator</th>
+                <td>{workSpaceDetail.memberName}</td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div className="tb_container">
+          <TableTitle>Resource Usage</TableTitle>
+          <tbody>
+            <tr className="tb_workload_detail_th">
+              <td colSpan={4}>
+                {dataUsage ? (
+                  <>
+                    <table className="tb_data">
+                      <tbody>
+                        <tr>
+                          <th style={{ width: "307px" }}>CPU</th>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.cpu_usage}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th style={{ width: "307px" }}>MEMORY</th>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.memory_usage}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </>
+                ) : (
+                  <>-</>
+                )}
+              </td>
+            </tr>
+          </tbody>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">{resourcesTable()}</div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">{clusterProjectTable()}</div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
@@ -360,18 +328,8 @@ const Detail = observer(() => {
           <br />
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          {eventsTable()}
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsMessageTable}</tbody>
-          </table>
-          <br />
-        </div> */}
-      </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
-        <div className="tb_container">{clusterProjectTable()}</div>
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );

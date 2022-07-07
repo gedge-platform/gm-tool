@@ -41,6 +41,8 @@ class StorageClass {
   totalPages = 1;
   resultList = {};
   viewList = [];
+  storageClassName = "";
+  storageClassNameData = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -110,11 +112,11 @@ class StorageClass {
     });
   };
 
-   setStorageClasses  = (list) => {
-     runInAction(() => {
+  setStorageClasses = (list) => {
+    runInAction(() => {
       this.storageClasses = list;
     });
-   };
+  };
 
   setViewList = (n) => {
     runInAction(() => {
@@ -129,35 +131,36 @@ class StorageClass {
   };
 
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
-     await axios
-       .get(
-         `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
-       )
-       .then((res) => {
-         runInAction(() => {
-           const YAML = require("json-to-pretty-yaml");
-           this.getYamlFile = YAML.stringify(res.data.data);
+    await axios
+      .get(
+        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+      )
+      .then((res) => {
+        runInAction(() => {
+          const YAML = require("json-to-pretty-yaml");
+          this.getYamlFile = YAML.stringify(res.data.data);
         });
-       });
-   };
-
+      });
+  };
 
   loadStorageClasses = async () => {
     await axios
       .get(`${SERVER_URL2}/storageclasses`)
       .then((res) => {
-         runInAction(() => {
-         this.storageClasses = res.data.data;
-         this.totalElements = res.data.data.length;
+        runInAction(() => {
+          this.storageClasses = res.data.data;
+          this.totalElements = res.data.data.length;
         });
-       })
-       .then(() => {
-         this.convertList(this.storageClasses, this.setStorageClasses);
-       })
-       .then(() => {
-         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster
-        );
-       });
+      })
+      .then(() => {
+        this.convertList(this.storageClasses, this.setStorageClasses);
+      })
+      .then(() => {
+        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+      })
+      .then(() => {
+        this.loadStorageClassName(this.viewList[0].cluster);
+      });
   };
 
   loadStorageClass = async (name, cluster) => {
@@ -171,6 +174,7 @@ class StorageClass {
         this.scParameters = data.parameters;
         this.label = data.labels;
         this.annotations = data.annotations;
+        this.storageClassList = data.name;
 
         Object.entries(this.storageClass?.annotations).forEach(
           ([key, value]) => {
@@ -196,6 +200,34 @@ class StorageClass {
           this.scParameters[key] = value;
         });
       });
+  };
+
+  loadStorageClassName = async (cluster) => {
+    await axios
+      .get(`${SERVER_URL2}/storageclasses?cluster=${cluster}`)
+      .then((res) => {
+        runInAction(() => {
+          this.storageClassNameData = res.data.data;
+        });
+      });
+  };
+
+  setStorageClassNameData = (value) => {
+    runInAction(() => {
+      this.storageClassNameData = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
+    });
+  };
+
+  setStorageClassName = (value) => {
+    runInAction(() => {
+      this.storageClassName = value;
+    });
   };
 }
 

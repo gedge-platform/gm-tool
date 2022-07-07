@@ -1,16 +1,9 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import {
-  BASIC_AUTH,
-  LOCAL_VOLUME_URL,
-  SERVER_URL2,
-  BEARER_TOKEN,
-} from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
+import { SERVER_URL2, BEARER_TOKEN } from "../config";
 
 class Claim {
-    viewList = [];
+  viewList = [];
   currentPage = 1;
   totalPages = 1;
   totalElements = 0;
@@ -46,7 +39,11 @@ class Claim {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
+        this.loadPVClaim(
+          this.viewList[0].name,
+          this.viewList[0].clusterName,
+          this.viewList[0].namespace
+        );
       }
     });
   };
@@ -56,7 +53,11 @@ class Claim {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
+        this.loadPVClaim(
+          this.viewList[0].name,
+          this.viewList[0].clusterName,
+          this.viewList[0].namespace
+        );
       }
     });
   };
@@ -80,7 +81,6 @@ class Claim {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-      console.log(apiList);
 
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
@@ -106,15 +106,15 @@ class Claim {
     });
   };
 
-  setPVClaimList = (list) => {
+  setPvClaimList = (list) => {
     runInAction(() => {
-      this.pvClaimList = list;
-    })
+      this.pvClaims = list;
+    });
   };
 
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.pVolumesList[n];
+      this.viewList = this.pvClaims[n];
     });
   };
 
@@ -139,19 +139,24 @@ class Claim {
 
   // 클레임 관리
   loadPVClaims = async () => {
-    await axios.get(`${SERVER_URL2}/pvcs`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.pvClaims = data;
-        this.totalElements = data.length;
+    await axios
+      .get(`${SERVER_URL2}/pvcs`)
+      .then((res) => {
+        runInAction(() => {
+          this.pvClaims = res.data.data;
+          this.totalElements = res.data.data.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.pvClaims, this.setPvClaimList);
+      })
+      .then(() => {
+        this.loadPVClaim(
+          this.viewList[0].name,
+          this.viewList[0].clusterName,
+          this.viewList[0].namespace
+        );
       });
-    }).then(() => {
-      this.convertList(this.pvClaimList, this.setPVClaimList);
-    });
-    this.loadPVClaim(
-      this.pvClaims[0].name,
-      this.pvClaims[0].clusterName,
-      this.pvClaims[0].namespace
-    );
   };
 
   loadPVClaim = async (name, clusterName, namespace) => {
@@ -166,6 +171,7 @@ class Claim {
           this.pvClaimAnnotations = {};
           this.pvClaimLables = {};
           this.events = data.events;
+          console.log(this.events);
           this.label = data.label;
           Object.entries(this.pvClaim?.label).map(([key, value]) => {
             this.pvClaimLables[key] = value;
@@ -184,7 +190,6 @@ class Claim {
         });
       });
   };
-
 }
-  const claimStore = new Claim();
-  export default claimStore;
+const claimStore = new Claim();
+export default claimStore;

@@ -13,6 +13,10 @@ import VolumYamlPopup from "./VolumYamlPopup";
 import VolumePopup from "./VolumePopup";
 import projectStore from "../../../../store/Project";
 import schedulerStore from "../../../../store/Scheduler";
+import workspacestore from "../../../../store/WorkSpace";
+import volumeBasicInformation from "./VolumeBasicInformation";
+import { values } from "lodash";
+import StorageClassStore from "../../../../store/StorageClass";
 
 const Button = styled.button`
   background-color: #fff;
@@ -47,8 +51,14 @@ const CreateVolume = observer((props) => {
     setContent,
     clearAll,
     createVolume,
+    setProject,
+    project,
+    selectClusters,
+    setSelectClusters,
+    clusterName,
   } = volumeStore;
-  const { workspace, setWorkspace, project, setProject } = deploymentStore;
+  const { workspace, setWorkspace } = deploymentStore;
+  const { storageClass, setStorageClass } = StorageClassStore;
 
   const template = {
     apiVersion: "v1",
@@ -56,13 +66,13 @@ const CreateVolume = observer((props) => {
     metadata: {
       name: volumeName,
       namespace: project,
-      labels: {},
+      labels: {
+        app: "",
+      },
     },
     spec: {
-      storageClassName: "manual",
-      accessModes: {
-        accessMode,
-      },
+      storageClassName: storageClass,
+      accessModes: [accessMode],
       resources: {
         requests: {
           storage: Number(volumeCapacity) + "Gi",
@@ -71,7 +81,8 @@ const CreateVolume = observer((props) => {
     },
   };
 
-  const onClickStepOne = () => {
+  const onClickStepOne = (e) => {
+    console.log(e);
     if (volumeName === "") {
       swalError("Volume 이름을 입력해주세요");
       return;
@@ -84,21 +95,22 @@ const CreateVolume = observer((props) => {
       swalError("Project를 선택해주세요");
       return;
     }
+    if (selectClusters.length === 0) {
+      swalError("클러스터를 확인해주세요!");
+      return;
+    }
     if (accessMode === "") {
       swalError("Access Mode를 선택해주세요");
+      return;
+    }
+    if (storageClass === "") {
+      swalError("StorageClass를 선택해주세요");
       return;
     }
     if (volumeCapacity === "") {
       swalError("Volume 용량을 입력해주세요");
       return;
-    }
-    if (
-      volumeName !== "" &&
-      workspace !== "" &&
-      project !== "" &&
-      accessMode !== "" &&
-      volumeCapacity !== ""
-    ) {
+    } else {
       setStepValue(2);
     }
   };
@@ -109,6 +121,10 @@ const CreateVolume = observer((props) => {
     setProjectListinWorkspace();
     setStepValue(1);
     clearAll();
+    setVolumeName("");
+    setWorkspace("");
+    setProject("");
+    setStorageClass("");
   };
 
   const onClickStepTwo = () => {
@@ -121,7 +137,9 @@ const CreateVolume = observer((props) => {
   };
 
   const CreateVolume = () => {
+    // for문으로 복수의 클러스터이름 보내게
     createVolume(require("json-to-pretty-yaml").stringify(template));
+    // setSelectClusters();
   };
 
   useEffect(() => {
@@ -151,7 +169,7 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => onClickStepOne()}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepOne(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -206,7 +224,9 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={CreateVolume}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={() => CreateVolume()}>
+                Schedule Apply
+              </ButtonNext>
             </div>
           </div>
         </>

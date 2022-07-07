@@ -11,6 +11,7 @@ import projectStore from "../../../../store/Project";
 import deploymentStore from "../../../../store/Deployment";
 import clusterStore from "../../../../store/Cluster";
 import volumeStore from "../../../../store/Volume";
+import StorageClassStore from "../../../../store/StorageClass";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,45 +31,40 @@ const ButtonNext = styled.button`
 `;
 
 const volumeBasicInformation = observer((props) => {
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
     workspacestore;
+  console.log(projectList);
 
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
+  const [storageClassEnable, setStorageClassEnable] = useState(true);
 
-  const {
-    loadProjectListInWorkspace,
-    projectListinWorkspace,
-    selectClusterInfo,
-    setSelectClusterInfo,
-    loadProjectDetail,
-  } = projectStore;
+  const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
+    projectStore;
 
-  const {
-    setCluster,
-    setProject,
-    workspaceName,
-    setWorkspaceName,
-    setWorkspace,
-  } = deploymentStore;
+  const { setWorkspace } = deploymentStore;
 
-  const { loadClusterInProject, clusters, setClusters } = clusterStore;
   const {
     setVolumeName,
     setAccessMode,
     setVolumeCapacity,
     volumeCapacity,
     volumeName,
+    setProject,
+    selectClusters,
+    setSelectClusters,
   } = volumeStore;
 
-  const [selectClusters, setSelectClusters] = useState([]);
+  const { loadStorageClassName, setStorageClass, storageClassNameData } =
+    StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;
-    if (name === "VolumeName") {
+    if (name === "volumeName") {
       setVolumeName(value);
     } else if (name === "workspace") {
-      loadProjectListInWorkspace(value);
+      // loadProjectListInWorkspace(value); // project list 가져옴
+      loadWorkspaceDetail(value); // project 가져옴
       setWorkspace(value);
       setProjectEnable(false);
       return;
@@ -77,18 +73,36 @@ const volumeBasicInformation = observer((props) => {
         setSelectClusterInfo([]);
         return;
       }
-      // loadClusterInProject(value);
       setProject(value);
-      await loadProjectDetail(value);
+      await loadProjectDetail(value); // cluster list 가져옴
       setSelectClusters([...selectClusterInfo]);
       setClusterEnable(false);
+      setStorageClassEnable(false);
+    } else if (name === "selectClusters") {
+      setSelectClusters(value);
+    } else if (name === "storageClass") {
+      setStorageClass(value);
     } else if (name === "accessMode") {
       setAccessMode(value);
     } else if (name === "volumeCapacity") {
       setVolumeCapacity(value);
     }
   };
-  console.log(onChange);
+
+  const checkCluster = ({ target: { checked } }, clusterName) => {
+    // checked가 true일 때
+    if (checked) {
+      // setSelectClusters([...selectClusters, clusterName]); //cluster 배열
+      setSelectClusters(clusterName);
+      loadStorageClassName(clusterName);
+    }
+    // checked가 false일 때
+    // else {
+    // setSelectClusters(
+    //   selectClusters.filter((cluster) => cluster !== clusterName)
+    // );
+    // }
+  };
 
   useEffect(() => {
     loadWorkSpaceList(true);
@@ -128,7 +142,7 @@ const volumeBasicInformation = observer((props) => {
                 type="text"
                 placeholder="Volume Name"
                 className="form_fullWidth"
-                name="VolumeName"
+                name="volumeName"
                 onChange={onChange}
                 value={volumeName}
               />
@@ -165,7 +179,7 @@ const volumeBasicInformation = observer((props) => {
                   onChange={onChange}
                 >
                   <option value={""}>Select Project</option>
-                  {projectListinWorkspace.map((project) => (
+                  {projectList.map((project) => (
                     <option value={project.projectName}>
                       {project.projectName}
                     </option>
@@ -194,7 +208,7 @@ const volumeBasicInformation = observer((props) => {
                         <td style={{ textAlign: "center" }}>
                           <input
                             type="checkbox"
-                            name="clusterCheck"
+                            name="selectClusters"
                             onChange={(e) => checkCluster(e, clusterName)}
                           />
                         </td>
@@ -207,6 +221,31 @@ const volumeBasicInformation = observer((props) => {
                 </tbody>
               </table>
             </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              StorageClass <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select
+                  disabled={storageClassEnable}
+                  name="storageClass"
+                  onChange={onChange}
+                >
+                  <option value={""}>Select StorageClass</option>
+                  {storageClassNameData
+                    ? storageClassNameData.map((storageClass) => (
+                        <option value={storageClass.name}>
+                          {storageClass.name}
+                        </option>
+                      ))
+                    : ""}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
           </tr>
           <tr>
             <th>
@@ -217,8 +256,8 @@ const volumeBasicInformation = observer((props) => {
                 <select name="accessMode" onChange={onChange}>
                   <option value="Select Access Mode">Select Access Mode</option>
                   <option value="ReadWriteOnce">ReadWriteOnce</option>
-                  <option value="ReadWriteOnce">ReadWriteOnce</option>
-                  <option value="ReadWriteOnce">ReadWriteOnce</option>
+                  <option value="ReadOnlyMany">ReadOnlyMany</option>
+                  <option value="ReadWriteMany">ReadWriteMany</option>
                   <option value="ReadWriteOncePod">ReadWriteOncePod</option>
                 </select>
               </FormControl>
@@ -237,7 +276,7 @@ const volumeBasicInformation = observer((props) => {
                 className="form_fullWidth"
                 name="volumeCapacity"
                 onChange={onChange}
-                value={volumeCapacity}
+                value={volumeCapacity || ""}
               />
             </td>
             <th></th>
