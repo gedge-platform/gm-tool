@@ -51,7 +51,7 @@ class Workspace {
 
   loadWorkSpaceList = async (type = false) => {
     await axios
-      .get(`${SERVER_URL2}/workspace`)
+      .get(`${SERVER_URL2}/workspaces`)
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data;
@@ -69,20 +69,22 @@ class Workspace {
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
-    await axios.get(`${SERVER_URL2}/workspace/${workspaceName}`).then((res) => {
-      runInAction(() => {
-        this.workSpaceDetail = res.data;
-        this.dataUsage = this.workSpaceDetail.resourceUsage;
-        if (res.data.events !== null) {
-          this.events = this.workSpaceDetail.events;
-        } else {
-          this.events = null;
-        }
-        this.detailInfo = res.data.projectList;
-        this.selectClusterInfo = res.data.selectCluster;
-        this.projectList = res.data.projectList;
+    await axios
+      .get(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .then((res) => {
+        runInAction(() => {
+          this.workSpaceDetail = res.data;
+          this.dataUsage = this.workSpaceDetail.resourceUsage;
+          if (res.data.events !== null) {
+            this.events = this.workSpaceDetail.events;
+          } else {
+            this.events = null;
+          }
+          this.detailInfo = res.data.projectList;
+          this.selectClusterInfo = res.data.selectCluster;
+          this.projectList = res.data.projectList;
+        });
       });
-    });
   };
 
   setWorkSpaceList = (workSpaceList = []) => {
@@ -104,19 +106,21 @@ class Workspace {
       workspaceOwner: getItem("user"),
       workspaceCreator: getItem("user"),
     };
-    const body2 = {
-      workspaceName,
-      workspaceDescription,
-      memberName: getItem("user"),
-      clusterName: selectCluster,
-    };
+    // const body2 = {
+    //   workspaceName,
+    //   workspaceDescription,
+    //   memberName: getItem("user"),
+    //   clusterName: selectCluster,
+    // };
+    // axios
+    //   .post(`${SERVER_URL2}/workspaces`, body2)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.error(err));
+    // return
     axios
-      .post(`${SERVER_URL2}/workspace`, body2)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-    return axios
       .post(`${SERVER_URL2}/workspaces`, body)
       .then((res) => {
+        console.log(res);
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
         }
@@ -152,7 +156,7 @@ class Workspace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
+      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 

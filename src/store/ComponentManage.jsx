@@ -1,7 +1,6 @@
-
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class ComponentManage {
   componentList = [];
@@ -13,18 +12,14 @@ class ComponentManage {
   }
 
   loadComponentList = async () => {
-    await axios
-      .get(`${SERVER_URL}/component`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data;
-          this.componentList = list;
-          this.componentDetail = list[0];
-          this.totalElements = list.length;
-        });
+    await axios.get(`${SERVER_URL2}/components`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data;
+        this.componentList = list;
+        this.componentDetail = list[0];
+        this.totalElements = list.length;
       });
+    });
   };
 }
 

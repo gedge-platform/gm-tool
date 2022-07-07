@@ -138,7 +138,7 @@ const StorageClassListTab = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton>생성</CCreateButton>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

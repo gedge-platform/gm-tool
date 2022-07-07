@@ -1,5 +1,3 @@
-# docker build -t gm-tool:[version] .
-# ex. docker build --network=host -t gm-tool:220704 .
 FROM node:14.17.5
 
 # set working directory

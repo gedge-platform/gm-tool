@@ -156,7 +156,7 @@ class Cluster {
 
   loadClusterList = async (type = "") => {
     await axios
-      .get(`${SERVER_URL2}/cluster`)
+      .get(`${SERVER_URL2}/clusters`)
       .then((res) => {
         runInAction(() => {
           const list =
@@ -178,7 +178,7 @@ class Cluster {
   };
 
   loadCluster = async (clusterName) => {
-    await axios.get(`${SERVER_URL2}/cluster/${clusterName}`).then((res) => {
+    await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
       runInAction(() => {
         this.clusterDetail = res.data;
       });
