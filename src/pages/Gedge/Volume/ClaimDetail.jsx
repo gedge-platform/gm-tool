@@ -69,7 +69,6 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   };
 
   const { pvClaimLables, pvClaim, events, label } = claimStore;
-  console.log(pvClaim);
 
   const annotationTable = [];
 

@@ -72,7 +72,7 @@ const ComponentListTab = observer(() => {
   useEffect(() => {
     loadComponentList();
   }, []);
-  console.log(componentList);
+
   return (
     <>
       <CReflexBox>

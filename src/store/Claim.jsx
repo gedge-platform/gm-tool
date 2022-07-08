@@ -171,7 +171,6 @@ class Claim {
           this.pvClaimAnnotations = {};
           this.pvClaimLables = {};
           this.events = data.events;
-          console.log(this.events);
           this.label = data.label;
           Object.entries(this.pvClaim?.label).map(([key, value]) => {
             this.pvClaimLables[key] = value;

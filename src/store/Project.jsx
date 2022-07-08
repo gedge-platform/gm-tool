@@ -227,18 +227,18 @@ class Project {
       projectOwner: getItem("user"),
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
-    const body2 = {
-      projectName,
-      projectDescription,
-      memberName: getItem("user"),
-      clusterName: selectCluster,
-      projectType,
-      workspaceName,
-    };
-    axios
-      .post(`${SERVER_URL2}/project`, body2)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
+    // const body2 = {
+    //   projectName,
+    //   projectDescription,
+    //   memberName: getItem("user"),
+    //   clusterName: selectCluster,
+    //   projectType,
+    //   workspaceName,
+    // };
+    // axios
+    //   .post(`${SERVER_URL2}/projects`, body2)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.error(err));
     axios
       .post(`${SERVER_URL2}/projects`, body)
       .then((res) => {
