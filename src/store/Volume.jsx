@@ -239,63 +239,6 @@ class Volume {
       });
   };
 
-  loadStorageClasses = async () => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses`)
-      .then(({ data: { data } }) => {
-        this.storageClasses = data;
-        this.totalElements = data.length;
-      })
-      .then(() => {
-        this.convertList(this.storageClasses, this.setStorageClasses);
-      })
-      .then(() => {
-        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
-      });
-
-    //  this.loadStorageClass(
-    //    this.storageClasses[0].name,
-    //  this.storageClasses[0].cluster
-    // );
-  };
-
-  loadStorageClass = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        this.storageClass = data;
-        this.scYamlFile = "";
-        this.scAnnotations = {};
-        this.scLables = {};
-        this.scParameters = data.parameters;
-        this.label = data.labels;
-
-        Object.entries(this.storageClass?.annotations).forEach(
-          ([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              if (value === "true" || value === "false") {
-                throw e;
-              }
-              this.scYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.scAnnotations[key] = value;
-              }
-            }
-          }
-        );
-
-        Object.entries(this.storageClass?.labels).map(([key, value]) => {
-          this.scLables[key] = value;
-        });
-
-        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-          this.scParameters[key] = value;
-        });
-      });
-  };
-
   createVolume = (template, callback) => {
     const YAML = require("yamljs");
     axios
