@@ -110,7 +110,7 @@ const WorkspaceListTab = observer(() => {
             isSelect={true}
             keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
