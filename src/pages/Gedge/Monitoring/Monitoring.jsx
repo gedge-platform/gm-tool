@@ -19,7 +19,7 @@ const Monitoring = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Cluster Overview" />
+        <CTab label="Zone Overview" />
         <CTab label="Psysical Resource" />
         <CTab label="API Server" />
         <CTab label="Scheduler" />
