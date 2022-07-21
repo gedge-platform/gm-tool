@@ -227,6 +227,7 @@ class Project {
       projectOwner: getItem("user"),
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
+    console.log(body);
     // const body2 = {
     //   projectName,
     //   projectDescription,

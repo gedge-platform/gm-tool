@@ -33,15 +33,11 @@ const ButtonNext = styled.button`
 const volumeBasicInformation = observer((props) => {
   const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
     workspacestore;
-  console.log(projectList);
-
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
   const [storageClassEnable, setStorageClassEnable] = useState(true);
-
   const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
     projectStore;
-
   const { setWorkspace } = deploymentStore;
 
   const {

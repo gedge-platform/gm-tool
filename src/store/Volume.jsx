@@ -1,13 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import {
-  BASIC_AUTH,
-  LOCAL_VOLUME_URL,
-  SERVER_URL2,
-  BEARER_TOKEN,
-} from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
+import { SERVER_URL2 } from "../config";
+
 import { swalError } from "../utils/swal-utils";
 
 class Volume {
