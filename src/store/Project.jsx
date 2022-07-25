@@ -217,25 +217,26 @@ class Project {
     istioCheck,
     callback
   ) => {
+    const { id } = getItem("user");
     const body = {
       projectName: projectName,
       projectDescription,
       projectType,
-      selectCluster,
+      clusterName: selectCluster,
       workspaceName,
-      projectCreator: getItem("user"),
-      projectOwner: getItem("user"),
+      memberName: id,
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
     console.log(body);
-    // const body2 = {
-    //   projectName,
-    //   projectDescription,
-    //   memberName: getItem("user"),
-    //   clusterName: selectCluster,
-    //   projectType,
-    //   workspaceName,
-    // };
+
+    // // const body2 = {
+    // //   projectName,
+    // //   projectDescription,
+    // //   memberName: getItem("user"),
+    // //   clusterName: selectCluster,
+    // //   projectType,
+    // //   workspaceName,
+    // // };
     // axios
     //   .post(`${SERVER_URL2}/projects`, body2)
     //   .then((res) => console.log(res))
@@ -244,6 +245,7 @@ class Project {
       .post(`${SERVER_URL2}/projects`, body)
       .then((res) => {
         console.log(res);
+        console.log(body);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
         }

@@ -12,6 +12,7 @@ import { randomString } from "@/utils/common-utils";
 import { CDialogNew } from "../../../../components/dialogs";
 import schedulerStore from "../../../../store/Scheduler";
 import { swalError } from "../../../../utils/swal-utils";
+import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 
 const Button = styled.button`
   background-color: #fff;
@@ -206,7 +207,7 @@ const CreateDeployment = observer((props) => {
     //   });
   };
   useEffect(() => {
-    if (stepValue === 3) {
+    if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     }
@@ -271,7 +272,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <DeploymentYaml />
+          <DeploymentVolumeSetting />
           <div
             style={{
               display: "flex",
@@ -287,6 +288,31 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
+              <ButtonNext onClick={onClickStepTwo}>다음</ButtonNext>
+              {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 4) {
+      return (
+        <>
+          <DeploymentYaml />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => setStepValue(3)}>이전</Button>
               <ButtonNext onClick={createDeployment}>Schedule Apply</ButtonNext>
               {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>
