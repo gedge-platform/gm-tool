@@ -36,7 +36,7 @@ export { default as NotFound } from "./Gedge/NotFound/NotFound";
 
 const Title = {
   Dashboard: "통합 대시보드",
-  Platform: "Git Commit Test",
+  Platform: "플랫폼",
   Infra: "인프라",
   Service: "서비스",
   PlatformUser: "사용자",
