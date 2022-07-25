@@ -5,7 +5,11 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
 
 import MapContent from "./DashboardCont/MapContent";
-import ClusterInfo from "./DashboardCont/ClusterInfo";
+// import ClusterInfo from "./DashboardCont/ClusterInfo";
+import ClusterSummary from "./DashboardCont/ClusterSummary";
+import ClusterKind from "./DashboardCont/ClusterKind";
+import ClusterStatus from "./DashboardCont/ClusterStatus";
+import ClusterRecent from "./DashboardCont/ClusterRecent";
 import NodeList from "./DashboardCont/NodeList";
 
 const DashboardWrap = styled.div`
@@ -13,12 +17,26 @@ const DashboardWrap = styled.div`
   flex-wrap: nowrap;
   justify-content: space-between;
   margin-bottom: 12px;
+  .panel_summary {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    &::before {
+      display: none;;
+    }
+  }
 
   .panel_service {
     width: 100%;
-
+    background: transparent;
+    border: 0;
+    &::before {
+      display: none;;
+    }
     .cluster_nodes {
-      padding: 25px;
+      padding: 12px;
+      border-radius: 5px;
+      background: #202842;
     }
 
     .panel_title {
@@ -27,7 +45,7 @@ const DashboardWrap = styled.div`
     .content_container {
       display: flex;
       width: 100%;
-      height: 800px;
+      height: 465px;
       padding: 25px;
 
       .cluster_info {
@@ -113,10 +131,7 @@ const DashboardWrap = styled.div`
           }
         }
       }
-      .cluster_map {
-        flex: 3;
-        border-radius: 8px;
-      }
+
     }
   }
 `;
@@ -127,20 +142,33 @@ const TotalDashboard = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
-        <PanelBox className="panel_service">
-          <div className="content_container">
-            <ClusterInfo />
-            <div className="cluster_map">
+        <PanelBox className="panel_summary">
+            {/* <ClusterInfo /> */}
+            <ClusterSummary />
+            {/* <div className="cluster_map">
               <MapContent />
+            </div> */}
+            <div className="ClusterSlideWrap">
+              <ClusterKind />
             </div>
-          </div>
         </PanelBox>
       </DashboardWrap>
       <DashboardWrap>
         <PanelBox className="panel_service">
-          <div className="cluster_nodes">
-            <NodeList />
+          <div className="cluster_serviceWrap">
+            <div className="cluster_map">
+              <MapContent />
+            </div>
+            <div className="cluster_status">
+              <ClusterStatus />
+            </div>
+            <div className="cluster_recent">
+              <ClusterRecent />
+            </div>
           </div>
+          {/* <div className="cluster_nodes">
+            <NodeList />
+          </div> */}
         </PanelBox>
       </DashboardWrap>
     </Layout>

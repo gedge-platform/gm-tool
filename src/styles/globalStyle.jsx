@@ -1754,6 +1754,435 @@ const globalStyles = createGlobalStyle`
       }
     }
   }}
+  
+  /* CLUSTER SUMNMARY */
+  .ClusterSummaryWrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .ClusterSummary {
+      width: calc(20% - 10px);
+      height: 132px;
+      padding: 25px 0 25px 140px;
+      background: #171e33;
+      border-radius: 5px;
+      color: #fff;
+      
+      &.Cluster {
+        background: url(../images/dashboard/status_cluster_icon.png) no-repeat 15px center #5189fa;
+      }
+      &.Core {
+        background: url(../images/dashboard/status_core_icon.png) no-repeat 15px center #00cba4;
+      }
+      &.Edge {
+        background: url(../images/dashboard/status_edge_icon.png) no-repeat 15px center #00beea;
+      }
+      &.Workspace {
+        background: url(../images/dashboard/status_workspace_icon.png) no-repeat 15px center #a574ee;
+      }
+      &.Project {
+        background: url(../images/dashboard/status_project_icon.png) no-repeat 15px center #4343ed;
+      }
+      .ClusterCountTitle {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .ClusterCount {
+        margin-top: 10px;
+        font-size: 54px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  /* CLUSTER SLIDER - CLUSTER KIND */
+  .ClusterKindWrap {
+    width: 100%;
+    height: 320px;
+    margin-top: 10px;
+    padding: 50px 145px;
+    background: #202842;
+    border-radius: 5px;
+    position: relative;
+    .slide {
+      width: 204px;
+      height: 204px;
+      padding-top: 140px;
+      border: 8px solid #2b334e;
+      border-radius: 100%;
+      background: #171e33;
+      text-align: center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      &.azure {
+        background:  url(../images/dashboard/icon_azure.png) no-repeat center 45px #171e33;
+      }
+      &.google {
+        background:  url(../images/dashboard/icon_google.png) no-repeat center 45px #171e33;
+      }
+      &.openstack {
+        background:  url(../images/dashboard/icon_openstack.png) no-repeat center 45px #171e33;
+      }
+      &.aws {
+        background:  url(../images/dashboard/icon_aws.png) no-repeat center 45px #171e33;
+      }
+      &.add {
+        border: 8px solid #1a2139;
+        background:  url(../images/dashboard/icon_add.png) no-repeat center center #1a2139;
+        cursor: pointer;
+        &:hover {
+          border-color: #343e5a;
+          background-color: #343e5a;
+        }
+      }
+    }
+    .btn_prev, .btn_next {
+      position: absolute;
+      top: 50%;
+      width: 50px;
+      height: 50px;
+      margin-top: -25px;
+      z-index: 10;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn_prev {
+      left: 50px;
+      right: auto;
+      background: url(../images/dashboard/btn_next.png) no-repeat center center;
+      transform: rotate(-180deg);
+    }
+    .btn_next {
+      right: 50px;
+      left: auto;
+      background: url(../images/dashboard/btn_next.png) no-repeat center center;
+    }
+    .swiper-button-disabled {
+      opacity: 0.35;
+    }
+  }
+
+  /* cluster_serviceWrap */
+  .cluster_serviceWrap {
+      width: 100%;
+      height: 475px;
+      padding: 12px;
+      background: #202842;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      .cluster_map {
+        width: calc(40% - 10px);
+        border-radius: 5px;
+        border: 1px solid #11162a;
+      }
+      .cluster_status {
+        width: calc(35% - 10px);
+        .ClusterStatusWrap {
+          width: 100%;
+          height: 100%;
+          padding: 10px;
+          border: 1px solid #11162a;
+          border-radius: 5px;
+          background: #27304c;
+          overflow-y: scroll;
+          &::-webkit-scrollbar {
+            background: transparent;
+            background-clip: padding-box;
+          }
+          &::-webkit-scrollbar-track {
+            width: 9px;
+            background: #161b30;
+            background-clip: padding-box;
+          }
+          &::-webkit-scrollbar-thumb {
+            background: #3c445b;
+            border-radius: 4px;
+            border: 3px solid transparent;
+            background-clip: padding-box;
+          }
+          &::-webkit-scrollbar-button:start:decrement,
+          &::-webkit-scrollbar-button:end:increment {
+            display: block;
+            height: 0;
+            background-color: transparent;
+          }
+
+          .ClusterStatusBox {
+            width: 100%;
+            height: 105px;
+            margin-bottom: 4px;
+            border: 1px solid #11162a;
+            background: #1d243c;
+            border-radius: 5px;
+            display: flex;
+            .ClusterStatusIcon {
+              width: 110px;
+              height: 100%;
+              background: #11162a;
+                &.azure {
+                  background:  url(../images/dashboard/icon_azure.png) no-repeat center center #11162a;
+                  background-size: 50%;
+                }
+                &.google {
+                  background:  url(../images/dashboard/icon_google.png) no-repeat center center #11162a;
+                  background-size: 50%;
+                }
+                &.openstack {
+                  background:  url(../images/dashboard/icon_openstack.png) no-repeat center center #11162a;
+                  background-size: 50%;
+                }
+                &.aws {
+                  background:  url(../images/dashboard/icon_aws.png) no-repeat center center #11162a;
+                  background-size: 50%;
+                }
+              }
+              .ClusterStatusInfoBox {
+                width: 45%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .Count {
+                  width: 100%;
+                  text-align: center;
+                  font-size: 40px;
+                  font-weight: bold;
+                  color: #fff;
+                  position: relative;
+                  &:first-of-type::after {
+                    content: '';
+                    width: 1px;
+                    height: 60px;
+                    border-right: 1px dotted #343a50;
+                    position: absolute;
+                    top: 5px;
+                    right: 0;
+                  }
+                  span {
+                    margin-top: 10px;
+                    font-size: 13px;
+                    font-weight: normal;
+                    opacity: 0.6;
+                    display: block;
+                  }
+                }
+              }
+              .ClusterStatusList {
+                width: 35%;
+                padding: 18px;
+                background: #1a2036;
+                border-left: 1px solid #161c31;
+                ul {
+                  width: 100%;
+                  li {
+                    width: 100%;
+                    height: 23px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+                    font-size: 12px;
+                    background: url(../images/dashboard/list_dot_bg.png) repeat-x center center;
+                    &::before {
+                      content: '';
+                      width: 8px;
+                      height: 8px;
+                      border-radius: 100%;
+                      position: absolute;
+                      top: 8px;
+                      left: 0;;
+                    }
+                    &.run {
+                      &::before {
+                        background: #1cdd49;
+                      }
+                      span {
+                        color: #1cdd49;
+                      }
+                    }
+                    &.stop {
+                      &::before {
+                        background: #788094;
+                      }
+                      span {
+                        color: #788094;
+                      }
+                    }
+                    &.pause {
+                      &::before {
+                        background: #e8990f;
+                      }
+                      span {
+                        color: #e8990f;
+                      }
+                    }
+                    span {
+                      padding: 0 5px;
+                      background: #1a2036;
+                    }
+                    span.tit {
+                      padding: 0 5px 0 15px;
+                      color: rgba(255, 255, 255, 0.7);
+                    }
+                    
+                  }
+                }
+              }
+            }
+          }
+        }
+    }
+    .cluster_recent {
+      width: calc(25% - 10px);
+      .ClusterRecentWrap {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #11162a;
+        border-radius: 5px;
+        background: #27304c;
+        .ClusterRecentTitle {
+          width: 100%;
+          height: 40px;
+          padding: 0 15px;
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
+          background: #191f36;
+        }
+        .ClusterRecentListWrap {
+          padding: 8px;
+          border-top: 1px solid #11162a;
+          border-bottom: 1px solid #11162a;
+          &:last-child {
+            border-bottom: 0;
+          }
+          ul {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            li {
+              width: 100%;
+              height: 30px;
+              margin-bottom: 4px;
+              display: flex;
+              align-items: center;
+              border-radius: 3px;
+              background: #1e253e;
+              font-size: 13px;
+              color: rgba(255, 255, 255, 0.7);
+              &:last-of-type {
+                margin-bottom: 0;
+              }
+              span {
+                width: 30px;
+                height: 30px;
+                margin-right: 10px;
+                background: #3d4765;
+                font-size: 14px;
+                font-weight: bold;
+                color: rgba(255, 255, 255, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .ClusterInfoWrap {
+      width: 430px;
+      .cluster_info {
+        .form_dashboard {
+          width: 100%;
+        }
+        .MuiInputBase-input {
+          background-color: #26b8fc;
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 16px;
+          text-align: center;
+          font-weight: 700;
+          border: none !important;
+          border-radius: 8px;
+        }
+        svg {
+          font-size: 24px;
+          color: rgba(255, 255, 255, 0.9);
+        }
+        .cluster_detail {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 12px;
+          height: 700px;
+          width: 100%;
+          background-color: #1a76ff;
+          margin-top: 10px;
+          border-radius: 8px;
+
+          .cluster_detail_title {
+            width: 100%;
+            border-radius: 8px;
+            height: 35px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            background-color: #0c62e4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          .cluster_detail_content {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+          }
+          .cluster_resources {
+            height: 288px;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+
+            .cluster_resource {
+              width: 95px;
+              height: 95px;
+              border-radius: 50%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              background-color: #4047cc;
+              span {
+                font-size: 12px;
+                font-weight: 500;
+                color: rgba(255, 255, 255, 0.9);
+              }
+              .resource_kind {
+                margin-bottom: 4px;
+              }
+              .resource_number {
+                font-size: 24px;
+                font-weight: 700;
+              }
+            }
+          }
+        }
+      }
+    }
+    
 `;
 
 export default globalStyles;
