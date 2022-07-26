@@ -1,13 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import {
-  BASIC_AUTH,
-  LOCAL_VOLUME_URL,
-  SERVER_URL2,
-  BEARER_TOKEN,
-} from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
+import { SERVER_URL2 } from "../config";
+
 import { swalError } from "../utils/swal-utils";
 
 class Volume {
@@ -20,7 +14,7 @@ class Volume {
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
   storageClasses = [];
-  storageClass = {};
+  // storageClass = {};
   scYamlFile = "";
   scParameters = {};
   scLables = {};
@@ -41,6 +35,11 @@ class Volume {
   ];
   label = {};
   content = ""; //초기화를 잘 합시다
+  volumeName = "";
+  selectClusters = [];
+  accessMode = "";
+  storageClass = "";
+  volumeCapacity = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -170,9 +169,15 @@ class Volume {
     });
   };
 
-  setSelectClusters = (selectClusters) => {
+  setSelectClusters = (value) => {
     runInAction(() => {
-      this.selectClusters = selectClusters;
+      this.selectClusters = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
     });
   };
 
@@ -235,63 +240,6 @@ class Volume {
               }
             }
           });
-        });
-      });
-  };
-
-  loadStorageClasses = async () => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses`)
-      .then(({ data: { data } }) => {
-        this.storageClasses = data;
-        this.totalElements = data.length;
-      })
-      .then(() => {
-        this.convertList(this.storageClasses, this.setStorageClasses);
-      })
-      .then(() => {
-        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
-      });
-
-    //  this.loadStorageClass(
-    //    this.storageClasses[0].name,
-    //  this.storageClasses[0].cluster
-    // );
-  };
-
-  loadStorageClass = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        this.storageClass = data;
-        this.scYamlFile = "";
-        this.scAnnotations = {};
-        this.scLables = {};
-        this.scParameters = data.parameters;
-        this.label = data.labels;
-
-        Object.entries(this.storageClass?.annotations).forEach(
-          ([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              if (value === "true" || value === "false") {
-                throw e;
-              }
-              this.scYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.scAnnotations[key] = value;
-              }
-            }
-          }
-        );
-
-        Object.entries(this.storageClass?.labels).map(([key, value]) => {
-          this.scLables[key] = value;
-        });
-
-        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-          this.scParameters[key] = value;
         });
       });
   };

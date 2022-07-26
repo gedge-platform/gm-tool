@@ -2,14 +2,10 @@ import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
-import { CCreateButton } from "@/components/buttons";
-import { PanelBox } from "@/components/styles/PanelBox";
-import { swalError } from "../../../../utils/swal-utils";
 import styled from "styled-components";
 import workspacestore from "../../../../store/WorkSpace";
 import projectStore from "../../../../store/Project";
 import deploymentStore from "../../../../store/Deployment";
-import clusterStore from "../../../../store/Cluster";
 import volumeStore from "../../../../store/Volume";
 import StorageClassStore from "../../../../store/StorageClass";
 
@@ -30,15 +26,11 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const volumeBasicInformation = observer((props) => {
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
-    workspacestore;
-  const [projectEnable, setProjectEnable] = useState(true);
-  const [clusterEnable, setClusterEnable] = useState(true);
-  const [storageClassEnable, setStorageClassEnable] = useState(true);
+const DeploymentVolumeSetting = observer((props) => {
+  const { loadWorkSpaceList } = workspacestore;
   const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
     projectStore;
-  const { setWorkspace } = deploymentStore;
+  const { project } = deploymentStore;
 
   const {
     setVolumeName,
@@ -46,41 +38,39 @@ const volumeBasicInformation = observer((props) => {
     setVolumeCapacity,
     volumeCapacity,
     volumeName,
-    setProject,
-    selectClusters,
     setSelectClusters,
   } = volumeStore;
 
-  const { loadStorageClassName, setStorageClass, storageClassNameData } =
-    StorageClassStore;
+  const {
+    loadStorageClassName,
+    setStorageClass,
+    storageClassNameData,
+    setSelectStorageClass,
+  } = StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;
     if (name === "volumeName") {
-      setVolumeName(value);
-    } else if (name === "workspace") {
-      // loadProjectListInWorkspace(value); // project list 가져옴
-      loadWorkspaceDetail(value); // project 가져옴
-      setWorkspace(value);
-      setProjectEnable(false);
-      return;
-    } else if (name === "project") {
       if (value === "") {
         setSelectClusterInfo([]);
         return;
       }
-      await loadProjectDetail(value); // cluster list 가져옴
+      setVolumeName(value);
+      loadProjectDetail(project); // value 값에 project 넣어서 cluster list 가져옴
       setSelectClusters([...selectClusterInfo]);
-      setClusterEnable(false);
-      setStorageClassEnable(false);
+      return;
     } else if (name === "selectClusters") {
       setSelectClusters(value);
-    } else if (name === "storageClass") {
-      setStorageClass(value);
+      return;
+    } else if (name === "selectStorageClass") {
+      setSelectStorageClass(value);
+      return;
     } else if (name === "accessMode") {
       setAccessMode(value);
+      return;
     } else if (name === "volumeCapacity") {
       setVolumeCapacity(value);
+      return;
     }
   };
 
@@ -112,12 +102,16 @@ const volumeBasicInformation = observer((props) => {
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="step current">
+          <div className="step">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
           <div className="step">
-            <span>고급 설정</span>
+            <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step current">
+            <span>Volume 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step">
@@ -141,46 +135,6 @@ const volumeBasicInformation = observer((props) => {
                 onChange={onChange}
                 value={volumeName}
               />
-            </td>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Workspace <span className="requried">*</span>
-            </th>
-            <td style={{ width: "50%" }}>
-              <FormControl className="form_fullWidth">
-                <select name="workspace" onChange={onChange}>
-                  <option value={""}>Select Workspace</option>
-                  {workSpaceList.map((item) => (
-                    <option value={item.workspaceName}>
-                      {item.workspaceName}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-            <th></th>
-          </tr>
-          <tr>
-            <th>
-              Project <span className="requried">*</span>
-            </th>
-            <td>
-              <FormControl className="form_fullWidth">
-                <select
-                  disabled={projectEnable}
-                  name="project"
-                  onChange={onChange}
-                >
-                  <option value={""}>Select Project</option>
-                  {projectList.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
             </td>
             <th></th>
           </tr>
@@ -225,8 +179,8 @@ const volumeBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={storageClassEnable}
-                  name="storageClass"
+                  //   disabled={storageClassEnable}
+                  name="selectStorageClass"
                   onChange={onChange}
                 >
                   <option value={""}>Select StorageClass</option>
@@ -282,4 +236,4 @@ const volumeBasicInformation = observer((props) => {
   );
 });
 
-export default volumeBasicInformation;
+export default DeploymentVolumeSetting;

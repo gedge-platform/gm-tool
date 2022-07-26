@@ -41,6 +41,11 @@ const UserServiceListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "프로젝트 유형",
+      field: "projectType",
+      filter: true,
+    },
+    {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
@@ -54,17 +59,6 @@ const UserServiceListTab = observer(() => {
       filter: true,
       cellRenderer: function ({ data: { workspace } }) {
         return `<span>${workspace.workspaceName}</span>`;
-      },
-    },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {
