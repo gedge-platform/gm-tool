@@ -1,6 +1,8 @@
 import axios from "axios";
+import { template } from "lodash";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL2, BEARER_TOKEN } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class Claim {
   viewList = [];
@@ -29,6 +31,14 @@ class Claim {
     },
   ];
   label = {};
+  claimName="";
+  project="";
+  clusterName="";
+  cluster="";
+  storageClass="";
+  accessMode="";
+  volumeCapacity="";
+  content = ""; //초기화를 잘 합시다2
 
   constructor() {
     makeAutoObservable(this);
@@ -124,6 +134,73 @@ class Claim {
     });
   };
 
+  setVolumeName = (value) => {
+    runInAction(() => {
+      this.volumeName = value;
+    });
+  };
+
+  setClaimName = (value) => {
+    runInAction(() => {
+      this.claimName = value;
+    });
+  };
+
+  setAccessMode = (name) => {
+    runInAction(() => {
+      this.accessMode = name;
+    });
+  };
+
+  setVolumeCapacity = (value) => {
+    runInAction(() => {
+      this.volumeCapacity = value;
+    });
+  };
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
+
+  setCluster = (cluster) => {
+    runInAction(() => {
+      this.cluster = cluster;
+    });
+  };
+
+  setProject = (value) => {
+    runInAction(() => {
+      this.project = value;
+    });
+  };
+
+  setSelectClusters = (value) => {
+    runInAction(() => {
+      this.selectClusters = value;
+    });
+  };
+
+  clearAll = () => {
+    runInAction(() => {
+      // this.volumeName = "";
+      this.content = "";
+      this.volumeCapacity = 0;
+      this.projectList = "";
+    });
+  };
+
+  closeTab = () => {
+    window.close();
+  }
+
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
@@ -189,6 +266,27 @@ class Claim {
         });
       });
   };
+
+  createVolume = (template, callback) => {
+    const YAML = require("yamljs");
+    axios
+      .post(
+        `http://192.168.160.235:8011/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+
+        YAML.parse(this.content)
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("Volume이 생성되었습니다!", callback);
+        }
+      })
+      .catch((err) => {
+        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        console.error(err);
+      });
+  };
 }
+
 const claimStore = new Claim();
 export default claimStore;
