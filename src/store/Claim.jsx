@@ -35,6 +35,7 @@ class Claim {
   project="";
   clusterName="";
   cluster="";
+  selectClusters="";
   storageClass="";
   accessMode="";
   volumeCapacity="";
@@ -267,7 +268,7 @@ class Claim {
       });
   };
 
-  createVolume = (template, callback) => {
+  createVolumeClaim = (template, callback) => {
     const YAML = require("yamljs");
     axios
       .post(

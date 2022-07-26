@@ -49,15 +49,15 @@ const CreateClaim = observer((props) => {
         content,
         setContent,
         clearAll,
-        createVolume,
+        createVolumeClaim,
         setProject,
         project,
-        // selectClusters,
+        selectClusters,
         setSelectClusters,
         clusterName,
         setAccessMode,
     } = claimStore;
-    const { selectClusters } = volumeStore;
+    // const { setSelectClusters, selectClusters } = volumeStore;
     const { workspace, setWorkspace } = deploymentStore;
     const { storageClass, setStorageClass, selectStorageClass, setSelectStorageClass } = StorageClassStore;
     const template = {
@@ -72,7 +72,7 @@ const CreateClaim = observer((props) => {
             },
         },
         spec: {
-            storageClassName: storageClass,
+            storageClassName: selectStorageClass,
             accessModes: [accessMode],
             resources: {
               requests: {
@@ -106,7 +106,6 @@ const CreateClaim = observer((props) => {
           return;
         }
         if (accessMode === "") {
-          console.log("storage: " + storageClass);
           swalError("Access Mode를 선택해주세요");
           return;
         }
@@ -115,7 +114,6 @@ const CreateClaim = observer((props) => {
           return;
         } else {
           setStepValue(2);
-          console.log(e);
         }
       };
 
@@ -126,7 +124,6 @@ const CreateClaim = observer((props) => {
         setStepValue(1);
         clearAll();
         setClaimName("");
-        setSelectClusters("");
         setWorkspace("");
         setProject("");
         setSelectStorageClass("");
@@ -137,19 +134,15 @@ const CreateClaim = observer((props) => {
       };
     
       const handlePreStepValue = () => {
-        setProjectListinWorkspace();
-        clearAll();
-        setClaimName("");
-        setSelectClusters("");
         setWorkspace("");
         setProject("");
-        setSelectStorageClass("");
+       
         
       };
     
       const CreateVolume = () => {
         // for문으로 복수의 클러스터이름 보내게
-        createVolume(require("json-to-pretty-yaml").stringify(template));
+        createVolumeClaim(require("json-to-pretty-yaml").stringify(template));
         handleClose();
         // setSelectClusters();
       };
