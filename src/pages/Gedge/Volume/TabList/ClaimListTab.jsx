@@ -18,10 +18,13 @@ import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import CreateVolume from "../Dialog/CreateVolume";
+import CreateClaim from "../ClaimDialog/CreateClaim";
 
 const ClaimListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openYaml, setOpenYaml] = useState(false);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -51,10 +54,16 @@ const ClaimListTab = observer(() => {
       headerName: "Name",
       field: "name",
       filter: true,
+
     },
     {
       headerName: "Namespace",
       field: "namespace",
+      filter: true,
+    },
+    {
+      headerName: "Cluster",
+      field: "cluster",
       filter: true,
     },
     {
@@ -127,12 +136,20 @@ const ClaimListTab = observer(() => {
   };
 
   const handleOpenYaml = () => {
+    setOpenYaml(true);
+  };
+
+  const handleCreateOpen = () => {
     setOpen(true);
   };
 
   const handleCloseYaml = () => {
-    setOpen(false);
+    setOpenYaml(false);
   };
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   useEffect(() => {
     loadPVClaims();
@@ -148,7 +165,7 @@ const ClaimListTab = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -168,7 +185,8 @@ const ClaimListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml open={openYaml} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <CreateClaim open={open} onClose={handleClose} reloadFunc={loadPVClaim} />
         </PanelBox>
         <ClaimDetail
           pvClaim={pvClaim}

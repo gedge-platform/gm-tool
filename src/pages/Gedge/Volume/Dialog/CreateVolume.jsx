@@ -89,26 +89,32 @@ const CreateVolume = observer((props) => {
     }
     if (workspace === "") {
       swalError("Workspace를 선택해주세요");
+      console.log(volumeName);
       return;
     }
     if (project === "") {
       swalError("Project를 선택해주세요");
+      console.log(workspace);
       return;
     }
     if (selectClusters.length === 0) {
       swalError("클러스터를 확인해주세요!");
+      console.log(project);
       return;
     }
     if (accessMode === "") {
       swalError("Access Mode를 선택해주세요");
+      console.log(accessMode);
       return;
     }
     if (storageClass === "") {
       swalError("StorageClass를 선택해주세요");
+      console.log(storageClass);
       return;
     }
     if (volumeCapacity === "") {
       swalError("Volume 용량을 입력해주세요");
+      console.log(volumeCapacity);
       return;
     } else {
       setStepValue(2);

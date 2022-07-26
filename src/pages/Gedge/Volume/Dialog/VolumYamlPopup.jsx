@@ -4,9 +4,14 @@ import volumeStore from "../../../../store/Volume";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import claimStore from "../../../../store/Claim";
 
 const VolumYamlPopup = observer(() => {
-  const { content, setContent } = volumeStore;
+  // const { content, setContent, volumeName } = volumeStore;
+  const { content, claimName} = claimStore;
+ // console.log("claim " + claimName);
+  console.log(content);
+
 
   return (
     <>

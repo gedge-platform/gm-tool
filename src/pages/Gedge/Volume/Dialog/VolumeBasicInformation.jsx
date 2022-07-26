@@ -73,7 +73,6 @@ const volumeBasicInformation = observer((props) => {
         setSelectClusterInfo([]);
         return;
       }
-      setProject(value);
       await loadProjectDetail(value); // cluster list 가져옴
       setSelectClusters([...selectClusterInfo]);
       setClusterEnable(false);
