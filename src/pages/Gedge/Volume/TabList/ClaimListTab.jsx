@@ -63,7 +63,7 @@ const ClaimListTab = observer(() => {
     },
     {
       headerName: "Cluster",
-      field: "cluster",
+      field: "clusterName",
       filter: true,
     },
     {

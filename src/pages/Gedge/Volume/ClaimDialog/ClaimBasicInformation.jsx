@@ -36,7 +36,7 @@ const ClaimBasicInformation = observer((props) => {
     const {selectClusterInfo, setSelectClusterInfo, loadProjectDetail} = projectStore;
     const {setWorkspace} = deploymentStore;
 
-    const {setSelectClusters} = volumeStore;
+    // const {setSelectClusters} = volumeStore;
 
     const {
         setVolumeName,
@@ -48,7 +48,7 @@ const ClaimBasicInformation = observer((props) => {
         claimName,
         setProject,
         selectClusters,
-        // setSelectClusters,
+        setSelectClusters,
     } = claimStore;
 
     const { setSelectStorageClass, loadStorageClassName, setStorageClass, storageClassNameData} = StorageClassStore;
@@ -125,7 +125,7 @@ const ClaimBasicInformation = observer((props) => {
                     <tbody>
                         <tr>
                             <th>
-                                Volume Claim Name
+                                VolumeClaim Name
                                 <span className="requried">*</span>
                             </th>
                             <td>

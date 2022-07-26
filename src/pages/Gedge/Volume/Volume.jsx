@@ -18,17 +18,17 @@ const Volume = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="볼륨 관리" />
         <CTab label="클레임 관리" />
+        <CTab label="볼륨 관리" />
         <CTab label="스토리지 클래스 관리" />
       </CTabs>
 
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <VolumeListTab />
+          <ClaimListTab />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={1}>
-          <ClaimListTab />
+          <VolumeListTab />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={2}>
           <StorageClassListTab />
