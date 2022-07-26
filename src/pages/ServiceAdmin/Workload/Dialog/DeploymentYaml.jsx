@@ -13,12 +13,16 @@ const DeploymentYaml = observer(() => {
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="step">
+          <div className="step current">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
           <div className="step">
             <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>Volume 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">

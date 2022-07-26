@@ -14,7 +14,7 @@ class Volume {
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
   storageClasses = [];
-  storageClass = {};
+  // storageClass = {};
   scYamlFile = "";
   scParameters = {};
   scLables = {};
@@ -35,6 +35,11 @@ class Volume {
   ];
   label = {};
   content = ""; //초기화를 잘 합시다
+  volumeName = "";
+  selectClusters = [];
+  accessMode = "";
+  storageClass = "";
+  volumeCapacity = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -164,9 +169,15 @@ class Volume {
     });
   };
 
-  setSelectClusters = (selectClusters) => {
+  setSelectClusters = (value) => {
     runInAction(() => {
-      this.selectClusters = selectClusters;
+      this.selectClusters = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
     });
   };
 

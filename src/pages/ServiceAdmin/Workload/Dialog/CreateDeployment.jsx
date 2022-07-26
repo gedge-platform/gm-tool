@@ -13,6 +13,8 @@ import { CDialogNew } from "../../../../components/dialogs";
 import schedulerStore from "../../../../store/Scheduler";
 import { swalError } from "../../../../utils/swal-utils";
 import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
+import volumeStore from "../../../../store/Volume";
+import StorageClassStore from "../../../../store/StorageClass";
 
 const Button = styled.button`
   background-color: #fff;
@@ -59,6 +61,20 @@ const CreateDeployment = observer((props) => {
     setProject,
     containerPortName,
   } = deploymentStore;
+
+  const {
+    setVolumeName,
+    setAccessMode,
+    setVolumeCapacity,
+    volumeCapacity,
+    volumeName,
+    selectClusters,
+    setSelectClusters,
+    accessMode,
+  } = volumeStore;
+
+  const { storageClass, setStorageClass, selectStorageClass } =
+    StorageClassStore;
 
   const { setProjectListinWorkspace } = projectStore;
   const { setWorkspaceList } = workspacesStore;
@@ -116,8 +132,7 @@ const CreateDeployment = observer((props) => {
     if (deploymentName === "") {
       swalError("이름을 입력해주세요");
       return;
-    }
-    if (workspace !== "" && project !== "" && deploymentName !== "") {
+    } else {
       setStepValue(2);
     }
   };
@@ -142,14 +157,33 @@ const CreateDeployment = observer((props) => {
     if (containerPort === "") {
       swalError("포트를 입력하세요!");
       return;
-    }
-    if (
-      containerName !== "" &&
-      containerImage !== "" &&
-      containerPortName !== "" &&
-      containerPort !== ""
-    ) {
+    } else {
       setStepValue(3);
+    }
+  };
+
+  const onClickStepThree = () => {
+    if (volumeName === "") {
+      swalError("Volume 이름을 입력해주세요");
+      return;
+    }
+    if (selectClusters.length === 0) {
+      swalError("클러스터를 확인해주세요!");
+      return;
+    }
+    if (selectStorageClass === "") {
+      swalError("StorageClass를 선택해주세요");
+      return;
+    }
+    if (accessMode === "") {
+      swalError("Access Mode를 선택해주세요");
+      return;
+    }
+    if (volumeCapacity === "") {
+      swalError("Volume 용량을 입력해주세요");
+      return;
+    } else {
+      setStepValue(4);
     }
   };
 
@@ -159,6 +193,10 @@ const CreateDeployment = observer((props) => {
     setProjectListinWorkspace();
     setStepValue(1);
     clearAll();
+    setVolumeName();
+    setAccessMode();
+    setVolumeCapacity();
+    setStorageClass();
   };
 
   const handlePreStepValue = () => {
@@ -288,7 +326,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={onClickStepTwo}>다음</ButtonNext>
+              <ButtonNext onClick={onClickStepThree}>다음</ButtonNext>
               {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>
           </div>

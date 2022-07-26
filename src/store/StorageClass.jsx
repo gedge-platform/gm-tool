@@ -1,8 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL2 } from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
 
 class StorageClass {
   viewList = [];
@@ -38,6 +36,7 @@ class StorageClass {
   viewList = [];
   storageClassName = "";
   storageClassNameData = [];
+  selectStorageClass = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -216,6 +215,12 @@ class StorageClass {
   setStorageClass = (value) => {
     runInAction(() => {
       this.storageClass = value;
+    });
+  };
+
+  setSelectStorageClass = (value) => {
+    runInAction(() => {
+      this.selectStorageClass = value;
     });
   };
 
