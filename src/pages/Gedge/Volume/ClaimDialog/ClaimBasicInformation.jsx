@@ -8,6 +8,7 @@ import deploymentStore from "../../../../store/Deployment";
 import projectStore from "../../../../store/Project";
 import StorageClassStore from "../../../../store/StorageClass";
 import workspacestore from "../../../../store/WorkSpace";
+import volumeStore from "../../../../store/Volume";
 
 const Button = styled.button`
   background-color: #fff;
@@ -35,6 +36,8 @@ const ClaimBasicInformation = observer((props) => {
     const {selectClusterInfo, setSelectClusterInfo, loadProjectDetail} = projectStore;
     const {setWorkspace} = deploymentStore;
 
+    const {setSelectClusters} = volumeStore;
+
     const {
         setVolumeName,
         setClaimName,
@@ -45,10 +48,10 @@ const ClaimBasicInformation = observer((props) => {
         claimName,
         setProject,
         selectClusters,
-        setSelectClusters,
+        // setSelectClusters,
     } = claimStore;
 
-    const { loadStorageClassName, setStorageClass, storageClassNameData} = StorageClassStore;
+    const { setSelectStorageClass, loadStorageClassName, setStorageClass, storageClassNameData} = StorageClassStore;
 
     const onChange = async (e) => {
         const {value, name} = e.target;
@@ -69,15 +72,19 @@ const ClaimBasicInformation = observer((props) => {
             setProject(value);
             setClusterEnable(false);
             setStorageClassEnable(false);
+            return;
         } else if (name === "selectClusters") {
-          console.log(value);
             setSelectClusters(value);
-        } else if (name === "storageClass") {
-            setStorageClass(value);
+            return;
+        } else if (name === "selectStorageClass") {
+            setSelectStorageClass(value);
+            return;
         } else if (name === "accessMode") {
             setAccessMode(value);
+            return;
         } else if (name === "volumeCapacity") {
             setVolumeCapacity(value);
+            return;
         }
     };
 
@@ -194,7 +201,6 @@ const ClaimBasicInformation = observer((props) => {
                             type="checkbox"
                             name="selectClusters"
                             onChange={(e) => checkCluster(e, clusterName)}
-                            value={clusterName}
                           />
                         </td>
                         <td>{clusterName}</td>
@@ -216,7 +222,7 @@ const ClaimBasicInformation = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select
                   disabled={storageClassEnable}
-                  name="storageClass"
+                  name="selectStorageClass"
                   onChange={onChange}
                 >
                   <option value={""}>Select StorageClass</option>

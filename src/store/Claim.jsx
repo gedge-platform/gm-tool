@@ -34,6 +34,7 @@ class Claim {
   claimName="";
   project="";
   clusterName="";
+  cluster="";
   storageClass="";
   accessMode="";
   volumeCapacity="";
@@ -169,9 +170,9 @@ class Claim {
     });
   };
 
-  setCluster = (clusterName) => {
+  setCluster = (cluster) => {
     runInAction(() => {
-      this.cluster = clusterName;
+      this.cluster = cluster;
     });
   };
 
@@ -181,9 +182,9 @@ class Claim {
     });
   };
 
-  setSelectClusters = (selectClusters) => {
+  setSelectClusters = (value) => {
     runInAction(() => {
-      this.selectClusters = selectClusters;
+      this.selectClusters = value;
     });
   };
 

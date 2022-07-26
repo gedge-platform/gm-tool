@@ -94,11 +94,11 @@ const ClaimListTab = observer(() => {
       field: "storageClass",
       filter: true,
     },
-    {
-      headerName: "Cluster Name",
-      field: "clusterName",
-      filter: true,
-    },
+    // {
+    //   headerName: "Cluster Name",
+    //   field: "clusterName",
+    //   filter: true,
+    // },
     {
       headerName: "Create At",
       field: "createAt",

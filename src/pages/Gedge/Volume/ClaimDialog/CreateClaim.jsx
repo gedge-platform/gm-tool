@@ -52,13 +52,14 @@ const CreateClaim = observer((props) => {
         createVolume,
         setProject,
         project,
-        selectClusters,
+        // selectClusters,
         setSelectClusters,
         clusterName,
+        setAccessMode,
     } = claimStore;
-    // const { createVolume } = volumeStore;
+    const { selectClusters } = volumeStore;
     const { workspace, setWorkspace } = deploymentStore;
-    const { storageClass, setStorageClass } = StorageClassStore;
+    const { storageClass, setStorageClass, selectStorageClass, setSelectStorageClass } = StorageClassStore;
     const template = {
 
         apiVersion: "v1",
@@ -82,6 +83,7 @@ const CreateClaim = observer((props) => {
     };
 
     const onClickStepOne = (e) => {
+      console.log(storageClass);
         if (claimName === "") {
             swalError("Claim 이름을 입력해주세요");
             return;
@@ -98,12 +100,14 @@ const CreateClaim = observer((props) => {
           swalError("클러스터를 확인해주세요!");
           return;
         }
-        if (accessMode === "") {
-          swalError("Access Mode를 선택해주세요");
+        if (selectStorageClass === "") {
+          
+          swalError("StorageClass를 선택해주세요");
           return;
         }
-        if (storageClass === "") {
-          swalError("StorageClass를 선택해주세요");
+        if (accessMode === "") {
+          console.log("storage: " + storageClass);
+          swalError("Access Mode를 선택해주세요");
           return;
         }
         if (volumeCapacity === "") {
@@ -122,10 +126,10 @@ const CreateClaim = observer((props) => {
         setStepValue(1);
         clearAll();
         setClaimName("");
-        // setVolumeName("");
+        setSelectClusters("");
         setWorkspace("");
         setProject("");
-        setStorageClass("");
+        setSelectStorageClass("");
       };
     
       const onClickStepTwo = () => {
@@ -133,8 +137,14 @@ const CreateClaim = observer((props) => {
       };
     
       const handlePreStepValue = () => {
+        setProjectListinWorkspace();
+        clearAll();
+        setClaimName("");
+        setSelectClusters("");
         setWorkspace("");
         setProject("");
+        setSelectStorageClass("");
+        
       };
     
       const CreateVolume = () => {
