@@ -197,7 +197,7 @@ class Deployment {
   setPDeploymentList = (list) => {
     runInAction(() => {
       this.pDeploymentList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -358,6 +358,7 @@ class Deployment {
         YAML.parse(this.content)
       )
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           swalError("Deployment가 생성되었습니다.", callback);
         }

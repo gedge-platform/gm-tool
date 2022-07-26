@@ -60,6 +60,7 @@ const CreateDeployment = observer((props) => {
     setProjectName,
     setProject,
     containerPortName,
+    postDeploymentGM,
   } = deploymentStore;
 
   const {
@@ -207,43 +208,48 @@ const CreateDeployment = observer((props) => {
   // const createDeployment = () => {
   //   postDeployment(handleClose);
   // };
+  // const createDeployment = () => {
+  //   const requestId = `${deploymentName}-${randomString()}`;
+
+  //   postWorkload(requestId, workspace, project, "Deployment");
+  //   console.log(requestId, workspace, project, "Deployment");
+  //   postScheduler(requestId, content, handleClose);
+  //   console.log(requestId, content, handleClose);
+
+  // let formData = new FormData();
+  // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
+  // formData.append("requestId", requestId);
+  // formData.append("yaml", content);
+  // formData.append("clusters", JSON.stringify(clusters));
+
+  // axios
+  //   .post(`http://101.79.4.15:32527/yaml`, formData)
+  //   .then(function (response) {
+  //     if (response.status === 200) {
+  //       setResponseData(response.data);
+
+  //       const popup = window.open(
+  //         "",
+  //         "Gedge scheduler",
+  //         `width=${screen.width},height=${screen.height}`,
+  //         "fullscreen=yes"
+  //       );
+  //       popup.document.open().write(response.data);
+  //       popup.document.close();
+
+  //       handleClose();
+  //       // setStepValue(4);
+  //     }
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+  // };
+
   const createDeployment = () => {
-    const requestId = `${deploymentName}-${randomString()}`;
-
-    postWorkload(requestId, workspace, project, "Deployment");
-    console.log(requestId, workspace, project, "Deployment");
-    postScheduler(requestId, content, handleClose);
-    console.log(requestId, content, handleClose);
-
-    // let formData = new FormData();
-    // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
-    // formData.append("requestId", requestId);
-    // formData.append("yaml", content);
-    // formData.append("clusters", JSON.stringify(clusters));
-
-    // axios
-    //   .post(`http://101.79.4.15:32527/yaml`, formData)
-    //   .then(function (response) {
-    //     if (response.status === 200) {
-    //       setResponseData(response.data);
-
-    //       const popup = window.open(
-    //         "",
-    //         "Gedge scheduler",
-    //         `width=${screen.width},height=${screen.height}`,
-    //         "fullscreen=yes"
-    //       );
-    //       popup.document.open().write(response.data);
-    //       popup.document.close();
-
-    //       handleClose();
-    //       // setStepValue(4);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
   };
+
   useEffect(() => {
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
