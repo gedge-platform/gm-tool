@@ -15,6 +15,7 @@ import { swalError } from "../../../../utils/swal-utils";
 import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 import volumeStore from "../../../../store/Volume";
 import StorageClassStore from "../../../../store/StorageClass";
+import claimStore from "../../../../store/Claim";
 
 const Button = styled.button`
   background-color: #fff;
@@ -61,6 +62,7 @@ const CreateDeployment = observer((props) => {
     setProject,
     containerPortName,
     postDeploymentGM,
+    postDeploymentPVC,
   } = deploymentStore;
 
   const {
@@ -116,6 +118,27 @@ const CreateDeployment = observer((props) => {
               ],
             },
           ],
+        },
+      },
+    },
+  };
+
+  const templatePVC = {
+    apiVersion: "v1",
+    kind: "PersistentVolumeClaim",
+    metadata: {
+      name: volumeName,
+      namespace: project,
+      labels: {
+        app: "",
+      },
+    },
+    spec: {
+      storageClassName: storageClass,
+      accessModes: [accessMode],
+      resources: {
+        requests: {
+          storage: Number(volumeCapacity) + "Gi",
         },
       },
     },
@@ -248,12 +271,14 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    postDeploymentPVC(require("json-to-pretty-yaml").stringify(templatePVC));
   };
 
   useEffect(() => {
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
+      setContent(YAML.stringify(templatePVC));
     }
   }, [stepValue]);
 

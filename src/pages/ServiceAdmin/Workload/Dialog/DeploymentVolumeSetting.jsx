@@ -41,12 +41,8 @@ const DeploymentVolumeSetting = observer((props) => {
     setSelectClusters,
   } = volumeStore;
 
-  const {
-    loadStorageClassName,
-    setStorageClass,
-    storageClassNameData,
-    setSelectStorageClass,
-  } = StorageClassStore;
+  const { loadStorageClassName, storageClassNameData, setSelectStorageClass } =
+    StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import styled from "styled-components"
+import styled from "styled-components";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
 import claimStore from "../../../../store/Claim";
@@ -28,174 +28,181 @@ const ButtonNext = styled.button`
 `;
 
 const ClaimBasicInformation = observer((props) => {
-    const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } = workspacestore;
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
+    workspacestore;
 
-    const [projectEnable, setProjectEnable] = useState(true);
-    const [clusterEnable, setClusterEnable] = useState(true);
-    const [storageClassEnable, setStorageClassEnable] = useState(true);
-    const {selectClusterInfo, setSelectClusterInfo, loadProjectDetail} = projectStore;
-    const {setWorkspace} = deploymentStore;
+  const [projectEnable, setProjectEnable] = useState(true);
+  const [clusterEnable, setClusterEnable] = useState(true);
+  const [storageClassEnable, setStorageClassEnable] = useState(true);
+  const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
+    projectStore;
+  const { setWorkspace } = deploymentStore;
 
-    const {setSelectClusters} = volumeStore;
+  const { setSelectClusters } = volumeStore;
 
-    const {
-        setVolumeName,
-        setClaimName,
-        setAccessMode,
-        setVolumeCapacity,
-        volumeCapacity,
-        volumeName,
-        claimName,
-        setProject,
-        selectClusters,
-        // setSelectClusters,
-    } = claimStore;
+  const {
+    setVolumeName,
+    setClaimName,
+    setAccessMode,
+    setVolumeCapacity,
+    volumeCapacity,
+    volumeName,
+    claimName,
+    setProject,
+    selectClusters,
+    // setSelectClusters,
+  } = claimStore;
 
-    const { setSelectStorageClass, loadStorageClassName, setStorageClass, storageClassNameData} = StorageClassStore;
+  const {
+    setSelectStorageClass,
+    loadStorageClassName,
+    setStorageClass,
+    storageClassNameData,
+  } = StorageClassStore;
 
-    const onChange = async (e) => {
-        const {value, name} = e.target;
-        if(name === "claimName") {
-            setClaimName(value);
-        } else if (name === "workspace") {
-          loadWorkspaceDetail(value);
-          setWorkspace(value);
-          setProjectEnable(false);
-            return;
-        } else if (name === "project") {
-            if (value === "") {
-                setSelectClusterInfo([]);
-                return;
-            }
-            await loadProjectDetail(value);
-            setSelectClusters([...selectClusterInfo]);
-            setProject(value);
-            setClusterEnable(false);
-            setStorageClassEnable(false);
-            return;
-        } else if (name === "selectClusters") {
-            setSelectClusters(value);
-            return;
-        } else if (name === "selectStorageClass") {
-            setSelectStorageClass(value);
-            return;
-        } else if (name === "accessMode") {
-            setAccessMode(value);
-            return;
-        } else if (name === "volumeCapacity") {
-            setVolumeCapacity(value);
-            return;
-        }
-    };
-
-    const checkCluster = ({target: {checked}}, clusterName) => {
-        if(checked) {
-            setSelectClusters(clusterName);
-            loadStorageClassName(clusterName);
-        }
-    };
-
-    useEffect(() => {
-        loadWorkSpaceList(true);
+  const onChange = async (e) => {
+    const { value, name } = e.target;
+    if (name === "claimName") {
+      setClaimName(value);
+    } else if (name === "workspace") {
+      loadWorkspaceDetail(value);
+      setWorkspace(value);
+      setProjectEnable(false);
+      return;
+    } else if (name === "project") {
+      if (value === "") {
         setSelectClusterInfo([]);
-      }, []);
+        return;
+      }
+      await loadProjectDetail(value);
+      setSelectClusters([...selectClusterInfo]);
+      setProject(value);
+      setClusterEnable(false);
+      setStorageClassEnable(false);
+      return;
+    } else if (name === "selectClusters") {
+      setSelectClusters(value);
+      return;
+    } else if (name === "selectStorageClass") {
+      setSelectStorageClass(value);
+      return;
+    } else if (name === "accessMode") {
+      setAccessMode(value);
+      return;
+    } else if (name === "volumeCapacity") {
+      setVolumeCapacity(value);
+      return;
+    }
+  };
 
-    useEffect(() => {
-        setSelectClusters([...selectClusterInfo]);
-    }, []);
+  const checkCluster = ({ target: { checked } }, clusterName) => {
+    if (checked) {
+      setSelectClusters(clusterName);
+      loadStorageClassName(clusterName);
+    }
+  };
 
-    return (
-        <>
-            <div className="step-container">
-                <div className="signup-step">
-                    <div className="step current">
-                        <span>기본 정보</span>
-                    </div>
-                    <div className="arr"></div>
-                        <div className="step">
-                            <span>고급 설정</span>
-                        </div>
-                        <div className="arr"></div>
-                        <div className="step">
-                            <span>설정 검토</span>
-                        </div>
-                    </div>
-                </div>
-                <table className="tb_data_new tb_write">
-                    <tbody>
-                        <tr>
-                            <th>
-                                Volume Claim Name
-                                <span className="requried">*</span>
-                            </th>
-                            <td>
-                                <CTextField
-                                    type="text"
-                                    placeholder="Volume Claim Name"
-                                    className="form_fullWidth"
-                                    name="claimName"
-                                    onChange={onChange}
-                                    value={claimName}
-                                />
-                            </td>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th>
-                                Workspace <span className="requried">*</span>
-                            </th>
-                            <td style={{ width: "50%" }}>
-                                <FormControl className="form_fullWidth">
-                                    <select name="workspace" onChange={onChange}>
-                                        <option value={""}>Select Workspace</option>
-                                        {workSpaceList.map((item) => (
-                                            <option value={item.workspaceName}>
-                                                {item.workspaceName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </FormControl>
-                            </td>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th>
-                                Project <span className="requried">*</span>
-                            </th>
-                            <td>
-                                <FormControl className="form_fullWidth">
-                                    <select
-                                        disabled={projectEnable}
-                                        name="project"
-                                        onChange={onChange}
-                                    >
-                                        <option value={""}>Select Project</option>
-                                        {projectList.map((project) => (
-                                            <option value={project.projectName}>
-                                                {project.projectName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </FormControl>
-                            </td>
-                            <th></th>
-                        </tr>
-                        <tr>
-                            <th>
-                                Cluster <span className="requried">*</span>
-                            </th>
-                            <td>
-                                <table className="tb_data_new">
-                                    <tbody className="tb_data_nodeInfo">
-                                        <tr>
-                                            <th></th>
-                                            <th>이름</th>
-                                            <th>타입</th>
-                                            <th>IP</th>
-                                        </tr>
-                                        {selectClusterInfo.map(
-                                            ({ clusterName, clusterType, clusterEndpoint }) => (
-                                        <tr>
+  useEffect(() => {
+    loadWorkSpaceList(true);
+    setSelectClusterInfo([]);
+  }, []);
+
+  useEffect(() => {
+    setSelectClusters([...selectClusterInfo]);
+  }, []);
+
+  return (
+    <>
+      <div className="step-container">
+        <div className="signup-step">
+          <div className="step current">
+            <span>기본 정보</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>고급 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>설정 검토</span>
+          </div>
+        </div>
+      </div>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>
+              VolumeClaim Name
+              <span className="requried">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Volume Claim Name"
+                className="form_fullWidth"
+                name="claimName"
+                onChange={onChange}
+                value={claimName}
+              />
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td style={{ width: "50%" }}>
+              <FormControl className="form_fullWidth">
+                <select name="workspace" onChange={onChange}>
+                  <option value={""}>Select Workspace</option>
+                  {workSpaceList.map((item) => (
+                    <option value={item.workspaceName}>
+                      {item.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select
+                  disabled={projectEnable}
+                  name="project"
+                  onChange={onChange}
+                >
+                  <option value={""}>Select Project</option>
+                  {projectList.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Cluster <span className="requried">*</span>
+            </th>
+            <td>
+              <table className="tb_data_new">
+                <tbody className="tb_data_nodeInfo">
+                  <tr>
+                    <th></th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>IP</th>
+                  </tr>
+                  {selectClusterInfo.map(
+                    ({ clusterName, clusterType, clusterEndpoint }) => (
+                      <tr>
                         <td style={{ textAlign: "center" }}>
                           <input
                             type="checkbox"
@@ -274,9 +281,8 @@ const ClaimBasicInformation = observer((props) => {
           </tr>
         </tbody>
       </table>
-        </>
-    );
-    
+    </>
+  );
 });
 
 export default ClaimBasicInformation;
