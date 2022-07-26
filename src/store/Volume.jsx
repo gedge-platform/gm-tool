@@ -1,13 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import {
-  BASIC_AUTH,
-  LOCAL_VOLUME_URL,
-  SERVER_URL2,
-  BEARER_TOKEN,
-} from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
+import { SERVER_URL2 } from "../config";
+
 import { swalError } from "../utils/swal-utils";
 
 class Volume {
@@ -20,7 +14,7 @@ class Volume {
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
   storageClasses = [];
-  storageClass = {};
+  // storageClass = {};
   scYamlFile = "";
   scParameters = {};
   scLables = {};
@@ -41,6 +35,11 @@ class Volume {
   ];
   label = {};
   content = ""; //초기화를 잘 합시다
+  volumeName = "";
+  selectClusters = [];
+  accessMode = "";
+  storageClass = "";
+  volumeCapacity = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -170,9 +169,15 @@ class Volume {
     });
   };
 
-  setSelectClusters = (selectClusters) => {
+  setSelectClusters = (value) => {
     runInAction(() => {
-      this.selectClusters = selectClusters;
+      this.selectClusters = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
     });
   };
 

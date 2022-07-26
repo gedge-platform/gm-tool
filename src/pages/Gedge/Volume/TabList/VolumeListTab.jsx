@@ -173,7 +173,7 @@ const VolumeListTab = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

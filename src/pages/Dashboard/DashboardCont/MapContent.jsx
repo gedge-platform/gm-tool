@@ -68,6 +68,7 @@ const MapContent = () => {
     <div
       id="map"
       style={{ height: "100%", width: "100%", pointerEvents: "none" }}
+      // 지도 크기 조정
     ></div>
   );
 };
