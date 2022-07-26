@@ -114,7 +114,6 @@ const CreateClaim = observer((props) => {
           return;
         } else {
           setStepValue(2);
-          console.log(selectStorageClass);
         }
       };
 
@@ -135,14 +134,9 @@ const CreateClaim = observer((props) => {
       };
     
       const handlePreStepValue = () => {
-        setProjectListinWorkspace();
-        clearAll();
-        setClaimName("");
-        setSelectClusters("");
         setWorkspace("");
         setProject("");
-        setSelectStorageClass("");
-        setAccessMode("");
+       
         
       };
     
