@@ -38,6 +38,8 @@ const CreateClaim = observer((props) => {
   const { setProjectListinWorkspace } = projectStore;
   const {
     claimName,
+    //volumeName,
+    //setVolumeName,
     setClaimName,
     accessMode,
     volumeCapacity,
@@ -47,15 +49,15 @@ const CreateClaim = observer((props) => {
     content,
     setContent,
     clearAll,
-    createVolume,
+    createVolumeClaim,
     setProject,
     project,
+    selectClusters,
     setSelectClusters,
     clusterName,
     setAccessMode,
-    createVolumeClaim,
   } = claimStore;
-  const { selectClusters } = volumeStore;
+  // const { setSelectClusters, selectClusters } = volumeStore;
   const { workspace, setWorkspace } = deploymentStore;
   const {
     storageClass,
@@ -74,7 +76,7 @@ const CreateClaim = observer((props) => {
       },
     },
     spec: {
-      storageClassName: storageClass,
+      storageClassName: selectStorageClass,
       accessModes: [accessMode],
       resources: {
         requests: {
@@ -85,6 +87,7 @@ const CreateClaim = observer((props) => {
   };
 
   const onClickStepOne = (e) => {
+    console.log(storageClass);
     if (claimName === "") {
       swalError("Claim 이름을 입력해주세요");
       return;
@@ -124,7 +127,6 @@ const CreateClaim = observer((props) => {
     setStepValue(1);
     clearAll();
     setClaimName("");
-    setSelectClusters("");
     setWorkspace("");
     setProject("");
     setSelectStorageClass("");
@@ -135,13 +137,8 @@ const CreateClaim = observer((props) => {
   };
 
   const handlePreStepValue = () => {
-    setProjectListinWorkspace();
-    clearAll();
-    setClaimName("");
-    setSelectClusters("");
     setWorkspace("");
     setProject("");
-    setSelectStorageClass("");
   };
 
   const CreateVolume = () => {

@@ -35,6 +35,7 @@ class Claim {
   project = "";
   clusterName = "";
   cluster = "";
+  selectClusters = "";
   storageClass = "";
   accessMode = "";
   volumeCapacity = "";
