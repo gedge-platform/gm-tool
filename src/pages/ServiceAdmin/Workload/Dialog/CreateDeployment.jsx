@@ -16,6 +16,7 @@ import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 import volumeStore from "../../../../store/Volume";
 import StorageClassStore from "../../../../store/StorageClass";
 import claimStore from "../../../../store/Claim";
+import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
 
 const Button = styled.button`
   background-color: #fff;
@@ -43,26 +44,20 @@ const CreateDeployment = observer((props) => {
 
   const {
     deploymentName,
-    setDeployName,
     podReplicas,
-    content,
     containerName,
     containerImage,
     containerPort,
     project,
     workspace,
     setWorkspace,
-    responseData,
     setContent,
     clearAll,
-    postDeployment,
-    setResponseData,
-    projectName,
-    setProjectName,
     setProject,
     containerPortName,
     postDeploymentGM,
     postDeploymentPVC,
+    setContentVolume,
   } = deploymentStore;
 
   const {
@@ -72,15 +67,12 @@ const CreateDeployment = observer((props) => {
     volumeCapacity,
     volumeName,
     selectClusters,
-    setSelectClusters,
     accessMode,
   } = volumeStore;
 
-  const { storageClass, setStorageClass, selectStorageClass } =
-    StorageClassStore;
+  const { setStorageClass, selectStorageClass } = StorageClassStore;
 
   const { setProjectListinWorkspace } = projectStore;
-  const { setWorkspaceList } = workspacesStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
   const template = {
@@ -134,7 +126,7 @@ const CreateDeployment = observer((props) => {
       },
     },
     spec: {
-      storageClassName: storageClass,
+      storageClassName: selectStorageClass,
       accessModes: [accessMode],
       resources: {
         requests: {
@@ -211,6 +203,14 @@ const CreateDeployment = observer((props) => {
     }
   };
 
+  const onClickStepFour = () => {
+    postDeploymentPVC(require("json-to-pretty-yaml").stringify(templatePVC));
+    console.log(
+      postDeploymentPVC(require("json-to-pretty-yaml").stringify(templatePVC))
+    );
+    setStepValue(5);
+  };
+
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
@@ -271,14 +271,25 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
-    postDeploymentPVC(require("json-to-pretty-yaml").stringify(templatePVC));
+    console.log(
+      postDeploymentGM(require("json-to-pretty-yaml").stringify(template))
+    );
   };
+
+  // useEffect는 component가 rendeing될 때마다 특정 작업을 실행할 수 있도록하는 Hook
+  // 클래스형 컴포넌트에서 사용할 수 있었던 생명주기 메소드를 함수형 컴포넌트에서도 사용할 수 있게 됨
 
   useEffect(() => {
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
+      setContentVolume(YAML.stringify(templatePVC));
+    }
+  }, [stepValue]);
+
+  useEffect(() => {
+    if (stepValue === 5) {
+      const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-      setContent(YAML.stringify(templatePVC));
     }
   }, [stepValue]);
 
@@ -366,7 +377,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml />
+          <DeploymentVolumeYaml />
           <div
             style={{
               display: "flex",
@@ -382,6 +393,31 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(3)}>이전</Button>
+              <ButtonNext onClick={onClickStepFour}>다음</ButtonNext>
+              {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 5) {
+      return (
+        <>
+          <DeploymentYaml />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => setStepValue(4)}>이전</Button>
               <ButtonNext onClick={createDeployment}>Schedule Apply</ButtonNext>
               {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
             </div>

@@ -26,7 +26,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const DeploymentVolumeSetting = observer((props) => {
+const DeploymentVolumeSetting = observer(() => {
   const { loadWorkSpaceList } = workspacestore;
   const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
     projectStore;
