@@ -253,7 +253,6 @@ class Volume {
         YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("Volume이 생성되었습니다!", callback);
         }

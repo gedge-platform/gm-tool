@@ -31,14 +31,14 @@ class Claim {
     },
   ];
   label = {};
-  claimName="";
-  project="";
-  clusterName="";
-  cluster="";
-  selectClusters="";
-  storageClass="";
-  accessMode="";
-  volumeCapacity="";
+  claimName = "";
+  project = "";
+  clusterName = "";
+  cluster = "";
+  selectClusters = "";
+  storageClass = "";
+  accessMode = "";
+  volumeCapacity = "";
   content = ""; //초기화를 잘 합시다2
 
   constructor() {
@@ -200,7 +200,7 @@ class Claim {
 
   closeTab = () => {
     window.close();
-  }
+  };
 
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
     await axios
@@ -272,7 +272,7 @@ class Claim {
     const YAML = require("yamljs");
     axios
       .post(
-        `http://192.168.160.235:8011/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+        `${SERVER_URL2}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
 
         YAML.parse(this.content)
       )

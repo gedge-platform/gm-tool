@@ -26,7 +26,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const DeploymentVolumeSetting = observer((props) => {
+const DeploymentVolumeSetting = observer(() => {
   const { loadWorkSpaceList } = workspacestore;
   const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
     projectStore;
@@ -41,12 +41,8 @@ const DeploymentVolumeSetting = observer((props) => {
     setSelectClusters,
   } = volumeStore;
 
-  const {
-    loadStorageClassName,
-    setStorageClass,
-    storageClassNameData,
-    setSelectStorageClass,
-  } = StorageClassStore;
+  const { loadStorageClassName, storageClassNameData, setSelectStorageClass } =
+    StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;

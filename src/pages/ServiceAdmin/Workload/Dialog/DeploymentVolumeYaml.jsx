@@ -5,8 +5,8 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const DeploymentYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
+const DeploymentVolumeYaml = observer(() => {
+  const { contentVolume } = deploymentStore;
 
   return (
     <>
@@ -20,11 +20,11 @@ const DeploymentYaml = observer(() => {
             <span>Pod 설정</span>
           </div>
           <div className="arr"></div>
-          <div className="step">
+          <div className="step current">
             <span>Volume 설정</span>
           </div>
           <div className="arr"></div>
-          <div className="step current">
+          <div className="step">
             <span>설정 검토</span>
           </div>
         </div>
@@ -42,7 +42,7 @@ const DeploymentYaml = observer(() => {
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
-        value={content}
+        value={contentVolume}
         setOptions={{
           enableBasicAutocompletion: false,
           enableLiveAutocompletion: false,
@@ -56,4 +56,4 @@ const DeploymentYaml = observer(() => {
   );
 });
 
-export default DeploymentYaml;
+export default DeploymentVolumeYaml;
