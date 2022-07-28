@@ -25,6 +25,5 @@ const ClusterRecent = () => {
             </div>
         </div>
     );
-  };
-  export default ClusterRecent;
-  
+};
+export default ClusterRecent;

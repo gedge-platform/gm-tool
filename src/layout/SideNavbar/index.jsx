@@ -38,7 +38,7 @@ const SideNavbar = () => {
     <SidebarArea>
       <LogoArea>
         <Link to="/">
-          <img src={sideLogo} alt="API GATEWAY" />
+          <img src={sideLogo} alt="GEdge Cloud" />
         </Link>
       </LogoArea>
       {/* <LogoArea>Hyperledger<br /> Fabric as a Service<br />(Big BlockChain Storage)</LogoArea> */}

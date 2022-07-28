@@ -22,6 +22,8 @@ export {default as CreateUser} from "./Gedge/Service/Project/CreateUser/CreateUs
 export {default as PlatformControl} from "./Gedge/Service/Project/PlatformControl/PlatformControl";
 export {default as Template} from "./Gedge/Service/Template/Template";
 
+export {default as ServiceAdmin} from "./Gedge/ServiceAdmin/ServiceAdmin";
+export {default as StoragePage} from "./Gedge/Storage/StoragePage";
 
 // Gedgd SA
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
@@ -64,6 +66,8 @@ const Title = {
   PlatformControl: "플랫폼 관리",
   Template: "템플릿",
 
+  ServiceAdmin: "서비스 어드민",
+  StoragePage: "스토리지",
 };
 
 export { Title };

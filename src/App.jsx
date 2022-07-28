@@ -26,6 +26,8 @@ import {
   CreateUser,
   PlatformControl,
   Template,
+  ServiceAdmin,
+  StoragePage
 } from "@/pages";
 import AuthRoute from "./routes/AuthRoute";
 import DeploymentPopup from "./pages/ServiceAdmin/Workload/Dialog/DeploymentPopup";
@@ -62,6 +64,9 @@ export const App = () => {
         <AuthRoute path="/createUser" component={CreateUser} />
         <AuthRoute path="/platformControl" component={PlatformControl} />
         <AuthRoute path="/template" component={Template} />
+
+        <AuthRoute path="/ServiceAdmin" component={ServiceAdmin} />
+        <AuthRoute path="/StoragePage" component={StoragePage} />
 
         {/* SA */}
         <AuthRoute path="/service/project" component={ServiceProject} />
