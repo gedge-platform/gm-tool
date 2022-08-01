@@ -1,8 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import L from "leaflet";
+import { observer } from "mobx-react";
+import dashboardStore from "../../../store/Dashboard";
 
-const MapContent = () => {
+const MapContent = observer(() => {
   const mapRef = useRef(null);
+
+  const {
+    edgeInfo,
+    loadMapInfo,
+  } = dashboardStore;
 
   const MAP_TILE = L.tileLayer(
     "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=0f6be85b-e0ce-41a2-af27-e96c56b394fb",
@@ -43,6 +50,7 @@ const MapContent = () => {
   // similar to componentDidMount() lifecycle method of class-based
   // components:
   useEffect(() => {
+    loadMapInfo();
     mapRef.current = L.map("map", mapParams);
     const cluster1 = L.marker([37.481, 126.893], {
       icon: CustomIcon("green"),
@@ -55,7 +63,7 @@ const MapContent = () => {
     }).addTo(mapRef.current);
 
     cluster1.bindPopup(
-      `<div class="leaflet-popup-content"><span>gedgemgmt01</span></div>`
+      `<div class="leaflet-popup-content">${edgeInfo.clusterName}<span></span></div>`
     );
     cluster2.bindPopup(
       `<div class="leaflet-popup-content"><span>gs-cluster01</span></div>`
@@ -71,6 +79,6 @@ const MapContent = () => {
       // 지도 크기 조정
     ></div>
   );
-};
+});
 
 export default MapContent;

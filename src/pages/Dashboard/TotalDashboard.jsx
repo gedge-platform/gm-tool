@@ -11,6 +11,7 @@ import ClusterKind from "./DashboardCont/ClusterKind";
 import ClusterStatus from "./DashboardCont/ClusterStatus";
 import ClusterRecent from "./DashboardCont/ClusterRecent";
 import NodeList from "./DashboardCont/NodeList";
+import dashboardStore from "../../store/Dashboard";
 
 const DashboardWrap = styled.div`
   display: flex;
@@ -138,13 +139,16 @@ const DashboardWrap = styled.div`
 
 const TotalDashboard = () => {
   const currentPageTitle = Title.Dashboard;
+  const {
+    dashboardDetail
+  } = dashboardStore;
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
         <PanelBox className="panel_summary">
             {/* <ClusterInfo /> */}
-            <ClusterSummary />
+            <ClusterSummary/>
             {/* <div className="cluster_map">
               <MapContent />
             </div> */}

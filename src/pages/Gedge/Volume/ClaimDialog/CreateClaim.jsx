@@ -118,7 +118,7 @@ const CreateClaim = observer((props) => {
       };
 
       const handleClose = () => {
-        props.reloadFunc && props.reloadFunc();
+        props.reloadFunc && props.reloadFunc(); // 이거 때문에 500 error
         props.onClose && props.onClose();
         setProjectListinWorkspace();
         setStepValue(1);
