@@ -2442,7 +2442,7 @@ const globalStyles = createGlobalStyle`
       position: relative;
       .CloudZoneSliderHeader {
         width: 100%;
-        height: 50px;
+        height: 57px;
         background: #2c3654;
         border: 1px solid #11162a;
         border-top-left-radius: 8px;
