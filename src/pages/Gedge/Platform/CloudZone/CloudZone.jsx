@@ -15,6 +15,26 @@ import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
 import Layout from "@/layout";
 import { Title } from "@/pages";
+import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
+import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
+import CloudZoneSummary from "./CloudZoneSummary"
+import CloudZoneSlider from "./CloudZoneSlider"
+import styled from "styled-components";
+
+const CloudZoneWrap = styled.div`
+  .panel_summary {
+    width: 100%;
+    padding: 20px;
+    background: #202842;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &::before {
+      display: none;;
+    }
+  }
+`
 
 const CloudZone = observer(() => {
   const currentPageTitle = Title.CloudZone;
@@ -123,44 +143,26 @@ const CloudZone = observer(() => {
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CReflexBox>
-        <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("core")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
-          </CommActionBar>
-
-          <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  onCellClicked={handleClick}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+      <CloudZoneWrap>
+        <PanelBox className="panel_summary">
+          <div className="ClusterInfoWrap">
+            <ClusterInfo />
           </div>
-          <Terminal
-            open={openTerminal}
-            // yaml={getYamlFile}
-            onClose={handleCloseTerminal}
-          />
-          <CreateCluster type={"core"} open={open} onClose={handleClose} />
+
+          <div className="ClusterSliderWrap">
+            <CloudZoneSlider />
+          </div>
+
+          <div className="SummaryWrap">
+            <CloudZoneSummary />
+          </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
-      </CReflexBox>
+        <div className="panel_summary">
+          <CReflexBox>
+              <Detail cluster={clusterDetail} />
+          </CReflexBox>
+        </div>
+      </CloudZoneWrap>
     </Layout>
   );
 });

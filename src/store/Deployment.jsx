@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
+import volumeStore from "./Volume";
 
 class Deployment {
   currentPage = 1;
@@ -117,6 +118,7 @@ class Deployment {
   // ];
 
   content = "";
+  contentVolume = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -197,7 +199,7 @@ class Deployment {
   setPDeploymentList = (list) => {
     runInAction(() => {
       this.pDeploymentList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -330,6 +332,13 @@ class Deployment {
       this.content = content;
     });
   };
+
+  setContentVolume = (contentVolume) => {
+    runInAction(() => {
+      this.contentVolume = contentVolume;
+    });
+  };
+
   setResponseData = (data) => {
     runInAction(() => {
       this.responseData = data;
@@ -350,17 +359,34 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
+    const { selectClusters } = volumeStore;
     const YAML = require("yamljs");
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}`,
+        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
         YAML.parse(this.content)
       )
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
           swalError("Deployment가 생성되었습니다.", callback);
         }
+      });
+  };
+
+  postDeploymentPVC = async () => {
+    const YAML = require("yamljs");
+    const { selectClusters } = volumeStore;
+
+    await axios
+      .post(
+        `${SERVER_URL2}/pvcs?cluster=${selectClusters}&project=${this.project}`,
+        YAML.parse(this.contentVolume)
+      )
+      .then((res) => {
+        console.log(res);
+        console.log("2번 찍힌다");
       });
   };
 }

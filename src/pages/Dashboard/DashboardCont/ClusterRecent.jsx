@@ -55,8 +55,8 @@ const ClusterRecent = observer(() => {
     <>
     {!toggle ? (
       <div className="ClusterRecentWrap">
-        <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>Cpu Top 5</ButtonStyle>
-          <div className="ClusterRecentTitle">Cluster Cpu Top 5 / 최신</div>
+        <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>CPU Top 5</ButtonStyle>
+          <div className="ClusterRecentTitle">Cluster CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
               <ul>{clusterCpuTop}</ul>
           {/* <li><span>1</span>kube-node-lease</li>
@@ -66,7 +66,7 @@ const ClusterRecent = observer(() => {
           <li><span>5</span>kubesphere-monitoring-federated</li>
         </ul> */}
             </div>
-          <div className="ClusterRecentTitle">Pod Cpu Top 5 / 최신</div>
+          <div className="ClusterRecentTitle">Pod CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
               <ul>{podCpuTop}</ul>
             </div>

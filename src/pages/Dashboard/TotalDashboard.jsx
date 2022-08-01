@@ -14,10 +14,10 @@ import NodeList from "./DashboardCont/NodeList";
 import dashboardStore from "../../store/Dashboard";
 
 const DashboardWrap = styled.div`
-  display: flex;
+  /* display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 12px; */
   .panel_summary {
     width: 100%;
     background: transparent;
@@ -156,8 +156,7 @@ const TotalDashboard = () => {
               <ClusterKind />
             </div>
         </PanelBox>
-      </DashboardWrap>
-      <DashboardWrap>
+     
         <PanelBox className="panel_service">
           <div className="cluster_serviceWrap">
             <div className="cluster_map">

@@ -153,67 +153,116 @@ const Detail = observer((props) => {
 
   return (
     <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
+      {/* <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resource Status" />
         <CTab label="Node Info" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-      </CTabs>
-      <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
-        <div className="tb_container">
-          <table className="tb_data">
-            {/* <tbody className="tb_data_detail">
-              <tr>
-                <th>Cluster Name</th>
-                <td>{clusterName}</td>
-                <th>IP</th>
-                <td>{ipAddr}</td>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <td>{clusterType}</td>
-                <th>Creator</th>
-                <td>{clusterCreator}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{dateFormatter(created_at)}</td>
-              </tr>
-            </tbody> */}
-          </table>
-          <br />
-
-          <TableTitle>GPU List</TableTitle>
-          {gpu ? (
-            <>
-              <table className="tb_data">
-                <tbody className="tb_data_detail">
-                  <tr>
-                    <th>container</th>
-                    <th>name</th>
-                    <th>node</th>
-                    <th>uuid</th>
-                    <th>vbios_version</th>
-                  </tr>
-                  {gpu.map(({ container, name, node, uuid, vbios_version }) => (
-                    <tr>
-                      <td>{container}</td>
-                      <td>{name}</td>
-                      <td>{node}</td>
-                      <td>{uuid}</td>
-                      <td>{vbios_version}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          ) : (
-            <LabelContainer>
-              <p>No GPU Info.</p>
-            </LabelContainer>
-          )}
-        </div>
+      </CTabs> */}
+      <CTabPanel value={tabvalue} index={0}>
+        {/* <table className="tb_data">
+          <tbody className="tb_data_detail">
+            <tr>
+              <th>Cluster Name</th>
+              <td>{clusterName}</td>
+              <th>IP</th>
+              <td>{ipAddr}</td>
+            </tr>
+            <tr>
+              <th>Type</th>
+              <td>{clusterType}</td>
+              <th>Creator</th>
+              <td>{clusterCreator}</td>
+            </tr>
+            <tr>
+              <th>Created</th>
+              <td>{dateFormatter(created_at)}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br /> */}
+        {gpu ? (
+          <>
+            <table className="tb_data">
+              <tbody className="tb_data_detail">
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>IP</th>
+                  <th>Kube-Version</th>
+                  <th>OS</th>
+                  <th>Created</th>
+                </tr>
+                <tr>
+                  <td>innogrid_01</td>
+                  <td>EDGE</td>
+                  <td>192.168.160.242</td>
+                  <td>1.22</td>
+                  <td>Ubuntu</td>
+                  <td>2022. 07. 18 16:30:00</td>
+                </tr>
+                <tr>
+                  <td>innogrid_02</td>
+                  <td>EDGE</td>
+                  <td>192.168.160.242</td>
+                  <td>1.22</td>
+                  <td>Ubuntu</td>
+                  <td>2022. 07. 18 16:30:00</td>
+                </tr>
+                <tr>
+                  <td>innogrid_03</td>
+                  <td>EDGE</td>
+                  <td>192.168.160.242</td>
+                  <td>1.22</td>
+                  <td>Ubuntu</td>
+                  <td>2022. 07. 18 16:30:00</td>
+                </tr>
+                <tr>
+                  <td>innogrid_04</td>
+                  <td>EDGE</td>
+                  <td>192.168.160.242</td>
+                  <td>1.22</td>
+                  <td>Ubuntu</td>
+                  <td>2022. 07. 18 16:30:00</td>
+                </tr>
+                <tr>
+                  <td>innogrid_05</td>
+                  <td>EDGE</td>
+                  <td>192.168.160.242</td>
+                  <td>1.22</td>
+                  <td>Ubuntu</td>
+                  <td>2022. 07. 18 16:30:00</td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="pagination">
+            <div className="paging-wrap">
+              <div className="select-wrap">
+                  <select>
+                    <option value="10">10건</option>
+                    <option value="20">20건</option>
+                    <option value="50">50건</option>
+                  </select>
+                  <span>총 218건</span>
+              </div>
+              <div className="btn-wrap">
+                  <button className="btnLabel_icon prev">
+                    이전
+                  </button>
+                  <span className="page-num">10 of 28</span>
+                  <button className="btnLabel_icon">
+                    다음
+                  </button>
+              </div>
+            </div>
+          </div>
+          </>
+        ) : (
+          <LabelContainer>
+            <p>No GPU Info.</p>
+          </LabelContainer>
+        )}
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
         <div className="tb_container">
@@ -245,7 +294,7 @@ const Detail = observer((props) => {
               </tr>
             </tbody>
           </table>
-        </div>
+      </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">

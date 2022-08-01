@@ -294,6 +294,16 @@ export const SideMenu = () => {
                 {Title.Certification}
               </NavLink>
               </li>
+              <li>
+              <NavLink to="/ServiceAdmin" activeClassName="active">
+                {Title.ServiceAdmin}
+              </NavLink>
+              </li>
+              <li>
+              <NavLink to="/StoragePage" activeClassName="active">
+                {Title.StoragePage}
+              </NavLink>
+              </li>
               </TreeView>
               </ul>
 

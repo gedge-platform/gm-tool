@@ -61,15 +61,119 @@ const MapContent = observer(() => {
     const cluster3 = L.marker([37.581, 127.003], {
       icon: CustomIcon("red"),
     }).addTo(mapRef.current);
-
+    // cluster1.bindPopup(
+    //   `<div class="leaflet-popup-content"><span>gedgemgmt01</span></div>`
+    // );
     cluster1.bindPopup(
-      `<div class="leaflet-popup-content">${edgeInfo.clusterName}<span></span></div>`
+      `
+        <div class="leaflet-popup-title">
+          SEOUL, Republic of Korea
+        </div>
+        <div class="leaflet-popup-table">
+          <table>
+            <tr>
+              <th>Cluster</th>
+              <td>AZURE</td>
+            </tr>
+            <tr>
+              <th rowspan="3">Status</th>
+              <td>
+                <div class="box run">
+                  <span class="tit">실행</span><span>7</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box stop">
+                  <span class="tit">중지</span><span>2</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box pause">
+                  <span class="tit">일시중지</span><span>1</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `
     );
     cluster2.bindPopup(
-      `<div class="leaflet-popup-content"><span>gs-cluster01</span></div>`
+      `
+        <div class="leaflet-popup-title">
+            SEOUL, Republic of Korea
+          </div>
+        <div class="leaflet-popup-table">
+          <table>
+            <tr>
+              <th>Cluster</th>
+              <td>AZURE</td>
+            </tr>
+            <tr>
+              <th rowspan="3">Status</th>
+              <td>
+                <div class="box run">
+                  <span class="tit">실행</span><span>7</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box stop">
+                  <span class="tit">중지</span><span>2</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box pause">
+                  <span class="tit">일시중지</span><span>1</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `
     );
     cluster3.bindPopup(
-      `<div class="leaflet-popup-content"><span>gs-cluster02</span></div>`
+      `
+        <div class="leaflet-popup-title">
+          SEOUL, Republic of Korea
+        </div>
+        <div class="leaflet-popup-table">
+          <table>
+            <tr>
+              <th>Cluster</th>
+              <td>AZURE</td>
+            </tr>
+            <tr>
+              <th rowspan="3">Status</th>
+              <td>
+                <div class="box run">
+                  <span class="tit">실행</span><span>7</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box stop">
+                  <span class="tit">중지</span><span>2</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="box pause">
+                  <span class="tit">일시중지</span><span>1</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `
     );
   }, []);
   return (
