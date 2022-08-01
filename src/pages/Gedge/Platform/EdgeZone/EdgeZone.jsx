@@ -13,6 +13,25 @@ import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import Layout from "@/layout";
 import { Title } from "@/pages";
+import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
+import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
+import EdgeZoneSummary from "./EdgeZoneSummary"
+import styled from "styled-components";
+
+const EdgeZoneWrap = styled.div`
+  .panel_summary {
+    width: 100%;
+    padding: 20px;
+    background: #202842;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &::before {
+      display: none;;
+    }
+  }
+`
 
 const EdgeZone = observer(() => {
   const currentPageTitle = Title.EdgeZone;
@@ -105,9 +124,9 @@ const EdgeZone = observer(() => {
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CReflexBox>
-        <PanelBox>
-          <CommActionBar
+      <EdgeZoneWrap>
+        <PanelBox className="panel_summary">
+          {/* <CommActionBar
             // reloadFunc={() => loadClusterList("edge")}
             // isSearch={true}
             // isSelect={true}
@@ -133,10 +152,27 @@ const EdgeZone = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateCluster type={"edge"} open={open} onClose={handleClose} />
+          <CreateCluster type={"edge"} open={open} onClose={handleClose} /> */}
+          <div className="ClusterInfoWrap">
+            <ClusterInfo />
+          </div>
+
+          <div className="ClusterMapWrap">
+            <MapContent />
+          </div>
+
+          <div className="SummaryWrap">
+            <EdgeZoneSummary />
+          </div>
         </PanelBox>
-        <Detail cluster={clusterDetail} />
-      </CReflexBox>
+
+        <div className="panel_summary">
+          <CReflexBox>
+              <Detail cluster={clusterDetail} />
+          </CReflexBox>
+        </div>
+      
+      </EdgeZoneWrap>
     </Layout>
   );
 });
