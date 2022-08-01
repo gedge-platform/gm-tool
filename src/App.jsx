@@ -18,8 +18,7 @@ import {
   Configuration,
   Certification,
   PlatformUser,
-  EdgeZone,
-  CloudZone,
+  // CloudZone,
   Topology,
   Roadbalancer,
   Storage,
@@ -27,8 +26,13 @@ import {
   PlatformControl,
   Template,
   ServiceAdmin,
-  StoragePage
+  StorageDashboard,
 } from "@/pages";
+import EdgeZoneDashboard from "./pages/Gedge/Platform/EdgeZone/EdgeZoneDashboard";
+import CloudZoneDashboard from "./pages/Gedge/Platform/CloudZone/CloudZoneDashboard";
+import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
+import EdgeClusterListTab from "./pages/Gedge/Cluster/TabList/EdgeClusterListTab";
+import CoreClusterListTab from "./pages/Gedge/Cluster/TabList/CoreClusterListTab";
 import AuthRoute from "./routes/AuthRoute";
 import DeploymentPopup from "./pages/ServiceAdmin/Workload/Dialog/DeploymentPopup";
 import { getItem } from "./utils/sessionStorageFn";
@@ -54,25 +58,25 @@ export const App = () => {
         <AuthRoute path="/user" component={User} />
         <AuthRoute path="/volumes" component={Volume} />
         <AuthRoute path="/configuration" component={Configuration} />
-        <AuthRoute path="/certification" component={Certification} />
+        <AuthRoute path="/certification" component={NotFound} />
         <AuthRoute path="/platformUser" component={PlatformUser} />
-        <AuthRoute path="/edgeZone" component={EdgeZone} />
-        <AuthRoute path="/cloudZone" component={CloudZone} />
-        <AuthRoute path="/topology" component={Topology} />
-        <AuthRoute path="/roadbalancer" component={Roadbalancer} />
+        <AuthRoute path="/edgeZone" component={EdgeClusterListTab} />
+        <AuthRoute path="/cloudZone" component={CoreClusterListTab} />
+        <AuthRoute path="/platformDashboard" component={PlatformDashboard} />
+        <AuthRoute path="/topology" component={NotFound} />
+        <AuthRoute path="/roadbalancer" component={NotFound} />
         <AuthRoute path="/storage" component={Storage} />
         <AuthRoute path="/createUser" component={CreateUser} />
-        <AuthRoute path="/platformControl" component={PlatformControl} />
-        <AuthRoute path="/template" component={Template} />
-
-        <AuthRoute path="/ServiceAdmin" component={ServiceAdmin} />
-        <AuthRoute path="/StoragePage" component={StoragePage} />
+        <AuthRoute path="/platformControl" component={NotFound} />
+        <AuthRoute path="/template" component={NotFound} />
+        <AuthRoute path="/StorageDashboard" component={StorageDashboard} />
 
         {/* SA */}
         <AuthRoute path="/service/project" component={ServiceProject} />
         <AuthRoute path="/service/workload" component={ServiceWorkload} />
         <AuthRoute path="/service/workspace" component={ServiceWorkSpace} />
         <AuthRoute path="/service/monitoring" component={ServiceMonitoring} />
+        <AuthRoute path="/service/ServiceAdmin" component={ServiceAdmin} />
 
         <Route path="/login" component={Login} />
         <Route path="/callback" component={DeploymentPopup} />

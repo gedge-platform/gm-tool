@@ -3,6 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
@@ -11,8 +12,10 @@ import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
+import { Title } from "@/pages";
 
 const EdgeClusterListTab = observer(() => {
+  const currentPageTitle = Title.EdgeZone;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -101,40 +104,40 @@ const EdgeClusterListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <Layout currentPageTitle={currentPageTitle}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={() => loadClusterList("edge")}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={() => loadClusterList("edge")}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  totalElements={totalElements}
-                  onCellClicked={handleClick}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                totalElements={totalElements}
+                onCellClicked={handleClick}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
           <CreateCluster type={"edge"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
-    </>
+    </Layout>
   );
 });
 export default EdgeClusterListTab;

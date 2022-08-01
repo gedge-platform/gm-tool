@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import EdgeZoneDashboard from "./EdgeZone/EdgeZoneDashboard";
+import CloudZoneDashboard from "./CloudZone/CloudZoneDashboard";
 
-const Platform = () => {
-  const currentPageTitle = Title.Platform;
+const PlatformDashboard = () => {
+  const currentPageTitle = Title.Dashboard;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -15,17 +17,18 @@ const Platform = () => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="코어 클라우드" />
-        <CTab label="클라우드 엣지" />
-        <CTab label="자격 증명" />
+        <CTab label="EdgeZone" />
+        <CTab label="CloudZone" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
+          <EdgeZoneDashboard />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={1}>
+          <CloudZoneDashboard />
         </CTabPanel>
       </div>
     </Layout>
   );
 };
-export default Platform;
+export default PlatformDashboard;

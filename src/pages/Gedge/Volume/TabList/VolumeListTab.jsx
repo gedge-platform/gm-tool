@@ -1,27 +1,13 @@
-import React, {
-  useState,
-  useLayoutEffect,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { toJS } from "mobx";
-import {
-  agDateColumnFilter,
-  dateFormatter,
-  isValidJSON,
-  nullCheck,
-} from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import axios from "axios";
-import ReactJson from "react-json-view";
 
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import VolumeDetail from "../VolumeDetail";
@@ -44,18 +30,11 @@ const VolumeListTab = observer(() => {
 
   const {
     pVolume,
-    pVolumesList,
     totalElements,
-    setPVolumes,
     pVolumeMetadata,
     loadPVolumes,
     loadPVolume,
     loadVolumeYaml,
-    setViewList,
-    setCurrentPage,
-    setTotalPages,
-    convertList,
-    resultList,
     getYamlFile,
     currentPage,
     totalPages,
