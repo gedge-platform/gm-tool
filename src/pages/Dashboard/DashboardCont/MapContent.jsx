@@ -6,10 +6,8 @@ import dashboardStore from "../../../store/Dashboard";
 const MapContent = observer(() => {
   const mapRef = useRef(null);
 
-  const {
-    edgeInfo,
-    loadMapInfo,
-  } = dashboardStore;
+  const { edgeInfo, loadMapInfo, point } = dashboardStore;
+  console.log(Object.values(point).map((value) => value[0]));
 
   const MAP_TILE = L.tileLayer(
     "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=0f6be85b-e0ce-41a2-af27-e96c56b394fb",

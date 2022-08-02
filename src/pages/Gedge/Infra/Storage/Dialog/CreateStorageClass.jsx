@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { randomString } from "@/utils/common-utils";
-import { CDialogNew } from "../../../../components/dialogs";
-import { swalError } from "../../../../utils/swal-utils";
+import { CDialogNew } from "../../../../../components/dialogs";
+import { CTextFeild } from "../../../../../components/textfields";
+import { swalError } from "../../../../../utils/swal-utils";
+
 import { Projection } from "leaflet";
-import VolumeBasicInformation from "./VolumeBasicInformation";
-import deploymentStore from "../../../../store/Deployment";
-import volumeStore from "../../../../store/Volume";
-import VolumeAdvancedSetting from "./VolumeAdvancedSetting";
-import VolumYamlPopup from "./VolumYamlPopup";
-import VolumePopup from "./VolumePopup";
-import projectStore from "../../../../store/Project";
-import schedulerStore from "../../../../store/Scheduler";
-import workspacestore from "../../../../store/WorkSpace";
-import volumeBasicInformation from "./VolumeBasicInformation";
+import deploymentStore from "../../../../../store/Deployment";
+import projectStore from "../../../../../store/Project";
+import workspacestore from "../../../../../store/WorkSpace";
 import { values } from "lodash";
-import StorageClassStore from "../../../../store/StorageClass";
+
+import StorageClassStore from "../../../../../store/StorageClass";
+import StorageClassBasicInfo from "./StorageClassBasicInfo";
+import StorageClassAdvancedSetting from "./StorageClassAdvancedSetting";
+import StorageClassYamlPopup from "./StorageClassYamlPopup";
 
 const Button = styled.button`
   background-color: #fff;
@@ -35,96 +33,76 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateVolume = observer((props) => {
+const CreateStorageClass = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const { setProjectListinWorkspace } = projectStore;
   const {
-    volumeName,
-    setVolumeName,
-    accessMode,
-    volumeCapacity,
-    setVolumeCapacity,
-    responseData,
-    setResponseData,
-    content,
     setContent,
-    clearAll,
-    createVolume,
-    setProject,
-    project,
-    selectClusters,
-    setSelectClusters,
-    clusterName,
-  } = volumeStore;
-  const { workspace, setWorkspace } = deploymentStore;
-  const { storageClass, setStorageClass } = StorageClassStore;
+    storageClassName,
+    setStorageClassName,
+    storageSystem,
+    volumeExpansion,
+    setStorageSystem,
+    reclaimPolicy,
+    setReclaimPolicy,
+    accessMode,
+    setAccessMode,
+    volumeBindingMode,
+    setVolumeBindingMode,
+  } = StorageClassStore;
 
   const template = {
-    apiVersion: "v1",
-    kind: "PersistentVolumeClaim",
+    apiVersion: "storage.k8s.io/v1",
+    kind: "StorageClass",
     metadata: {
-      name: volumeName,
-      namespace: project,
-      labels: {
-        app: "",
-      },
+      name: storageClassName,
     },
-    spec: {
-      storageClassName: storageClass,
-      accessModes: [accessMode],
-      resources: {
-        requests: {
-          storage: Number(volumeCapacity) + "Gi",
-        },
-      },
+    provisioner: storageSystem,
+    parameters: {
+      type: "gp2",
     },
+    reclaimPolicy: reclaimPolicy,
+    allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
+    volumeBindingMode: volumeBindingMode,
+  };
+
+  const handleClose = () => {
+    props.reloadFunc && props.reloadFunc();
+    props.onClose && props.onClose();
+    setStepValue(1);
+    setStorageClassName("");
+    setStorageSystem("");
+    setReclaimPolicy("");
+    setAccessMode("");
+    setVolumeBindingMode("");
   };
 
   const onClickStepOne = (e) => {
-    console.log(e);
-    if (volumeName === "") {
-      swalError("Volume 이름을 입력해주세요");
+    if (storageClassName === "") {
+      swalError("StorageClass 이름을 입력해주세요");
       return;
     }
-    if (workspace === "") {
-      swalError("Workspace를 선택해주세요");
+    if (storageSystem === "") {
+      swalError("Storage System을 선택해주세요");
       return;
     }
-    if (project === "") {
-      swalError("Project를 선택해주세요");
+    if (volumeExpansion === "") {
+      swalError("Volume Expansion을 선택해주세요");
       return;
     }
-    if (selectClusters.length === 0) {
-      swalError("클러스터를 확인해주세요!");
+    if (reclaimPolicy === "") {
+      swalError("Reclaim Policy를 선택해주세요");
       return;
     }
     if (accessMode === "") {
       swalError("Access Mode를 선택해주세요");
       return;
     }
-    if (storageClass === "") {
-      swalError("StorageClass를 선택해주세요");
+    if (volumeBindingMode === "") {
+      swalError("VolumeBinding Mode를 선택해주세요");
       return;
     }
-    if (volumeCapacity === "") {
-      swalError("Volume 용량을 입력해주세요");
-      return;
-    } else {
-      setStepValue(2);
-    }
-  };
-
-  const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
-    props.onClose && props.onClose();
-    setProjectListinWorkspace();
-    setStepValue(1);
-    clearAll();
-    setVolumeName("");
-    setWorkspace("");
-    setProject("");
-    setStorageClass("");
+    setStepValue(2);
   };
 
   const onClickStepTwo = () => {
@@ -132,14 +110,11 @@ const CreateVolume = observer((props) => {
   };
 
   const handlePreStepValue = () => {
-    setWorkspace();
-    setProject();
+    console.log("handlePreStepValue");
   };
 
-  const CreateVolume = () => {
-    // for문으로 복수의 클러스터이름 보내게
-    createVolume(require("json-to-pretty-yaml").stringify(template));
-    // setSelectClusters();
+  const CreateStorageClass = () => {
+    CreateStorageClass(require("json-to-pretty-yaml").stringify(template));
   };
 
   useEffect(() => {
@@ -153,7 +128,7 @@ const CreateVolume = observer((props) => {
     if (stepValue === 1) {
       return (
         <>
-          <VolumeBasicInformation />
+          <StorageClassBasicInfo />
           <div
             style={{
               display: "flex",
@@ -177,7 +152,7 @@ const CreateVolume = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
-          <VolumeAdvancedSetting />
+          <StorageClassAdvancedSetting />
           <div
             style={{
               display: "flex",
@@ -208,7 +183,7 @@ const CreateVolume = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <VolumYamlPopup />
+          <StorageClassYamlPopup />
           <div
             style={{
               display: "flex",
@@ -224,14 +199,14 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={() => CreateVolume()}>
+              <ButtonNext onClick={() => CreateStorageClass()}>
                 Schedule Apply
               </ButtonNext>
             </div>
           </div>
         </>
       );
-    } else <VolumePopup />;
+    } else <StorageClassBasicInfo />;
   };
 
   return (
@@ -239,7 +214,7 @@ const CreateVolume = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={"Create Volume"}
+      title={"Create StorageClass"}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
@@ -248,4 +223,4 @@ const CreateVolume = observer((props) => {
     </CDialogNew>
   );
 });
-export default CreateVolume;
+export default CreateStorageClass;

@@ -37,10 +37,22 @@ class StorageClass {
   storageClassName = "";
   storageClassNameData = [];
   selectStorageClass = "";
+  content = "";
+  storageSystem = "";
+  volumeExpansion = "";
+  reclaimPolicy = "";
+  accessMode = "";
+  volumeBindingMode = "";
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -124,7 +136,61 @@ class StorageClass {
     });
   };
 
-  loadVolumeYaml = async (name, clusterName, projectName, kind) => {
+  setStorageClassNameData = (value) => {
+    runInAction(() => {
+      this.storageClassNameData = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
+    });
+  };
+
+  setSelectStorageClass = (value) => {
+    runInAction(() => {
+      this.selectStorageClass = value;
+    });
+  };
+
+  setStorageClassName = (value) => {
+    runInAction(() => {
+      this.storageClassName = value;
+    });
+  };
+
+  setStorageSystem = (value) => {
+    runInAction(() => {
+      this.storageSystem = value;
+    });
+  };
+
+  setVolumeExpansion = (value) => {
+    runInAction(() => {
+      this.volumeExpansion = value;
+    });
+  };
+
+  setReclaimPolicy = (value) => {
+    runInAction(() => {
+      this.reclaimPolicy = value;
+    });
+  };
+
+  setAccessMode = (value) => {
+    runInAction(() => {
+      this.accessMode = value;
+    });
+  };
+
+  setVolumeBindingMode = (value) => {
+    runInAction(() => {
+      this.volumeBindingMode = value;
+    });
+  };
+
+  loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
         `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
@@ -204,30 +270,6 @@ class StorageClass {
           this.storageClassNameData = res.data.data;
         });
       });
-  };
-
-  setStorageClassNameData = (value) => {
-    runInAction(() => {
-      this.storageClassNameData = value;
-    });
-  };
-
-  setStorageClass = (value) => {
-    runInAction(() => {
-      this.storageClass = value;
-    });
-  };
-
-  setSelectStorageClass = (value) => {
-    runInAction(() => {
-      this.selectStorageClass = value;
-    });
-  };
-
-  setStorageClassName = (value) => {
-    runInAction(() => {
-      this.storageClassName = value;
-    });
   };
 }
 

@@ -8,49 +8,38 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import axios from "axios";
 import Layout from "@/layout";
 import { Title } from "@/pages";
-import ViewDialog from "./Dialog/ViewYaml";
-
-// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
-//import volumeStore from "@/store/Volume";
-import volumeStore from "@/store/StorageClass";
+import StorageClassStore from "../../../../store/StorageClass";
 import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
 import StorageClassDetail from "./StorageClassDetail";
+import CreateStorageClass from "./Dialog/CreateStorageClass";
+import ViewYaml from "./Dialog/ViewYaml";
 
 const Storage = observer(() => {
   const currentPageTitle = Title.Storage;
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openYaml, setOpenYaml] = useState(false);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    storageClassMetadata,
-    storageClasses,
-    storageClass,
-    scYamlFile,
-    scParameters,
-    scLables,
-    scAnnotations,
+    loadStorageClasses,
     totalElements,
-    setCurrentPage,
-    setTotalPages,
     currentPage,
     totalPages,
     goPrevPage,
     goNextPage,
-    getYamlFile,
-    loadVolumeYaml,
-    loadStorageClasses,
     loadStorageClass,
     viewList,
-  } = volumeStore;
+    getYamlFile,
+    loadStorageClassYaml,
+  } = StorageClassStore;
 
   const [columDefs] = useState([
     {
@@ -111,17 +100,25 @@ const Storage = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadStorageClass(e.data.name, e.data.cluster);
-    loadVolumeYaml(e.data.name, e.data.cluster, null, "storageclasses");
+    loadStorageClassYaml(e.data.name, e.data.cluster, null, "storageclasses");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
   };
 
   const handleOpenYaml = () => {
-    setOpen(true);
+    setOpenYaml(true);
   };
 
   const handleCloseYaml = () => {
+    setOpenYaml(false);
+  };
+
+  const handleCreateOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
     setOpen(false);
   };
 
@@ -141,7 +138,7 @@ const Storage = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -149,7 +146,6 @@ const Storage = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  //  rowData={viewList}
                   rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
@@ -162,7 +158,16 @@ const Storage = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewDialog open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml
+            open={openYaml}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+          />
+          <CreateStorageClass
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadStorageClasses}
+          />
         </PanelBox>
         <StorageClassDetail />
       </CReflexBox>
