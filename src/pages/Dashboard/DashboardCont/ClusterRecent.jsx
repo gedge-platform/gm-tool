@@ -27,7 +27,6 @@ const ClusterRecent = observer(() => {
 
   const clickToggle = () => {
     setToggle(isOpen => !isOpen);
-    console.log("off");
   }
   
   const clusterCpuTop = clusterCpuTop5.map(
@@ -53,12 +52,12 @@ const ClusterRecent = observer(() => {
 
   return (
     <>
-    {!toggle ? (
+    {toggle ? (
       <div className="ClusterRecentWrap">
         <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>CPU Top 5</ButtonStyle>
           <div className="ClusterRecentTitle">Cluster CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{clusterCpuTop}</ul>
+              <ul>{clusterCpuTop ? clusterCpuTop : "-"}</ul>
           {/* <li><span>1</span>kube-node-lease</li>
           <li><span>2</span>kube-system</li>
           <li><span>3</span>default</li>
@@ -68,7 +67,7 @@ const ClusterRecent = observer(() => {
             </div>
           <div className="ClusterRecentTitle">Pod CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{podCpuTop}</ul>
+              <ul>{podCpuTop ? podCpuTop : "-"}</ul>
             </div>
           </div>
     ) : (
@@ -76,11 +75,11 @@ const ClusterRecent = observer(() => {
         <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>Memory Top 5</ButtonStyle>
           <div className="ClusterRecentTitle">Cluster Memory Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{clusterMemTop}</ul>
+              <ul>{clusterMemTop? clusterMemTop : "-"}</ul>
             </div>
           <div className="ClusterRecentTitle">Pod Memory Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{podMemTop}</ul>
+              <ul>{podMemTop ? podMemTop : "-"}</ul>
             </div>
       </div>
     )

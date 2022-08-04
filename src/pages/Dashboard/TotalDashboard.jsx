@@ -152,18 +152,18 @@ const TotalDashboard = () => {
             {/* <div className="cluster_map">
               <MapContent />
             </div> */}
-            <div className="ClusterSlideWrap">
+            {/* <div className="ClusterSlideWrap">
               <ClusterKind />
-            </div>
+            </div> */}
         </PanelBox>
      
         <PanelBox className="panel_service">
           <div className="cluster_serviceWrap">
-            <div className="cluster_map">
-              <MapContent />
-            </div>
             <div className="cluster_status">
               <ClusterStatus />
+            </div>
+            <div className="cluster_map">
+              <MapContent />
             </div>
             <div className="cluster_recent">
               <ClusterRecent />
