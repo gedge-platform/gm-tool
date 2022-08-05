@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL2 } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class StorageClass {
   viewList = [];
@@ -43,6 +44,7 @@ class StorageClass {
   reclaimPolicy = "";
   accessMode = "";
   volumeBindingMode = "";
+  selectClusters = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -190,6 +192,18 @@ class StorageClass {
     });
   };
 
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
+
+  setSelectClusters = (value) => {
+    runInAction(() => {
+      this.selectClusters = value;
+    });
+  };
+
   loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
@@ -269,6 +283,26 @@ class StorageClass {
         runInAction(() => {
           this.storageClassNameData = res.data.data;
         });
+      });
+  };
+
+  postStorageClass = (callback) => {
+    const YAML = require("yamljs");
+    axios
+      .post(
+        `${SERVER_URL2}/storageclasses?cluster=${this.selectClusters}`,
+
+        YAML.parse(this.content)
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("StorageClass가 생성되었습니다", callback);
+        }
+      })
+      .catch((err) => {
+        swalError("StorageClass 생성에 실패하였습니다.", callback);
+        console.log(err);
       });
   };
 }

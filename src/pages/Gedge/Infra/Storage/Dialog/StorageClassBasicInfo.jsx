@@ -4,6 +4,10 @@ import styled from "styled-components";
 import { CTextField } from "../../../../../components/textfields";
 import { FormControl } from "@material-ui/core";
 import StorageClassStore from "../../../../../store/StorageClass";
+import clusterStore from "../../../../../store/Cluster";
+import projectStore from "../../../../../store/Project";
+import { KeyboardReturnOutlined } from "@mui/icons-material";
+import { swalError } from "../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -36,32 +40,59 @@ const StorageClassBasicInfo = observer(() => {
     setAccessMode,
     volumeBindingMode,
     setVolumeBindingMode,
+    selectClusters,
+    setSelectClusters,
+    loadStorageClassName,
   } = StorageClassStore;
+
+  const { loadClusterList, viewList } = clusterStore;
+  const { selectClusterInfo, loadProjectDetail } = projectStore;
+  const [chk, setChk] = useState(false);
 
   const onChange = (e) => {
     const { value, name } = e.target;
-    console.log(value, name);
     if (name === "storageClassName") {
       setStorageClassName(value);
+      return;
+    }
+    if (name === "selectClusters") {
+      setSelectClusters(value);
+      return;
     }
     if (name === "storageSystem") {
       setStorageSystem(value);
+      return;
     }
     if (name === "volumeExpansion") {
       setVolumeExpansion(value);
+      return;
     }
     if (name === "reclaimPolicy") {
       setReclaimPolicy(value);
+      return;
     }
     if (name === "accessMode") {
       setAccessMode(value);
+      return;
     }
     if (name === "volumeBindingMode") {
       setVolumeBindingMode(value);
+      return;
     }
   };
 
-  useEffect(() => {}, []);
+  const checkCluster = ({ target: { checked } }, clusterName) => {
+    if (checked) {
+      setSelectClusters(clusterName);
+      loadStorageClassName(clusterName);
+    } else {
+      setSelectClusters([]); // check가 fasle일 때 selectClusters의 길이가 0이 되도록
+    }
+  };
+
+  useEffect(() => {
+    loadClusterList();
+  }, []);
 
   return (
     <>
@@ -107,9 +138,47 @@ const StorageClassBasicInfo = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="storageSystem" onChange={onChange}>
                   <option value="">Select Storage System</option>
-                  <option value="Ceph">Ceph</option>
+                  <option value="CephFS">CephFS</option>
+                  <option value="NFS">NFS</option>
+                  <option value="BlockStorage">Block Storage</option>
                 </select>
               </FormControl>
+            </td>
+            <th></th>
+          </tr>
+          <tr>
+            <th>
+              Cluster <span className="requried">*</span>
+            </th>
+            <td>
+              <table className="tb_data_new">
+                <tbody className="tb_data_nodeInfo">
+                  <tr>
+                    <th></th>
+                    <th>이름</th>
+                    <th>타입</th>
+                    <th>IP</th>
+                  </tr>
+                  {viewList.map(
+                    ({ clusterName, clusterType, clusterEndpoint }) => (
+                      <tr>
+                        <td style={{ textAlign: "center" }}>
+                          <input
+                            type="radio"
+                            // type="checkbox"
+                            name="selectClusters"
+                            onChange={(e) => checkCluster(e, clusterName)}
+                            value={selectClusters}
+                          />
+                        </td>
+                        <td>{clusterName}</td>
+                        <td>{clusterType}</td>
+                        <td>{clusterEndpoint}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
             </td>
             <th></th>
           </tr>
@@ -121,8 +190,8 @@ const StorageClassBasicInfo = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="volumeExpansion" onChange={onChange}>
                   <option value="">Select Volume Expansion</option>
-                  <option value="True">True</option>
-                  <option value="False">False</option>
+                  <option value="true">true</option>
+                  <option value="false">false</option>
                 </select>
               </FormControl>
             </td>
@@ -173,7 +242,7 @@ const StorageClassBasicInfo = observer(() => {
             </td>
             <th></th>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Pool</th>
             <td>
               <CTextField
@@ -200,7 +269,7 @@ const StorageClassBasicInfo = observer(() => {
               />
             </td>
             <th></th>
-          </tr>
+          </tr> */}
         </tbody>
       </table>
     </>

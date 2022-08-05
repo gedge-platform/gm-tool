@@ -205,7 +205,7 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.MEMORY_UTIL} />
+                <PrAreaChart value={ClusterMetricTypes.CPU_USAGE} />
               </div>
             </div>
           </PanelBox>
@@ -214,7 +214,7 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.CPU_USAGE} />
+                <PrAreaChart value={ClusterMetricTypes.MEMORY_UTIL} />
               </div>
             </div>
           </PanelBox>
@@ -226,7 +226,7 @@ const PsysicalResource = observer(() => {
             </div>
           </PanelBox>
         </div>
-        <div className="tabN-chart-div-area">
+        {/* <div className="tabN-chart-div-area">
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
@@ -241,7 +241,7 @@ const PsysicalResource = observer(() => {
               </div>
             </div>
           </PanelBox>
-        </div>
+        </div> */}
         <div className="tabN-chart-div-area">
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
@@ -253,7 +253,7 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.POD_UTIL} />
+                <PrAreaChart value={ClusterMetricTypes.DISK_USAGE} />
               </div>
             </div>
           </PanelBox>
@@ -262,7 +262,7 @@ const PsysicalResource = observer(() => {
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
-                <PrAreaChart value={ClusterMetricTypes.DISK_USAGE} />
+                <PrAreaChart value={ClusterMetricTypes.POD_UTIL} />
               </div>
             </div>
           </PanelBox>
@@ -274,7 +274,7 @@ const PsysicalResource = observer(() => {
             </div>
           </PanelBox>
         </div>
-        <div className="tabN-chart-div-area">
+        {/* <div className="tabN-chart-div-area">
           <PanelBox className="panel_graph tabN-chart-area">
             <div className="tab2-chart-area">
               <div className="tab2-chart">
@@ -289,7 +289,7 @@ const PsysicalResource = observer(() => {
               </div>
             </div>
           </PanelBox>
-        </div>
+        </div> */}
       </PanelBox>
     </PanelBoxM>
   );

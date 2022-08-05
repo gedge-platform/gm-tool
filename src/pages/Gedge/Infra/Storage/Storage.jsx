@@ -67,14 +67,14 @@ const Storage = observer(() => {
       field: "volumeBindingMode",
       filter: true,
     },
-    {
-      headerName: "AllowVolumeExpansion",
-      field: "allowVolumeExpansion",
-      filter: true,
-      cellRenderer: ({ value }) => {
-        return drawStatus(value);
-      },
-    },
+    // {
+    //   headerName: "AllowVolumeExpansion",
+    //   field: "allowVolumeExpansion",
+    //   filter: true,
+    //   cellRenderer: ({ value }) => {
+    //     return drawStatus(value);
+    //   },
+    // },
     {
       headerName: "Created",
       field: "createAt",

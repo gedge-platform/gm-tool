@@ -49,21 +49,102 @@ const CreateStorageClass = observer((props) => {
     setAccessMode,
     volumeBindingMode,
     setVolumeBindingMode,
+    selectClusters,
+    setSelectClusters,
+    postStorageClass,
   } = StorageClassStore;
 
-  const template = {
+  const templateCephfs = {
     apiVersion: "storage.k8s.io/v1",
     kind: "StorageClass",
     metadata: {
       name: storageClassName,
+      annotations: {
+        "meta.helm.sh/release-name": "rook-ceph-cluster",
+        "meta.helm.sh/release-namespace": "rook-ceph",
+        "storageclass.kubernetes.io/is-default-class": "false",
+      },
     },
-    provisioner: storageSystem,
+    provisioner: "rook-ceph.cephfs.csi.ceph.com",
     parameters: {
-      type: "gp2",
+      clusterID: "rook-ceph",
+      fsName: "myfs",
+      pool: "myfs-replicated",
+      "csi.storage.k8s.io/provisioner-secret-name":
+        "rook-csi-cephfs-provisioner",
+      "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/controller-expand-secret-name":
+        "rook-csi-cephfs-provisioner",
+      "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-cephfs-node",
+      "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
     },
-    reclaimPolicy: reclaimPolicy,
     allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
-    volumeBindingMode: volumeBindingMode,
+    reclaimPolicy: reclaimPolicy,
+    // volumeBindingMode: volumeBindingMode,
+  };
+
+  const templateNfs = {
+    apiVersion: "storage.k8s.io/v1",
+    kind: "StorageClass",
+    metadata: {
+      name: storageClassName,
+      annotations: {
+        "meta.helm.sh/release-name": "rook-ceph-cluster",
+        "meta.helm.sh/release-namespace": "rook-ceph",
+        "storageclass.kubernetes.io/is-default-class": "false",
+      },
+    },
+    provisioner: "rook-ceph.nfs.csi.ceph.com",
+    parameters: {
+      nfsCluster: "my-nfs",
+      server: "rook-ceph-nfs-my-nfs-a",
+      clusterID: "rook-ceph",
+      fsName: "myfs",
+      pool: "myfs-replicated",
+      "csi.storage.k8s.io/provisioner-secret-name":
+        "rook-csi-cephfs-provisioner",
+      "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/controller-expand-secret-name":
+        "rook-csi-cephfs-provisioner",
+      "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-cephfs-node",
+      "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+    },
+    allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
+    reclaimPolicy: reclaimPolicy,
+    // volumeBindingMode: volumeBindingMode,
+  };
+
+  const templateRbd = {
+    apiVersion: "storage.k8s.io/v1",
+    kind: "StorageClass",
+    metadata: {
+      name: storageClassName,
+      annotations: {
+        "meta.helm.sh/release-name": "rook-ceph-cluster",
+        "meta.helm.sh/release-namespace": "rook-ceph",
+        "storageclass.kubernetes.io/is-default-class": "false",
+      },
+    },
+    provisioner: "rook-ceph.rbd.csi.ceph.com",
+    parameters: {
+      clusterID: "rook-ceph",
+      pool: "replicapool",
+      imageFormat: "2",
+      imageFeatures: "layering",
+      "csi.storage.k8s.io/provisioner-secret-name": "rook-csi-rbd-provisioner",
+      "csi.storage.k8s.io/provisioner-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/controller-expand-secret-name":
+        "rook-csi-rbd-provisioner",
+      "csi.storage.k8s.io/controller-expand-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/node-stage-secret-name": "rook-csi-rbd-node",
+      "csi.storage.k8s.io/node-stage-secret-namespace": "rook-ceph",
+      "csi.storage.k8s.io/fstype": "ext4",
+    },
+    allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
+    reclaimPolicy: reclaimPolicy,
+    // volumeBindingMode: volumeBindingMode,
   };
 
   const handleClose = () => {
@@ -84,6 +165,10 @@ const CreateStorageClass = observer((props) => {
     }
     if (storageSystem === "") {
       swalError("Storage System을 선택해주세요");
+      return;
+    }
+    if (selectClusters.length === 0) {
+      swalError("Cluster를 선택해주세요");
       return;
     }
     if (volumeExpansion === "") {
@@ -109,18 +194,41 @@ const CreateStorageClass = observer((props) => {
     setStepValue(3);
   };
 
+  const CreateStorageClass = () => {
+    if (storageSystem === "CephFS") {
+      postStorageClass(
+        require("json-to-pretty-yaml").stringify(templateCephfs)
+      );
+      handleClose();
+    }
+    if (storageSystem === "NFS") {
+      console.log("NFS: ", storageSystem);
+      postStorageClass(require("json-to-pretty-yaml").stringify(templateNfs));
+      handleClose();
+    }
+    if (storageSystem === "BlockStorage") {
+      console.log("BlockStorage: ", storageSystem);
+      postStorageClass(require("json-to-pretty-yaml").stringify(templateRbd));
+      handleClose();
+    }
+  };
+
   const handlePreStepValue = () => {
     console.log("handlePreStepValue");
   };
 
-  const CreateStorageClass = () => {
-    CreateStorageClass(require("json-to-pretty-yaml").stringify(template));
-  };
-
   useEffect(() => {
     if (stepValue === 3) {
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      if (storageSystem === "CephFS") {
+        const YAML = require("json-to-pretty-yaml");
+        setContent(YAML.stringify(templateCephfs));
+      } else if (storageSystem === "NFS") {
+        const YAML = require("json-to-pretty-yaml");
+        setContent(YAML.stringify(templateNfs));
+      } else {
+        const YAML = require("json-to-pretty-yaml");
+        setContent(YAML.stringify(templateRbd));
+      }
     }
   }, [stepValue]);
 
@@ -206,7 +314,7 @@ const CreateStorageClass = observer((props) => {
           </div>
         </>
       );
-    } else <StorageClassBasicInfo />;
+    } else <StorageClassYamlPopup />;
   };
 
   return (
