@@ -6,7 +6,8 @@ const ClusterSummary = observer(() => {
   const {
     dashboardDetail,
     clusterCnt,
-    coreClusterCnt,
+    // coreClusterCnt,
+    credentialCnt,
     edgeClusterCnt,
     workspaceCnt,
     projectCnt,
@@ -29,7 +30,7 @@ const ClusterSummary = observer(() => {
 
       <div className="ClusterSummary Core">
         <div className="ClusterCountTitle">코어 클라우드 개수</div>
-        <div className="ClusterCount">{coreClusterCnt}</div>
+        <div className="ClusterCount">{credentialCnt}</div>
       </div>
 
       <div className="ClusterSummary Edge">
