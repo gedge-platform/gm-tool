@@ -3,9 +3,10 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons"
+import { CIconButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
@@ -13,10 +14,10 @@ import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
-// import TerminalIcon from '@mui/icons-material/Terminal';
-// import { images } from '../../../../images/ico-action/ico_terminal.png';
+import { Title } from "@/pages";
 
 const CoreClusterListTab = observer(() => {
+  const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -35,7 +36,6 @@ const CoreClusterListTab = observer(() => {
     goNextPage,
     totalElements,
   } = clusterStore;
-
 
   const [columDefs] = useState([
     {
@@ -81,7 +81,7 @@ const CoreClusterListTab = observer(() => {
       maxWidth: 100,
       cellRenderer: function () {
         // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`
+        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
       },
       cellStyle: { textAlign: "center" },
     },
@@ -99,13 +99,11 @@ const CoreClusterListTab = observer(() => {
 
   const handleOpen = (e) => {
     setOpen(true);
-
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-
 
   const handleOpenTerminal = () => {
     setOpenTerminal(true);
@@ -115,13 +113,12 @@ const CoreClusterListTab = observer(() => {
     setOpenTerminal(false);
   };
 
-
   useLayoutEffect(() => {
     loadClusterList("core");
   }, []);
 
   return (
-    <>
+    <Layout currentPageTitle={currentPageTitle}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -135,21 +132,21 @@ const CoreClusterListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  onCellClicked={handleClick}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                onCellClicked={handleClick}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
           <Terminal
             open={openTerminal}
@@ -160,7 +157,7 @@ const CoreClusterListTab = observer(() => {
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
-    </>
+    </Layout>
   );
 });
 export default CoreClusterListTab;

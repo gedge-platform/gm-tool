@@ -7,7 +7,8 @@ class Dashboard {
   viewList = [];
   dashboardDetail = {};
   clusterCnt = 0;
-  coreClusterCnt = 0;
+  // coreClusterCnt = 0;
+  credentialCnt = 0;
   edgeClusterCnt = 0;
   workspaceCnt = 0;
   projectCnt = 0;
@@ -62,6 +63,27 @@ class Dashboard {
   x = [];
   y = [];
 
+  connectionconfig = [];
+  ConfigName = [];
+  ProviderName = [];
+  ConfigNameCnt = 0;
+
+  VMCnt = 0;
+
+  Paused = 0;
+  Running = 0;
+  Stop = 0;
+
+  VMList = [
+  {
+    configName: "",
+    vmCnt: 0,
+    paused: 0,
+    running: 0,
+    stop: 0,
+  },
+];
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -86,11 +108,13 @@ class Dashboard {
       runInAction(() => {
         this.dashboardDetail = data;
         this.clusterCnt = data.clusterCnt;
-        this.coreClusterCnt = data.coreClusterCnt;
+        // this.coreClusterCnt = data.coreClusterCnt;
+        this.credentialCnt = data.credentialCnt;
         this.edgeClusterCnt = data.edgeClusterCnt;
         this.workspaceCnt = data.workspaceCnt;
         this.projectCnt = data.projectCnt;
       });
+      console.log(this.credentialCnt);
     });
   };
 
@@ -126,22 +150,80 @@ class Dashboard {
     });
   };
 
-  loadMapInfoList = async () => {
-    await axios.get(`http://101.79.1.173:8010/gmcapi/v2/totalDashboard`)
+  loadCredentialName = async () => {
+    await axios.get(`http://210.207.104.188:1024/spider/connectionconfig`)
     .then((res) => {
       runInAction(() => {
-        const list = res.data.data.edgeInfo;
-        this.point = list.point;
-        console.log(list);
+        console.log("step1");
+        this.connectionconfig = res.data.connectionconfig;
+        this.ConfigName = this.connectionconfig.map(name => name.ConfigName);
+        console.log(this.ConfigName);
+        this.ProviderName = this.connectionconfig.map(provider => provider.ProviderName);
       });
     }).then(() => {
-      this.loadMapInfo(
-        this.edgeInfo[0].point,
-        console.log(toJS(this.edgeInfo[0].point))
-      );
+      console.log("step2");
+      // console.log(this.ConfigName);
+      for (let i=1; i<=this.ConfigName.length; i++) {
+        this.loadVMCnt(this.ConfigName[i]);
+      };
+      // this.ConfigName.map(name => this.loadVMCnt(name));
+      // this.ConfigName.map(val => this.loadVMStatusCnt(val));
     });
   };
 
+  // ConfigName = this.ConfigName.map(name => this.loadVMCnt(name));
+
+
+  loadVMCnt = async (ConfigName) => {
+    await axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`,
+    {ConnectionName: ConfigName})
+    .then((res) => {
+      runInAction(() => {
+        console.log("step3");
+        console.log(res.data);
+        this.VMCnt = res.data.VMCnt;
+        this.VMList.vmCnt.push(this.VMCnt);
+      })
+      console.log(this.VMList);
+    })
+    // .then((res) => {
+    //   console.log("step4");
+    //   console.log(res);
+    //   this.VMList.configName = ConfigName;
+    //   this.VMList.vmCnt = this.VMCnt;
+    //   console.log(this.VMList);
+    //   // this.ConfigName.map(val => this.loadVMStatusCnt(val));
+    // })
+    // .then(() => {
+    //   console.log("step5");
+    //   console.log(res);
+    //   this.loadVMStatusCnt(ConfigName, this.VMList);
+    // })
+  };
+
+  // loadVMStatusCnt = async (ConfigName, VMList) => {
+  //   await axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
+  //   {ConnectionName: ConfigName})
+  //   .then((res) => {
+  //     runInAction(() => {
+  //       console.log("step6");
+  //       console.log(res);
+  //       this.Paused = res.data.Paused;
+  //       this.Running = res.data.Running;
+  //       this.Stop = res.data.Stop;
+  //     })
+  //   })
+  //   .then(() => {
+  //     // if(ConfigName === VMList.ConfigName) {
+  //       console.log("step7");
+  //       console.log(res);
+  //       VMList.paused = this.Paused;
+  //       VMList.running = this.Running;
+  //       VMList.stop = this.Stop;
+  //       console.log(VMList);
+  //     // }
+  //   })
+  // };
 
 }
 const dashboardStore = new Dashboard();

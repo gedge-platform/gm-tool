@@ -23,7 +23,7 @@ const DashboardWrap = styled.div`
     background: transparent;
     border: 0;
     &::before {
-      display: none;;
+      display: none;
     }
   }
 
@@ -32,7 +32,7 @@ const DashboardWrap = styled.div`
     background: transparent;
     border: 0;
     &::before {
-      display: none;;
+      display: none;
     }
     .cluster_nodes {
       padding: 12px;
@@ -132,41 +132,38 @@ const DashboardWrap = styled.div`
           }
         }
       }
-
     }
   }
 `;
 
 const TotalDashboard = () => {
-  const currentPageTitle = Title.Dashboard;
-  const {
-    dashboardDetail
-  } = dashboardStore;
+  const currentPageTitle = Title.TotalDashboard;
+  const { dashboardDetail } = dashboardStore;
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
         <PanelBox className="panel_summary">
-            {/* <ClusterInfo /> */}
-            <ClusterSummary/>
-            {/* <div className="cluster_map">
+          {/* <ClusterInfo /> */}
+          {/* <ClusterSummary /> */}
+          {/* <div className="cluster_map">
               <MapContent />
             </div> */}
-            {/* <div className="ClusterSlideWrap">
-              <ClusterKind />
-            </div> */}
+          <div className="ClusterSlideWrap">
+            <ClusterKind />
+          </div>
         </PanelBox>
-     
+
         <PanelBox className="panel_service">
           <div className="cluster_serviceWrap">
             <div className="cluster_status">
               <ClusterStatus />
             </div>
             <div className="cluster_map">
-              <MapContent />
+              {/* <MapContent /> */}
             </div>
             <div className="cluster_recent">
-              <ClusterRecent />
+              {/* <ClusterRecent /> */}
             </div>
           </div>
           {/* <div className="cluster_nodes">

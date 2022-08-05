@@ -5,60 +5,67 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons"
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
-import Terminal from "../Dialog/Terminal";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
 import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
-import CloudZoneSummary from "./CloudZoneSummary"
-import CloudZoneSlider from "./CloudZoneSlider"
+import EdgeZoneSummary from "./EdgeZoneSummary";
 import styled from "styled-components";
 
-const CloudZoneWrap = styled.div`
-  .panel_summary {
-    width: 100%;
-    padding: 20px;
-    background: #202842;
-    border: 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    &::before {
-      display: none;;
-    }
-  }
-`
+// const EdgeZoneWrap = styled.div`
+//   .panel_summary {
+//     width: 100%;
+//     padding: 20px;
+//     background: #202842;
+//     border: 0;
+//     display: flex;
+//     justify-content: space-between;
+//     flex-wrap: wrap;
+//     &::before {
+//       display: none;
+//     }
+//   }
+// `;
 
-const CloudZone = observer(() => {
-  const currentPageTitle = Title.CloudZone;
+const EdgeZoneListTab = observer(() => {
+  const currentPageTitle = Title.EdgeZone;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-  const [openTerminal, setOpenTerminal] = useState(false);
+
   const {
     clusterDetail,
     clusterList,
+    totalElements,
     loadClusterList,
     loadCluster,
+
     currentPage,
     totalPages,
     viewList,
     goPrevPage,
     goNextPage,
-    totalElements,
   } = clusterStore;
 
-
   const [columDefs] = useState([
+    {
+      headerName: "",
+      field: "check",
+      minWidth: 53,
+      maxWidth: 53,
+      filter: false,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: true,
+    },
     {
       headerName: "이름",
       field: "clusterName",
@@ -95,76 +102,61 @@ const CloudZone = observer(() => {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
-    {
-      headerName: "",
-      field: "terminal",
-      minWidth: 100,
-      maxWidth: 100,
-      cellRenderer: function () {
-        // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`
-      },
-      cellStyle: { textAlign: "center" },
-    },
   ]);
 
   const history = useHistory();
 
   const handleClick = (e) => {
-    let fieldName = e.colDef.field;
     loadCluster(e.data.clusterName);
-    if (fieldName === "terminal") {
-      handleOpenTerminal();
-    }
   };
 
-  const handleOpen = (e) => {
+  const handleOpen = () => {
     setOpen(true);
-
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-
-  const handleOpenTerminal = () => {
-    setOpenTerminal(true);
-  };
-
-  const handleCloseTerminal = () => {
-    setOpenTerminal(false);
-  };
-
-
   useLayoutEffect(() => {
-    loadClusterList("core");
+    loadClusterList("edge");
   }, []);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CloudZoneWrap>
-        <PanelBox className="panel_summary">
-          <div className="ClusterInfoWrap">
-            <ClusterInfo />
-          </div>
+      <CReflexBox>
+        <PanelBox>
+          <CommActionBar
+          // reloadFunc={() => loadClusterList("edge")}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
+          >
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          </CommActionBar>
 
-          <div className="ClusterSliderWrap">
-            <CloudZoneSlider />
+          <div className="tabPanelContainer">
+            <CTabPanel value={tabvalue} index={0}>
+              <div className="grid-height2">
+                <AgGrid
+                  rowData={viewList}
+                  columnDefs={columDefs}
+                  isBottom={false}
+                  totalElements={totalElements}
+                  onCellClicked={handleClick}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
+                />
+              </div>
+            </CTabPanel>
           </div>
-
-          <div className="SummaryWrap">
-            <CloudZoneSummary />
-          </div>
+          <CreateCluster type={"edge"} open={open} onClose={handleClose} />
         </PanelBox>
-        <div className="panel_summary">
-          <CReflexBox>
-              <Detail cluster={clusterDetail} />
-          </CReflexBox>
-        </div>
-      </CloudZoneWrap>
+      </CReflexBox>
     </Layout>
   );
 });
 
-export default CloudZone;
+export default EdgeZoneListTab;
