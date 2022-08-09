@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";

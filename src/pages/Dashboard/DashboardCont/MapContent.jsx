@@ -1,24 +1,216 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
 import L from "leaflet";
 import { observer } from "mobx-react";
-import dashboardStore from "../../../store/Dashboard";
 import { address } from "react-dom-factories";
-import { toJS } from "mobx";
+import { runInAction } from "mobx";
+import axios from "axios";
+import dashboardStore from "../../../store/Dashboard";
 
 const MapContent = observer(() => {
+  const { loadMapInfo, pointArr } = dashboardStore;
   const mapRef = useRef(null);
+  const [data, setData] = useState("");
 
-  const {
-    edgeInfo,
-    loadMapInfo,
-    loadMapInfoList,
-    point,
-    x,
-    y,
-    pointArr,
-    setPointArr,
-    loadMapPoint,
-  } = dashboardStore;
+  useEffect(async () => {
+    const result = await axios(
+      `http://192.168.160.230:8011/gmcapi/v2/totalDashboard`
+    );
+    const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
+    const dataPoint = dataEdgeInfo.map((item) =>
+      Object.values(item).map((val) => val.point)
+    );
+    setData(dataPoint);
+
+    //지도
+    mapRef.current = L.map("map", mapParams);
+
+    //좌표
+    const dataPoints = dataPoint.map((item) => {
+      item.map((point) => {
+        L.marker([point.y, point.x], {
+          icon: CustomIcon("green"),
+        }).addTo(mapRef.current);
+      });
+    });
+
+    // dataPoints.bindPopup(
+    //   `
+    //           <div class="leaflet-popup-title">
+    //             SEOUL, Republic of Korea
+    //           </div>
+    //           <div class="leaflet-popup-table">
+    //             <table>
+    //               <tr>
+    //                 <th>Cluster</th>
+    //                 <td>AZURE</td>
+    //               </tr>
+    //               <tr>
+    //                 <th rowspan="3">Status</th>
+    //                 <td>
+    //                   <div class="box run">
+    //                     <span class="tit">실행</span><span>7</span>
+    //                   </div>
+    //                 </td>
+    //               </tr>
+    //               <tr>
+    //                 <td>
+    //                   <div class="box stop">
+    //                     <span class="tit">중지</span><span>2</span>
+    //                   </div>
+    //                 </td>
+    //               </tr>
+    //               <tr>
+    //                 <td>
+    //                   <div class="box pause">
+    //                     <span class="tit">일시중지</span><span>1</span>
+    //                   </div>
+    //                 </td>
+    //               </tr>
+    //             </table>
+    //           </div>
+    //         `
+    // );
+  }, []);
+
+  // useEffect(() => {
+  //   // console.log("step1");
+  //   // loadMapInfo();
+
+  //   // 지도
+  //   // mapRef.current = L.map("map", mapParams);
+
+  //   //좌표
+  //   // pointArr?.map((item) => {
+  //   //   console.log(item.y, item.x);
+  //   //   L.marker([item.y, item.x], {
+  //   //     icon: CustomIcon("green"),
+  //   //   }).addTo(mapRef.current);
+  //   // });
+
+  //   // const cluster1 = L.marker([y, x], {
+  //   //   icon: CustomIcon("green"),
+  //   // }).addTo(mapRef.current);
+  //   // const cluster2 = L.marker([37.681, 126.793], {
+  //   //   icon: CustomIcon("violet"),
+  //   // }).addTo(mapRef.current);
+  //   // const cluster = L.marker([x.map((x) => x), y.map((y) => y)]).addTo(
+  //   //   mapRef.current
+  //   // );
+  //   // const cluster3 = L.marker([37.581, 127.003], {
+  //   //   icon: CustomIcon("red"),
+  //   // }).addTo(mapRef.current);
+  //   // cluster.bindPopup(
+  //   //   `
+  //   //     <div class="leaflet-popup-title">
+  //   //       SEOUL, Republic of Korea
+  //   //     </div>
+  //   //     <div class="leaflet-popup-table">
+  //   //       <table>
+  //   //         <tr>
+  //   //           <th>Cluster</th>
+  //   //           <td>AZURE</td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <th rowspan="3">Status</th>
+  //   //           <td>
+  //   //             <div class="box run">
+  //   //               <span class="tit">실행</span><span>7</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box stop">
+  //   //               <span class="tit">중지</span><span>2</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box pause">
+  //   //               <span class="tit">일시중지</span><span>1</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //       </table>
+  //   //     </div>
+  //   //   `
+  //   // );
+  //   // cluster2.bindPopup(
+  //   //   `
+  //   //     <div class="leaflet-popup-title">
+  //   //         SEOUL, Republic of Korea
+  //   //       </div>
+  //   //     <div class="leaflet-popup-table">
+  //   //       <table>
+  //   //         <tr>
+  //   //           <th>Cluster</th>
+  //   //           <td>AZURE</td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <th rowspan="3">Status</th>
+  //   //           <td>
+  //   //             <div class="box run">
+  //   //               <span class="tit">실행</span><span>7</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box stop">
+  //   //               <span class="tit">중지</span><span>2</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box pause">
+  //   //               <span class="tit">일시중지</span><span>1</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //       </table>
+  //   //     </div>
+  //   //   `
+  //   // );
+  //   // cluster3.bindPopup(
+  //   //   `
+  //   //     <div class="leaflet-popup-title">
+  //   //       SEOUL, Republic of Korea
+  //   //     </div>
+  //   //     <div class="leaflet-popup-table">
+  //   //       <table>
+  //   //         <tr>
+  //   //           <th>Cluster</th>
+  //   //           <td>AZURE</td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <th rowspan="3">Status</th>
+  //   //           <td>
+  //   //             <div class="box run">
+  //   //               <span class="tit">실행</span><span>7</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box stop">
+  //   //               <span class="tit">중지</span><span>2</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //         <tr>
+  //   //           <td>
+  //   //             <div class="box pause">
+  //   //               <span class="tit">일시중지</span><span>1</span>
+  //   //             </div>
+  //   //           </td>
+  //   //         </tr>
+  //   //       </table>
+  //   //     </div>
+  //   //   `
+  //   // );
+  // }, []);
 
   const MAP_TILE = L.tileLayer(
     "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=0f6be85b-e0ce-41a2-af27-e96c56b394fb",
@@ -37,8 +229,9 @@ const MapContent = observer(() => {
   };
 
   const mapParams = {
-    center: [37.481, 126.893],
-    zoom: 10,
+    // center: [37.481, 126.893],
+    center: [37.5537586, 126.9809696],
+    zoom: 12,
     zoomControl: true,
     maxBounds: L.latLngBounds(L.latLng(-150, -240), L.latLng(150, 240)),
     layers: [MAP_TILE],
@@ -95,175 +288,9 @@ const MapContent = observer(() => {
   //   `;
   // };
 
-  const point2 = [
-    {
-      x: "126.988142548",
-      y: "37.565648682",
-    },
-    {
-      x: "114.988142548",
-      y: "35.565648682",
-    },
-  ];
-
-  // const markerData = () => {
-  //   mapRef.current = L.map("map", mapParams);
-  //   pointArr?.map((item) => {
-  //     console.log(item.y, item.x);
-  //     L.marker([item.y, item.x], {
-  //       icon: CustomIcon("green"),
-  //     }).addTo(mapRef.current);
-  //   });
-  // };
   // This useEffect hook runs when the component is first mounted,
   // similar to componentDidMount() lifecycle method of class-based
   // components:
-  useEffect(() => {
-    console.log("로그");
-
-    loadMapInfo();
-    //지도
-    mapRef.current = L.map("map", mapParams);
-    //좌표
-    pointArr?.map((item) => {
-      console.log(item.y, item.x);
-      L.marker([item.y, item.x], {
-        icon: CustomIcon("green"),
-      }).addTo(mapRef.current);
-    });
-
-    // loadCluster();
-    // console.log(y[0]);
-    // const cluster = x.map((map, idx) => {
-    //   L.marker([y[idx], map]),
-    //     {
-    //       icon: CustomIcon("green"),
-    //     }.addTo(mapRef.current);
-    // });
-    // const cluster1 = L.marker([y, x], {
-    //   icon: CustomIcon("green"),
-    // }).addTo(mapRef.current);
-    // const cluster2 = L.marker([37.681, 126.793], {
-    //   icon: CustomIcon("violet"),
-    // }).addTo(mapRef.current);
-    // const cluster = L.marker([x.map((x) => x), y.map((y) => y)]).addTo(
-    //   mapRef.current
-    // );
-    // const cluster3 = L.marker([37.581, 127.003], {
-    //   icon: CustomIcon("red"),
-    // }).addTo(mapRef.current);
-    // cluster.bindPopup(
-    //   `
-    //     <div class="leaflet-popup-title">
-    //       SEOUL, Republic of Korea
-    //     </div>
-    //     <div class="leaflet-popup-table">
-    //       <table>
-    //         <tr>
-    //           <th>Cluster</th>
-    //           <td>AZURE</td>
-    //         </tr>
-    //         <tr>
-    //           <th rowspan="3">Status</th>
-    //           <td>
-    //             <div class="box run">
-    //               <span class="tit">실행</span><span>7</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box stop">
-    //               <span class="tit">중지</span><span>2</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box pause">
-    //               <span class="tit">일시중지</span><span>1</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //       </table>
-    //     </div>
-    //   `
-    // );
-    // cluster2.bindPopup(
-    //   `
-    //     <div class="leaflet-popup-title">
-    //         SEOUL, Republic of Korea
-    //       </div>
-    //     <div class="leaflet-popup-table">
-    //       <table>
-    //         <tr>
-    //           <th>Cluster</th>
-    //           <td>AZURE</td>
-    //         </tr>
-    //         <tr>
-    //           <th rowspan="3">Status</th>
-    //           <td>
-    //             <div class="box run">
-    //               <span class="tit">실행</span><span>7</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box stop">
-    //               <span class="tit">중지</span><span>2</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box pause">
-    //               <span class="tit">일시중지</span><span>1</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //       </table>
-    //     </div>
-    //   `
-    // );
-    // cluster3.bindPopup(
-    //   `
-    //     <div class="leaflet-popup-title">
-    //       SEOUL, Republic of Korea
-    //     </div>
-    //     <div class="leaflet-popup-table">
-    //       <table>
-    //         <tr>
-    //           <th>Cluster</th>
-    //           <td>AZURE</td>
-    //         </tr>
-    //         <tr>
-    //           <th rowspan="3">Status</th>
-    //           <td>
-    //             <div class="box run">
-    //               <span class="tit">실행</span><span>7</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box stop">
-    //               <span class="tit">중지</span><span>2</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //         <tr>
-    //           <td>
-    //             <div class="box pause">
-    //               <span class="tit">일시중지</span><span>1</span>
-    //             </div>
-    //           </td>
-    //         </tr>
-    //       </table>
-    //     </div>
-    //   `
-    // );
-  }, []);
 
   // const loadCluster = () => {
   //   console.log("dd " + y[0]);

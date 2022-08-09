@@ -75,9 +75,9 @@ class Dashboard {
   Running = 0;
   Stop = 0;
 
+  configName = [];
   VMList = [
     {
-      configName: "",
       vmCnt: 0,
       paused: 0,
       running: 0,
@@ -85,15 +85,11 @@ class Dashboard {
     },
   ];
 
+  ConfigNameList = [];
+
   constructor() {
     makeAutoObservable(this);
   }
-
-  setPointArr = (value) => {
-    runInAction(() => {
-      this.pointArr = value;
-    });
-  };
 
   setPointX = (x) => {
     runInAction(() => {
@@ -142,35 +138,24 @@ class Dashboard {
 
   // loadMapInfo = async () => {
   //   await axios
-  //   .get(`http://101.79.1.173:8010/gmcapi/v2/totalDashboard`)
-  //   .then(({ data: { data, involvesData} }) => {
-  //     runInAction(() => {
-  //       this.dashboardDetail = data;
-  //       this.edgeInfo = data.edgeInfo;
+  //     .get(`http://192.168.160.230:8011/gmcapi/v2/totalDashboard`)
+  //     .then(({ data: { data } }) => {
+  //       runInAction(() => {
+  //         this.dashboardDetail = data;
+  //         this.edgeInfo = data.edgeInfo;
+  //         this.point = this.edgeInfo.map((point) =>
+  //           Object.entries(point.point)
+  //         );
+  //         this.pointArr = this.edgeInfo.map((p) => p.point);
+  //         this.x = this.point
+  //           .map((x) => Object.values(x[0]))
+  //           .map((val) => val[1]);
+  //         this.y = this.point
+  //           .map((y) => Object.values(y[1]))
+  //           .map((val) => val[1]);
+  //       });
   //     });
-  //   });
   // };
-
-  loadMapInfo = async () => {
-    await axios
-      .get(`http://192.168.160.230:8011/gmcapi/v2/totalDashboard`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.dashboardDetail = data;
-          this.edgeInfo = data.edgeInfo;
-          this.point = this.edgeInfo.map((point) =>
-            Object.entries(point.point)
-          );
-          this.pointArr = this.edgeInfo.map((p) => p.point);
-          this.x = this.point
-            .map((x) => Object.values(x[0]))
-            .map((val) => val[1]);
-          this.y = this.point
-            .map((y) => Object.values(y[1]))
-            .map((val) => val[1]);
-        });
-      });
-  };
 
   loadCredentialName = async () => {
     await axios
@@ -178,10 +163,10 @@ class Dashboard {
       .then((res) => {
         runInAction(() => {
           this.connectionconfig = res.data.connectionconfig;
-          this.ConfigName = this.connectionconfig.map(
+          this.ConfigNameList = this.connectionconfig.map(
             (name) => name.ConfigName
           );
-
+          // const ConfigNameList = Object.values(this.ConfigName);
           this.ProviderName = this.connectionconfig.map(
             (provider) => provider.ProviderName
           );
@@ -192,40 +177,103 @@ class Dashboard {
         // for (let i = 1; i <= this.ConfigName.length; i++) {
         //   this.loadVMCnt(this.ConfigName[i]);
         // }
-        this.ConfigName.map((name) => this.loadVMCnt(name));
-
+        // this.ConfigNameList.map((name) => this.loadVMCnt(name));
+        // this.loadVMCnt();
         // this.ConfigName.map(val => this.loadVMStatusCnt(val));
       });
   };
 
+  loadVMStatusCnt = async () => {
+    const urls = axios.get(
+      `http://210.207.104.188:1024/spider/connectionconfig`
+    );
+    const configResult = await Promise.all([urls]).then((res) => {
+      console.log(res);
+      return res;
+    });
+    const configNameList = configResult[0].data.connectionconfig;
+    const vmList = [];
+    await configNameList.forEach((config) => {
+      let configName = config.ConfigName;
+      axios
+        .post(
+          `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
+          {
+            ConnectionName: configName,
+          }
+        )
+        .then((res) => {
+          vmList.push(res);
+        });
+    });
+    console.log(vmList);
+    // res.forEach((result) => {
+    //   Object.values(result.data.connectionconfig).map(
+    //     (val) => val.ConfigName
+    // );
+    // })
+
+    console.log(configNameList);
+  };
+
   // ConfigName = this.ConfigName.map(name => this.loadVMCnt(name));
 
-  loadVMCnt = (ConfigName) => {
-    Promise.all(
-      axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
-        ConnectionName: this.ConfigName,
-      })
-    ).then((res) => {
-      runInAction(() => {
-        console.log(res);
-      });
-    });
-  };
-  // loadVMCnt = async (ConfigName) => {
-  // await axios
-  //   .post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
-  //     ConnectionName: ConfigName,
-  //   })
-  //   .then((res) => {
+  // loadVMCnt = (ConfigName) => {
+  //   Promise.all(
+  //     axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
+  //       ConnectionName: this.ConfigName,
+  //     })
+  //   ).then((res) => {
   //     runInAction(() => {
-  //       // console.log("step3");
   //       console.log(res);
-  //       // this.VMCnt = res.data.VMCnt;
-  //       // console.log([...this.VMCnt]);
-  //       // console.log(Object.entries(this.VMCnt));
-  //       // this.VMList.vmCnt.push(this.VMCnt);
   //     });
   //   });
+  // };
+
+  //Promise.all( iterable )
+
+  // loadVMCnt = async () => {
+  //   const urls = await axios.post(
+  //     `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`,
+  //     {
+  //       ConnectionName: "openstack-config01",
+  //     }
+  //   );
+  //   console.log(urls);
+  //   Promise.allSettled(urls).then((res) => console.log(res));
+  //   const test = await Promise.all(async () => {
+  //     let testconfig = loadCredentialName();
+  //     console.log(testconfig);
+  //     const urls = await axios.post(
+  //       `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`,
+  //       {
+  //         ConnectionName: "openstack-config01",
+  //       }
+  //     );
+  //     return urls;
+  //   });
+  //   console.log("teee :", test);
+  //   console.log(Promise.allSettled(urls));
+  // };
+
+  // loadVMCnt = async (ConfigName) => {
+  //   await axios
+
+  //     .post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
+  //       ConnectionName: ConfigName,
+  //     })
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         // console.log("step3");
+  //         console.log(res);
+  //         // this.VMCnt = res.data.VMCnt;
+  //         // console.log(this.VMCnt);
+  //         // console.log([...this.VMCnt]);
+  //         // console.log(Object.entries(this.VMCnt));
+  //         // this.VMList.vmCnt.push(this.VMCnt);
+  //       });
+  //     });
+  // };
 
   // loadVMCnt = async (ConfigName) => {
   //   Promise.all(
