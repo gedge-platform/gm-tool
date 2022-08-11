@@ -3,11 +3,15 @@ import { observer } from "mobx-react";
 import dashboardStore from "../../../store/Dashboard";
 import CCreateButton from "@/components/buttons";
 import styled from "styled-components";
-import { Button } from "@mui/material";
+import theme from "@/styles/theme";
 
-const ButtonStyle = styled(Button)`
-  position: relative;
+const ButtonStyle = styled.button`
   width: 100%;
+  height: 7%;
+  font-size: 13px;
+  position: relative;
+  background-color: ${theme.colors.navActive};
+  color: #ffff;
 `;
 
 const ClusterRecent = observer(() => {
@@ -29,26 +33,60 @@ const ClusterRecent = observer(() => {
     setToggle(isOpen => !isOpen);
   }
   
-  const clusterCpuTop = clusterCpuTop5.map(
-    (cluster, index) => 
-    <li><span>{index + 1}</span>{cluster.cluster}</li>
-  );
+  // const clusterCpuTop =
+  //   let arr = [];
+  //   for (let i = 0; i < 5; i++) {
+  //     arr.push(<li><span>{i+1}</span>{clusterCpuTop5.cluster}</li>);
+  //   };
+  //   return arr
+  // );
 
-  const podCpuTop = podCpuTop5.map(
-    (pod, index) => 
-    <li><span>{index + 1}</span>{pod.name}</li>
-  );
+  const clusterCpuTop = () => { 
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(<li><span>{i+1}</span>{clusterCpuTop5[i] ? clusterCpuTop5[i]["cluster"] : "-"}</li>);
+    }
+    return arr
+  }
 
-  const clusterMemTop = clusterMemTop5.map(
-    (cluster, index) =>
-    <li><span>{index + 1}</span>{cluster.cluster}</li>
-  );
+  // const podCpuTop = podCpuTop5.map(
+  //   (pod, index) => 
+  //   <li><span>{index + 1}</span>{pod.name}</li>
+  // );
 
-  const podMemTop = podMemTop5.map(
-    (pod, index) => 
-    <li><span>{index + 1}</span>{pod.name}</li>
-  );
+  const podCpuTop = () => { 
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(<li><span>{i+1}</span>{podCpuTop5[i] ? podCpuTop5[i]["name"] : "-"}</li>);
+    }
+    return arr
+  }
 
+  // const clusterMemTop = clusterMemTop5.map(
+  //   (cluster, index) =>
+  //   <li><span>{index + 1}</span>{cluster.cluster}</li>
+  // );
+
+  const clusterMemTop = () => { 
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(<li><span>{i+1}</span>{clusterMemTop5[i] ? clusterMemTop5[i]["cluster"] : "-"}</li>);
+    }
+    return arr
+  }
+
+  // const podMemTop = podMemTop5.map(
+  //   (pod, index) => 
+  //   <li><span>{index + 1}</span>{pod.name}</li>
+  // );
+
+  const podMemTop = () => { 
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(<li><span>{i+1}</span>{podMemTop5[i] ? podMemTop5[i]["name"] : "-"}</li>);
+    }
+    return arr
+  }
 
   return (
     <>
@@ -57,7 +95,7 @@ const ClusterRecent = observer(() => {
         <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>CPU Top 5</ButtonStyle>
           <div className="ClusterRecentTitle">Cluster CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{clusterCpuTop ? clusterCpuTop : "-"}</ul>
+              <ul>{clusterCpuTop()}</ul>
           {/* <li><span>1</span>kube-node-lease</li>
           <li><span>2</span>kube-system</li>
           <li><span>3</span>default</li>
@@ -67,7 +105,7 @@ const ClusterRecent = observer(() => {
             </div>
           <div className="ClusterRecentTitle">Pod CPU Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{podCpuTop ? podCpuTop : "-"}</ul>
+              <ul>{podCpuTop()}</ul>
             </div>
           </div>
     ) : (
@@ -75,15 +113,15 @@ const ClusterRecent = observer(() => {
         <ButtonStyle variant="contained" onClick={clickToggle} toggle={toggle}>Memory Top 5</ButtonStyle>
           <div className="ClusterRecentTitle">Cluster Memory Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{clusterMemTop? clusterMemTop : "-"}</ul>
+              <ul>{clusterMemTop()}</ul>
             </div>
           <div className="ClusterRecentTitle">Pod Memory Top 5 / 최신</div>
             <div className="ClusterRecentListWrap">
-              <ul>{podMemTop ? podMemTop : "-"}</ul>
+              <ul>{podMemTop()}</ul>
             </div>
       </div>
     )
-    };
+    }
     </>
   );
 });

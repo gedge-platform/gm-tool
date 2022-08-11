@@ -145,7 +145,7 @@ const TotalDashboard = () => {
       <DashboardWrap>
         <PanelBox className="panel_summary">
           {/* <ClusterInfo /> */}
-          {/* <ClusterSummary /> */}
+          <ClusterSummary />
           {/* <div className="cluster_map">
               <MapContent />
             </div> */}
@@ -163,7 +163,7 @@ const TotalDashboard = () => {
               {/* <MapContent /> */}
             </div>
             <div className="cluster_recent">
-              {/* <ClusterRecent /> */}
+              <ClusterRecent />
             </div>
           </div>
           {/* <div className="cluster_nodes">

@@ -360,17 +360,18 @@ export const SideMenu = () => {
               sx={{ overflowY: "auto" }}
               aria-expanded={false}
             >
-              <CustomTreeItem
+              {/* <CustomTreeItem
                 nodeId="1"
                 label={Title.Dashboard}
+                activeClassName="active"
                 onNodeFocus={handleClick}
-              >
+              > */}
                 <li>
                   <NavLink nodeId="2" exact to="/" activeClassName="active">
                     {Title.TotalDashboard}
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink
                     nodeId="3"
                     exact
@@ -379,8 +380,8 @@ export const SideMenu = () => {
                   >
                     {Title.ServiceAdmin}
                   </NavLink>
-                </li>
-              </CustomTreeItem>
+                </li> */}
+              {/* </CustomTreeItem> */}
               <li>
                 <NavLink to="/service/Workspace" activeClassName="active">
                   {Title.WorkSpace}
