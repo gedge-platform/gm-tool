@@ -188,7 +188,6 @@ class Dashboard {
       `http://210.207.104.188:1024/spider/connectionconfig`
     );
     const configResult = await Promise.all([urls]).then((res) => {
-      console.log(res);
       return res;
     });
     const configNameList = configResult[0].data.connectionconfig;
@@ -206,14 +205,12 @@ class Dashboard {
           vmList.push(res);
         });
     });
-    console.log(vmList);
+
     // res.forEach((result) => {
     //   Object.values(result.data.connectionconfig).map(
     //     (val) => val.ConfigName
     // );
     // })
-
-    console.log(configNameList);
   };
 
   // ConfigName = this.ConfigName.map(name => this.loadVMCnt(name));

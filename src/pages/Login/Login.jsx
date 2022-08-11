@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+
 import BrandArea from "./BrandArea";
 import "./css/Login.css";
 import tit_welcome from "./images/tit_welcome.png";
@@ -11,6 +11,8 @@ import { swalError } from "../../utils/swal-utils";
 import jwtDecode from "jwt-decode";
 import userStore from "../../store/UserStore";
 //token의 playload 내용을 디코딩해줌
+
+import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 const Login = () => {
   const history = useHistory();
@@ -57,9 +59,12 @@ const Login = () => {
           setItem("userRole", jwtDecode(accessToken).role);
           setItem("token", accessToken); // local storage에 저장
           setUser(jwtDecode(accessToken));
-          console.log(data.userId);
           setTimeout;
-          swalError("로그인 되었습니다.", () => history.push("/"));
+
+          const userRoles = jwtDecode(accessToken).role;
+
+          // 속도가 느리지만 일단 작동은 됩니다.....
+          swalError("로그인 되었습니다.", () => window.location.replace("/"));
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));
           setInputs({

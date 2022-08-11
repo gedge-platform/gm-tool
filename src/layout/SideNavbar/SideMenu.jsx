@@ -215,7 +215,7 @@ export const SideMenu = () => {
               aria-expanded={false}
             >
               <li>
-                <NavLink exact to="/" activeClassName="active">
+                <NavLink exact to="/total" activeClassName="active">
                   {Title.TotalDashboard}
                 </NavLink>
               </li>
@@ -360,27 +360,11 @@ export const SideMenu = () => {
               sx={{ overflowY: "auto" }}
               aria-expanded={false}
             >
-              <CustomTreeItem
-                nodeId="1"
-                label={Title.Dashboard}
-                onNodeFocus={handleClick}
-              >
-                <li>
-                  <NavLink nodeId="2" exact to="/" activeClassName="active">
-                    {Title.TotalDashboard}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    nodeId="3"
-                    exact
-                    to="/service/serviceAdmin"
-                    activeClassName="active"
-                  >
-                    {Title.ServiceAdmin}
-                  </NavLink>
-                </li>
-              </CustomTreeItem>
+              <li>
+                <NavLink exact to="/service" activeClassName="active">
+                  {Title.ServiceAdminDashboard}
+                </NavLink>
+              </li>
               <li>
                 <NavLink to="/service/Workspace" activeClassName="active">
                   {Title.WorkSpace}
@@ -397,13 +381,8 @@ export const SideMenu = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/volumes" activeClassName="active">
+                <NavLink to="/service/volumes" activeClassName="active">
                   {Title.Volume}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/service/monitoring" activeClassName="active">
-                  {Title.Monitoring}
                 </NavLink>
               </li>
             </TreeView>

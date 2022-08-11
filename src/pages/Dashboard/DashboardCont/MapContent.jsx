@@ -5,71 +5,88 @@ import { address } from "react-dom-factories";
 import { runInAction } from "mobx";
 import axios from "axios";
 import dashboardStore from "../../../store/Dashboard";
+import { forEach } from "lodash";
 
 const MapContent = observer(() => {
   const { loadMapInfo, pointArr } = dashboardStore;
   const mapRef = useRef(null);
   const [data, setData] = useState("");
+  const [dataEdgeInfo, setDataEdgeInfo] = useState("");
 
   useEffect(async () => {
     const result = await axios(
       `http://192.168.160.230:8011/gmcapi/v2/totalDashboard`
     );
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
+    setDataEdgeInfo(dataEdgeInfo);
     const dataPoint = dataEdgeInfo.map((item) =>
       Object.values(item).map((val) => val.point)
     );
     setData(dataPoint);
 
+    console.log(dataEdgeInfo[0].map((item) => item.address));
+    // const addressData = dataEdgeInfo[0].map((info) =>
+    //   Object.entries(info).map(([key, value]) => [key, value])
+    // ); //[Array(8), Array(8)]
+
+    // const addressTmp = addressData.map((item) => item[1]); //[Array(2), Array(2)]
+    // console.log(addressTmp);
+
+    // const addressList = Object.values(addressTmp).map((val) => val[1]); //['서울시 중구 을지로 100', '서울시 중구 을지로100']
+    // const addressArr = Object.values(addressList);
+    // console.log(
+    //   Object.entries(addressList).map(([key, value]) => [key, value])
+    // );
+
     //지도
     mapRef.current = L.map("map", mapParams);
 
     //좌표
-    const dataPoints = dataPoint.map((item) => {
+    const marker = dataPoint.map((item) => {
       item.map((point) => {
         L.marker([point.y, point.x], {
           icon: CustomIcon("green"),
-        }).addTo(mapRef.current);
+        })
+          .addTo(mapRef.current)
+          .bindPopup(
+            `
+              <div class="leaflet-popup-title">
+              ${dataEdgeInfo[0].map((item) => item.address)}
+             </div>
+             <div class="leaflet-popup-table">
+               <table>
+                 <tr>
+                   <th>Cluster</th>
+                   <td>AZURE</td>
+                 </tr>
+                 <tr>
+                   <th rowspan="3">Status</th>
+                   <td>
+                     <div class="box run">
+                       <span class="tit">실행</span><span>7</span>
+                     </div>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td>
+                     <div class="box stop">
+                       <span class="tit">중지</span><span>2</span>
+                     </div>
+                   </td>
+                 </tr>
+                 <tr>
+                   <td>
+                     <div class="box pause">
+                       <span class="tit">일시중지</span><span>1</span>
+                     </div>
+                   </td>
+                 </tr>
+               </table>
+             </div>
+             `
+          );
       });
     });
-
-    // dataPoints.bindPopup(
-    //   `
-    //           <div class="leaflet-popup-title">
-    //             SEOUL, Republic of Korea
-    //           </div>
-    //           <div class="leaflet-popup-table">
-    //             <table>
-    //               <tr>
-    //                 <th>Cluster</th>
-    //                 <td>AZURE</td>
-    //               </tr>
-    //               <tr>
-    //                 <th rowspan="3">Status</th>
-    //                 <td>
-    //                   <div class="box run">
-    //                     <span class="tit">실행</span><span>7</span>
-    //                   </div>
-    //                 </td>
-    //               </tr>
-    //               <tr>
-    //                 <td>
-    //                   <div class="box stop">
-    //                     <span class="tit">중지</span><span>2</span>
-    //                   </div>
-    //                 </td>
-    //               </tr>
-    //               <tr>
-    //                 <td>
-    //                   <div class="box pause">
-    //                     <span class="tit">일시중지</span><span>1</span>
-    //                   </div>
-    //                 </td>
-    //               </tr>
-    //             </table>
-    //           </div>
-    //         `
-    // );
   }, []);
 
   // useEffect(() => {
@@ -248,61 +265,9 @@ const MapContent = observer(() => {
       shadowSize: [41, 41],
     });
 
-  // const loadMapCluster = (idx) => {
-  //   `
-  //     <div class="leaflet-popup-title">
-  //      ${edgeInfo[idx].address}
-  //      ${console.log("step1")}
-  //      ${console.log(edgeInfo[idx].address)}
-  //     </div>
-  //     <div class="leaflet-popup-table">
-  //     <table>
-  //       <tr>
-  //         <th>Cluster</th>
-  //         <td>${edgeInfo[idx].clusterType}</td>
-  //       </tr>
-  //       <tr>
-  //         <th rowspan="3">Status</th>
-  //         <td>
-  //           <div class="box run">
-  //             <span class="tit">실행</span><span>7</span>
-  //           </div>
-  //         </td>
-  //       </tr>
-  //       <tr>
-  //         <td>
-  //           <div class="box stop">
-  //             <span class="tit">중지</span><span>2</span>
-  //           </div>
-  //         </td>
-  //       </tr>
-  //       <tr>
-  //         <td>
-  //           <div class="box pause">
-  //             <span class="tit">일시중지</span><span>1</span>
-  //           </div>
-  //         </td>
-  //       </tr>
-  //     </table>
-  //   </div>
-  //   `;
-  // };
-
   // This useEffect hook runs when the component is first mounted,
   // similar to componentDidMount() lifecycle method of class-based
   // components:
-
-  // const loadCluster = () => {
-  //   console.log("dd " + y[0]);
-  //   mapRef.current = L.map("map", mapParams);
-  //   x.map((map, idx) => {
-  //     L.marker([y[idx], map]),
-  //       {
-  //         icon: CustomIcon("green"),
-  //       }.addTo(mapRef.current);
-  //     loadMapCluster(idx);
-  //   });
-  // };
 
   return (
     <div
