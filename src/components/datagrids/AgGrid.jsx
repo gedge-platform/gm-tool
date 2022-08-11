@@ -109,7 +109,7 @@ const AgGrid = (props) => {
           {isBottom ? (
             ""
           ) : (
-            <div>
+            <div className="btn-wrap">
               <button type="button" className="btn_comm" onClick={goPrevPage}>
                 <span className="btnLabel_icon hover prev">Prev</span>
               </button>

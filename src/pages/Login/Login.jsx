@@ -64,6 +64,8 @@ const Login = () => {
           const userRoles = jwtDecode(accessToken).role;
 
           // 속도가 느리지만 일단 작동은 됩니다.....
+          // 로그인 후 새로고침을 다시 해서 데이터 받아오기 때문에 느리지만 데이터를 처음부터 체크하면서 받아오니까 잘 가져온다......
+          // swalError("로그인 되었습니다.", () => history.push("/"));
           swalError("로그인 되었습니다.", () => window.location.replace("/"));
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));
