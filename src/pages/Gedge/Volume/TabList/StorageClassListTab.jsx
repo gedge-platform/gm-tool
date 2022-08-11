@@ -9,16 +9,14 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import axios from "axios";
-
-// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import StorageClassDetail from "../StorageClassDetail";
-//import volumeStore from "@/store/Volume";
 import volumeStore from "@/store/StorageClass";
 import ViewYaml from "../Dialog/ViewYaml";
 import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import StorageClassStore from "../../../../store/StorageClass";
 
 const StorageClassListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -28,26 +26,17 @@ const StorageClassListTab = observer(() => {
   };
 
   const {
-    storageClassMetadata,
-    storageClasses,
-    storageClass,
-    scYamlFile,
-    scParameters,
-    scLables,
-    scAnnotations,
+    loadStorageClasses,
     totalElements,
-    setCurrentPage,
-    setTotalPages,
     currentPage,
     totalPages,
     goPrevPage,
     goNextPage,
-    getYamlFile,
-    loadVolumeYaml,
-    loadStorageClasses,
     loadStorageClass,
     viewList,
-  } = volumeStore;
+    getYamlFile,
+    loadStorageClassYaml,
+  } = StorageClassStore;
 
   const [columDefs] = useState([
     {
@@ -108,7 +97,7 @@ const StorageClassListTab = observer(() => {
   const handleOpen = (e) => {
     let fieldName = e.colDef.field;
     loadStorageClass(e.data.name, e.data.cluster);
-    loadVolumeYaml(e.data.name, e.data.cluster, null, "storageclasses");
+    loadStorageClassYaml(e.data.name, e.data.cluster, null, "storageclasses");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }

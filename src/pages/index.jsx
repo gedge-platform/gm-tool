@@ -23,7 +23,7 @@ export { default as CreateUser } from "./Gedge/Service/Project/CreateUser/Create
 export { default as PlatformControl } from "./Gedge/Service/Project/PlatformControl/PlatformControl";
 export { default as Template } from "./Gedge/Service/Template/Template";
 
-export { default as ServiceAdmin } from "./Gedge/ServiceAdmin/ServiceAdmin";
+export { default as ServiceAdminDashboard } from "./Gedge/ServiceAdminDashboard/ServiceAdminDashboard";
 export { default as StorageDashboard } from "./Gedge/Storage/StorageDashboard";
 
 // Gedgd SA
@@ -60,7 +60,7 @@ const Title = {
   Roadbalancer: "로드밸런서",
   Topology: "토폴로지",
   NetWork: "네트워크",
-  Storage: "스토리지",
+  Storage: "스토리지 클래스",
   StorageDashboard: "대시보드",
   Service: "서비스",
   Project: "프로젝트",
@@ -68,7 +68,7 @@ const Title = {
   PlatformControl: "플랫폼 관리",
   Template: "템플릿",
 
-  ServiceAdmin: "서비스 어드민",
+  ServiceAdminDashboard: "통합 대시보드",
 };
 
 export { Title };

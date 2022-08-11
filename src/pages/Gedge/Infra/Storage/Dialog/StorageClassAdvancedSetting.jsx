@@ -3,7 +3,6 @@ import styled from "styled-components";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import { observer } from "mobx-react";
-import deploymentStore from "../../../../store/Deployment";
 
 const HeaderContainer = styled.div`
   width: 320px;
@@ -38,20 +37,7 @@ const Span = styled.span`
   background-color: #fff;
 `;
 
-const VolumeAdvancedSetting = observer(() => {
-  const {
-    podReplicas,
-    containerName,
-    containerPort,
-    containerPortName,
-    containerImage,
-    setPodReplicas,
-    setContainerName,
-    setContainerPort,
-    setContainerPortName,
-    setContainerImage,
-  } = deploymentStore;
-
+const StorageClassAdvancedSetting = observer(() => {
   const onChange = (e, type) => {
     const { value, name } = e.target;
   };
@@ -132,4 +118,4 @@ const VolumeAdvancedSetting = observer(() => {
   );
 });
 
-export default VolumeAdvancedSetting;
+export default StorageClassAdvancedSetting;

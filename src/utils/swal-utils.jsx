@@ -21,7 +21,8 @@ export const swalConfirm = (text) => {
 export const swalError = (text, callback) => {
   return Swal.fire({
     text: text,
-    width: 350,
+    // width: 350,
+    width: 400,
     confirmButtonText: "확인",
     reverseButtons: true,
   }).then((result) => {

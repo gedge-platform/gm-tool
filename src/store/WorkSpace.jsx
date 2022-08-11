@@ -120,7 +120,6 @@ class Workspace {
     axios
       .post(`${SERVER_URL2}/workspaces`, body)
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
         }

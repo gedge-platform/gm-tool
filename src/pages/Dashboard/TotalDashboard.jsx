@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
 
 import MapContent from "./DashboardCont/MapContent";
-// import ClusterInfo from "./DashboardCont/ClusterInfo";
+
 import ClusterSummary from "./DashboardCont/ClusterSummary";
 import ClusterKind from "./DashboardCont/ClusterKind";
 import ClusterStatus from "./DashboardCont/ClusterStatus";
 import ClusterRecent from "./DashboardCont/ClusterRecent";
 import NodeList from "./DashboardCont/NodeList";
-import dashboardStore from "../../store/Dashboard";
 
 const DashboardWrap = styled.div`
   /* display: flex;
@@ -138,17 +137,12 @@ const DashboardWrap = styled.div`
 
 const TotalDashboard = () => {
   const currentPageTitle = Title.TotalDashboard;
-  const { dashboardDetail } = dashboardStore;
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <DashboardWrap>
         <PanelBox className="panel_summary">
-          {/* <ClusterInfo /> */}
-          {/* <ClusterSummary /> */}
-          {/* <div className="cluster_map">
-              <MapContent />
-            </div> */}
+          <ClusterSummary />
           <div className="ClusterSlideWrap">
             <ClusterKind />
           </div>
@@ -160,15 +154,15 @@ const TotalDashboard = () => {
               <ClusterStatus />
             </div>
             <div className="cluster_map">
-              {/* <MapContent /> */}
+              <MapContent />
             </div>
             <div className="cluster_recent">
-              {/* <ClusterRecent /> */}
+              <ClusterRecent />
             </div>
           </div>
-          {/* <div className="cluster_nodes">
+          <div className="cluster_nodes">
             <NodeList />
-          </div> */}
+          </div>
         </PanelBox>
       </DashboardWrap>
     </Layout>

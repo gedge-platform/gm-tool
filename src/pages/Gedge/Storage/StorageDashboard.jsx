@@ -3,7 +3,6 @@ import Layout from "@/layout";
 import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import styled from "styled-components";
@@ -34,88 +33,14 @@ const StoragePageWrap = styled.div`
 const StorageDashboard = () => {
   const currentPageTitle = Title.StorageDashboard;
 
-  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const {
-    clusterDetail,
-    clusterList,
-    totalElements,
-    loadClusterList,
-    loadCluster,
-
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-  } = clusterStore;
-
-  const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
-    {
-      headerName: "이름",
-      field: "clusterName",
-      filter: true,
-    },
-    {
-      headerName: "타입",
-      field: "clusterType",
-      filter: true,
-    },
-    {
-      headerName: "생성자",
-      field: "clusterCreator",
-      filter: true,
-    },
-    {
-      headerName: "노드개수",
-      field: "nodeCnt",
-      filter: true,
-    },
-    {
-      headerName: "IP",
-      field: "clusterEndpoint",
-      filter: true,
-    },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
-      },
-    },
-  ]);
+  const { clusterDetail, loadClusterList } = clusterStore;
 
   const history = useHistory();
-
-  const handleClick = (e) => {
-    loadCluster(e.data.clusterName);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useLayoutEffect(() => {
     loadClusterList("edge");
