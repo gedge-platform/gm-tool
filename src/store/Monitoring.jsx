@@ -154,6 +154,7 @@ class Monitoring {
       )
       .then((res) => {
         this.coPieCPU = this.convertResponseToMonit(res);
+        console.log(this.coPieCPU[2]?.metrics);
       });
   };
 
@@ -173,6 +174,7 @@ class Monitoring {
       )
       .then((res) => {
         this.coPieMemory = this.convertResponseToMonit(res);
+        console.log(this.coPieMemory[2]?.metrics);
       });
   };
 

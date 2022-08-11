@@ -1,12 +1,13 @@
 import { observer } from "mobx-react";
 import React from "react";
-import volumeStore from "../../../../store/Volume";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import StorageClassStore from "../../../../../store/StorageClass";
 
-const VolumYamlPopup = observer(() => {
-  const { content, setContent } = volumeStore;
+const StorageClassYamlPopup = observer(() => {
+  const { content, claimName } = StorageClassStore;
+  console.log(content);
 
   return (
     <>
@@ -52,4 +53,4 @@ const VolumYamlPopup = observer(() => {
   );
 });
 
-export default VolumYamlPopup;
+export default StorageClassYamlPopup;

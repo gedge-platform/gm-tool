@@ -4,7 +4,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const VolumeYaml = observer((props) => {
+const StorageClassYaml = observer((props) => {
   const { content } = props;
 
   return (
@@ -31,4 +31,4 @@ const VolumeYaml = observer((props) => {
   );
 });
 
-export default VolumeYaml;
+export default StorageClassYaml;

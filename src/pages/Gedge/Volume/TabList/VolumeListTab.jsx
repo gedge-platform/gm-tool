@@ -8,8 +8,6 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-
-// import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";

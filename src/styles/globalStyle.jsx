@@ -241,12 +241,12 @@ const globalStyles = createGlobalStyle`
   .btn_comm {
     min-width: 24px;
     min-height: 24px;
-    border: 1px solid #bec3ca;
-    border-radius: 3px;
+    border: 0;
+    border-radius: 4px;
     &:not(select) {
       /* background: linear-gradient(#fdfdfd,#f6f6f9); */
-      background: #222C45;
-      box-shadow: inset 0 0 1px #fff;
+      /* background: #222C45; */
+      /* box-shadow: inset 0 0 1px #fff; */
     }
   }
   .btn-wrap {
@@ -258,15 +258,16 @@ const globalStyles = createGlobalStyle`
     /* ${theme.mixins.ir_btn}; */
     background-position: center center;
     background-repeat: no-repeat;
-    font-size: 0;
+    text-indent: -9999em;
     width: 24px;
     height: 24px;
     border: 1px solid #212a43;
     background-color: #62697e;
     border-radius: 3px;
+    display:inline-block;
     &:hover {
       opacity: 0.6;
-      background-color: #fff;
+      /* background-color: #fff; */
     }
   }
   

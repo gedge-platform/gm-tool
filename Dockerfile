@@ -7,14 +7,18 @@ WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 # install app dependencies
-COPY package*.json ./
+COPY package.json ./
+
+# yarn ignore-engines
+RUN yarn config set ignore-engines true
 
 # Add node-sass
-RUN mkdir -p node_modules/node-sass/vendor/linux-x64-83
-RUN curl -L https://github.com/sass/node-sass/releases/download/v4.14.1/linux-x64-83_binding.node -o node_modules/node-sass/vendor/linux-x64-83/binding.node
+#RUN mkdir -p node_modules/node-sass/vendor/linux-x64-83
+#RUN curl -L https://github.com/sass/node-sass/releases/download/v4.14.1/linux-x64-83_binding.node -o node_modules/node-sass/vendor/linux-x64-83/binding.node
 
-RUN npm install --loglevel=error
-RUN npm rebuild node-sass
+RUN yarn install
+RUN yarn cache clean
+#RUN yarn rebuild node-sass
 
 # add app
 COPY . ./
@@ -23,4 +27,4 @@ COPY . ./
 EXPOSE 8080
 
 # start app
-CMD ["npm", "run", "start-docker"]
+CMD ["yarn", "run", "start"]

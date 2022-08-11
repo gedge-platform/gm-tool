@@ -64,7 +64,7 @@ const Label = styled.span`
   }
 `;
 
-const StorageClassDetail = observer(({ }) => {
+const StorageClassDetail = observer(({}) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -72,10 +72,7 @@ const StorageClassDetail = observer(({ }) => {
     setTabvalue(newValue);
   };
 
-  const { storageClass,events, annotations,label } = StorageClassStore;
-
-
-
+  const { storageClass, events, annotations, label } = StorageClassStore;
 
   const metaTable = [];
   if (storageClass?.annotations) {
@@ -136,29 +133,29 @@ const StorageClassDetail = observer(({ }) => {
                     ? storageClass?.volumeBindingMode
                     : "-"}
                 </td>
-                <th>AllowVolumeExpansion</th>
+                {/* <th>AllowVolumeExpansion</th>
                 <td>
                   {storageClass?.allowVolumeExpansion
                     ? storageClass?.allowVolumeExpansion
                     : "-"}
-                </td>
-              </tr>
-              <tr>
+                </td> */}
                 <th>Created</th>
                 <td>
                   {storageClass?.createAt
                     ? dateFormatter(storageClass?.createAt)
                     : "-"}
                 </td>
+              </tr>
+              {/* <tr>
                 <th>{null}</th>
                 <td>{null}</td>
-              </tr>
+              </tr> */}
             </tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
-      <div className="tb_container">
+        <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
             {label ? (
@@ -195,7 +192,7 @@ const StorageClassDetail = observer(({ }) => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-      <EventAccordion events={events} />
+        <EventAccordion events={events} />
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">

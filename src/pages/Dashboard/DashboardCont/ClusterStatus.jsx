@@ -153,7 +153,7 @@ const ClusterStatus = observer(() => {
         </div>
       </div> */}
 
-            {/* <div className="ClusterStatusBox">
+      {/* <div className="ClusterStatusBox">
                 <div className="ClusterStatusIcon openstack"></div>
                 <div className="ClusterStatusInfoBox">
                 <div className="Count">10 <span>클러스터</span></div>
@@ -168,7 +168,7 @@ const ClusterStatus = observer(() => {
                 </div>
             </div> */}
 
-            {/* <div className="ClusterStatusBox">
+      {/* <div className="ClusterStatusBox">
                 <div className="ClusterStatusIcon aws"></div>
                 <div className="ClusterStatusInfoBox">
                     <div className="Count">10 <span>클러스터</span></div>
@@ -183,8 +183,8 @@ const ClusterStatus = observer(() => {
                 </div>
             </div> */}
 
-            {/* 스크롤 영역 테스트 */}
-            {/* <div className="ClusterStatusBox">
+      {/* 스크롤 영역 테스트 */}
+      {/* <div className="ClusterStatusBox">
                 <div className="ClusterStatusIcon azure"></div>
                 <div className="ClusterStatusInfoBox">
                 <div className="Count">10 <span>클러스터</span></div>

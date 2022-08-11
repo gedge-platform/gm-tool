@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL2 } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class StorageClass {
   viewList = [];
@@ -37,10 +38,23 @@ class StorageClass {
   storageClassName = "";
   storageClassNameData = [];
   selectStorageClass = "";
+  content = "";
+  storageSystem = "";
+  volumeExpansion = "";
+  reclaimPolicy = "";
+  accessMode = "";
+  volumeBindingMode = "";
+  selectClusters = "";
 
   constructor() {
     makeAutoObservable(this);
   }
+
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -124,7 +138,73 @@ class StorageClass {
     });
   };
 
-  loadVolumeYaml = async (name, clusterName, projectName, kind) => {
+  setStorageClassNameData = (value) => {
+    runInAction(() => {
+      this.storageClassNameData = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
+    });
+  };
+
+  setSelectStorageClass = (value) => {
+    runInAction(() => {
+      this.selectStorageClass = value;
+    });
+  };
+
+  setStorageClassName = (value) => {
+    runInAction(() => {
+      this.storageClassName = value;
+    });
+  };
+
+  setStorageSystem = (value) => {
+    runInAction(() => {
+      this.storageSystem = value;
+    });
+  };
+
+  setVolumeExpansion = (value) => {
+    runInAction(() => {
+      this.volumeExpansion = value;
+    });
+  };
+
+  setReclaimPolicy = (value) => {
+    runInAction(() => {
+      this.reclaimPolicy = value;
+    });
+  };
+
+  setAccessMode = (value) => {
+    runInAction(() => {
+      this.accessMode = value;
+    });
+  };
+
+  setVolumeBindingMode = (value) => {
+    runInAction(() => {
+      this.volumeBindingMode = value;
+    });
+  };
+
+  setResponseData = (data) => {
+    runInAction(() => {
+      this.responseData = data;
+    });
+  };
+
+  setSelectClusters = (value) => {
+    runInAction(() => {
+      this.selectClusters = value;
+    });
+  };
+
+  loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
         `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
@@ -206,28 +286,24 @@ class StorageClass {
       });
   };
 
-  setStorageClassNameData = (value) => {
-    runInAction(() => {
-      this.storageClassNameData = value;
-    });
-  };
+  postStorageClass = (callback) => {
+    const YAML = require("yamljs");
+    axios
+      .post(
+        `${SERVER_URL2}/storageclasses?cluster=${this.selectClusters}`,
 
-  setStorageClass = (value) => {
-    runInAction(() => {
-      this.storageClass = value;
-    });
-  };
-
-  setSelectStorageClass = (value) => {
-    runInAction(() => {
-      this.selectStorageClass = value;
-    });
-  };
-
-  setStorageClassName = (value) => {
-    runInAction(() => {
-      this.storageClassName = value;
-    });
+        YAML.parse(this.content)
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("StorageClass가 생성되었습니다", callback);
+        }
+      })
+      .catch((err) => {
+        swalError("StorageClass 생성에 실패하였습니다.", callback);
+        console.log(err);
+      });
   };
 }
 

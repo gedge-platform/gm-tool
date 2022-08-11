@@ -277,13 +277,12 @@ class Claim {
         YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("Volume이 생성되었습니다!", callback);
         }
       })
       .catch((err) => {
-        swalError("프로젝트 생성에 실패하였습니다.", callback);
+        swalError("Volume 생성에 실패하였습니다.", callback);
         console.error(err);
       });
   };
