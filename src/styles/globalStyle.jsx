@@ -1971,7 +1971,7 @@ const globalStyles = createGlobalStyle`
   /* cluster_serviceWrap */
   .cluster_serviceWrap {
       width: 100%;
-      height: 475px;
+      height: 508px;
       padding: 12px;
       background: #202842;
       border-radius: 5px;
