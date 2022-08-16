@@ -125,8 +125,10 @@ const Detail = observer(() => {
     // selectProject,
     changeCluster,
     changeProject,
+    selectClusterInfo,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
+
   const eventsTable = () => {
     return (
       <EventWrap className="event-wrap">
@@ -195,13 +197,19 @@ const Detail = observer(() => {
                   <th> Name</th>
                   <td>{project?.projectName}</td>
                   <th>Cluster</th>
-                  <td>{project?.selectCluster}</td>
+                  {/* <td>{project?.selectCluster}</td> */}
+                  <td>
+                      {selectClusterInfo.map((item) => item.clusterName + " ")}
+                    </td>
                 </tr>
                 <tr>
                   <th> Create</th>
                   <td>{dateFormatter(project?.created_at)}</td>
                   <th>Creator</th>
-                  <td>{project?.projectCreator}</td>
+                  {/* <td>{project?.projectCreator}</td> */}
+                  <td>
+                      {project?.projectCreator ? project?.projectCreator : "-"}
+                    </td>
                 </tr>
                 </>
               ) : (
@@ -269,9 +277,9 @@ const Detail = observer(() => {
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Resources" />
+        <CTab label="Projects" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-        <CTab label="Projects" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -295,35 +303,44 @@ const Detail = observer(() => {
                 <th>Created</th>
                 <td>{dateFormatter(workSpaceDetail.created_at)}</td>
               </tr>
-              <tr>
-                <th>Resource Usage</th>
+            </tbody>
+          </table>
+        </div>
+        <div className="tb_container">
+        <TableTitle>Resource Usage</TableTitle>
+              <tr className="tb_workload_detail_th">
                 <td colSpan={4}>
                   {dataUsage ? (
                     <>
-                    <table className="tb_data">
-                      <tbody>
-                        <tr>
-                        <th>CPU</th>
-                        <td>{dataUsage?.cpu_usage}</td>
-                        <th>MEMORY</th>
-                        <td>{dataUsage?.memory_usage}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "307px" }}>CPU</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.cpu_usage}
+                            </td>
+                            <th style={{ width: "307px" }}>MEMORY</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.memory_usage}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </>
                   ) : (
                     <>-</>
                   )}
                 </td>
               </tr>
-            </tbody>
-          </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">{resourcesTable()}</div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">{clusterProjectTable()}</div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
@@ -339,7 +356,6 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
           <br />
-
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -360,18 +376,8 @@ const Detail = observer(() => {
           <br />
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
-        <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          {eventsTable()}
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>{eventsMessageTable}</tbody>
-          </table>
-          <br />
-        </div> */}
-      </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
-        <div className="tb_container">{clusterProjectTable()}</div>
+        <EventAccordion events={events} />
       </CTabPanel>
     </PanelBox>
   );

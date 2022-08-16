@@ -274,7 +274,7 @@ const Detail = observer(() => {
         </div>
         <div className="tb_container">
         <TableTitle>Resource Usage</TableTitle>
-            <tbody>
+            {/* <tbody> */}
             <tr className="tb_workload_detail_th">
                 <td colSpan={4}>
                   {dataUsage ? (
@@ -301,8 +301,7 @@ const Detail = observer(() => {
                   )}
                 </td>
               </tr>
-            </tbody>
-
+            {/* </tbody> */}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
@@ -327,7 +326,6 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
           <br />
-
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -351,7 +349,6 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={4}>
         <EventAccordion events={events} />
       </CTabPanel>
-  
     </PanelBox>
   );
 });
