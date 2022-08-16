@@ -1,6 +1,6 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 import { ThirtyFpsRounded } from "@mui/icons-material";
@@ -30,9 +30,95 @@ class Workspace {
   selectClusterInfo = [];
   workspace = [];
 
+  viewList = [];
+  currentPage = 1;
+  totalPages = 1;
+
   constructor() {
     makeAutoObservable(this);
   }
+
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      }
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+  setWorkSpaceList = (list = []) => {
+    runInAction(() => {
+      this.workSpaceList = list;
+    });
+  };
+
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.workSpaceList[n];
+    });
+  };
+
+  setMetricsLastTime = (time) => {
+    runInAction(() => {
+      this.lastTime = time;
+    });
+  };
 
   // loadWorkSpaceList = async (type = "user") => {
   //   await axios
@@ -51,29 +137,34 @@ class Workspace {
 
   loadWorkSpaceList = async (type = false) => {
     await axios
-      .get(`${SERVER_URL2}/workspaces`)
-      .then((res) => {
+      .get(`${SERVER_URL4}/workspaces`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.workSpaceList = res.data;
+          this.workSpaceList = data;
           // this.workSpaceDetail = res.data[0];
-          this.totalElements = res.data.length;
+          this.totalElements = data.length;
           this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
       })
       .then(() => {
-        type
-          ? null
-          : this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+        this.convertList(this.workSpaceList, this.setWorkSpaceList);
+      })
+      // .then(() => {
+      //   this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      // });
+      .then(() => {
+        type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
       });
   };
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .get(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => {
         runInAction(() => {
           this.workSpaceDetail = res.data;
+          console.log(this.workSpaceDetail);
           this.dataUsage = this.workSpaceDetail.resourceUsage;
           if (res.data.events !== null) {
             this.events = this.workSpaceDetail.events;

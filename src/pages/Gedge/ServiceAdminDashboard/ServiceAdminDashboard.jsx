@@ -4,6 +4,8 @@ import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
 import { FormControl, MenuItem, Select } from "@mui/material";
+import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
+import { observer } from "mobx-react";
 
 const ServiceAdminWrap = styled.div`
   padding: 0 10px;
@@ -18,7 +20,13 @@ const ServiceAdminWrap = styled.div`
     }
   }
 `;
-const ServiceAdminDashboard = () => {
+const ServiceAdminDashboard = observer(() => {
+  const { loadServiceAdminDashboard } = serviceAdminDashboardStore;
+
+  useEffect(() => {
+    loadServiceAdminDashboard();
+  }, []);
+
   const currentPageTitle = Title.ServiceAdminDashboard;
 
   return (
@@ -175,5 +183,5 @@ const ServiceAdminDashboard = () => {
       </ServiceAdminWrap>
     </Layout>
   );
-};
+});
 export default ServiceAdminDashboard;

@@ -14,6 +14,7 @@ class RequestStatus {
     await axios.get(`${SERVER_URL3}`).then(({ data }) => {
       runInAction(() => {
         this.requestList = data;
+        console.log(this.requestList);
       });
     });
   };

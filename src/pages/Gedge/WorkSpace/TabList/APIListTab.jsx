@@ -27,6 +27,11 @@ const WorkspaceListTab = observer(() => {
     deleteWorkspace,
     workSpaceDetail,
     loadWorkspaceDetail,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    currentPage,
   } = workspacesStore;
 
   const [columDefs] = useState([
@@ -119,10 +124,14 @@ const WorkspaceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={workSpaceList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

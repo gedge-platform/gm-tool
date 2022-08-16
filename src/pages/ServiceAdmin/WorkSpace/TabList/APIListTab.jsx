@@ -58,17 +58,17 @@ const WorkspaceListTab = observer(() => {
       field: "memberName",
       filter: true,
     },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
-      },
-    },
+    // {
+    //   headerName: "생성날짜",
+    //   field: "created_at",
+    //   filter: "agDateColumnFilter",
+    //   filterParams: agDateColumnFilter(),
+    //   minWidth: 150,
+    //   maxWidth: 200,
+    //   cellRenderer: function (data) {
+    //     return `<span>${dateFormatter(data.value)}</span>`;
+    //   },
+    // },
     {
       headerName: "삭제",
       field: "delete",
@@ -124,7 +124,7 @@ const WorkspaceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={workSpaceList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

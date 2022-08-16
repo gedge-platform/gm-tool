@@ -125,9 +125,17 @@ const Detail = observer(() => {
               {cluster?.resourceUsage ? (
                 <>
                   <th>CPU</th>
-                  <td>{cluster?.resourceUsage?.cpu_usage}</td>
+                  <td>
+                    {cluster?.resourceUsage?.cpu_usage
+                      ? cluster?.resourceUsage?.cpu_usage
+                      : "-"}
+                  </td>
                   <th>MEMORY</th>
-                  <td>{cluster?.resourceUsage?.memory_usage}</td>
+                  <td>
+                    {cluster?.resourceUsage?.memory_usage
+                      ? cluster?.resourceUsage?.memory_usage
+                      : "-"}
+                  </td>
                 </>
               ) : (
                 <></>
@@ -150,27 +158,59 @@ const Detail = observer(() => {
               <>
                 <tr>
                   <th>Deployment</th>
-                  <td>{resources?.resource?.deployment_count}</td>
+                  <td>
+                    {resources?.resource?.deployment_count
+                      ? resources?.resource?.deployment_count
+                      : "-"}
+                  </td>
                   <th>Pod</th>
-                  <td>{resources?.resource?.pod_count}</td>
+                  <td>
+                    {resources?.resource?.pod_count
+                      ? resources?.resource?.pod_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Service</th>
-                  <td>{resources?.resource?.service_count}</td>
+                  <td>
+                    {resources?.resource?.service_count
+                      ? resources?.resource?.service_count
+                      : "-"}
+                  </td>
                   <th>CronJob</th>
-                  <td>{resources?.resource?.cronjob_count}</td>
+                  <td>
+                    {resources?.resource?.cronjob_count
+                      ? resources?.resource?.cronjob_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Job</th>
-                  <td>{resources?.resource?.job_count}</td>
+                  <td>
+                    {resources?.resource?.job_count
+                      ? resources?.resource?.job_count
+                      : "-"}
+                  </td>
                   <th>Volume</th>
-                  <td>{resources?.resource?.volume_count}</td>
+                  <td>
+                    {resources?.resource?.volume_count
+                      ? resources?.resource?.volume_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Statefulset</th>
-                  <td>{resources?.resource?.Statefulset_count}</td>
+                  <td>
+                    {resources?.resource?.Statefulset_count
+                      ? resources?.resource?.Statefulset_count
+                      : "-"}
+                  </td>
                   <th>Daemonset</th>
-                  <td>{resources?.resource?.daemonset_count}</td>
+                  <td>
+                    {resources?.resource?.daemonset_count
+                      ? resources?.resource?.daemonset_count
+                      : "-"}
+                  </td>
                 </tr>
               </>
             ) : (
@@ -213,9 +253,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td>
+                <td style={{ whiteSpace: "pre-wrap" }}>
                   {selectClusterInfo?.map(
-                    (cluster) => cluster.clusterName + " "
+                    (cluster) => cluster.clusterName + "\n"
                   )}
                 </td>
                 <th>Creator</th>
