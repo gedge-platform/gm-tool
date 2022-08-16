@@ -5,19 +5,6 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import workspaceStore from "../../../store/WorkSpace";
 import "@grapecity/wijmo.styles/wijmo.css";
-import theme from "@/styles/theme";
-import { toJS } from "mobx";
-import {
-  MenuItem,
-  FormControl,
-  Select,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-  formLabelClasses,
-} from "@mui/material";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
 import { dateFormatter } from "@/utils/common-utils";
 import { Projection } from "leaflet";
 import EventAccordion from "@/components/detail/EventAccordion";
@@ -117,15 +104,9 @@ const Detail = observer(() => {
     labels,
     annotations,
     detailInfo,
-    clusterList,
-    projectList,
-    selectProject,
     dataUsage,
     events,
-    // selectProject,
-    changeCluster,
     changeProject,
-    selectClusters,
     selectClusterInfo,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
@@ -273,35 +254,35 @@ const Detail = observer(() => {
           </table>
         </div>
         <div className="tb_container">
-        <TableTitle>Resource Usage</TableTitle>
-            {/* <tbody> */}
+          <TableTitle>Resource Usage</TableTitle>
+          <tbody>
             <tr className="tb_workload_detail_th">
-                <td colSpan={4}>
-                  {dataUsage ? (
-                    <>
-                      <table className="tb_data">
-                        <tbody>
-                          <tr>
-                            <th style={{ width: "307px" }}>CPU</th>
-                            <td style={{ width: "307px" }}>
-                              {dataUsage?.cpu_usage}
-                            </td>
-                          </tr>
-                          <tr>
-                            <th style={{ width: "307px" }}>MEMORY</th>
-                            <td style={{ width: "307px" }}>
-                              {dataUsage?.memory_usage}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </>
-                  ) : (
-                    <>-</>
-                  )}
-                </td>
-              </tr>
-            {/* </tbody> */}
+              <td colSpan={4}>
+                {dataUsage ? (
+                  <>
+                    <table className="tb_data">
+                      <tbody>
+                        <tr>
+                          <th style={{ width: "307px" }}>CPU</th>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.cpu_usage}
+                          </td>
+                        </tr>
+                        <tr>
+                          <th style={{ width: "307px" }}>MEMORY</th>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.memory_usage}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </>
+                ) : (
+                  <>-</>
+                )}
+              </td>
+            </tr>
+          </tbody>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>

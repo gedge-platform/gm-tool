@@ -7,7 +7,6 @@ import "ace-builds/src-noconflict/theme-monokai";
 
 const DeploymentYaml = observer(() => {
   const { content, setContent } = deploymentStore;
-  console.log(content);
 
   return (
     <>
@@ -19,6 +18,10 @@ const DeploymentYaml = observer(() => {
           <div className="arr"></div>
           <div className="step">
             <span>Pod 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>Volume 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">

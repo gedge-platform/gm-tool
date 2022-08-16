@@ -27,6 +27,11 @@ const WorkspaceListTab = observer(() => {
     deleteWorkspace,
     workSpaceDetail,
     loadWorkspaceDetail,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    currentPage,
   } = workspacesStore;
 
   const [columDefs] = useState([
@@ -121,8 +126,12 @@ const WorkspaceListTab = observer(() => {
                   onCellClicked={handleClick}
                   rowData={workSpaceList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

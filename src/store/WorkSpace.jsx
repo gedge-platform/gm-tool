@@ -21,14 +21,14 @@ class Workspace {
       eventTime: "",
     },
   ];
-  projectList = [];
+  projectList = [{}];
   clusterList = [];
   detailInfo = [{}];
   selectProject = "";
   selectCluster = "";
   dataUsage = {};
-  projectList = [];
   selectClusterInfo = [];
+  workspace = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -51,12 +51,13 @@ class Workspace {
 
   loadWorkSpaceList = async (type = false) => {
     await axios
-      .get(`${SERVER_URL2}/workspace`)
+      .get(`${SERVER_URL2}/workspaces`)
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data;
           // this.workSpaceDetail = res.data[0];
           this.totalElements = res.data.length;
+          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
       })
       .then(() => {
@@ -68,27 +69,22 @@ class Workspace {
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
-    await axios.get(`${SERVER_URL2}/workspace/${workspaceName}`).then((res) => {
-      runInAction(() => {
-        this.workSpaceDetail = res.data;
-        this.dataUsage = this.workSpaceDetail.resourceUsage;
-        if (res.data.events !== null) {
-          this.events = this.workSpaceDetail.events;
-        } else {
-          this.events = null;
-        }
-        this.detailInfo = res.data.projectList;
-        // this.selectCluster = this.clusterList[0];
-        this.selectClusterInfo = res.data.selectCluster;
-
-        // this.projectList = this.detailInfo.map(
-        //   (project) => project.projectName
-        // );
-        // this.selectProject = this.projectList[0];
-        // //this.clusterList = data.selectCluster;
-        // console.log(this.selectCluster);
+    await axios
+      .get(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .then((res) => {
+        runInAction(() => {
+          this.workSpaceDetail = res.data;
+          this.dataUsage = this.workSpaceDetail.resourceUsage;
+          if (res.data.events !== null) {
+            this.events = this.workSpaceDetail.events;
+          } else {
+            this.events = null;
+          }
+          this.detailInfo = res.data.projectList;
+          this.selectClusterInfo = res.data.selectCluster;
+          this.projectList = res.data.projectList;
+        });
       });
-    });
   };
 
   setWorkSpaceList = (workSpaceList = []) => {
@@ -110,17 +106,18 @@ class Workspace {
       workspaceOwner: getItem("user"),
       workspaceCreator: getItem("user"),
     };
-    const body2 = {
-      workspaceName,
-      workspaceDescription,
-      memberName: getItem("user"),
-      clusterName: selectCluster,
-    };
+    // const body2 = {
+    //   workspaceName,
+    //   workspaceDescription,
+    //   memberName: getItem("user"),
+    //   clusterName: selectCluster,
+    // };
+    // axios
+    //   .post(`${SERVER_URL2}/workspaces`, body2)
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.error(err));
+    // return
     axios
-      .post(`${SERVER_URL2}/workspace`, body2)
-      .then((res) => console.log(res))
-      .catch((err) => console.error(err));
-    return axios
       .post(`${SERVER_URL2}/workspaces`, body)
       .then((res) => {
         if (res.status === 201) {
@@ -144,9 +141,21 @@ class Workspace {
     });
   };
 
+  setWorkspace = (workspace) => {
+    runInAction(() => {
+      this.workspace = workspace;
+    });
+  };
+
+  setProjectList = (value) => {
+    runInAction(() => {
+      this.projectList = value;
+    });
+  };
+
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/workspace/${workspaceName}`)
+      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 

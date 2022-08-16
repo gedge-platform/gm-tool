@@ -63,8 +63,8 @@ module.exports = function () {
 
     devtool: devMode ? "cheap-module-eval-source-map" : "source-map",
     devServer: {
-      // host: '0.0.0.0',
-      // port: 3000,
+      host: "0.0.0.0",
+      port: 8080,
       disableHostCheck: true,
       inline: true,
       hot: true,

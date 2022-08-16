@@ -65,7 +65,7 @@ const Detail = observer(() => {
     setOpen(false);
   };
   return (
-    <PanelBox style={{ overflowY: "hidden" }}>
+    <PanelBox style={{ overflowY: "hidden"}}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Involves Data" />

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class User {
   userList = [];
@@ -130,18 +131,25 @@ class User {
     });
   };
 
-  postUser = async (data) => {
+  postUser = async (data, callback) => {
     const body = {
       ...data,
-      memberEnabled: 0,
+      enabled: true
     };
+    console.log(body);
     return await axios
-      .post(`${SERVER_URL2}/members`, body)
-      .then(({ status }) => {
-        if (status === 201) return true;
-        return false;
+      .post(`http://192.168.160.230:8012/gmcapi/v2/members`, body)
+      .then((res) => {
+        runInAction(() => {
+          
+          console.log(res);
+          if (res.status === 201) {
+            swalError("멤버가 생성되었습니다.", callback);
+            return true;
+          } 
+        });
       })
-      .catch((err) => false);
+      .catch((err) => false)
   };
 }
 

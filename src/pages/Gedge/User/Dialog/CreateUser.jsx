@@ -29,9 +29,9 @@ const CreateUser = observer((props) => {
   const [inputs, setInputs] = useState({
     memberId: "",
     memberName: "",
-    memberPassword: "",
-    memberEmail: "",
-    memberContact: "",
+    password: "",
+    email: "",
+    contact: "",
     memberDescription: "",
     memberRole: "PA",
   });
@@ -39,10 +39,10 @@ const CreateUser = observer((props) => {
   const {
     memberId,
     memberName,
-    memberPassword,
+    password,
     memberRole,
-    memberEmail,
-    memberContact,
+    email,
+    contact,
     memberDescription,
   } = inputs;
 
@@ -54,9 +54,9 @@ const CreateUser = observer((props) => {
     setInputs({
       memberId: "",
       memberName: "",
-      memberPassword: "",
-      memberEmail: "",
-      memberContact: "",
+      password: "",
+      email: "",
+      contact: "",
       memberDescription: "",
       memberRole: "PA",
     });
@@ -69,13 +69,35 @@ const CreateUser = observer((props) => {
     });
   };
 
-  const createUser = async () => {
-    const result = await postUser(inputs);
-    if (result) swalError("멤버가 생성되었습니다.", handleClose);
-    else {
-      swalError("멤버 생성에 실패하였습니다.");
+  const onClickCreateUser = () => {
+    if (memberId === "") {
+      swalError("ID를 입력해주세요");
       return;
     }
+    if (password === "") {
+      swalError("Password를 입력해주세요");
+      return;
+    }
+    if (memberName === "") {
+      swalError("Name을 입력해주세요");
+      return;
+    }
+    if(email === "") {
+      swalError("Email을 입력해주세요");
+      return;
+    }
+    if(contact === "") {
+      swalError("Contact를 입력해주세요");
+      return;
+    } else {
+      createUser();
+    }
+  };
+
+  const createUser = async () => {
+    const result = await postUser(inputs);
+    console.log(result);
+    handleClose();
   };
 
   useEffect(() => {}, []);
@@ -118,9 +140,9 @@ const CreateUser = observer((props) => {
                 type="password"
                 placeholder="Mermber Password"
                 className="form_fullWidth"
-                name="memberPassword"
+                name="password"
                 onChange={onChange}
-                value={memberPassword}
+                value={password}
               />
             </td>
           </tr>
@@ -150,9 +172,9 @@ const CreateUser = observer((props) => {
                 type="text"
                 placeholder="Member Email"
                 className="form_fullWidth"
-                name="memberEmail"
+                name="email"
                 onChange={onChange}
-                value={memberEmail}
+                value={email}
               />
             </td>
           </tr>
@@ -166,9 +188,9 @@ const CreateUser = observer((props) => {
                 type="text"
                 placeholder="Member Contact"
                 className="form_fullWidth"
-                name="memberContact"
+                name="contact"
                 onChange={onChange}
-                value={memberContact}
+                value={contact}
               />
             </td>
           </tr>
@@ -215,7 +237,7 @@ const CreateUser = observer((props) => {
           }}
         >
           <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={createUser}>생성</ButtonNext>
+          <ButtonNext onClick={onClickCreateUser}>생성</ButtonNext>
         </div>
       </div>
     </CDialogNew>

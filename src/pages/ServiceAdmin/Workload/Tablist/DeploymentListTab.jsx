@@ -108,16 +108,15 @@ const DeploymentListTab = observer(() => {
             isSearch={true}
             isSelect={true}
             keywordList={["이름"]}
-          >
+            >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
-
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={deploymentList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
@@ -125,7 +124,7 @@ const DeploymentListTab = observer(() => {
                   currentPage={currentPage}
                   goNextPage={goNextPage}
                   goPrevPage={goPrevPage}
-                />
+                  />
               </div>
             </CTabPanel>
           </div>
@@ -133,7 +132,7 @@ const DeploymentListTab = observer(() => {
             open={open}
             onClose={handleClose}
             reloadFunc={loadDeploymentList}
-          />
+            />
         </PanelBox>
         <Detail />
       </CReflexBox>

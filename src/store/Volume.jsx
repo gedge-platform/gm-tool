@@ -1,13 +1,8 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import {
-  BASIC_AUTH,
-  LOCAL_VOLUME_URL,
-  SERVER_URL2,
-  BEARER_TOKEN,
-} from "../config";
-import { getItem } from "../utils/sessionStorageFn";
-import { setItem } from "../utils/sessionStorageFn";
+import { SERVER_URL2 } from "../config";
+
+import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
@@ -18,15 +13,8 @@ class Volume {
   totalElements = 0;
   pVolumeYamlFile = "";
   pVolumeMetadata = {};
-  pvClaims = [];
-  pvClaim = {};
-  pvClaimList = [];
-  pvClaimYamlFile = "";
-  pvClaimAnnotations = {};
-  pvClaimLables = {};
-  pvClaimEvents = [];
   storageClasses = [];
-  storageClass = {};
+  // storageClass = {};
   scYamlFile = "";
   scParameters = {};
   scLables = {};
@@ -46,19 +34,12 @@ class Volume {
     },
   ];
   label = {};
-
-  currentPage = 1;
-  totalPages = 1;
-  resultList = {};
-
+  content = ""; //초기화를 잘 합시다
   volumeName = "";
+  selectClusters = [];
   accessMode = "";
+  storageClass = "";
   volumeCapacity = "";
-
-  content = "";
-  responseData = "";
-  clusterName = "";
-  project = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -134,12 +115,6 @@ class Volume {
     });
   };
 
-  setPVClaimList = (list) => {
-    runInAction(() => {
-      this.pvClaimList = list;
-    });
-  };
-
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
@@ -187,17 +162,31 @@ class Volume {
       this.cluster = clusterName;
     });
   };
-  setProject = (project) => {
+
+  setProject = (value) => {
     runInAction(() => {
-      this.project = project;
+      this.project = value;
+    });
+  };
+
+  setSelectClusters = (value) => {
+    runInAction(() => {
+      this.selectClusters = value;
+    });
+  };
+
+  setStorageClass = (value) => {
+    runInAction(() => {
+      this.storageClass = value;
     });
   };
 
   clearAll = () => {
     runInAction(() => {
-      this.volumeName = "";
+      // this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
+      this.projectList = "";
     });
   };
 
@@ -255,128 +244,15 @@ class Volume {
       });
   };
 
-  // 클레임 관리
-  loadPVClaims = async () => {
-    await axios
-      .get(`${SERVER_URL2}/pvcs`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pvClaims = data;
-          this.totalElements = data.length;
-        });
-      })
-      .then(() => {
-        this.convertList(this.pvClaimList, this.setPVClaimList);
-      });
-    this.loadPVClaim(
-      this.pvClaims[0].name,
-      this.pvClaims[0].clusterName,
-      this.pvClaims[0].namespace
-    );
-  };
-
-  loadPVClaim = async (name, clusterName, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL2}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
-      )
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pvClaim = data;
-          this.pvClaimYamlFile = "";
-          this.pvClaimAnnotations = {};
-          this.pvClaimLables = {};
-          this.events = data.events;
-          this.label = data.label;
-          Object.entries(this.pvClaim?.label).map(([key, value]) => {
-            this.pvClaimLables[key] = value;
-          });
-
-          Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.pvClaimAnnotations[key] = value;
-              }
-            }
-          });
-        });
-      });
-  };
-
-  loadStorageClasses = async () => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses`)
-      .then(({ data: { data } }) => {
-        this.storageClasses = data;
-        this.totalElements = data.length;
-      })
-      .then(() => {
-        this.convertList(this.storageClasses, this.setStorageClasses);
-      })
-      .then(() => {
-        this.loadStorageClass(
-          this.viewList[0].name, this.viewList[0].cluster
-       );
-      });
-
-    //  this.loadStorageClass(
-    //    this.storageClasses[0].name,
-    //  this.storageClasses[0].cluster
-    // );
-  };
-
-  loadStorageClass = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        console.log(data);
-        this.storageClass = data;
-        this.scYamlFile = "";
-        this.scAnnotations = {};
-        this.scLables = {};
-        this.scParameters = data.parameters;
-        this.label = data.labels;
-
-        Object.entries(this.storageClass?.annotations).forEach(
-          ([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              if (value === "true" || value === "false") {
-                throw e;
-              }
-              this.scYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.scAnnotations[key] = value;
-              }
-            }
-          }
-        );
-
-        Object.entries(this.storageClass?.labels).map(([key, value]) => {
-          this.scLables[key] = value;
-        });
-
-        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-          this.scParameters[key] = value;
-        });
-      });
-  };
-
-  createVolume = (template) => {
-    const body = {
-      template,
-    };
+  createVolume = (template, callback) => {
+    const YAML = require("yamljs");
     axios
       .post(
-        `http://101.79.1.173:8010/gmcapi/v2/pvcs?cluster=${clusterName}`,
-        body
+        `http://192.168.160.235:8011/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+
+        YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("Volume이 생성되었습니다!", callback);
         }

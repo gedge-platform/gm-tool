@@ -11,17 +11,20 @@ import { observer } from "mobx-react";
 import axios from "axios";
 // import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 // import VolumeDetail from "../VolumeDetail";
-import volumeStore from "@/store/Volume";
+import claimStore from "@/store/Claim";
 import ViewYaml from "../Dialog/ViewYaml";
 import ClaimDetail from "../ClaimDetail";
 import {
   converterCapacity,
   drawStatus,
 } from "@/components/datagrids/AggridFormatter";
+import CreateVolume from "../Dialog/CreateVolume";
+import CreateClaim from "../ClaimDialog/CreateClaim";
 
 const ClaimListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openYaml, setOpenYaml] = useState(false);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -44,17 +47,23 @@ const ClaimListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
-  } = volumeStore;
+  } = claimStore;
 
   const [columDefs] = useState([
     {
       headerName: "Name",
       field: "name",
       filter: true,
+
     },
     {
       headerName: "Namespace",
       field: "namespace",
+      filter: true,
+    },
+    {
+      headerName: "Cluster",
+      field: "clusterName",
       filter: true,
     },
     {
@@ -85,11 +94,11 @@ const ClaimListTab = observer(() => {
       field: "storageClass",
       filter: true,
     },
-    {
-      headerName: "Cluster Name",
-      field: "clusterName",
-      filter: true,
-    },
+    // {
+    //   headerName: "Cluster Name",
+    //   field: "clusterName",
+    //   filter: true,
+    // },
     {
       headerName: "Create At",
       field: "createAt",
@@ -127,12 +136,20 @@ const ClaimListTab = observer(() => {
   };
 
   const handleOpenYaml = () => {
+    setOpenYaml(true);
+  };
+
+  const handleCreateOpen = () => {
     setOpen(true);
   };
 
   const handleCloseYaml = () => {
-    setOpen(false);
+    setOpenYaml(false);
   };
+
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   useEffect(() => {
     loadPVClaims();
@@ -143,12 +160,12 @@ const ClaimListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            // reloadFunc={loadPVClaims}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          // reloadFunc={loadPVClaims}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
-            <CCreateButton>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -156,7 +173,7 @@ const ClaimListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={pvClaims}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
@@ -168,7 +185,8 @@ const ClaimListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml open={openYaml} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <CreateClaim open={open} onClose={handleClose} reloadFunc={loadPVClaim} />
         </PanelBox>
         <ClaimDetail
           pvClaim={pvClaim}

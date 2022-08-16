@@ -31,6 +31,7 @@ const PodListTab = observer(() => {
     totalPages,
     goPrevPage,
     goNextPage,
+    viewList,
   } = podStore;
   const [columDefs] = useState([
     {
@@ -120,7 +121,7 @@ const PodListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={podList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

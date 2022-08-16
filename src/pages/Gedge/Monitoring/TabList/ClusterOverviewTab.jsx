@@ -162,8 +162,8 @@ const ClusterOverview = observer(() => {
           stepConverter(5),
           combinationMetrics(
             ClusterMetricTypes.CPU_TOTAL,
-            ClusterMetricTypes.CPU_USAGE,
-            ClusterMetricTypes.CPU_UTIL
+            ClusterMetricTypes.CPU_UTIL,
+            ClusterMetricTypes.CPU_USAGE
           )
         );
         setChartValueTop("CPU");
