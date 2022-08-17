@@ -21,13 +21,44 @@ const ServiceAdminWrap = styled.div`
   }
 `;
 const ServiceAdminDashboard = observer(() => {
-  const { loadServiceAdminDashboard } = serviceAdminDashboardStore;
+  const {
+    loadServiceAdminDashboard,
+    dashboardData,
+    workspaceNameList,
+    loadWorkspaceName,
+    setWorkspaceNameList,
+    setWorkspaceName,
+    workspaceName,
+    projectList,
+    podCpuTop,
+    podMemTop,
+    projectCpuTop,
+    projectMemTop,
+  } = serviceAdminDashboardStore;
+
+  console.log(projectCpuTop);
+
+  const resourceData = Object.values(dashboardData).map(
+    (item) => item.resource
+  );
+
+  const onChange = ({ target: { name, value } }) => {
+    if (name === "workspace") {
+      console.log(name, value);
+      setWorkspaceName(value);
+      loadServiceAdminDashboard(value);
+      return;
+    }
+  };
 
   useEffect(() => {
-    loadServiceAdminDashboard();
+    loadWorkspaceName();
+    loadServiceAdminDashboard(setWorkspaceName);
   }, []);
 
   const currentPageTitle = Title.ServiceAdminDashboard;
+
+  const tmp = Object.entries(projectList);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -35,12 +66,16 @@ const ServiceAdminDashboard = observer(() => {
         <div className="ServiceSummaryWrap">
           <div className="ServiceSummary Workspace">
             <div className="SummaryCountTitle">전체 워크스페이스 개수</div>
-            <div className="SummaryCount">10</div>
+            <div className="SummaryCount">
+              {Object.values(dashboardData).map((item) => item.workspaceCnt)}
+            </div>
           </div>
 
           <div className="ServiceSummary Project">
             <div className="SummaryCountTitle">전체 프로젝트 개수</div>
-            <div className="SummaryCount">8</div>
+            <div className="SummaryCount">
+              {Object.values(dashboardData).map((item) => item.projectCnt)}
+            </div>
           </div>
         </div>
 
@@ -50,9 +85,14 @@ const ServiceAdminDashboard = observer(() => {
               Overview
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
-                  <Select inputProps={{ "aria-label": "Without label" }}>
+                  <select name="workspace" onChange={onChange}>
+                    {workspaceNameList.map((name) => (
+                      <option value={name}>{name}</option>
+                    ))}
+                  </select>
+                  {/* <Select inputProps={{ "aria-label": "Without label" }}>
                     <MenuItem value="selct">SELECT</MenuItem>
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </div>
             </div>
@@ -60,42 +100,73 @@ const ServiceAdminDashboard = observer(() => {
           <div className="ServiceCircleWrap">
             <div className="service_circle_inner">
               <div className="service_circle">
-                <span className="count">15</span>
-                <div className="title">Workspace</div>
-              </div>
-
-              <div className="service_circle">
-                <span className="count">8</span>
+                <span className="count"></span>
                 <div className="title">Project</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">8</span>
+                <span className="count">
+                  {Object.values(resourceData).map(
+                    (item) => item.deployment_count
+                  )}
+                </span>
                 <div className="title">Deployment</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">4</span>
+                <span className="count">
+                  {Object.values(resourceData).map((item) => item.pod_count)}
+                </span>
                 <div className="title">Pod</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">12</span>
+                <span className="count">
+                  {Object.values(resourceData).map(
+                    (item) => item.service_count
+                  )}
+                </span>
                 <div className="title">Service</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">2</span>
+                <span className="count">
+                  {Object.values(resourceData).map(
+                    (item) => item.cronjob_count
+                  )}
+                </span>
                 <div className="title">Cronjob</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">3</span>
+                <span className="count">
+                  {Object.values(resourceData).map((item) => item.job_count)}
+                </span>
                 <div className="title">Job</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">5</span>
+                <span className="count">
+                  {Object.values(resourceData).map(
+                    (item) => item.daemonset_count
+                  )}
+                </span>
+                <div className="title">Daemonset</div>
+              </div>
+
+              <div className="service_circle">
+                <span className="count">
+                  {Object.values(resourceData).map(
+                    (item) => item.Statefulset_count
+                  )}
+                </span>
+                <div className="title">Statefulset</div>
+              </div>
+
+              <div className="service_circle">
+                <span className="count">
+                  {Object.values(resourceData).map((item) => item.volume_count)}
+                </span>
                 <div className="title">Volume</div>
               </div>
             </div>
@@ -103,7 +174,7 @@ const ServiceAdminDashboard = observer(() => {
 
           <div className="ServiceRecentWrap">
             <div className="ServiceRecentInner">
-              <div className="ServiceRecentTitle">Workspace Top 5 / 최신</div>
+              <div className="ServiceRecentTitle">Project Top 5</div>
               <div className="ServiceRecentListWrap">
                 <ul>
                   <li>
@@ -126,7 +197,7 @@ const ServiceAdminDashboard = observer(() => {
             </div>
 
             <div className="ServiceRecentInner">
-              <div className="ServiceRecentTitle">Project Top 5 / 최신</div>
+              <div className="ServiceRecentTitle">Pod Top 5</div>
               <div className="ServiceRecentListWrap">
                 <ul>
                   <li>
