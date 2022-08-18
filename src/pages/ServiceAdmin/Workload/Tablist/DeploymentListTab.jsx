@@ -108,7 +108,7 @@ const DeploymentListTab = observer(() => {
             isSearch={true}
             isSelect={true}
             keywordList={["이름"]}
-            >
+          >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -124,7 +124,7 @@ const DeploymentListTab = observer(() => {
                   currentPage={currentPage}
                   goNextPage={goNextPage}
                   goPrevPage={goPrevPage}
-                  />
+                />
               </div>
             </CTabPanel>
           </div>
@@ -132,7 +132,7 @@ const DeploymentListTab = observer(() => {
             open={open}
             onClose={handleClose}
             reloadFunc={loadDeploymentList}
-            />
+          />
         </PanelBox>
         <Detail />
       </CReflexBox>
