@@ -11,8 +11,15 @@ class ServiceAdminDashboard {
   projectList = [];
   podCpuTop = [];
   podMemTop = [];
-  projectCpuTop = [];
+  projectCpuTop = [
+    {
+      name: "",
+      value: 0,
+    },
+  ];
+
   projectMemTop = [];
+  resource = {};
 
   setWorkspaceName = (value) => {
     runInAction(() => {
@@ -52,24 +59,20 @@ class ServiceAdminDashboard {
       .get(
         `${SERVER_URL4}/serviceDashboard?user=${id}&workspace=${workspaceName}`
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.dashboardData = res.data;
-          this.projectList = Object.values(this.dashboardData).map(
-            (item) => item.projectList
-          );
-          this.podCpuTop = Object.values(this.dashboardData).map(
-            (item) => item.podCpuTop5
-          );
-          this.podMemTop = Object.values(this.dashboardData).map(
-            (item) => item.podMemTop5
-          );
-          this.projectCpuTop = Object.values(this.dashboardData).map(
-            (item) => item.projectCpuTop5
-          );
-          this.projectMemTop = Object.values(this.dashboardData).map(
-            (item) => item.projectMemTop5
-          );
+          this.dashboardData = data;
+          this.projectList = data?.projectList ? data?.projectList : 0;
+          this.projectName = this.projectList
+            ? this.projectList?.map((name) => name.projectName)
+            : 0;
+
+          this.podCpuTop = data?.podCpuTop5 ? data?.podCpuTop5 : 0;
+          this.podMemTop = data?.podMemTop5;
+
+          this.projectCpuTop = data?.projectCpuTop5 ? data?.projectCpuTop5 : 0;
+          this.projectMemTop = data?.projectMemTop5;
+          this.resource = data?.resource;
         });
       });
   };
@@ -96,6 +99,9 @@ class ServiceAdminDashboard {
   //             console.log(res);
   //             this.dashboardData = res.data;
   //           });
+  //         })
+  //         .then(() => {
+  //           this.loadServiceAdminDashboard(this.workspaceName[0]);
   //         });
   //     });
   //   };
