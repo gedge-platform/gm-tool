@@ -42,9 +42,13 @@ const ClusterKind = () => {
                 <SwiperSlide><div className="slide google">GOOGLE</div></SwiperSlide>
                 <SwiperSlide><div className="slide openstack">OPENSTACK</div></SwiperSlide>
                 <SwiperSlide><div className="slide aws">AWS</div></SwiperSlide>
-                <SwiperSlide><div className="slide add"></div></SwiperSlide>
+                <SwiperSlide><div className="slide baremetal">BAREMETAL</div></SwiperSlide>
+
+
+                
+                {/* <SwiperSlide><div className="slide add"></div></SwiperSlide> */}
                 {/* 아래는 추가를 위한 확인용 슬라이드 */}
-                <SwiperSlide><div className="slide"></div></SwiperSlide>
+                {/* <SwiperSlide><div className="slide"></div></SwiperSlide> */}
             
                 
             </Swiper>

@@ -125,25 +125,25 @@ class CronJob {
     );
   };
 
-  loadCronJobDetail = async (name, cluster, project) => {
-    await axios
-      .get(
-        `${SERVER_URL2}/cronjobs/${name}?cluster=${cluster}&project=${project}`
-      )
-      .then(({ data: { data, involvesData } }) => {
-        runInAction(() => {
-          this.cronJobDetail = data;
-          this.label = data.label;
-          this.annotations = data.annotations;
-          this.cronjobInvolvesJobs = involvesData.jobs;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-        });
-      });
-  };
+  // loadCronJobDetail = async (name, cluster, project) => {
+  //   await axios
+  //     .get(
+  //       `${SERVER_URL2}/cronjobs/${name}?cluster=${cluster}&project=${project}`
+  //     )
+  //     .then(({ data: { data, involvesData } }) => {
+  //       runInAction(() => {
+  //         this.cronJobDetail = data;
+  //         this.label = data.label;
+  //         this.annotations = data.annotations;
+  //         this.cronjobInvolvesJobs = involvesData.jobs;
+  //         if (data.events !== null) {
+  //           this.events = data.events;
+  //         } else {
+  //           this.events = null;
+  //         }
+  //       });
+  //     });
+  // };
 }
 
 const cronJobStore = new CronJob();

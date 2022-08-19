@@ -40,10 +40,13 @@ const MapContent = observer(() => {
 
     //지도
     mapRef.current = L.map("map", mapParams);
+    // ${dataEdgeInfo[0].map((item) => item.address)}
+   
 
-    //좌표
-    const marker = dataPoint.map((item) => {
-      item.map((point) => {
+    console.log("**************",dataEdgeInfo[0].map(item => item.address)[0])
+
+    const marker =  dataPoint.map((item) => {
+      item.map((point,i) => {
         L.marker([point.y, point.x], {
           icon: CustomIcon("green"),
         })
@@ -51,33 +54,32 @@ const MapContent = observer(() => {
           .bindPopup(
             `
               <div class="leaflet-popup-title">
-              ${dataEdgeInfo[0].map((item) => item.address)}
+              ${dataEdgeInfo[0].map((item) => item.address)[i]}
              </div>
              <div class="leaflet-popup-table">
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>AZURE</td>
+                   <td>${dataEdgeInfo[0].map((item) => item.clusterName)[i]}</td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>
                    <td>
                      <div class="box run">
-                       <span class="tit">실행</span><span>7</span>
+                       <span class="tit">
+                        Ready 
+                       </span>
+                       <span>7</span>
                      </div>
                    </td>
                  </tr>
                  <tr>
                    <td>
                      <div class="box stop">
-                       <span class="tit">중지</span><span>2</span>
-                     </div>
-                   </td>
-                 </tr>
-                 <tr>
-                   <td>
-                     <div class="box pause">
-                       <span class="tit">일시중지</span><span>1</span>
+                       <span class="tit">
+                      Not Ready 
+                     </span>
+                     <span>2</span>
                      </div>
                    </td>
                  </tr>
@@ -87,6 +89,52 @@ const MapContent = observer(() => {
           );
       });
     });
+    //좌표
+    // const marker =  dataPoint.map((item) => {
+    //   item.map((point) => {
+    //     L.marker([point.y, point.x], {
+    //       icon: CustomIcon("green"),
+    //     })
+    //       .addTo(mapRef.current)
+    //       .bindPopup(
+    //         `
+    //           <div class="leaflet-popup-title">
+    //           ${dataEdgeInfo[0].itme.address}
+    //          </div>
+    //          <div class="leaflet-popup-table">
+    //            <table>
+    //              <tr>
+    //                <th>Cluster</th>
+    //                <td>AZURE</td>
+    //              </tr>
+    //              <tr>
+    //                <th rowspan="3">Status</th>
+    //                <td>
+    //                  <div class="box run">
+    //                    <span class="tit">실행</span><span>7</span>
+    //                  </div>
+    //                </td>
+    //              </tr>
+    //              <tr>
+    //                <td>
+    //                  <div class="box stop">
+    //                    <span class="tit">중지</span><span>2</span>
+    //                  </div>
+    //                </td>
+    //              </tr>
+    //              <tr>
+    //                <td>
+    //                  <div class="box pause">
+    //                    <span class="tit">일시중지</span><span>1</span>
+    //                  </div>
+    //                </td>
+    //              </tr>
+    //            </table>
+    //          </div>
+    //          `
+    //       );
+    //   });
+    // });
   }, []);
 
   // useEffect(() => {
