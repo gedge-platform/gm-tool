@@ -21,11 +21,11 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { 
-    podList, 
-    podDetail, 
-    totalElements, 
-    loadPodList, 
+  const {
+    podList,
+    podDetail,
+    totalElements,
+    loadPodList,
     loadPodDetail,
     currentPage,
     totalPages,

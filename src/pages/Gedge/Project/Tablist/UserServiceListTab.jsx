@@ -41,6 +41,11 @@ const UserServiceListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "프로젝트 타입",
+      field: "projectType",
+      filter: true,
+    },
+    {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
@@ -112,7 +117,7 @@ const UserServiceListTab = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

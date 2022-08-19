@@ -4,6 +4,10 @@ import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
 import { FormControl, MenuItem, Select } from "@mui/material";
+import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
+import { observer } from "mobx-react";
+import { ResponsiveLine } from "@nivo/line";
+import ApexCharts from "apexcharts";
 
 const ServiceAdminWrap = styled.div`
   padding: 0 10px;
@@ -18,8 +22,447 @@ const ServiceAdminWrap = styled.div`
     }
   }
 `;
-const ServiceAdminDashboard = () => {
+
+const ButtonStyle = styled.button`
+  width: 100%;
+  height: 16%;
+  font-size: 16px;
+  font-weight: bold;
+  position: relative;
+  border: #6765bf;
+  background-color: #6765bf;
+  color: #ffff;
+  border-radius: 5px;
+`;
+
+const ServiceAdminDashboard = observer(() => {
+  useEffect(() => {
+    loadWorkspaceName();
+    loadServiceAdminDashboard(setWorkspaceName);
+  }, []);
+
+  const {
+    loadServiceAdminDashboard,
+    dashboardData,
+    workspaceNameList,
+    loadWorkspaceName,
+    setWorkspaceNameList,
+    setWorkspaceName,
+    workspaceName,
+    projectList,
+    podCpuTop,
+    podMemTop,
+    projectCpuTop,
+    projectMemTop,
+    resource,
+  } = serviceAdminDashboardStore;
+
   const currentPageTitle = Title.ServiceAdminDashboard;
+
+  const onChange = ({ target: { name, value } }) => {
+    if (name === "workspace") {
+      setWorkspaceName(value);
+      loadServiceAdminDashboard(value);
+      return;
+    }
+    if (name === "project") {
+      console.log(name, value);
+    }
+  };
+
+  const [toggleProject, setToggleProject] = useState(false);
+  const clickToggleProject = (e) => {
+    setToggleProject((current) => !current);
+  };
+
+  const [togglePod, setTogglePod] = useState(false);
+  const clickTogglePod = (e) => {
+    setTogglePod((current) => !current);
+  };
+
+  const podCpuTop5 = () => {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(
+        <li>
+          <span>{i + 1}</span>
+          {podCpuTop[i] ? podCpuTop[i]["name"] : "-"}
+        </li>
+      );
+    }
+    return arr;
+  };
+
+  const projectMemTop5 = () => {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(
+        <li>
+          <span>{i + 1}</span>
+          {projectMemTop[i] ? projectMemTop[i]["name"] : "-"}
+        </li>
+      );
+    }
+    return arr;
+  };
+
+  const projectCpuTop5 = () => {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(
+        <li>
+          <span>{i + 1}</span>
+          {projectCpuTop[i] ? projectCpuTop[i]["name"] : "-"}
+        </li>
+      );
+    }
+    return arr;
+  };
+
+  const podMemTop5 = () => {
+    let arr = [];
+    for (let i = 0; i < 5; i++) {
+      arr.push(
+        <li>
+          <span>{i + 1}</span>
+          {podMemTop[i] ? podMemTop[i]["name"] : "-"}
+        </li>
+      );
+    }
+    return arr;
+  };
+
+  const rowData = [
+    {
+      id: "japan",
+      color: "hsl(72, 70%, 50%)",
+      data: [
+        {
+          x: "plane",
+          y: 65,
+        },
+        {
+          x: "helicopter",
+          y: 86,
+        },
+        {
+          x: "boat",
+          y: 109,
+        },
+        {
+          x: "train",
+          y: 123,
+        },
+        {
+          x: "subway",
+          y: 158,
+        },
+        {
+          x: "bus",
+          y: 168,
+        },
+        {
+          x: "car",
+          y: 163,
+        },
+        {
+          x: "moto",
+          y: 37,
+        },
+        {
+          x: "bicycle",
+          y: 44,
+        },
+        {
+          x: "horse",
+          y: 218,
+        },
+        {
+          x: "skateboard",
+          y: 260,
+        },
+        {
+          x: "others",
+          y: 252,
+        },
+      ],
+    },
+    {
+      id: "france",
+      color: "hsl(122, 70%, 50%)",
+      data: [
+        {
+          x: "plane",
+          y: 5,
+        },
+        {
+          x: "helicopter",
+          y: 33,
+        },
+        {
+          x: "boat",
+          y: 140,
+        },
+        {
+          x: "train",
+          y: 154,
+        },
+        {
+          x: "subway",
+          y: 296,
+        },
+        {
+          x: "bus",
+          y: 13,
+        },
+        {
+          x: "car",
+          y: 112,
+        },
+        {
+          x: "moto",
+          y: 109,
+        },
+        {
+          x: "bicycle",
+          y: 10,
+        },
+        {
+          x: "horse",
+          y: 78,
+        },
+        {
+          x: "skateboard",
+          y: 196,
+        },
+        {
+          x: "others",
+          y: 68,
+        },
+      ],
+    },
+    {
+      id: "us",
+      color: "hsl(13, 70%, 50%)",
+      data: [
+        {
+          x: "plane",
+          y: 27,
+        },
+        {
+          x: "helicopter",
+          y: 27,
+        },
+        {
+          x: "boat",
+          y: 75,
+        },
+        {
+          x: "train",
+          y: 90,
+        },
+        {
+          x: "subway",
+          y: 86,
+        },
+        {
+          x: "bus",
+          y: 38,
+        },
+        {
+          x: "car",
+          y: 100,
+        },
+        {
+          x: "moto",
+          y: 205,
+        },
+        {
+          x: "bicycle",
+          y: 17,
+        },
+        {
+          x: "horse",
+          y: 14,
+        },
+        {
+          x: "skateboard",
+          y: 143,
+        },
+        {
+          x: "others",
+          y: 75,
+        },
+      ],
+    },
+    {
+      id: "germany",
+      color: "hsl(17, 70%, 50%)",
+      data: [
+        {
+          x: "plane",
+          y: 59,
+        },
+        {
+          x: "helicopter",
+          y: 231,
+        },
+        {
+          x: "boat",
+          y: 29,
+        },
+        {
+          x: "train",
+          y: 244,
+        },
+        {
+          x: "subway",
+          y: 245,
+        },
+        {
+          x: "bus",
+          y: 36,
+        },
+        {
+          x: "car",
+          y: 253,
+        },
+        {
+          x: "moto",
+          y: 294,
+        },
+        {
+          x: "bicycle",
+          y: 257,
+        },
+        {
+          x: "horse",
+          y: 239,
+        },
+        {
+          x: "skateboard",
+          y: 3,
+        },
+        {
+          x: "others",
+          y: 82,
+        },
+      ],
+    },
+    {
+      id: "norway",
+      color: "hsl(160, 70%, 50%)",
+      data: [
+        {
+          x: "plane",
+          y: 156,
+        },
+        {
+          x: "helicopter",
+          y: 270,
+        },
+        {
+          x: "boat",
+          y: 184,
+        },
+        {
+          x: "train",
+          y: 213,
+        },
+        {
+          x: "subway",
+          y: 225,
+        },
+        {
+          x: "bus",
+          y: 46,
+        },
+        {
+          x: "car",
+          y: 147,
+        },
+        {
+          x: "moto",
+          y: 261,
+        },
+        {
+          x: "bicycle",
+          y: 96,
+        },
+        {
+          x: "horse",
+          y: 178,
+        },
+        {
+          x: "skateboard",
+          y: 178,
+        },
+        {
+          x: "others",
+          y: 230,
+        },
+      ],
+    },
+  ];
+
+  const MyResponsiveLine = () => (
+    <ResponsiveLine
+      data={rowData}
+      margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+      xScale={{ type: "point" }}
+      yScale={{
+        type: "linear",
+        min: "auto",
+        max: "auto",
+        stacked: true,
+        reverse: false,
+      }}
+      // yFormat=" >-.2f"
+      // axisTop={null}
+      // axisRight={null}
+      // axisBottom={{
+      //   orient: "bottom",
+      //   tickSize: 5,
+      //   tickPadding: 5,
+      //   tickRotation: 0,
+      //   legend: "transportation",
+      //   legendOffset: 36,
+      //   legendPosition: "middle",
+      // }}
+      // axisLeft={{
+      //   orient: "left",
+      //   tickSize: 5,
+      //   tickPadding: 5,
+      //   tickRotation: 0,
+      //   legend: "count",
+      //   legendOffset: -40,
+      //   legendPosition: "middle",
+      // }}
+      pointSize={8}
+      pointColor={{ theme: "background" }}
+      pointBorderWidth={2}
+      pointBorderColor={{ from: "serieColor" }}
+      pointLabelYOffset={-12}
+      useMesh={true}
+      // legends={[
+      //   {
+      //     anchor: "bottom-right",
+      //     direction: "column",
+      //     justify: false,
+      //     translateX: 100,
+      //     translateY: 0,
+      //     itemsSpacing: 0,
+      //     itemDirection: "left-to-right",
+      //     itemWidth: 80,
+      //     itemHeight: 20,
+      //     itemOpacity: 0.75,
+      //     symbolSize: 12,
+      //     symbolShape: "circle",
+      //     symbolBorderColor: "rgba(0, 0, 0, .5)",
+      //   },
+      // ]}
+    />
+  );
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -27,12 +470,12 @@ const ServiceAdminDashboard = () => {
         <div className="ServiceSummaryWrap">
           <div className="ServiceSummary Workspace">
             <div className="SummaryCountTitle">전체 워크스페이스 개수</div>
-            <div className="SummaryCount">10</div>
+            <div className="SummaryCount">{dashboardData.workspaceCnt}</div>
           </div>
 
           <div className="ServiceSummary Project">
             <div className="SummaryCountTitle">전체 프로젝트 개수</div>
-            <div className="SummaryCount">8</div>
+            <div className="SummaryCount">{dashboardData.projectCnt}</div>
           </div>
         </div>
 
@@ -42,9 +485,14 @@ const ServiceAdminDashboard = () => {
               Overview
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
-                  <Select inputProps={{ "aria-label": "Without label" }}>
+                  <select name="workspace" onChange={onChange}>
+                    {workspaceNameList.map((name) => (
+                      <option value={name}>{name}</option>
+                    ))}
+                  </select>
+                  {/* <Select inputProps={{ "aria-label": "Without label" }}>
                     <MenuItem value="selct">SELECT</MenuItem>
-                  </Select>
+                  </Select> */}
                 </FormControl>
               </div>
             </div>
@@ -52,94 +500,150 @@ const ServiceAdminDashboard = () => {
           <div className="ServiceCircleWrap">
             <div className="service_circle_inner">
               <div className="service_circle">
-                <span className="count">15</span>
-                <div className="title">Workspace</div>
-              </div>
-
-              <div className="service_circle">
-                <span className="count">8</span>
+                <span className="count">{projectList?.length}</span>
                 <div className="title">Project</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">8</span>
+                <span className="count">{Object.values(resource)[1]}</span>
                 <div className="title">Deployment</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">4</span>
+                <span className="count">{Object.values(resource)[2]}</span>
+                <div className="title">Daemonset</div>
+              </div>
+
+              <div className="service_circle">
+                <span className="count">{Object.values(resource)[3]}</span>
+                <div className="title">Statefulset</div>
+              </div>
+
+              <div className="service_circle">
+                <span className="count">{Object.values(resource)[4]}</span>
                 <div className="title">Pod</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">12</span>
+                <span className="count">{Object.values(resource)[5]}</span>
                 <div className="title">Service</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">2</span>
+                <span className="count">{Object.values(resource)[6]}</span>
                 <div className="title">Cronjob</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">3</span>
+                <span className="count">{Object.values(resource)[7]}</span>
                 <div className="title">Job</div>
               </div>
 
               <div className="service_circle">
-                <span className="count">5</span>
+                <span className="count">{Object.values(resource)[8]}</span>
                 <div className="title">Volume</div>
               </div>
             </div>
           </div>
 
-          <div className="ServiceRecentWrap">
-            <div className="ServiceRecentInner">
-              <div className="ServiceRecentTitle">Workspace Top 5 / 최신</div>
-              <div className="ServiceRecentListWrap">
-                <ul>
-                  <li>
-                    <span>1</span>kube-node-lease
-                  </li>
-                  <li>
-                    <span>2</span>kube-system
-                  </li>
-                  <li>
-                    <span>3</span>default
-                  </li>
-                  <li>
-                    <span>4</span>kubesphere-system
-                  </li>
-                  <li>
-                    <span>5</span>kubesphere-monitoring-federated
-                  </li>
-                </ul>
-              </div>
-            </div>
+          <>
+            {toggleProject === false && togglePod === false ? (
+              <>
+                <div className="ServiceRecentWrap">
+                  <div className="ServiceRecentInner">
+                    {/* <div className="ServiceRecentTitle"> */}
+                    <ButtonStyle
+                      variant="contained"
+                      onClick={clickToggleProject}
+                      toggle={toggleProject}
+                    >
+                      Project Top 5
+                    </ButtonStyle>
+                    {/* </div> */}
+                    <div className="ServiceRecentListWrap">
+                      <ul>{projectCpuTop5()}</ul>
+                    </div>
+                  </div>
 
-            <div className="ServiceRecentInner">
-              <div className="ServiceRecentTitle">Project Top 5 / 최신</div>
-              <div className="ServiceRecentListWrap">
-                <ul>
-                  <li>
-                    <span>1</span>kube-node-lease
-                  </li>
-                  <li>
-                    <span>2</span>kube-system
-                  </li>
-                  <li>
-                    <span>3</span>default
-                  </li>
-                  <li>
-                    <span>4</span>kubesphere-system
-                  </li>
-                  <li>
-                    <span>5</span>kubesphere-monitoring-federated
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+                  <div className="ServiceRecentInner">
+                    <ButtonStyle
+                      variant="contained"
+                      onClick={clickTogglePod}
+                      toggle={togglePod}
+                    >
+                      Pod Top 5
+                    </ButtonStyle>
+                    <div className="ServiceRecentListWrap">
+                      <ul>{podCpuTop5()}</ul>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="ServiceRecentWrap">
+                  <div className="ServiceRecentInner">
+                    <ButtonStyle
+                      variant="contained"
+                      onClick={clickToggleProject}
+                      toggle={toggleProject}
+                    >
+                      Project Memory Top5
+                    </ButtonStyle>
+                    <div className="ServiceRecentListWrap">
+                      <ul>{projectMemTop5()}</ul>
+                    </div>
+                  </div>
+
+                  <div className="ServiceRecentInner">
+                    <ButtonStyle
+                      variant="contained"
+                      onClick={clickTogglePod}
+                      toggle={togglePod}
+                    >
+                      Pod Memory Top 5
+                    </ButtonStyle>
+                    <div className="ServiceRecentListWrap">
+                      <ul>{podMemTop5()}</ul>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+          {/* // <>
+          //   {togglePod === fasle ? (
+          //     <div className="ServiceRecentWrap">
+          //       <div className="ServiceRecentInner">
+          //         <ButtonStyle
+          //           variant="contained"
+          //           onClick={clickTogglePod}
+          //           toggle={togglePod}
+          //         >
+          //           Pod Top 5
+          //         </ButtonStyle>
+          //         <div className="ServiceRecentListWrap">
+          //           <ul>{podCpuTop5()}</ul>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   ) : (
+          //     <div className="ServiceRecentWrap">
+          //       <div className="ServiceRecentInner">
+          //         <ButtonStyle
+          //           variant="contained"
+          //           onClick={clickTogglePod}
+          //           toggle={togglePod}
+          //         >
+          //           Pod Memory Top 5
+          //         </ButtonStyle>
+          //         <div className="ServiceRecentListWrap">
+          //           <ul>{podCpuTop5()}</ul>
+          //         </div>
+          //       </div>
+          //     </div>
+          //   )}
+          // </> */}
         </PanelBox>
 
         <PanelBox className="panel_summary">
@@ -148,16 +652,18 @@ const ServiceAdminDashboard = () => {
               Monitoring
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
-                  <Select inputProps={{ "aria-label": "Without label" }}>
-                    <MenuItem value="selct">SELECT</MenuItem>
-                  </Select>
+                  <select name="project" onChange={onChange}>
+                    {Object.values(projectList).map((val) => (
+                      <option value={val.projectName}>{val.projectName}</option>
+                    ))}
+                  </select>
                 </FormControl>
               </div>
             </div>
             <div className="monitoringInner">
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Workspace 총 개수</div>
-                <div className="monitoringBoxCont">그래프 들어갈 자리</div>
+                <div className="monitoringBoxCont">{MyResponsiveLine()}</div>
               </div>
 
               <div className="monitoringBox">
@@ -175,5 +681,5 @@ const ServiceAdminDashboard = () => {
       </ServiceAdminWrap>
     </Layout>
   );
-};
+});
 export default ServiceAdminDashboard;

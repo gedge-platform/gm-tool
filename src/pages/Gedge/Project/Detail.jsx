@@ -110,7 +110,9 @@ const Detail = observer(() => {
     changeCluster,
     workspace,
     events,
+    resourceUsage,
   } = projectStore;
+  console.log(resourceUsage);
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
@@ -154,12 +156,20 @@ const Detail = observer(() => {
         <table className="tb_data">
           <tbody className="tb_workload_detail_th">
             <tr>
-              {cluster?.resourceUsage ? (
+              {cluster.resourceUsage ? (
                 <>
                   <th>CPU</th>
-                  <td>{cluster?.resourceUsage?.cpu_usage}</td>
+                  <td>
+                    {cluster.resourceUsage?.namespace_cpu
+                      ? cluster.resourceUsage?.namespace_cpu
+                      : "-"}
+                  </td>
                   <th>MEMORY</th>
-                  <td>{cluster?.resourceUsage?.memory_usage}</td>
+                  <td>
+                    {cluster.resourceUsage?.namespace_memory
+                      ? cluster.resourceUsage?.namespace_memory
+                      : "-"}
+                  </td>
                 </>
               ) : (
                 <></>
@@ -182,27 +192,59 @@ const Detail = observer(() => {
               <>
                 <tr>
                   <th>Deployment</th>
-                  <td>{resources?.resource?.deployment_count}</td>
+                  <td>
+                    {resources?.resource?.deployment_count
+                      ? resources?.resource?.deployment_count
+                      : "-"}
+                  </td>
                   <th>Pod</th>
-                  <td>{resources?.resource?.pod_count}</td>
+                  <td>
+                    {resources?.resource?.pod_count
+                      ? resources?.resource?.pod_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Service</th>
-                  <td>{resources?.resource?.service_count}</td>
+                  <td>
+                    {resources?.resource?.service_count
+                      ? resources?.resource?.service_count
+                      : "-"}
+                  </td>
                   <th>CronJob</th>
-                  <td>{resources?.resource?.cronjob_count}</td>
+                  <td>
+                    {resources?.resource?.cronjob_count
+                      ? resources?.resource?.cronjob_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Job</th>
-                  <td>{resources?.resource?.job_count}</td>
+                  <td>
+                    {resources?.resource?.job_count
+                      ? resources?.resource?.job_count
+                      : "-"}
+                  </td>
                   <th>Volume</th>
-                  <td>{resources?.resource?.volume_count}</td>
+                  <td>
+                    {resources?.resource?.volume_count
+                      ? resources?.resource?.volume_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Statefulset</th>
-                  <td>{resources?.resource?.Statefulset_count}</td>
+                  <td>
+                    {resources?.resource?.Statefulset_count
+                      ? resources?.resource?.Statefulset_count
+                      : "-"}
+                  </td>
                   <th>Daemonset</th>
-                  <td>{resources?.resource?.daemonset_count}</td>
+                  <td>
+                    {resources?.resource?.daemonset_count
+                      ? resources?.resource?.daemonset_count
+                      : "-"}
+                  </td>
                 </tr>
               </>
             ) : (
@@ -246,15 +288,15 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th className="tb_workload_detail_th">Workspace Name</th>
-                <td>{Object.values(workspace)[0]}</td>
-                <th>Workspace Description</th>
                 <td>{Object.values(workspace)[1]}</td>
+                <th>Workspace Description</th>
+                <td>{Object.values(workspace)[2]}</td>
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td>
+                <td style={{ whiteSpace: "pre-wrap" }}>
                   {selectClusterInfo?.map(
-                    (cluster) => cluster.clusterName + " "
+                    (cluster) => cluster.clusterName + "\n"
                   )}
                 </td>
                 <th>Creator</th>
@@ -308,168 +350,8 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            {eventsTable()}
-            <tbody>{eventsMessageTable}</tbody>
-          </table>
-        </div> */}
       </CTabPanel>
     </PanelBox>
   );
 });
 export default Detail;
-
-/*
-    <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="노드 정보" />
-        <CTab label="채널 정보" />
-      </CTabs>
-      <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>네트워크 이름</th>
-                  <td>OOO 조회</td>
-                  <th>조직ID</th>
-                  <td>JSON</td>
-                </tr>
-                <tr>
-                  <th>Import 여부</th>
-                  <td colSpan={1}>N</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>Node Type</th>
-                  <th>Node 이름</th>
-                  <th>상태</th>
-                </tr>
-                <tr>
-                  <td>CA</td>
-                  <td>block-ca</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer(Endorser)</td>
-                  <td>block-peer1(Committer)</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer2</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer3</td>
-                  <td>운영 중</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>조직 이름</th>
-                  <th>채널 이름</th>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-1</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-2</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-3</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>Node Type</th>
-                    <th>Node 이름</th>
-                    <th>상태</th>
-                  </tr>
-                  <tr>
-                    <td>CA</td>
-                    <td>block-ca</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer(Endorser)</td>
-                    <td>block-peer1(Committer)</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer2</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer3</td>
-                    <td>운영 중</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>조직 이름</th>
-                    <th>채널 이름</th>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-1</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-2</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-3</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-4</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-      </div>
-    </PanelBox>
-*/

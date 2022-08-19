@@ -7,6 +7,7 @@ export { default as Dashboard } from "./Dashboard/Dashboard";
 // Gedege PA
 export { default as Cluster } from "./Gedge/Cluster/Cluster";
 export { default as Project } from "./Gedge/Project/Project";
+export { default as PlatformProject } from "./Gedge/Project/PlatformProject";
 export { default as ComponentManage } from "./Gedge/ComponentManage/ComponentManage";
 export { default as Monitoring } from "./Gedge/Monitoring/Monitoring";
 export { default as WorkSpace } from "./Gedge/WorkSpace/WorkSpace";
@@ -49,7 +50,8 @@ const Title = {
   Certification: "인증",
   Cluster: "클러스터 관리",
   WorkSpace: "워크스페이스",
-  Project: "프로젝트 관리",
+  UserProject: "사용자 생성",
+  PlatformProject: "플랫폼 관리",
   Component: "컴포넌트",
   Volume: "볼륨",
   User: "사용자",

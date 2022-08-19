@@ -310,14 +310,14 @@ export const SideMenu = () => {
                   onNodeFocus={handleClick}
                 >
                   <li>
-                    <NavLink exact to="/createUser" activeClassName="active">
+                    <NavLink exact to="/userProject" activeClassName="active">
                       {Title.CreateUser}
                     </NavLink>
                   </li>
                   <li>
                     <NavLink
                       exact
-                      to="/platformControl"
+                      to="/platformProject"
                       activeClassName="active"
                     >
                       {Title.PlatformControl}

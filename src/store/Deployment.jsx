@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Deployment {
   currentPage = 1;
@@ -236,12 +237,14 @@ class Deployment {
       });
   };
 
-  loadDeploymentList = async (type) => {
+  loadDeploymentList = async () => {
     await axios
       .get(`${SERVER_URL2}/deployments`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter((item) => item.projetType === type);
+          const { user } = getItem("user");
+          // const list = res.data.data.filter((item) => item.projetType === type);
+          const list = res.data.data.filter((item) => item.user !== user);
           this.deploymentList = list;
           this.deploymentDetail = list[0];
           this.totalElements = list.length;

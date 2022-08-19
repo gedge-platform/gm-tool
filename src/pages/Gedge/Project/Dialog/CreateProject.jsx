@@ -74,6 +74,7 @@ const CreateProject = observer((props) => {
     selectClusterInfo,
     setSelectClusterInfo,
     loadWorkspaceDetail,
+    viewList,
   } = workspacesStore;
   const { createProject } = projectStore;
 
@@ -258,7 +259,7 @@ const CreateProject = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={" "}>Select Workspace</option>
-                  {workSpaceList.map((workspace) => (
+                  {viewList.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}
                     </option>
