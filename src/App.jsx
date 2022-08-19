@@ -70,7 +70,7 @@ export const App = () => {
           <AuthRoute path="/user" component={User} />
           <AuthRoute path="/volumes" component={Volume} />
           <AuthRoute path="/configuration" component={Configuration} />
-          <AuthRoute path="/certification" component={NotFound} />
+          <AuthRoute path="/certification" component={Certification} />
           <AuthRoute path="/platformUser" component={PlatformUser} />
           <AuthRoute path="/edgeZone" component={EdgeClusterListTab} />
           <AuthRoute path="/cloudZone" component={CoreClusterListTab} />

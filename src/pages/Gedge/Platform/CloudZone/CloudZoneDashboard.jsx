@@ -12,6 +12,7 @@ import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
 import CloudZoneSummary from "./CloudZoneSummary";
 import CloudZoneSlider from "./CloudZoneSlider";
 import styled from "styled-components";
+import NodeList from "../../../Dashboard/DashboardCont/NodeList";
 
 const CloudZoneWrap = styled.div`
   .panel_summary {
@@ -62,7 +63,8 @@ const CloudZoneDashboard = observer(() => {
         </PanelBox>
         <div className="panel_summary">
           <CReflexBox>
-            <Detail cluster={clusterDetail} />
+            {/* <Detail cluster={clusterDetail} /> */}
+            <NodeList />
           </CReflexBox>
         </div>
       </CloudZoneWrap>

@@ -161,7 +161,7 @@ const TotalDashboard = () => {
             </div>
           </div>
           <div className="cluster_nodes">
-            <NodeList />
+            {/* <NodeList /> */}
           </div>
         </PanelBox>
       </DashboardWrap>

@@ -1,31 +1,38 @@
 import React from "react";
+import { observer } from "mobx-react";
+import dashboardStore from "../../../../store/Dashboard";
 
-const EdgeZoneSummary = () => {
-    return (
-        <div className="edgezone_summary_circleWrap">
-            <div className="edgezone_summary_circle">
-                <span className="count">15</span>
-                <div className="title">Workspace</div>
-            </div>
 
-            <div className="edgezone_summary_circle">
-                <span className="count">8</span>
-                <div className="title">Project</div>
-            </div>
+const EdgeZoneSummary = observer(() => {
+    
+const {
+  
+} = dashboardStore;
 
-            <div className="edgezone_summary_circle">
-                <span className="count">8</span>
-                <div className="title">Deployment</div>
-            </div>
+  return (
+    <div className="edgezone_summary_circleWrap">
+      <div className="edgezone_summary_circle">
+        <span className="count">15</span>
+        <div className="title">Workspace</div>
+      </div>
+      <div className="edgezone_summary_circle">
+        <span className="count">8</span>
+        <div className="title">Project</div>
+      </div>
 
-            <div className="edgezone_summary_circle">
-                <span className="count">4</span>
-                <div className="title">Pod</div>
-            </div>
+      <div className="edgezone_summary_circle">
+        <span className="count">8</span>
+        <div className="title">Deployment</div>
+      </div>
 
-            <div className="edgezone_summary_circle">
-                <span className="count">12</span>
-                <div className="title">Service</div>
+      <div className="edgezone_summary_circle">
+        <span className="count">4</span>
+        <div className="title">Pod</div>
+      </div>
+
+      <div className="edgezone_summary_circle">
+        <span className="count">12</span>
+        <div className="title">Service</div>
             </div>
 
             <div className="edgezone_summary_circle">
@@ -44,5 +51,5 @@ const EdgeZoneSummary = () => {
             </div>
         </div>
     );
-};
+});
 export default EdgeZoneSummary;

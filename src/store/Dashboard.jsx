@@ -1,5 +1,6 @@
 import axios from "axios";
 import {  makeAutoObservable, runInAction, toJS } from "mobx";
+import { createContext } from "react";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Dashboard {
@@ -44,7 +45,7 @@ class Dashboard {
       _id: "",
       address: "",
       clusterEndpoint: "",
-      clusterName: "",
+      // clusterName: "",
       clusterType: "",
       status: "",
       token: "",
@@ -67,9 +68,57 @@ class Dashboard {
   Stop = 0;
   
   VMList = [];
-  // vmStatusList = [];
-  // vmCntList = [];
+  
+  clusterNameList = [];
+  clusterName = "";
+  cloudDashboardDetail = [];
+  clusterInfo = [
+    {
+      address: "",
+    },
+  ];
+  nodeInfo = [
+    {
+      nodeName: "",
+      type: "",
+      nodeIP: "",
+      kubeVersion: "",
+      os: "",
+      created_at: "",
+      constainerRuntimeVersion: "",
+    },
+  ];
 
+  master = "";
+  worker = "";
+
+  cpuUsage = "";
+  cpuUtil = "";
+  cpuTotal = "";
+
+  memoryUsage = "";
+  memoryUtil = "";
+  memoryTotal = "";
+
+  diskUsage = "";
+  diskUtil = "";
+  diskTotal = "";
+
+  resourceCnt = [
+    {
+      cronjob_count: 0,
+      daemonset_count: 0,
+      deployment_count: 0,
+      job_count: 0,
+      namespace_count: 0,
+      pod_count: 0,
+      project_count: 0,
+      pv_count: 0,
+      service_count: 0,
+      statefulset_count: 0,
+      workspace_count: 0,
+    },
+  ];
 
   constructor() {
     makeAutoObservable(this);
@@ -154,7 +203,8 @@ class Dashboard {
           this.ProviderName = this.connectionconfig.map(
             (provider) => provider.ProviderName
           );
-        });
+        })
+        console.log(this.ConfigNameList);
       })
       .then(() => {
         // console.log(this.ConfigName);
@@ -329,7 +379,56 @@ class Dashboard {
     //   // }
     // })
   // };
+
+  loadClusterList = async (type = "") => {
+    await axios
+      .get(`${SERVER_URL2}/clusters`)
+      .then((res) => {
+        runInAction(() => {
+          const list =
+            type === ""
+              ? res.data
+              : res.data.filter((item) => item.clusterType === type);
+          this.clusterList = list;
+          this.clusterNameList = list.map((item) => item.clusterName);
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.loadClusterDetail(this.clusterNameList[0]);
+      });
+  };
+
+loadClusterDetail = async (clusterName) => {
+  await axios.get(`http://192.168.160.230:8012/gmcapi/v2/cloudDashboard?cluster=${clusterName}`)
+  .then((res) => {
+    runInAction(() => {
+      this.clusterName = clusterName;
+      this.cloudDashboardDetail = res.data.data;
+      this.clusterInfo = res.data.data.ClusterInfo;
+      this.address = res.data.data.ClusterInfo.address;
+      this.nodeInfo = res.data.data.nodeInfo;
+      this.type = this.nodeInfo.map((val) => val.type);
+      this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
+      this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
+      this.cpuUsage = res.data.data.cpuUsage;
+      this.cpuUtil = res.data.data.cpuUtil;
+      this.cpuTotal = res.data.data.cpuTotal;
+      this.memoryUsage = res.data.data.memoryUsage;
+      this.memoryUtil = res.data.data.memoryUtil;
+      this.memoryTotal = res.data.data.memoryTotal;
+      this.diskUsage = res.data.data.diskUsage;
+      this.diskUtil = res.data.data.diskUtil;
+      this.diskTotal = res.data.data.diskTotal;
+      this.resourceCnt = res.data.data.resourceCnt;
+    });
+  });
+  console.log(this.nodeInfo);
 }
 
+
+
+
+}
 const dashboardStore = new Dashboard();
 export default dashboardStore;

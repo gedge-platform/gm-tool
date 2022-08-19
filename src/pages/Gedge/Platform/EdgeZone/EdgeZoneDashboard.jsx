@@ -11,6 +11,8 @@ import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
 import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
 import EdgeZoneSummary from "./EdgeZoneSummary";
 import styled from "styled-components";
+import NodeList from "../../../Dashboard/DashboardCont/NodeList";
+import dashboardStore from "../../../../store/Dashboard";
 
 const EdgeZoneWrap = styled.div`
   .panel_summary {
@@ -34,6 +36,8 @@ const EdgeZoneDashboard = observer(() => {
   };
 
   const { clusterDetail, loadClusterList, loadCluster } = clusterStore;
+
+  const {nodeInfo} =dashboardStore;
 
   const history = useHistory();
 
@@ -60,13 +64,14 @@ const EdgeZoneDashboard = observer(() => {
           </div>
 
           <div className="SummaryWrap">
-            <EdgeZoneSummary />
+            <EdgeZoneSummary/>
           </div>
           {/* </PanelBox> */}
 
           <div className="panel_summary">
             <CReflexBox>
-              <Detail cluster={clusterDetail} />
+              {/* <Detail cluster={nodeInfo} /> */}
+              <NodeList />
             </CReflexBox>
           </div>
         </PanelBox>
