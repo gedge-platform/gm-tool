@@ -307,7 +307,6 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
           <br />
-
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
