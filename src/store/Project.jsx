@@ -1,12 +1,13 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
 class Project {
   projectList = [];
   projectDetail = {};
+  resourceUsage = {};
   labels = {};
   annotations = {};
   events = [
@@ -127,7 +128,7 @@ class Project {
 
   loadProjectList = async (type = "user") => {
     await axios
-      .get(`${SERVER_URL2}/userProjects`)
+      .get(`${SERVER_URL4}/userProjects`)
       .then((res) => {
         runInAction(() => {
           const list = res.data.filter((item) => item.projectType === type);
@@ -145,26 +146,29 @@ class Project {
 
   loadProjectDetail = async (projectName) => {
     await axios
-      .get(`${SERVER_URL2}/userProjects/${projectName}`)
-      .then((res) => {
+      .get(`${SERVER_URL4}/userProjects/${projectName}`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.projectDetail = res.data;
-          this.detailInfo = res.data.DetailInfo;
-          this.workspace = res.data.workspace;
-          this.labels = res.data.DetailInfo[0].labels;
-          this.annotations = res.data.DetailInfo[0].annotations;
-          if (res.data.events !== null) {
-            this.events = res.data.events;
+          this.projectDetail = data;
+          this.detailInfo = data.DetailInfo;
+          this.workspace = data.workspace;
+          this.labels = data.DetailInfo[0].labels;
+          this.annotations = data.DetailInfo[0].annotations;
+          if (data.events !== null) {
+            this.events = data.events;
           } else {
             this.events = null;
           }
-          this.selectClusterInfo = res.data.selectCluster;
+          this.selectClusterInfo = data.selectCluster;
 
-          const tempSelectCluster = res.data.selectCluster;
+          const tempSelectCluster = data.selectCluster;
           this.clusterList = tempSelectCluster.map(
             (cluster) => cluster.clusterName
           );
           this.selectCluster = this.clusterList[0];
+          this.resourceUsage = this.detailInfo.map(
+            (data) => data.resourceUsage
+          );
           // const temp = new Set(res.data.map((cluster) => cluster.clusterName));
           // this.clusterList = [...temp];
         });
@@ -173,7 +177,7 @@ class Project {
 
   loadProjectListInWorkspace = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL2}/userProjects?workspace=${workspaceName}`)
+      .get(`${SERVER_URL4}/userProjects?workspace=${workspaceName}`)
       .then((res) => {
         runInAction(() => {
           this.projectListinWorkspace = res.data;
@@ -182,7 +186,7 @@ class Project {
   };
 
   loadSystemProjectList = async (type) => {
-    await axios.get(`${SERVER_URL2}/systemProjects`).then((res) => {
+    await axios.get(`${SERVER_USERVER_URL4RL2}/systemProjects`).then((res) => {
       runInAction(() => {
         this.systemProjectList = res.data;
         this.totalElements = res.data.length;

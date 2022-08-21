@@ -2743,14 +2743,14 @@ const globalStyles = createGlobalStyle`
 
     .ServiceRecentWrap {
       width: 100%;
-      padding: 0 10px 10px 10px;
+      padding: 0 10px 25px 10px;
       background: #202842;
       border-radius: 8px;
       display: flex;
       justify-content: space-between;
       .ServiceRecentInner {
         width: calc(100% / 2 - 5px);
-        border: 1px solid #11162a;
+        /* border: 1px solid #202842; */
         border-radius: 5px;
       }
       .ServiceRecentTitle {

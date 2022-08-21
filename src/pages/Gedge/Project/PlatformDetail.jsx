@@ -82,7 +82,7 @@ const Detail = observer(() => {
         <CTab label="Metadata" />
         <CTab label="Events" />
       </CTabs>
-      <CTabPanel value={tabvalue} index={0}>
+      {/* <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
@@ -172,7 +172,7 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });

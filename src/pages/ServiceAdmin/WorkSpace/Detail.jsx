@@ -244,8 +244,8 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td>
-                  {selectClusterInfo.map((item) => item.clusterName + " ")}
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
                 </td>
                 <th>Creator</th>
                 <td>{workSpaceDetail.memberName}</td>

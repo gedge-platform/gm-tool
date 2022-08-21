@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Pod {
   currentPage = 1;
@@ -113,7 +114,11 @@ class Pod {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPodDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadPodDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -123,7 +128,11 @@ class Pod {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPodDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadPodDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -172,17 +181,17 @@ class Pod {
     });
   };
 
-      setPPodList = (list) => {
-        runInAction(() => {
-          this.pPodList = list;
-        })
-      };
+  setPPodList = (list) => {
+    runInAction(() => {
+      this.pPodList = list;
+    });
+  };
 
-      setViewList = (n) => {
-        runInAction(() => {
-          this.viewList = this.pPodList[n];
-        });
-      };
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pPodList[n];
+    });
+  };
 
   loadPodDetail = async (name, cluster, project) => {
     await axios
@@ -212,17 +221,22 @@ class Pod {
       });
   };
 
-  loadPodList = async (type) => {
-    await axios.get(`${SERVER_URL2}/pods`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.podList = list;
-        this.podDetail = list[0];
-        this.totalElements = list.length;
+  loadPodList = async () => {
+    await axios
+      .get(`${SERVER_URL2}/pods`)
+      .then((res) => {
+        runInAction(() => {
+          const { user } = getItem("user");
+          const list = res.data.data.filter((item) => item.user !== user);
+          // const list = res.data.data.filter((item) => item.projectType === type);
+          this.podList = list;
+          this.podDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.podList, this.setPPodList);
       });
-    }).then(() => {
-      this.convertList(this.podList, this.setPPodList);
-    })
     this.loadPodDetail(
       this.podList[0].name,
       this.podList[0].cluster,

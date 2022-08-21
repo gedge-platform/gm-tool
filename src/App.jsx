@@ -24,6 +24,8 @@ import {
   PlatformControl,
   Template,
   StorageDashboard,
+  PlatformServiceListTab,
+  PlatformProject,
 } from "@/pages";
 
 import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
@@ -57,7 +59,6 @@ export const App = () => {
   // };
 
   if (userRole === "PA") {
-    console.log(userRole + "PA");
     return (
       <>
         <AuthRoute path="/total" component={TotalDashboard} exact />
@@ -65,6 +66,9 @@ export const App = () => {
         <Switch>
           <AuthRoute path="/cluster" component={Cluster} />
           <AuthRoute path="/project" component={Project} />
+          <AuthRoute path="/userProject" component={Project} />
+          <AuthRoute path="/platformProject" component={PlatformProject} />
+
           <AuthRoute path="/component" component={ComponentManage} />
           <AuthRoute path="/monitoring" component={Monitoring} />
           <AuthRoute path="/workSpace" component={WorkSpace} />
@@ -79,7 +83,7 @@ export const App = () => {
           <AuthRoute path="/topology" component={NotFound} />
           <AuthRoute path="/roadbalancer" component={NotFound} />
           <AuthRoute path="/storage" component={Storage} />
-          <AuthRoute path="/createUser" component={CreateUser} />
+
           <AuthRoute path="/platformControl" component={NotFound} />
           <AuthRoute path="/template" component={NotFound} />
           <AuthRoute path="/StorageDashboard" component={StorageDashboard} />
@@ -92,7 +96,6 @@ export const App = () => {
       </>
     );
   } else if (userRole === "SA") {
-    console.log(userRole + "SA");
     return (
       <>
         <AuthRoute path="/service" component={ServiceAdminDashboard} exact />
@@ -111,7 +114,6 @@ export const App = () => {
       </>
     );
   } else {
-    console.log(userRole + "YJY");
     return (
       <>
         <AuthRoute path="/total" component={TotalDashboard} exact />
