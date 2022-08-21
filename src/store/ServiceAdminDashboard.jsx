@@ -41,19 +41,22 @@ class ServiceAdminDashboard {
     const { id } = getItem("user");
     await axios
       .get(`${SERVER_URL4}/workspaces?user=${id}`)
-      .then(({ data: { data } }) => {
+      .then((res) => {
         runInAction(() => {
-          this.workspaceNameList = data.map((item) => item.workspaceName);
+          console.log(res);
+          this.workspaceNameList = res.data.map((item) => item.workspaceName);
           const tmp = this.workspaceNameList.map((name) => name);
           this.workspaceName = tmp.map((workspaceName) => workspaceName);
         });
       })
       .then(() => {
+        console.log(this.workspaceName);
         this.loadServiceAdminDashboard(this.workspaceName[0]);
       });
   };
 
   loadServiceAdminDashboard = async (workspaceName) => {
+    console.log(workspaceName);
     const { id } = getItem("user");
     await axios
       .get(

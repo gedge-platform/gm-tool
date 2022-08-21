@@ -547,69 +547,64 @@ const ServiceAdminDashboard = observer(() => {
           </div>
 
           <>
-            {toggleProject === false && togglePod === false ? (
-              <>
-                <div className="ServiceRecentWrap">
-                  <div className="ServiceRecentInner">
-                    {/* <div className="ServiceRecentTitle"> */}
-                    <ButtonStyle
-                      variant="contained"
-                      onClick={clickToggleProject}
-                      toggle={toggleProject}
-                    >
-                      Project Top 5
-                    </ButtonStyle>
-                    {/* </div> */}
-                    <div className="ServiceRecentListWrap">
-                      <ul>{projectCpuTop5()}</ul>
-                    </div>
-                  </div>
-
-                  <div className="ServiceRecentInner">
-                    <ButtonStyle
-                      variant="contained"
-                      onClick={clickTogglePod}
-                      toggle={togglePod}
-                    >
-                      Pod Top 5
-                    </ButtonStyle>
-                    <div className="ServiceRecentListWrap">
-                      <ul>{podCpuTop5()}</ul>
-                    </div>
+            <div className="ServiceRecentWrap">
+              {/* <div className="ServiceRecentTitle"> */}
+              {toggleProject ? (
+                <div className="ServiceRecentInner">
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickToggleProject}
+                    toggle={toggleProject}
+                  >
+                    Project Top 5
+                  </ButtonStyle>
+                  {/* </div> */}
+                  <div className="ServiceRecentListWrap">
+                    <ul>{projectCpuTop5()}</ul>
                   </div>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className="ServiceRecentWrap">
-                  <div className="ServiceRecentInner">
-                    <ButtonStyle
-                      variant="contained"
-                      onClick={clickToggleProject}
-                      toggle={toggleProject}
-                    >
-                      Project Memory Top5
-                    </ButtonStyle>
-                    <div className="ServiceRecentListWrap">
-                      <ul>{projectMemTop5()}</ul>
-                    </div>
-                  </div>
-
-                  <div className="ServiceRecentInner">
-                    <ButtonStyle
-                      variant="contained"
-                      onClick={clickTogglePod}
-                      toggle={togglePod}
-                    >
-                      Pod Memory Top 5
-                    </ButtonStyle>
-                    <div className="ServiceRecentListWrap">
-                      <ul>{podMemTop5()}</ul>
-                    </div>
+              ) : (
+                <div className="ServiceRecentInner">
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickToggleProject}
+                    toggle={toggleProject}
+                  >
+                    Project Memory Top5
+                  </ButtonStyle>
+                  <div className="ServiceRecentListWrap">
+                    <ul>{projectMemTop5()}</ul>
                   </div>
                 </div>
-              </>
-            )}
+              )}
+              {togglePod ? (
+                <div className="ServiceRecentInner">
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickTogglePod}
+                    toggle={togglePod}
+                  >
+                    Pod Top 5
+                  </ButtonStyle>
+                  <div className="ServiceRecentListWrap">
+                    <ul>{podCpuTop5()}</ul>
+                  </div>
+                </div>
+              ) : (
+                <div className="ServiceRecentInner">
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickTogglePod}
+                    toggle={togglePod}
+                  >
+                    Pod Memory Top 5
+                  </ButtonStyle>
+                  <div className="ServiceRecentListWrap">
+                    <ul>{podMemTop5()}</ul>
+                  </div>
+                </div>
+              )}
+            </div>
           </>
           {/* // <>
           //   {togglePod === fasle ? (
