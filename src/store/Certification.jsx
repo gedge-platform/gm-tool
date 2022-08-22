@@ -1,16 +1,82 @@
 import axios from "axios";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { apiV2, SERVER_URL2 } from "../config";
 
 class Certification {
-  userName = "";
-  password = "";
-  domainName = "";
-  projectID = "";
-  endPointAddress = "";
+  clusterList = [];
+  clusterNameList = [];
+  totalElements = 0;
+  clusterDetail = {
+    clusterNum: 0,
+    ipAddr: "",
+    clusterName: "",
+    clusterType: "",
+    clusterEndpoint: "",
+    clusterCreator: "",
+    created_at: "",
+    gpu: [],
+    resource: {
+      deployment_count: 0,
+      pod_count: 0,
+      service_count: 0,
+      cronjob_count: 0,
+      job_count: 0,
+      volume_count: 0,
+      Statefulset_count: 0,
+      daemonset_count: 0,
+    },
+    nodes: [
+      {
+        name: "",
+        type: "",
+        nodeIP: "",
+        os: "",
+        kernel: "",
+        labels: {},
+        annotations: {},
+        allocatable: {
+          cpu: "",
+          "ephemeral-storage": "",
+          "hugepages-1Gi": "",
+          "hugepages-2Mi": "",
+          memory: "",
+          pods: "",
+        },
+        capacity: {
+          cpu: "",
+          "ephemeral-storage": "",
+          "hugepages-1Gi": "",
+          "hugepages-2Mi": "",
+          memory: "",
+          pods: "",
+        },
+        containerRuntimeVersion: "",
+      },
+    ],
+    events: [
+      {
+        kind: "",
+        name: "",
+        namespace: "",
+        cluster: "",
+        message: "",
+        reason: "",
+        type: "",
+        eventTime: "",
+      },
+    ],
+  };
+
+  clusters = [];
 
   currentPage = 1;
   totalPages = 1;
   resultList = {};
   viewList = [];
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 
   goPrevPage = () => {
     runInAction(() => {
@@ -76,9 +142,71 @@ class Certification {
     });
   };
 
+  setClusterList = (list) => {
+    runInAction(() => {
+      this.clusterList = list;
+    });
+  };
+
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.clusterList[n];
+    });
+  };
+
+  loadClusterList = async (type = "") => {
+    await axios
+      .get(`${SERVER_URL2}/clusters`)
+      .then((res) => {
+        runInAction(() => {
+          const list =
+            type === ""
+              ? res.data
+              : res.data.filter((item) => item.clusterType === type);
+          this.clusterList = list;
+          this.clusterNameList = list.map((item) => item.clusterName);
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.clusterList, this.setClusterList);
+      })
+      .then(() => {
+        this.loadCluster(this.viewList[0].clusterName);
+      });
+    // this.clusterDetail = list[0];
+  };
+
+  loadCluster = async (clusterName) => {
+    await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
+      runInAction(() => {
+        this.clusterDetail = res.data;
+      });
+    });
+  };
+
+  loadClusterInProject = async (project) => {
+    await axios
+      .get(`${apiV2}/clusterInfo?project=${project}`)
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
+  };
+  loadClusterInWorkspace = async (workspace) => {
+    await axios
+      .get(`${SERVER_URL2}/clusters?workspace=${workspace}`)
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
+  };
+
+  setDetail = (num) => {
+    runInAction(() => {
+      this.clusterDetail = this.clusterList.find(
+        (item) => item.clusterNum === num
+      );
+    });
+  };
+
+  setClusters = (clusters) => {
+    runInAction(() => {
+      this.clusters = clusters;
     });
   };
 }

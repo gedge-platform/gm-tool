@@ -162,7 +162,7 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data">
+          <table className="tb_data" >
             {/* <tbody className="tb_data_detail">
               <tr>
                 <th>Cluster Name</th>
@@ -187,10 +187,10 @@ const Detail = observer((props) => {
           <TableTitle>GPU List</TableTitle>
           {gpu ? (
             <>
-              <table className="tb_data">
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_detail">
                   <tr>
-                    <th>container</th>
+                    <th >container</th>
                     <th>name</th>
                     <th>node</th>
                     <th>uuid</th>
@@ -250,8 +250,9 @@ const Detail = observer((props) => {
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Node List</TableTitle>
-          <table className="tb_data">
-            <tbody className="tb_data_nodeInfo">
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            {/* <tbody className="tb_data_nodeInfo"> */}
+            <tbody>
               <tr>
                 <th>Name</th>
                 <th>Type</th>

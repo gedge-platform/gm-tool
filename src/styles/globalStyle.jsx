@@ -1930,6 +1930,9 @@ const globalStyles = createGlobalStyle`
       &.aws {
         background:  url(../images/dashboard/icon_aws.png) no-repeat center 45px #171e33;
       }
+      &.baremetal {
+        background:  url(../images/dashboard/icon_baremetal.png) no-repeat center 45px #171e33;
+      }
       &.add {
         border: 8px solid #1a2139;
         background:  url(../images/dashboard/icon_add.png) no-repeat center center #1a2139;

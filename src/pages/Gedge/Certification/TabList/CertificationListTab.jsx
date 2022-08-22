@@ -10,14 +10,13 @@ import { CIconButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
-import CreateCluster from "../Dialog/CreateCluster";
-import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
+import certificationStore from "../../../../store/Certification";
+import Terminal from "../Dialog/Terminal";
+import CreateCluster from "../Dialog/CreateCluster";
 
-const CoreClusterListTab = observer(() => {
-  const currentPageTitle = Title.CloudZone;
+const CertificationListTab = observer(() => {
+  const currentPageTitle = Title.Certification;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -35,36 +34,36 @@ const CoreClusterListTab = observer(() => {
     goPrevPage,
     goNextPage,
     totalElements,
-  } = clusterStore;
+  } = certificationStore;
 
   const [columDefs] = useState([
     {
-      headerName: "ID",
+      headerName: "이름",
       field: "clusterName",
       filter: true,
     },
     {
-      headerName: "이름",
+      headerName: "타입",
       field: "clusterType",
       filter: true,
     },
     {
-      headerName: "상태",
+      headerName: "생성자",
       field: "clusterCreator",
       filter: true,
     },
     {
-      headerName: "이미지 이름",
+      headerName: "노드개수",
       field: "nodeCnt",
       filter: true,
     },
     {
-      headerName: "스팩 이름",
+      headerName: "IP",
       field: "clusterEndpoint",
       filter: true,
     },
     {
-      headerName: "IP",
+      headerName: "생성날짜",
       field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -75,7 +74,7 @@ const CoreClusterListTab = observer(() => {
       },
     },
     {
-      headerName: "VM",
+      headerName: "",
       field: "terminal",
       minWidth: 100,
       maxWidth: 100,
@@ -155,9 +154,8 @@ const CoreClusterListTab = observer(() => {
           />
           <CreateCluster type={"core"} open={open} onClose={handleClose} />
         </PanelBox>
-        {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
     </Layout>
   );
 });
-export default CoreClusterListTab;
+export default CertificationListTab;
