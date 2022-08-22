@@ -2346,7 +2346,7 @@ const globalStyles = createGlobalStyle`
                 background: #0758d1;
                 border-radius: 5px;
                 font-size: 12px;
-              }
+              }              
               .cluster_resoureceInfo {
                 width: 100%;
                 display: flex;

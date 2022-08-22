@@ -3,4 +3,3 @@ package-lock.json
 yarn.lock
 src/config.jsx
 .env
-.vscode

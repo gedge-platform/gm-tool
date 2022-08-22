@@ -11,6 +11,7 @@ import {
 } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
 import EventAccordion from "@/components/detail/EventAccordion";
+import dashboardStore from "../../../store/Dashboard";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -89,6 +90,7 @@ const Detail = observer((props) => {
       },
     },
   } = clusterStore;
+
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

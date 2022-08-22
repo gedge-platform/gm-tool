@@ -31,7 +31,6 @@ import {
 import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
 import EdgeClusterListTab from "./pages/Gedge/Cluster/TabList/EdgeClusterListTab";
 import CoreClusterListTab from "./pages/Gedge/Cluster/TabList/CoreClusterListTab";
-import CertificationListTab from "./pages/Gedge/Certification/TabList/CertificationListTab";
 import AuthRoute from "./routes/AuthRoute";
 import DeploymentPopup from "./pages/ServiceAdmin/Workload/Dialog/DeploymentPopup";
 import { getItem } from "./utils/sessionStorageFn";
@@ -75,7 +74,7 @@ export const App = () => {
           <AuthRoute path="/user" component={User} />
           <AuthRoute path="/volumes" component={Volume} />
           <AuthRoute path="/configuration" component={Configuration} />
-          <AuthRoute path="/certification" component={CertificationListTab} />
+          <AuthRoute path="/certification" component={Certification} />
           <AuthRoute path="/platformUser" component={PlatformUser} />
           <AuthRoute path="/edgeZone" component={EdgeClusterListTab} />
           <AuthRoute path="/cloudZone" component={CoreClusterListTab} />

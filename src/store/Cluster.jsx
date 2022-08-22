@@ -6,6 +6,11 @@ class Cluster {
   clusterList = [];
   clusterNameList = [];
   totalElements = 0;
+  cloudDashboardDetail = {
+    clusterInfo: {
+      address: "",
+    },
+  };
   clusterDetail = {
     clusterNum: 0,
     ipAddr: "",
@@ -173,16 +178,20 @@ class Cluster {
       })
       .then(() => {
         this.loadCluster(this.viewList[0].clusterName);
+        // this.loadClusterDetail(this.viewList[0].clusterName);
+        
       });
     // this.clusterDetail = list[0];
   };
 
   loadCluster = async (clusterName) => {
+    console.log(clusterName);
     await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
       runInAction(() => {
         this.clusterDetail = res.data;
       });
     });
+    return this.clusterDetail;
   };
 
   loadClusterInProject = async (project) => {

@@ -13,6 +13,7 @@ const ButtonStyle = styled.button`
   position: relative;
   background-color: #6765bf;
   color: #ffff;
+  border-radius: inherit;
 `;
 
 const ClusterRecent = observer(() => {
@@ -23,7 +24,7 @@ const ClusterRecent = observer(() => {
     podMemTop5,
     loadClusterRecent,
   } = dashboardStore;
-  console.log(clusterCpuTop5);
+
   useEffect(() => {
     loadClusterRecent();
   }, []);

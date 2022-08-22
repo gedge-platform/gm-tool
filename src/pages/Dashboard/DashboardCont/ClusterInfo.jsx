@@ -2,41 +2,57 @@ import React, { useEffect } from "react";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import { observer } from "mobx-react";
 import clusterStore from "../../../store/Cluster";
+import dashboardStore from "../../../store/Dashboard";
+import ApexCharts from "apexcharts";
+import ReactApexChart from "react-apexcharts";
+import styled from "styled-components";
+
+const Cluster_resoureceGraphData = styled.div `
+  height: 12px;
+  margin: 10px 0;
+  justify-content: center;
+  color: #fff;
+  background: #8ff17d;
+  border-radius: 5px;
+  font-size: 12px;
+`;
 
 const ClusterInfo = observer(() => {
+
   const {
-    clusterNameList,
-    clusterDetail: {
-      clusterCreator,
-      clusterEndpoint,
-      clusterName,
-      clusterNum,
-      clusterType,
-      created_at,
-      events,
-      gpu,
-      ipAddr,
-      nodes,
-      resource: {
-        cronjob_count,
-        deployment_count,
-        job_count,
-        pod_count,
-        service_count,
-        volume_count,
-      },
-    },
     loadClusterList,
-    loadCluster,
-  } = clusterStore;
+    clusterNameList,
+    clusterName,
+    loadClusterDetail,
+    clusterInfo: {
+      address,
+    },
+    master,
+    worker,
+    cpuUsage,
+    cpuUtil,
+    cpuTotal,
+    diskUsage,
+    diskUtil,
+    diskTotal,
+    memoryTotal,
+    memoryUsage,
+    memoryUtil,
+    resourceCnt,
+    cloudDashboardDetail} = dashboardStore;
+  
 
   const changeCluster = ({ target: { value } }) => {
-    loadCluster(value);
+    loadClusterDetail(value);
+    // clusterData(value)
   };
 
+  
   useEffect(() => {
     loadClusterList();
+    // loadCluster();
   }, []);
+
   return (
     <div className="cluster_info">
       <FormControl className="form_dashboard">
@@ -53,18 +69,17 @@ const ClusterInfo = observer(() => {
       <div className="cluster_detailWrap">
         <div className="cluster_detail">
           <div className="cluster_detail_title">Name</div>
-          <div className="cluster_detail_content">Innogrid</div>
+          <div className="cluster_detail_content">{clusterName}</div>
           <div className="cluster_detail_title">Info / Location</div>
           <div className="cluster_detail_content">
-            <div className="cluster_detail_content_txt">100, Eulji-ro, Jung-gum Seoul, Republic of Korea</div>
+            <div className="cluster_detail_content_txt">{address}</div>
             <div className="cluster_detail_content_circleWrap">
               <div className="cluster_detail_content_circle">
-                <span className="count">5</span>
+                <span className="count">{master}</span>
                 <div className="title">Master Node</div>
               </div>
-
               <div className="cluster_detail_content_circle">
-                <span className="count">3</span>
+                <span className="count">{worker}</span>
                 <div className="title">Worker Node</div>
               </div>
             </div>
@@ -75,21 +90,21 @@ const ClusterInfo = observer(() => {
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">CPU</div>
-              <div className="resource_percent">58<span>%</span></div>
+              <div className="resource_percent">{cpuUtil.value}<span>%</span></div>
             </div>
             <div className="cluster_resoureceGraph">
-              그래프 들어갈 자리
+              <Cluster_resoureceGraphData style={{ width: cpuUtil.value+"%" }} />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">2.41</span>
+                  <span className="detail">{cpuUsage.value}</span>
                   <span className="category">cores</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">4</span>
+                  <span className="detail">{cpuTotal.value}</span>
                   <span className="category">cores</span>
                 </div>
               </div>
@@ -99,21 +114,21 @@ const ClusterInfo = observer(() => {
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Memory</div>
-              <div className="resource_percent">31<span>%</span></div>
+              <div className="resource_percent">{memoryUtil.value}<span>%</span></div>
             </div>
             <div className="cluster_resoureceGraph">
-              그래프 들어갈 자리
+            <Cluster_resoureceGraphData style={{ width: memoryUtil.value+"%" }} />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">4.91</span>
+                  <span className="detail">{memoryUsage.value}</span>
                   <span className="category">Gi</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">15.63</span>
+                  <span className="detail">{memoryTotal.value}</span>
                   <span className="category">Gi</span>
                 </div>
               </div>
@@ -123,21 +138,21 @@ const ClusterInfo = observer(() => {
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Disk</div>
-              <div className="resource_percent">63<span>%</span></div>
+              <div className="resource_percent">{diskUtil.value}<span>%</span></div>
             </div>
             <div className="cluster_resoureceGraph">
-              그래프 들어갈 자리
+              <Cluster_resoureceGraphData style={{ width: diskUtil.value+"%" }} />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">53.47</span>
+                  <span className="detail">{diskUsage.value}</span>
                   <span className="category">GB</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">84.48</span>
+                  <span className="detail">{diskTotal.value}</span>
                   <span className="category">GB</span>
                 </div>
               </div>
