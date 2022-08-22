@@ -3,8 +3,8 @@ import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 
-const Roadbalancer = () => {
-  const currentPageTitle = Title.Roadbalancer;
+const Loadbalancer = () => {
+  const currentPageTitle = Title.Loadbalancer;
 
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -20,12 +20,10 @@ const Roadbalancer = () => {
         <CTab label="자격 증명" />
       </CTabs>
       <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-        </CTabPanel>
+        <CTabPanel value={tabvalue} index={0}></CTabPanel>
+        <CTabPanel value={tabvalue} index={1}></CTabPanel>
       </div>
     </Layout>
   );
 };
-export default Roadbalancer;
+export default Loadbalancer;

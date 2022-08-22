@@ -18,7 +18,7 @@ import {
   Certification,
   PlatformUser,
   Topology,
-  Roadbalancer,
+  Loadbalancer,
   Storage,
   CreateUser,
   PlatformControl,
@@ -80,7 +80,7 @@ export const App = () => {
           <AuthRoute path="/cloudZone" component={CoreClusterListTab} />
           <AuthRoute path="/platformDashboard" component={PlatformDashboard} />
           <AuthRoute path="/topology" component={NotFound} />
-          <AuthRoute path="/roadbalancer" component={NotFound} />
+          <AuthRoute path="/loadbalancer" component={NotFound} />
           <AuthRoute path="/storage" component={Storage} />
 
           <AuthRoute path="/platformControl" component={NotFound} />

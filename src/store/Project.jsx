@@ -131,7 +131,9 @@ class Project {
       .get(`${SERVER_URL4}/userProjects`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.filter((item) => item.projectType === type);
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
           this.projectList = list;
           this.totalElements = list.length;
         });
@@ -180,15 +182,15 @@ class Project {
       .get(`${SERVER_URL4}/userProjects?workspace=${workspaceName}`)
       .then((res) => {
         runInAction(() => {
-          this.projectListinWorkspace = res.data;
+          this.projectListinWorkspace = res.data.data;
         });
       });
   };
 
   loadSystemProjectList = async (type) => {
-    await axios.get(`${SERVER_USERVER_URL4RL2}/systemProjects`).then((res) => {
+    await axios.get(`${SERVER_URL4}/systemProjects`).then((res) => {
       runInAction(() => {
-        this.systemProjectList = res.data;
+        this.systemProjectList = res.data.data;
         this.totalElements = res.data.length;
       });
     });
@@ -246,10 +248,9 @@ class Project {
     //   .then((res) => console.log(res))
     //   .catch((err) => console.error(err));
     axios
-      .post(`${SERVER_URL2}/projects`, body)
+      .post(`${SERVER_URL4}/projects`, body)
       .then((res) => {
         console.log(res);
-        console.log(body);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
         }
@@ -262,7 +263,7 @@ class Project {
 
   deleteProject = (projectName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/projects/${projectName}`)
+      .delete(`${SERVER_URL4}/projects/${projectName}`)
       .then((res) => {
         if (res.status === 200)
           swalError("프로젝트가 삭제되었습니다.", callback);

@@ -25,7 +25,7 @@ class Workspace {
   clusterList = [];
   detailInfo = [{}];
   selectProject = "";
-  selectCluster = "";
+  selectCluster = [];
   dataUsage = {};
   selectClusterInfo = [];
   workspace = [];
@@ -163,8 +163,8 @@ class Workspace {
       .get(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res.data);
           this.workSpaceDetail = res.data;
-          console.log(this.workSpaceDetail);
           this.dataUsage = this.workSpaceDetail.resourceUsage;
           if (res.data.events !== null) {
             this.events = this.workSpaceDetail.events;
@@ -172,6 +172,7 @@ class Workspace {
             this.events = null;
           }
           this.detailInfo = res.data.projectList;
+          console.log(this.detailInfo);
           this.selectClusterInfo = res.data.selectCluster;
           this.projectList = res.data.projectList;
         });
@@ -193,10 +194,11 @@ class Workspace {
     const body = {
       workspaceName,
       workspaceDescription,
-      selectCluster,
-      workspaceOwner: getItem("user"),
-      workspaceCreator: getItem("user"),
+      clusterName: selectCluster,
+      MemberName: getItem("user").id,
+      // workspaceCreator: getItem("user"),
     };
+    console.log(body);
     // const body2 = {
     //   workspaceName,
     //   workspaceDescription,
@@ -209,7 +211,7 @@ class Workspace {
     //   .catch((err) => console.error(err));
     // return
     axios
-      .post(`${SERVER_URL2}/workspaces`, body)
+      .post(`${SERVER_URL4}/workspaces`, body)
       .then((res) => {
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);

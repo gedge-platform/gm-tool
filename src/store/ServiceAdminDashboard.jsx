@@ -41,22 +41,19 @@ class ServiceAdminDashboard {
     const { id } = getItem("user");
     await axios
       .get(`${SERVER_URL4}/workspaces?user=${id}`)
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(res);
-          this.workspaceNameList = res.data.map((item) => item.workspaceName);
+          this.workspaceNameList = data.map((item) => item.workspaceName);
           const tmp = this.workspaceNameList.map((name) => name);
           this.workspaceName = tmp.map((workspaceName) => workspaceName);
         });
       })
       .then(() => {
-        console.log(this.workspaceName);
         this.loadServiceAdminDashboard(this.workspaceName[0]);
       });
   };
 
   loadServiceAdminDashboard = async (workspaceName) => {
-    console.log(workspaceName);
     const { id } = getItem("user");
     await axios
       .get(
@@ -71,11 +68,11 @@ class ServiceAdminDashboard {
             : 0;
 
           this.podCpuTop = data?.podCpuTop5 ? data?.podCpuTop5 : 0;
-          this.podMemTop = data?.podMemTop5;
+          this.podMemTop = data?.podMemTop5 ? data?.podMemTop5 : 0;
 
           this.projectCpuTop = data?.projectCpuTop5 ? data?.projectCpuTop5 : 0;
-          this.projectMemTop = data?.projectMemTop5;
-          this.resource = data?.resource;
+          this.projectMemTop = data?.projectMemTop5 ? data?.projectMemTop5 : 0;
+          this.resource = data?.resource ? data?.resource : 0;
         });
       });
   };

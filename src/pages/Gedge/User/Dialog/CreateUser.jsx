@@ -82,11 +82,11 @@ const CreateUser = observer((props) => {
       swalError("Name을 입력해주세요");
       return;
     }
-    if(email === "") {
+    if (email === "") {
       swalError("Email을 입력해주세요");
       return;
     }
-    if(contact === "") {
+    if (contact === "") {
       swalError("Contact를 입력해주세요");
       return;
     } else {
@@ -96,7 +96,6 @@ const CreateUser = observer((props) => {
 
   const createUser = async () => {
     const result = await postUser(inputs);
-    console.log(result);
     handleClose();
   };
 
@@ -194,7 +193,7 @@ const CreateUser = observer((props) => {
               />
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Member Description</th>
             <td>
               <CTextField
@@ -206,7 +205,7 @@ const CreateUser = observer((props) => {
                 value={memberDescription}
               />
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <th>
               Member Role <span className="requried">*</span>

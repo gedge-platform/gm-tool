@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
 import { getItem } from "../utils/sessionStorageFn";
@@ -367,7 +367,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
+        `${SERVER_URL4}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
         YAML.parse(this.content)
       )
       .then((res) => {

@@ -17,7 +17,7 @@ export { default as Certification } from "./Gedge/Certification/Certification";
 export { default as PlatformUser } from "./Gedge/PlatformUser/PlatformUser";
 export { default as EdgeZoneDashboard } from "./Gedge/Platform/EdgeZone/EdgeZoneDashboard";
 export { default as CloudZoneDashboard } from "./Gedge/Platform/CloudZone/CloudZoneDashboard";
-export { default as Roadbalancer } from "./Gedge/Infra/Network/Roadbalancer/Roadbalancer.jsx";
+export { default as Loadbalancer } from "./Gedge/Infra/Network/Loadbalancer/Loadbalancer.jsx";
 export { default as Topology } from "./Gedge/Infra/Network/Topology/Topology";
 export { default as Storage } from "./Gedge/Infra/Storage/Storage";
 export { default as CreateUser } from "./Gedge/Service/Project/CreateUser/CreateUser";
@@ -59,7 +59,7 @@ const Title = {
   Workload: "워크로드",
   EdgeZone: "엣지존",
   CloudZone: "클라우드존",
-  Roadbalancer: "로드밸런서",
+  Loadbalancer: "로드밸런서",
   Topology: "토폴로지",
   NetWork: "네트워크",
   Storage: "스토리지 클래스",
