@@ -89,6 +89,7 @@ const Detail = observer((props) => {
       },
     },
   } = clusterStore;
+  const nodesChk = nodes === null ? 0 : nodes;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -162,7 +163,7 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" >
+          <table className="tb_data">
             {/* <tbody className="tb_data_detail">
               <tr>
                 <th>Cluster Name</th>
@@ -190,7 +191,7 @@ const Detail = observer((props) => {
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_detail">
                   <tr>
-                    <th >container</th>
+                    <th>container</th>
                     <th>name</th>
                     <th>node</th>
                     <th>uuid</th>
@@ -251,7 +252,6 @@ const Detail = observer((props) => {
         <div className="tb_container">
           <TableTitle>Node List</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            {/* <tbody className="tb_data_nodeInfo"> */}
             <tbody>
               <tr>
                 <th>Name</th>
@@ -261,7 +261,8 @@ const Detail = observer((props) => {
                 <th>OS</th>
                 <th>Created</th>
               </tr>
-              {nodes.length >= 1 ? (
+
+              {nodesChk.length >= 1 ? (
                 nodeList()
               ) : (
                 <tr>

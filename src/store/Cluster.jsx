@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URL2 } from "../config";
+import { apiV2, SERVER_URL2, SERVER_URL4 } from "../config";
 
 class Cluster {
   clusterList = [];
@@ -161,13 +161,13 @@ class Cluster {
 
   loadClusterList = async (type = "") => {
     await axios
-      .get(`${SERVER_URL2}/clusters`)
-      .then((res) => {
+      .get(`${SERVER_URL4}/clusters`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
           const list =
             type === ""
-              ? res.data
-              : res.data.filter((item) => item.clusterType === type);
+              ? data
+              : data.filter((item) => item.clusterType === type);
           this.clusterList = list;
           this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = list.length;
@@ -179,18 +179,20 @@ class Cluster {
       .then(() => {
         this.loadCluster(this.viewList[0].clusterName);
         // this.loadClusterDetail(this.viewList[0].clusterName);
-        
       });
     // this.clusterDetail = list[0];
   };
 
   loadCluster = async (clusterName) => {
-    console.log(clusterName);
-    await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
-      runInAction(() => {
-        this.clusterDetail = res.data;
+    await axios
+      .get(`${SERVER_URL4}/clusters/${clusterName}`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.clusterDetail = data;
+          this.nodes =
+            this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+        });
       });
-    });
     return this.clusterDetail;
   };
 

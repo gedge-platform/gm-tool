@@ -6,6 +6,7 @@ import { runInAction } from "mobx";
 import axios from "axios";
 import dashboardStore from "../../../store/Dashboard";
 import { forEach } from "lodash";
+import { SERVER_URL4 } from "../../../config";
 
 const MapContent = observer(() => {
   const { loadMapInfo, pointArr } = dashboardStore;
@@ -14,9 +15,7 @@ const MapContent = observer(() => {
   const [dataEdgeInfo, setDataEdgeInfo] = useState("");
 
   useEffect(async () => {
-    const result = await axios(
-      `http://192.168.160.230:8011/gmcapi/v2/totalDashboard`
-    );
+    const result = await axios(`${SERVER_URL4}/totalDashboard`);
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
     setDataEdgeInfo(dataEdgeInfo);
     const dataPoint = dataEdgeInfo.map((item) =>
@@ -24,7 +23,6 @@ const MapContent = observer(() => {
     );
     setData(dataPoint);
 
-    console.log(dataEdgeInfo[0].map((item) => item.address));
     // const addressData = dataEdgeInfo[0].map((info) =>
     //   Object.entries(info).map(([key, value]) => [key, value])
     // ); //[Array(8), Array(8)]
@@ -41,12 +39,9 @@ const MapContent = observer(() => {
     //지도
     mapRef.current = L.map("map", mapParams);
     // ${dataEdgeInfo[0].map((item) => item.address)}
-   
 
-    console.log("**************",dataEdgeInfo[0].map(item => item.address)[0])
-
-    const marker =  dataPoint.map((item) => {
-      item.map((point,i) => {
+    const marker = dataPoint.map((item) => {
+      item.map((point, i) => {
         L.marker([point.y, point.x], {
           icon: CustomIcon("green"),
         })
@@ -60,7 +55,9 @@ const MapContent = observer(() => {
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>${dataEdgeInfo[0].map((item) => item.clusterName)[i]}</td>
+                   <td>${
+                     dataEdgeInfo[0].map((item) => item.clusterName)[i]
+                   }</td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>

@@ -139,7 +139,6 @@ class User {
       .post(`${SERVER_URL4}/members`, body)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
           if (res.status === 201) {
             swalError("멤버가 생성되었습니다.", callback);
             return true;

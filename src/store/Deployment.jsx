@@ -367,12 +367,11 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL4}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
+        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
         YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
+        if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
         }
       });
@@ -387,9 +386,8 @@ class Deployment {
         `${SERVER_URL2}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
-      .then((res) => {
-        console.log(res);
-        console.log("2번 찍힌다");
+      .then(() => {
+        return;
       });
   };
 }

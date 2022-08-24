@@ -141,39 +141,71 @@ const Detail = observer(() => {
   };
 
   const clusterProjectTable = () => {
-    return detailInfo.map((project) => (
+    return detailInfo ? (
+      detailInfo.map((project) => (
+        <>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody className="project_table">
+              <tr>
+                {detailInfo ? (
+                  <>
+                    <tr>
+                      <th> Name</th>
+                      <td>{project?.projectName}</td>
+                      <th>Cluster</th>
+                      <td style={{ whiteSpace: "pre-wrap" }}>
+                        {selectClusterInfo.map(
+                          (item) => item.clusterName + "\n"
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Created</th>
+                      <td>{dateFormatter(project?.created_at)}</td>
+                      <th>Creator</th>
+                      <td>
+                        {project?.projectCreator
+                          ? project?.projectCreator
+                          : "-"}
+                      </td>
+                    </tr>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </tr>
+            </tbody>
+          </table>
+          <br />
+        </>
+      ))
+    ) : (
       <>
         <table className="tb_data" style={{ tableLayout: "fixed" }}>
           <tbody className="project_table">
             <tr>
-              {detailInfo ? (
+              {
                 <>
                   <tr>
                     <th> Name</th>
-                    <td>{project?.projectName}</td>
-                    <th>Cluster Name</th>
-                    <td style={{ whiteSpace: "pre-wrap" }}>
-                      {selectClusterInfo.map((item) => item.clusterName + "\n")}
-                    </td>
+                    <td>-</td>
+                    <th>Cluster</th>
+                    <td>-</td>
                   </tr>
                   <tr>
                     <th>Created</th>
-                    <td>{dateFormatter(project?.created_at)}</td>
+                    <td>-</td>
                     <th>Creator</th>
-                    <td>
-                      {project?.projectCreator ? project?.projectCreator : "-"}
-                    </td>
+                    <td>-</td>
                   </tr>
                 </>
-              ) : (
-                <></>
-              )}
+              }
             </tr>
           </tbody>
         </table>
         <br />
       </>
-    ));
+    );
   };
 
   const resourcesTable = () => {

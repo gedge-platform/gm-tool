@@ -141,7 +141,6 @@ class Workspace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          // this.workSpaceDetail = res.data[0];
           this.totalElements = data.length;
           this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
@@ -163,7 +162,6 @@ class Workspace {
       .get(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res.data);
           this.workSpaceDetail = res.data;
           this.dataUsage = this.workSpaceDetail.resourceUsage;
           if (res.data.events !== null) {
@@ -171,10 +169,9 @@ class Workspace {
           } else {
             this.events = null;
           }
-          this.detailInfo = res.data.projectList;
-          console.log(this.detailInfo);
+          this.detailInfo = res.data.projectList ? res.data.projectList : 0;
           this.selectClusterInfo = res.data.selectCluster;
-          this.projectList = res.data.projectList;
+          this.projectList = res.data.projectList ? res.data.projectList : 0;
         });
       });
   };
@@ -198,7 +195,6 @@ class Workspace {
       MemberName: getItem("user").id,
       // workspaceCreator: getItem("user"),
     };
-    console.log(body);
     // const body2 = {
     //   workspaceName,
     //   workspaceDescription,
@@ -248,12 +244,12 @@ class Workspace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .delete(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 
     axios
-      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .delete(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => {
         if (res.status === 200)
           swalError("워크스페이스가 삭제되었습니다.", callback);
