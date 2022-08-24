@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class User {
@@ -106,10 +106,9 @@ class User {
 
   loadUserList = async () => {
     await axios
-      .get(`${SERVER_URL2}/members`)
+      .get(`${SERVER_URL4}/members`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
           this.userList = res.data;
           this.totalElements = res.data.length;
           // this.userDetail = res.data.data[0];
@@ -124,7 +123,7 @@ class User {
   };
 
   loadUserDetail = async (memberId) => {
-    await axios.get(`${SERVER_URL2}/members/${memberId}`).then((res) => {
+    await axios.get(`${SERVER_URL4}/members/${memberId}`).then((res) => {
       runInAction(() => {
         this.userDetail = res.data;
       });
@@ -134,22 +133,19 @@ class User {
   postUser = async (data, callback) => {
     const body = {
       ...data,
-      enabled: true
+      enabled: true,
     };
-    console.log(body);
     return await axios
-      .post(`http://192.168.160.230:8012/gmcapi/v2/members`, body)
+      .post(`${SERVER_URL4}/members`, body)
       .then((res) => {
         runInAction(() => {
-          
-          console.log(res);
           if (res.status === 201) {
             swalError("멤버가 생성되었습니다.", callback);
             return true;
-          } 
+          }
         });
       })
-      .catch((err) => false)
+      .catch((err) => false);
   };
 }
 

@@ -11,7 +11,7 @@ const BasicInformation = observer(() => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
 
-  const { loadWorkSpaceList, workSpaceList } = workspacesStore;
+  const { loadWorkSpaceList, workSpaceList, workspace } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
   const {
     deploymentName,
@@ -62,10 +62,8 @@ const BasicInformation = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
-                      {workspace.workspaceName}
-                    </option>
+                  {workspace.map((item) => (
+                    <option value={item}>{item}</option>
                   ))}
                 </select>
               </FormControl>

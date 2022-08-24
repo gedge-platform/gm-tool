@@ -33,7 +33,7 @@ const ButtonNext = styled.button`
 const DeploymentBasicInformation = observer((props) => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
-  const { loadWorkSpaceList, workSpaceList } = workspacesStore;
+  const { loadWorkSpaceList, workSpaceList, workspace } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
   const {
     deploymentName,
@@ -67,6 +67,7 @@ const DeploymentBasicInformation = observer((props) => {
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
+
   return (
     <>
       <div className="step-container">
@@ -98,10 +99,8 @@ const DeploymentBasicInformation = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workSpaceList.map((item) => (
-                    <option value={item.workspaceName}>
-                      {item.workspaceName}
-                    </option>
+                  {workspace.map((item) => (
+                    <option value={item}>{item}</option>
                   ))}
                 </select>
               </FormControl>

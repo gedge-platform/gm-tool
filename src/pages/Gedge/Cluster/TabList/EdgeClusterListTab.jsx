@@ -13,6 +13,7 @@ import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import { Title } from "@/pages";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const EdgeClusterListTab = observer(() => {
   const currentPageTitle = Title.EdgeZone;
@@ -58,9 +59,12 @@ const EdgeClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "생성자",
-      field: "clusterCreator",
+      headerName: "상태",
+      field: "status",
       filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
       headerName: "노드개수",
