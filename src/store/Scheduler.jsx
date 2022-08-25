@@ -6,6 +6,12 @@ import * as FormData from "form-data";
 import deploymentStore from "./Deployment";
 
 class Scheduler {
+  totalElements = 0;
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
+
   constructor() {
     makeAutoObservable(this);
   }

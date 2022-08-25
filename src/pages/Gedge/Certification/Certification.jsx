@@ -11,16 +11,14 @@ import Detail from "./Detail";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import CreateCertification from "./Dialog/CreateCertification";
-
+import CertificationListTab from "./TabList/CertificationListTab";
 
 const Certification = observer(() => {
   const currentPageTitle = Title.Certification;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const {
-
-  } = certificationStore;
+  const {} = certificationStore;
 
   const [columDefs] = useState([
     {
@@ -53,32 +51,19 @@ const Certification = observer(() => {
     setOpen(false);
   };
 
-  useLayoutEffect(() => {
-
-  }, []);
+  useLayoutEffect(() => {}, []);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CReflexBox>
-        <PanelBox>
-          <CommActionBar>
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-          </CommActionBar>
-          <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid 
-                  columDefs={columDefs}
-                />
-              </div>
-            </CTabPanel>
-          </div> 
-          <CreateCertification 
-            open={open}
-            onClose={handleClose}
-          />
-        </PanelBox>
-      </CReflexBox>
+      <div className="tabPanelContainer">
+        <CTabPanel value={tabvalue} index={0}>
+          <CertificationListTab />
+          {/* <div className="grid-height2">
+                <AgGrid columDefs={columDefs} />
+              </div> */}
+        </CTabPanel>
+      </div>
+      <CreateCertification open={open} onClose={handleClose} />
     </Layout>
   );
 });

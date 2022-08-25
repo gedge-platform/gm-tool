@@ -21,8 +21,18 @@ const SchedulerListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalElements, loadPodList, loadPodDetail } =
-    podStore;
+  const {
+    podList,
+    podDetail,
+    totalYElements,
+    loadPodList,
+    loadPodDetail,
+    currentYPage,
+    totalYPages,
+    viewYList,
+    goPrevPage,
+    goNextPage,
+  } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -102,10 +112,14 @@ const SchedulerListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={podList}
+                  rowData={viewYList}
                   columnDefs={columDefs}
-                  isBottom={true}
-                  totalElements={totalElements}
+                  isBottom={false}
+                  totalElements={totalYElements}
+                  totalPages={totalYPages}
+                  currentPage={currentYPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
