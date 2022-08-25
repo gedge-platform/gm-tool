@@ -7,7 +7,7 @@ import ApexCharts from "apexcharts";
 import ReactApexChart from "react-apexcharts";
 import styled from "styled-components";
 
-const Cluster_resoureceGraphData = styled.div `
+const Cluster_resoureceGraphData = styled.div`
   height: 12px;
   margin: 10px 0;
   justify-content: center;
@@ -18,15 +18,13 @@ const Cluster_resoureceGraphData = styled.div `
 `;
 
 const ClusterInfo = observer(() => {
-
   const {
     loadClusterList,
     clusterNameList,
     clusterName,
     loadClusterDetail,
-    clusterInfo: {
-      address,
-    },
+    clusterInfo,
+    address,
     master,
     worker,
     cpuUsage,
@@ -39,15 +37,14 @@ const ClusterInfo = observer(() => {
     memoryUsage,
     memoryUtil,
     resourceCnt,
-    cloudDashboardDetail} = dashboardStore;
-  
+    cloudDashboardDetail,
+  } = dashboardStore;
 
   const changeCluster = ({ target: { value } }) => {
     loadClusterDetail(value);
     // clusterData(value)
   };
 
-  
   useEffect(() => {
     loadClusterList();
     // loadCluster();
@@ -70,7 +67,7 @@ const ClusterInfo = observer(() => {
         <div className="cluster_detail">
           <div className="cluster_detail_title">Name</div>
           <div className="cluster_detail_content">{clusterName}</div>
-          <div className="cluster_detail_title">Info / Location</div>
+          <div className="cluster_detail_title">Location</div>
           <div className="cluster_detail_content">
             <div className="cluster_detail_content_txt">{address}</div>
             <div className="cluster_detail_content_circleWrap">
@@ -85,15 +82,20 @@ const ClusterInfo = observer(() => {
             </div>
           </div>
         </div>
-        
+
         <div className="cluster_resourceWrap">
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">CPU</div>
-              <div className="resource_percent">{cpuUtil.value}<span>%</span></div>
+              <div className="resource_percent">
+                {cpuUtil.value}
+                <span>%</span>
+              </div>
             </div>
             <div className="cluster_resoureceGraph">
-              <Cluster_resoureceGraphData style={{ width: cpuUtil.value+"%" }} />
+              <Cluster_resoureceGraphData
+                style={{ width: cpuUtil.value + "%" }}
+              />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
@@ -114,10 +116,15 @@ const ClusterInfo = observer(() => {
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Memory</div>
-              <div className="resource_percent">{memoryUtil.value}<span>%</span></div>
+              <div className="resource_percent">
+                {memoryUtil.value}
+                <span>%</span>
+              </div>
             </div>
             <div className="cluster_resoureceGraph">
-            <Cluster_resoureceGraphData style={{ width: memoryUtil.value+"%" }} />
+              <Cluster_resoureceGraphData
+                style={{ width: memoryUtil.value + "%" }}
+              />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
@@ -138,10 +145,15 @@ const ClusterInfo = observer(() => {
           <div className="cluster_resourece">
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Disk</div>
-              <div className="resource_percent">{diskUtil.value}<span>%</span></div>
+              <div className="resource_percent">
+                {diskUtil.value}
+                <span>%</span>
+              </div>
             </div>
             <div className="cluster_resoureceGraph">
-              <Cluster_resoureceGraphData style={{ width: diskUtil.value+"%" }} />
+              <Cluster_resoureceGraphData
+                style={{ width: diskUtil.value + "%" }}
+              />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
@@ -161,7 +173,6 @@ const ClusterInfo = observer(() => {
         </div>
       </div>
     </div>
-
 
     // 아래는 기존 소스
     // <div className="cluster_info">

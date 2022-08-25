@@ -10,7 +10,7 @@ import podStore from "../../../../store/Pod";
 const podBasicInformation = observer(() => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
-  const { loadWorkSpaceList, workSpaceList } = workspacesStore;
+  const { loadWorkSpaceList, workSpaceList, workspace } = workspacesStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
   const { podName, setPodName, setWorkspace, setProject } = podStore;
   const { loadClusterInProject, clusterList } = clusterStore;
@@ -59,10 +59,8 @@ const podBasicInformation = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
-                      {workspace.workspaceName}
-                    </option>
+                  {workspace.map((item) => (
+                    <option value={item}>{item}</option>
                   ))}
                 </select>
               </FormControl>

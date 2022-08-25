@@ -132,7 +132,7 @@ const ServiceAdminDashboard = observer(() => {
     return arr;
   };
 
-  const rowData = [
+  const workspaceEX = [
     {
       id: "japan",
       color: "hsl(72, 70%, 50%)",
@@ -187,6 +187,9 @@ const ServiceAdminDashboard = observer(() => {
         },
       ],
     },
+  ];
+
+  const projectEX = [
     {
       id: "france",
       color: "hsl(122, 70%, 50%)",
@@ -241,174 +244,70 @@ const ServiceAdminDashboard = observer(() => {
         },
       ],
     },
+  ];
+
+  const podEX = [
     {
-      id: "us",
-      color: "hsl(13, 70%, 50%)",
+      id: "france",
+      color: "hsl(122, 70%, 50%)",
       data: [
         {
           x: "plane",
-          y: 27,
+          y: 5,
         },
         {
           x: "helicopter",
-          y: 27,
+          y: 33,
         },
         {
           x: "boat",
-          y: 75,
+          y: 140,
         },
         {
           x: "train",
-          y: 90,
+          y: 154,
         },
         {
           x: "subway",
-          y: 86,
+          y: 296,
         },
         {
           x: "bus",
-          y: 38,
+          y: 13,
         },
         {
           x: "car",
-          y: 100,
+          y: 112,
         },
         {
           x: "moto",
-          y: 205,
+          y: 109,
         },
         {
           x: "bicycle",
-          y: 17,
+          y: 10,
         },
         {
           x: "horse",
-          y: 14,
+          y: 78,
         },
         {
           x: "skateboard",
-          y: 143,
+          y: 196,
         },
         {
           x: "others",
-          y: 75,
-        },
-      ],
-    },
-    {
-      id: "germany",
-      color: "hsl(17, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 59,
-        },
-        {
-          x: "helicopter",
-          y: 231,
-        },
-        {
-          x: "boat",
-          y: 29,
-        },
-        {
-          x: "train",
-          y: 244,
-        },
-        {
-          x: "subway",
-          y: 245,
-        },
-        {
-          x: "bus",
-          y: 36,
-        },
-        {
-          x: "car",
-          y: 253,
-        },
-        {
-          x: "moto",
-          y: 294,
-        },
-        {
-          x: "bicycle",
-          y: 257,
-        },
-        {
-          x: "horse",
-          y: 239,
-        },
-        {
-          x: "skateboard",
-          y: 3,
-        },
-        {
-          x: "others",
-          y: 82,
-        },
-      ],
-    },
-    {
-      id: "norway",
-      color: "hsl(160, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 156,
-        },
-        {
-          x: "helicopter",
-          y: 270,
-        },
-        {
-          x: "boat",
-          y: 184,
-        },
-        {
-          x: "train",
-          y: 213,
-        },
-        {
-          x: "subway",
-          y: 225,
-        },
-        {
-          x: "bus",
-          y: 46,
-        },
-        {
-          x: "car",
-          y: 147,
-        },
-        {
-          x: "moto",
-          y: 261,
-        },
-        {
-          x: "bicycle",
-          y: 96,
-        },
-        {
-          x: "horse",
-          y: 178,
-        },
-        {
-          x: "skateboard",
-          y: 178,
-        },
-        {
-          x: "others",
-          y: 230,
+          y: 68,
         },
       ],
     },
   ];
 
-  const MyResponsiveLine = () => (
+  const workspaceEXgraph = () => (
     <ResponsiveLine
-      data={rowData}
-      margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+      data={workspaceEX}
+      margin={{ top: 15, right: 15, bottom: 15, left: 15 }}
+      colors={{ scheme: "accent" }} // 그래프 색
       xScale={{ type: "point" }}
       yScale={{
         type: "linear",
@@ -417,18 +316,21 @@ const ServiceAdminDashboard = observer(() => {
         stacked: true,
         reverse: false,
       }}
+      // enableGridX={false} // X축 실선
+      // enableGridY={false} // Y축 실선
       // yFormat=" >-.2f"
       // axisTop={null}
       // axisRight={null}
-      // axisBottom={{
-      //   orient: "bottom",
-      //   tickSize: 5,
-      //   tickPadding: 5,
-      //   tickRotation: 0,
-      //   legend: "transportation",
-      //   legendOffset: 36,
-      //   legendPosition: "middle",
-      // }}
+      axisBottom={{
+        enable: true,
+        orient: "bottom",
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: "transportation",
+        legendOffset: 36,
+        legendPosition: "middle",
+      }}
       // axisLeft={{
       //   orient: "left",
       //   tickSize: 5,
@@ -439,11 +341,11 @@ const ServiceAdminDashboard = observer(() => {
       //   legendPosition: "middle",
       // }}
       pointSize={8}
-      pointColor={{ theme: "background" }}
+      // pointColor={{ theme: "background" }}
       pointBorderWidth={2}
       pointBorderColor={{ from: "serieColor" }}
       pointLabelYOffset={-12}
-      useMesh={true}
+      useMesh={true} // 점선
       // legends={[
       //   {
       //     anchor: "bottom-right",
@@ -461,6 +363,60 @@ const ServiceAdminDashboard = observer(() => {
       //     symbolBorderColor: "rgba(0, 0, 0, .5)",
       //   },
       // ]}
+    />
+  );
+
+  const projectEXgraph = () => (
+    <ResponsiveLine
+      data={projectEX}
+      margin={{ top: 15, right: 15, bottom: 15, left: 15 }}
+      colors={{ scheme: "category10" }}
+      xScale={{ type: "point" }}
+      yScale={{
+        type: "linear",
+        min: "auto",
+        max: "auto",
+        stacked: true,
+        reverse: false,
+      }}
+      // enableGridX={false} // X축 실선
+      // enableGridY={false} // Y축 실선
+      axisBottom={{
+        enable: true,
+        orient: "bottom",
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: "transportation",
+        legendOffset: 36,
+        legendPosition: "middle",
+      }}
+      pointSize={8}
+      pointBorderWidth={2}
+      pointBorderColor={{ from: "serieColor" }}
+      pointLabelYOffset={-12}
+      useMesh={true}
+    />
+  );
+
+  const podEXgraph = () => (
+    <ResponsiveLine
+      data={podEX}
+      margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
+      colors={{ scheme: "dark2" }}
+      xScale={{ type: "point" }}
+      yScale={{
+        type: "linear",
+        min: "auto",
+        max: "auto",
+        stacked: true,
+        reverse: false,
+      }}
+      pointSize={8}
+      pointBorderWidth={2}
+      pointBorderColor={{ from: "serieColor" }}
+      pointLabelYOffset={-12}
+      useMesh={true}
     />
   );
 
@@ -606,39 +562,6 @@ const ServiceAdminDashboard = observer(() => {
               )}
             </div>
           </>
-          {/* // <>
-          //   {togglePod === fasle ? (
-          //     <div className="ServiceRecentWrap">
-          //       <div className="ServiceRecentInner">
-          //         <ButtonStyle
-          //           variant="contained"
-          //           onClick={clickTogglePod}
-          //           toggle={togglePod}
-          //         >
-          //           Pod Top 5
-          //         </ButtonStyle>
-          //         <div className="ServiceRecentListWrap">
-          //           <ul>{podCpuTop5()}</ul>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   ) : (
-          //     <div className="ServiceRecentWrap">
-          //       <div className="ServiceRecentInner">
-          //         <ButtonStyle
-          //           variant="contained"
-          //           onClick={clickTogglePod}
-          //           toggle={togglePod}
-          //         >
-          //           Pod Memory Top 5
-          //         </ButtonStyle>
-          //         <div className="ServiceRecentListWrap">
-          //           <ul>{podCpuTop5()}</ul>
-          //         </div>
-          //       </div>
-          //     </div>
-          //   )}
-          // </> */}
         </PanelBox>
 
         <PanelBox className="panel_summary">
@@ -658,17 +581,17 @@ const ServiceAdminDashboard = observer(() => {
             <div className="monitoringInner">
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Workspace 총 개수</div>
-                <div className="monitoringBoxCont">{MyResponsiveLine()}</div>
+                <div className="monitoringBoxCont">{workspaceEXgraph()}</div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Project 총 개수</div>
-                <div className="monitoringBoxCont">그래프 들어갈 자리</div>
+                <div className="monitoringBoxCont">{projectEXgraph()}</div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Pod 총 개수</div>
-                <div className="monitoringBoxCont">그래프 들어갈 자리</div>
+                <div className="monitoringBoxCont">{podEXgraph()}</div>
               </div>
             </div>
           </div>

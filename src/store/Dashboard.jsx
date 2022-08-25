@@ -1,5 +1,5 @@
 import axios from "axios";
-import {  makeAutoObservable, runInAction, toJS } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
 import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
@@ -66,17 +66,15 @@ class Dashboard {
   Paused = 0;
   Running = 0;
   Stop = 0;
-  
+
   VMList = [];
-  
+
   clusterNameList = [];
   clusterName = "";
   cloudDashboardDetail = [];
-  clusterInfo = [
-    {
-      address: "",
-    },
-  ];
+  clusterInfo = {
+    address: "",
+  };
   nodeInfo = [
     {
       nodeName: "",
@@ -138,9 +136,9 @@ class Dashboard {
 
   loadDashboardCnt = async () => {
     await axios
-      .get(`http://192.168.160.230:8011/gmcapi/v2/totalDashboard`)
+      .get(`${SERVER_URL2}/totalDashboard`)
       // .get(`${SERVER_URL2}/totalDashboard`)
-      .then(({ data: { data, involvesData } }) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
           this.clusterCnt = data.clusterCnt;
@@ -156,7 +154,7 @@ class Dashboard {
 
   loadClusterRecent = async () => {
     await axios
-      .get(`http://192.168.160.230:8011/gmcapi/v2/totalDashboard`)
+      .get(`${SERVER_URL2}/totalDashboard`)
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -203,7 +201,7 @@ class Dashboard {
           this.ProviderName = this.connectionconfig.map(
             (provider) => provider.ProviderName
           );
-        })
+        });
         console.log(this.ConfigNameList);
       })
       .then(() => {
@@ -246,7 +244,6 @@ class Dashboard {
     // );
     // })
   };
- 
 
   // ConfigName = this.ConfigName.map(name => this.loadVMCnt(name));
 
@@ -264,18 +261,18 @@ class Dashboard {
   //     console.log(this.VMCnt);
   //     return this.VMCnt
   //   });
-    // .then((res) => {
-      //   console.log("step4");
-      // //   console.log(res);
-      //   this.VMList.configName = ConfigName;
-      //   this.VMList.vmCnt = this.VMCnt;
-      // console.log(this.VMList);
-    //   // this.ConfigName.map(val => this.loadVMStatusCnt(val));
-    // })
-    // .then(() => {
-    //   console.log("step5" + ConfigName);
-    //     this.loadVMCnt(this.ConfigName);
-    // });
+  // .then((res) => {
+  //   console.log("step4");
+  // //   console.log(res);
+  //   this.VMList.configName = ConfigName;
+  //   this.VMList.vmCnt = this.VMCnt;
+  // console.log(this.VMList);
+  //   // this.ConfigName.map(val => this.loadVMStatusCnt(val));
+  // })
+  // .then(() => {
+  //   console.log("step5" + ConfigName);
+  //     this.loadVMCnt(this.ConfigName);
+  // });
   // };
   loadVMCnt = async () => {
     const urls = axios.get(
@@ -290,17 +287,14 @@ class Dashboard {
     await configNameList.forEach((config) => {
       let configName = config.ConfigName;
       axios
-        .post(
-          `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`,
-          {
-            ConnectionName: configName,
-          }
-        )
+        .post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
+          ConnectionName: configName,
+        })
         .then((res) => {
           const vmCnt = res.data.VMCnt;
           // console.log("test : ", res);
-          vmCntList.push({configName, vmCnt});
-          return vmCntList
+          vmCntList.push({ configName, vmCnt });
+          return vmCntList;
         });
     });
     console.log(vmCntList);
@@ -333,7 +327,6 @@ class Dashboard {
           }
         )
         .then((res) => {
-          console.log("status : ", configName);
           const stop = res.data.Stop;
           const running = res.data.Running;
           const paused = res.data.Paused;
@@ -341,12 +334,11 @@ class Dashboard {
           // vmStatusList.push(running);
           // vmStatusList.push(stop);
           // vmStatusList.push(paused);
-          vmStatusList.push([configName, running, stop, paused])
+          vmStatusList.push([configName, running, stop, paused]);
           // console.log(vmStatusList);
           return vmStatusList;
         });
     });
- 
 
     // console.log(configNameList);
   };
@@ -368,16 +360,16 @@ class Dashboard {
   //       this.Stop
   //     )
   //   });
-    // .then(() => {
-    //   // if(ConfigName === VMList.ConfigName) {
-    //     console.log("step7");
-    //     // console.log(res);
-    //     VMList.paused = this.Paused;
-    //     VMList.running = this.Running;
-    //     VMList.stop = this.Stop;
-    //     console.log(VMList);
-    //   // }
-    // })
+  // .then(() => {
+  //   // if(ConfigName === VMList.ConfigName) {
+  //     console.log("step7");
+  //     // console.log(res);
+  //     VMList.paused = this.Paused;
+  //     VMList.running = this.Running;
+  //     VMList.stop = this.Stop;
+  //     console.log(VMList);
+  //   // }
+  // })
   // };
 
   loadClusterList = async (type = "") => {
@@ -399,36 +391,39 @@ class Dashboard {
       });
   };
 
-loadClusterDetail = async (clusterName) => {
-  await axios.get(`http://192.168.160.230:8012/gmcapi/v2/cloudDashboard?cluster=${clusterName}`)
-  .then((res) => {
-    runInAction(() => {
-      this.clusterName = clusterName;
-      this.cloudDashboardDetail = res.data.data;
-      this.clusterInfo = res.data.data.ClusterInfo;
-      this.address = res.data.data.ClusterInfo.address;
-      this.nodeInfo = res.data.data.nodeInfo;
-      this.type = this.nodeInfo.map((val) => val.type);
-      this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
-      this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
-      this.cpuUsage = res.data.data.cpuUsage;
-      this.cpuUtil = res.data.data.cpuUtil;
-      this.cpuTotal = res.data.data.cpuTotal;
-      this.memoryUsage = res.data.data.memoryUsage;
-      this.memoryUtil = res.data.data.memoryUtil;
-      this.memoryTotal = res.data.data.memoryTotal;
-      this.diskUsage = res.data.data.diskUsage;
-      this.diskUtil = res.data.data.diskUtil;
-      this.diskTotal = res.data.data.diskTotal;
-      this.resourceCnt = res.data.data.resourceCnt;
-    });
-  });
-  console.log(this.nodeInfo);
-}
-
-
-
-
+  loadClusterDetail = async (clusterName) => {
+    await axios
+      .get(`${SERVER_URL2}/cloudDashboard?cluster=${clusterName}`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.clusterName = clusterName;
+          this.cloudDashboardDetail = data;
+          this.clusterInfo = data.ClusterInfo;
+          this.address = data.ClusterInfo.address;
+          this.nodeInfo = data.nodeInfo;
+          this.type = this.nodeInfo.map((val) => val.type);
+          this.master = this.type.reduce(
+            (cnt, element) => cnt + ("master" === element),
+            0
+          );
+          this.worker = this.type.reduce(
+            (cnt, element) => cnt + ("worker" === element),
+            0
+          );
+          this.cpuUsage = data.cpuUsage;
+          this.cpuUtil = data.cpuUtil;
+          this.cpuTotal = data.cpuTotal;
+          this.memoryUsage = data.memoryUsage;
+          this.memoryUtil = data.memoryUtil;
+          this.memoryTotal = data.memoryTotal;
+          this.diskUsage = data.diskUsage;
+          this.diskUtil = data.diskUtil;
+          this.diskTotal = data.diskTotal;
+          this.resourceCnt = data.resourceCnt;
+          console.log(this.resourceCnt);
+        });
+      });
+  };
 }
 const dashboardStore = new Dashboard();
 export default dashboardStore;

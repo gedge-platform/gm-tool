@@ -27,7 +27,7 @@ const ButtonNext = styled.button`
 const CreateUser = observer((props) => {
   const { open } = props;
   const [inputs, setInputs] = useState({
-    memberId: "",
+    memberId: "", //
     memberName: "",
     password: "",
     email: "",
@@ -46,6 +46,7 @@ const CreateUser = observer((props) => {
     memberDescription,
   } = inputs;
 
+  console.log(inputs);
   const { postUser } = userStore;
 
   const handleClose = () => {
@@ -63,6 +64,7 @@ const CreateUser = observer((props) => {
   };
 
   const onChange = ({ target: { name, value } }) => {
+    console.log(name, value);
     setInputs({
       ...inputs,
       [name]: value,
@@ -82,11 +84,11 @@ const CreateUser = observer((props) => {
       swalError("Name을 입력해주세요");
       return;
     }
-    if(email === "") {
+    if (email === "") {
       swalError("Email을 입력해주세요");
       return;
     }
-    if(contact === "") {
+    if (contact === "") {
       swalError("Contact를 입력해주세요");
       return;
     } else {
@@ -96,7 +98,6 @@ const CreateUser = observer((props) => {
 
   const createUser = async () => {
     const result = await postUser(inputs);
-    console.log(result);
     handleClose();
   };
 
@@ -194,7 +195,7 @@ const CreateUser = observer((props) => {
               />
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <th>Member Description</th>
             <td>
               <CTextField
@@ -206,7 +207,7 @@ const CreateUser = observer((props) => {
                 value={memberDescription}
               />
             </td>
-          </tr>
+          </tr> */}
           <tr>
             <th>
               Member Role <span className="requried">*</span>

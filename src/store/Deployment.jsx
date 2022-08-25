@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
 import { getItem } from "../utils/sessionStorageFn";
@@ -371,8 +371,7 @@ class Deployment {
         YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
+        if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
         }
       });
@@ -387,9 +386,8 @@ class Deployment {
         `${SERVER_URL2}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
-      .then((res) => {
-        console.log(res);
-        console.log("2번 찍힌다");
+      .then(() => {
+        return;
       });
   };
 }

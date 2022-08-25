@@ -10,6 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import clusterStore from "../../../store/Cluster";
 import dashboardStore from "../../../store/Dashboard";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -19,10 +20,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     borderColor: "#171e33",
-    fontSize: 14, 
+    fontSize: 14,
     // "&:nth-of-type(odd)": {
     //   backgroundColor:"#222c45",
-    // }, 
+    // },
     backgroundColor: "#25304b",
     color: "#bcbebd",
     fontWeight: "bold",
@@ -42,9 +43,7 @@ const NodeList = observer(() => {
     // clusterDetail: { nodes },
   } = clusterStore;
 
-  const  {
-    nodeInfo,
-  } = dashboardStore;
+  const { nodeInfo } = dashboardStore;
 
   return (
     <TableContainer component={Paper} style={{ overflow: "unset" }}>
@@ -67,7 +66,9 @@ const NodeList = observer(() => {
               <StyledTableCell>{node.nodeIP}</StyledTableCell>
               <StyledTableCell>{node.kubeVersion}</StyledTableCell>
               <StyledTableCell>{node.os}</StyledTableCell>
-              <StyledTableCell>{node.created_at}</StyledTableCell>
+              <StyledTableCell>
+                {dateFormatter(node.created_at)}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

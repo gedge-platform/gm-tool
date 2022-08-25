@@ -272,6 +272,7 @@ class StorageClass {
 
         Object.entries(this.storageClass?.parameters).map(([key, value]) => {
           this.scParameters[key] = value;
+          console.log("key: " + key, "value: " + value);
         });
       });
   };

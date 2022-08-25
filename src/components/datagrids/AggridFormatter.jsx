@@ -18,6 +18,7 @@ const drawStatus = (status) => {
     case "SUCCESS":
     case "Succeeded":
     case "Normal":
+    case "success":
       // Green
       return `<span class="status_ico status_01">${status}</span>`;
     case "Available":
@@ -35,6 +36,7 @@ const drawStatus = (status) => {
     case "FAIL":
     case "Failed":
     case "Warning":
+    case "fail":
       // Red
       return `<span class="status_ico status_04">${status}</span>`;
     case "DEPLOYED":

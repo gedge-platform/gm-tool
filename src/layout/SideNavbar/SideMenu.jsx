@@ -263,7 +263,7 @@ export const SideMenu = () => {
                 <CustomTreeItem nodeId="6" label={Title.NetWork}>
                   <li>
                     <NavLink exact to="/roadbalancer" activeClassName="active">
-                      {Title.Roadbalancer}
+                      {Title.Loadbalancer}
                     </NavLink>
                   </li>
                   <li>

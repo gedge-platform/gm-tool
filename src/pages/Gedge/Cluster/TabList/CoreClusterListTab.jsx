@@ -39,13 +39,8 @@ const CoreClusterListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "ID",
-      field: "clusterName",
-      filter: true,
-    },
-    {
       headerName: "이름",
-      field: "clusterType",
+      field: "clusterName",
       filter: true,
     },
     {
@@ -59,7 +54,7 @@ const CoreClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "스팩 이름",
+      headerName: "스펙",
       field: "clusterEndpoint",
       filter: true,
     },

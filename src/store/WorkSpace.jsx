@@ -25,7 +25,7 @@ class Workspace {
   clusterList = [];
   detailInfo = [{}];
   selectProject = "";
-  selectCluster = "";
+  selectCluster = [];
   dataUsage = {};
   selectClusterInfo = [];
   workspace = [];
@@ -141,7 +141,6 @@ class Workspace {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workSpaceList = data;
-          // this.workSpaceDetail = res.data[0];
           this.totalElements = data.length;
           this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
@@ -164,16 +163,15 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.workSpaceDetail = res.data;
-          console.log(this.workSpaceDetail);
           this.dataUsage = this.workSpaceDetail.resourceUsage;
           if (res.data.events !== null) {
             this.events = this.workSpaceDetail.events;
           } else {
             this.events = null;
           }
-          this.detailInfo = res.data.projectList;
+          this.detailInfo = res.data.projectList ? res.data.projectList : 0;
           this.selectClusterInfo = res.data.selectCluster;
-          this.projectList = res.data.projectList;
+          this.projectList = res.data.projectList ? res.data.projectList : 0;
         });
       });
   };
@@ -193,9 +191,9 @@ class Workspace {
     const body = {
       workspaceName,
       workspaceDescription,
-      selectCluster,
-      workspaceOwner: getItem("user"),
-      workspaceCreator: getItem("user"),
+      clusterName: selectCluster,
+      MemberName: getItem("user").id,
+      // workspaceCreator: getItem("user"),
     };
     // const body2 = {
     //   workspaceName,
@@ -209,7 +207,7 @@ class Workspace {
     //   .catch((err) => console.error(err));
     // return
     axios
-      .post(`${SERVER_URL2}/workspaces`, body)
+      .post(`${SERVER_URL4}/workspaces`, body)
       .then((res) => {
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
@@ -246,12 +244,12 @@ class Workspace {
 
   deleteWorkspace = (workspaceName, callback) => {
     axios
-      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .delete(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => console.log(res))
       .catch((err) => console.error(err));
 
     axios
-      .delete(`${SERVER_URL2}/workspaces/${workspaceName}`)
+      .delete(`${SERVER_URL4}/workspaces/${workspaceName}`)
       .then((res) => {
         if (res.status === 200)
           swalError("워크스페이스가 삭제되었습니다.", callback);
