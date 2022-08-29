@@ -456,7 +456,9 @@ const ServiceAdminDashboard = observer(() => {
           <div className="ServiceCircleWrap">
             <div className="service_circle_inner">
               <div className="service_circle">
-                <span className="count">{projectList?.length}</span>
+                <span className="count">
+                  {projectList ? projectList?.length : 0}
+                </span>
                 <div className="title">Project</div>
               </div>
 
