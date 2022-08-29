@@ -24,55 +24,64 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const {
-  CredentialName,
-  ProviderName,
-  IdentityEndPoint,
-  Username,
-  Password,
-  DomainName,
-  ProjectID,
-} = certificationStore;
-
 const CreateCertification = observer((props) => {
   const { open } = props;
-
-  const template = {
-    CredentialName: CredentialName,
-    ProviderName: ProviderName,
-    KeyValueInfoList: [
-      {
-        Key: "IdentityEndPoint",
-        Value: IdentityEndPoint,
-      },
-      {
-        Key: "Username",
-        Value: Username,
-      },
-      {
-        Key: "Password",
-        Value: Password,
-      },
-      {
-        Key: "DomainName",
-        Value: DomainName,
-      },
-      {
-        Key: "ProjectID",
-        Value: ProjectID,
-      },
-    ],
-  };
-
+  const [inputs, setInputs] = useState({
+    CredentialName: "",
+    ProviderName: "",
+    IdentityEndPoint: "",
+    Username: "",
+    Password: "",
+    DomainName: "",
+    ProjectID: "",
+  });
   // const {
-  //   credentialName,
-  //   domainName,
-  //   identityEndPoint,
-  //   password,
-  //   projectID,
-  //   username,
-  //   providerName,
-  // } = inputs;
+  //   CredentialName,
+  //   ProviderName,
+  //   IdentityEndPoint,
+  //   Username,
+  //   Password,
+  //   DomainName,
+  //   ProjectID,
+  //   setContent,
+  // } = certificationStore;
+
+  // const template = {
+  //   CredentialName: CredentialName,
+  //   ProviderName: ProviderName,
+  //   KeyValueInfoList: [
+  //     {
+  //       Key: "IdentityEndPoint",
+  //       Value: IdentityEndPoint,
+  //     },
+  //     {
+  //       Key: "Username",
+  //       Value: Username,
+  //     },
+  //     {
+  //       Key: "Password",
+  //       Value: Password,
+  //     },
+  //     {
+  //       Key: "DomainName",
+  //       Value: DomainName,
+  //     },
+  //     {
+  //       Key: "ProjectID",
+  //       Value: ProjectID,
+  //     },
+  //   ],
+  // };
+
+  const {
+    credentialName,
+    domainName,
+    identityEndPoint,
+    password,
+    projectID,
+    username,
+    providerName,
+  } = inputs;
 
   const { postCredential, setDomainName, setCredentialName, setProviderName } =
     certificationStore;
@@ -82,20 +91,20 @@ const CreateCertification = observer((props) => {
     props.onClose && props.onClose();
   };
 
-  const onChange = (e) => {
-    const { value, name } = e.target;
-    switch (name) {
-      case "CredentialName":
-        setCredentialName(value);
-      case "Domainame":
-        setDomainName(value);
-      case "ProviderName":
-        setProviderName(value);
-    }
-    // setInputs({
-    //   ...inputs,
-    //   [name]: value,
-    // });
+  const onChange = ({ target: { name, value } }) => {
+    // const { value, name } = e.target;
+    // switch (name) {
+    //   case "CredentialName":
+    //     setCredentialName(value);
+    //   case "Domainame":
+    //     setDomainName(value);
+    //   case "ProviderName":
+    //     setProviderName(value);
+    // }
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
   };
 
   const onClickCreateCertification = () => {
@@ -132,14 +141,16 @@ const CreateCertification = observer((props) => {
   };
 
   const createCredential = async () => {
-    postCredential(require("json-to-pretty-yaml").stringify(template));
-    console.log(
-      postCredential(require("json-to-pretty-yaml").stringify(template))
-    );
+    // postCredential(require("json-to-pretty-yaml").stringify(template));
+    // console.log(
+    //   postCredential(require("json-to-pretty-yaml").stringify(template))
+    // );
+    const result = await postCredential(inputs);
   };
 
   useEffect(() => {
-    const YAML = require("json-to-pretty-yaml");
+    // const YAML = require("json-to-pretty-yaml");
+    // setContent(YAML.stringify(template));
   });
 
   return (
