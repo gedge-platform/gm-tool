@@ -4,6 +4,12 @@ import { BASIC_AUTH, SERVER_URL2 } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
 
 class Pod {
+  totalYElements = 0;
+  currentYPage = 1;
+  totalYPages = 1;
+  resultYList = {};
+  viewYList = [];
+
   currentPage = 1;
   totalPages = 1;
   resultList = {};
@@ -146,6 +152,7 @@ class Pod {
   setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
+      this.totalYPages = n;
     });
   };
 
@@ -181,9 +188,47 @@ class Pod {
     });
   };
 
+  yamlList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultYListList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 21) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultYList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultYList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultYList);
+      this.setYViewList(0);
+    });
+  };
+
   setPPodList = (list) => {
     runInAction(() => {
       this.pPodList = list;
+    });
+  };
+
+  setYViewList = (n) => {
+    runInAction(() => {
+      this.viewYList = this.pPodList[n];
     });
   };
 
@@ -232,10 +277,12 @@ class Pod {
           this.podList = list;
           this.podDetail = list[0];
           this.totalElements = list.length;
+          this.totalYElements = list.length;
         });
       })
       .then(() => {
         this.convertList(this.podList, this.setPPodList);
+        this.yamlList(this.podList, this.setPPodList);
       });
     this.loadPodDetail(
       this.podList[0].name,

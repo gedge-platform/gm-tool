@@ -5,6 +5,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { swalError } from "../../../../utils/swal-utils";
+import certificationStore from "../../../../store/Certification";
 
 const Button = styled.button`
   background-color: #fff;
@@ -26,80 +27,157 @@ const ButtonNext = styled.button`
 const CreateCertification = observer((props) => {
   const { open } = props;
   const [inputs, setInputs] = useState({
-    userName: "",
-    password: "",
-    domainName: "",
-    projectID: "",
-    endPointAddress: "",
+    CredentialName: "",
+    ProviderName: "",
+    IdentityEndPoint: "",
+    Username: "",
+    Password: "",
+    DomainName: "",
+    ProjectID: "",
   });
+  // const {
+  //   CredentialName,
+  //   ProviderName,
+  //   IdentityEndPoint,
+  //   Username,
+  //   Password,
+  //   DomainName,
+  //   ProjectID,
+  //   setContent,
+  // } = certificationStore;
 
-  const { userName, password, domainName, projectID, endPointAddress } = inputs;
+  // const template = {
+  //   CredentialName: CredentialName,
+  //   ProviderName: ProviderName,
+  //   KeyValueInfoList: [
+  //     {
+  //       Key: "IdentityEndPoint",
+  //       Value: IdentityEndPoint,
+  //     },
+  //     {
+  //       Key: "Username",
+  //       Value: Username,
+  //     },
+  //     {
+  //       Key: "Password",
+  //       Value: Password,
+  //     },
+  //     {
+  //       Key: "DomainName",
+  //       Value: DomainName,
+  //     },
+  //     {
+  //       Key: "ProjectID",
+  //       Value: ProjectID,
+  //     },
+  //   ],
+  // };
+
+  const {
+    credentialName,
+    domainName,
+    identityEndPoint,
+    password,
+    projectID,
+    username,
+    providerName,
+  } = inputs;
+
+  const { postCredential, setDomainName, setCredentialName, setProviderName } =
+    certificationStore;
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
-    setInputs({
-      userName: "",
-      password: "",
-      domainName: "",
-      projectID: "",
-      endPointAddress: "",
-    });
   };
 
   const onChange = ({ target: { name, value } }) => {
+    // const { value, name } = e.target;
+    // switch (name) {
+    //   case "CredentialName":
+    //     setCredentialName(value);
+    //   case "Domainame":
+    //     setDomainName(value);
+    //   case "ProviderName":
+    //     setProviderName(value);
+    // }
     setInputs({
       ...inputs,
       [name]: value,
     });
   };
 
-  const createCertification = async () => {
-    const result = await postCretification(inputs);
-    handleClose();
+  const onClickCreateCertification = () => {
+    if (CredentialName === "") {
+      swalError("Name을 입력해주세요");
+      return;
+    }
+    if (DomainName === "") {
+      swalError("password를 입력해주세요");
+      return;
+    }
+    if (IdentityEndPoint === "") {
+      swalError("domain Name을 입력해주세요");
+      return;
+    }
+    if (Password === "") {
+      swalError("projectID를 입력해주세요");
+      return;
+    }
+    if (ProjectID === "") {
+      swalError("endpoint address를 입력해주세요");
+      return;
+    }
+    if (Username === "") {
+      swalError("endpoint address를 입력해주세요");
+      return;
+    }
+    if (ProviderName === "") {
+      swalError("endpoint address를 입력해주세요");
+      return;
+    } else {
+      createCredential();
+    }
   };
+
+  const createCredential = async () => {
+    // postCredential(require("json-to-pretty-yaml").stringify(template));
+    // console.log(
+    //   postCredential(require("json-to-pretty-yaml").stringify(template))
+    // );
+    const result = await postCredential(inputs);
+  };
+
+  useEffect(() => {
+    // const YAML = require("json-to-pretty-yaml");
+    // setContent(YAML.stringify(template));
+  });
 
   return (
     <CDialogNew
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={`Create Certification`}
+      title={`Create Credential`}
       onClose={handleClose}
       bottomArea={false}
-      modules={[`custom`]}
+      modules={["custom"]}
     >
-      <table className="tb_data_new_tb_write">
+      <table className="tb_data_new tb_write">
         <tbody>
           <tr>
             <th>
-              User Name
+              Credential Name
               <span className="required">*</span>
             </th>
             <td>
               <CTextField
                 type="text"
-                placeholder="User Name"
+                placeholder="Credential Name"
                 className="form_fullWidth"
-                name="userName"
+                name="CredentialName"
                 onChange={onChange}
-                value={userName}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Password
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="password"
-                placeholder="User Password"
-                className="form_fullWidth"
-                name="password"
-                onChange={onChange}
-                value={password}
+                value={CredentialName}
               />
             </td>
           </tr>
@@ -113,41 +191,89 @@ const CreateCertification = observer((props) => {
                 type="text"
                 placeholder="Domain Name"
                 className="form_fullWidth"
-                name="domainName"
+                name="DomainName"
                 onChange={onChange}
-                value={domainName}
+                value={DomainName}
               />
             </td>
           </tr>
           <tr>
             <th>
-              Project ID
+              IdentityEndPoint
               <span className="required">*</span>
             </th>
             <td>
               <CTextField
                 type="text"
-                placeholder="Project ID"
+                placeholder="IdentityEndPoint"
                 className="form_fullWidth"
-                name="projectID"
+                name="IdentityEndPoint"
                 onChange={onChange}
-                value={projectID}
+                value={IdentityEndPoint}
               />
             </td>
           </tr>
           <tr>
             <th>
-              Endpoint Address
+              Password
+              <span className="required">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="password"
+                placeholder="Password"
+                className="form_fullWidth"
+                name="Password"
+                onChange={onChange}
+                value={Password}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              ProjectID
               <span className="required">*</span>
             </th>
             <td>
               <CTextField
                 type="text"
-                placeholder="Endpoint Address"
+                placeholder="ProjectID"
                 className="form_fullWidth"
-                name="endpointAddress"
+                name="ProjectID"
                 onChange={onChange}
-                value={endPointAddress}
+                value={ProjectID}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Username
+              <span className="required">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="USername"
+                className="form_fullWidth"
+                name="Username"
+                onChange={onChange}
+                value={Username}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              ProviderName
+              <span className="required">*</span>
+            </th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="ProviderName"
+                className="form_fullWidth"
+                name="ProviderName"
+                onChange={onChange}
+                value={ProviderName}
               />
             </td>
           </tr>
@@ -168,7 +294,7 @@ const CreateCertification = observer((props) => {
           }}
         >
           <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={handleClose}>생성</ButtonNext>
+          <ButtonNext onClick={onClickCreateCertification}>생성</ButtonNext>
         </div>
       </div>
     </CDialogNew>

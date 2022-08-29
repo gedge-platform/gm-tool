@@ -14,6 +14,7 @@ import { Title } from "@/pages";
 import certificationStore from "../../../../store/Certification";
 import Terminal from "../Dialog/Terminal";
 import CreateCluster from "../Dialog/CreateCluster";
+import CreateCertification from "../Dialog/CreateCertification";
 
 const CertificationListTab = observer(() => {
   const currentPageTitle = Title.Certification;
@@ -24,6 +25,9 @@ const CertificationListTab = observer(() => {
   };
   const [openTerminal, setOpenTerminal] = useState(false);
   const {
+    loadCredentialList,
+
+    credential,
     clusterDetail,
     clusterList,
     loadClusterList,
@@ -38,52 +42,85 @@ const CertificationListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "이름",
-      field: "clusterName",
+      headerName: "CredentialName",
+      field: "CredentialName",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "DomainName",
+      field: "DomainName",
       filter: true,
-    },
-    {
-      headerName: "생성자",
-      field: "clusterCreator",
-      filter: true,
-    },
-    {
-      headerName: "노드개수",
-      field: "nodeCnt",
-      filter: true,
-    },
-    {
-      headerName: "IP",
-      field: "clusterEndpoint",
-      filter: true,
-    },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
+      cellRenderer: function ({ data: { KeyValueInfoList } }) {
+        return `<span>${KeyValueInfoList[0].Value}</span>`;
       },
     },
     {
-      headerName: "",
-      field: "terminal",
-      minWidth: 100,
-      maxWidth: 100,
-      cellRenderer: function () {
-        // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+      headerName: "IdentityEndpoint",
+      field: "IdentityEndpoint",
+      filter: true,
+      cellRenderer: function ({ data: { KeyValueInfoList } }) {
+        if (KeyValueInfoList[1])
+          return `<span>${KeyValueInfoList[1].Value}</span>`;
+        else return `<span>no data</span>`;
       },
-      cellStyle: { textAlign: "center" },
     },
+    {
+      headerName: "Password",
+      field: "Password",
+      filter: true,
+      cellRenderer: function ({ data: { KeyValueInfoList } }) {
+        if (KeyValueInfoList[2])
+          return `<span>${KeyValueInfoList[2].Value}</span>`;
+        else return `<span>no data</span>`;
+      },
+    },
+    {
+      headerName: "ProjectID",
+      field: "ProjectID",
+      filter: true,
+      cellRenderer: function ({ data: { KeyValueInfoList } }) {
+        if (KeyValueInfoList[3])
+          return `<span>${KeyValueInfoList[3].Value}</span>`;
+        else return `<span>no data</span>`;
+      },
+    },
+    {
+      headerName: "Username",
+      field: "Username",
+      filter: true,
+      cellRenderer: function ({ data: { KeyValueInfoList } }) {
+        if (KeyValueInfoList[4])
+          return `<span>${KeyValueInfoList[4].Value}</span>`;
+        else return `<span>no data</span>`;
+      },
+    },
+    {
+      headerName: "ProviderName",
+      field: "ProviderName",
+      filter: true,
+    },
+    // {
+    //   headerName: "생성날짜",
+    //   field: "created_at",
+    //   filter: "agDateColumnFilter",
+    //   filterParams: agDateColumnFilter(),
+    //   minWidth: 150,
+    //   maxWidth: 200,
+    //   cellRenderer: function (data) {
+    //     return `<span>${dateFormatter(data.value)}</span>`;
+    //   },
+    // },
+    // {
+    //   headerName: "",
+    //   field: "terminal",
+    //   minWidth: 100,
+    //   maxWidth: 100,
+    //   cellRenderer: function () {
+    //     // return `<span class="state_ico_new terminal" onClick></span> `;
+    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+    //   },
+    //   cellStyle: { textAlign: "center" },
+    // },
   ]);
 
   const history = useHistory();
@@ -113,49 +150,49 @@ const CertificationListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("core");
+    // loadClusterList("core");
+    loadCredentialList();
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
-      <CReflexBox>
-        <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("core")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
-          </CommActionBar>
+    // con/so/le.log(CredentialName),
+    <CReflexBox>
+      <PanelBox>
+        <CommActionBar
+        // reloadFunc={() => loadClusterList("core")}
+        // isSearch={true}
+        // isSelect={true}
+        // keywordList={["이름"]}
+        >
+          <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
+        </CommActionBar>
 
-          <div className="tabPanelContainer">
-            {/* <CTabPanel value={tabvalue} index={0}> */}
-            <div className="grid-height2">
-              <AgGrid
-                rowData={viewList}
-                columnDefs={columDefs}
-                isBottom={false}
-                onCellClicked={handleClick}
-                totalElements={totalElements}
-                totalPages={totalPages}
-                currentPage={currentPage}
-                goNextPage={goNextPage}
-                goPrevPage={goPrevPage}
-              />
-            </div>
-            {/* </CTabPanel> */}
+        <div className="tabPanelContainer">
+          {/* <CTabPanel value={tabvalue} index={0}> */}
+          <div className="grid-height2">
+            <AgGrid
+              rowData={viewList}
+              columnDefs={columDefs}
+              isBottom={false}
+              onCellClicked={handleClick}
+              totalElements={totalElements}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
+            />
           </div>
-          <Terminal
-            open={openTerminal}
-            // yaml={getYamlFile}
-            onClose={handleCloseTerminal}
-          />
-          <CreateCluster type={"core"} open={open} onClose={handleClose} />
-        </PanelBox>
-      </CReflexBox>
-    </Layout>
+          {/* </CTabPanel> */}
+        </div>
+        {/* <Terminal
+          open={openTerminal}
+          // yaml={getYamlFile}
+          onClose={handleCloseTerminal}
+        /> */}
+        <CreateCertification open={open} onClose={handleClose} />
+      </PanelBox>
+    </CReflexBox>
   );
 });
 export default CertificationListTab;
