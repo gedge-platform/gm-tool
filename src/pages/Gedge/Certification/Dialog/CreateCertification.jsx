@@ -74,13 +74,13 @@ const CreateCertification = observer((props) => {
   // };
 
   const {
-    credentialName,
-    domainName,
-    identityEndPoint,
-    password,
-    projectID,
-    username,
-    providerName,
+    CredentialName,
+    DomainName,
+    IdentityEndPoint,
+    Password,
+    ProjectID,
+    Username,
+    ProviderName,
   } = inputs;
 
   const { postCredential, setDomainName, setCredentialName, setProviderName } =
