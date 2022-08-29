@@ -18,7 +18,16 @@ const RequestStatusTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { requestList, loadRequestList } = requestStatusStore;
+  const {
+    requestList,
+    loadRequestList,
+    totalElements,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+  } = requestStatusStore;
 
   const [columDefs] = useState([
     {
@@ -46,7 +55,8 @@ const RequestStatusTab = observer(() => {
       field: "status",
       filter: true,
       cellRenderer: function ({ value }) {
-        return drawStatus(value.toUpperCase());
+        if (value) return drawStatus(value.toUpperCase());
+        else return `<span>No Informaiton</span>`;
       },
     },
     {
@@ -103,10 +113,16 @@ const RequestStatusTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={requestList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
-                  totalElements={requestList.length}
+                  totalElements={totalElements}
+                  isBottom={false}
+                  // onCellClicked={handleClick}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
+                  // totalElements={requestList.length}
                 />
               </div>
             </CTabPanel>

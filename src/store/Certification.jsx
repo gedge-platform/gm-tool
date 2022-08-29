@@ -1,78 +1,25 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URL2 } from "../config";
+import { apiV2, SERVER_URL2, SERVER_URL4 } from "../config";
+import { swalError } from "../utils/swal-utils";
 
 class Certification {
-  clusterList = [];
-  clusterNameList = [];
+  credential = [];
+  CredentialName = "";
+  DomainName = "";
+  IdentityEndPoint = "";
+  Password = "";
+  ProjectID = "";
+  Username = "";
+  KeyValueInfoList = [];
+  ProviderName = "";
   totalElements = 0;
-  clusterDetail = {
-    clusterNum: 0,
-    ipAddr: "",
-    clusterName: "",
-    clusterType: "",
-    clusterEndpoint: "",
-    clusterCreator: "",
-    created_at: "",
-    gpu: [],
-    resource: {
-      deployment_count: 0,
-      pod_count: 0,
-      service_count: 0,
-      cronjob_count: 0,
-      job_count: 0,
-      volume_count: 0,
-      Statefulset_count: 0,
-      daemonset_count: 0,
-    },
-    nodes: [
-      {
-        name: "",
-        type: "",
-        nodeIP: "",
-        os: "",
-        kernel: "",
-        labels: {},
-        annotations: {},
-        allocatable: {
-          cpu: "",
-          "ephemeral-storage": "",
-          "hugepages-1Gi": "",
-          "hugepages-2Mi": "",
-          memory: "",
-          pods: "",
-        },
-        capacity: {
-          cpu: "",
-          "ephemeral-storage": "",
-          "hugepages-1Gi": "",
-          "hugepages-2Mi": "",
-          memory: "",
-          pods: "",
-        },
-        containerRuntimeVersion: "",
-      },
-    ],
-    events: [
-      {
-        kind: "",
-        name: "",
-        namespace: "",
-        cluster: "",
-        message: "",
-        reason: "",
-        type: "",
-        eventTime: "",
-      },
-    ],
-  };
-
-  clusters = [];
-
   currentPage = 1;
   totalPages = 1;
   resultList = {};
   viewList = [];
+
+  content = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -142,16 +89,70 @@ class Certification {
     });
   };
 
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
   setClusterList = (list) => {
     runInAction(() => {
       this.clusterList = list;
     });
   };
 
+  setCredentialList = (list) => {
+    runInAction(() => {
+      this.credential = list;
+    });
+  };
+
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.clusterList[n];
+      this.viewList = this.credential[n];
     });
+  };
+
+  loadCredentialList = async () => {
+    await axios
+      .get(`${SERVER_URL4}/spider/credentials`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.credential = data.credential;
+          this.totalElements = this.credential.length;
+          this.CredentialName = this.credential.map(
+            (list) => list.CredentialName
+          );
+          this.ProviderName = this.credential.map((list) => list.ProviderName);
+          this.KeyValueInfoList = this.credential.map(
+            (list) => list.KeyValueInfoList
+          );
+          // this.DomainName = this.KeyValueInfoList.map(
+          //   (val) => Object.values(val[0])[1]
+          // );
+        });
+        console.log(Object.values(this.KeyValueInfoList[0][0])[1]);
+      })
+      .then(() => {
+        this.convertList(this.credential, this.setCredentialList);
+      });
+  };
+
+  postCredential = async (data, callback) => {
+    const YAML = require("yamljs");
+    // const body = {
+    //   ...data,
+    //   enabled: true,
+    // };
+    console.log(YAML);
+    return await axios
+      .post(`${SERVER_URL4}/spider/credentials`, YAML.parse(this.content))
+      .then((res) => {
+        console.log(res);
+        if (res.status === 201) {
+          swalError("Credential 생성 완료", callback);
+        }
+      });
   };
 
   loadClusterList = async (type = "") => {
@@ -207,6 +208,24 @@ class Certification {
   setClusters = (clusters) => {
     runInAction(() => {
       this.clusters = clusters;
+    });
+  };
+
+  setCredentialName = (name) => {
+    runInAction(() => {
+      this.CredentialName = name;
+    });
+  };
+
+  setProviderName = (name) => {
+    runInAction(() => {
+      this.ProviderName = name;
+    });
+  };
+
+  setDomainName = (name) => {
+    runInAction(() => {
+      this.DomainName = name;
     });
   };
 }
