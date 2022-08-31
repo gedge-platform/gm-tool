@@ -62,7 +62,7 @@ const Title = {
   Loadbalancer: "로드밸런서",
   Topology: "토폴로지",
   NetWork: "네트워크",
-  Storage: "스토리지 클래스",
+  Storage: "스토리지클래스",
   StorageDashboard: "대시보드",
   Service: "서비스",
   Project: "프로젝트",
