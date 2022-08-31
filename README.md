@@ -40,19 +40,20 @@ Gedge Management Dashboard \
 
 
 ## GM-Tool의 기능
-1. 로그인
+1. Login
 
-![image](https://user-images.githubusercontent.com/96764768/187579057-c2bad318-fc2f-4a96-9b12-e82ce45d7314.png)
+![image](https://user-images.githubusercontent.com/96764768/187580059-e72428b8-8f96-48c1-96fb-794814a891bd.png)
 
 2. Platform Admin
 
-![image](https://user-images.githubusercontent.com/96764768/187577376-2c77b643-3344-4fe5-8898-9f92451836a8.png)
+![image](https://user-images.githubusercontent.com/96764768/187584916-ab95ba03-26b9-4ba1-b463-fe455d9b1568.png)
 
 * 통합 대시보드
   - 클라우드의 전반적인 내용을 요약
   - 전체 클러스터 개수, 클라우드 개수, 엣지 개수, 전체 워크스페이스 개수, 전체 프로젝트 개수
   - 실행 중인 클라우드를 아이콘으로 표현 및 상태를 표시
   - 실행 중인 엣지를 아이콘으로 표현 및 위치와 상태를 지도에 표시
+  - CPU 및 Memory 사용량 Top 5를 표시
 
 3. Service Admin
 
@@ -62,6 +63,7 @@ Gedge Management Dashboard \
   - 서비스 어드민 통합 대시보드
   - 각각의 유저가 사용중인 리소스를 요약
   - 유저가 만든 전체 워크스페이스 개수, 전체 프로젝트 개수를 표현
+  - Project의 CPU와 Memory, Pod의 CPU와 Memory 사용량 Top 5를 표시
   - 워크스페이스를 선택 시 이에 따른 각각의 리소스를 확인할 수 있게 표현
   - 워크스페이스 총 개수, 프로젝트 총 개수, 파드 총 개수 모니터링 가능
 
@@ -87,4 +89,15 @@ npm install
 ```
 npm start
 ```
+
+
+## Contributing
+If you're interested in being a contributor and want to get involved in developing the GEdge Platform code, please see DOCUMENTATIONs for details on submitting patches and the contribution workflow.
+
+
+## Community
+We have a project site for the GEdge Platform. If you're interested in being a contributor and want to get involved in developing the Cloud Edge Platform code, please visit <a href="https://gedge-platform.github.io/">GEdge Plaform</a> Project site
+
+
+
 
