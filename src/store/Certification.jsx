@@ -69,7 +69,7 @@ class Certification {
         cntCheck = true;
         tempList.push(toJS(value));
         cnt = cnt + 1;
-        if (cnt > 10) {
+        if (cnt > 20) {
           cntCheck = false;
           cnt = 1;
           this.resultList[totalCnt] = tempList;

@@ -123,12 +123,7 @@ class Monitoring {
 
   loadClusterNames = async (callback) => {
     await axios
-      .get(
-        `${SERVER_URL2}/clusters`
-        // , {
-        //   auth: BASIC_AUTH,
-        // }
-      )
+      .get(`${SERVER_URL2}/clusters`)
       .then((res) => {
         runInAction(() => {
           this.clusterNames = res.data?.map((item) => item.clusterName);
@@ -154,6 +149,7 @@ class Monitoring {
       )
       .then((res) => {
         this.coPieCPU = this.convertResponseToMonit(res);
+        console.log(res);
         // console.log(this.coPieCPU[2]?.metrics);
       });
   };

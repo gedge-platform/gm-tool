@@ -13,62 +13,71 @@ const ClusterStatus = observer(() => {
     vmStatusList,
     connectionconfig,
     ProviderName,
-
   } = dashboardStore;
 
   useEffect(() => {
     // loadCredentialName();
-      // loadVMStatusCnt();
-      // clusterStatus2();
+    // loadVMStatusCnt();
+    // clusterStatus2();
   }, []);
 
-      // console.log(vmStatusList)
-      // if (vmStatusList === undefined) {
-      //   loadVMStatusCnt();
-      // } else {
-      //   console.log(vmStatusList);
-      //   return vmStatusList.map((val) => {
-      //     <div className="ClusterStatusBox">
-      //       <div className="ClusterStatusIcon azure"></div>
-      //       <div className="ClusterStatusInfoBox">
-      //         <div className="Count">10<span>{val.ConfigName}</span></div>
-      //         <div className="Count">10<span>VM</span></div>
-      //     </div>
-      //      <div className="ClusterStatusList">
-      //        <ul>
-      //          <li className="run"><span className="tit">실행</span> <span>{val.running}</span></li>
-      //          <li className="stop"><span className="tit">중지</span> <span>{val.stop}</span></li>
-      //          <li className="pause"><span className="tit">일시중지</span> <span>{val.paused}</span></li>
-      //        </ul>
-      //      </div>
-      //    </div>
-      //   });      
-      // }
- 
+  // console.log(vmStatusList);
+  // if (vmStatusList === undefined) {
+  //   loadVMStatusCnt();
+  // } else {
   //   console.log(vmStatusList);
-    // return vmStatusList.map((val) => {
-    //   <div className="ClusterStatusBox">
-    //     <div className="ClusterStatusIcon azure"></div>
-    //     <div className="ClusterStatusInfoBox">
-    //       <div className="Count">10<span>{val.ConfigName}</span></div>
-    //       <div className="Count">10<span>VM</span></div>
-    //     </div>
-    //     <div className="ClusterStatusList">
-    //       <ul>
-    //         <li className="run"><span className="tit">실행</span> <span>{val.running}</span></li>
-    //         <li className="stop"><span className="tit">중지</span> <span>{val.stop}</span></li>
-    //         <li className="pause"><span className="tit">일시중지</span> <span>{val.paused}</span></li>
-    //       </ul>
-    //     </div>
-    //   </div>
-    // });
+  //   return vmStatusList.map((val) => {
+  //     <div className="ClusterStatusBox">
+  //       <div className="ClusterStatusIcon azure"></div>
+  //       <div className="ClusterStatusInfoBox">
+  //         <div className="Count">
+  //           10<span>{val.ConfigName}</span>
+  //         </div>
+  //         <div className="Count">
+  //           10<span>VM</span>
+  //         </div>
+  //       </div>
+  //       <div className="ClusterStatusList">
+  //         <ul>
+  //           <li className="run">
+  //             <span className="tit">실행</span> <span>{val.running}</span>
+  //           </li>
+  //           <li className="stop">
+  //             <span className="tit">중지</span> <span>{val.stop}</span>
+  //           </li>
+  //           <li className="pause">
+  //             <span className="tit">일시중지</span> <span>{val.paused}</span>
+  //           </li>
+  //         </ul>
+  //       </div>
+  //     </div>;
+  //   });
+  // }
+
+  //   console.log(vmStatusList);
+  // return vmStatusList.map((val) => {
+  //   <div className="ClusterStatusBox">
+  //     <div className="ClusterStatusIcon azure"></div>
+  //     <div className="ClusterStatusInfoBox">
+  //       <div className="Count">10<span>{val.ConfigName}</span></div>
+  //       <div className="Count">10<span>VM</span></div>
+  //     </div>
+  //     <div className="ClusterStatusList">
+  //       <ul>
+  //         <li className="run"><span className="tit">실행</span> <span>{val.running}</span></li>
+  //         <li className="stop"><span className="tit">중지</span> <span>{val.stop}</span></li>
+  //         <li className="pause"><span className="tit">일시중지</span> <span>{val.paused}</span></li>
+  //       </ul>
+  //     </div>
+  //   </div>
+  // });
   // };
-  
+
   return (
-    <div className="ClusterStatusWrap">      
-    {/* {clusterStatus2()}   */}
-    {/* {dashboardstatus()} */}
-    {/* {console.log(vmStatusList)}
+    <div className="ClusterStatusWrap">
+      {/* {clusterStatus2()}   */}
+      {/* {dashboardstatus()} */}
+      {/* {console.log(vmStatusList)}
       <div className="ClusterStatusBox">
         <div className="ClusterStatusIcon azure"></div>
         <div className="ClusterStatusInfoBox">
@@ -143,9 +152,7 @@ const ClusterStatus = observer(() => {
                     </ul>
                 </div>
             </div> */}
-        </div>
-    );
-
-  });
-  export default ClusterStatus;
-  
+    </div>
+  );
+});
+export default ClusterStatus;

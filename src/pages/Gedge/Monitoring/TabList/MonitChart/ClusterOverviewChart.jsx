@@ -75,8 +75,9 @@ const COAreaChartTop = observer(({ chartValue }) => {
             vertical={false}
             strokeDasharray="3 5"
           />
+
           <XAxis interval={5} tickLine="false" dataKey="time" />
-          <YAxis />
+          <YAxis type="number" domain={[0, 100]} />
           <Tooltip />
           <Area
             type="monotone"
