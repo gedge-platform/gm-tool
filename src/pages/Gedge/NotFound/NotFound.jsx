@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import { getItem } from "../../../utils/sessionStorageFn";
 
 const Container = styled.div`
   width: 100vw;
@@ -23,11 +24,28 @@ const Container = styled.div`
 `;
 
 const NotFound = () => {
+  const userRole = getItem("userRole");
+
   return (
-    <Container>
-      <p>404 Not Found</p>
-      <NavLink to="/">메인페이지로</NavLink>
-    </Container>
+    <>
+      <Container>
+        <p>404 Not Found</p>
+        <NavLink to="/">메인페이지로</NavLink>
+      </Container>
+    </>
+    // <>
+    //   {userRole === "PA" ? (
+    //     <Container>
+    //       <p>404 Not Found</p>
+    //       <NavLink to="/">PA 메인페이지로</NavLink>
+    //     </Container>
+    //   ) : (
+    //     <Container>
+    //       <p>404 Not Found</p>
+    //       <NavLink to="/service">SA 메인페이지로</NavLink>
+    //     </Container>
+    //   )}
+    // </>
   );
 };
 

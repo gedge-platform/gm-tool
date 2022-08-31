@@ -3,9 +3,8 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import moment from "moment";
 import serviceAccountStore from "../../../store/ServiceAccount";
-import { isValidJSON } from "../../../utils/common-utils";
+import { isValidJSON, dateFormatter } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
 
 const TableTitle = styled.p`
@@ -55,7 +54,7 @@ const ServiceAccountsDetail = observer(() => {
     serviceAccountDetail: {
       annotations,
       cluster,
-      createdAt,
+      createAt,
       label,
       name,
       namespace,
@@ -64,6 +63,7 @@ const ServiceAccountsDetail = observer(() => {
     },
   } = serviceAccountStore;
 
+  console.log(secrets);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -81,33 +81,49 @@ const ServiceAccountsDetail = observer(() => {
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Data" />
+        <CTab label="Overview" />
+        <CTab label="Metadata" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody className="tb_data_detail">
+            <tbody>
               <tr>
-                <th>Name</th>
+                <th style={{ width: "15%" }}>Name</th>
                 <td>{name}</td>
-                <th>Project</th>
-                <td>{namespace}</td>
               </tr>
               <tr>
-                <th>Cluster</th>
-                <td>{cluster}</td>
-                <th>Secrets Count</th>
-                <td>{secretCnt}</td>
-              </tr>
-              <tr>
-                <th>Secrets Name</th>
-                <td>{secrets[0].name}</td>
-                <th>Create Time</th>
-                <td>{moment(createdAt).format("YYYY-MM-DD HH:MM")}</td>
+                <th>Created</th>
+                <td>{dateFormatter(createAt)}</td>
               </tr>
             </tbody>
           </table>
+          <br />
 
+          <TableTitle>Secrets</TableTitle>
+          <table className="tb_data">
+            <tbody>
+              <tr>
+                <th style={{ width: "15%" }}>Secrets Name</th>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {secrets !== null ? (
+                    secrets.map((secret) => secret.name + "\n")
+                  ) : (
+                    <></>
+                  )}
+                </td>
+              </tr>
+              <tr>
+                <th>Secrets Count</th>
+                <td>{secretCnt}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </CTabPanel>
+
+      <CTabPanel value={tabvalue} index={1}>
+        <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
             {label ? (
@@ -121,36 +137,47 @@ const ServiceAccountsDetail = observer(() => {
               <p>No Labels Info.</p>
             )}
           </LabelContainer>
-
-          <TableTitle>Annotations</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              {annotations ? (
-                Object.entries(annotations).map(([key, value]) => (
-                  <tr>
-                    <th style={{ width: "20%" }}>{key}</th>
-                    <td>
-                      {isValidJSON(value) ? (
-                        <ReactJson
-                          src={JSON.parse(value)}
-                          theme="summerfruit"
-                          displayDataTypes={false}
-                          displayObjectSize={false}
-                        />
-                      ) : (
-                        value
-                      )}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td>No Annotations Info.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
           <br />
+          <TableTitle>Annotations</TableTitle>
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
+          {/* <LabelContainer>
+            {annotations ? (
+              Object.entries(annotations).map(([key, value]) => (
+                <tr>
+                  <th style={{ width: "20%" }}>{key}</th>
+                  <td>
+                    {isValidJSON(value) ? (
+                      <ReactJson
+                        src={JSON.parse(value)}
+                        theme="summerfruit"
+                        displayDataTypes={false}
+                        displayObjectSize={false}
+                      />
+                    ) : (
+                      value
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <p>No Annotations Info.</p>
+            )}
+          </LabelContainer> */}
         </div>
       </CTabPanel>
     </PanelBox>

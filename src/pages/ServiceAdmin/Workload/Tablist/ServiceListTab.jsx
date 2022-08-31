@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
@@ -10,8 +10,10 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../ServiceDetail";
 import serviceStore from "../../../../store/Service";
-import moment from "moment";
 import CreateService from "../Dialog/CreateService";
+import { ViewList } from "@mui/icons-material";
+import { toJS } from "mobx";
+
 
 const ServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -21,11 +23,17 @@ const ServiceListTab = observer(() => {
   };
 
   const {
+    pServiceList,
+    viewList,
     serviceList,
     serviceDetail,
     totalElements,
     loadServiceList,
     loadServiceDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
   } = serviceStore;
 
   const [columDefs] = useState([
@@ -62,9 +70,7 @@ const ServiceListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -97,20 +103,23 @@ const ServiceListTab = observer(() => {
             isSearch={true}
             isSelect={true}
             keywordList={["이름"]}
-          >
+            >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
-
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={serviceList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
-                />
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
+                  />
               </div>
             </CTabPanel>
           </div>
@@ -118,7 +127,7 @@ const ServiceListTab = observer(() => {
             open={open}
             onClose={handleClose}
             reloadFunc={loadServiceList}
-          />
+            />
         </PanelBox>
         <Detail service={serviceDetail} />
       </CReflexBox>

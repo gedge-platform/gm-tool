@@ -1,86 +1,98 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
+import { CIconButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
+import Terminal from "../Dialog/Terminal";
+import { Title } from "@/pages";
 
 const CoreClusterListTab = observer(() => {
+  const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-
-  const { clusterDetail, clusterList, loadClusterList, loadCluster } =
-    clusterStore;
+  const [openTerminal, setOpenTerminal] = useState(false);
+  const {
+    clusterDetail,
+    clusterList,
+    loadClusterList,
+    loadCluster,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
+  } = clusterStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
       headerName: "이름",
       field: "clusterName",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
-      filter: true,
-    },
-    {
-      headerName: "생성자",
+      headerName: "상태",
       field: "clusterCreator",
       filter: true,
     },
     {
-      headerName: "노드개수",
+      headerName: "이미지 이름",
       field: "nodeCnt",
       filter: true,
     },
     {
-      headerName: "IP",
+      headerName: "스펙",
       field: "clusterEndpoint",
       filter: true,
     },
     {
-      headerName: "생성날짜",
+      headerName: "IP",
       field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
+    },
+    {
+      headerName: "VM",
+      field: "terminal",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        // return `<span class="state_ico_new terminal" onClick></span> `;
+        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+      },
+      cellStyle: { textAlign: "center" },
     },
   ]);
 
   const history = useHistory();
 
   const handleClick = (e) => {
+    let fieldName = e.colDef.field;
     loadCluster(e.data.clusterName);
+    if (fieldName === "terminal") {
+      handleOpenTerminal();
+    }
   };
 
-  const handleOpen = () => {
+  const handleOpen = (e) => {
     setOpen(true);
   };
 
@@ -88,36 +100,59 @@ const CoreClusterListTab = observer(() => {
     setOpen(false);
   };
 
-  useEffect(() => {
+  const handleOpenTerminal = () => {
+    setOpenTerminal(true);
+  };
+
+  const handleCloseTerminal = () => {
+    setOpenTerminal(false);
+  };
+
+  useLayoutEffect(() => {
     loadClusterList("core");
   }, []);
 
   return (
-    <>
+    <Layout currentPageTitle={currentPageTitle}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar
+          // reloadFunc={() => loadClusterList("core")}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
+          >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  rowData={clusterList}
-                  columnDefs={columDefs}
-                  isBottom={true}
-                  onCellClicked={handleClick}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                onCellClicked={handleClick}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
+          <Terminal
+            open={openTerminal}
+            // yaml={getYamlFile}
+            onClose={handleCloseTerminal}
+          />
           <CreateCluster type={"core"} open={open} onClose={handleClose} />
         </PanelBox>
-        <Detail cluster={clusterDetail} />
+        {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
-    </>
+    </Layout>
   );
 });
 export default CoreClusterListTab;

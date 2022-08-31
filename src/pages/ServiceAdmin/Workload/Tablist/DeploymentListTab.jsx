@@ -9,9 +9,9 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import deploymentStore from "../../../../store/Deployment";
-import moment from "moment";
+
 import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const DeploymentListTab = observer(() => {
@@ -27,6 +27,12 @@ const DeploymentListTab = observer(() => {
     totalElements,
     loadDeploymentList,
     loadDeploymentDetail,
+    setWorkspace,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -49,6 +55,9 @@ const DeploymentListTab = observer(() => {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
+      cellRenderer: function (data) {
+        return `<span>${data.value ? data.value : "-"}</span>`;
+      },
     },
     {
       headerName: "상태",
@@ -66,9 +75,7 @@ const DeploymentListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -84,6 +91,7 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
   }, []);
   const handleCreateOpen = () => {
+    setWorkspace("");
     setOpen(true);
   };
 
@@ -103,16 +111,19 @@ const DeploymentListTab = observer(() => {
           >
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
-
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={deploymentList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
@@ -10,7 +10,6 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../StatefulDetail";
 import statefulSetStore from "../../../../store/StatefulSet";
-import moment from "moment";
 
 const StatefulSetListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -24,6 +23,11 @@ const StatefulSetListTab = observer(() => {
     totalElements,
     loadStatefulSetList,
     loadStatefulSetDetail,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = statefulSetStore;
 
   const [columDefs] = useState([
@@ -55,9 +59,7 @@ const StatefulSetListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value)).format(
-          "YYYY-MM-DD HH:mm"
-        )}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -91,10 +93,14 @@ const StatefulSetListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={statefulSetList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

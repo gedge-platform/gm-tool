@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import Detail from "../Detail";
 import projectStore from "../../../../store/Project";
 import CreateProject from "../Dialog/CreateProject";
@@ -28,6 +27,11 @@ const UserServiceListTab = observer(() => {
     loadProjectList,
     loadProjectDetail,
     deleteProject,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = projectStore;
 
   const [columDefs] = useState([
@@ -37,26 +41,24 @@ const UserServiceListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "프로젝트 유형",
+      field: "projectType",
+      filter: true,
+    },
+    {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "워크스페이스",
       field: "workspaceName",
       filter: true,
-    },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+      cellRenderer: function ({ data: { workspace } }) {
+        return `<span>${workspace.workspaceName}</span>`;
       },
     },
     {
@@ -71,6 +73,15 @@ const UserServiceListTab = observer(() => {
     },
   ]);
 
+  const history = useHistory();
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleClick = ({ data: { projectName }, colDef: { field } }) => {
     if (field === "delete") {
       swalUpdate("삭제하시겠습니까?", () =>
@@ -81,15 +92,6 @@ const UserServiceListTab = observer(() => {
     loadProjectDetail(projectName);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const history = useHistory();
-
   useEffect(() => {
     loadProjectList("user");
   }, []);
@@ -99,10 +101,10 @@ const UserServiceListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-            reloadFunc={loadProjectList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
+          // reloadFunc={loadProjectList}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
@@ -112,16 +114,20 @@ const UserServiceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={projectList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <CreateProject
-            reloadFunc={loadProjectList}
+            reloadFunc={() => loadProjectList()}
             type={"user"}
             open={open}
             onClose={handleClose}

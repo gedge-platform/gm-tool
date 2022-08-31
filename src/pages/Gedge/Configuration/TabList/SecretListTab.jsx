@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from "react";
+//Pagenation Import useLayoutEffect
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
-import axios from "axios";
-import { BASIC_AUTH, SERVER_URL } from "../../../../config";
 import secretStore from "../../../../store/Secret";
 import SecretDetail from "../SecretsDetail";
 
@@ -26,6 +24,13 @@ const SecretListTab = observer(() => {
     totalElements,
     loadsecretList,
     loadsecretTabList,
+
+    //Pagenation Variable
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
   } = secretStore;
 
   const [columDefs] = useState([
@@ -62,9 +67,7 @@ const SecretListTab = observer(() => {
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
   ]);
@@ -76,7 +79,8 @@ const SecretListTab = observer(() => {
 
   const history = useHistory();
 
-  useEffect(() => {
+  //Pagenation useEffect -> useLayoutEffect
+  useLayoutEffect(() => {
     loadsecretList();
   }, []);
 
@@ -84,8 +88,13 @@ const SecretListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
-            <CCreateButton>생성</CCreateButton>
+          <CommActionBar
+          // reloadFunc={loadsecretList}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
+          >
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -93,10 +102,18 @@ const SecretListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={secretList}
+                  //Pagenation rowData={viewList}
+                  rowData={viewList}
                   columnDefs={columDefs}
-                  isBottom={true}
+                  //Pagenation isBottom = false
+                  // isBottom={true}
+                  isBottom={false}
                   totalElements={totalElements}
+                  //Pagenation AgGrid Function
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>

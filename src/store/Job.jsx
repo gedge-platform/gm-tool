@@ -1,8 +1,13 @@
 import axios from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { BASIC_AUTH, SERVER_URL2 } from "../config";
 
 class Job {
+  currentPage = 1;
+  totalPages = 1;
+  resultList = {};
+  viewList = [];
+  pJobList = [];
   jobList = [];
   jobDetailData = {
     containers: [
@@ -48,6 +53,7 @@ class Job {
       },
     },
   ];
+  ownerReferences = {};
 
   totalElements = 0;
   labels = {};
@@ -69,21 +75,93 @@ class Job {
     makeAutoObservable(this);
   }
 
-  loadJobList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/jobs`, {
-        auth: BASIC_AUTH,
-      })
-      .then((res) => {
-        runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.jobList = list;
-          // this.jobDetail = list[0];
-          this.totalElements = list.length;
-        });
+  goPrevPage = () => {
+    runInAction(() => {
+      if (this.currentPage > 1) {
+        this.currentPage = this.currentPage - 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+      }
+    });
+  };
+
+  goNextPage = () => {
+    runInAction(() => {
+      if (this.totalPages > this.currentPage) {
+        this.currentPage = this.currentPage + 1;
+        this.setViewList(this.currentPage - 1);
+        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+      }
+    });
+  };
+
+  setCurrentPage = (n) => {
+    runInAction(() => {
+      this.currentPage = n;
+    });
+  };
+
+  setTotalPages = (n) => {
+    runInAction(() => {
+      this.totalPages = n;
+    });
+  };
+
+  convertList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultList = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 10) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultList[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
       });
+
+      if (cntCheck) {
+        this.resultList[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalPages(totalCnt);
+      setFunc(this.resultList);
+      this.setViewList(0);
+    });
+  };
+
+      setPJobList = (list) => {
+        runInAction(() => {
+          this.pJobList = list;
+        })
+      };
+
+      setViewList = (n) => {
+        runInAction(() => {
+          this.viewList = this.pJobList[n];
+        });
+      };
+
+  loadJobList = async (type) => {
+    await axios.get(`${SERVER_URL2}/jobs`).then((res) => {
+      runInAction(() => {
+        const list = res.data.data.filter((item) => item.projectType === type);
+        this.jobList = list;
+        // this.jobDetail = list[0];
+        this.totalElements = list.length;
+      });
+    }).then(() => {
+      this.convertList(this.jobList, this.setPJobList);
+    })
     this.loadJobDetail(
       this.jobList[0].name,
       this.jobList[0].cluster,
@@ -93,9 +171,7 @@ class Job {
 
   loadJobDetail = async (name, cluster, project) => {
     await axios
-      .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`, {
-        auth: BASIC_AUTH,
-      })
+      .get(`${SERVER_URL2}/jobs/${name}?cluster=${cluster}&project=${project}`)
       .then(({ data: { data, involves } }) => {
         runInAction(() => {
           this.jobDetailData = data;
@@ -103,6 +179,7 @@ class Job {
           this.labels = data.label;
           this.annotations = data.annotations;
           this.involvesPodList = involves.podList;
+          this.ownerReferences = involves.ownerReferences;
 
           if (data.events !== null) {
             this.events = data.events;

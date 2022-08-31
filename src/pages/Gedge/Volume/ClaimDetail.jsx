@@ -6,14 +6,61 @@ import { swalConfirm } from "@/utils/swal-utils";
 import { CScrollbar } from "@/components/scrollbars";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
 import LogDialog from "../../Template/Dialog/LogDialog";
 import { CDatePicker } from "@/components/textfields/CDatePicker";
 import { observer } from "mobx-react";
 import { toJS } from "mobx";
-import volumeStore from "../../../store/Volume";
+import ReactJson from "react-json-view";
+import { isValidJSON } from "@/utils/common-utils";
+import EventAccordion from "@/components/detail/EventAccordion";
+import claimStore from "../../../store/Claim";
+import styled from "styled-components";
 
-const ClaimDetail = observer(({ pvClaim, metadata }) => {
+const TableTitle = styled.p`
+  font-size: 14px;
+  font-weight: 500;
+  margin: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+const TableSubTitle = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
+
+const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -21,11 +68,9 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables } = volumeStore;
+  const { pvClaimLables, pvClaim, events, label } = claimStore;
 
   const annotationTable = [];
-  const labelTable = [];
-  const eventTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
     annotationTable.push(
@@ -36,12 +81,24 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
     );
   });
 
-  if (pvClaimLables) {
-    Object.entries(pvClaimLables).map(([key, value]) => {
-      labelTable.push(
+  const metaTable = [];
+  if (pvClaim?.annotations) {
+    Object.entries(pvClaim?.annotations).map(([key, value]) => {
+      metaTable.push(
         <tr>
-          <th className="tb_volume_detail_th">{key}</th>
-          <td>{value}</td>
+          <th style={{ width: "20%" }}>{key}</th>
+          <td>
+            {isValidJSON(value) ? (
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
+            ) : (
+              value
+            )}
+          </td>
         </tr>
       );
     });
@@ -51,38 +108,37 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
-        <CTab label="Annotations" />
         <CTab label="Metadata" />
-        <CTab label="Event" />
+        <CTab label="Events" />
         <CTab label="Finalizers" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>
+            <tbody className="tb_data_detail">
               <tr>
-                <th className="tb_volume_detail_th">name</th>
-                <td className="tb_volume_detail_td">{pvClaim?.name}</td>
+                <th>Claim Name</th>
+                <td>{pvClaim.name ? pvClaim?.name : "-"}</td>
                 <th>capacity</th>
-                <td>{pvClaim?.capacity}</td>
+                <td>{pvClaim?.capacity ? pvClaim?.capacity : "-"}</td>
               </tr>
               <tr>
-                <th className="tb_volume_detail_th">namespace</th>
-                <td className="tb_volume_detail_td">{pvClaim?.namespace}</td>
+                <th>namespace</th>
+                <td>{pvClaim?.namespace ? pvClaim?.namespace : "-"}</td>
                 <th>accessMode</th>
-                <td>{pvClaim?.accessMode}</td>
+                <td>{pvClaim?.accessMode ? pvClaim?.accessMode : "-"}</td>
               </tr>
               <tr>
                 <th>status</th>
-                <td>{pvClaim?.status}</td>
-                <th>volume</th>
-                <td>{pvClaim?.volume}</td>
+                <td>{pvClaim?.status ? pvClaim?.status : "-"}</td>
+                <th>volume Name</th>
+                <td>{pvClaim?.volume ? pvClaim?.volume : "-"}</td>
               </tr>
               <tr>
-                <th>clusterName</th>
-                <td>{pvClaim?.clusterName}</td>
+                <th>cluster Name</th>
+                <td>{pvClaim?.clusterName ? pvClaim?.clusterName : "-"}</td>
                 <th>storageClass</th>
-                <td>{pvClaim?.storageClass}</td>
+                <td>{pvClaim?.storageClass ? pvClaim?.storageClass : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -90,36 +146,36 @@ const ClaimDetail = observer(({ pvClaim, metadata }) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
+          <TableTitle>Labels</TableTitle>
+          <LabelContainer>
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
+                <Label>
+                  <span className="key">{key}</span>
+                  <span className="value">{value}</span>
+                </Label>
+              ))
+            ) : (
+              <p>No Labels Info.</p>
+            )}
+          </LabelContainer>
+
+          <br />
+          <TableTitle>Annotaions</TableTitle>
           <table className="tb_data">
-            <tbody>{annotationTable}</tbody>
+            <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>{labelTable}</tbody>
-          </table>
-        </div>
+        <EventAccordion events={events} />
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
               <tr>
-                <th className="tb_volume_detail_th">event</th>
-                <td>{null}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </CTabPanel>
-      <CTabPanel value={tabvalue} index={4}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">Finalizers</th>
+                <th className="tb_volume_detail_th">value</th>
                 <td>{pvClaim?.finalizers}</td>
               </tr>
             </tbody>

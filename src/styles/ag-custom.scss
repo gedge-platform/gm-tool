@@ -24,7 +24,7 @@
   align-items: center;
   height: 37px;
   padding: 0 8px;
-  border-top: 1px solid #141a30;
+  // border-top: 1px solid #141a30;
   background-color: #2f3855;
   color: rgba(255, 255, 255, 0.7);
   //&::after {
@@ -41,6 +41,10 @@
     line-height: 22px;
     margin-right: 8px;
     background-image: url(../images/bullet/select_arr_g.png);
+    // background-color: #5c6478;
+    // color: rgba(255, 255, 255, 0.7);
+    // border-radius: 3px;
+    // border: 1px solid #212a43;
   }
   .btn_comm {
     width: 24px;

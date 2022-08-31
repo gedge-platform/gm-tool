@@ -17,6 +17,8 @@ const drawStatus = (status) => {
     case "Running":
     case "SUCCESS":
     case "Succeeded":
+    case "Normal":
+    case "success":
       // Green
       return `<span class="status_ico status_01">${status}</span>`;
     case "Available":
@@ -26,17 +28,28 @@ const drawStatus = (status) => {
       return `<span class="status_ico status_02">${status}</span>`;
     case "Pending":
     case "PENDING":
-      // Orange
+    case "Released":
+      // Yellow
       return `<span class="status_ico status_03">${status}</span>`;
     case "false":
     case "False":
     case "FAIL":
     case "Failed":
+    case "Warning":
+    case "fail":
       // Red
       return `<span class="status_ico status_04">${status}</span>`;
     case "DEPLOYED":
       // Purple
       return `<span class="status_ico status_05">${status}</span>`;
+  }
+  switch (type) {
+    case "Normal":
+      // Green
+      return `<span class="status_ico status_01">${type}</span>`;
+    case "Warning":
+      // Red
+      return `<span class="status_ico status_04">${type}</span>`;
   }
 };
 

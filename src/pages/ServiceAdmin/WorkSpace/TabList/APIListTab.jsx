@@ -2,26 +2,37 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter } from "@/utils/common-utils";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import workspacesStore from "@/store/WorkSpace";
-import CreateWorkSpace from "@/pages/Gedge/Workspace/Dialog/CreateWorkSpace";
+import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
+import Detail from "../Detail";
 
-const APIListTab = observer(() => {
+const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { workSpaceList, loadWorkSpaceList, totalElements, deleteWorkspace } =
-    workspacesStore;
+  const {
+    workSpaceList,
+    loadWorkSpaceList,
+    totalElements,
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkspaceDetail,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    currentPage,
+  } = workspacesStore;
 
   const [columDefs] = useState([
     {
@@ -30,33 +41,34 @@ const APIListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "selectCluster",
+      headerName: "설명",
+      field: "workspaceDescription",
       filter: true,
     },
     {
-      headerName: "OWNER",
-      field: "workspaceOwner",
+      headerName: "클러스터",
+      field: "memberName",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
       headerName: "CREATOR",
-      field: "workspaceCreator",
+      field: "memberName",
       filter: true,
     },
-    {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${moment(new Date(data.value))
-          // .subtract(9, "h")
-          .format("YYYY-MM-DD HH:mm")}</span>`;
-      },
-    },
+    // {
+    //   headerName: "생성날짜",
+    //   field: "created_at",
+    //   filter: "agDateColumnFilter",
+    //   filterParams: agDateColumnFilter(),
+    //   minWidth: 150,
+    //   maxWidth: 200,
+    //   cellRenderer: function (data) {
+    //     return `<span>${dateFormatter(data.value)}</span>`;
+    //   },
+    // },
     {
       headerName: "삭제",
       field: "delete",
@@ -82,11 +94,13 @@ const APIListTab = observer(() => {
         deleteWorkspace(workspaceName, loadWorkSpaceList)
       );
     }
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     loadWorkSpaceList();
   }, []);
@@ -109,23 +123,29 @@ const APIListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={workSpaceList}
-                  columnDefs={columDefs}
-                  isBottom={true}
-                  totalElements={totalElements}
                   onCellClicked={handleClick}
+                  rowData={viewList}
+                  columnDefs={columDefs}
+                  isBottom={false}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
+                  goNextPage={goNextPage}
+                  goPrevPage={goPrevPage}
                 />
               </div>
             </CTabPanel>
           </div>
           <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
+            type={"user"}
             open={open}
             onClose={handleClose}
           />
         </PanelBox>
+        <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
     </>
   );
 });
-export default APIListTab;
+export default WorkspaceListTab;

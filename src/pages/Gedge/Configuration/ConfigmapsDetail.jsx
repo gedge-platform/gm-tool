@@ -3,10 +3,10 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import configmapsStore from "../../../store/Configmaps";
-import moment from "moment";
 import styled from "styled-components";
-import { isValidJSON } from "../../../utils/common-utils";
+import { dateFormatter, isValidJSON } from "../../../utils/common-utils";
 import ReactJson from "react-json-view";
+import { toJS } from "mobx";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -15,13 +15,43 @@ const TableTitle = styled.p`
   color: rgba(255, 255, 255, 0.8);
 `;
 
+const LabelContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
+`;
+
+const Label = styled.span`
+  height: 20px;
+  background-color: #20263a;
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+  line-height: 20px;
+  font-weight: 600;
+  margin: 6px 6px;
+
+  .key {
+    padding: 0 2px;
+    background-color: #eff4f9;
+    color: #36435c;
+    text-align: center;
+  }
+  .value {
+    padding: 0 2px;
+    text-align: center;
+    color: #eff4f9;
+  }
+`;
+
 const ConfigmapsDetail = observer(() => {
-  const {
-    configmapsList,
-    configmapsDetail,
-    configmapsData,
-    configmapsTabList,
-  } = configmapsStore;
+  const { configmapsTabList } = configmapsStore;
 
   const dataTable = [];
   const metadata = configmapsTabList.data;
@@ -43,86 +73,104 @@ const ConfigmapsDetail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(metadata).map(([key, value]) => {
-    dataTable.push(
-      <tr>
-        <th>{key}</th>
-        <td>{value}</td>
-      </tr>
-    );
-  });
-
-  Object.entries(annotations).map(([key, value]) => {
-    annotationsTable.push(
-      <tr>
-        <th style={{ width: "20%" }}>{key}</th>
-        <td>
-          {isValidJSON(value) ? (
-            <ReactJson
-              src={JSON.parse(value)}
-              theme="summerfruit"
-              displayDataTypes={false}
-              displayObjectSize={false}
-            />
-          ) : (
-            value
-          )}
-        </td>
-      </tr>
-    );
-  });
+  // Object.entries(metadata).map(([key, value]) => {
+  //   dataTable.push(
+  //     <tr>
+  //       <th style={{ width: "15%" }}>{key}</th>
+  //       <td>{value}</td>
+  //     </tr>
+  //   );
+  // });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="Data" />
+        <CTab label="Overview" />
+        <CTab label="Metadata" />
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data">
-            <tbody className="tb_data_detail">
+            <tbody>
               <tr>
-                <th>Name</th>
+                <th style={{ width: "15%" }}>Name</th>
                 <td>{configmapsTabList.name}</td>
-                <th>Project</th>
-                <td>{configmapsTabList.namespace}</td>
               </tr>
               <tr>
-                <th>Cluster</th>
-                <td>{configmapsTabList.cluster}</td>
                 <th>Data Count</th>
                 <td>{configmapsTabList.dataCnt}</td>
               </tr>
               <tr>
-                <th>Create Time</th>
-                <td>
-                  {moment(configmapsTabList.createAt).format(
-                    "YYYY-MM-DD HH:MM"
-                  )}
-                </td>
+                <th>Created</th>
+                <td>{dateFormatter(configmapsTabList.createAt)}</td>
               </tr>
             </tbody>
           </table>
           <br />
-          <TableTitle>Annotations</TableTitle>
-          <table className="tb_data">
+          <TableTitle>Data</TableTitle>
+          {metadata ? (
+            <table className="tb_data">
+              <tbody>
+                {Object.entries(metadata).map(([key, value]) => (
+                  <tr>
+                    <th style={{ width: "15%" }}>{key}</th>
+                    <td>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Data Info.</p>
+            </LabelContainer>
+          )}
+          {/* <table className="tb_data">
             <tbody>
-              {annotationsTable.length > 0 ? (
-                annotationsTable
+              {dataTable ? (
+                dataTable
               ) : (
-                <tr>
-                  <td>No Annotations Info.</td>
-                </tr>
+                <LabelContainer>
+                  <p>No Data Info.</p>
+                </LabelContainer>
               )}
             </tbody>
-          </table>
+          </table> */}
+          <br />
 
-          <br />
-          <TableTitle>Data</TableTitle>
-          <table className="tb_data">
-            <tbody>{dataTable}</tbody>
-          </table>
-          <br />
+        </div>
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={1}>
+
+      <div className="tb_container" style={{ width: "95%" }}>
+        <TableTitle>Annotations</TableTitle>
+          {/* {annotationsTable.length > 0 ? ( */}
+          {annotations ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                {Object.entries(annotations).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td>
+                      {isValidJSON(value) ? (
+                        <ReactJson
+                          src={JSON.parse(value)}
+                          theme="summerfruit"
+                          displayDataTypes={false}
+                          displayObjectSize={false}
+                        />
+                      ) : (
+                        value
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

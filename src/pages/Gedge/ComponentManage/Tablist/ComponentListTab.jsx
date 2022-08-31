@@ -8,7 +8,6 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
 import Detail from "../Detail";
 import ComponentStore from "../../../../store/ComponentManage";
 
@@ -73,7 +72,7 @@ const ComponentListTab = observer(() => {
   useEffect(() => {
     loadComponentList();
   }, []);
-  console.log(componentList);
+
   return (
     <>
       <CReflexBox>
