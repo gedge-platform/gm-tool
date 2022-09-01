@@ -135,9 +135,11 @@ class User {
       ...data,
       enabled: true,
     };
-    return await axios
+    // return
+    await axios
       .post(`${SERVER_URL4}/members`, body)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           if (res.status === 201) {
             swalError("멤버가 생성되었습니다.", callback);

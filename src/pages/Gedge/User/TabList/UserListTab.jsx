@@ -135,14 +135,14 @@ const UserListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-           <CommActionBar
-            // reloadFunc={loadUserList}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
+          <CommActionBar
+          // reloadFunc={loadUserList}
+          // isSearch={true}
+          // isSelect={true}
+          // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-          </CommActionBar> 
+          </CommActionBar>
           <div className="grid-height2">
             <AgGrid
               rowData={viewList}
