@@ -9,10 +9,19 @@ import { forEach } from "lodash";
 import { SERVER_URL4 } from "../../../config";
 
 const MapContent = observer(() => {
-  const { loadMapInfo, pointArr } = dashboardStore;
+  const {
+    loadMapInfo,
+    pointArr,
+    loadClusterList,
+    loadClusterDetail,
+    cloudDashboardDetail,
+    nodeRunning,
+  } = dashboardStore;
+
   const mapRef = useRef(null);
   const [data, setData] = useState("");
   const [dataEdgeInfo, setDataEdgeInfo] = useState("");
+  const [dataStatus, setDataStatus] = useState("");
 
   useEffect(async () => {
     const result = await axios(`${SERVER_URL4}/totalDashboard`);
@@ -21,7 +30,22 @@ const MapContent = observer(() => {
     const dataPoint = dataEdgeInfo.map((item) =>
       Object.values(item).map((val) => val.point)
     );
+    const dataStatus = dataEdgeInfo.map((item) =>
+      Object.values(item).map((val) => val.status)
+    );
+
     setData(dataPoint);
+    setDataStatus(dataStatus);
+    loadClusterList();
+    loadClusterDetail();
+
+    for (let i = 0; i < nodeRunning.length; i++) {
+      if (nodeRunning.map((item) => item.status) === "Ready") {
+        console.log("Ready");
+      } else {
+        console.log("NOT Ready");
+      }
+    }
 
     // const addressData = dataEdgeInfo[0].map((info) =>
     //   Object.entries(info).map(([key, value]) => [key, value])
@@ -66,7 +90,11 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>7</span>
+                       <span>${
+                         dataStatus[0]?.map((item) => item) === "success"
+                           ? dataStatus[0]?.map((item) => item).length
+                           : 0
+                       }</span>
                      </div>
                    </td>
                  </tr>
@@ -76,7 +104,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready 
                      </span>
-                     <span>2</span>
+                     <span></span>
                      </div>
                    </td>
                  </tr>

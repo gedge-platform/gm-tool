@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL4 } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -71,6 +71,12 @@ class Dashboard {
 
   clusterNameList = [];
   clusterName = "";
+  setClusterName = (value) => {
+    runInAction(() => {
+      this.clusterName = value;
+    });
+  };
+
   cloudDashboardDetail = [];
   clusterInfo = {
     address: "",
@@ -102,21 +108,21 @@ class Dashboard {
   diskUtil = "";
   diskTotal = "";
 
-  resourceCnt = [
-    {
-      cronjob_count: 0,
-      daemonset_count: 0,
-      deployment_count: 0,
-      job_count: 0,
-      namespace_count: 0,
-      pod_count: 0,
-      project_count: 0,
-      pv_count: 0,
-      service_count: 0,
-      statefulset_count: 0,
-      workspace_count: 0,
-    },
-  ];
+  resourceCnt = {
+    cronjob_count: 0,
+    daemonset_count: 0,
+    deployment_count: 0,
+    job_count: 0,
+    namespace_count: 0,
+    pod_count: 0,
+    project_count: 0,
+    pv_count: 0,
+    service_count: 0,
+    statefulset_count: 0,
+    workspace_count: 0,
+  };
+
+  nodeRunning = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -136,8 +142,8 @@ class Dashboard {
 
   loadDashboardCnt = async () => {
     await axios
-      .get(`${SERVER_URL2}/totalDashboard`)
-      // .get(`${SERVER_URL2}/totalDashboard`)
+      .get(`${SERVER_URL4}/totalDashboard`)
+      // .get(`${SERVER_URL4}/totalDashboard`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -154,7 +160,7 @@ class Dashboard {
 
   loadClusterRecent = async () => {
     await axios
-      .get(`${SERVER_URL2}/totalDashboard`)
+      .get(`${SERVER_URL4}/totalDashboard`)
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -297,14 +303,11 @@ class Dashboard {
           return vmCntList;
         });
     });
-    console.log(vmCntList);
     // res.forEach((result) => {
     //   Object.values(result.data.connectionconfig).map(
     //     (val) => val.ConfigName
     // );
     // })
-
-    console.log(configNameList);
   };
 
   loadVMStatusCnt = async () => {
@@ -312,7 +315,6 @@ class Dashboard {
       `http://210.207.104.188:1024/spider/connectionconfig`
     );
     const configResult = await Promise.all([urls]).then((res) => {
-      console.log(res);
       return res;
     });
     const configNameList = configResult[0].data.connectionconfig;
@@ -372,28 +374,28 @@ class Dashboard {
   // })
   // };
 
-  loadClusterList = async (type = "") => {
+  loadClusterList = async (type = "edge") => {
     await axios
-      .get(`${SERVER_URL2}/clusters`)
-      .then((res) => {
+      .get(`${SERVER_URL4}/clusters`)
+      .then(({ data: { data } }) => {
         runInAction(() => {
           const list =
-            type === ""
-              ? res.data
-              : res.data.filter((item) => item.clusterType === type);
-          this.clusterList = list;
+            type === "edge"
+              ? data
+              : data.filter((item) => item.clusterType === type);
           this.clusterNameList = list.map((item) => item.clusterName);
+          this.clusterName = this.clusterNameList[0];
           this.totalElements = list.length;
         });
       })
       .then(() => {
-        this.loadClusterDetail(this.clusterNameList[0]);
+        this.loadClusterDetail(this.clusterName);
       });
   };
 
   loadClusterDetail = async (clusterName) => {
     await axios
-      .get(`${SERVER_URL2}/cloudDashboard?cluster=${clusterName}`)
+      .get(`${SERVER_URL4}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.clusterName = clusterName;
@@ -420,7 +422,7 @@ class Dashboard {
           this.diskUtil = data.diskUtil;
           this.diskTotal = data.diskTotal;
           this.resourceCnt = data.resourceCnt;
-          console.log(this.resourceCnt);
+          this.nodeRunning = data.nodeRunning;
         });
       });
   };

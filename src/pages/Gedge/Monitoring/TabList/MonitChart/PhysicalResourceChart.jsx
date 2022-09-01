@@ -22,6 +22,8 @@ const PrAreaChart = observer(({ value }) => {
 
   let title = "";
   let metrics = [];
+  let metricsY = 0;
+  let dataMax = [];
 
   const searchMetrics = (filter) => {
     Object.entries(allMetrics).map(([key, value]) => {
@@ -36,14 +38,26 @@ const PrAreaChart = observer(({ value }) => {
       }
     });
   };
+  const searchMax = (filter) => {
+    Object.entries(allMetrics).map(([key, value]) => {
+      if (key === filter) {
+        value[0]?.values.forEach((element) => {
+          metricsY = element[1];
+        });
+      }
+    });
+  };
 
   switch (value) {
     case ClusterMetricTypes.CPU_USAGE:
       title = "CPU Usage (Core)";
+      searchMax("cpu_total");
+      dataMax = [0, Number(metricsY)];
       searchMetrics(value);
       break;
     case ClusterMetricTypes.CPU_UTIL:
       title = "CPU Util (%)";
+      dataMax = [0, 100];
       searchMetrics(value);
       break;
     case ClusterMetricTypes.CPU_TOTAL:
@@ -53,10 +67,13 @@ const PrAreaChart = observer(({ value }) => {
     case ClusterMetricTypes.MEMORY_USAGE:
       title = "Memory Usage (GB)";
       searchMetrics(value);
+      searchMax("memory_total");
+      dataMax = [0, Number(metricsY)];
       break;
     case ClusterMetricTypes.MEMORY_UTIL:
       title = "Memory Util (%)";
       searchMetrics(value);
+      dataMax = [0, 100];
       break;
     case ClusterMetricTypes.MEMORY_TOTAL:
       title = "Memory Total (GB)";
@@ -65,10 +82,13 @@ const PrAreaChart = observer(({ value }) => {
     case ClusterMetricTypes.DISK_USAGE:
       title = "Disk Usage (GB)";
       searchMetrics(value);
+      searchMax("disk_total");
+      dataMax = [0, Number(metricsY)];
       break;
     case ClusterMetricTypes.DISK_UTIL:
       title = "Disk Util (%)";
       searchMetrics(value);
+      dataMax = [0, 100];
       break;
     case ClusterMetricTypes.DISK_TOTAL:
       title = "Disk Total (GB)";
@@ -80,11 +100,15 @@ const PrAreaChart = observer(({ value }) => {
       break;
     case ClusterMetricTypes.POD_RUNNING:
       title = "Pod Running";
+      console.log(value);
+      searchMax("pod_quota");
+      dataMax = [0, Number(metricsY)];
       searchMetrics(value);
       break;
     case ClusterMetricTypes.POD_UTIL:
       title = "Pod Util (%)";
       searchMetrics(value);
+      dataMax = [0, 100];
       break;
     default:
       break;
@@ -119,7 +143,7 @@ const PrAreaChart = observer(({ value }) => {
             strokeDasharray="3 5"
           />
           <XAxis tickLine="false" dataKey="time" />
-          <YAxis />
+          <YAxis type="number" domain={dataMax} />
           <Tooltip />
           <Area
             type="monotone"
