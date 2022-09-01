@@ -39,14 +39,6 @@ const MapContent = observer(() => {
     loadClusterList();
     loadClusterDetail();
 
-    for (let i = 0; i < nodeRunning.length; i++) {
-      if (nodeRunning.map((item) => item.status) === "Ready") {
-        console.log("Ready");
-      } else {
-        console.log("NOT Ready");
-      }
-    }
-
     // const addressData = dataEdgeInfo[0].map((info) =>
     //   Object.entries(info).map(([key, value]) => [key, value])
     // ); //[Array(8), Array(8)]
@@ -90,11 +82,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>${
-                         dataStatus[0]?.map((item) => item) === "success"
-                           ? dataStatus[0]?.map((item) => item).length
-                           : 0
-                       }</span>
+                       <span></span>
                      </div>
                    </td>
                  </tr>
