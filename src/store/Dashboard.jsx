@@ -379,7 +379,7 @@ class Dashboard {
         runInAction(() => {
           const list =
             type === ""
-              ? res.data
+              ? res.data.data
               : res.data.filter((item) => item.clusterType === type);
           this.clusterList = list;
           this.clusterNameList = list.map((item) => item.clusterName);
