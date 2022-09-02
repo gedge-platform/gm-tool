@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Job {
   currentPage = 1;
@@ -80,7 +80,11 @@ class Job {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -90,7 +94,11 @@ class Job {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -139,29 +147,34 @@ class Job {
     });
   };
 
-      setPJobList = (list) => {
-        runInAction(() => {
-          this.pJobList = list;
-        })
-      };
+  setPJobList = (list) => {
+    runInAction(() => {
+      this.pJobList = list;
+    });
+  };
 
-      setViewList = (n) => {
-        runInAction(() => {
-          this.viewList = this.pJobList[n];
-        });
-      };
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pJobList[n];
+    });
+  };
 
   loadJobList = async (type) => {
-    await axios.get(`${SERVER_URL2}/jobs`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.jobList = list;
-        // this.jobDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL}/jobs`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
+          this.jobList = list;
+          // this.jobDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.jobList, this.setPJobList);
       });
-    }).then(() => {
-      this.convertList(this.jobList, this.setPJobList);
-    })
     this.loadJobDetail(
       this.jobList[0].name,
       this.jobList[0].cluster,
@@ -171,7 +184,7 @@ class Job {
 
   loadJobDetail = async (name, cluster, project) => {
     await axios
-      .get(`${SERVER_URL2}/jobs/${name}?cluster=${cluster}&project=${project}`)
+      .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`)
       .then(({ data: { data, involves } }) => {
         runInAction(() => {
           this.jobDetailData = data;

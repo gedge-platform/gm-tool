@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import moment from "moment";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import axios from "axios";
 
 //ag-grid filter
@@ -73,7 +73,7 @@ export const strFormatByLength = (str, length = 200) => {
 export const duplicateCheck = async (name, type) => {
   return await axios
     .get(
-      `${SERVER_URL2}/duplicateCheck/${name}?type=${type}`
+      `${SERVER_URL}/duplicateCheck/${name}?type=${type}`
       // , {
       //   auth: BASIC_AUTH,
       // }

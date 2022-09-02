@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class PlatformProject {
   platformProjectList = [
@@ -129,7 +129,7 @@ class PlatformProject {
 
   loadPlatformProjectList = async (type) => {
     await axios
-      .get(`${SERVER_URL4}/systemProjects`)
+      .get(`${SERVER_URL}/systemProjects`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.platformProjectList = data;
@@ -157,7 +157,7 @@ class PlatformProject {
 
   loadPlatformDetail = async (projectName) => {
     await axios
-      .get(`${SERVER_URL4}/systemProjects/${projectName}`)
+      .get(`${SERVER_URL}/systemProjects/${projectName}`)
       .then((res) => {
         runInAction(() => {});
       });
@@ -165,9 +165,7 @@ class PlatformProject {
 
   loadCluster = async (projectName, clusterName) => {
     await axios
-      .get(
-        `${SERVER_URL4}/systemProjects/${projectName}?cluster=${clusterName}`
-      )
+      .get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.platformDetail = data;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URLL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -40,7 +40,7 @@ class ServiceAdminDashboard {
   loadWorkspaceName = async () => {
     const { id } = getItem("user");
     await axios
-      .get(`${SERVER_URL4}/workspaces?user=${id}`)
+      .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.workspaceNameList = data.map((item) => item.workspaceName);
@@ -57,7 +57,7 @@ class ServiceAdminDashboard {
     const { id } = getItem("user");
     await axios
       .get(
-        `${SERVER_URL4}/serviceDashboard?user=${id}&workspace=${workspaceName}`
+        `${SERVER_URL}/serviceDashboard?user=${id}&workspace=${workspaceName}`
       )
       .then(({ data: { data } }) => {
         runInAction(() => {
@@ -79,7 +79,7 @@ class ServiceAdminDashboard {
 
   //   loadServiceAdminDashboard = async () => {
   //     const { id } = getItem("user");
-  //     const urls = axios.get(`${SERVER_URL4}/workspaces?user=${id}`);
+  //     const urls = axios.get(`${SERVER_URL}/workspaces?user=${id}`);
   //     const result = await Promise.all([urls]).then((res) => {
   //       return res;
   //     });
@@ -91,7 +91,7 @@ class ServiceAdminDashboard {
   //       let workspaceName = item;
   //       axios
   //         .get(
-  //           `${SERVER_URL4}/serviceDashboard?user=${id}&workspace=${workspaceName}`
+  //           `${SERVER_URL}/serviceDashboard?user=${id}&workspace=${workspaceName}`
   //         )
 
   //         .then((res) => {

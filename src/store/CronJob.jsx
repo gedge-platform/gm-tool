@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class CronJob {
   currentPage = 1;
@@ -36,7 +36,11 @@ class CronJob {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -46,7 +50,11 @@ class CronJob {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -95,29 +103,32 @@ class CronJob {
     });
   };
 
-      setPCronjobList = (list) => {
-        runInAction(() => {
-          this.pCronjobList = list;
-        })
-      };
+  setPCronjobList = (list) => {
+    runInAction(() => {
+      this.pCronjobList = list;
+    });
+  };
 
-      setViewList = (n) => {
-        runInAction(() => {
-          this.viewList = this.pCronjobList[n];
-        });
-      };
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pCronjobList[n];
+    });
+  };
 
   loadCronJobList = async (type) => {
-    await axios.get(`${SERVER_URL2}/cronjobs`).then(({ data: { data } }) => {
-      runInAction(() => {
-        const list = data.filter((item) => item.projectType === type);
-        this.cronJobList = list;
-        // this.cronJobDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL}/cronjobs`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          const list = data.filter((item) => item.projectType === type);
+          this.cronJobList = list;
+          // this.cronJobDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.cronJobList, this.setPCronjobList);
       });
-    }).then(() => {
-      this.convertList(this.cronJobList, this.setPCronjobList);
-    })
     this.loadCronJobDetail(
       this.cronJobList[0].name,
       this.cronJobList[0].cluster,
@@ -128,7 +139,7 @@ class CronJob {
   // loadCronJobDetail = async (name, cluster, project) => {
   //   await axios
   //     .get(
-  //       `${SERVER_URL2}/cronjobs/${name}?cluster=${cluster}&project=${project}`
+  //       `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
   //     )
   //     .then(({ data: { data, involvesData } }) => {
   //       runInAction(() => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class DaemonSet {
   currentPage = 1;
@@ -53,7 +53,11 @@ class DaemonSet {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDaemonSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDaemonSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -63,7 +67,11 @@ class DaemonSet {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDaemonSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDaemonSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -115,7 +123,7 @@ class DaemonSet {
   setPDaemonSetList = (list) => {
     runInAction(() => {
       this.pDaemonSetList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -125,17 +133,21 @@ class DaemonSet {
   };
 
   loadDaemonSetList = async (type) => {
-    await axios.get(`${SERVER_URL2}/daemonsets`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.daemonSetList = list;
-        // this.daemonSetDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL}/daemonsets`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
+          this.daemonSetList = list;
+          // this.daemonSetDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.daemonSetList, this.setPDaemonSetList);
       });
-    })
-    .then(() => {
-      this.convertList(this.daemonSetList, this.setPDaemonSetList);
-    })
     this.loadDaemonSetDetail(
       this.daemonSetList[0].name,
       this.daemonSetList[0].cluster,
@@ -146,7 +158,7 @@ class DaemonSet {
   loadDaemonSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/daemonsets/${name}?cluster=${cluster}&project=${project}`
+        `${SERVER_URL}/daemonsets/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {

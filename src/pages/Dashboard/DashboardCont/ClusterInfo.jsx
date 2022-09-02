@@ -38,6 +38,7 @@ const ClusterInfo = observer(() => {
     memoryUtil,
     resourceCnt,
     cloudDashboardDetail,
+    loadClusterListinDashboard,
   } = dashboardStore;
 
   const changeCluster = ({ target: { value } }) => {
@@ -45,7 +46,7 @@ const ClusterInfo = observer(() => {
   };
 
   useEffect(() => {
-    loadClusterList();
+    loadClusterListinDashboard();
   }, []);
 
   return (

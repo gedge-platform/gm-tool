@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URLL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class User {
@@ -106,7 +106,7 @@ class User {
 
   loadUserList = async () => {
     await axios
-      .get(`${SERVER_URL4}/members`)
+      .get(`${SERVER_URL}/members`)
       .then((res) => {
         runInAction(() => {
           this.userList = res.data;
@@ -123,7 +123,7 @@ class User {
   };
 
   loadUserDetail = async (memberId) => {
-    await axios.get(`${SERVER_URL4}/members/${memberId}`).then((res) => {
+    await axios.get(`${SERVER_URL}/members/${memberId}`).then((res) => {
       runInAction(() => {
         this.userDetail = res.data;
       });
@@ -137,7 +137,7 @@ class User {
     };
     // return
     await axios
-      .post(`${SERVER_URL4}/members`, body)
+      .post(`${SERVER_URL}/members`, body)
       .then((res) => {
         console.log(res);
         runInAction(() => {

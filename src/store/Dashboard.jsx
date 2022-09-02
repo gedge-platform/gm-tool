@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { BASIC_AUTH, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -142,8 +142,8 @@ class Dashboard {
 
   loadDashboardCnt = async () => {
     await axios
-      .get(`${SERVER_URL4}/totalDashboard`)
-      // .get(`${SERVER_URL4}/totalDashboard`)
+      .get(`${SERVER_URL}/totalDashboard`)
+      // .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -160,7 +160,7 @@ class Dashboard {
 
   loadClusterRecent = async () => {
     await axios
-      .get(`${SERVER_URL4}/totalDashboard`)
+      .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -374,31 +374,27 @@ class Dashboard {
   // })
   // };
 
-  loadClusterList = async (type = "edge") => {
-    await axios
-      .get(`${SERVER_URL4}/clusters`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          const list =
-            type === "edge"
-              ? data
-              : data.filter((item) => item.clusterType === type);
-          this.clusterNameList = list.map((item) => item.clusterName);
-          this.clusterName = this.clusterNameList[0];
-          this.totalElements = list.length;
-        });
-      })
-      .then(() => {
-        this.loadClusterDetail(this.clusterName);
+  // (구)loadClusterList
+  loadClusterListinDashboard = async (type = "edge") => {
+    await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
+      runInAction(() => {
+        const list =
+          type === "edge"
+            ? data
+            : data.filter((item) => item.clusterType === type);
+        this.clusterNameList = list.map((item) => item.clusterName);
+        this.clusterName = this.clusterNameList[0];
+        this.totalElements = list.length;
       });
+    });
+    // .then(() => this.loadCloudDashboard(this.clusterName));
   };
 
-  loadClusterDetail = async (clusterName) => {
+  loadCloudDashboard = async (clusterName) => {
     await axios
-      .get(`${SERVER_URL4}/cloudDashboard?cluster=${clusterName}`)
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${this.clusterName}`)
+      .then(({ data: { data } }) =>
         runInAction(() => {
-          this.clusterName = clusterName;
           this.cloudDashboardDetail = data;
           this.clusterInfo = data.ClusterInfo;
           this.address = data.ClusterInfo.address;
@@ -422,10 +418,46 @@ class Dashboard {
           this.diskUtil = data.diskUtil;
           this.diskTotal = data.diskTotal;
           this.resourceCnt = data.resourceCnt;
-          this.nodeRunning = data.nodeRunning;
-        });
-      });
+          this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+        })
+      );
   };
+
+  // loadClusterDetail = async (clusterName) => {
+  //   await axios
+  //     .get(`${SERVER_URL}/cloudDashboard?cluster=${this.clusterName}`)
+  //     .then((res) => console.log(res));
+  //   .then((res) => {
+  //     runInAction(() => {
+  //       console.log(clusterName);
+  //       // this.clusterName = clusterName;
+  //       // this.cloudDashboardDetail = data;
+  //       // this.clusterInfo = data.ClusterInfo;
+  //       // this.address = data.ClusterInfo.address;
+  //       // this.nodeInfo = data.nodeInfo;
+  //       // this.type = this.nodeInfo.map((val) => val.type);
+  //       // this.master = this.type.reduce(
+  //       //   (cnt, element) => cnt + ("master" === element),
+  //       //   0
+  //       // );
+  //       // this.worker = this.type.reduce(
+  //       //   (cnt, element) => cnt + ("worker" === element),
+  //       //   0
+  //       // );
+  //       // this.cpuUsage = data.cpuUsage;
+  //       // this.cpuUtil = data.cpuUtil;
+  //       // this.cpuTotal = data.cpuTotal;
+  //       // this.memoryUsage = data.memoryUsage;
+  //       // this.memoryUtil = data.memoryUtil;
+  //       // this.memoryTotal = data.memoryTotal;
+  //       // this.diskUsage = data.diskUsage;
+  //       // this.diskUtil = data.diskUtil;
+  //       // this.diskTotal = data.diskTotal;
+  //       // this.resourceCnt = data.resourceCnt;
+  //       // this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+  //     });
+  //   });
+  // };
 }
 const dashboardStore = new Dashboard();
 export default dashboardStore;
