@@ -27,7 +27,7 @@ const ButtonNext = styled.button`
 const CreateUser = observer((props) => {
   const { open } = props;
   const [inputs, setInputs] = useState({
-    memberId: "", //
+    memberId: "", //어디서 오는거냥 admin
     memberName: "",
     password: "",
     email: "",
@@ -35,7 +35,6 @@ const CreateUser = observer((props) => {
     memberDescription: "",
     memberRole: "PA",
   });
-
   const {
     memberId,
     memberName,
@@ -46,7 +45,6 @@ const CreateUser = observer((props) => {
     memberDescription,
   } = inputs;
 
-  console.log(inputs);
   const { postUser } = userStore;
 
   const handleClose = () => {
@@ -64,7 +62,6 @@ const CreateUser = observer((props) => {
   };
 
   const onChange = ({ target: { name, value } }) => {
-    console.log(name, value);
     setInputs({
       ...inputs,
       [name]: value,

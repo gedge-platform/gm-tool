@@ -36,16 +36,13 @@ const EdgeZoneDashboard = observer(() => {
   };
 
   const { clusterDetail, loadClusterList, loadCluster } = clusterStore;
-
-  const {nodeInfo} =dashboardStore;
-
   const history = useHistory();
 
   const handleClick = (e) => {
     loadCluster(e.data.clusterName);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     loadClusterList("edge");
   }, []);
 
@@ -64,7 +61,7 @@ const EdgeZoneDashboard = observer(() => {
           </div>
 
           <div className="SummaryWrap">
-            <EdgeZoneSummary/>
+            <EdgeZoneSummary />
           </div>
           {/* </PanelBox> */}
 
