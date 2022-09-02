@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { SERVER_URL2 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class StorageClass {
@@ -208,7 +208,7 @@ class StorageClass {
   loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
-        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
       )
       .then((res) => {
         runInAction(() => {
@@ -220,7 +220,7 @@ class StorageClass {
 
   loadStorageClasses = async () => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses`)
+      .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
           this.storageClasses = res.data.data;
@@ -240,7 +240,7 @@ class StorageClass {
 
   loadStorageClass = async (name, cluster) => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
+      .get(`${SERVER_URL}/storageclasses/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.storageClass = data;
@@ -281,7 +281,7 @@ class StorageClass {
 
   loadStorageClassName = async (cluster) => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses?cluster=${cluster}`)
+      .get(`${SERVER_URL}/storageclasses?cluster=${cluster}`)
       .then((res) => {
         runInAction(() => {
           this.storageClassNameData = res.data.data;
@@ -293,7 +293,7 @@ class StorageClass {
     const YAML = require("yamljs");
     axios
       .post(
-        `${SERVER_URL2}/storageclasses?cluster=${this.selectClusters}`,
+        `${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`,
 
         YAML.parse(this.content)
       )

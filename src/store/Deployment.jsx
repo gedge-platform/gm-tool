@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
 import { getItem } from "../utils/sessionStorageFn";
@@ -212,7 +212,7 @@ class Deployment {
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`
+        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
@@ -239,7 +239,7 @@ class Deployment {
 
   loadDeploymentList = async () => {
     await axios
-      .get(`${SERVER_URL2}/deployments`)
+      .get(`${SERVER_URL}/deployments`)
       .then((res) => {
         runInAction(() => {
           const { user } = getItem("user");
@@ -367,7 +367,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
         YAML.parse(this.content)
       )
       .then((res) => {
@@ -383,7 +383,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/pvcs?cluster=${selectClusters}&project=${this.project}`,
+        `${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
       .then(() => {

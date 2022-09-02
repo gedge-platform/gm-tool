@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URL2, SERVER_URL4 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Certification {
@@ -115,7 +115,7 @@ class Certification {
 
   loadCredentialList = async () => {
     await axios
-      .get(`${SERVER_URL4}/spider/credentials`)
+      .get(`${SERVER_URL}/spider/credentials`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.credential = data.credential;
@@ -146,7 +146,7 @@ class Certification {
     // };
     console.log(YAML);
     return await axios
-      .post(`${SERVER_URL4}/spider/credentials`, YAML.parse(this.content))
+      .post(`${SERVER_URL}/spider/credentials`, YAML.parse(this.content))
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
@@ -157,7 +157,7 @@ class Certification {
 
   loadClusterList = async (type = "") => {
     await axios
-      .get(`${SERVER_URL2}/clusters`)
+      .get(`${SERVER_URL}/clusters`)
       .then((res) => {
         runInAction(() => {
           const list =
@@ -179,7 +179,7 @@ class Certification {
   };
 
   loadCluster = async (clusterName) => {
-    await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
+    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then((res) => {
       runInAction(() => {
         this.clusterDetail = res.data;
       });
@@ -188,12 +188,12 @@ class Certification {
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`${apiV2}/clusterInfo?project=${project}`)
+      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {
     await axios
-      .get(`${SERVER_URL2}/clusters?workspace=${workspace}`)
+      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 
