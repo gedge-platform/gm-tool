@@ -5,7 +5,7 @@ import "./css/Login.css";
 import tit_welcome from "./images/tit_welcome.png";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { SERVER_URL2 } from "@/config.jsx";
+import { SERVER_URL } from "@/config.jsx";
 import { setItem } from "../../utils/sessionStorageFn";
 import { swalError } from "../../utils/swal-utils";
 import jwtDecode from "jwt-decode";
@@ -44,7 +44,7 @@ const Login = () => {
     setCheck(false);
 
     await axios
-      .post(`${SERVER_URL2}/auth`, inputs)
+      .post(`${SERVER_URL}/auth`, inputs)
       // .post(`${SERVER_URL}/auth`, inputs)
       .then(({ data }) => {
         const { accessToken, status } = data;
@@ -121,7 +121,7 @@ const Login = () => {
                     className="input_login"
                     onChange={onChange}
                     value={password}
-                    // value="1234"
+                  // value="1234"
                   />
                 </li>
               </ul>

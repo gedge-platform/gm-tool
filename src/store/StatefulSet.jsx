@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class StatefulSet {
   currentPage = 1;
@@ -128,7 +128,7 @@ class StatefulSet {
   };
 
   loadStatefulSetList = async (type) => {
-    await axios.get(`${SERVER_URL2}/statefulsets`).then((res) => {
+    await axios.get(`${SERVER_URL}/statefulsets`).then((res) => {
       runInAction(() => {
         const list = res.data.data.filter((item) => item.projectType === type);
         this.statefulSetList = list;
@@ -136,9 +136,9 @@ class StatefulSet {
         this.totalElements = list.length;
       });
     })
-    .then(() => {
-      this.convertList(this.statefulSetList, this.setPStatefulSetList);
-    })
+      .then(() => {
+        this.convertList(this.statefulSetList, this.setPStatefulSetList);
+      })
     this.loadStatefulSetDetail(
       this.statefulSetList[0].name,
       this.statefulSetList[0].cluster,
@@ -149,7 +149,7 @@ class StatefulSet {
   loadStatefulSetDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/statefulsets/${name}?cluster=${cluster}&project=${project}`
+        `${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`
       )
       .then((res) => {
         runInAction(() => {

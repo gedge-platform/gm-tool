@@ -6,7 +6,7 @@ import { runInAction } from "mobx";
 import axios from "axios";
 import dashboardStore from "../../../store/Dashboard";
 import { forEach } from "lodash";
-import { SERVER_URL4 } from "../../../config";
+import { SERVER_URL } from "../../../config";
 
 const MapContent = observer(() => {
   const {
@@ -24,7 +24,7 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
 
   useEffect(async () => {
-    const result = await axios(`${SERVER_URL4}/totalDashboard`);
+    const result = await axios(`${SERVER_URL}/totalDashboard`);
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
     setDataEdgeInfo(dataEdgeInfo);
     const dataPoint = dataEdgeInfo.map((item) =>
@@ -37,7 +37,7 @@ const MapContent = observer(() => {
     setData(dataPoint);
     setDataStatus(dataStatus);
     loadClusterList();
-    loadClusterDetail();
+    // loadClusterDetail();
 
     // const addressData = dataEdgeInfo[0].map((info) =>
     //   Object.entries(info).map(([key, value]) => [key, value])
@@ -71,9 +71,8 @@ const MapContent = observer(() => {
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>${
-                     dataEdgeInfo[0].map((item) => item.clusterName)[i]
-                   }</td>
+                   <td>${dataEdgeInfo[0].map((item) => item.clusterName)[i]
+            }</td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>
@@ -334,7 +333,7 @@ const MapContent = observer(() => {
     <div
       id="map"
       style={{ height: "100%", width: "100%", pointerEvents: "none" }}
-      // 지도 크기 조정
+    // 지도 크기 조정
     ></div>
   );
 });

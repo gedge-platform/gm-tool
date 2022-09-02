@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { BASIC_AUTH, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -142,8 +142,8 @@ class Dashboard {
 
   loadDashboardCnt = async () => {
     await axios
-      .get(`${SERVER_URL4}/totalDashboard`)
-      // .get(`${SERVER_URL4}/totalDashboard`)
+      .get(`${SERVER_URL}/totalDashboard`)
+      // .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -160,7 +160,7 @@ class Dashboard {
 
   loadClusterRecent = async () => {
     await axios
-      .get(`${SERVER_URL4}/totalDashboard`)
+      .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -376,7 +376,7 @@ class Dashboard {
 
   loadClusterList = async (type = "edge") => {
     await axios
-      .get(`${SERVER_URL4}/clusters`)
+      .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           const list =
@@ -389,13 +389,15 @@ class Dashboard {
         });
       })
       .then(() => {
-        this.loadClusterDetail(this.clusterName);
+        if (this.clusterName != undefined) {
+          this.loadClusterDetail(this.clusterName);
+        }
       });
   };
 
   loadClusterDetail = async (clusterName) => {
     await axios
-      .get(`${SERVER_URL4}/cloudDashboard?cluster=${clusterName}`)
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.clusterName = clusterName;
