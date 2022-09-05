@@ -27,7 +27,7 @@ const ButtonNext = styled.button`
 const CreateUser = observer((props) => {
   const { open } = props;
   const [inputs, setInputs] = useState({
-    memberId: "", //어디서 오는거냥 admin
+    memberId: "",
     memberName: "",
     password: "",
     email: "",

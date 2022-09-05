@@ -13,8 +13,9 @@ import { observer } from "mobx-react";
 import { Title } from "@/pages";
 import certificationStore from "../../../../store/Certification";
 import Terminal from "../Dialog/Terminal";
-import CreateCluster from "../Dialog/CreateCluster";
+import CreateCluster from "../Dialog/CreateAWS";
 import CreateCertification from "../Dialog/CreateCertification";
+import SelectProvider from "../Dialog/SelectProvider";
 
 const CertificationListTab = observer(() => {
   const currentPageTitle = Title.Certification;
@@ -190,7 +191,11 @@ const CertificationListTab = observer(() => {
           // yaml={getYamlFile}
           onClose={handleCloseTerminal}
         /> */}
-        <CreateCertification open={open} onClose={handleClose} />
+        <CreateCertification
+          open={open}
+          onClose={handleClose}
+          reloadFunc={loadCredentialList}
+        />
       </PanelBox>
     </CReflexBox>
   );
