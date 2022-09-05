@@ -218,7 +218,7 @@ class Certification {
     };
     console.log(body);
     return await axios
-      .post(`${SERVER_URL4}/spider/credentials`, body)
+      .post(`${SERVER_URL}/spider/credentials`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
@@ -233,7 +233,7 @@ class Certification {
 
   deleteCredential = async (CredentialName, callback) => {
     axios
-      .delete(`${SERVER_URL4}/spider/credentials/${CredentialName}`)
+      .delete(`${SERVER_URL}/spider/credentials/${CredentialName}`)
       .then((res) => {
         if (res.status === 200) swalError("Credential 삭제 완료", callback);
       })
