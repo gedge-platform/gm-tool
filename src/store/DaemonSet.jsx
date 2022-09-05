@@ -148,6 +148,17 @@ class DaemonSet {
       .then(() => {
         this.convertList(this.daemonSetList, this.setPDaemonSetList);
       });
+    // await axios.get(`${SERVER_URL}/daemonsets`).then((res) => {
+    //   runInAction(() => {
+    //     const list = res.data.data.filter((item) => item.projectType === type);
+    //     this.daemonSetList = list;
+    //     // this.daemonSetDetail = list[0];
+    //     this.totalElements = list.length;
+    //   });
+    // })
+    //   .then(() => {
+    //     this.convertList(this.daemonSetList, this.setPDaemonSetList);
+    //   })
     this.loadDaemonSetDetail(
       this.daemonSetList[0].name,
       this.daemonSetList[0].cluster,

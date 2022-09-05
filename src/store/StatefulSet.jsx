@@ -151,6 +151,17 @@ class StatefulSet {
       .then(() => {
         this.convertList(this.statefulSetList, this.setPStatefulSetList);
       });
+    // await axios.get(`${SERVER_URL}/statefulsets`).then((res) => {
+    //   runInAction(() => {
+    //     const list = res.data.data.filter((item) => item.projectType === type);
+    //     this.statefulSetList = list;
+    //     // this.statefulSetDetail = list[0];
+    //     this.totalElements = list.length;
+    //   });
+    // })
+    //   .then(() => {
+    //     this.convertList(this.statefulSetList, this.setPStatefulSetList);
+    //   })
     this.loadStatefulSetDetail(
       this.statefulSetList[0].name,
       this.statefulSetList[0].cluster,

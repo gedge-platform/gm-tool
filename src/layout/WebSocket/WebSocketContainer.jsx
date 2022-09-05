@@ -4,7 +4,7 @@ import { Toastify } from "../../utils/common-utils";
 const WebSocketContainer = (props) => {
   const [socketConnectd, setSocketConnected] = useState(false);
 
-  const socketUrl = "ws://101.79.4.15:3111";
+  const socketUrl = "ws://localhost:3111";
   let ws = useRef(null);
 
   const connect = () => {

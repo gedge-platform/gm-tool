@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URLL } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Certification {
@@ -188,7 +188,7 @@ class Certification {
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`${apiV2}/clusterInfo?project=${project}`)
+      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {

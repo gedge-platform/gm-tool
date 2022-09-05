@@ -347,7 +347,7 @@ class Pod {
     });
   };
 
-  createPod = async () => {};
+  createPod = async () => { };
 }
 
 const podStore = new Pod();

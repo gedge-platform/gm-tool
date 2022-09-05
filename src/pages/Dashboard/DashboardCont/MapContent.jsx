@@ -18,9 +18,12 @@ const MapContent = observer(() => {
     nodeRunning,
     loadCloudDashboard,
     setClusterName,
-    loadClusterListinDashboard,
+    loadCloudDetailInDashboard,
+    loadClusterDetail,
+    loadClusterList,
   } = dashboardStore;
-  const nodeData = nodeRunning.map((item) => item.status);
+  const nodeData =
+    nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
 
   const mapRef = useRef(null);
   const [data, setData] = useState("");
@@ -37,7 +40,7 @@ const MapContent = observer(() => {
     );
     // loadClusterList();
     setClusterName(clusterNameData[0]);
-    loadCloudDashboard();
+    loadCloudDetailInDashboard();
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
     setDataEdgeInfo(dataEdgeInfo);
     const dataPoint = dataEdgeInfo.map((item) =>
@@ -81,7 +84,10 @@ const MapContent = observer(() => {
                         Ready 
                        </span>
                        <span>${
-                         nodeData.filter((status) => status === "Ready").length
+                         nodeData !== 0
+                           ? nodeData.filter((status) => status === "Ready")
+                               .length
+                           : 0
                        }</span>
                      </div>
                    </td>
@@ -93,9 +99,10 @@ const MapContent = observer(() => {
                       Not Ready 
                      </span>
                      <span>${
-                       nodeRunning
-                         .map((item) => item.status)
-                         .filter((status) => status !== "Ready").length
+                       nodeData !== 0
+                         ? nodeData.filter((status) => status !== "Ready")
+                             .length
+                         : 0
                      }</span>
                      </div>
                    </td>

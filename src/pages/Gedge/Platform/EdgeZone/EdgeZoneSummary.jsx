@@ -5,7 +5,6 @@ import clusterStore from "../../../../store/Cluster";
 
 const EdgeZoneSummary = observer(() => {
   const { resourceCnt } = dashboardStore;
-  // const { resourceCnt } = clusterStore;
 
   return (
     <div className="edgezone_summary_circleWrap">

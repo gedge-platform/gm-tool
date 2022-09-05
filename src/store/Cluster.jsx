@@ -1,7 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URLL } from "../config";
-
+import { SERVER_URL } from "../config";
 class Cluster {
   clusterList = [];
   clusterNameList = [];
@@ -195,6 +194,40 @@ class Cluster {
         });
       });
     return this.clusterDetail;
+  };
+
+  loadClusterDetail = async (clusterName) => {
+    await axios
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.clusterName = clusterName;
+          this.cloudDashboardDetail = data;
+          this.clusterInfo = data.ClusterInfo;
+          this.address = data.ClusterInfo.address;
+          this.nodeInfo = data.nodeInfo;
+          this.type = this.nodeInfo.map((val) => val.type);
+          this.master = this.type.reduce(
+            (cnt, element) => cnt + ("master" === element),
+            0
+          );
+          this.worker = this.type.reduce(
+            (cnt, element) => cnt + ("worker" === element),
+            0
+          );
+          this.cpuUsage = data.cpuUsage;
+          this.cpuUtil = data.cpuUtil;
+          this.cpuTotal = data.cpuTotal;
+          this.memoryUsage = data.memoryUsage;
+          this.memoryUtil = data.memoryUtil;
+          this.memoryTotal = data.memoryTotal;
+          this.diskUsage = data.diskUsage;
+          this.diskUtil = data.diskUtil;
+          this.diskTotal = data.diskTotal;
+          this.resourceCnt = data.resourceCnt;
+          this.nodeRunning = data.nodeRunning;
+        });
+      });
   };
 
   loadClusterInProject = async (project) => {

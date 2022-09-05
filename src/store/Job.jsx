@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Job {
   currentPage = 1;
@@ -174,6 +174,12 @@ class Job {
       })
       .then(() => {
         this.convertList(this.jobList, this.setPJobList);
+        // await axios.get(`${SERVER_URL}/jobs`).then((res) => {
+        //   runInAction(() => {
+        //     const list = res.data.data.filter((item) => item.projectType === type);
+        //     this.jobList = list;
+        //     // this.jobDetail = list[0];
+        //     this.totalElements = list.length;
       });
     this.loadJobDetail(
       this.jobList[0].name,

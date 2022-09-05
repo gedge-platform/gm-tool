@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Service {
   currentPage = 1;
@@ -139,6 +139,16 @@ class Service {
       .then(() => {
         this.convertList(this.pServiceList, this.setPServiceList);
       })
+      // await axios.get(`${SERVER_URL}/services`).then((res) => {
+      //   runInAction(() => {
+      //     const list = res.data.data.filter((item) => item.projectType === type);
+      //     this.pServiceList = list;
+      //     // this.serviceDetail = list[0];
+      //     this.totalElements = this.pServiceList.length;
+      //   });
+      // }).then(() => {
+      //   this.convertList(this.pServiceList, this.setPServiceList);
+      // })
       .then(() => {
         this.loadServiceDetail(
           this.viewList[0].name,

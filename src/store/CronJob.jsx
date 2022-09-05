@@ -128,6 +128,12 @@ class CronJob {
       })
       .then(() => {
         this.convertList(this.cronJobList, this.setPCronjobList);
+        // await axios.get(`${SERVER_URL}/cronjobs`).then(({ data: { data } }) => {
+        //   runInAction(() => {
+        //     const list = data.filter((item) => item.projectType === type);
+        //     this.cronJobList = list;
+        //     // this.cronJobDetail = list[0];
+        //     this.totalElements = list.length;
       });
     this.loadCronJobDetail(
       this.cronJobList[0].name,

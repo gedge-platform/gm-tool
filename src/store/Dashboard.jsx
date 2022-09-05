@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -374,7 +374,6 @@ class Dashboard {
   // })
   // };
 
-  // (구)loadClusterList
   loadClusterListinDashboard = async (type = "edge") => {
     await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
       runInAction(() => {
@@ -387,14 +386,15 @@ class Dashboard {
         this.totalElements = list.length;
       });
     });
-    // .then(() => this.loadCloudDashboard(this.clusterName));
+    this.loadCloudDetailInDashboard(this.clusterNameList[0]);
   };
 
-  loadCloudDashboard = async (clusterName) => {
+  loadCloudDetailInDashboard = async (clusterName) => {
     await axios
-      .get(`${SERVER_URL}/cloudDashboard?cluster=${this.clusterName}`)
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
+          this.clusterName = clusterName;
           this.cloudDashboardDetail = data;
           this.clusterInfo = data.ClusterInfo;
           this.address = data.ClusterInfo.address;
@@ -408,56 +408,20 @@ class Dashboard {
             (cnt, element) => cnt + ("worker" === element),
             0
           );
-          this.cpuUsage = data.cpuUsage;
-          this.cpuUtil = data.cpuUtil;
-          this.cpuTotal = data.cpuTotal;
-          this.memoryUsage = data.memoryUsage;
-          this.memoryUtil = data.memoryUtil;
-          this.memoryTotal = data.memoryTotal;
-          this.diskUsage = data.diskUsage;
-          this.diskUtil = data.diskUtil;
-          this.diskTotal = data.diskTotal;
-          this.resourceCnt = data.resourceCnt;
+          this.cpuUsage = data.cpuUsage ? data.cpuUsage : 0;
+          this.cpuUtil = data.cpuUtil ? data.cpuUtil : 0;
+          this.cpuTotal = data.cpuTotal ? data.cpuTotal : 0;
+          this.memoryUsage = data.memoryUsage ? data.memoryUsage : 0;
+          this.memoryUtil = data.memoryUtil ? data.memoryUtil : 0;
+          this.memoryTotal = data.memoryTotal ? data.memoryTotal : 0;
+          this.diskUsage = data.diskUsage ? data.diskUsage : 0;
+          this.diskUtil = data.diskUtil ? data.diskUtil : 0;
+          this.diskTotal = data.diskTotal ? data.diskTotal : 0;
+          this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
           this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
         })
       );
   };
-
-  // loadClusterDetail = async (clusterName) => {
-  //   await axios
-  //     .get(`${SERVER_URL}/cloudDashboard?cluster=${this.clusterName}`)
-  //     .then((res) => console.log(res));
-  //   .then((res) => {
-  //     runInAction(() => {
-  //       console.log(clusterName);
-  //       // this.clusterName = clusterName;
-  //       // this.cloudDashboardDetail = data;
-  //       // this.clusterInfo = data.ClusterInfo;
-  //       // this.address = data.ClusterInfo.address;
-  //       // this.nodeInfo = data.nodeInfo;
-  //       // this.type = this.nodeInfo.map((val) => val.type);
-  //       // this.master = this.type.reduce(
-  //       //   (cnt, element) => cnt + ("master" === element),
-  //       //   0
-  //       // );
-  //       // this.worker = this.type.reduce(
-  //       //   (cnt, element) => cnt + ("worker" === element),
-  //       //   0
-  //       // );
-  //       // this.cpuUsage = data.cpuUsage;
-  //       // this.cpuUtil = data.cpuUtil;
-  //       // this.cpuTotal = data.cpuTotal;
-  //       // this.memoryUsage = data.memoryUsage;
-  //       // this.memoryUtil = data.memoryUtil;
-  //       // this.memoryTotal = data.memoryTotal;
-  //       // this.diskUsage = data.diskUsage;
-  //       // this.diskUtil = data.diskUtil;
-  //       // this.diskTotal = data.diskTotal;
-  //       // this.resourceCnt = data.resourceCnt;
-  //       // this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
-  //     });
-  //   });
-  // };
 }
 const dashboardStore = new Dashboard();
 export default dashboardStore;
