@@ -112,7 +112,6 @@ const Detail = observer(() => {
     events,
     resourceUsage,
   } = projectStore;
-  console.log(resourceUsage);
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
@@ -162,13 +161,13 @@ const Detail = observer(() => {
                   <td>
                     {cluster.resourceUsage?.namespace_cpu
                       ? cluster.resourceUsage?.namespace_cpu
-                      : "-"}
+                      : "0"}
                   </td>
                   <th>MEMORY</th>
                   <td>
                     {cluster.resourceUsage?.namespace_memory
                       ? cluster.resourceUsage?.namespace_memory
-                      : "-"}
+                      : "0"}
                   </td>
                 </>
               ) : (
@@ -195,13 +194,13 @@ const Detail = observer(() => {
                   <td>
                     {resources?.resource?.deployment_count
                       ? resources?.resource?.deployment_count
-                      : "-"}
+                      : "0"}
                   </td>
                   <th>Pod</th>
                   <td>
                     {resources?.resource?.pod_count
                       ? resources?.resource?.pod_count
-                      : "-"}
+                      : "0"}
                   </td>
                 </tr>
                 <tr>
@@ -209,13 +208,13 @@ const Detail = observer(() => {
                   <td>
                     {resources?.resource?.service_count
                       ? resources?.resource?.service_count
-                      : "-"}
+                      : "0"}
                   </td>
                   <th>CronJob</th>
                   <td>
                     {resources?.resource?.cronjob_count
                       ? resources?.resource?.cronjob_count
-                      : "-"}
+                      : "0"}
                   </td>
                 </tr>
                 <tr>
@@ -223,13 +222,13 @@ const Detail = observer(() => {
                   <td>
                     {resources?.resource?.job_count
                       ? resources?.resource?.job_count
-                      : "-"}
+                      : "0"}
                   </td>
                   <th>Volume</th>
                   <td>
                     {resources?.resource?.volume_count
                       ? resources?.resource?.volume_count
-                      : "-"}
+                      : "0"}
                   </td>
                 </tr>
                 <tr>
@@ -237,13 +236,13 @@ const Detail = observer(() => {
                   <td>
                     {resources?.resource?.Statefulset_count
                       ? resources?.resource?.Statefulset_count
-                      : "-"}
+                      : "0"}
                   </td>
                   <th>Daemonset</th>
                   <td>
                     {resources?.resource?.daemonset_count
                       ? resources?.resource?.daemonset_count
-                      : "-"}
+                      : "0"}
                   </td>
                 </tr>
               </>

@@ -59,6 +59,7 @@ const Detail = observer(() => {
     resource,
     resourceUsage,
   } = platformProjectStore;
+  console.log(platformDetail);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

@@ -42,8 +42,11 @@ const ClusterInfo = observer(() => {
     setClusterName,
     loadClusterDetail,
     loadCloudDetailInDashboard,
+    list,
+    edgeType,
+    cloudList,
   } = dashboardStore;
-  console.log(cpuUtil);
+  console.log(edgeType);
 
   const changeCluster = ({ target: { value } }) => {
     loadCloudDetailInDashboard(value);
@@ -63,8 +66,8 @@ const ClusterInfo = observer(() => {
           inputProps={{ "aria-label": "Without label" }}
           onChange={changeCluster}
         >
-          {clusterNameList.map((cluster) => (
-            <MenuItem value={cluster}>{cluster}</MenuItem>
+          {Object.values(edgeType).map((item) => (
+            <MenuItem value={item.clusterName}>{item.clusterName}</MenuItem>
           ))}
         </Select>
       </FormControl>
