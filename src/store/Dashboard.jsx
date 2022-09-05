@@ -372,16 +372,26 @@ class Dashboard {
   // })
   // };
 
-  loadClusterListinDashboard = async (type = "edge") => {
+  edgeType = [];
+  cloudType = [];
+  list = [];
+
+  loadClusterListinDashboard = async (type = "edge" || "cloud") => {
     await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
       runInAction(() => {
-        const list =
+        this.list =
           type === "edge"
             ? data
             : data.filter((item) => item.clusterType === type);
-        this.clusterNameList = list.map((item) => item.clusterName);
+
+        this.edgeType = this.list.filter((item) => item.clusterType === "edge");
+        const cloudList = data.filter((item) => item.clusterType === "cloud");
+
+        console.log(cloudList);
+
+        this.clusterNameList = this.edgeType.map((item) => item.clusterName);
         this.clusterName = this.clusterNameList[0];
-        this.totalElements = list.length;
+        this.totalElements = this.list.length;
       });
     });
     this.loadCloudDetailInDashboard(this.clusterNameList[0]);
