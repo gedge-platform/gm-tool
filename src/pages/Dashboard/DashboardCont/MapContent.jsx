@@ -10,17 +10,11 @@ import { SERVER_URL } from "../../../config";
 
 const MapContent = observer(() => {
   const {
-    loadMapInfo,
-    pointArr,
-    clusterNameList,
     clusterName,
-    cloudDashboardDetail,
     nodeRunning,
-    loadCloudDashboard,
     setClusterName,
     loadCloudDetailInDashboard,
-    loadClusterDetail,
-    loadClusterList,
+    loadClusterListinDashboard,
   } = dashboardStore;
   const nodeData =
     nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
@@ -31,8 +25,7 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
-  useEffect(async () => {
-    console.log("step start");
+  useEffect(async (type = "edge") => {
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const result2 = await axios(`${SERVER_URL}/clusters`);
     const clusterNameData = Object.values(result2.data)[0].map(

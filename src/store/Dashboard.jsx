@@ -148,7 +148,6 @@ class Dashboard {
         runInAction(() => {
           this.dashboardDetail = data;
           this.clusterCnt = data.clusterCnt;
-          // this.coreClusterCnt = data.coreClusterCnt;
           this.credentialCnt = data.credentialCnt;
           this.edgeClusterCnt = data.edgeClusterCnt;
           this.workspaceCnt = data.workspaceCnt;
@@ -208,7 +207,6 @@ class Dashboard {
             (provider) => provider.ProviderName
           );
         });
-        console.log(this.ConfigNameList);
       })
       .then(() => {
         // console.log(this.ConfigName);
