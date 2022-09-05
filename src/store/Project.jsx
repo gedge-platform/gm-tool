@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { BASIC_AUTH, SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
@@ -128,7 +128,7 @@ class Project {
 
   loadProjectList = async (type = "user") => {
     await axios
-      .get(`${SERVER_URL4}/userProjects`)
+      .get(`${SERVER_URL}/userProjects`)
       .then((res) => {
         runInAction(() => {
           const list = res.data.data.filter(
@@ -148,7 +148,7 @@ class Project {
 
   loadProjectDetail = async (projectName) => {
     await axios
-      .get(`${SERVER_URL4}/userProjects/${projectName}`)
+      .get(`${SERVER_URL}/userProjects/${projectName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.projectDetail = data;
@@ -179,7 +179,7 @@ class Project {
 
   loadProjectListInWorkspace = async (workspaceName) => {
     await axios
-      .get(`${SERVER_URL4}/userProjects?workspace=${workspaceName}`)
+      .get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`)
       .then((res) => {
         runInAction(() => {
           this.projectListinWorkspace = res.data.data;
@@ -188,7 +188,7 @@ class Project {
   };
 
   loadSystemProjectList = async (type) => {
-    await axios.get(`${SERVER_URL4}/systemProjects`).then((res) => {
+    await axios.get(`${SERVER_URL}/systemProjects`).then((res) => {
       runInAction(() => {
         this.systemProjectList = res.data.data;
         this.totalElements = res.data.length;
@@ -244,11 +244,11 @@ class Project {
     // //   workspaceName,
     // // };
     // axios
-    //   .post(`${SERVER_URL2}/projects`, body2)
+    //   .post(`${SERVER_URL}/projects`, body2)
     //   .then((res) => console.log(res))
     //   .catch((err) => console.error(err));
     axios
-      .post(`${SERVER_URL4}/projects`, body)
+      .post(`${SERVER_URL}/projects`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
@@ -263,7 +263,7 @@ class Project {
 
   deleteProject = (projectName, callback) => {
     axios
-      .delete(`${SERVER_URL4}/projects/${projectName}`)
+      .delete(`${SERVER_URL}/projects/${projectName}`)
       .then((res) => {
         if (res.status === 200)
           swalError("프로젝트가 삭제되었습니다.", callback);

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { SERVER_URL2 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class StorageClass {
@@ -45,6 +45,7 @@ class StorageClass {
   accessMode = "";
   volumeBindingMode = "";
   selectClusters = "";
+  parametersData = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -207,7 +208,7 @@ class StorageClass {
   loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
-        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
       )
       .then((res) => {
         runInAction(() => {
@@ -219,7 +220,7 @@ class StorageClass {
 
   loadStorageClasses = async () => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses`)
+      .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
           this.storageClasses = res.data.data;
@@ -239,47 +240,48 @@ class StorageClass {
 
   loadStorageClass = async (name, cluster) => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses/${name}?cluster=${cluster}`)
+      .get(`${SERVER_URL}/storageclasses/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
-        this.storageClass = data;
-        this.scYamlFile = "";
-        this.scAnnotations = {};
-        this.scLables = {};
-        this.scParameters = data.parameters;
-        this.label = data.labels;
-        this.annotations = data.annotations;
-        this.storageClassList = data.name;
+        runInAction(() => {
+          this.storageClass = data;
+          this.scYamlFile = "";
+          this.scAnnotations = {};
+          this.scLables = {};
+          this.scParameters = data.parameters ? data.parameters : "-";
+          this.label = data.labels;
+          this.annotations = data.annotations;
+          this.storageClassList = data.name;
 
-        Object.entries(this.storageClass?.annotations).forEach(
-          ([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              if (value === "true" || value === "false") {
-                throw e;
-              }
-              this.scYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.scAnnotations[key] = value;
+          Object.entries(this.storageClass?.annotations).forEach(
+            ([key, value]) => {
+              try {
+                const YAML = require("json-to-pretty-yaml");
+                if (value === "true" || value === "false") {
+                  throw e;
+                }
+                this.scYamlFile = YAML.stringify(JSON.parse(value));
+              } catch (e) {
+                if (key && value) {
+                  this.scAnnotations[key] = value;
+                }
               }
             }
-          }
-        );
+          );
 
-        Object.entries(this.storageClass?.labels).map(([key, value]) => {
-          this.scLables[key] = value;
-        });
+          Object.entries(this.storageClass?.labels).map(([key, value]) => {
+            this.scLables[key] = value;
+          });
 
-        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-          this.scParameters[key] = value;
-          console.log("key: " + key, "value: " + value);
+          Object.entries(this.storageClass?.parameters).map(([key, value]) => {
+            this.scParameters[key] = value;
+          });
         });
       });
   };
 
   loadStorageClassName = async (cluster) => {
     await axios
-      .get(`${SERVER_URL2}/storageclasses?cluster=${cluster}`)
+      .get(`${SERVER_URL}/storageclasses?cluster=${cluster}`)
       .then((res) => {
         runInAction(() => {
           this.storageClassNameData = res.data.data;
@@ -291,7 +293,7 @@ class StorageClass {
     const YAML = require("yamljs");
     axios
       .post(
-        `${SERVER_URL2}/storageclasses?cluster=${this.selectClusters}`,
+        `${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`,
 
         YAML.parse(this.content)
       )

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
-import { SERVER_URL3, REQUEST_URL2 } from "../config";
+import { SERVER_URL, REQUEST_URL2 } from "../config";
 import clusterStore from "./Cluster";
 import * as FormData from "form-data";
 import deploymentStore from "./Deployment";
@@ -18,7 +18,7 @@ class Scheduler {
 
   postWorkload = (requestId, workspace, project, type) => {
     axios
-      .post(SERVER_URL3, {
+      .post(SERVER_URL, {
         request_id: requestId,
         workspaceName: workspace,
         projectName: project,

@@ -129,7 +129,6 @@ const CreateCertification = observer((props) => {
   };
 
   const onClickCreateAWS = () => {
-    console.log(credentialName);
     if (CredentialName === "") {
       swalError("Name을 입력해주세요");
       return;

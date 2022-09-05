@@ -15,9 +15,9 @@ const ClusterSummary = observer(() => {
     loadDashboardCnt,
     setClusterCnt,
     setDashBoardDetail,
-   } = dashboardStore;
+  } = dashboardStore;
 
-   useEffect(() => {
+  useEffect(() => {
     loadDashboardCnt();
   }, []);
 
@@ -29,12 +29,12 @@ const ClusterSummary = observer(() => {
       </div>
 
       <div className="ClusterSummary Core">
-        <div className="ClusterCountTitle">코어 클라우드 개수</div>
+        <div className="ClusterCountTitle">클라우드 개수</div>
         <div className="ClusterCount">{credentialCnt}</div>
       </div>
 
       <div className="ClusterSummary Edge">
-        <div className="ClusterCountTitle">엣지 클라우드 개수</div>
+        <div className="ClusterCountTitle">엣지 개수</div>
         <div className="ClusterCount">{edgeClusterCnt}</div>
       </div>
 

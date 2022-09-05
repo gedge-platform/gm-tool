@@ -42,12 +42,10 @@ const ClusterInfo = observer(() => {
 
   const changeCluster = ({ target: { value } }) => {
     loadClusterDetail(value);
-    // clusterData(value)
   };
 
   useEffect(() => {
     loadClusterList();
-    // loadCluster();
   }, []);
 
   return (
