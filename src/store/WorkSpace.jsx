@@ -147,6 +147,7 @@ class Workspace {
       })
       .then(() => {
         this.convertList(this.workSpaceList, this.setWorkSpaceList);
+        console.log(this.workspace);
       })
       // .then(() => {
       //   this.loadWorkspaceDetail(this.viewList[0].workspaceName);

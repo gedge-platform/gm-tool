@@ -12,13 +12,14 @@ import Layout from "@/layout";
 import { Title } from "@/pages";
 import CreateCertification from "./Dialog/CreateCertification";
 import CertificationListTab from "./TabList/CertificationListTab";
+import SelectProvider from "./Dialog/SelectProvider";
 
 const Certification = observer(() => {
   const currentPageTitle = Title.Certification;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const {} = certificationStore;
+  const { ProviderName, loadCredentialList } = certificationStore;
 
   const [columDefs] = useState([
     {
@@ -51,7 +52,9 @@ const Certification = observer(() => {
     setOpen(false);
   };
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => {
+    loadCredentialList();
+  }, []);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -63,7 +66,11 @@ const Certification = observer(() => {
               </div> */}
         </CTabPanel>
       </div>
-      <CreateCertification open={open} onClose={handleClose} />
+      {/* <SelectProvider
+        open={open}
+        onClose={handleClose}
+        reloadFunc={loadCredentialList}
+      /> */}
     </Layout>
   );
 });

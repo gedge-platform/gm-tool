@@ -234,6 +234,7 @@ class Deployment {
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
         });
+        console.log(this.workspace);
       });
   };
 
