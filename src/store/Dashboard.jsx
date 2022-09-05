@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -148,7 +148,6 @@ class Dashboard {
         runInAction(() => {
           this.dashboardDetail = data;
           this.clusterCnt = data.clusterCnt;
-          // this.coreClusterCnt = data.coreClusterCnt;
           this.credentialCnt = data.credentialCnt;
           this.edgeClusterCnt = data.edgeClusterCnt;
           this.workspaceCnt = data.workspaceCnt;
@@ -208,7 +207,6 @@ class Dashboard {
             (provider) => provider.ProviderName
           );
         });
-        console.log(this.ConfigNameList);
       })
       .then(() => {
         // console.log(this.ConfigName);
@@ -374,31 +372,25 @@ class Dashboard {
   // })
   // };
 
-  loadClusterList = async (type = "edge") => {
-    await axios
-      .get(`${SERVER_URL}/clusters`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          const list =
-            type === "edge"
-              ? data
-              : data.filter((item) => item.clusterType === type);
-          this.clusterNameList = list.map((item) => item.clusterName);
-          this.clusterName = this.clusterNameList[0];
-          this.totalElements = list.length;
-        });
-      })
-      .then(() => {
-        if (this.clusterName != undefined) {
-          this.loadClusterDetail(this.clusterName);
-        }
+  loadClusterListinDashboard = async (type = "edge") => {
+    await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
+      runInAction(() => {
+        const list =
+          type === "edge"
+            ? data
+            : data.filter((item) => item.clusterType === type);
+        this.clusterNameList = list.map((item) => item.clusterName);
+        this.clusterName = this.clusterNameList[0];
+        this.totalElements = list.length;
       });
+    });
+    this.loadCloudDetailInDashboard(this.clusterNameList[0]);
   };
 
-  loadClusterDetail = async (clusterName) => {
+  loadCloudDetailInDashboard = async (clusterName) => {
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
-      .then(({ data: { data } }) => {
+      .then(({ data: { data } }) =>
         runInAction(() => {
           this.clusterName = clusterName;
           this.cloudDashboardDetail = data;
@@ -414,19 +406,19 @@ class Dashboard {
             (cnt, element) => cnt + ("worker" === element),
             0
           );
-          this.cpuUsage = data.cpuUsage;
-          this.cpuUtil = data.cpuUtil;
-          this.cpuTotal = data.cpuTotal;
-          this.memoryUsage = data.memoryUsage;
-          this.memoryUtil = data.memoryUtil;
-          this.memoryTotal = data.memoryTotal;
-          this.diskUsage = data.diskUsage;
-          this.diskUtil = data.diskUtil;
-          this.diskTotal = data.diskTotal;
-          this.resourceCnt = data.resourceCnt;
-          this.nodeRunning = data.nodeRunning;
-        });
-      });
+          this.cpuUsage = data.cpuUsage ? data.cpuUsage : 0;
+          this.cpuUtil = data.cpuUtil ? data.cpuUtil : 0;
+          this.cpuTotal = data.cpuTotal ? data.cpuTotal : 0;
+          this.memoryUsage = data.memoryUsage ? data.memoryUsage : 0;
+          this.memoryUtil = data.memoryUtil ? data.memoryUtil : 0;
+          this.memoryTotal = data.memoryTotal ? data.memoryTotal : 0;
+          this.diskUsage = data.diskUsage ? data.diskUsage : 0;
+          this.diskUtil = data.diskUtil ? data.diskUtil : 0;
+          this.diskTotal = data.diskTotal ? data.diskTotal : 0;
+          this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
+          this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+        })
+      );
   };
 }
 const dashboardStore = new Dashboard();

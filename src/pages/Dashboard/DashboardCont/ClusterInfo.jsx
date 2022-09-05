@@ -22,7 +22,6 @@ const ClusterInfo = observer(() => {
     loadClusterList,
     clusterNameList,
     clusterName,
-    loadClusterDetail,
     clusterInfo,
     address,
     master,
@@ -38,14 +37,22 @@ const ClusterInfo = observer(() => {
     memoryUtil,
     resourceCnt,
     cloudDashboardDetail,
+    loadClusterListinDashboard,
+    loadCloudDashboard,
+    setClusterName,
+    loadClusterDetail,
+    loadCloudDetailInDashboard,
   } = dashboardStore;
+  console.log(cpuUtil);
 
   const changeCluster = ({ target: { value } }) => {
-    loadClusterDetail(value);
+    loadCloudDetailInDashboard(value);
+    // setClusterName(value);
   };
 
   useEffect(() => {
-    loadClusterList();
+    // loadClusterList();
+    loadClusterListinDashboard();
   }, []);
 
   return (
@@ -86,25 +93,29 @@ const ClusterInfo = observer(() => {
             <div className="cluster_resoureceTitle">
               <div className="resource_type">CPU</div>
               <div className="resource_percent">
-                {cpuUtil.value}
+                {cpuUtil !== 0 ? cpuUtil.value : 0}
                 <span>%</span>
               </div>
             </div>
             <div className="cluster_resoureceGraph">
               <Cluster_resoureceGraphData
-                style={{ width: cpuUtil.value + "%" }}
+                style={{ width: cpuUtil !== 0 ? cpuUtil.value + "%" : 0 + "%" }}
               />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">{cpuUsage.value}</span>
+                  <span className="detail">
+                    {cpuUsage !== 0 ? cpuUsage.value : 0}
+                  </span>
                   <span className="category">cores</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">{cpuTotal.value}</span>
+                  <span className="detail">
+                    {cpuTotal !== 0 ? cpuTotal.value : 0}
+                  </span>
                   <span className="category">cores</span>
                 </div>
               </div>
@@ -115,25 +126,31 @@ const ClusterInfo = observer(() => {
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Memory</div>
               <div className="resource_percent">
-                {memoryUtil.value}
+                {memoryUtil !== 0 ? memoryUtil.value : 0}
                 <span>%</span>
               </div>
             </div>
             <div className="cluster_resoureceGraph">
               <Cluster_resoureceGraphData
-                style={{ width: memoryUtil.value + "%" }}
+                style={{
+                  width: memoryUtil !== 0 ? memoryUtil.value + "%" : 0 + "%",
+                }}
               />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">{memoryUsage.value}</span>
+                  <span className="detail">
+                    {memoryUsage !== 0 ? memoryUsage.value : 0}
+                  </span>
                   <span className="category">Gi</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">{memoryTotal.value}</span>
+                  <span className="detail">
+                    {memoryTotal !== 0 ? memoryTotal.value : 0}
+                  </span>
                   <span className="category">Gi</span>
                 </div>
               </div>
@@ -144,25 +161,31 @@ const ClusterInfo = observer(() => {
             <div className="cluster_resoureceTitle">
               <div className="resource_type">Disk</div>
               <div className="resource_percent">
-                {diskUtil.value}
+                {diskUtil !== 0 ? diskUtil.value : 0}
                 <span>%</span>
               </div>
             </div>
             <div className="cluster_resoureceGraph">
               <Cluster_resoureceGraphData
-                style={{ width: diskUtil.value + "%" }}
+                style={{
+                  width: diskUtil !== 0 ? diskUtil.value + "%" : 0 + "%",
+                }}
               />
             </div>
             <div className="cluster_resoureceInfo">
               <div className="resource_infotxt">
                 <div className="usedWrap">
                   <span className="used">Used</span>
-                  <span className="detail">{diskUsage.value}</span>
+                  <span className="detail">
+                    {diskUsage !== 0 ? diskUsage.value : 0}
+                  </span>
                   <span className="category">GB</span>
                 </div>
                 <div className="totalWrap">
                   <span className="total">Total</span>
-                  <span className="detail">{diskTotal.value}</span>
+                  <span className="detail">
+                    {diskTotal !== 0 ? diskTotal.value : 0}
+                  </span>
                   <span className="category">GB</span>
                 </div>
               </div>

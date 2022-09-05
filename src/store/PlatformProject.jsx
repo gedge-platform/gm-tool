@@ -159,15 +159,13 @@ class PlatformProject {
     await axios
       .get(`${SERVER_URL}/systemProjects/${projectName}`)
       .then((res) => {
-        runInAction(() => { });
+        runInAction(() => {});
       });
   };
 
   loadCluster = async (projectName, clusterName) => {
     await axios
-      .get(
-        `${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`
-      )
+      .get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.platformDetail = data;

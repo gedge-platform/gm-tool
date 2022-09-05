@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Service {
   currentPage = 1;
@@ -44,7 +44,11 @@ class Service {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -54,7 +58,11 @@ class Service {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -106,7 +114,7 @@ class Service {
   setPServiceList = (list) => {
     runInAction(() => {
       this.pServiceList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -116,16 +124,31 @@ class Service {
   };
 
   loadServiceList = async (type) => {
-    await axios.get(`${SERVER_URL}/services`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.pServiceList = list;
-        // this.serviceDetail = list[0];
-        this.totalElements = this.pServiceList.length;
-      });
-    }).then(() => {
-      this.convertList(this.pServiceList, this.setPServiceList);
-    })
+    await axios
+      .get(`${SERVER_URL}/services`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
+          this.pServiceList = list;
+          // this.serviceDetail = list[0];
+          this.totalElements = this.pServiceList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.pServiceList, this.setPServiceList);
+      })
+      // await axios.get(`${SERVER_URL}/services`).then((res) => {
+      //   runInAction(() => {
+      //     const list = res.data.data.filter((item) => item.projectType === type);
+      //     this.pServiceList = list;
+      //     // this.serviceDetail = list[0];
+      //     this.totalElements = this.pServiceList.length;
+      //   });
+      // }).then(() => {
+      //   this.convertList(this.pServiceList, this.setPServiceList);
+      // })
       .then(() => {
         this.loadServiceDetail(
           this.viewList[0].name,

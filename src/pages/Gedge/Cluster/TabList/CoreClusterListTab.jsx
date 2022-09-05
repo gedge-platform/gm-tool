@@ -15,6 +15,7 @@ import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const CoreClusterListTab = observer(() => {
   const currentPageTitle = Title.CloudZone;
@@ -44,22 +45,30 @@ const CoreClusterListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "상태",
-      field: "clusterCreator",
+      headerName: "타입",
+      field: "clusterType",
       filter: true,
     },
     {
-      headerName: "이미지 이름",
+      headerName: "상태",
+      field: "status",
+      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
+    },
+    {
+      headerName: "노드개수",
       field: "nodeCnt",
       filter: true,
     },
     {
-      headerName: "스펙",
+      headerName: "IP",
       field: "clusterEndpoint",
       filter: true,
     },
     {
-      headerName: "IP",
+      headerName: "생성날짜",
       field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -109,7 +118,7 @@ const CoreClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("core");
+    loadClusterList("cloud");
   }, []);
 
   return (
@@ -148,7 +157,8 @@ const CoreClusterListTab = observer(() => {
             // yaml={getYamlFile}
             onClose={handleCloseTerminal}
           />
-          <CreateCluster type={"core"} open={open} onClose={handleClose} />
+          {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
+          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
