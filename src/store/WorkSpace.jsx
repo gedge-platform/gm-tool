@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 import { ThirtyFpsRounded } from "@mui/icons-material";
@@ -159,22 +159,35 @@ class Workspace {
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
-    await axios
-      .get(`${SERVER_URL}/workspaces/${workspaceName}`)
-      .then((res) => {
-        runInAction(() => {
-          this.workSpaceDetail = res.data;
-          this.dataUsage = this.workSpaceDetail.resourceUsage;
-          if (res.data.events !== null) {
-            this.events = this.workSpaceDetail.events;
-          } else {
-            this.events = null;
-          }
-          this.detailInfo = res.data.projectList ? res.data.projectList : 0;
-          this.selectClusterInfo = res.data.selectCluster;
-          this.projectList = res.data.projectList ? res.data.projectList : 0;
-        });
+    await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
+      runInAction(() => {
+        this.workSpaceDetail = res.data;
+        this.dataUsage = this.workSpaceDetail.resourceUsage;
+        if (res.data.events !== null) {
+          this.events = this.workSpaceDetail.events;
+        } else {
+          this.events = null;
+        }
+        this.detailInfo = res.data.projectList ? res.data.projectList : 0;
+        this.selectClusterInfo = res.data.selectCluster;
+        this.projectList = res.data.projectList ? res.data.projectList : 0;
+        // await axios
+        //   .get(`${SERVER_URL}/workspaces/${workspaceName}`)
+        //   .then((res) => {
+        //     runInAction(() => {
+        //       this.workSpaceDetail = res.data;
+        //       this.dataUsage = this.workSpaceDetail.resourceUsage;
+        //       if (res.data.events !== null) {
+        //         this.events = this.workSpaceDetail.events;
+        //       } else {
+        //         this.events = null;
+        //       }
+        //       this.detailInfo = res.data.projectList ? res.data.projectList : 0;
+        //       this.selectClusterInfo = res.data.selectCluster;
+        //       this.projectList = res.data.projectList ? res.data.projectList : 0;
+        //     });
       });
+    });
   };
 
   setWorkSpaceList = (workSpaceList = []) => {

@@ -36,7 +36,11 @@ class CronJob {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -46,7 +50,11 @@ class CronJob {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -98,7 +106,7 @@ class CronJob {
   setPCronjobList = (list) => {
     runInAction(() => {
       this.pCronjobList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -108,16 +116,25 @@ class CronJob {
   };
 
   loadCronJobList = async (type) => {
-    await axios.get(`${SERVER_URL}/cronjobs`).then(({ data: { data } }) => {
-      runInAction(() => {
-        const list = data.filter((item) => item.projectType === type);
-        this.cronJobList = list;
-        // this.cronJobDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL}/cronjobs`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          const list = data.filter((item) => item.projectType === type);
+          this.cronJobList = list;
+          // this.cronJobDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.cronJobList, this.setPCronjobList);
+        // await axios.get(`${SERVER_URL}/cronjobs`).then(({ data: { data } }) => {
+        //   runInAction(() => {
+        //     const list = data.filter((item) => item.projectType === type);
+        //     this.cronJobList = list;
+        //     // this.cronJobDetail = list[0];
+        //     this.totalElements = list.length;
       });
-    }).then(() => {
-      this.convertList(this.cronJobList, this.setPCronjobList);
-    })
     this.loadCronJobDetail(
       this.cronJobList[0].name,
       this.cronJobList[0].cluster,

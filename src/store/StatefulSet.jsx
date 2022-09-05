@@ -56,7 +56,11 @@ class StatefulSet {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadStatefulSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadStatefulSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -66,7 +70,11 @@ class StatefulSet {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadStatefulSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadStatefulSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -118,7 +126,7 @@ class StatefulSet {
   setPStatefulSetList = (list) => {
     runInAction(() => {
       this.pStatefulSetList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -128,17 +136,32 @@ class StatefulSet {
   };
 
   loadStatefulSetList = async (type) => {
-    await axios.get(`${SERVER_URL}/statefulsets`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.statefulSetList = list;
-        // this.statefulSetDetail = list[0];
-        this.totalElements = list.length;
-      });
-    })
+    await axios
+      .get(`${SERVER_URL}/statefulsets`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
+          this.statefulSetList = list;
+          // this.statefulSetDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
       .then(() => {
         this.convertList(this.statefulSetList, this.setPStatefulSetList);
-      })
+      });
+    // await axios.get(`${SERVER_URL}/statefulsets`).then((res) => {
+    //   runInAction(() => {
+    //     const list = res.data.data.filter((item) => item.projectType === type);
+    //     this.statefulSetList = list;
+    //     // this.statefulSetDetail = list[0];
+    //     this.totalElements = list.length;
+    //   });
+    // })
+    //   .then(() => {
+    //     this.convertList(this.statefulSetList, this.setPStatefulSetList);
+    //   })
     this.loadStatefulSetDetail(
       this.statefulSetList[0].name,
       this.statefulSetList[0].cluster,

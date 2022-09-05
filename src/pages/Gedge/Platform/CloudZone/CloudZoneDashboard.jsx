@@ -40,7 +40,8 @@ const CloudZoneDashboard = observer(() => {
   const history = useHistory();
 
   useLayoutEffect(() => {
-    loadClusterList("core");
+    // loadClusterList("core");
+    loadClusterList("cloud");
   }, []);
 
   return (

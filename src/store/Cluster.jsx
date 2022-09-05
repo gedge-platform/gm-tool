@@ -1,7 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
-
 class Cluster {
   clusterList = [];
   clusterNameList = [];
@@ -160,7 +159,7 @@ class Cluster {
     });
   };
 
-  loadClusterList = async (type = "") => {
+  loadClusterList = async (type = "edge") => {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {

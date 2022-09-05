@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 
 class Job {
   currentPage = 1;
@@ -80,7 +80,11 @@ class Job {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -90,7 +94,11 @@ class Job {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadDeploymentDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -142,7 +150,7 @@ class Job {
   setPJobList = (list) => {
     runInAction(() => {
       this.pJobList = list;
-    })
+    });
   };
 
   setViewList = (n) => {
@@ -152,16 +160,27 @@ class Job {
   };
 
   loadJobList = async (type) => {
-    await axios.get(`${SERVER_URL}/jobs`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.jobList = list;
-        // this.jobDetail = list[0];
-        this.totalElements = list.length;
+    await axios
+      .get(`${SERVER_URL}/jobs`)
+      .then((res) => {
+        runInAction(() => {
+          const list = res.data.data.filter(
+            (item) => item.projectType === type
+          );
+          this.jobList = list;
+          // this.jobDetail = list[0];
+          this.totalElements = list.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.jobList, this.setPJobList);
+        // await axios.get(`${SERVER_URL}/jobs`).then((res) => {
+        //   runInAction(() => {
+        //     const list = res.data.data.filter((item) => item.projectType === type);
+        //     this.jobList = list;
+        //     // this.jobDetail = list[0];
+        //     this.totalElements = list.length;
       });
-    }).then(() => {
-      this.convertList(this.jobList, this.setPJobList);
-    })
     this.loadJobDetail(
       this.jobList[0].name,
       this.jobList[0].cluster,
