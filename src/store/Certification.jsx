@@ -50,13 +50,13 @@ class Certification {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -94,93 +94,105 @@ class Certification {
     });
   };
 
-  setContent = (content) => {
+  setContent = content => {
     runInAction(() => {
       this.content = content;
     });
   };
 
-  setClusterList = (list) => {
+  setClusterList = list => {
     runInAction(() => {
       this.clusterList = list;
     });
   };
 
-  setCredentialList = (list) => {
+  setCredentialList = list => {
     runInAction(() => {
       this.credential = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.credential[n];
     });
   };
 
-  setCredentialName = (n) => {
+  setCredentialName = n => {
     runInAction(() => {
       console.log(n);
       this.CredentialName = n;
     });
   };
 
-  setDomainName = (n) => {
+  setDomainName = n => {
     runInAction(() => {
       console.log(this.DomainName);
       this.DomainName = n;
     });
   };
 
-  setIdentityEndPoint = (n) => {
+  setIdentityEndPoint = n => {
     runInAction(() => {
       this.IdentityEndPoint = n;
     });
   };
 
-  setPassword = (n) => {
+  setPassword = n => {
     runInAction(() => {
       this.Password = n;
     });
   };
 
-  setProjectID = (n) => {
+  setProjectID = n => {
     runInAction(() => {
       this.ProjectID = n;
     });
   };
 
-  setUsername = (n) => {
+  setUsername = n => {
     runInAction(() => {
       this.Username = n;
     });
   };
 
-  setClientId = (n) => {
+  setAccessId = n => {
+    runInAction(() => {
+      this.AccessId = n;
+    });
+  };
+
+  setAccessToken = n => {
+    runInAction(() => {
+      this.AccessToken = n;
+    });
+  };
+
+  setClientId = n => {
     runInAction(() => {
       this.ClientId = n;
     });
   };
 
-  setClientSecret = (n) => {
+  setClientSecret = n => {
     runInAction(() => {
       this.ClientSecret = n;
     });
   };
 
-  setRegion = (n) => {
+  setRegion = n => {
     runInAction(() => {
       this.Region = n;
     });
   };
 
-  setZone = (n) => {
+  setZone = n => {
     runInAction(() => {
       this.Zone = n;
     });
   };
 
-  setProviderName = (n) => {
+  setProviderName = n => {
     runInAction(() => {
       this.ProviderName = n;
     });
@@ -188,21 +200,14 @@ class Certification {
 
   loadCredentialList = async () => {
     await axios
-      .get(`${SERVER_URL}/spider/credentials`)
+      .get(`${SERVER_URL}/spider/credentialList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.credential = data.credential;
+          // console.log("data is ", data);
+          this.credential = data;
           this.totalElements = this.credential.length;
-          this.CredentialName = this.credential.map(
-            (list) => list.CredentialName
-          );
-          this.ProviderName = this.credential.map((list) => list.ProviderName);
-          this.KeyValueInfoList = this.credential.map(
-            (list) => list.KeyValueInfoList
-          );
-          // this.DomainName = this.KeyValueInfoList.map(
-          //   (val) => Object.values(val[0])[1]
-          // );
+          this.CredentialName = this.credential.map(list => list.name);
+          this.ProviderName = this.credential.map(list => list.type);
         });
       })
       .then(() => {
@@ -217,27 +222,25 @@ class Certification {
       enabled: true,
     };
     console.log(body);
-    return await axios
-      .post(`${SERVER_URL4}/spider/credentials`, body)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 201) {
-          swalError("Credential 생성 완료", callback);
-          return true;
-        } else {
-          swalError("Credential 생성 실패", callback);
-          return false;
-        }
-      });
+    return await axios.post(`${SERVER_URL4}/spider/credentials`, body).then(res => {
+      console.log(res);
+      if (res.status === 201) {
+        swalError("Credential 생성 완료", callback);
+        return true;
+      } else {
+        swalError("Credential 생성 실패", callback);
+        return false;
+      }
+    });
   };
 
   deleteCredential = async (CredentialName, callback) => {
     axios
       .delete(`${SERVER_URL4}/spider/credentials/${CredentialName}`)
-      .then((res) => {
+      .then(res => {
         if (res.status === 200) swalError("Credential 삭제 완료", callback);
       })
-      .catch((err) => {
+      .catch(err => {
         swalError("삭제에 실패하였습니다.");
       });
   };
@@ -245,14 +248,11 @@ class Certification {
   loadClusterList = async (type = "") => {
     await axios
       .get(`${SERVER_URL}/clusters`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
-          const list =
-            type === ""
-              ? res.data
-              : res.data.filter((item) => item.clusterType === type);
+          const list = type === "" ? res.data : res.data.filter(item => item.clusterType === type);
           this.clusterList = list;
-          this.clusterNameList = list.map((item) => item.clusterName);
+          this.clusterNameList = list.map(item => item.clusterName);
           this.totalElements = list.length;
         });
       })
@@ -265,52 +265,46 @@ class Certification {
     // this.clusterDetail = list[0];
   };
 
-  loadCluster = async (clusterName) => {
-    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then((res) => {
+  loadCluster = async clusterName => {
+    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then(res => {
       runInAction(() => {
         this.clusterDetail = res.data;
       });
     });
   };
 
-  loadClusterInProject = async (project) => {
-    await axios
-      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
-      .then((res) => runInAction(() => (this.clusters = res.data.data)));
+  loadClusterInProject = async project => {
+    await axios.get(`${SERVER_URL}/clusterInfo?project=${project}`).then(res => runInAction(() => (this.clusters = res.data.data)));
   };
-  loadClusterInWorkspace = async (workspace) => {
-    await axios
-      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
-      .then((res) => runInAction(() => (this.clusters = res.data.data)));
+  loadClusterInWorkspace = async workspace => {
+    await axios.get(`${SERVER_URL}/clusters?workspace=${workspace}`).then(res => runInAction(() => (this.clusters = res.data.data)));
   };
 
-  setDetail = (num) => {
+  setDetail = num => {
     runInAction(() => {
-      this.clusterDetail = this.clusterList.find(
-        (item) => item.clusterNum === num
-      );
+      this.clusterDetail = this.clusterList.find(item => item.clusterNum === num);
     });
   };
 
-  setClusters = (clusters) => {
+  setClusters = clusters => {
     runInAction(() => {
       this.clusters = clusters;
     });
   };
 
-  setCredentialName = (name) => {
+  setCredentialName = name => {
     runInAction(() => {
       this.CredentialName = name;
     });
   };
 
-  setProviderName = (name) => {
+  setProviderName = name => {
     runInAction(() => {
       this.ProviderName = name;
     });
   };
 
-  setDomainName = (name) => {
+  setDomainName = name => {
     runInAction(() => {
       this.DomainName = name;
     });
