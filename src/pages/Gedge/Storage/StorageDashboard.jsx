@@ -8,7 +8,8 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import Detail from "@/pages/Gedge/Platform/Detail";
 import clusterStore from "@/store/Cluster";
-
+import storageStore from "@/store/StorageClass";
+import RadialBar from "./RadialBar"
 const StoragePageWrap = styled.div`
   padding: 0 10px;
   .panel_summary {
@@ -30,21 +31,30 @@ const StoragePageWrap = styled.div`
   }
 `;
 
-const StorageDashboard = () => {
+const StorageDashboard = observer(() => {
   const currentPageTitle = Title.StorageDashboard;
 
   const [tabvalue, setTabvalue] = useState(0);
+
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const { clusterDetail, loadClusterList } = clusterStore;
-
+  const { cephDashboard, loadStorageMonit } = storageStore;
   const history = useHistory();
 
   useLayoutEffect(() => {
-    loadClusterList("edge");
+    // loadClusterList("edge");
+
+
+
   }, []);
+
+  useEffect(() => {
+    loadStorageMonit();
+  }, []);
+
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -52,8 +62,8 @@ const StorageDashboard = () => {
         <PanelBox className="panel_summary">
           <div className="storageBoxWrap">
             <div className="storageBox">
-              <div className="storageBoxTitle">HEALTH_OK</div>
-              <div className="storageBoxTxt">Cluster Status</div>
+              <div className="storageBoxTitle">{cephDashboard.clusterStatus}</div>
+              <div className="storageBoxTxt">Ceph Cluster Status</div>
             </div>
 
             <div className="storageBox">
@@ -62,12 +72,12 @@ const StorageDashboard = () => {
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">11</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_pool_num}</div>
               <div className="storageBoxTxt">Pools</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">177</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_pg_per_osd}</div>
               <div className="storageBoxTxt">PGs per OSD</div>
             </div>
 
@@ -88,11 +98,11 @@ const StorageDashboard = () => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Row Capacity</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
-                <div className="circle capacity">
+                <RadialBar label={["total", "used", "avail"]} value={[cephDashboard.ceph_cluster_total_bytes, cephDashboard.ceph_cluster_total_used_bytes, cephDashboard.ceph_cluster_total_avail_bytes]} />
+                {/* <div className="circle capacity">
                   <div className="circleCount">20.06%</div>
                   <div className="circleTxt">of 240 GIB</div>
-                </div>
+                </div> */}
               </div>
               <div className="contTxt">
                 <ul>
@@ -218,5 +228,5 @@ const StorageDashboard = () => {
       </StoragePageWrap>
     </Layout>
   );
-};
+});
 export default StorageDashboard;

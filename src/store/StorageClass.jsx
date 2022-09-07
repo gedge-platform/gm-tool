@@ -16,6 +16,7 @@ class StorageClass {
   scAnnotations = {};
   getYamlFile = "";
   resultList = {};
+  storageMonit = {};
   events = [
     {
       kind: "",
@@ -46,6 +47,29 @@ class StorageClass {
   volumeBindingMode = "";
   selectClusters = "";
   parametersData = {};
+
+  cephDashboard = {
+    ceph_cluster_total_bytes: 0,
+    ceph_cluster_total_used_bytes: 0,
+    ceph_cluster_total_avail_bytes: 0,
+    ceph_mon_quorum_status: 0,
+    ceph_osd_in: 0,
+    ceph_osd_out: 0,
+    ceph_osd_up: 0,
+    ceph_oud_down: 0,
+    ceph_pg_active: 0,
+    ceph_pg_clean: 0,
+    ceph_pg_incomplete: 0,
+    ceph_pg_per_osd: 0,
+    ceph_pool_num: 0,
+    ceph_unclean_pgs: 0,
+    clusterStatus: "",
+    cluster_avail_capacity: 0,
+    read_iops: 0,
+    read_throughput: 0,
+    write_iops: 0,
+    write_throughput: 0
+  }
 
   constructor() {
     makeAutoObservable(this);
@@ -308,7 +332,18 @@ class StorageClass {
         console.log(err);
       });
   };
+  loadStorageMonit = async () => {
+    await axios
+      .get(`${SERVER_URL}/ceph/monit`)
+      .then((res) => {
+        runInAction(() => {
+          this.cephDashboard = res.data.data;
+          console.log("loadStorageMonit")
+        });
+      });
+  };
 }
+
 
 const StorageClassStore = new StorageClass();
 export default StorageClassStore;
