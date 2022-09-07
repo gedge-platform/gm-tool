@@ -25,7 +25,7 @@ const CoreClusterListTab = observer(() => {
     setTabvalue(newValue);
   };
   const [openTerminal, setOpenTerminal] = useState(false);
-  const { clusterDetail, clusterList, loadClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
+  const { clusterDetail, clusterList, loadCloudClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
     clusterStore;
 
   const [columDefs] = useState([
@@ -127,7 +127,7 @@ const CoreClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("cloud");
+    loadCloudClusterList();
   }, []);
 
   return (
