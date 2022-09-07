@@ -44,7 +44,8 @@ class Scheduler {
     formData.append("clusters", JSON.stringify(clusters));
 
     axios
-      .post(`http://101.79.4.15:32527/yaml`, formData)
+      // .post(`http://101.79.4.15:32527/yaml`, formData)
+      .post(`http://101.79.1.173:8012/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
           const popup = window.open(

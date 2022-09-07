@@ -13,7 +13,7 @@ import projectStore from "../../../../../store/Project";
 import { swalUpdate } from "../../../../../utils/swal-utils";
 import Layout from "@/layout";
 import { Title } from "@/pages";
-import CreateProject from "../../../Service/Project/CreateUser/Dialog/CreateProject"
+import CreateProject from "../../../Service/Project/CreateUser/Dialog/CreateProject";
 
 const CreateUser = observer(() => {
   const currentPageTitle = Title.CreateUser;
@@ -142,7 +142,8 @@ const CreateUser = observer(() => {
             onClose={handleClose}
           />
         </PanelBox>
-        <Detail project={projectDetail} />
+        {/* <Detail project={projectDetail} /> */}
+        <userDetail project={projectDetail} />
       </CReflexBox>
     </Layout>
   );

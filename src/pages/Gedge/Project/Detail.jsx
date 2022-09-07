@@ -8,6 +8,8 @@ import projectStore from "../../../store/Project";
 import "@grapecity/wijmo.styles/wijmo.css";
 import { MenuItem, FormControl, Select } from "@mui/material";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { AgGrid } from "../../../components/datagrids/AgGrid";
+import { height } from "@mui/system";
 
 const EventWrap = styled.div`
   .MuiInputBase-input {
@@ -111,38 +113,61 @@ const Detail = observer(() => {
     workspace,
     events,
     resourceUsage,
+    eventList,
+    totalEvents,
+    eventLength,
+    currentEvent,
+    goPrevEvent,
+    goNextEvent,
   } = projectStore;
-  console.log(resourceUsage);
+  console.log(events);
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const [columDefs] = useState([
+    {
+      headerName: "message",
+      field: "message",
+      filter: true,
+    },
+    {
+      headerName: "kind",
+      field: "kind",
+      filter: true,
+    },
+  ]);
 
   const eventsTable = () => {
     return (
       <EventWrap className="event-wrap">
         <FormControl>
           <Select
-            value={selectCluster}
+            value={events.cluster}
             inputProps={{ "aria-label": "Without label" }}
             onChange={clusterChange}
           >
-            {clusterList.map((cluster) => (
+            {events.map((cluster) => (
               <MenuItem
                 style={{
                   color: "black",
                   backgroundColor: "white",
                   fontSize: 15,
                 }}
-                value={cluster}
+                value={cluster.eventTime}
               >
-                {cluster}
+                {cluster.eventTime}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
       </EventWrap>
     );
+  };
+
+  const eventAccor = () => {
+    return eventList.map((item) => <EventAccordion events={item} />);
   };
 
   const clusterChange = (e) => {
@@ -349,7 +374,25 @@ const Detail = observer(() => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <EventAccordion events={events} />
+        <div className="grid-height2">
+          {/* {eventsTable()} */}
+          {/* <EventAccordion events={events} /> */}
+          {/* <EventAccordion events={eventList}> */}
+          <EventAccordion events={eventList} />
+          <div style={{ height: 0 }}>
+            <AgGrid
+              // rowData={eventAccor()}
+              // columDefs={columDefs}
+              isBottom={false}
+              totalElements={eventLength}
+              totalPages={totalEvents}
+              currentPage={currentEvent}
+              goNextPage={goNextEvent}
+              goPrevPage={goPrevEvent}
+            />
+          </div>
+          {/* </AgGrid> */}
+        </div>
       </CTabPanel>
     </PanelBox>
   );

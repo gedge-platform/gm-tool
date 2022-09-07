@@ -72,7 +72,11 @@ const AgGrid = (props) => {
     setDetail(tempArr[0].id);
   };
   return (
-    <div id="my-grid" className="grid-wrapper ag-theme-alpine">
+    <div
+      id="my-grid"
+      className="grid-wrapper ag-theme-alpine"
+      style={{ height: 410 }}
+    >
       <AgGridReact
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
