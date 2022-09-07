@@ -159,12 +159,13 @@ class Cluster {
     });
   };
 
-  loadEdgeClusterList = async () => {
+  loadEdgeClusterList = async (type = "edge") => {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          const list = data;
+          // const list = data;
+          const list = type === "" ? data : data.filter(item => item.clusterType === type);
           this.clusterList = list;
           this.clusterNameList = list.map(item => item.clusterName);
           this.totalElements = list.length;
