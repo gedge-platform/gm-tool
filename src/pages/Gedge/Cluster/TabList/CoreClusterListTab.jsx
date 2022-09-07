@@ -48,13 +48,8 @@ const CoreClusterListTab = observer(() => {
       },
     },
     {
-      headerName: "Private",
-      field: "PrivateIP",
-      filter: true,
-    },
-    {
-      headerName: "Public",
-      field: "PublicIP",
+      headerName: "스펙",
+      field: "VMSpecName",
       filter: true,
     },
     {
@@ -75,6 +70,16 @@ const CoreClusterListTab = observer(() => {
     {
       headerName: "리전",
       field: "Region.Region",
+      filter: true,
+    },
+    {
+      headerName: "Private",
+      field: "PrivateIP",
+      filter: true,
+    },
+    {
+      headerName: "Public",
+      field: "PublicIP",
       filter: true,
     },
     {
