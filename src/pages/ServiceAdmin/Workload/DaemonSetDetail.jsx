@@ -90,13 +90,21 @@ const Detail = observer(() => {
                 <th className="tb_workload_detail_th">Name</th>
                 <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}</td>
+                <td>
+                  {daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{daemonSetDetail.project ? daemonSetDetail.project : "-"}</td>
+                <td>
+                  {daemonSetDetail.project ? daemonSetDetail.project : "-"}
+                </td>
                 <th>Created</th>
-                <td>{daemonSetDetail.createAt ? dateFormatter(daemonSetDetail.createAt) : "-"}</td>
+                <td>
+                  {daemonSetDetail.createAt
+                    ? dateFormatter(daemonSetDetail.createAt)
+                    : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -330,23 +338,21 @@ const Detail = observer(() => {
                           <th>Port</th>
                           <th>Protocol</th>
                         </tr>
-                        <tr>
-                          {services.port ? (
-                            services.port?.map((port) => (
-                              <>
-                                <td>{port.name}</td>
-                                <td>{port.port}</td>
-                                <td>{port.protocol}</td>
-                              </>
-                            ))
-                          ) : (
-                            <>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
-                            </>
-                          )}
-                        </tr>
+                        {services.port ? (
+                          services.port?.map((port) => (
+                            <tr>
+                              <td>{port.name}</td>
+                              <td>{port.port}</td>
+                              <td>{port.protocol}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </td>

@@ -223,11 +223,7 @@ class Deployment {
           this.strategy = data.strategy;
           this.labels = data.labels;
           this.annotations = data.annotations;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
+          this.events = data.events;
           this.pods = involvesData.pods;
           this.depServices = involvesData.services;
           // this.depServicesPort = involvesData.services.port;

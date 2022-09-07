@@ -174,16 +174,13 @@ class StatefulSet {
       .get(
         `${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.statefulSetDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
-          } else {
-            this.events = null;
-          }
+          this.statefulSetDetail = data;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.events = data.events;
+          console.log(this.events);
         });
       });
   };

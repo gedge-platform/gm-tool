@@ -17,9 +17,13 @@ const Cluster_resoureceGraphData = styled.div`
   font-size: 12px;
 `;
 
-const ClusterInfo = observer(() => {
+const CloudClusterInfo = observer(() => {
   const {
+    loadClusterList,
+    clusterNameList,
     clusterName,
+    clusterInfo,
+    address,
     master,
     worker,
     cpuUsage,
@@ -31,32 +35,44 @@ const ClusterInfo = observer(() => {
     memoryTotal,
     memoryUsage,
     memoryUtil,
-    loadEdgeZoneDashboard,
-    loadEdgeZoneDetailDashboard,
-    edgeType,
-    clusterInfo,
+    resourceCnt,
+    cloudDashboardDetail,
+    loadClusterListinDashboard,
+    loadCloudDashboard,
     setClusterName,
+    loadClusterDetail,
+    loadCloudDetailInDashboard,
+    list,
+    cloudType,
+    clusterType,
+    loadCloudZoneDashboard,
+    loadCloudZoneDetailDashboard,
+    loadEdgeZoneDashboard,
+    cloudName,
+    setCloudName,
   } = dashboardStore;
 
+  console.log("cloudType", cloudType);
+
   const changeCluster = ({ target: { value } }) => {
-    setClusterName(value);
-    loadEdgeZoneDetailDashboard(value);
+    setCloudName(value);
+    loadCloudZoneDetailDashboard(value);
   };
 
   useEffect(() => {
-    loadEdgeZoneDashboard();
+    loadCloudZoneDashboard();
   }, []);
 
   return (
     <div className="cluster_info">
       <FormControl className="form_dashboard">
         <Select
-          key={clusterName}
-          value={clusterName}
+          key={cloudName}
+          value={cloudName}
           inputProps={{ "aria-label": "Without label" }}
           onChange={changeCluster}
         >
-          {edgeType.map((item) => (
+          {cloudType.map((item) => (
             <MenuItem value={item.clusterName}>{item.clusterName}</MenuItem>
           ))}
         </Select>
@@ -64,6 +80,7 @@ const ClusterInfo = observer(() => {
       <div className="cluster_detailWrap">
         <div className="cluster_detail">
           <div className="cluster_detail_title">Name</div>
+
           <div className="cluster_detail_content">
             {clusterInfo.clusterName}
           </div>
@@ -191,59 +208,7 @@ const ClusterInfo = observer(() => {
         </div>
       </div>
     </div>
-
-    // 아래는 기존 소스
-    // <div className="cluster_info">
-    //   <FormControl className="form_dashboard">
-    //     <Select
-    //       value={clusterName}
-    //       inputProps={{ "aria-label": "Without label" }}
-    //       onChange={changeCluster}
-    //     >
-    //       {clusterNameList.map((cluster) => (
-    //         <MenuItem value={cluster}>{cluster}</MenuItem>
-    //       ))}
-    //     </Select>
-    //   </FormControl>
-    //   <div className="cluster_detail">
-    //     <div className="cluster_detail_title">클러스터 API 주소</div>
-    //     <div className="cluster_detail_content">{clusterEndpoint}</div>
-    //     <div className="cluster_detail_title">클러스터 타입</div>
-    //     <div className="cluster_detail_content">
-    //       {clusterType.toUpperCase()}
-    //     </div>
-    //     <div className="cluster_detail_title">클러스터 Creator</div>
-    //     <div className="cluster_detail_content">{clusterCreator}</div>
-    //     <div className="cluster_detail_title">클러스터 Resource</div>
-    //     <div className="cluster_resources">
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Deployment</span>
-    //         <span className="resource_number">{deployment_count}</span>
-    //       </div>
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Pod</span>
-    //         <span className="resource_number">{pod_count}</span>
-    //       </div>
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Service</span>
-    //         <span className="resource_number">{service_count}</span>
-    //       </div>
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Cronjob</span>
-    //         <span className="resource_number">{cronjob_count}</span>
-    //       </div>
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Job</span>
-    //         <span className="resource_number">{job_count}</span>
-    //       </div>
-    //       <div className="cluster_resource">
-    //         <span className="resource_kind">Volume</span>
-    //         <span className="resource_number">{volume_count}</span>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 });
 
-export default ClusterInfo;
+export default CloudClusterInfo;

@@ -514,7 +514,7 @@ const ServiceAdminDashboard = observer(() => {
                     onClick={clickToggleProject}
                     toggle={toggleProject}
                   >
-                    Project Top 5
+                    Project CPU Top 5
                   </ButtonStyle>
                   {/* </div> */}
                   <div className="ServiceRecentListWrap">
@@ -528,7 +528,7 @@ const ServiceAdminDashboard = observer(() => {
                     onClick={clickToggleProject}
                     toggle={toggleProject}
                   >
-                    Project Memory Top5
+                    Project Memory Top 5
                   </ButtonStyle>
                   <div className="ServiceRecentListWrap">
                     <ul>{projectMemTop5()}</ul>
@@ -542,7 +542,7 @@ const ServiceAdminDashboard = observer(() => {
                     onClick={clickTogglePod}
                     toggle={togglePod}
                   >
-                    Pod Top 5
+                    Pod CPU Top 5
                   </ButtonStyle>
                   <div className="ServiceRecentListWrap">
                     <ul>{podCpuTop5()}</ul>
