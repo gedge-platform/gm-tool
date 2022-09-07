@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
+import React, { useEffect, useState } from "react";
 import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
@@ -27,7 +27,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateCertification = observer((props) => {
+const CreateCertification = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
@@ -306,15 +306,7 @@ const CreateCertification = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Credential"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Credential"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );
