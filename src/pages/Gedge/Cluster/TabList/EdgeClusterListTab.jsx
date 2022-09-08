@@ -27,7 +27,7 @@ const EdgeClusterListTab = observer(() => {
     clusterDetail,
     clusterList,
     totalElements,
-    loadEdgeClusterList,
+    loadClusterList,
     loadCluster,
 
     currentPage,
@@ -104,7 +104,7 @@ const EdgeClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadEdgeClusterList();
+    loadClusterList();
   }, []);
 
   return (

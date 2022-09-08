@@ -104,7 +104,7 @@ const CoreClusterListTab = observer(() => {
 
   const handleClick = e => {
     let fieldName = e.colDef.field;
-    loadCluster(e.data.clusterName);
+    // loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
       handleOpenTerminal();
     }

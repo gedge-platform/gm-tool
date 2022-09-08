@@ -41,7 +41,6 @@ const SideNavbar = () => {
           <img src={sideLogo} alt="GEdge Cloud" />
         </Link>
       </LogoArea>
-      {/* <LogoArea>Hyperledger<br /> Fabric as a Service<br />(Big BlockChain Storage)</LogoArea> */}
       <SideUser />
       <SideMenu />
     </SidebarArea>
