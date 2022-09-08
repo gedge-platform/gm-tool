@@ -53,6 +53,7 @@ class StorageClass {
     ceph_cluster_total_used_bytes: 0,
     ceph_cluster_total_avail_bytes: 0,
     ceph_mon_quorum_status: 0,
+    ceph_pool_objects: 0,
     ceph_osd_in: 0,
     ceph_osd_out: 0,
     ceph_osd_up: 0,
@@ -65,10 +66,13 @@ class StorageClass {
     ceph_unclean_pgs: 0,
     clusterStatus: "",
     cluster_avail_capacity: 0,
+    cluster_used_capacity: 0,
     read_iops: 0,
     read_throughput: 0,
     write_iops: 0,
-    write_throughput: 0
+    write_throughput: 0,
+    osd_read_latency: 0,
+    osd_write_latency: 0,
   }
 
   constructor() {
