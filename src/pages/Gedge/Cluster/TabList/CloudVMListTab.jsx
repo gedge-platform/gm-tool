@@ -17,15 +17,15 @@ import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
-const CoreClusterListTab = observer(() => {
-  const currentPageTitle = Title.CloudZone;
+const CloudVMListTab = observer(() => {
+  // const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
+  // const [tabvalue, setTabvalue] = useState(0);
+  // const handleTabChange = (event, newValue) => {
+  //   setTabvalue(newValue);
+  // };
   const [openTerminal, setOpenTerminal] = useState(false);
-  const { clusterDetail, clusterList, loadClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
+  const { clusterDetail, clusterList, loadCloudClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
     clusterStore;
 
   const [columDefs] = useState([
@@ -48,13 +48,8 @@ const CoreClusterListTab = observer(() => {
       },
     },
     {
-      headerName: "Private",
-      field: "PrivateIP",
-      filter: true,
-    },
-    {
-      headerName: "Public",
-      field: "PublicIP",
+      headerName: "스펙",
+      field: "VMSpecName",
       filter: true,
     },
     {
@@ -78,28 +73,38 @@ const CoreClusterListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "Private",
+      field: "PrivateIP",
+      filter: true,
+    },
+    {
+      headerName: "Public",
+      field: "PublicIP",
+      filter: true,
+    },
+    {
       headerName: "SSH",
       field: "SSHAccessPoint",
       filter: true,
     },
-    {
-      headerName: "VM",
-      field: "terminal",
-      minWidth: 100,
-      maxWidth: 100,
-      cellRenderer: function () {
-        // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
-      },
-      cellStyle: { textAlign: "center" },
-    },
+    // {
+    //   headerName: "VM",
+    //   field: "terminal",
+    //   minWidth: 100,
+    //   maxWidth: 100,
+    //   cellRenderer: function () {
+    //     // return `<span class="state_ico_new terminal" onClick></span> `;
+    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+    //   },
+    //   cellStyle: { textAlign: "center" },
+    // },
   ]);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const handleClick = e => {
     let fieldName = e.colDef.field;
-    loadCluster(e.data.clusterName);
+    // loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
       handleOpenTerminal();
     }
@@ -122,11 +127,11 @@ const CoreClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("cloud");
+    loadCloudClusterList();
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -166,7 +171,7 @@ const CoreClusterListTab = observer(() => {
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
-    </Layout>
+    </>
   );
 });
-export default CoreClusterListTab;
+export default CloudVMListTab;

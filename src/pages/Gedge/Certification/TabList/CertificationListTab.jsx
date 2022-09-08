@@ -30,7 +30,7 @@ const CertificationListTab = observer(() => {
     credential,
     clusterDetail,
     clusterList,
-    loadClusterList,
+    loadEdgeClusterList,
     loadCluster,
     currentPage,
     totalPages,
