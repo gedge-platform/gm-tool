@@ -103,13 +103,13 @@ class Cluster {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -147,13 +147,13 @@ class Cluster {
     });
   };
 
-  setClusterList = (list) => {
+  setClusterList = list => {
     runInAction(() => {
       this.clusterList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.clusterList[n];
     });
@@ -164,12 +164,10 @@ class Cluster {
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          const list =
-            type === ""
-              ? data
-              : data.filter((item) => item.clusterType === type);
+          // const list = data;
+          const list = type === "" ? data : data.filter(item => item.clusterType === type);
           this.clusterList = list;
-          this.clusterNameList = list.map((item) => item.clusterName);
+          this.clusterNameList = list.map(item => item.clusterName);
           this.totalElements = list.length;
         });
       })
@@ -180,76 +178,75 @@ class Cluster {
         this.loadCluster(this.viewList[0].clusterName);
         this.loadClusterDetail(this.viewList[0].clusterName);
       });
-    // this.clusterDetail = list[0];
   };
 
-  loadCluster = async (clusterName) => {
+  loadCloudClusterList = async () => {
     await axios
-      .get(`${SERVER_URL}/clusters/${clusterName}`)
+      .get(`${SERVER_URL}/spider/vmList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.clusterDetail = data;
-          this.nodes =
-            this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+          console.log("data is : ", data);
+          const list = data;
+          this.clusterList = list;
+          this.clusterNameList = list.map(item => item.IId.NameId);
+          this.totalElements = list.length;
         });
+      })
+      .then(() => {
+        this.convertList(this.clusterList, this.setClusterList);
       });
+  };
+
+  loadCluster = async clusterName => {
+    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.clusterDetail = data;
+        this.nodes = this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+      });
+    });
     return this.clusterDetail;
   };
 
-  loadClusterDetail = async (clusterName) => {
-    await axios
-      .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.clusterName = clusterName;
-          this.cloudDashboardDetail = data;
-          this.clusterInfo = data.ClusterInfo;
-          this.address = data.ClusterInfo.address;
-          this.nodeInfo = data.nodeInfo;
-          this.type = this.nodeInfo.map((val) => val.type);
-          this.master = this.type.reduce(
-            (cnt, element) => cnt + ("master" === element),
-            0
-          );
-          this.worker = this.type.reduce(
-            (cnt, element) => cnt + ("worker" === element),
-            0
-          );
-          this.cpuUsage = data.cpuUsage;
-          this.cpuUtil = data.cpuUtil;
-          this.cpuTotal = data.cpuTotal;
-          this.memoryUsage = data.memoryUsage;
-          this.memoryUtil = data.memoryUtil;
-          this.memoryTotal = data.memoryTotal;
-          this.diskUsage = data.diskUsage;
-          this.diskUtil = data.diskUtil;
-          this.diskTotal = data.diskTotal;
-          this.resourceCnt = data.resourceCnt;
-          this.nodeRunning = data.nodeRunning;
-        });
+  loadClusterDetail = async clusterName => {
+    await axios.get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.clusterName = clusterName;
+        this.cloudDashboardDetail = data;
+        this.clusterInfo = data.ClusterInfo;
+        this.address = data.ClusterInfo.address;
+        this.nodeInfo = data.nodeInfo;
+        this.type = this.nodeInfo.map(val => val.type);
+        this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
+        this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
+        this.cpuUsage = data.cpuUsage;
+        this.cpuUtil = data.cpuUtil;
+        this.cpuTotal = data.cpuTotal;
+        this.memoryUsage = data.memoryUsage;
+        this.memoryUtil = data.memoryUtil;
+        this.memoryTotal = data.memoryTotal;
+        this.diskUsage = data.diskUsage;
+        this.diskUtil = data.diskUtil;
+        this.diskTotal = data.diskTotal;
+        this.resourceCnt = data.resourceCnt;
+        this.nodeRunning = data.nodeRunning;
       });
-  };
-
-  loadClusterInProject = async (project) => {
-    await axios
-      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
-      .then((res) => runInAction(() => (this.clusters = res.data.data)));
-  };
-  loadClusterInWorkspace = async (workspace) => {
-    await axios
-      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
-      .then((res) => runInAction(() => (this.clusters = res.data.data)));
-  };
-
-  setDetail = (num) => {
-    runInAction(() => {
-      this.clusterDetail = this.clusterList.find(
-        (item) => item.clusterNum === num
-      );
     });
   };
 
-  setClusters = (clusters) => {
+  loadClusterInProject = async project => {
+    await axios.get(`${SERVER_URL}/clusterInfo?project=${project}`).then(res => runInAction(() => (this.clusters = res.data.data)));
+  };
+  loadClusterInWorkspace = async workspace => {
+    await axios.get(`${SERVER_URL}/clusters?workspace=${workspace}`).then(res => runInAction(() => (this.clusters = res.data.data)));
+  };
+
+  setDetail = num => {
+    runInAction(() => {
+      this.clusterDetail = this.clusterList.find(item => item.clusterNum === num);
+    });
+  };
+
+  setClusters = clusters => {
     runInAction(() => {
       this.clusters = clusters;
     });
