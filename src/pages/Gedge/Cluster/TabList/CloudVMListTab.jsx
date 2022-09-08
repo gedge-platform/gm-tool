@@ -17,13 +17,13 @@ import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
-const CoreClusterListTab = observer(() => {
-  const currentPageTitle = Title.CloudZone;
+const CloudVMListTab = observer(() => {
+  // const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
+  // const [tabvalue, setTabvalue] = useState(0);
+  // const handleTabChange = (event, newValue) => {
+  //   setTabvalue(newValue);
+  // };
   const [openTerminal, setOpenTerminal] = useState(false);
   const { clusterDetail, clusterList, loadCloudClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
     clusterStore;
@@ -87,20 +87,20 @@ const CoreClusterListTab = observer(() => {
       field: "SSHAccessPoint",
       filter: true,
     },
-    {
-      headerName: "VM",
-      field: "terminal",
-      minWidth: 100,
-      maxWidth: 100,
-      cellRenderer: function () {
-        // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
-      },
-      cellStyle: { textAlign: "center" },
-    },
+    // {
+    //   headerName: "VM",
+    //   field: "terminal",
+    //   minWidth: 100,
+    //   maxWidth: 100,
+    //   cellRenderer: function () {
+    //     // return `<span class="state_ico_new terminal" onClick></span> `;
+    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+    //   },
+    //   cellStyle: { textAlign: "center" },
+    // },
   ]);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const handleClick = e => {
     let fieldName = e.colDef.field;
@@ -131,7 +131,7 @@ const CoreClusterListTab = observer(() => {
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -171,7 +171,7 @@ const CoreClusterListTab = observer(() => {
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
-    </Layout>
+    </>
   );
 });
-export default CoreClusterListTab;
+export default CloudVMListTab;
