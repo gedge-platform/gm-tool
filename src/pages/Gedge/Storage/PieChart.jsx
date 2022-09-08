@@ -40,7 +40,7 @@ const PieChart = observer((props) => {
             borderRadius: 25,
             name: {
               show: true,
-              fontSize: "22px",
+              fontSize: "20px",
               color: "#fff",
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 600,
