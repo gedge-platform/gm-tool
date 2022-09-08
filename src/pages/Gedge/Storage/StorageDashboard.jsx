@@ -8,7 +8,9 @@ import { observer } from "mobx-react";
 import styled from "styled-components";
 import Detail from "@/pages/Gedge/Platform/Detail";
 import clusterStore from "@/store/Cluster";
-
+import storageStore from "@/store/StorageClass";
+import PieChart from "./PieChart"
+import RadialBarChart from "./RadialBarChart"
 const StoragePageWrap = styled.div`
   padding: 0 10px;
   .panel_summary {
@@ -30,21 +32,30 @@ const StoragePageWrap = styled.div`
   }
 `;
 
-const StorageDashboard = () => {
+const StorageDashboard = observer(() => {
   const currentPageTitle = Title.StorageDashboard;
 
   const [tabvalue, setTabvalue] = useState(0);
+
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const { clusterDetail, loadClusterList } = clusterStore;
-
+  const { cephDashboard, loadStorageMonit } = storageStore;
   const history = useHistory();
 
   useLayoutEffect(() => {
-    loadClusterList("edge");
+    // loadClusterList("edge");
+
+
+
   }, []);
+
+  useEffect(() => {
+    loadStorageMonit();
+  }, []);
+
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -52,33 +63,33 @@ const StorageDashboard = () => {
         <PanelBox className="panel_summary">
           <div className="storageBoxWrap">
             <div className="storageBox">
-              <div className="storageBoxTitle">HEALTH_OK</div>
-              <div className="storageBoxTxt">Cluster Status</div>
+              <div className="storageBoxTitle">{cephDashboard.clusterStatus}</div>
+              <div className="storageBoxTxt">Ceph Cluster Status</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">3 up, 3 in / 3 total</div>
-              <div className="storageBoxTxt">Hosts</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_osd_up} up, {cephDashboard.ceph_osd_in} in / {cephDashboard.ceph_osd_in} total</div>
+              <div className="storageBoxTxt">OSDs</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">11</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_pool_num}</div>
               <div className="storageBoxTxt">Pools</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">177</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_pg_per_osd}</div>
               <div className="storageBoxTxt">PGs per OSD</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">4 total</div>
-              <div className="storageBoxTxt">Hosts</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_mon_quorum_status}</div>
+              <div className="storageBoxTxt">Monitors</div>
             </div>
 
             <div className="storageBox">
-              <div className="storageBoxTitle">1 total</div>
-              <div className="storageBoxTxt">Object Gateways</div>
+              <div className="storageBoxTitle">{cephDashboard.ceph_pool_objects}</div>
+              <div className="storageBoxTxt">Objects</div>
             </div>
           </div>
         </PanelBox>
@@ -88,21 +99,17 @@ const StorageDashboard = () => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Row Capacity</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
-                <div className="circle capacity">
-                  <div className="circleCount">20.06%</div>
-                  <div className="circleTxt">of 240 GIB</div>
-                </div>
+                <PieChart label={["avail", "used"]} value={[cephDashboard.ceph_cluster_total_avail_bytes, cephDashboard.ceph_cluster_total_used_bytes]} />
               </div>
               <div className="contTxt">
                 <ul>
                   <li className="used">
-                    <span className="tit">Used</span> <span>48.1 GiB</span>
+                    <span className="tit">Used</span> <span>{cephDashboard.ceph_cluster_total_used_bytes} GiB</span>
                   </li>
                   <li className="avail">
-                    <span className="tit">Avail</span> <span>191.9 GiB</span>
+                    <span className="tit">Avail</span> <span>{cephDashboard.ceph_cluster_total_avail_bytes} GiB</span>
                   </li>
-                  <li className="none"></li>
+                  <li className="total"> <span className="tit">Total</span> <span>{cephDashboard.ceph_cluster_total_bytes} GiB</span></li>
                   <li className="none"></li>
                 </ul>
               </div>
@@ -136,17 +143,27 @@ const StorageDashboard = () => {
             </div>
 
             <div className="storageCircleBox">
-              <div className="storageCircleBoxTitle">PG Status</div>
+              {/* <div className="storageCircleBoxTitle">PG Status</div> */}
+              <div className="storageCircleBoxTitle">OSD Latency</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
+                <RadialBarChart label={["read", "write"]} value={[cephDashboard.osd_read_latency, cephDashboard.osd_write_latency]} />
+                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함
                 <div className="circle status">
                   <div className="circleCount">177</div>
                   <div className="circleTxt">PGs</div>
-                </div>
+                </div> */}
               </div>
               <div className="contTxt">
                 <ul>
-                  <li className="clean">
+                  <li className="reads">
+                    <span className="tit">Reads</span> <span>{cephDashboard.osd_read_latency}</span>
+                  </li>
+                  <li className="writes">
+                    <span className="tit">Writes</span> <span>{cephDashboard.osd_write_latency}</span>
+                  </li>
+                  <li className="none"></li>
+                  <li className="none"></li>
+                  {/* <li className="clean">
                     <span className="tit">Clean</span> <span>0</span>
                   </li>
                   <li className="working">
@@ -157,7 +174,7 @@ const StorageDashboard = () => {
                   </li>
                   <li className="unknown">
                     <span className="tit">Unknown</span> <span>0</span>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
@@ -165,19 +182,15 @@ const StorageDashboard = () => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Client Read/Write</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
-                <div className="circle clientRW">
-                  <div className="circleCount">38</div>
-                  <div className="circleTxt">IOPS</div>
-                </div>
+                <RadialBarChart label={["read", "write"]} value={[cephDashboard.read_iops, cephDashboard.write_iops]} />
               </div>
               <div className="contTxt">
                 <ul>
                   <li className="reads">
-                    <span className="tit">Reads</span> <span>2/s</span>
+                    <span className="tit">Reads</span> <span>{cephDashboard.read_iops}</span>
                   </li>
                   <li className="writes">
-                    <span className="tit">Writes</span> <span>36/s</span>
+                    <span className="tit">Writes</span> <span>{cephDashboard.write_iops}</span>
                   </li>
                   <li className="none"></li>
                   <li className="none"></li>
@@ -188,19 +201,15 @@ const StorageDashboard = () => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Client Throughput</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
-                <div className="circle clientT">
-                  <div className="circleCount">12.8</div>
-                  <div className="circleTxt">MiB/s</div>
-                </div>
+                <RadialBarChart label={["read", "write"]} value={[cephDashboard.read_throughput, cephDashboard.write_throughput]} />
               </div>
               <div className="contTxt">
                 <ul>
                   <li className="reads">
-                    <span className="tit">Reads</span> <span>3.2 KiB/s</span>
+                    <span className="tit">Reads</span> <span>2/s</span>
                   </li>
                   <li className="writes">
-                    <span className="tit">Writes</span> <span>12.8 MiB/s</span>
+                    <span className="tit">Writes</span> <span>36/s</span>
                   </li>
                   <li className="none"></li>
                   <li className="none"></li>
@@ -218,5 +227,5 @@ const StorageDashboard = () => {
       </StoragePageWrap>
     </Layout>
   );
-};
+});
 export default StorageDashboard;

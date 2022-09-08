@@ -64,7 +64,7 @@ const Title = {
   Topology: "토폴로지",
   NetWork: "네트워크",
   Storage: "스토리지클래스",
-  StorageDashboard: "대시보드",
+  StorageDashboard: "Ceph 대시보드",
   Service: "서비스",
   Project: "프로젝트",
   CreateUser: "사용자 생성",
