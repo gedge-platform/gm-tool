@@ -159,7 +159,8 @@ class Cluster {
     });
   };
 
-  loadClusterList = async (type = "edge") => {
+  loadClusterList = async type => {
+    console.log("type is ", type);
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
@@ -210,6 +211,7 @@ class Cluster {
   loadClusterDetail = async clusterName => {
     await axios.get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`).then(({ data: { data } }) => {
       runInAction(() => {
+        console.log("data is ", data);
         this.clusterName = clusterName;
         this.cloudDashboardDetail = data;
         this.clusterInfo = data.ClusterInfo;

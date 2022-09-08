@@ -15,13 +15,8 @@ import CreateCluster from "../Dialog/CreateCluster";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
-const EdgeClusterListTab = observer(() => {
-  const currentPageTitle = Title.EdgeZone;
+const CloudClusterListTab = observer(() => {
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
 
   const {
     clusterDetail,
@@ -38,16 +33,6 @@ const EdgeClusterListTab = observer(() => {
   } = clusterStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
       headerName: "이름",
       field: "clusterName",
@@ -89,8 +74,6 @@ const EdgeClusterListTab = observer(() => {
     },
   ]);
 
-  const history = useHistory();
-
   const handleClick = e => {
     loadCluster(e.data.clusterName);
   };
@@ -104,11 +87,11 @@ const EdgeClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("edge");
+    loadClusterList("cloud");
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -121,7 +104,6 @@ const EdgeClusterListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
               <AgGrid
                 rowData={viewList}
@@ -137,11 +119,11 @@ const EdgeClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type={"edge"} open={open} onClose={handleClose} />
+          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
-    </Layout>
+    </>
   );
 });
-export default EdgeClusterListTab;
+export default CloudClusterListTab;
