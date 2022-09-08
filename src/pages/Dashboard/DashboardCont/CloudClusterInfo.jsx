@@ -52,8 +52,6 @@ const CloudClusterInfo = observer(() => {
     setCloudName,
   } = dashboardStore;
 
-  console.log("cloudType", cloudType);
-
   const changeCluster = ({ target: { value } }) => {
     setCloudName(value);
     loadCloudZoneDetailDashboard(value);

@@ -36,9 +36,11 @@ const ButtonStyle = styled.button`
 `;
 
 const ServiceAdminDashboard = observer(() => {
+  const { serviceAdminMonitoring } = serviceAdminDashboardStore;
   useEffect(() => {
     loadWorkspaceName();
     loadServiceAdminDashboard(setWorkspaceName);
+    serviceAdminMonitoring();
   }, []);
 
   const {
