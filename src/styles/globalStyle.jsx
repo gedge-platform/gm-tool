@@ -2994,18 +2994,26 @@ const globalStyles = createGlobalStyle`
                 }
                 &.used {
                   &::before {
-                    background: #f8adf7;
+                    background: #EA78EA;
                   }
                   span {
-                    color: #f8adf7;
+                    color: #EA78EA;
                   }
                 }
                 &.avail {
                   &::before {
-                    background: #d725d5;
+                    background: #E04AE0;
                   }
                   span {
-                    color: #d725d5;
+                    color: #E04AE0;
+                  }
+                }
+                 &.total {
+                  &::before {
+                    background: #CE00CE;
+                  }
+                  span {
+                    color: #CE00CE;
                   }
                 }
                 &.clean {

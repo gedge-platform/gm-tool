@@ -91,7 +91,7 @@ const EdgeClusterListTab = observer(() => {
 
   const history = useHistory();
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     loadCluster(e.data.clusterName);
   };
 
