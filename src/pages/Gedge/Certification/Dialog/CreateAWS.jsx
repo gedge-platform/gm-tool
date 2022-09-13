@@ -24,117 +24,44 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateAWS = observer((props) => {
+const CreateAWS = observer(props => {
   // const { open } = props;
   const [inputs, setInputs] = useState({
-    credentialName: "",
-    ProviderName: "AWS",
-    IdentityEndPoint: "",
-    Username: "",
-    Password: "",
-    DomainName: "",
-    ProjectID: "",
+    CredentialName: "",
+    ProviderName: "OPENSTACK",
+    ClientId: "",
+    ClientSecret: "",
     Region: "",
     Zone: "",
   });
-  // const [input, setInput] = useState({
-  //   CredentialName: "",
-  //   ProviderName: "",
-  //   CliendId: "",
-  //   ClientSecret: "",
-  //   Region: "",
-  //   Zone: "",
-  // });
-  const {
-    CredentialName,
-    ProviderName,
-    IdentityEndPoint,
-    Username,
-    Password,
-    DomainName,
-    ProjectID,
-    Region,
-    Zone,
-  } = inputs;
 
-  // const{
-  //   CredentialName,
-  //   ProviderName,
-  //   CliendId,
-  //   ClientSecret,
-  //   Region,
-  //   Zone,
-  // } = input;
+  const { CredentialName, ProviderName, ClientId, ClientSecret, Region, Zone } = inputs;
 
-  const {
-    postCredential,
-    setCredentialName,
-    setIdentityEndPoint,
-    setUsername,
-    setPassword,
-    setProjectID,
-    setDomainName,
-    setRegion,
-    setZone,
-  } = certificationStore;
+  const { postCredential, setCredentialName, setClientId, setClientSecret, setRegion, setZone } = certificationStore;
 
-  // const onChange = ({ target: { name, value } }) => {
-  //   console.log(name, value);
-  //   setInputs({
-  //     ...inputs,
-  //     [name]: value,
-  //   });
-  // };
+  const handleClose = () => {
+    props.reloadFunc && props.reloadFunc();
+    props.onClose && props.onClose();
+    setInputs({
+      CredentialName: "",
+      ProviderName: "",
+      ClientId: "",
+      ClientSecret: "",
+      Region: "",
+      Zone: "",
+    });
+  };
 
-  // const onChange = (e) => {
-  //   const { value, name } = e.target;
-  //   switch (name) {
-  //     case "CredentialName":
-  //       setCredentialName(value);
-  //       break;
-  //     case "IdentityEndPoint":
-  //       setIdentityEndPoint(value);
-  //       break;
-  //     case "Username":
-  //       setUsername(value);
-  //       break;
-  //     case "Password":
-  //       setPassword(value);
-  //       break;
-  //     case "DomainName":
-  //       setDomainName(value);
-  //       break;
-  //     case "ProjectID":
-  //       setProjectID(value);
-  //       break;
-  //     case "Region":
-  //       setRegion(value);
-  //       break;
-  //     case "Zone":
-  //       setZone(value);
-  //       break;
-  //   }
-  // };
-
-  const onChange = (e) => {
+  const onChange = e => {
     const { value, name } = e.target;
     if (name === "CredentialName") {
       setCredentialName(value);
       return;
-    } else if (name === "IdentityEndPoint") {
-      setIdentityEndPoint(value);
+    } else if (name === "ClientId") {
+      setClientId(value);
       return;
-    } else if (name === "Username") {
-      setUsername(value);
-      return;
-    } else if (name === "Password") {
-      setPassword(value);
-      return;
-    } else if (name === "DomainName") {
-      setDomainName(value);
-      return;
-    } else if (name === "ProjectID") {
-      setProjectID(value);
+    } else if (name === "ClientSecret") {
+      setClientSecret(value);
       return;
     } else if (name === "Region") {
       setRegion(value);
@@ -143,6 +70,11 @@ const CreateAWS = observer((props) => {
       setZone(value);
       return;
     }
+  };
+
+  const createCredential = async () => {
+    const result = await postCredential(inputs);
+    handleClose();
   };
 
   useEffect(() => {});
@@ -169,81 +101,26 @@ const CreateAWS = observer((props) => {
           </tr>
           <tr>
             <th>
-              Domain Name
+              Client Id
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Domain Name"
-                className="form_fullWidth"
-                name="DomainName"
-                onChange={onChange}
-                value={DomainName}
-              />
+              <CTextField type="text" placeholder="Client ID" className="form_fullWidth" name="ClientId" onChange={onChange} value={ClientId} />
             </td>
           </tr>
           <tr>
             <th>
-              IdentityEndPoint
+              Client Secret
               <span className="required">*</span>
             </th>
             <td>
               <CTextField
-                type="text"
-                placeholder="IdentityEndPoint"
+                type="Password"
+                placeholder="Clinet Secret"
                 className="form_fullWidth"
-                name="IdentityEndPoint"
+                name="ClientSecret"
                 onChange={onChange}
-                value={IdentityEndPoint}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Password
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="password"
-                placeholder="Password"
-                className="form_fullWidth"
-                name="Password"
-                onChange={onChange}
-                value={Password}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              ProjectID
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="ProjectID"
-                className="form_fullWidth"
-                name="ProjectID"
-                onChange={onChange}
-                value={ProjectID}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Username
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Username"
-                className="form_fullWidth"
-                name="Username"
-                onChange={onChange}
-                value={Username}
+                value={ClientSecret}
               />
             </td>
           </tr>
@@ -253,14 +130,7 @@ const CreateAWS = observer((props) => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Region"
-                className="form_fullWidth"
-                name="Region"
-                onChange={onChange}
-                value={Region}
-              />
+              <CTextField type="text" placeholder="Region" className="form_fullWidth" name="Region" onChange={onChange} value={Region} />
             </td>
           </tr>
           <tr>
@@ -269,14 +139,7 @@ const CreateAWS = observer((props) => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Zone"
-                className="form_fullWidth"
-                name="Zone"
-                onChange={onChange}
-                value={Zone}
-              />
+              <CTextField type="text" placeholder="Zone" className="form_fullWidth" name="Zone" onChange={onChange} value={Zone} />
             </td>
           </tr>
         </tbody>

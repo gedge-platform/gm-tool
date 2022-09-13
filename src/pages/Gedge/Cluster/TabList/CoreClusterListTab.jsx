@@ -16,6 +16,7 @@ import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const CoreClusterListTab = observer(() => {
   const currentPageTitle = Title.CloudZone;
@@ -40,43 +41,57 @@ const CoreClusterListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "이름",
-      field: "clusterName",
+      headerName: "제공자",
+      field: "ProviderName",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "이름",
+      field: "IId.NameId",
       filter: true,
     },
     {
       headerName: "상태",
-      field: "status",
+      field: "VmStatus",
       filter: true,
       cellRenderer: ({ value }) => {
         return drawStatus(value);
       },
     },
     {
-      headerName: "노드개수",
-      field: "nodeCnt",
+      headerName: "Private",
+      field: "PrivateIP",
       filter: true,
     },
     {
-      headerName: "IP",
-      field: "clusterEndpoint",
+      headerName: "Public",
+      field: "PublicIP",
       filter: true,
     },
     {
-      headerName: "생성날짜",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
-      },
+      headerName: "이미지",
+      field: "ImageIId.NameId",
+      filter: true,
+    },
+    {
+      headerName: "VPC",
+      field: "VpcIID.NameId",
+      filter: true,
+    },
+    {
+      headerName: "키페어",
+      field: "KeyPairIId.NameId",
+      filter: true,
+    },
+    {
+      headerName: "리전",
+      field: "Region.Region",
+      filter: true,
+    },
+    {
+      headerName: "SSH",
+      field: "SSHAccessPoint",
+      filter: true,
     },
     {
       headerName: "VM",
@@ -138,7 +153,7 @@ const CoreClusterListTab = observer(() => {
           <div className="tabPanelContainer">
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
-              <AgGrid
+              <AgGrid2
                 rowData={viewList}
                 columnDefs={columDefs}
                 isBottom={false}

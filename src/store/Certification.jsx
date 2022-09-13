@@ -156,6 +156,18 @@ class Certification {
     });
   };
 
+  setAccessId = (n) => {
+    runInAction(() => {
+      this.AccessId = n;
+    });
+  };
+
+  setAccessToken = (n) => {
+    runInAction(() => {
+      this.AccessToken = n;
+    });
+  };
+
   setClientId = (n) => {
     runInAction(() => {
       this.ClientId = n;
@@ -188,21 +200,14 @@ class Certification {
 
   loadCredentialList = async () => {
     await axios
-      .get(`${SERVER_URL}/spider/credentials`)
+      .get(`${SERVER_URL}/spider/credentialList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.credential = data.credential;
+          // console.log("data is ", data);
+          this.credential = data;
           this.totalElements = this.credential.length;
-          this.CredentialName = this.credential.map(
-            (list) => list.CredentialName
-          );
-          this.ProviderName = this.credential.map((list) => list.ProviderName);
-          this.KeyValueInfoList = this.credential.map(
-            (list) => list.KeyValueInfoList
-          );
-          // this.DomainName = this.KeyValueInfoList.map(
-          //   (val) => Object.values(val[0])[1]
-          // );
+          this.CredentialName = this.credential.map((list) => list.name);
+          this.ProviderName = this.credential.map((list) => list.type);
         });
       })
       .then(() => {
@@ -218,7 +223,7 @@ class Certification {
     };
     console.log(body);
     return await axios
-      .post(`${SERVER_URL}/spider/credentials`, body)
+      .post(`${SERVER_URL4}/spider/credentials`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
@@ -233,7 +238,7 @@ class Certification {
 
   deleteCredential = async (CredentialName, callback) => {
     axios
-      .delete(`${SERVER_URL}/spider/credentials/${CredentialName}`)
+      .delete(`${SERVER_URL4}/spider/credentials/${CredentialName}`)
       .then((res) => {
         if (res.status === 200) swalError("Credential 삭제 완료", callback);
       })

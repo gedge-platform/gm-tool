@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { observer } from "mobx-react";
 import styled from "styled-components";
+import cronJobStore from "../../../../../store/CronJob";
+import { observer } from "mobx-react-lite";
 import { dateFormatter } from "@/utils/common-utils";
-import platformProjectStore from "../../../store/PlatformProject";
-import "@grapecity/wijmo.styles/wijmo.css";
 import EventAccordion from "@/components/detail/EventAccordion";
 
 const TableTitle = styled.p`
@@ -22,10 +21,6 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
-
-  p {
-    color: rgba(255, 255, 255, 0.6);
-  }
 `;
 
 const Label = styled.span`
@@ -51,18 +46,11 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const {
-    platformDetail,
-    labels,
-    annotations,
-    events,
-    resource,
-    resourceUsage,
-  } = platformProjectStore;
-  console.log(platformDetail);
-
+  const { cronJobDetail, label, annotations, events, cronjobInvolvesJobs } =
+    cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  const containers = cronJobDetail.containers;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -82,28 +70,45 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
+        <CTab label="Involves Data" />
       </CTabs>
-      {/* <CTabPanel value={tabvalue} index={0}>
+      <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{platformDetail.Name}</td>
+                <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{platformDetail.clusterName}</td>
+                <td>{cronJobDetail.cluster ? cronJobDetail.cluster : "-"}</td>
               </tr>
               <tr>
-                <th>Status</th>
-                <td>{platformDetail.status}</td>
+                <th>Project</th>
+                <td>{cronJobDetail.project ? cronJobDetail.project : "-"}</td>
+                <th>Schedule</th>
+                <td>{cronJobDetail.schedule ? cronJobDetail.schedule : "-"}</td>
+              </tr>
+              <tr>
+                <th>Concurrency Policy</th>
+                <td>
+                  {cronJobDetail.concurrencyPolicy
+                    ? cronJobDetail.concurrencyPolicy
+                    : "-"}
+                </td>
+                <th>Successful Jobs History Limit</th>
+                <td>
+                  {cronJobDetail.successfulJobsHistoryLimit
+                    ? cronJobDetail.successfulJobsHistoryLimit
+                    : "-"}
+                </td>
+              </tr>
+              <tr>
                 <th>Created</th>
-                <td>{dateFormatter(platformDetail.created_at)}</td>
-              </tr>
-              <tr>
-                <th>CPU Usage</th>
-                <td>{resourceUsage.namespace_cpu}</td>
-                <th>Memory Usage</th>
-                <td>{resourceUsage.namespace_memory}</td>
+                <td>
+                  {cronJobDetail.creationTimestamp
+                    ? dateFormatter(cronJobDetail.creationTimestamp)
+                    : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -111,27 +116,18 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Deployment</th>
-                <td>{resource.deployment_count}</td>
-                <th className="tb_workload_detail_th">Pod</th>
-                <td>{resource.pod_count}</td>
-              </tr>
-              <tr>
-                <th>Service</th>
-                <td>{resource.service_count}</td>
-                <th>CronJob</th>
-                <td>{resource.cronjob_count}</td>
-              </tr>
-              <tr>
-                <th>Job</th>
-                <td>{resource.job_count}</td>
-                <th>Volume</th>
-                <td>{resource.volume_count}</td>
-              </tr>
-            </tbody>
+          <TableTitle>Containers</TableTitle>
+          <table className="tb_data">
+            {containers?.map((item) => (
+              <tbody>
+                <tr>
+                  <th className="tb_workload_detail_th">Name</th>
+                  <td>{item?.name}</td>
+                  <th>Image</th>
+                  <td>{item?.image}</td>
+                </tr>
+              </tbody>
+            ))}
           </table>
         </div>
       </CTabPanel>
@@ -139,8 +135,8 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
-              Object.entries(labels).map(([key, value]) => (
+            {label ? (
+              Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
                   <span className="value">{value}</span>
@@ -151,6 +147,7 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
           <br />
+
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -168,12 +165,44 @@ const Detail = observer(() => {
               <p>No Annotations Info.</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-      </CTabPanel> */}
+      </CTabPanel>
+      <CTabPanel value={tabvalue} index={4}>
+        <div className="tb_container">
+          <TableTitle>References</TableTitle>
+          {cronjobInvolvesJobs
+            ? cronjobInvolvesJobs.map((job) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{job?.name}</td>
+                      </tr>
+                      <tr>
+                        <th>CompletionTime</th>
+                        <td>{dateFormatter(job?.completionTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>StartTime</th>
+                        <td>{dateFormatter(job?.startTime)}</td>
+                      </tr>
+                      <tr>
+                        <th>Succeeded</th>
+                        <td>{job?.succeeded}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            : "No Info"}
+          <br />
+        </div>
+      </CTabPanel>
     </PanelBox>
   );
 });

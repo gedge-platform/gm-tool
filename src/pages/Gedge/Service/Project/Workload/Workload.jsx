@@ -37,7 +37,7 @@ const Workload = () => {
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <DeploymentListTab style={{ height: 500 }} />
+          <DeploymentListTab />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={1}>
           <ServiceListTab />

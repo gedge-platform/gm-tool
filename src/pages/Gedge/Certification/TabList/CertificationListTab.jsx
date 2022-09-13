@@ -13,9 +13,26 @@ import { observer } from "mobx-react";
 import { Title } from "@/pages";
 import certificationStore from "../../../../store/Certification";
 import Terminal from "../Dialog/Terminal";
-import CreateCluster from "../Dialog/CreateAWS";
+import CreateCluster from "../Dialog/CreateOPENSTACK";
 import CreateCertification from "../Dialog/CreateCertification";
 import SelectProvider from "../Dialog/SelectProvider";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import styled from "styled-components";
+
+const CloudZoneWrap = styled.div`
+  .panel_summary {
+    width: 100%;
+    padding: 20px;
+    background: #202842;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &::before {
+      display: none;
+    }
+  }
+`;
 
 const CertificationListTab = observer(() => {
   const currentPageTitle = Title.Certification;
@@ -27,7 +44,6 @@ const CertificationListTab = observer(() => {
   const [openTerminal, setOpenTerminal] = useState(false);
   const {
     loadCredentialList,
-
     credential,
     clusterDetail,
     clusterList,
@@ -43,85 +59,60 @@ const CertificationListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "CredentialName",
-      field: "CredentialName",
+      headerName: "이름",
+      field: "name",
       filter: true,
     },
     {
-      headerName: "DomainName",
-      field: "DomainName",
+      headerName: "타입",
+      field: "type",
       filter: true,
-      cellRenderer: function ({ data: { KeyValueInfoList } }) {
-        return `<span>${KeyValueInfoList[0].Value}</span>`;
-      },
     },
     {
-      headerName: "IdentityEndpoint",
-      field: "IdentityEndpoint",
+      headerName: "도메인",
+      field: "domain",
       filter: true,
-      cellRenderer: function ({ data: { KeyValueInfoList } }) {
-        if (KeyValueInfoList[1])
-          return `<span>${KeyValueInfoList[1].Value}</span>`;
-        else return `<span>no data</span>`;
-      },
     },
     {
-      headerName: "Password",
-      field: "Password",
+      headerName: "테넌트 ID",
+      field: "project",
       filter: true,
-      cellRenderer: function ({ data: { KeyValueInfoList } }) {
-        if (KeyValueInfoList[2])
-          return `<span>${KeyValueInfoList[2].Value}</span>`;
-        else return `<span>no data</span>`;
-      },
     },
     {
-      headerName: "ProjectID",
-      field: "ProjectID",
+      headerName: "URL",
+      field: "endpoint",
       filter: true,
-      cellRenderer: function ({ data: { KeyValueInfoList } }) {
-        if (KeyValueInfoList[3])
-          return `<span>${KeyValueInfoList[3].Value}</span>`;
-        else return `<span>no data</span>`;
-      },
     },
     {
-      headerName: "Username",
-      field: "Username",
+      headerName: "username",
+      field: "username",
       filter: true,
-      cellRenderer: function ({ data: { KeyValueInfoList } }) {
-        if (KeyValueInfoList[4])
-          return `<span>${KeyValueInfoList[4].Value}</span>`;
-        else return `<span>no data</span>`;
-      },
     },
     {
-      headerName: "ProviderName",
-      field: "ProviderName",
+      headerName: "password",
+      field: "password",
       filter: true,
     },
-    // {
-    //   headerName: "생성날짜",
-    //   field: "created_at",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
-    //   },
-    // },
-    // {
-    //   headerName: "",
-    //   field: "terminal",
-    //   minWidth: 100,
-    //   maxWidth: 100,
-    //   cellRenderer: function () {
-    //     // return `<span class="state_ico_new terminal" onClick></span> `;
-    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
-    //   },
-    //   cellStyle: { textAlign: "center" },
-    // },
+    {
+      headerName: "access_id",
+      field: "access_id",
+      filter: true,
+    },
+    {
+      headerName: "access_token",
+      field: "access_token",
+      filter: true,
+    },
+    {
+      headerName: "Zone",
+      field: "zone",
+      filter: true,
+    },
+    {
+      headerName: "생성날짜",
+      field: "created_at",
+      filter: true,
+    },
   ]);
 
   const history = useHistory();
@@ -172,7 +163,7 @@ const CertificationListTab = observer(() => {
         <div className="tabPanelContainer">
           {/* <CTabPanel value={tabvalue} index={0}> */}
           <div className="grid-height2">
-            <AgGrid
+            <AgGrid2
               rowData={viewList}
               columnDefs={columDefs}
               isBottom={false}

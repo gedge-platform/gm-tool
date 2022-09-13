@@ -7,6 +7,7 @@ import {
   Login,
   NotFound,
   WorkSpace,
+  Workload,
   User,
   Monitoring,
   ComponentManage,
@@ -82,6 +83,7 @@ export const App = () => {
           <AuthRoute path="/topology" component={NotFound} />
           <AuthRoute path="/loadbalancer" component={NotFound} />
           <AuthRoute path="/storage" component={Storage} />
+          <AuthRoute path="/workload" component={Workload} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
           <AuthRoute path="/template" component={NotFound} />

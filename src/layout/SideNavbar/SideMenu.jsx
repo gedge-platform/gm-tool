@@ -323,6 +323,11 @@ export const SideMenu = () => {
                       {Title.PlatformControl}
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink exact to="/workload" activeClassName="active">
+                      {Title.Workload}
+                    </NavLink>
+                  </li>
                 </CustomTreeItem>
                 <li>
                   <NavLink exact to="/template" activeClassName="active">
