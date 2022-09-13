@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Service {
   currentPage = 1;
@@ -86,7 +87,6 @@ class Service {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-      console.log(apiList);
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
         tempList.push(toJS(value));
@@ -123,15 +123,16 @@ class Service {
     });
   };
 
-  loadServiceList = async (type) => {
+  loadServiceList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/services`)
+      .get(`${SERVER_URL}/services?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.pServiceList = list;
+          // const list = listTmp.filter((item) => item.projectType === type);
+
+          this.pServiceList = res.data.data;
           // this.serviceDetail = list[0];
           this.totalElements = this.pServiceList.length;
         });
@@ -139,16 +140,6 @@ class Service {
       .then(() => {
         this.convertList(this.pServiceList, this.setPServiceList);
       })
-      // await axios.get(`${SERVER_URL}/services`).then((res) => {
-      //   runInAction(() => {
-      //     const list = res.data.data.filter((item) => item.projectType === type);
-      //     this.pServiceList = list;
-      //     // this.serviceDetail = list[0];
-      //     this.totalElements = this.pServiceList.length;
-      //   });
-      // }).then(() => {
-      //   this.convertList(this.pServiceList, this.setPServiceList);
-      // })
       .then(() => {
         this.loadServiceDetail(
           this.viewList[0].name,
@@ -248,6 +239,7 @@ class Service {
           YAML.parse(this.content)
         )
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             count++;
             if (count === this.cluster.length) {

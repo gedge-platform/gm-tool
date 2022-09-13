@@ -268,6 +268,7 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    handleClose();
   };
 
   // useEffect는 component가 rendeing될 때마다 특정 작업을 실행할 수 있도록하는 Hook

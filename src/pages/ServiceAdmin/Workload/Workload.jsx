@@ -13,7 +13,7 @@ import RequestStatusTab from "./Tablist/RequestStatusTab";
 import SchedulerListTab from "./Tablist/SchedulerListTab";
 
 const Workload = () => {
-  console.log("77");
+  // console.log("77");
   const currentPageTitle = Title.Workload;
 
   const [tabvalue, setTabvalue] = useState(0);
@@ -37,7 +37,7 @@ const Workload = () => {
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
-          <DeploymentListTab />
+          <DeploymentListTab style={{ height: 500 }} />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={1}>
           <ServiceListTab />

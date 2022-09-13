@@ -19,11 +19,7 @@ const Cluster_resoureceGraphData = styled.div`
 
 const ClusterInfo = observer(() => {
   const {
-    loadClusterList,
-    clusterNameList,
     clusterName,
-    clusterInfo,
-    address,
     master,
     worker,
     cpuUsage,
@@ -35,38 +31,32 @@ const ClusterInfo = observer(() => {
     memoryTotal,
     memoryUsage,
     memoryUtil,
-    resourceCnt,
-    cloudDashboardDetail,
-    loadClusterListinDashboard,
-    loadCloudDashboard,
-    setClusterName,
-    loadClusterDetail,
-    loadCloudDetailInDashboard,
-    list,
+    loadEdgeZoneDashboard,
+    loadEdgeZoneDetailDashboard,
     edgeType,
-    cloudList,
+    clusterInfo,
+    setClusterName,
   } = dashboardStore;
-  console.log(edgeType);
 
   const changeCluster = ({ target: { value } }) => {
-    loadCloudDetailInDashboard(value);
-    // setClusterName(value);
+    setClusterName(value);
+    loadEdgeZoneDetailDashboard(value);
   };
 
   useEffect(() => {
-    // loadClusterList();
-    loadClusterListinDashboard();
+    loadEdgeZoneDashboard();
   }, []);
 
   return (
     <div className="cluster_info">
       <FormControl className="form_dashboard">
         <Select
+          key={clusterName}
           value={clusterName}
           inputProps={{ "aria-label": "Without label" }}
           onChange={changeCluster}
         >
-          {Object.values(edgeType).map((item) => (
+          {edgeType.map((item) => (
             <MenuItem value={item.clusterName}>{item.clusterName}</MenuItem>
           ))}
         </Select>
@@ -74,10 +64,14 @@ const ClusterInfo = observer(() => {
       <div className="cluster_detailWrap">
         <div className="cluster_detail">
           <div className="cluster_detail_title">Name</div>
-          <div className="cluster_detail_content">{clusterName}</div>
+          <div className="cluster_detail_content">
+            {clusterInfo.clusterName}
+          </div>
           <div className="cluster_detail_title">Location</div>
           <div className="cluster_detail_content">
-            <div className="cluster_detail_content_txt">{address}</div>
+            <div className="cluster_detail_content_txt">
+              {clusterInfo.address}
+            </div>
             <div className="cluster_detail_content_circleWrap">
               <div className="cluster_detail_content_circle">
                 <span className="count">{master}</span>

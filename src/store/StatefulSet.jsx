@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class StatefulSet {
   currentPage = 1;
@@ -135,17 +136,20 @@ class StatefulSet {
     });
   };
 
-  loadStatefulSetList = async (type) => {
+  loadStatefulSetList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/statefulsets`)
+      .get(`${SERVER_URL}/statefulsets?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.statefulSetList = list;
+          console.log(res);
+          // const list = res.data.data.filter(
+          //   (item) => item.projectType === type
+          // );
+          this.statefulSetList = res.data.data;
           // this.statefulSetDetail = list[0];
-          this.totalElements = list.length;
+          this.totalElements = this.statefulSetList.length;
         });
       })
       .then(() => {
@@ -174,16 +178,13 @@ class StatefulSet {
       .get(
         `${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`
       )
-      .then((res) => {
+      .then(({ data: { data } }) => {
         runInAction(() => {
-          this.statefulSetDetail = res.data.data;
-          this.label = res.data.data.label;
-          this.annotations = res.data.data.annotations;
-          if (res.data.data.events !== null) {
-            this.events = res.data.data.events;
-          } else {
-            this.events = null;
-          }
+          this.statefulSetDetail = data;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.events = data.events;
+          console.log(this.events);
         });
       });
   };

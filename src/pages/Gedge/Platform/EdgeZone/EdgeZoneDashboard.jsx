@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
-import { Title } from "@/pages";
 import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
 import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
 import EdgeZoneSummary from "./EdgeZoneSummary";
@@ -34,16 +31,16 @@ const EdgeZoneDashboard = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
+  const { loadEdgeZoneDashboard, loadEdgeZoneDetailDashboard } = dashboardStore;
 
-  const { clusterDetail, loadClusterList, loadCluster } = clusterStore;
   const history = useHistory();
 
   const handleClick = (e) => {
-    loadCluster(e.data.clusterName);
+    loadEdgeZoneDetailDashboard(e.data.clusterName);
   };
 
   useEffect(() => {
-    loadClusterList("edge");
+    loadEdgeZoneDashboard();
   }, []);
 
   return (
@@ -63,11 +60,8 @@ const EdgeZoneDashboard = observer(() => {
           <div className="SummaryWrap">
             <EdgeZoneSummary />
           </div>
-          {/* </PanelBox> */}
-
           <div className="panel_summary">
             <CReflexBox>
-              {/* <Detail cluster={nodeInfo} /> */}
               <NodeList />
             </CReflexBox>
           </div>
