@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { BASIC_AUTH, SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class CronJob {
   currentPage = 1;
@@ -115,15 +116,18 @@ class CronJob {
     });
   };
 
-  loadCronJobList = async (type) => {
+  loadCronJobList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/cronjobs`)
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL}/cronjobs?user=${id}`)
+      .then((res) => {
+        console.log(res);
         runInAction(() => {
-          const list = data.filter((item) => item.projectType === type);
-          this.cronJobList = list;
+          // const list = data.filter((item) => item.projectType === type);
+          this.cronJobList = res.data.data;
           // this.cronJobDetail = list[0];
-          this.totalElements = list.length;
+          this.totalElements = res.data.data.length;
         });
       })
       .then(() => {

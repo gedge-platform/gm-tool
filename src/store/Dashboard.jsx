@@ -70,6 +70,7 @@ class Dashboard {
   VMList = [];
 
   clusterNameList = [];
+  cloudNameList = [];
   clusterName = "";
   setClusterName = (value) => {
     runInAction(() => {
@@ -77,7 +78,13 @@ class Dashboard {
     });
   };
 
-  cloudDashboardDetail = [];
+  cloudName = "";
+  setCloudName = (value) => {
+    runInAction(() => {
+      this.cloudName = value;
+    });
+  };
+
   clusterInfo = {
     address: "",
   };
@@ -368,44 +375,74 @@ class Dashboard {
   //     VMList.running = this.Running;
   //     VMList.stop = this.Stop;
   //     console.log(VMList);
-  //   // }
+  //   // }l
   // })
   // };
 
   edgeType = [];
   cloudType = [];
-  list = [];
 
-  loadClusterListinDashboard = async (type = "edge" || "cloud") => {
+  loadEdgeZoneDashboard = async () => {
     await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
       runInAction(() => {
-        this.list =
-          type === "edge"
-            ? data
-            : data.filter((item) => item.clusterType === type);
-
-        this.edgeType = this.list.filter((item) => item.clusterType === "edge");
-        const cloudList = data.filter((item) => item.clusterType === "cloud");
-
-        console.log(cloudList);
-
+        this.edgeType = data.filter((item) => item.clusterType === "edge");
         this.clusterNameList = this.edgeType.map((item) => item.clusterName);
-        this.clusterName = this.clusterNameList[0];
-        this.totalElements = this.list.length;
+
+        this.totalElements = data.length;
       });
     });
-    this.loadCloudDetailInDashboard(this.clusterNameList[0]);
+    this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
-  loadCloudDetailInDashboard = async (clusterName) => {
+  loadEdgeZoneDetailDashboard = async (clusterName) => {
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
-          this.clusterName = clusterName;
-          this.cloudDashboardDetail = data;
           this.clusterInfo = data.ClusterInfo;
-          this.address = data.ClusterInfo.address;
+          this.nodeInfo = data.nodeInfo;
+          this.type = this.nodeInfo.map((val) => val.type);
+          this.master = this.type.reduce(
+            (cnt, element) => cnt + ("master" === element),
+            0
+          );
+          this.worker = this.type.reduce(
+            (cnt, element) => cnt + ("worker" === element),
+            0
+          );
+          this.cpuUsage = data.cpuUsage ? data.cpuUsage : 0;
+          this.cpuUtil = data.cpuUtil ? data.cpuUtil : 0;
+          this.cpuTotal = data.cpuTotal ? data.cpuTotal : 0;
+          this.memoryUsage = data.memoryUsage ? data.memoryUsage : 0;
+          this.memoryUtil = data.memoryUtil ? data.memoryUtil : 0;
+          this.memoryTotal = data.memoryTotal ? data.memoryTotal : 0;
+          this.diskUsage = data.diskUsage ? data.diskUsage : 0;
+          this.diskUtil = data.diskUtil ? data.diskUtil : 0;
+          this.diskTotal = data.diskTotal ? data.diskTotal : 0;
+          this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
+          this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+        })
+      );
+  };
+
+  loadCloudZoneDashboard = async () => {
+    await axios.get(`${SERVER_URL}/clusters`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.cloudType = data.filter((item) => item.clusterType === "cloud");
+        this.cloudNameList = this.cloudType.map((item) => item.clusterName);
+        this.totalElements = data.length;
+      });
+    });
+    this.loadCloudZoneDetailDashboard(this.cloudNameList[0]);
+  };
+
+  loadCloudZoneDetailDashboard = async (cloudName) => {
+    await axios
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${cloudName}`)
+      .then(({ data: { data } }) =>
+        runInAction(() => {
+          this.cloudName = cloudName;
+          this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
           this.type = this.nodeInfo.map((val) => val.type);
           this.master = this.type.reduce(

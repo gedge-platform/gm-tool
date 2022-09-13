@@ -338,23 +338,21 @@ const Detail = observer(() => {
                           <th>Port</th>
                           <th>Protocol</th>
                         </tr>
-                        <tr>
-                          {services.port ? (
-                            services.port?.map((port) => (
-                              <>
-                                <td>{port.name}</td>
-                                <td>{port.port}</td>
-                                <td>{port.protocol}</td>
-                              </>
-                            ))
-                          ) : (
-                            <>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
-                            </>
-                          )}
-                        </tr>
+                        {services.port ? (
+                          services.port?.map((port) => (
+                            <tr>
+                              <td>{port.name}</td>
+                              <td>{port.port}</td>
+                              <td>{port.protocol}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </td>
