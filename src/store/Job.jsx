@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Job {
   currentPage = 1;
@@ -159,27 +160,21 @@ class Job {
     });
   };
 
-  loadJobList = async (type) => {
+  loadJobList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/jobs`)
+      .get(`${SERVER_URL}/jobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.jobList = list;
+          // const list = res.data.data.filter((item) => item.projectType === type);
+          this.jobList = res.data.data;
           // this.jobDetail = list[0];
-          this.totalElements = list.length;
+          this.totalElements = res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.jobList, this.setPJobList);
-        // await axios.get(`${SERVER_URL}/jobs`).then((res) => {
-        //   runInAction(() => {
-        //     const list = res.data.data.filter((item) => item.projectType === type);
-        //     this.jobList = list;
-        //     // this.jobDetail = list[0];
-        //     this.totalElements = list.length;
       });
     this.loadJobDetail(
       this.jobList[0].name,

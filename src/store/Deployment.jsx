@@ -230,21 +230,20 @@ class Deployment {
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
         });
-        console.log(this.workspace);
       });
   };
 
   loadDeploymentList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/deployments`)
+      .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
-          const { user } = getItem("user");
-          // const list = res.data.data.filter((item) => item.projetType === type);
-          const list = res.data.data.filter((item) => item.user !== user);
-          this.deploymentList = list;
-          this.deploymentDetail = list[0];
-          this.totalElements = list.length;
+          this.deploymentList = res.data.data;
+          this.deploymentDetail = res.data.data[0];
+          this.totalElements = res.data.data.length;
         });
       })
       .then(() => {

@@ -126,16 +126,18 @@ class Project {
     });
   };
 
-  loadProjectList = async (type = "user") => {
+  loadProjectList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/userProjects`)
+      .get(`${SERVER_URL}/userProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.projectList = list;
-          this.totalElements = list.length;
+          // const list = res.data.data.filter(
+          //   (item) => item.projectType === type
+          // );
+          this.projectList = res.data.data;
+          this.totalElements = res.data.data.length;
         });
       })
       .then(() => {
@@ -187,9 +189,12 @@ class Project {
       });
   };
 
-  loadSystemProjectList = async (type) => {
-    await axios.get(`${SERVER_URL}/systemProjects`).then((res) => {
+  loadSystemProjectList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios.get(`${SERVER_URL}/systemProjects?user=${id}`).then((res) => {
       runInAction(() => {
+        console.log(res);
         this.systemProjectList = res.data.data;
         this.totalElements = res.data.length;
       });

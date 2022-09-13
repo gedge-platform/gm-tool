@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
+import { getItem } from "@/utils/sessionStorageFn";
 
 class PlatformProject {
   platformProjectList = [
@@ -127,18 +128,21 @@ class PlatformProject {
     });
   };
 
-  loadPlatformProjectList = async (type) => {
+  loadPlatformProjectList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/systemProjects`)
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL}/systemProjects?user=${id}`)
+      .then((res) => {
         runInAction(() => {
-          this.platformProjectList = data;
-          this.platformDetail = data[0];
+          console.log(res);
+          this.platformProjectList = res.data.data;
+          this.platformDetail = res.data.data[0];
           // const temp = new Set(
           //   res.data.data.map((cluster) => cluster.clusterName)
           // );
           // this.clusterList = [...temp];
-          this.totalElements = data.length;
+          this.totalElements = res.data.data.length;
         });
       })
       .then(() => {
