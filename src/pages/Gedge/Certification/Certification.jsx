@@ -59,12 +59,12 @@ const Certification = observer(() => {
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <CertificationListTab />
-          {/* <div className="grid-height2">
+        {/* <CTabPanel value={tabvalue} index={0}> */}
+        <CertificationListTab />
+        {/* <div className="grid-height2">
                 <AgGrid columDefs={columDefs} />
               </div> */}
-        </CTabPanel>
+        {/* </CTabPanel> */}
       </div>
       {/* <SelectProvider
         open={open}

@@ -8,6 +8,7 @@ import projectStore from "../../../../../store/Project";
 import "@grapecity/wijmo.styles/wijmo.css";
 import { MenuItem, FormControl, Select } from "@mui/material";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { AgGrid } from "../../../../../components/datagrids/AgGrid";
 
 const EventWrap = styled.div`
   .MuiInputBase-input {
@@ -99,7 +100,7 @@ const Label = styled.span`
   }
 `;
 
-const Detail = observer(() => {
+const userDetail = observer(() => {
   const {
     projectDetail,
     labels,
@@ -110,11 +111,30 @@ const Detail = observer(() => {
     changeCluster,
     workspace,
     events,
+    eventList,
+    totalEvents,
+    eventLength,
+    currentEvent,
+    goPrevEvent,
+    goNextEvent,
   } = projectStore;
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  const [columDefs] = useState([
+    {
+      headerName: "type",
+      field: "type",
+      filter: true,
+    },
+    {
+      headerName: "message",
+      field: "message",
+      filter: true,
+    },
+  ]);
 
   const eventsTable = () => {
     return (
@@ -308,6 +328,20 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
+        {/* <EventAccordion events={events}> */}
+        {/* <AgGrid
+          rowData={eventList}
+          columDefs={columDefs}
+          isBottom={false}
+          totalElements={eventLength}
+          totalPages={totalEvents}
+          currentPage={currentEvent}
+          goNextPage={goNextEvent}
+          goPrevEvent={goPrevEvent}
+        > */}
+        {/* <EventAccordion events={currentEvent} /> */}
+        {/* </AgGrid> */}
+        {/* </EventAccordion> */}
         {/* <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             {eventsTable()}
@@ -318,7 +352,7 @@ const Detail = observer(() => {
     </PanelBox>
   );
 });
-export default Detail;
+export default userDetail;
 
 /*
     <PanelBox>

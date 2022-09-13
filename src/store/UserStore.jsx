@@ -10,7 +10,6 @@ class User {
   //   id: "",
   //   role: "",
   // };
-
   totalElements = 0;
   currentPage = 1;
   totalPages = 1;
@@ -127,6 +126,7 @@ class User {
       runInAction(() => {
         this.userDetail = res.data;
       });
+      console.log(this.userDetail);
     });
   };
 

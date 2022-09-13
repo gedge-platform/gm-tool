@@ -396,7 +396,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .paper_main, .paper_detail {
-    
+
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -410,7 +410,7 @@ const globalStyles = createGlobalStyle`
       }
     }
     .grid-height {
-      height: 100%
+      height: 500px
     }
   }
   

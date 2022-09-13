@@ -239,6 +239,7 @@ class Service {
           YAML.parse(this.content)
         )
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             count++;
             if (count === this.cluster.length) {

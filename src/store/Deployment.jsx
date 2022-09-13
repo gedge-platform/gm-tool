@@ -367,8 +367,10 @@ class Deployment {
         YAML.parse(this.content)
       )
       .then((res) => {
+        console.log(res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
+          return;
         }
       });
   };
@@ -382,8 +384,8 @@ class Deployment {
         `${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
-      .then(() => {
-        return;
+      .then((res) => {
+        console.log(res);
       });
   };
 }

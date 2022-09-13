@@ -46,6 +46,12 @@ class Project {
   resultList = {};
   viewList = [];
 
+  currentEvent = 1;
+  totalEvents = 1;
+  resultEvent = {};
+  eventList = [];
+  eventLength = 0;
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -176,6 +182,11 @@ class Project {
           // const temp = new Set(res.data.map((cluster) => cluster.clusterName));
           // this.clusterList = [...temp];
         });
+      })
+      .then(() => {
+        this.eventLength = this.events.length;
+        console.log(this.events);
+        this.convertEventList(this.events, this.setEventList);
       });
   };
 
@@ -274,6 +285,81 @@ class Project {
           swalError("프로젝트가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));
+  };
+
+  setCurrentEvent = (n) => {
+    runInAction(() => {
+      this.currentEvent = n;
+    });
+  };
+
+  goPrevEvent = () => {
+    runInAction(() => {
+      if (this.currentEvent > 1) {
+        this.currentEvent = this.currentEvent - 1;
+        this.setEventViewList(this.currentEvent - 1);
+      }
+    });
+  };
+
+  goNextEvent = () => {
+    runInAction(() => {
+      if (this.totalEvents > this.currentEvent) {
+        this.currentEvent = this.currentEvent + 1;
+        this.setEventViewList(this.currentEvent - 1);
+      }
+    });
+  };
+
+  setTotalEvents = (n) => {
+    runInAction(() => {
+      this.totalEvents = n;
+    });
+  };
+
+  setEventViewList = (n) => {
+    runInAction(() => {
+      this.eventList = this.events[n];
+      console.log(this.eventList);
+    });
+  };
+
+  setEventList = (list) => {
+    runInAction(() => {
+      this.events = list;
+    });
+  };
+
+  convertEventList = (apiList, setFunc) => {
+    runInAction(() => {
+      let cnt = 1;
+      let totalCnt = 0;
+      let tempList = [];
+      let cntCheck = true;
+      this.resultEvent = {};
+
+      Object.entries(apiList).map(([_, value]) => {
+        cntCheck = true;
+        tempList.push(toJS(value));
+        cnt = cnt + 1;
+        if (cnt > 5) {
+          cntCheck = false;
+          cnt = 1;
+          this.resultEvent[totalCnt] = tempList;
+          totalCnt = totalCnt + 1;
+          tempList = [];
+        }
+      });
+
+      if (cntCheck) {
+        this.resultEvent[totalCnt] = tempList;
+        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      }
+
+      this.setTotalEvents(totalCnt);
+      setFunc(this.resultEvent);
+      this.setEventViewList(0);
+    });
   };
 }
 

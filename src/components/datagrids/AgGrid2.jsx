@@ -8,8 +8,9 @@ import "@ag-grid-community/core/dist/styles/ag-theme-balham-dark.css";
 import "@/styles/ag-custom.scss";
 
 ModuleRegistry.register(ClientSideRowModelModule);
+// detail 없는 부분
 
-const AgGrid = (props) => {
+const AgGrid2 = (props) => {
   const {
     rowData,
     columnDefs,
@@ -75,7 +76,7 @@ const AgGrid = (props) => {
     <div
       id="my-grid"
       className="grid-wrapper ag-theme-alpine"
-      // style={{ height: 410 }}
+      // style={{ height: 50% }}
     >
       <AgGridReact
         defaultColDef={defaultColDef}
@@ -133,4 +134,4 @@ const AgGrid = (props) => {
   );
 };
 
-export { AgGrid };
+export { AgGrid2 };
