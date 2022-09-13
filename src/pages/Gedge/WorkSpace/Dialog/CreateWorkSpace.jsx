@@ -28,9 +28,8 @@ const ButtonNext = styled.button`
 
 const CreateWorkSpace = observer((props) => {
   const { open } = props;
-  const { loadClusterList, clusterList, viewList } = clusterStore;
+  const { loadClusterList, clusterListInWorkspace } = clusterStore;
   const { createWorkspace } = workspacesStore;
-  // const clusterList = ["gedgemgmt01", "gs-cluster01", "gs-cluster02"];
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
   const [selectCluster, setSelectCluster] = useState([]);
@@ -143,20 +142,6 @@ const CreateWorkSpace = observer((props) => {
             <th>
               Cluster <span className="requried">*</span>
             </th>
-            {/* <td>
-              <FormGroup
-                className="form_fullWidth"
-                onChange={(e) => console.log(e.target.name)}
-              >
-                {clusterList?.map((cluster) => (
-                  <FormControlLabel
-                    control={<Checkbox name={cluster.clusterName} />}
-                    label={cluster.clusterName}
-                  />
-                ))}
-              </FormGroup>
-            </td> */}
-
             <td>
               <table className="tb_data_new">
                 <tbody className="tb_data_nodeInfo">
@@ -168,7 +153,7 @@ const CreateWorkSpace = observer((props) => {
                     <th>IP</th>
                   </tr>
                   {/* paginetion 때문에 clusterList -> viewList */}
-                  {viewList.map(
+                  {clusterListInWorkspace.map(
                     ({
                       clusterName,
                       clusterType,
