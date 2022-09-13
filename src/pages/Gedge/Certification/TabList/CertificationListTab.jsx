@@ -16,6 +16,23 @@ import Terminal from "../Dialog/Terminal";
 import CreateCluster from "../Dialog/CreateOPENSTACK";
 import CreateCertification from "../Dialog/CreateCertification";
 import SelectProvider from "../Dialog/SelectProvider";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import styled from "styled-components";
+
+const CloudZoneWrap = styled.div`
+  .panel_summary {
+    width: 100%;
+    padding: 20px;
+    background: #202842;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &::before {
+      display: none;
+    }
+  }
+`;
 
 const CertificationListTab = observer(() => {
   const currentPageTitle = Title.Certification;
@@ -100,7 +117,7 @@ const CertificationListTab = observer(() => {
 
   const history = useHistory();
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
@@ -108,7 +125,7 @@ const CertificationListTab = observer(() => {
     }
   };
 
-  const handleOpen = e => {
+  const handleOpen = (e) => {
     setOpen(true);
   };
 
@@ -146,7 +163,7 @@ const CertificationListTab = observer(() => {
         <div className="tabPanelContainer">
           {/* <CTabPanel value={tabvalue} index={0}> */}
           <div className="grid-height2">
-            <AgGrid
+            <AgGrid2
               rowData={viewList}
               columnDefs={columDefs}
               isBottom={false}
@@ -165,7 +182,11 @@ const CertificationListTab = observer(() => {
           // yaml={getYamlFile}
           onClose={handleCloseTerminal}
         /> */}
-        <CreateCertification open={open} onClose={handleClose} reloadFunc={loadCredentialList} />
+        <CreateCertification
+          open={open}
+          onClose={handleClose}
+          reloadFunc={loadCredentialList}
+        />
       </PanelBox>
     </CReflexBox>
   );

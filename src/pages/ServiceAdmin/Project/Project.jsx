@@ -17,9 +17,9 @@ const Project = () => {
     <Layout currentPageTitle={currentPageTitle}>
       <CTabs type="tab1" value={tabvalue} onChange={handleTabChange}></CTabs>
       <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <UserServiceListTab />
-        </CTabPanel>
+        {/* <CTabPanel value={tabvalue} index={0}> */}
+        <UserServiceListTab />
+        {/* </CTabPanel> */}
       </div>
     </Layout>
   );

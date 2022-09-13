@@ -3,7 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import daemonSetStore from "../../../store/DaemonSet";
+import daemonSetStore from "../../../../../store/DaemonSet";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 

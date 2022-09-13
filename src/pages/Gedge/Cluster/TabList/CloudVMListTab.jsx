@@ -16,6 +16,7 @@ import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const CloudVMListTab = observer(() => {
   // const currentPageTitle = Title.CloudZone;
@@ -25,8 +26,18 @@ const CloudVMListTab = observer(() => {
   //   setTabvalue(newValue);
   // };
   const [openTerminal, setOpenTerminal] = useState(false);
-  const { clusterDetail, clusterList, loadCloudClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
-    clusterStore;
+  const {
+    clusterDetail,
+    clusterList,
+    loadCloudClusterList,
+    loadCluster,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
+  } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -102,7 +113,7 @@ const CloudVMListTab = observer(() => {
 
   // const history = useHistory();
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     // loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
@@ -110,7 +121,7 @@ const CloudVMListTab = observer(() => {
     }
   };
 
-  const handleOpen = e => {
+  const handleOpen = (e) => {
     setOpen(true);
   };
 
@@ -147,7 +158,7 @@ const CloudVMListTab = observer(() => {
           <div className="tabPanelContainer">
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
-              <AgGrid
+              <AgGrid2
                 rowData={viewList}
                 columnDefs={columDefs}
                 isBottom={false}

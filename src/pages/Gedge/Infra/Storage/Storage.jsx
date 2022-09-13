@@ -130,9 +130,10 @@ const Storage = observer(() => {
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <CReflexBox>
+      <CReflexBox style={{ height: 810 }}>
         <PanelBox>
           <CommActionBar
+
           // reloadFunc={loadStorageClasses}
           // isSearch={true}
           // isSelect={true}
