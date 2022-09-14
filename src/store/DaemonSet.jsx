@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class DaemonSet {
   currentPage = 1;
@@ -132,37 +133,24 @@ class DaemonSet {
     });
   };
 
-  loadDaemonSetList = async (type) => {
+  loadDaemonSetList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/daemonsets`)
+      .get(`${SERVER_URL}/daemonsets?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const list = res.data.data.filter(
-            (item) => item.projectType === type
-          );
-          this.daemonSetList = list;
-          // this.daemonSetDetail = list[0];
-          this.totalElements = list.length;
+          this.daemonSetList = res.data.data;
+          this.totalElements = this.daemonSetList.length;
         });
       })
       .then(() => {
         this.convertList(this.daemonSetList, this.setPDaemonSetList);
       });
-    // await axios.get(`${SERVER_URL}/daemonsets`).then((res) => {
-    //   runInAction(() => {
-    //     const list = res.data.data.filter((item) => item.projectType === type);
-    //     this.daemonSetList = list;
-    //     // this.daemonSetDetail = list[0];
-    //     this.totalElements = list.length;
-    //   });
-    // })
-    //   .then(() => {
-    //     this.convertList(this.daemonSetList, this.setPDaemonSetList);
-    //   })
     this.loadDaemonSetDetail(
-      this.daemonSetList[0].name,
-      this.daemonSetList[0].cluster,
-      this.daemonSetList[0].project
+      this.viewList[0].name,
+      this.viewList[0].cluster,
+      this.viewList[0].project
     );
   };
 

@@ -99,7 +99,7 @@ const StorageDashboard = observer(() => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Row Capacity</div>
               <div className="storageCircleBoxCont">
-                <PieChart label={["avail", "used"]} value={[cephDashboard.ceph_cluster_total_avail_bytes, cephDashboard.ceph_cluster_total_used_bytes]} />
+                <PieChart total={true} label={["avail", "used"]} value={[cephDashboard.ceph_cluster_total_avail_bytes, cephDashboard.ceph_cluster_total_used_bytes]} />
               </div>
               <div className="contTxt">
                 <ul>
@@ -118,25 +118,26 @@ const StorageDashboard = observer(() => {
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Objects</div>
               <div className="storageCircleBoxCont">
-                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함 */}
+                <PieChart total={false} label={["in", "out", "up", "down"]} value={[cephDashboard.ceph_osd_in, cephDashboard.ceph_osd_out, cephDashboard.ceph_osd_up, cephDashboard.ceph_osd_down]} />
+                {/* 아래 Circle 의 원형 테두리는 예시임 실제 개발시에 CSS를 빼야함
                 <div className="circle object">
                   <div className="circleCount">4.4k</div>
                   <div className="circleTxt">objects</div>
-                </div>
+                </div> */}
               </div>
               <div className="contTxt">
                 <ul>
                   <li className="clean">
-                    <span className="tit">Healthy</span> <span>100%</span>
+                    <span className="tit">In</span> <span>{cephDashboard.ceph_osd_in}</span>
                   </li>
                   <li className="working">
-                    <span className="tit">Misplaced</span> <span>100%</span>
+                    <span className="tit">Out</span> <span>{cephDashboard.ceph_osd_out}</span>
                   </li>
                   <li className="warning">
-                    <span className="tit">Degraded</span> <span>0</span>
+                    <span className="tit">Up</span> <span>{cephDashboard.ceph_osd_up}</span>
                   </li>
                   <li className="unknown">
-                    <span className="tit">Unfound</span> <span>0</span>
+                    <span className="tit">Down</span> <span>{cephDashboard.ceph_osd_down}</span>
                   </li>
                 </ul>
               </div>
@@ -156,10 +157,10 @@ const StorageDashboard = observer(() => {
               <div className="contTxt">
                 <ul>
                   <li className="reads">
-                    <span className="tit">Reads</span> <span>{cephDashboard.osd_read_latency}</span>
+                    <span className="tit">Reads</span> <span>{cephDashboard.osd_read_latency} m/s</span>
                   </li>
                   <li className="writes">
-                    <span className="tit">Writes</span> <span>{cephDashboard.osd_write_latency}</span>
+                    <span className="tit">Writes</span> <span>{cephDashboard.osd_write_latency} m/s</span>
                   </li>
                   <li className="none"></li>
                   <li className="none"></li>
@@ -180,7 +181,7 @@ const StorageDashboard = observer(() => {
             </div>
 
             <div className="storageCircleBox">
-              <div className="storageCircleBoxTitle">Client Read/Write</div>
+              <div className="storageCircleBoxTitle">Client IOPS</div>
               <div className="storageCircleBoxCont">
                 <RadialBarChart label={["read", "write"]} value={[cephDashboard.read_iops, cephDashboard.write_iops]} />
               </div>
@@ -206,10 +207,10 @@ const StorageDashboard = observer(() => {
               <div className="contTxt">
                 <ul>
                   <li className="reads">
-                    <span className="tit">Reads</span> <span>2/s</span>
+                    <span className="tit">Reads</span> <span>{cephDashboard.read_throughput} KB/s</span>
                   </li>
                   <li className="writes">
-                    <span className="tit">Writes</span> <span>36/s</span>
+                    <span className="tit">Writes</span> <span>{cephDashboard.write_throughput} KB/s</span>
                   </li>
                   <li className="none"></li>
                   <li className="none"></li>

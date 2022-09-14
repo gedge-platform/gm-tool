@@ -13,8 +13,7 @@ const MapContent = observer(() => {
     clusterName,
     nodeRunning,
     setClusterName,
-    loadCloudDetailInDashboard,
-    loadClusterListinDashboard,
+    loadEdgeZoneDetailDashboard,
   } = dashboardStore;
   const nodeData =
     nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
@@ -25,17 +24,20 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
-  useEffect(async (type = "edge") => {
+  useEffect(async () => {
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const result2 = await axios(`${SERVER_URL}/clusters`);
-    const clusterNameData = Object.values(result2.data)[0].map(
-      (item) => item.clusterName
+    const filterClusterType = result2.data.data.filter(
+      (item) => item.clusterType === "edge"
     );
-    // loadClusterList();
+
+    const clusterNameData = filterClusterType.map((item) => item.clusterName);
     setClusterName(clusterNameData[0]);
-    loadCloudDetailInDashboard();
+    loadEdgeZoneDetailDashboard();
+
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
     setDataEdgeInfo(dataEdgeInfo);
+
     const dataPoint = dataEdgeInfo.map((item) =>
       Object.values(item).map((val) => val.point)
     );

@@ -18,7 +18,7 @@ const RadialBarChart = observer((props) => {
         endAngle: 270,
         hollow: {
           margin: 5,
-          size: '30%',
+          size: '20%',
           background: 'transparent',
           image: undefined,
         },

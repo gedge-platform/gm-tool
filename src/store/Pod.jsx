@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL } from "../config";
+import { SERVER_URL } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
 
 class Pod {
@@ -222,20 +222,46 @@ class Pod {
 
   setPPodList = (list) => {
     runInAction(() => {
-      this.pPodList = list;
+      this.PodList = list;
     });
   };
 
   setYViewList = (n) => {
     runInAction(() => {
-      this.viewYList = this.pPodList[n];
+      this.viewYList = this.PodList[n];
     });
   };
 
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.pPodList[n];
+      this.viewList = this.PodList[n];
     });
+  };
+
+  loadPodList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/pods?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          console.log(res);
+          // const list = res.data.data.filter((item) => item.projectType === type);
+          this.podList = res.data.data;
+          this.podDetail = this.podList[0];
+          this.totalElements = this.podList.length;
+          this.totalYElements = this.podList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.podList, this.setPPodList);
+        // this.yamlList(this.podList, this.setPPodList);
+      });
+    this.loadPodDetail(
+      this.viewList[0].name,
+      this.viewList[0].cluster,
+      this.viewList[0].project
+    );
   };
 
   loadPodDetail = async (name, cluster, project) => {
@@ -264,31 +290,6 @@ class Pod {
           }
         });
       });
-  };
-
-  loadPodList = async () => {
-    await axios
-      .get(`${SERVER_URL}/pods`)
-      .then((res) => {
-        runInAction(() => {
-          const { user } = getItem("user");
-          const list = res.data.data.filter((item) => item.user !== user);
-          // const list = res.data.data.filter((item) => item.projectType === type);
-          this.podList = list;
-          this.podDetail = list[0];
-          this.totalElements = list.length;
-          this.totalYElements = list.length;
-        });
-      })
-      .then(() => {
-        this.convertList(this.podList, this.setPPodList);
-        this.yamlList(this.podList, this.setPPodList);
-      });
-    this.loadPodDetail(
-      this.podList[0].name,
-      this.podList[0].cluster,
-      this.podList[0].project
-    );
   };
 
   setPodName = (podName) => {
@@ -347,7 +348,7 @@ class Pod {
     });
   };
 
-  createPod = async () => { };
+  createPod = async () => {};
 }
 
 const podStore = new Pod();

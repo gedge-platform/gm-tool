@@ -3,7 +3,6 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { getItem } from "@/utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
-import { ThirtyFpsRounded } from "@mui/icons-material";
 
 class Workspace {
   workSpaceList = [];
@@ -120,34 +119,20 @@ class Workspace {
     });
   };
 
-  // loadWorkSpaceList = async (type = "user") => {
-  //   await axios
-  //     .get(`${SERVER_URL}/workspace`)
-  //     .then((res) => {
-  //       runInAction(() => {
-  //         this.workSpaceList = res.data;
-  //         // this.workSpaceDetail = res.data[0];
-  //         this.totalElements = res.data.length;
-  //       });
-  //     })
-  //     .then(() => {
-  //       this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
-  //     });
-  // };
-
   loadWorkSpaceList = async (type = false) => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/workspaces`)
-      .then(({ data: { data } }) => {
+      .get(`${SERVER_URL}/workspaces?user=${id}`)
+      .then((res) => {
         runInAction(() => {
-          this.workSpaceList = data;
-          this.totalElements = data.length;
+          this.workSpaceList = res.data.data;
+          this.totalElements = res.data.data.length;
           this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
       })
       .then(() => {
         this.convertList(this.workSpaceList, this.setWorkSpaceList);
-        console.log(this.workspace);
       })
       // .then(() => {
       //   this.loadWorkspaceDetail(this.viewList[0].workspaceName);
