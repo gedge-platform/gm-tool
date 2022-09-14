@@ -17,6 +17,7 @@ import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudVMListTab = observer(() => {
   // const currentPageTitle = Title.CloudZone;
@@ -144,7 +145,7 @@ const CloudVMListTab = observer(() => {
   return (
     <>
       <CReflexBox>
-        <PanelBox>
+        <PanelBox2>
           <CommActionBar
           // reloadFunc={() => loadClusterList("core")}
           // isSearch={true}
@@ -179,7 +180,7 @@ const CloudVMListTab = observer(() => {
           />
           {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
           <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
-        </PanelBox>
+        </PanelBox2>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
     </>

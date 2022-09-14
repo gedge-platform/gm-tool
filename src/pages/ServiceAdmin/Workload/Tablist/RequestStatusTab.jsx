@@ -11,6 +11,7 @@ import { observer } from "mobx-react";
 import requestStatusStore from "../../../../store/RequestStatus";
 import { toJS } from "mobx";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const RequestStatusTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -99,7 +100,7 @@ const RequestStatusTab = observer(() => {
   return (
     <>
       <CReflexBox>
-        <PanelBox>
+        <PanelBox2>
           <CommActionBar
             isSearch={true}
             isSelect={true}
@@ -127,7 +128,7 @@ const RequestStatusTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-        </PanelBox>
+        </PanelBox2>
       </CReflexBox>
     </>
   );

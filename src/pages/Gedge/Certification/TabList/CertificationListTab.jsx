@@ -18,6 +18,7 @@ import CreateCertification from "../Dialog/CreateCertification";
 import SelectProvider from "../Dialog/SelectProvider";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 import styled from "styled-components";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudZoneWrap = styled.div`
   .panel_summary {
@@ -149,7 +150,7 @@ const CertificationListTab = observer(() => {
   return (
     // con/so/le.log(CredentialName),
     <CReflexBox>
-      <PanelBox>
+      <PanelBox2>
         <CommActionBar
         // reloadFunc={() => loadClusterList("core")}
         // isSearch={true}
@@ -187,7 +188,7 @@ const CertificationListTab = observer(() => {
           onClose={handleClose}
           reloadFunc={loadCredentialList}
         />
-      </PanelBox>
+      </PanelBox2>
     </CReflexBox>
   );
 });
