@@ -127,7 +127,8 @@ class CronJob {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;
           // this.cronJobDetail = list[0];
-          this.totalElements = res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {

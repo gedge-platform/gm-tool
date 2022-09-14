@@ -208,11 +208,11 @@ class Deployment {
     await axios
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           this.deploymentList = res.data.data;
           this.deploymentDetail = res.data.data[0];
-          this.totalElements = res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {

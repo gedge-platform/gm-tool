@@ -141,7 +141,8 @@ class DaemonSet {
       .then((res) => {
         runInAction(() => {
           this.daemonSetList = res.data.data;
-          this.totalElements = this.daemonSetList.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {

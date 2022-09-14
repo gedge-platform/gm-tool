@@ -57,10 +57,11 @@ const Detail = observer(() => {
     annotations,
     events,
     ownerReferences,
+    containers,
   } = jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const containers = jobDetailData.containers;
+  console.log(containers);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -135,21 +136,27 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Container Name</th>
-                      <td>{containers?.name}</td>
+                      <td>{containers?.name ? containers?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>Command</th>
                       <td>
-                        {containers?.command?.map((item) => (
-                          <p>{item}</p>
-                        ))}
+                        {containers?.command ? (
+                          containers?.command?.map((item) => (
+                            <p>{item ? item : "-"}</p>
+                          ))
+                        ) : (
+                          <>-</>
+                        )}
                       </td>
                     </tr>
                     <tr>
                       <th>Args</th>
                       <td>
                         {containers?.args ? (
-                          containers?.args?.map((item) => <p>{item}</p>)
+                          containers?.args?.map((item) => (
+                            <p>{item ? item : "-"}</p>
+                          ))
                         ) : (
                           <>-</>
                         )}
@@ -169,11 +176,19 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>TerminationMessagePath</th>
-                      <td>{containers?.terminationMessagePath}</td>
+                      <td>
+                        {containers?.terminationMessagePath
+                          ? containers?.terminationMessagePath
+                          : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>TerminationMessagePolicy</th>
-                      <td>{containers?.terminationMessagePolicy}</td>
+                      <td>
+                        {containers?.terminationMessagePolicy
+                          ? containers?.terminationMessagePolicy
+                          : "-"}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -186,7 +201,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
+            {labels !== null ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -230,23 +245,23 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Name</th>
-                      <td>{pod?.name}</td>
+                      <td>{pod?.name ? pod?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>Pod IP</th>
-                      <td>{pod?.podIP}</td>
+                      <td>{pod?.podIP ? pod?.podIP : "-"}</td>
                     </tr>
                     <tr>
                       <th>Host IP</th>
-                      <td>{pod?.hostIP}</td>
+                      <td>{pod?.hostIP ? pod?.hostIP : "-"}</td>
                     </tr>
                     <tr>
                       <th>Node Name</th>
-                      <td>{pod?.nodeName}</td>
+                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
                     </tr>
                     <tr>
                       <th>Status</th>
-                      <td>{pod?.status}</td>
+                      <td>{pod?.status ? pod?.status : "-"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -256,14 +271,16 @@ const Detail = observer(() => {
           <TableTitle>References</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {Object.entries(ownerReferences).map(([key, value]) => (
-                <tr>
-                  <th style={{ width: "25%" }}>
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </th>
-                  <td>{value}</td>
-                </tr>
-              ))}
+              {ownerReferences
+                ? Object.entries(ownerReferences).map(([key, value]) => (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </th>
+                      <td>{value}</td>
+                    </tr>
+                  ))
+                : "-"}
             </tbody>
           </table>
         </div>

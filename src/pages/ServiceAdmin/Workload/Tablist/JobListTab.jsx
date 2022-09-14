@@ -19,18 +19,18 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { 
+  const {
     viewList,
-    jobList, 
-    jobDetail, 
-    totalElements, 
-    loadJobList, 
+    jobList,
+    jobDetail,
+    totalElements,
+    loadJobList,
     loadJobDetail,
     currentPage,
     totalPages,
     goPrevPage,
     goNextPage,
-   } = jobStore;
+  } = jobStore;
 
   const [columDefs] = useState([
     {

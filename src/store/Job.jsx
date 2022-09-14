@@ -10,28 +10,7 @@ class Job {
   viewList = [];
   pJobList = [];
   jobList = [];
-  jobDetailData = {
-    containers: [
-      {
-        name: "",
-        image: "",
-      },
-    ],
-    ownerReferences: [
-      {
-        name: "",
-        apiVersion: "",
-        kind: "",
-      },
-    ],
-    conditions: [
-      {
-        status: "",
-        type: "",
-        lastProbeTime: "",
-      },
-    ],
-  };
+  containers = [];
   depServicesPort = [
     {
       name: "",
@@ -81,7 +60,7 @@ class Job {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(
+        this.loadJobDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
           this.viewList[0].project
@@ -95,7 +74,7 @@ class Job {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(
+        this.loadJobDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
           this.viewList[0].project
@@ -148,38 +127,39 @@ class Job {
     });
   };
 
-  setPJobList = (list) => {
+  setJobList = (list) => {
     runInAction(() => {
-      this.pJobList = list;
+      this.jobList = list;
     });
   };
 
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.pJobList[n];
+      this.viewList = this.jobList[n];
     });
   };
 
   loadJobList = async () => {
-    let { id, role } = getItem("user");
-    role === "SA" ? (id = id) : (id = "");
+    // let { id, role } = getItem("user");
+    // role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/jobs?user=${id}`)
+      // .get(`${SERVER_URL}/jobs?user=${id}`)
+      .get(`${SERVER_URL}/jobs`)
       .then((res) => {
         runInAction(() => {
-          // const list = res.data.data.filter((item) => item.projectType === type);
-          this.jobList = res.data.data;
-          // this.jobDetail = list[0];
-          this.totalElements = res.data.data.length;
+          this.jobList = res.data.data ? res.data.data : 0;
+          this.jobDetail = this.jobList[0];
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
-        this.convertList(this.jobList, this.setPJobList);
+        this.convertList(this.jobList, this.setJobList);
       });
     this.loadJobDetail(
-      this.jobList[0].name,
-      this.jobList[0].cluster,
-      this.jobList[0].project
+      this.viewList[0].name,
+      this.viewList[0].cluster,
+      this.viewList[0].project
     );
   };
 
@@ -187,13 +167,17 @@ class Job {
     await axios
       .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`)
       .then(({ data: { data, involves } }) => {
+        // console.log(data);
+        // console.log(involves);
         runInAction(() => {
-          this.jobDetailData = data;
-          this.jobDetailInvolves = involves;
-          this.labels = data.label;
-          this.annotations = data.annotations;
+          this.jobDetailData = data !== null ? data : 0;
+          this.jobDetailInvolves = involves ? involves : 0;
+          this.labels = data.label ? data.label : null;
+          this.annotations = data.annotations !== "" ? data.annotations : null;
           this.involvesPodList = involves.podList;
           this.ownerReferences = involves.ownerReferences;
+          this.containers = data.containers;
+          console.log(this.containers);
 
           if (data.events !== null) {
             this.events = data.events;
