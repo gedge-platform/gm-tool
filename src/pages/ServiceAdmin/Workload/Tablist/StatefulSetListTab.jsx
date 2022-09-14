@@ -96,7 +96,7 @@ const StatefulSetListTab = observer(() => {
                   rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
-                  totalElements={totalElements}
+                  totalElements={totalElements === 0 ? 0 : totalElements}
                   totalPages={totalPages}
                   currentPage={currentPage}
                   goNextPage={goNextPage}

@@ -183,7 +183,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
+            {labels !== null ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>

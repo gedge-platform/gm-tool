@@ -110,13 +110,6 @@ class Deployment {
   containerPortName = "";
 
   depServices = {};
-  // depServicesPort = [
-  //   {
-  //     name: "",
-  //     port: 0,
-  //     protocol: "",
-  //   },
-  // ];
 
   content = "";
   contentVolume = "";
@@ -209,6 +202,29 @@ class Deployment {
     });
   };
 
+  loadDeploymentList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/deployments?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.deploymentList = res.data.data;
+          this.deploymentDetail = res.data.data[0];
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.deploymentList, this.setPDeploymentList);
+      });
+    this.loadDeploymentDetail(
+      this.deploymentList[0].name,
+      this.deploymentList[0].cluster,
+      this.deploymentList[0].project
+    );
+  };
+
   loadDeploymentDetail = async (name, cluster, project) => {
     await axios
       .get(
@@ -231,29 +247,6 @@ class Deployment {
           this.containersTemp = data.containers;
         });
       });
-  };
-
-  loadDeploymentList = async () => {
-    let { id, role } = getItem("user");
-    role === "SA" ? (id = id) : (id = "");
-    await axios
-      .get(`${SERVER_URL}/deployments?user=${id}`)
-      .then((res) => {
-        console.log(res);
-        runInAction(() => {
-          this.deploymentList = res.data.data;
-          this.deploymentDetail = res.data.data[0];
-          this.totalElements = res.data.data.length;
-        });
-      })
-      .then(() => {
-        this.convertList(this.deploymentList, this.setPDeploymentList);
-      });
-    this.loadDeploymentDetail(
-      this.deploymentList[0].name,
-      this.deploymentList[0].cluster,
-      this.deploymentList[0].project
-    );
   };
 
   setWorkspace = (workspace) => {
@@ -367,10 +360,8 @@ class Deployment {
         YAML.parse(this.content)
       )
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
-          return;
         }
       });
   };
@@ -384,8 +375,8 @@ class Deployment {
         `${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        return;
       });
   };
 }

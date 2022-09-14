@@ -146,10 +146,8 @@ class StatefulSet {
       .get(`${SERVER_URL}/statefulsets?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
-          // const list = res.data.data.filter(
-          //   (item) => item.projectType === type
-          // );
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
           this.statefulSetList = res.data.data;
           // this.statefulSetDetail = list[0];
           res.data.data === null

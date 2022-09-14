@@ -1,8 +1,9 @@
 import axios from "axios";
 import { template } from "lodash";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { SERVER_URL, BEARER_TOKEN } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Claim {
   viewList = [];
@@ -217,10 +218,13 @@ class Claim {
 
   // 클레임 관리
   loadPVClaims = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/pvcs`)
+      .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           this.pvClaims = res.data.data;
           this.totalElements = res.data.data.length;
         });

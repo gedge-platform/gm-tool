@@ -134,7 +134,8 @@ class Service {
 
           this.pServiceList = res.data.data;
           // this.serviceDetail = list[0];
-          this.totalElements = this.pServiceList.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {

@@ -78,12 +78,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>${
-                         nodeData !== 0
-                           ? nodeData.filter((status) => status === "Ready")
-                               .length
-                           : 0
-                       }</span>
+                       <span>4</span>
                      </div>
                    </td>
                  </tr>
@@ -93,12 +88,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready 
                      </span>
-                     <span>${
-                       nodeData !== 0
-                         ? nodeData.filter((status) => status !== "Ready")
-                             .length
-                         : 0
-                     }</span>
+                     <span>0</span>
                      </div>
                    </td>
                  </tr>

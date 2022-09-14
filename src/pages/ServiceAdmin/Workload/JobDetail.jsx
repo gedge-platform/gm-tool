@@ -61,7 +61,7 @@ const Detail = observer(() => {
   } = jobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  // const containers = jobDetailData.containers;
+  console.log(containers);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -79,7 +79,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-        <CTab label="Involves Data" />
+        {/* <CTab label="Involves Data" /> */}
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -87,30 +87,38 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th>Name</th>
-                <td>{jobDetailData ? jobDetailData.name : "-"}</td>
+                <td>{jobDetailData.name ? jobDetailData.name : "-"}</td>
                 <th>Cluster</th>
-                <td>{jobDetailData ? jobDetailData.cluster : "-"}</td>
+                <td>{jobDetailData.cluster ? jobDetailData.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{jobDetailData ? jobDetailData.project : "-"}</td>
+                <td>{jobDetailData.project ? jobDetailData.project : "-"}</td>
                 <th>Status</th>
-                <td>{jobDetailData ? jobDetailData.status : "-"}</td>
+                <td>{jobDetailData.status ? jobDetailData.status : "-"}</td>
               </tr>
               <tr>
                 <th>BackOffLimit</th>
-                <td>{jobDetailData ? jobDetailData.backoffLimit : "-"}</td>
+                <td>
+                  {jobDetailData.backoffLimit
+                    ? jobDetailData.backoffLimit
+                    : "-"}
+                </td>
                 <th>Completions</th>
-                <td>{jobDetailData ? jobDetailData.completions : "-"}</td>
+                <td>
+                  {jobDetailData.completions ? jobDetailData.completions : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Start Time</th>
                 <td>
-                  {jobDetailData ? dateFormatter(jobDetailData.startTime) : "-"}
+                  {jobDetailData.startTime
+                    ? dateFormatter(jobDetailData.startTime)
+                    : "-"}
                 </td>
                 <th>Created</th>
                 <td>
-                  {jobDetailData
+                  {jobDetailData.created_at
                     ? dateFormatter(jobDetailData.created_at)
                     : "-"}
                 </td>
@@ -122,60 +130,70 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
-            containers.map((containers) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>Container Name</th>
-                    <td>{containers?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Command</th>
-                    <td>
-                      {containers?.command?.map((item) => (
-                        <p>{item}</p>
-                      ))}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Args</th>
-                    <td>
-                      {containers?.args ? (
-                        containers?.args?.map((item) => <p>{item}</p>)
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Image</th>
-                    <td>{containers?.image}</td>
-                  </tr>
-                  <tr>
-                    <th>ImagePullPolicy</th>
-                    <td>{containers?.imagePullPolicy}</td>
-                  </tr>
-                  <tr>
-                    <th>resources</th>
-                    <td>resources</td>
-                  </tr>
-                  <tr>
-                    <th>TerminationMessagePath</th>
-                    <td>{containers?.terminationMessagePath}</td>
-                  </tr>
-                  <tr>
-                    <th>TerminationMessagePolicy</th>
-                    <td>{containers?.terminationMessagePolicy}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Containers Info.</p>
-            </LabelContainer>
-          )}
+          {containers
+            ? containers.map((containers) => (
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Container Name</th>
+                      <td>{containers?.name ? containers?.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Command</th>
+                      <td>
+                        {containers?.command?.map((item) => (
+                          <p>{item ? item : "-"}</p>
+                        ))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Args</th>
+                      <td>
+                        {containers?.args ? (
+                          containers?.args?.map((item) => (
+                            <p>{item ? item : "-"}</p>
+                          ))
+                        ) : (
+                          <>-</>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Image</th>
+                      <td>{containers?.image ? containers?.image : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>ImagePullPolicy</th>
+                      <td>
+                        {containers?.imagePullPolicy
+                          ? containers?.imagePullPolicy
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>resources</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>TerminationMessagePath</th>
+                      <td>
+                        {containers?.terminationMessagePath
+                          ? containers?.terminationMessagePath
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>TerminationMessagePolicy</th>
+                      <td>
+                        {containers?.terminationMessagePolicy
+                          ? containers?.terminationMessagePolicy
+                          : "-"}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))
+            : "No Info"}
           <br />
         </div>
       </CTabPanel>
@@ -218,63 +236,55 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={4}>
+      {/* <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPodList != null ? (
-            involvesPodList.map((pod) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>Name</th>
-                    <td>{pod?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Pod IP</th>
-                    <td>{pod?.podIP}</td>
-                  </tr>
-                  <tr>
-                    <th>Host IP</th>
-                    <td>{pod?.hostIP}</td>
-                  </tr>
-                  <tr>
-                    <th>Node Name</th>
-                    <td>{pod?.nodeName}</td>
-                  </tr>
-                  <tr>
-                    <th>Status</th>
-                    <td>{pod?.status}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Pod Info</p>
-            </LabelContainer>
-          )}
+          {involvesPodList != null
+            ? involvesPodList.map((pod) => (
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{pod?.name}</td>
+                    </tr>
+                    <tr>
+                      <th>Pod IP</th>
+                      <td>{pod?.podIP}</td>
+                    </tr>
+                    <tr>
+                      <th>Host IP</th>
+                      <td>{pod?.hostIP}</td>
+                    </tr>
+                    <tr>
+                      <th>Node Name</th>
+                      <td>{pod?.nodeName}</td>
+                    </tr>
+                    <tr>
+                      <th>Status</th>
+                      <td>{pod?.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))
+            : "No Info"}
           <br />
           <TableTitle>References</TableTitle>
-          {ownerReferences != null ? (
-            Object.entries(ownerReferences).map(([key, value]) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </th>
-                    <td>{value}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Reference Info</p>
-            </LabelContainer>
-          )}
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {ownerReferences != null
+                ? Object.entries(ownerReferences).map(([key, value]) => (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </th>
+                      <td>{value}</td>
+                    </tr>
+                  ))
+                : "No Info"}
+            </tbody>
+          </table>
         </div>
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });
