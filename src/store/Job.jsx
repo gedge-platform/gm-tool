@@ -11,6 +11,28 @@ class Job {
   pJobList = [];
   jobList = [];
   containers = [];
+  jobDetailData = {
+    containers: [
+      {
+        name: "",
+        image: "",
+      },
+    ],
+    ownerReferences: [
+      {
+        name: "",
+        apiVersion: "",
+        kind: "",
+      },
+    ],
+    conditions: [
+      {
+        status: "",
+        type: "",
+        lastProbeTime: "",
+      },
+    ],
+  };
   depServicesPort = [
     {
       name: "",
@@ -103,18 +125,20 @@ class Job {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -140,27 +164,37 @@ class Job {
   };
 
   loadJobList = async () => {
-    // let { id, role } = getItem("user");
-    // role === "SA" ? (id = id) : (id = "");
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      // .get(`${SERVER_URL}/jobs?user=${id}`)
-      .get(`${SERVER_URL}/jobs`)
+      .get(`${SERVER_URL}/jobs?user=${id}`)
+      // .get(`${SERVER_URL}/jobs`)
       .then((res) => {
         runInAction(() => {
-          this.jobList = res.data.data ? res.data.data : 0;
-          this.jobDetail = this.jobList[0];
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          // const list = res.data.data.filter((item) => item.projectType === type);
+          this.jobList = res.data.data;
+          // this.jobDetail = list[0];
+          res.data.data === null
+            ? (this.totalElements = 0)
+            : (this.totalElements = res.data.data.length);
         });
       })
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
       });
-    this.loadJobDetail(
-      this.viewList[0].name,
-      this.viewList[0].cluster,
-      this.viewList[0].project
-    );
+    this.jobList === null
+      ? ((this.jobDetailData = null),
+        (this.containers = null),
+        (this.jobDetailInvolves = null),
+        (this.labels = null),
+        (this.annotations = null),
+        (this.involvesPodList = null),
+        (this.ownerReferences = null))
+      : this.loadJobDetail(
+          this.jobList[0].name,
+          this.jobList[0].cluster,
+          this.jobList[0].project
+        );
   };
 
   loadJobDetail = async (name, cluster, project) => {
@@ -170,10 +204,11 @@ class Job {
         // console.log(data);
         // console.log(involves);
         runInAction(() => {
-          this.jobDetailData = data !== null ? data : 0;
-          this.jobDetailInvolves = involves ? involves : 0;
-          this.labels = data.label ? data.label : null;
-          this.annotations = data.annotations !== "" ? data.annotations : null;
+          this.jobDetailData = data;
+          this.containers = data.containers;
+          this.jobDetailInvolves = involves;
+          this.labels = data.label;
+          this.annotations = data.annotations;
           this.involvesPodList = involves.podList;
           this.ownerReferences = involves.ownerReferences;
           this.containers = data.containers;

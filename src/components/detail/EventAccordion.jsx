@@ -26,7 +26,7 @@ const EventsContainer = styled.div`
   background-color: #2f3855;
 
   p {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.8);
   }
 `;
 

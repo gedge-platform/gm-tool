@@ -25,6 +25,7 @@ import deleteBtn2 from "@/images/ico-action/ico_del.png";
 import terminalBtn from "@/images/ico-action/ico_terminal.png";
 
 import { PanelBox } from "@/components/styles/PanelBox";
+import { PanelBox2 } from "@/components/styles/PanelBox2";
 
 const globalStyles = createGlobalStyle`
   ${reset};
@@ -396,7 +397,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .paper_main, .paper_detail {
-
+    
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -410,15 +411,37 @@ const globalStyles = createGlobalStyle`
       }
     }
     .grid-height {
-      height: 500px
+      height: 100%
+    }
+
+    ${PanelBox2} {
+      height: 800px;
+      display: flex;
+      flex-direction: column;
+      .panelTitBar {
+        flex-shrink: 0;
+      }
+      .panelCont {
+        flex-grow: 1;
+        padding: 0;
+      }
+    }
+    .grid-height {
+      height: 100%
     }
   }
-  
+
   .paper_main {
     ${PanelBox} {
     }
   }
-  
+
+  .paper_main {
+    ${PanelBox2} {
+      height: 800px;
+    }
+  }
+
   .tabPanelContainer {
     flex: 1;
     .tabPanel {
@@ -459,6 +482,27 @@ const globalStyles = createGlobalStyle`
         top: 43px
       }
     }
+    ${PanelBox2} {
+      overflow:hidden;
+      .panelTitBar {
+        height: 43px;
+        padding-bottom: 1px;
+        box-shadow: inset 0 -1px 0 #232f47;
+        .tit { font-size: 13px }
+      }
+      .panelCont {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        padding: 9px;
+        overflow-y: auto;
+      }
+      .panelTitBar + .panelCont {
+        top: 43px
+      }
+    }
     .tb_data {
       border: 1px double #141a30;
 
@@ -470,7 +514,7 @@ const globalStyles = createGlobalStyle`
   }
 
   .horizontal > .reflex-splitter {
-    position: relative;
+    position: inherit;
     height: 6px;
     background: transparent !important;
     border: 0 !important;
@@ -2994,26 +3038,18 @@ const globalStyles = createGlobalStyle`
                 }
                 &.used {
                   &::before {
-                    background: #EA78EA;
+                    background: #f8adf7;
                   }
                   span {
-                    color: #EA78EA;
+                    color: #f8adf7;
                   }
                 }
                 &.avail {
                   &::before {
-                    background: #E04AE0;
+                    background: #d725d5;
                   }
                   span {
-                    color: #E04AE0;
-                  }
-                }
-                 &.total {
-                  &::before {
-                    background: #CE00CE;
-                  }
-                  span {
-                    color: #CE00CE;
+                    color: #d725d5;
                   }
                 }
                 &.clean {
