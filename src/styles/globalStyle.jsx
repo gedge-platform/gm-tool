@@ -2900,7 +2900,7 @@ const globalStyles = createGlobalStyle`
       display: flex;
       justify-content: space-between;
       .storageCircleBox {
-        width: calc(100% / 5 - 6px);
+        width: calc(100% / 4 - 6px);
         background: #1d243c;
         border: 1px solid #11162a;
         border-radius: 8px;
@@ -3086,6 +3086,40 @@ const globalStyles = createGlobalStyle`
             }
           }
       }
+       .storageCircleBox2 {
+        width: calc(100% / 3 - 6px);
+        background: #1d243c;
+        border: 1px solid #11162a;
+        border-radius: 8px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .storageCircleBoxTitle2 {
+          width: 100%;
+          height: 40px;
+          padding: 0 18px;
+          display: flex;
+          align-items: center;
+          border-top-right-radius: 8px;
+          border-top-left-radius: 8px;
+          border-bottom: 1px solid #141a30;
+          background: #25304b;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
+        .storageCircleBoxCont2 {
+            width: 100%;
+            height: 275px;
+            padding: 6px;
+            background: #27304c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom-right-radius: 8px;
+          border-bottom-left-radius: 8px;
+          }
+        }
     }
 `;
 

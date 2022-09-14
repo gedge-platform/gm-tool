@@ -33,7 +33,6 @@ const COAreaChartTop = observer(({ chartValue }) => {
     metrics.map(data => {
       if (maxData < parseFloat(data.value)) {
         maxData = parseFloat(data.value)
-        console.log(maxData)
       }
     })
   };

@@ -15,7 +15,7 @@ const PieChart = observer((props) => {
       breakpoint: 480,
       options: {
         chart: {
-          width: 275
+          width: "100%"
         },
         legend: {
           position: 'bottom',
@@ -93,7 +93,7 @@ const PieChart = observer((props) => {
         options={options}
         series={series}
         type="donut"
-        width="275"
+        width="100%"
       />
     </div >)
     ;
