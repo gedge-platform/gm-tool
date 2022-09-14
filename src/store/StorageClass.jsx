@@ -58,7 +58,7 @@ class StorageClass {
     ceph_osd_in: 0,
     ceph_osd_out: 0,
     ceph_osd_up: 0,
-    ceph_oud_down: 0,
+    ceph_osd_down: 0,
     ceph_pg_active: 0,
     ceph_pg_clean: 0,
     ceph_pg_incomplete: 0,

@@ -3,7 +3,7 @@ import Chart from "react-apexcharts";
 import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
-  const { label, value } = props;
+  const { total, label, value } = props;
   console.log("label : ", label)
   console.log("value : ", value)
   const options = {
@@ -29,10 +29,10 @@ const PieChart = observer((props) => {
     plotOptions: {
       pie: {
         horizontal: true,
-        barHeight: "70%",
+        barHeight: "60%",
         borderRadius: 5, // Here is the issue ...
         donut: {
-          size: "70%",
+          size: "60%",
           background: "transparent",
           borderRadius: 25,
           labels: {
@@ -60,13 +60,13 @@ const PieChart = observer((props) => {
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 400,
               // color: undefined,
-              offsetY: 16,
+              offsetY: 12,
               formatter: function (val) {
                 return val;
               }
             },
             total: {
-              show: true,
+              show: total,
               showAlways: false,
               borderRadius: 25,
               label: "Total",

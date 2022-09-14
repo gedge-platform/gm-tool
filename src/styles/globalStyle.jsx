@@ -3048,6 +3048,14 @@ const globalStyles = createGlobalStyle`
                     color: #ce0000;
                   }
                 }
+                 &.down {
+                  &::before {
+                    background: #ce0000;
+                  }
+                  span {
+                    color: #ce0000;
+                  }
+                }
                 &.reads {
                   &::before {
                     background: #00beea;
