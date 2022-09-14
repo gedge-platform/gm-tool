@@ -18,6 +18,7 @@ import CreateCertification from "../Dialog/CreateCertification";
 import SelectProvider from "../Dialog/SelectProvider";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 import styled from "styled-components";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudZoneWrap = styled.div`
   .panel_summary {

@@ -5,7 +5,6 @@ const CTabPanel = (props) => {
 
   return (
     <div
-      //   style={{ height: 1000 }}
       role="tabpanel"
       hidden={value !== index}
       id={`ctabpanel-${index}`}
