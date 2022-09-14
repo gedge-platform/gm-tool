@@ -100,7 +100,7 @@ const RequestStatusTab = observer(() => {
   return (
     <>
       <CReflexBox>
-        <PanelBox2>
+        <PanelBox>
           <CommActionBar
             isSearch={true}
             isSelect={true}
@@ -128,7 +128,7 @@ const RequestStatusTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-        </PanelBox2>
+        </PanelBox>
       </CReflexBox>
     </>
   );

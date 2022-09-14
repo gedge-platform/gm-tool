@@ -13,6 +13,7 @@ class CronJob {
   cronJobDetail = {};
   totalElements = 0;
   label = {};
+  containers = [];
   annotations = {};
   events = [
     {
@@ -80,18 +81,20 @@ class CronJob {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -127,7 +130,9 @@ class CronJob {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;
           // this.cronJobDetail = list[0];
-          this.totalElements = res.data.data.length;
+          res.data.data === null
+            ? (this.totalElements = 0)
+            : (this.totalElements = res.data.data.length);
         });
       })
       .then(() => {
@@ -139,32 +144,42 @@ class CronJob {
         //     // this.cronJobDetail = list[0];
         //     this.totalElements = list.length;
       });
-    this.loadCronJobDetail(
-      this.cronJobList[0].name,
-      this.cronJobList[0].cluster,
-      this.cronJobList[0].project
-    );
+    this.cronJobList === null
+      ? ((this.containers = null),
+        (this.label = null),
+        (this.cronJobDetail = null),
+        (this.annotations = null),
+        (this.cronjobInvolvesJobs = null),
+        (this.events = null))
+      : this.loadCronJobDetail(
+          this.cronJobList[0].name,
+          this.cronJobList[0].cluster,
+          this.cronJobList[0].project
+        );
+    console.log(this.label);
   };
 
-  // loadCronJobDetail = async (name, cluster, project) => {
-  //   await axios
-  //     .get(
-  //       `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
-  //     )
-  //     .then(({ data: { data, involvesData } }) => {
-  //       runInAction(() => {
-  //         this.cronJobDetail = data;
-  //         this.label = data.label;
-  //         this.annotations = data.annotations;
-  //         this.cronjobInvolvesJobs = involvesData.jobs;
-  //         if (data.events !== null) {
-  //           this.events = data.events;
-  //         } else {
-  //           this.events = null;
-  //         }
-  //       });
-  //     });
-  // };
+  loadCronJobDetail = async (name, cluster, project) => {
+    await axios
+      .get(
+        `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
+      )
+      .then(({ data: { data, involvesData } }) => {
+        runInAction(() => {
+          console.log(data);
+          this.cronJobDetail = data;
+          this.containers = data.containers;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.cronjobInvolvesJobs = involvesData.jobs;
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
+        });
+      });
+  };
 }
 
 const cronJobStore = new CronJob();

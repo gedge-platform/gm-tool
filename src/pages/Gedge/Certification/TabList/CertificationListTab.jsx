@@ -150,7 +150,7 @@ const CertificationListTab = observer(() => {
   return (
     // con/so/le.log(CredentialName),
     <CReflexBox>
-      <PanelBox2>
+      <PanelBox>
         <CommActionBar
         // reloadFunc={() => loadClusterList("core")}
         // isSearch={true}
@@ -188,7 +188,7 @@ const CertificationListTab = observer(() => {
           onClose={handleClose}
           reloadFunc={loadCredentialList}
         />
-      </PanelBox2>
+      </PanelBox>
     </CReflexBox>
   );
 });

@@ -25,7 +25,7 @@ class StatefulSet {
       updateRevision: "",
       updatedReplicas: 0,
     },
-    containers: [{ env: [], ports: [], volumeMounts: [] }],
+    // containers: [{ env: [], ports: [], volumeMounts: [] }],
     ownerReferences: [],
     label: {},
     events: [],
@@ -47,6 +47,7 @@ class StatefulSet {
     },
   ];
   totalElements = 0;
+  containers = [{ env: [], ports: [], volumeMounts: [] }];
 
   constructor() {
     makeAutoObservable(this);
@@ -100,18 +101,20 @@ class StatefulSet {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -149,8 +152,11 @@ class StatefulSet {
           // );
           this.statefulSetList = res.data.data;
           // this.statefulSetDetail = list[0];
-          this.totalElements = this.statefulSetList.length;
+          res.data.data === null
+            ? (this.totalElements = 0)
+            : (this.totalElements = this.statefulSetList.length);
         });
+        console.log(this.statefulSetList);
       })
       .then(() => {
         this.convertList(this.statefulSetList, this.setPStatefulSetList);
@@ -166,11 +172,15 @@ class StatefulSet {
     //   .then(() => {
     //     this.convertList(this.statefulSetList, this.setPStatefulSetList);
     //   })
-    this.loadStatefulSetDetail(
-      this.statefulSetList[0].name,
-      this.statefulSetList[0].cluster,
-      this.statefulSetList[0].project
-    );
+    this.statefulSetList === null
+      ? ((this.statefulSetDetail = null),
+        (this.label = null),
+        (this.annotations = null))
+      : this.loadStatefulSetDetail(
+          this.statefulSetList[0].name,
+          this.statefulSetList[0].cluster,
+          this.statefulSetList[0].project
+        );
   };
 
   loadStatefulSetDetail = async (name, cluster, project) => {
@@ -181,10 +191,14 @@ class StatefulSet {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.statefulSetDetail = data;
+          this.containers = data.containers;
           this.label = data.label;
           this.annotations = data.annotations;
-          this.events = data.events;
-          console.log(this.events);
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
         });
       });
   };

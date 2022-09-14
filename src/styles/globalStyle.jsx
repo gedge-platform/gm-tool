@@ -399,7 +399,7 @@ const globalStyles = createGlobalStyle`
   .paper_main, .paper_detail {
     
     ${PanelBox} {
-      height: 500px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       .panelTitBar {
@@ -433,7 +433,6 @@ const globalStyles = createGlobalStyle`
 
   .paper_main {
     ${PanelBox} {
-      height: 500px;
     }
   }
 
@@ -444,20 +443,12 @@ const globalStyles = createGlobalStyle`
   }
 
   .tabPanelContainer {
-    flex: 100;
+    flex: 1;
     .tabPanel {
       height: 100%;
       position: relative;
     }
   }
-
-  .paper_main {
-    flex: 100;
-    .horizontal {
-      .reflex-element {
-      }
-    }
-  } 
   
   .paper_detail {
     &

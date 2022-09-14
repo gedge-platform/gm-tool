@@ -10,7 +10,7 @@ import { observer } from "mobx-react";
 import podStore from "../../../../store/Pod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
-import { PanelBox2 } from "../../../../components/styles/PanelBox2";
+import { PanelBox } from "../../../../components/styles/PanelBox";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -100,7 +100,7 @@ const SchedulerListTab = observer(() => {
   return (
     <>
       <CReflexBox>
-        <PanelBox2>
+        <PanelBox>
           <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
@@ -127,7 +127,7 @@ const SchedulerListTab = observer(() => {
             onClose={handleClose}
             reloadFunc={loadPodList}
           />
-        </PanelBox2>
+        </PanelBox>
       </CReflexBox>
     </>
   );

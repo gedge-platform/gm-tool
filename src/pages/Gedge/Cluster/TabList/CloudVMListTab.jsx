@@ -145,7 +145,7 @@ const CloudVMListTab = observer(() => {
   return (
     <>
       <CReflexBox>
-        <PanelBox2>
+        <PanelBox>
           <CommActionBar
           // reloadFunc={() => loadClusterList("core")}
           // isSearch={true}
@@ -180,7 +180,7 @@ const CloudVMListTab = observer(() => {
           />
           {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
           <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
-        </PanelBox2>
+        </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
     </>
