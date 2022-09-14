@@ -61,6 +61,7 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const containers = jobDetailData.containers;
+  console.log(containers);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -135,13 +136,13 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Container Name</th>
-                      <td>{containers?.name}</td>
+                      <td>{containers?.name ? containers?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>Command</th>
                       <td>
                         {containers?.command?.map((item) => (
-                          <p>{item}</p>
+                          <p>{item ? item : "-"}</p>
                         ))}
                       </td>
                     </tr>
@@ -149,7 +150,9 @@ const Detail = observer(() => {
                       <th>Args</th>
                       <td>
                         {containers?.args ? (
-                          containers?.args?.map((item) => <p>{item}</p>)
+                          containers?.args?.map((item) => (
+                            <p>{item ? item : "-"}</p>
+                          ))
                         ) : (
                           <>-</>
                         )}
@@ -157,23 +160,35 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>Image</th>
-                      <td>{containers?.image}</td>
+                      <td>{containers?.image ? containers?.image : "-"}</td>
                     </tr>
                     <tr>
                       <th>ImagePullPolicy</th>
-                      <td>{containers?.imagePullPolicy}</td>
+                      <td>
+                        {containers?.imagePullPolicy
+                          ? containers?.imagePullPolicy
+                          : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>resources</th>
-                      <td>resources</td>
+                      <td></td>
                     </tr>
                     <tr>
                       <th>TerminationMessagePath</th>
-                      <td>{containers?.terminationMessagePath}</td>
+                      <td>
+                        {containers?.terminationMessagePath
+                          ? containers?.terminationMessagePath
+                          : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>TerminationMessagePolicy</th>
-                      <td>{containers?.terminationMessagePolicy}</td>
+                      <td>
+                        {containers?.terminationMessagePolicy
+                          ? containers?.terminationMessagePolicy
+                          : "-"}
+                      </td>
                     </tr>
                   </tbody>
                 </table>

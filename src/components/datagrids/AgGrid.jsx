@@ -107,7 +107,7 @@ const AgGrid = (props) => {
                             <option value="20">20건</option>
                             <option value="50">50건</option>
                         </select> */}
-            <span>총 {totalElements ? totalElements : 1}건</span>
+            <span>총 {totalElements !== 0 ? totalElements : 0}건</span>
             {/* <span> | {rowPerPage * currentPage - rowPerPage}~{rowPerPage * currentPage}건</span> */}
           </div>
           {isBottom ? (

@@ -16,6 +16,7 @@ class Pod {
   viewList = [];
   pPodList = [];
   podList = [];
+  yamlListInPod = [];
   podDetail = {};
   totalElements = 0;
   label = {};
@@ -188,47 +189,9 @@ class Pod {
     });
   };
 
-  yamlList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultYListList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 21) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultYList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
-
-      if (cntCheck) {
-        this.resultYList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
-      }
-
-      this.setTotalPages(totalCnt);
-      setFunc(this.resultYList);
-      this.setYViewList(0);
-    });
-  };
-
   setPPodList = (list) => {
     runInAction(() => {
       this.PodList = list;
-    });
-  };
-
-  setYViewList = (n) => {
-    runInAction(() => {
-      this.viewYList = this.PodList[n];
     });
   };
 
@@ -245,17 +208,14 @@ class Pod {
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
-          // const list = res.data.data.filter((item) => item.projectType === type);
           this.podList = res.data.data;
           this.podDetail = this.podList[0];
-          this.totalElements = this.podList.length;
-          this.totalYElements = this.podList.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.podList, this.setPPodList);
-        // this.yamlList(this.podList, this.setPPodList);
       });
     this.loadPodDetail(
       this.viewList[0].name,

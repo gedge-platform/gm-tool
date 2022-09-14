@@ -38,11 +38,13 @@ const CloudZoneDashboard = observer(() => {
   };
 
   // const { clusterDetail, loadClusterList } = clusterStore;
-  const { loadCloudZoneDashboard } = dashboardStore;
+  const { loadCloudZoneDashboard, loadCloudZoneDetailDashboard } =
+    dashboardStore;
   const history = useHistory();
 
   useLayoutEffect(() => {
     loadCloudZoneDashboard();
+    loadCloudZoneDetailDashboard();
   }, []);
 
   return (

@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
+import { getItem } from "../utils/sessionStorageFn";
 
 class StorageClass {
   viewList = [];
@@ -73,7 +74,7 @@ class StorageClass {
     write_throughput: 0,
     osd_read_latency: 0,
     osd_write_latency: 0,
-  }
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -247,10 +248,14 @@ class StorageClass {
   };
 
   loadStorageClasses = async () => {
+    let { id, role } = getItem("user");
+    console.log(id, role);
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/storageclasses`)
+      .get(`${SERVER_URL}/storageclasses?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           this.storageClasses = res.data.data;
           this.totalElements = res.data.data.length;
         });
@@ -337,17 +342,14 @@ class StorageClass {
       });
   };
   loadStorageMonit = async () => {
-    await axios
-      .get(`${SERVER_URL}/ceph/monit`)
-      .then((res) => {
-        runInAction(() => {
-          this.cephDashboard = res.data.data;
-          console.log("loadStorageMonit")
-        });
+    await axios.get(`${SERVER_URL}/ceph/monit`).then((res) => {
+      runInAction(() => {
+        this.cephDashboard = res.data.data;
+        console.log("loadStorageMonit");
       });
+    });
   };
 }
-
 
 const StorageClassStore = new StorageClass();
 export default StorageClassStore;

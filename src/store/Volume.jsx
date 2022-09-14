@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
-
+import { getItem } from "../utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
 class Volume {
@@ -205,8 +205,10 @@ class Volume {
 
   // 볼륨 관리
   loadPVolumes = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/pvs`)
+      .get(`${SERVER_URL}/pvs?user=${id}`)
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
