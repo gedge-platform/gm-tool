@@ -24,20 +24,26 @@ const PrAreaChart = observer(({ value }) => {
   let metrics = [];
   let metricsY = 0;
   let dataMax = [];
+  let maxData = 0;
 
   const searchMetrics = (filter) => {
     Object.entries(allMetrics).map(([key, value]) => {
       if (key === filter) {
+        maxData = 0
         value[0]?.values.forEach((element) => {
           const tempMetrics = {
             time: unixToTime(element[0]),
             value: element[1],
           };
           metrics.push(tempMetrics);
+          if (maxData < parseFloat(element[1])) {
+            maxData = parseFloat(element[1])
+          }
         });
       }
     });
   };
+
   const searchMax = (filter) => {
     Object.entries(allMetrics).map(([key, value]) => {
       if (key === filter) {
@@ -52,13 +58,16 @@ const PrAreaChart = observer(({ value }) => {
     case ClusterMetricTypes.CPU_USAGE:
       title = "CPU Usage (Core)";
       searchMax("cpu_total");
-      dataMax = [0, Number(metricsY)];
+      dataMax = [0, Number(metricsY)]
       searchMetrics(value);
+      // dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.CPU_UTIL:
       title = "CPU Util (%)";
-      dataMax = [0, 100];
+      // dataMax = [0, 100];
+      // searchMetrics(value);
       searchMetrics(value);
+      dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.CPU_TOTAL:
       title = "CPU Total (Core)";
@@ -66,14 +75,18 @@ const PrAreaChart = observer(({ value }) => {
       break;
     case ClusterMetricTypes.MEMORY_USAGE:
       title = "Memory Usage (GB)";
-      searchMetrics(value);
+      // searchMetrics(value);
       searchMax("memory_total");
-      dataMax = [0, Number(metricsY)];
+      dataMax = [0, Number(metricsY)]
+      searchMetrics(value);
+      // dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.MEMORY_UTIL:
       title = "Memory Util (%)";
+      // searchMetrics(value);
+      // dataMax = [0, 100];
       searchMetrics(value);
-      dataMax = [0, 100];
+      dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.MEMORY_TOTAL:
       title = "Memory Total (GB)";
@@ -81,14 +94,19 @@ const PrAreaChart = observer(({ value }) => {
       break;
     case ClusterMetricTypes.DISK_USAGE:
       title = "Disk Usage (GB)";
-      searchMetrics(value);
+      // searchMetrics(value);
       searchMax("disk_total");
+
       dataMax = [0, Number(metricsY)];
+      searchMetrics(value);
+      // dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.DISK_UTIL:
       title = "Disk Util (%)";
+      // searchMetrics(value);
+      // dataMax = [0, 100];
       searchMetrics(value);
-      dataMax = [0, 100];
+      dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.DISK_TOTAL:
       title = "Disk Total (GB)";
@@ -100,15 +118,18 @@ const PrAreaChart = observer(({ value }) => {
       break;
     case ClusterMetricTypes.POD_RUNNING:
       title = "Pod Running";
-      console.log(value);
       searchMax("pod_quota");
       dataMax = [0, Number(metricsY)];
+      // searchMetrics(value);
       searchMetrics(value);
+      // dataMax = [0, Math.round(maxData * 1.2)];
       break;
     case ClusterMetricTypes.POD_UTIL:
       title = "Pod Util (%)";
+      // searchMetrics(value);
+      // dataMax = [0, 100];
       searchMetrics(value);
-      dataMax = [0, 100];
+      dataMax = [0, Math.round(maxData * 1.2)];
       break;
     default:
       break;

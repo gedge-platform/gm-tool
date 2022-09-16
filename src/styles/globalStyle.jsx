@@ -2939,13 +2939,47 @@ const globalStyles = createGlobalStyle`
         }
       }
     }
-
+    .storageCircleBoxWrap2 {
+      padding: 10px;
+      display: flex;
+      height:100%;
+      justify-content: space-between;
+      .storageCircleBox2 {
+        width: calc(100% / 3 - 6px);
+        background: #1d243c;
+        border: 1px solid #11162a;
+        border-radius: 8px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .storageCircleBoxTitle2 {
+          width: 100%;
+          height: 40px;
+          padding: 0 18px;
+          display: flex;
+          align-items: center;
+          border-top-right-radius: 8px;
+          border-top-left-radius: 8px;
+          border-bottom: 1px solid #141a30;
+          background: #25304b;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
+        }
+        .storageCircleBoxCont2 {
+          height:100%;
+          padding: 10px;
+          display: inline-grid;
+        }
+      }
+    }
     .storageCircleBoxWrap {
       padding: 10px;
       display: flex;
       justify-content: space-between;
       .storageCircleBox {
-        width: calc(100% / 5 - 6px);
+        width: calc(100% / 4 - 6px);
         background: #1d243c;
         border: 1px solid #11162a;
         border-radius: 8px;
@@ -3039,18 +3073,26 @@ const globalStyles = createGlobalStyle`
                 }
                 &.used {
                   &::before {
-                    background: #f8adf7;
+                    background: #EA78EA;
                   }
                   span {
-                    color: #f8adf7;
+                    color: #EA78EA;
                   }
                 }
                 &.avail {
                   &::before {
-                    background: #d725d5;
+                    background: #E04AE0;
                   }
                   span {
-                    color: #d725d5;
+                    color: #E04AE0;
+                  }
+                }
+                 &.total {
+                  &::before {
+                    background: #CE00CE;
+                  }
+                  span {
+                    color: #CE00CE;
                   }
                 }
                 &.clean {
