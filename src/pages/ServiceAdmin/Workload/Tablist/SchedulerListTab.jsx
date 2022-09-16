@@ -11,6 +11,7 @@ import podStore from "../../../../store/Pod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
 import { PanelBox } from "../../../../components/styles/PanelBox";
+import schedulerStore from "../../../../store/Scheduler";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);

@@ -400,6 +400,7 @@ const globalStyles = createGlobalStyle`
     
     ${PanelBox} {
       height: 100%;
+      max-height: 600px;
       display: flex;
       flex-direction: column;
       .panelTitBar {
@@ -415,7 +416,7 @@ const globalStyles = createGlobalStyle`
     }
 
     ${PanelBox2} {
-      height: 800px;
+      height: 100%;
       display: flex;
       flex-direction: column;
       .panelTitBar {

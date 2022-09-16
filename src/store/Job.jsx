@@ -182,18 +182,19 @@ class Job {
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
       });
-    this.jobList === null
-      ? ((this.jobDetailData = null),
-        (this.containers = null),
-        (this.jobDetailInvolves = null),
+    console.log(this.jobList);
+    this.totalElements === 0
+      ? ((this.containers = null),
+        (this.jobDetailData = null),
         (this.labels = null),
+        (this.involvesPodList = null),
         (this.annotations = null),
         (this.involvesPodList = null),
         (this.ownerReferences = null))
       : this.loadJobDetail(
-          this.jobList[0].name,
-          this.jobList[0].cluster,
-          this.jobList[0].project
+          this.jobList[0][0].name,
+          this.jobList[0][0].cluster,
+          this.jobList[0][0].project
         );
   };
 

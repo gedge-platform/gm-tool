@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import daemonSetStore from "../../../../../store/DaemonSet";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { PanelBox2 } from "../../../../../components/styles/PanelBox2";
 
 const TableTitle = styled.p`
   font-size: 14px;
