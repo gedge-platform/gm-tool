@@ -32,6 +32,7 @@ const PlatfromServiceListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
+    loadPlatformProjectDetail,
   } = platformProjectStore;
 
   const [columDefs] = useState([
@@ -70,7 +71,7 @@ const PlatfromServiceListTab = observer(() => {
     const fieldName = e.colDef.field;
     // console.log(e.data.projectName);
     // loadPlatformProjectList()
-    loadCluster(e.data.projectName, e.data.clusterName);
+    loadPlatformProjectDetail(e.data.projectName, e.data.clusterName);
     // loadPlatformDetail(e.data.projectName);
   };
 

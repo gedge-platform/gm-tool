@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { SERVER_URL2 } from "../config";
-
+import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
 
 class Volume {
@@ -193,7 +193,7 @@ class Volume {
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
-        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
       )
       .then((res) => {
         runInAction(() => {
@@ -205,8 +205,10 @@ class Volume {
 
   // 볼륨 관리
   loadPVolumes = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL2}/pvs`)
+      .get(`${SERVER_URL}/pvs?user=${id}`)
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
@@ -223,7 +225,7 @@ class Volume {
 
   loadPVolume = async (name, cluster) => {
     await axios
-      .get(`${SERVER_URL2}/pvs/${name}?cluster=${cluster}`)
+      .get(`${SERVER_URL}/pvs/${name}?cluster=${cluster}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.pVolume = data;

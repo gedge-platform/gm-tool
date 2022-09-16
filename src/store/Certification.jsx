@@ -1,18 +1,23 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { apiV2, SERVER_URL2, SERVER_URL4 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class Certification {
   credential = [];
   CredentialName = "";
+  // credentialName = "";
   DomainName = "";
   IdentityEndPoint = "";
   Password = "";
   ProjectID = "";
   Username = "";
+  ClientId = "";
+  ClientSecret = "";
+  Region = "";
+  Zone = "";
   KeyValueInfoList = [];
-  ProviderName = "";
+  ProviderName = {};
   totalElements = 0;
   currentPage = 1;
   totalPages = 1;
@@ -113,25 +118,97 @@ class Certification {
     });
   };
 
+  setCredentialName = (n) => {
+    runInAction(() => {
+      console.log(n);
+      this.CredentialName = n;
+    });
+  };
+
+  setDomainName = (n) => {
+    runInAction(() => {
+      console.log(this.DomainName);
+      this.DomainName = n;
+    });
+  };
+
+  setIdentityEndPoint = (n) => {
+    runInAction(() => {
+      this.IdentityEndPoint = n;
+    });
+  };
+
+  setPassword = (n) => {
+    runInAction(() => {
+      this.Password = n;
+    });
+  };
+
+  setProjectID = (n) => {
+    runInAction(() => {
+      this.ProjectID = n;
+    });
+  };
+
+  setUsername = (n) => {
+    runInAction(() => {
+      this.Username = n;
+    });
+  };
+
+  setAccessId = (n) => {
+    runInAction(() => {
+      this.AccessId = n;
+    });
+  };
+
+  setAccessToken = (n) => {
+    runInAction(() => {
+      this.AccessToken = n;
+    });
+  };
+
+  setClientId = (n) => {
+    runInAction(() => {
+      this.ClientId = n;
+    });
+  };
+
+  setClientSecret = (n) => {
+    runInAction(() => {
+      this.ClientSecret = n;
+    });
+  };
+
+  setRegion = (n) => {
+    runInAction(() => {
+      this.Region = n;
+    });
+  };
+
+  setZone = (n) => {
+    runInAction(() => {
+      this.Zone = n;
+    });
+  };
+
+  setProviderName = (n) => {
+    runInAction(() => {
+      this.ProviderName = n;
+    });
+  };
+
   loadCredentialList = async () => {
     await axios
-      .get(`${SERVER_URL4}/spider/credentials`)
+      .get(`${SERVER_URL}/spider/credentialList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.credential = data.credential;
+          // console.log("data is ", data);
+          this.credential = data;
           this.totalElements = this.credential.length;
-          this.CredentialName = this.credential.map(
-            (list) => list.CredentialName
-          );
-          this.ProviderName = this.credential.map((list) => list.ProviderName);
-          this.KeyValueInfoList = this.credential.map(
-            (list) => list.KeyValueInfoList
-          );
-          // this.DomainName = this.KeyValueInfoList.map(
-          //   (val) => Object.values(val[0])[1]
-          // );
+          this.CredentialName = this.credential.map((list) => list.name);
+          this.ProviderName = this.credential.map((list) => list.type);
         });
-        console.log(Object.values(this.KeyValueInfoList[0][0])[1]);
       })
       .then(() => {
         this.convertList(this.credential, this.setCredentialList);
@@ -139,25 +216,40 @@ class Certification {
   };
 
   postCredential = async (data, callback) => {
-    const YAML = require("yamljs");
-    // const body = {
-    //   ...data,
-    //   enabled: true,
-    // };
-    console.log(YAML);
+    // const YAML = require("yamljs");
+    const body = {
+      ...data,
+      enabled: true,
+    };
+    console.log(body);
     return await axios
-      .post(`${SERVER_URL4}/spider/credentials`, YAML.parse(this.content))
+      .post(`${SERVER_URL4}/spider/credentials`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
           swalError("Credential 생성 완료", callback);
+          return true;
+        } else {
+          swalError("Credential 생성 실패", callback);
+          return false;
         }
+      });
+  };
+
+  deleteCredential = async (CredentialName, callback) => {
+    axios
+      .delete(`${SERVER_URL4}/spider/credentials/${CredentialName}`)
+      .then((res) => {
+        if (res.status === 200) swalError("Credential 삭제 완료", callback);
+      })
+      .catch((err) => {
+        swalError("삭제에 실패하였습니다.");
       });
   };
 
   loadClusterList = async (type = "") => {
     await axios
-      .get(`${SERVER_URL2}/clusters`)
+      .get(`${SERVER_URL}/clusters`)
       .then((res) => {
         runInAction(() => {
           const list =
@@ -179,7 +271,7 @@ class Certification {
   };
 
   loadCluster = async (clusterName) => {
-    await axios.get(`${SERVER_URL2}/clusters/${clusterName}`).then((res) => {
+    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then((res) => {
       runInAction(() => {
         this.clusterDetail = res.data;
       });
@@ -188,12 +280,12 @@ class Certification {
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`${apiV2}/clusterInfo?project=${project}`)
+      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {
     await axios
-      .get(`${SERVER_URL2}/clusters?workspace=${workspace}`)
+      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 

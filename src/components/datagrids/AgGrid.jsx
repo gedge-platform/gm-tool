@@ -72,7 +72,11 @@ const AgGrid = (props) => {
     setDetail(tempArr[0].id);
   };
   return (
-    <div id="my-grid" className="grid-wrapper ag-theme-alpine">
+    <div
+      id="my-grid"
+      className="grid-wrapper ag-theme-alpine"
+      // style={{ height: 410 }}
+    >
       <AgGridReact
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
@@ -103,7 +107,7 @@ const AgGrid = (props) => {
                             <option value="20">20건</option>
                             <option value="50">50건</option>
                         </select> */}
-            <span>총 {totalElements ? totalElements : 1}건</span>
+            <span>총 {totalElements !== 0 ? totalElements : 0}건</span>
             {/* <span> | {rowPerPage * currentPage - rowPerPage}~{rowPerPage * currentPage}건</span> */}
           </div>
           {isBottom ? (

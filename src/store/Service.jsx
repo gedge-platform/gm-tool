@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2 } from "../config";
+import { SERVER_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Service {
   currentPage = 1;
@@ -44,7 +45,11 @@ class Service {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -54,7 +59,11 @@ class Service {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -78,7 +87,6 @@ class Service {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-      console.log(apiList);
       Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
         tempList.push(toJS(value));
@@ -103,42 +111,49 @@ class Service {
     });
   };
 
-      setPServiceList = (list) => {
-        runInAction(() => {
-          this.pServiceList = list;
-        })
-      };
+  setPServiceList = (list) => {
+    runInAction(() => {
+      this.pServiceList = list;
+    });
+  };
 
-      setViewList = (n) => {
+  setViewList = (n) => {
+    runInAction(() => {
+      this.viewList = this.pServiceList[n];
+    });
+  };
+
+  loadServiceList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/services?user=${id}`)
+      .then((res) => {
         runInAction(() => {
-          this.viewList = this.pServiceList[n];
+          // const list = listTmp.filter((item) => item.projectType === type);
+
+          this.pServiceList = res.data.data;
+          // this.serviceDetail = list[0];
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
-      };
-
-  loadServiceList = async (type) => {
-    await axios.get(`${SERVER_URL2}/services`).then((res) => {
-      runInAction(() => {
-        const list = res.data.data.filter((item) => item.projectType === type);
-        this.pServiceList = list;
-        // this.serviceDetail = list[0];
-        this.totalElements = this.pServiceList.length;
-      });
-    }).then(() => {
-      this.convertList(this.pServiceList, this.setPServiceList);
-    })
-    .then(() => {
-      this.loadServiceDetail(
-        this.viewList[0].name,
-        this.viewList[0].cluster,
-        this.viewList[0].project
+      })
+      .then(() => {
+        this.convertList(this.pServiceList, this.setPServiceList);
+      })
+      .then(() => {
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
         );
       });
-    };
+  };
 
   loadServiceDetail = async (name, cluster, project) => {
     await axios
       .get(
-        `${SERVER_URL2}/services/${name}?cluster=${cluster}&project=${project}`
+        `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
@@ -221,10 +236,11 @@ class Service {
     this.cluster.map(async (item) => {
       await axios
         .post(
-          `${SERVER_URL2}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
+          `${SERVER_URL}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
           YAML.parse(this.content)
         )
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             count++;
             if (count === this.cluster.length) {

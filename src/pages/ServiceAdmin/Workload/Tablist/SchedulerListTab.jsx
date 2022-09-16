@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
@@ -8,11 +7,10 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
-import CreatePod from "../Dialog/CreatePod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
+import { PanelBox } from "../../../../components/styles/PanelBox";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -22,17 +20,16 @@ const SchedulerListTab = observer(() => {
   };
 
   const {
-    podList,
-    podDetail,
-    totalYElements,
-    loadPodList,
-    loadPodDetail,
-    currentYPage,
-    totalYPages,
-    viewYList,
+    loadYamlList,
+    yamlList,
+    totalElements,
+    currentPage,
+    totalPages,
     goPrevPage,
     goNextPage,
-  } = podStore;
+    viewList,
+  } = schedulerStore;
+
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -88,15 +85,15 @@ const SchedulerListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
-  };
+  // const handleClick = (e) => {
+  //   const fieldName = e.colDef.field;
+  //   loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  // };
 
   const history = useHistory();
 
   useEffect(() => {
-    loadPodList();
+    loadYamlList();
   }, []);
 
   return (
@@ -111,13 +108,13 @@ const SchedulerListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  onCellClicked={handleClick}
-                  rowData={viewYList}
+                  // onCellClicked={handleClick}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
-                  totalElements={totalYElements}
-                  totalPages={totalYPages}
-                  currentPage={currentYPage}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
                   goNextPage={goNextPage}
                   goPrevPage={goPrevPage}
                 />
@@ -127,7 +124,7 @@ const SchedulerListTab = observer(() => {
           <CreateScheduler
             open={open}
             onClose={handleClose}
-            reloadFunc={loadPodList}
+            reloadFunc={loadYamlList}
           />
         </PanelBox>
       </CReflexBox>

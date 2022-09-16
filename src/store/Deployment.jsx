@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { useHistory } from "react-router";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
 import { getItem } from "../utils/sessionStorageFn";
@@ -110,13 +110,6 @@ class Deployment {
   containerPortName = "";
 
   depServices = {};
-  // depServicesPort = [
-  //   {
-  //     name: "",
-  //     port: 0,
-  //     protocol: "",
-  //   },
-  // ];
 
   content = "";
   contentVolume = "";
@@ -209,45 +202,17 @@ class Deployment {
     });
   };
 
-  loadDeploymentDetail = async (name, cluster, project) => {
-    await axios
-      .get(
-        `${SERVER_URL2}/deployments/${name}?cluster=${cluster}&project=${project}`
-      )
-      .then(({ data: { data, involvesData } }) => {
-        runInAction(() => {
-          this.deploymentDetail = data;
-          this.workspace = data.workspace;
-          this.workspaceName = data.workspace;
-          this.projectName = data.project;
-          this.strategy = data.strategy;
-          this.labels = data.labels;
-          this.annotations = data.annotations;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-          this.pods = involvesData.pods;
-          this.depServices = involvesData.services;
-          // this.depServicesPort = involvesData.services.port;
-          this.deploymentEvents = data.events;
-          this.containersTemp = data.containers;
-        });
-      });
-  };
-
   loadDeploymentList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL2}/deployments`)
+      .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          const { user } = getItem("user");
-          // const list = res.data.data.filter((item) => item.projetType === type);
-          const list = res.data.data.filter((item) => item.user !== user);
-          this.deploymentList = list;
-          this.deploymentDetail = list[0];
-          this.totalElements = list.length;
+          this.deploymentList = res.data.data;
+          this.deploymentDetail = res.data.data[0];
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
@@ -258,6 +223,30 @@ class Deployment {
       this.deploymentList[0].cluster,
       this.deploymentList[0].project
     );
+  };
+
+  loadDeploymentDetail = async (name, cluster, project) => {
+    await axios
+      .get(
+        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`
+      )
+      .then(({ data: { data, involvesData } }) => {
+        runInAction(() => {
+          this.deploymentDetail = data;
+          this.workspace = data.workspace;
+          this.workspaceName = data.workspace;
+          this.projectName = data.project;
+          this.strategy = data.strategy;
+          this.labels = data.labels;
+          this.annotations = data.annotations;
+          this.events = data.events;
+          this.pods = involvesData.pods;
+          this.depServices = involvesData.services;
+          // this.depServicesPort = involvesData.services.port;
+          this.deploymentEvents = data.events;
+          this.containersTemp = data.containers;
+        });
+      });
   };
 
   setWorkspace = (workspace) => {
@@ -367,7 +356,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
+        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
         YAML.parse(this.content)
       )
       .then((res) => {
@@ -383,7 +372,7 @@ class Deployment {
 
     await axios
       .post(
-        `${SERVER_URL2}/pvcs?cluster=${selectClusters}&project=${this.project}`,
+        `${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`,
         YAML.parse(this.contentVolume)
       )
       .then(() => {

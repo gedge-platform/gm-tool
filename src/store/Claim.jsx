@@ -1,8 +1,9 @@
 import axios from "axios";
 import { template } from "lodash";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { SERVER_URL2, BEARER_TOKEN } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Claim {
   viewList = [];
@@ -205,7 +206,7 @@ class Claim {
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
-        `${SERVER_URL2}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
+        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
       )
       .then((res) => {
         runInAction(() => {
@@ -217,10 +218,13 @@ class Claim {
 
   // 클레임 관리
   loadPVClaims = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL2}/pvcs`)
+      .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           this.pvClaims = res.data.data;
           this.totalElements = res.data.data.length;
         });
@@ -240,7 +244,7 @@ class Claim {
   loadPVClaim = async (name, clusterName, namespace) => {
     await axios
       .get(
-        `${SERVER_URL2}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
+        `${SERVER_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
       .then(({ data: { data } }) => {
         runInAction(() => {
@@ -272,7 +276,7 @@ class Claim {
     const YAML = require("yamljs");
     axios
       .post(
-        `${SERVER_URL2}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+        `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
 
         YAML.parse(this.content)
       )

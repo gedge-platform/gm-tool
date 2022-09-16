@@ -6,35 +6,47 @@ import { runInAction } from "mobx";
 import axios from "axios";
 import dashboardStore from "../../../store/Dashboard";
 import { forEach } from "lodash";
-import { SERVER_URL4 } from "../../../config";
+import { SERVER_URL } from "../../../config";
 
 const MapContent = observer(() => {
-  const { loadMapInfo, pointArr } = dashboardStore;
+  const {
+    clusterName,
+    nodeRunning,
+    setClusterName,
+    loadEdgeZoneDetailDashboard,
+  } = dashboardStore;
+  const nodeData =
+    nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
+
   const mapRef = useRef(null);
   const [data, setData] = useState("");
   const [dataEdgeInfo, setDataEdgeInfo] = useState("");
+  const [dataStatus, setDataStatus] = useState("");
+  const [nodeDatas, setNodeDatas] = useState(clusterName);
 
   useEffect(async () => {
-    const result = await axios(`${SERVER_URL4}/totalDashboard`);
+    const result = await axios(`${SERVER_URL}/totalDashboard`);
+    const result2 = await axios(`${SERVER_URL}/clusters`);
+    const filterClusterType = result2.data.data.filter(
+      (item) => item.clusterType === "edge"
+    );
+
+    const clusterNameData = filterClusterType.map((item) => item.clusterName);
+    setClusterName(clusterNameData[0]);
+    loadEdgeZoneDetailDashboard();
+
     const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
     setDataEdgeInfo(dataEdgeInfo);
+
     const dataPoint = dataEdgeInfo.map((item) =>
       Object.values(item).map((val) => val.point)
     );
+    const dataStatus = dataEdgeInfo.map((item) =>
+      Object.values(item).map((val) => val.status)
+    );
+
     setData(dataPoint);
-
-    // const addressData = dataEdgeInfo[0].map((info) =>
-    //   Object.entries(info).map(([key, value]) => [key, value])
-    // ); //[Array(8), Array(8)]
-
-    // const addressTmp = addressData.map((item) => item[1]); //[Array(2), Array(2)]
-    // console.log(addressTmp);
-
-    // const addressList = Object.values(addressTmp).map((val) => val[1]); //['서울시 중구 을지로 100', '서울시 중구 을지로100']
-    // const addressArr = Object.values(addressList);
-    // console.log(
-    //   Object.entries(addressList).map(([key, value]) => [key, value])
-    // );
+    setDataStatus(dataStatus);
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -66,7 +78,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>7</span>
+                       <span>4</span>
                      </div>
                    </td>
                  </tr>
@@ -76,7 +88,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready 
                      </span>
-                     <span>2</span>
+                     <span>0</span>
                      </div>
                    </td>
                  </tr>
@@ -86,52 +98,6 @@ const MapContent = observer(() => {
           );
       });
     });
-    //좌표
-    // const marker =  dataPoint.map((item) => {
-    //   item.map((point) => {
-    //     L.marker([point.y, point.x], {
-    //       icon: CustomIcon("green"),
-    //     })
-    //       .addTo(mapRef.current)
-    //       .bindPopup(
-    //         `
-    //           <div class="leaflet-popup-title">
-    //           ${dataEdgeInfo[0].itme.address}
-    //          </div>
-    //          <div class="leaflet-popup-table">
-    //            <table>
-    //              <tr>
-    //                <th>Cluster</th>
-    //                <td>AZURE</td>
-    //              </tr>
-    //              <tr>
-    //                <th rowspan="3">Status</th>
-    //                <td>
-    //                  <div class="box run">
-    //                    <span class="tit">실행</span><span>7</span>
-    //                  </div>
-    //                </td>
-    //              </tr>
-    //              <tr>
-    //                <td>
-    //                  <div class="box stop">
-    //                    <span class="tit">중지</span><span>2</span>
-    //                  </div>
-    //                </td>
-    //              </tr>
-    //              <tr>
-    //                <td>
-    //                  <div class="box pause">
-    //                    <span class="tit">일시중지</span><span>1</span>
-    //                  </div>
-    //                </td>
-    //              </tr>
-    //            </table>
-    //          </div>
-    //          `
-    //       );
-    //   });
-    // });
   }, []);
 
   // useEffect(() => {

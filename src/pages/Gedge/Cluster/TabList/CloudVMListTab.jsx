@@ -15,19 +15,22 @@ import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
+import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
-const CoreClusterListTab = observer(() => {
-  const currentPageTitle = Title.CloudZone;
+const CloudVMListTab = observer(() => {
+  // const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
+  // const [tabvalue, setTabvalue] = useState(0);
+  // const handleTabChange = (event, newValue) => {
+  //   setTabvalue(newValue);
+  // };
   const [openTerminal, setOpenTerminal] = useState(false);
   const {
     clusterDetail,
     clusterList,
-    loadClusterList,
+    loadCloudClusterList,
     loadCluster,
     currentPage,
     totalPages,
@@ -39,54 +42,81 @@ const CoreClusterListTab = observer(() => {
 
   const [columDefs] = useState([
     {
+      headerName: "제공자",
+      field: "ProviderName",
+      filter: true,
+    },
+    {
       headerName: "이름",
-      field: "clusterName",
+      field: "IId.NameId",
       filter: true,
     },
     {
       headerName: "상태",
-      field: "clusterCreator",
+      field: "VmStatus",
       filter: true,
-    },
-    {
-      headerName: "이미지 이름",
-      field: "nodeCnt",
-      filter: true,
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
       headerName: "스펙",
-      field: "clusterEndpoint",
+      field: "VMSpecName",
       filter: true,
     },
     {
-      headerName: "IP",
-      field: "created_at",
-      filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
-      minWidth: 150,
-      maxWidth: 200,
-      cellRenderer: function (data) {
-        return `<span>${dateFormatter(data.value)}</span>`;
-      },
+      headerName: "이미지",
+      field: "ImageIId.NameId",
+      filter: true,
     },
     {
-      headerName: "VM",
-      field: "terminal",
-      minWidth: 100,
-      maxWidth: 100,
-      cellRenderer: function () {
-        // return `<span class="state_ico_new terminal" onClick></span> `;
-        return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
-      },
-      cellStyle: { textAlign: "center" },
+      headerName: "VPC",
+      field: "VpcIID.NameId",
+      filter: true,
     },
+    {
+      headerName: "키페어",
+      field: "KeyPairIId.NameId",
+      filter: true,
+    },
+    {
+      headerName: "리전",
+      field: "Region.Region",
+      filter: true,
+    },
+    {
+      headerName: "Private",
+      field: "PrivateIP",
+      filter: true,
+    },
+    {
+      headerName: "Public",
+      field: "PublicIP",
+      filter: true,
+    },
+    {
+      headerName: "SSH",
+      field: "SSHAccessPoint",
+      filter: true,
+    },
+    // {
+    //   headerName: "VM",
+    //   field: "terminal",
+    //   minWidth: 100,
+    //   maxWidth: 100,
+    //   cellRenderer: function () {
+    //     // return `<span class="state_ico_new terminal" onClick></span> `;
+    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
+    //   },
+    //   cellStyle: { textAlign: "center" },
+    // },
   ]);
 
-  const history = useHistory();
+  // const history = useHistory();
 
   const handleClick = (e) => {
     let fieldName = e.colDef.field;
-    loadCluster(e.data.clusterName);
+    // loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
       handleOpenTerminal();
     }
@@ -109,11 +139,11 @@ const CoreClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    loadClusterList("core");
+    loadCloudClusterList();
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -129,7 +159,7 @@ const CoreClusterListTab = observer(() => {
           <div className="tabPanelContainer">
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
-              <AgGrid
+              <AgGrid2
                 rowData={viewList}
                 columnDefs={columDefs}
                 isBottom={false}
@@ -148,11 +178,12 @@ const CoreClusterListTab = observer(() => {
             // yaml={getYamlFile}
             onClose={handleCloseTerminal}
           />
-          <CreateCluster type={"core"} open={open} onClose={handleClose} />
+          {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
+          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
-    </Layout>
+    </>
   );
 });
-export default CoreClusterListTab;
+export default CloudVMListTab;

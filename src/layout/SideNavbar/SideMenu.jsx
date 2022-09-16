@@ -219,50 +219,27 @@ export const SideMenu = () => {
                   {Title.TotalDashboard}
                 </NavLink>
               </li>
-              <CustomTreeItem
-                nodeId="1"
-                label={Title.Platform}
-                onNodeFocus={handleClick}
-              >
+              <CustomTreeItem nodeId="1" label={Title.Platform} onNodeFocus={handleClick}>
                 <li>
-                  <NavLink
-                    nodeId="2"
-                    exact
-                    to="/platformDashboard"
-                    activeClassName="active"
-                  >
+                  <NavLink nodeId="2" exact to="/platformDashboard" activeClassName="active">
                     {Title.Dashboard}
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink
-                    nodeId="3"
-                    exact
-                    to="/edgeZone"
-                    activeClassName="active"
-                  >
+                  <NavLink nodeId="3" exact to="/edgeZone" activeClassName="active">
                     {Title.EdgeZone}
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink
-                    nodeId="4"
-                    exact
-                    to="/cloudZone"
-                    activeClassName="active"
-                  >
+                  <NavLink nodeId="4" exact to="/cloudZone" activeClassName="active">
                     {Title.CloudZone}
                   </NavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem
-                nodeId="5"
-                label={Title.Infra}
-                onNodeFocus={handleClick}
-              >
+              <CustomTreeItem nodeId="5" label={Title.Infra} onNodeFocus={handleClick}>
                 <CustomTreeItem nodeId="6" label={Title.NetWork}>
                   <li>
-                    <NavLink exact to="/roadbalancer" activeClassName="active">
+                    <NavLink exact to="/loadbalancer" activeClassName="active">
                       {Title.Loadbalancer}
                     </NavLink>
                   </li>
@@ -279,11 +256,7 @@ export const SideMenu = () => {
                 </li> */}
                 <CustomTreeItem nodeId="9" label={Title.Storage}>
                   <li>
-                    <NavLink
-                      exact
-                      to="/storageDashboard"
-                      activeClassName="active"
-                    >
+                    <NavLink exact to="/storageDashboard" activeClassName="active">
                       {Title.StorageDashboard}
                     </NavLink>
                   </li>
@@ -294,36 +267,29 @@ export const SideMenu = () => {
                   </li>
                 </CustomTreeItem>
               </CustomTreeItem>
-              <CustomTreeItem
-                nodeId="12"
-                label={Title.Service}
-                onNodeFocus={handleClick}
-              >
+              <CustomTreeItem nodeId="12" label={Title.Service} onNodeFocus={handleClick}>
                 <li>
                   <NavLink exact to="/workSpace" activeClassName="active">
                     {Title.WorkSpace}
                   </NavLink>
                 </li>
-                <CustomTreeItem
-                  nodeId="14"
-                  label={Title.Project}
-                  onNodeFocus={handleClick}
-                >
+                <CustomTreeItem nodeId="14" label={Title.Project} onNodeFocus={handleClick}>
                   <li>
                     <NavLink exact to="/userProject" activeClassName="active">
                       {Title.CreateUser}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink
-                      exact
-                      to="/platformProject"
-                      activeClassName="active"
-                    >
+                    <NavLink exact to="/platformProject" activeClassName="active">
                       {Title.PlatformControl}
                     </NavLink>
                   </li>
                 </CustomTreeItem>
+                <li>
+                  <NavLink exact to="/workload" activeClassName="active">
+                    {Title.Workload}
+                  </NavLink>
+                </li>
                 <li>
                   <NavLink exact to="/template" activeClassName="active">
                     {Title.Template}

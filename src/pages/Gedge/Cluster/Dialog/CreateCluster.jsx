@@ -57,7 +57,7 @@ const CreateCluster = observer((props) => {
             <td style={{ width: "50%" }}>
               <FormControl className="form_fullWidth">
                 <select name="type" onChange={onChange}>
-                  <option value={"core"}>Core</option>
+                  <option value={"cloud"}>Cloud</option>
                   <option value={"edge"}>Edge</option>
                 </select>
               </FormControl>

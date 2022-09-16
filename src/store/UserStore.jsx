@@ -1,6 +1,6 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { BASIC_AUTH, SERVER_URL2, SERVER_URL4 } from "../config";
+import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 
 class User {
@@ -10,7 +10,6 @@ class User {
   //   id: "",
   //   role: "",
   // };
-
   totalElements = 0;
   currentPage = 1;
   totalPages = 1;
@@ -106,7 +105,7 @@ class User {
 
   loadUserList = async () => {
     await axios
-      .get(`${SERVER_URL4}/members`)
+      .get(`${SERVER_URL}/members`)
       .then((res) => {
         runInAction(() => {
           this.userList = res.data;
@@ -123,10 +122,11 @@ class User {
   };
 
   loadUserDetail = async (memberId) => {
-    await axios.get(`${SERVER_URL4}/members/${memberId}`).then((res) => {
+    await axios.get(`${SERVER_URL}/members/${memberId}`).then((res) => {
       runInAction(() => {
         this.userDetail = res.data;
       });
+      console.log(this.userDetail);
     });
   };
 
@@ -135,9 +135,11 @@ class User {
       ...data,
       enabled: true,
     };
-    return await axios
-      .post(`${SERVER_URL4}/members`, body)
+    // return
+    await axios
+      .post(`${SERVER_URL}/members`, body)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           if (res.status === 201) {
             swalError("멤버가 생성되었습니다.", callback);

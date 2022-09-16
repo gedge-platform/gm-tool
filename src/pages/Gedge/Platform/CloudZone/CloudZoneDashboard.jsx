@@ -8,11 +8,13 @@ import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import { Title } from "@/pages";
-import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
+// import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
+import CloudClusterInfo from "../../../Dashboard/DashboardCont/CloudClusterInfo";
 import CloudZoneSummary from "./CloudZoneSummary";
 import CloudZoneSlider from "./CloudZoneSlider";
 import styled from "styled-components";
 import NodeList from "../../../Dashboard/DashboardCont/NodeList";
+import dashboardStore from "../../../../store/Dashboard";
 
 const CloudZoneWrap = styled.div`
   .panel_summary {
@@ -35,12 +37,14 @@ const CloudZoneDashboard = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, loadClusterList } = clusterStore;
-
+  // const { clusterDetail, loadClusterList } = clusterStore;
+  const { loadCloudZoneDashboard, loadCloudZoneDetailDashboard } =
+    dashboardStore;
   const history = useHistory();
 
   useLayoutEffect(() => {
-    loadClusterList("core");
+    loadCloudZoneDashboard();
+    loadCloudZoneDetailDashboard();
   }, []);
 
   return (
@@ -51,7 +55,7 @@ const CloudZoneDashboard = observer(() => {
             <CTabPanel value={tabvalue} index={1}></CTabPanel>
           </div>
           <div className="ClusterInfoWrap">
-            <ClusterInfo />
+            <CloudClusterInfo />
           </div>
           <div className="ClusterSliderWrap">
             <CloudZoneSlider />
