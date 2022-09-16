@@ -3,7 +3,12 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
-
+import {
+  unixToTime,
+  unixStartTime,
+  stepConverter,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class StorageClass {
   viewList = [];
   currentPage = 1;
@@ -48,13 +53,22 @@ class StorageClass {
   volumeBindingMode = "";
   selectClusters = "";
   parametersData = {};
-
+  osd_read_latency = [];
+  osd_write_latency = [];
+  overwrite_iops = [];
+  read_iops = [];
+  read_throughput = [];
+  write_iops = [];
+  write_throughput = [];
   cephDashboard = {
     ceph_cluster_total_bytes: 0,
     ceph_cluster_total_used_bytes: 0,
     ceph_cluster_total_avail_bytes: 0,
     ceph_mon_quorum_status: 0,
-    ceph_pool_objects: 0,
+    ceph_objects_healthy: 0,
+    ceph_objects_misplaced: 0,
+    ceph_objects_degraded: 0,
+    ceph_objects_unfound: 0,
     ceph_osd_in: 0,
     ceph_osd_out: 0,
     ceph_osd_up: 0,
@@ -62,9 +76,11 @@ class StorageClass {
     ceph_pg_active: 0,
     ceph_pg_clean: 0,
     ceph_pg_incomplete: 0,
+    ceph_pg_total: 0,
     ceph_pg_per_osd: 0,
     ceph_pool_num: 0,
     ceph_unclean_pgs: 0,
+    ceph_mds_count: 0,
     clusterStatus: "",
     cluster_avail_capacity: 0,
     cluster_used_capacity: 0,
@@ -349,7 +365,40 @@ class StorageClass {
       });
     });
   };
+  loadCephMonit = async (start, end, step) => {
+    await axios.get(`${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`).then((res) => {
+      runInAction(() => {
+        // this.cephMetrics = res.data.items;
+        this.osd_read_latency = res.data.items.osd_read_latency[0].values
+        this.osd_write_latency = res.data.items.osd_write_latency[0].values
+        this.overwrite_iops = res.data.items.overwrite_iops[0].values
+        this.read_iops = res.data.items.read_iops[0].values
+        this.read_throughput = res.data.items.read_throughput[0].values
+        this.write_iops = res.data.items.write_iops[0].values
+        this.write_throughput = res.data.items.write_throughput[0].values
+        // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
+        // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
+        // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
+        // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
+        // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
+        // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
+        // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
+      });
+    });
+  };
+  searchMetrics = (MetricList) => {
+    let metrics = [];
+    MetricList.forEach((element) => {
+      const tempMetrics = {
+        time: unixToTime(element[0]),
+        value: element[1],
+      };
+      metrics.push(tempMetrics);
+    })
+    return metrics
+  };
 }
+
 
 const StorageClassStore = new StorageClass();
 export default StorageClassStore;

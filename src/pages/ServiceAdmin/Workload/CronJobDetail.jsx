@@ -46,11 +46,18 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { cronJobDetail, label, annotations, events, cronjobInvolvesJobs } =
-    cronJobStore;
+  const {
+    containers,
+    cronJobDetail,
+    label,
+    annotations,
+    events,
+    cronjobInvolvesJobs,
+  } = cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  const containers = cronJobDetail.containers;
+
+  // const containers = cronJobDetail.containers;
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -78,25 +85,33 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                <td>{cronJobDetail ? cronJobDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cronJobDetail.cluster ? cronJobDetail.cluster : "-"}</td>
+                <td>{cronJobDetail ? cronJobDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{cronJobDetail.project ? cronJobDetail.project : "-"}</td>
+                <td>{cronJobDetail ? cronJobDetail.project : "-"}</td>
                 <th>Schedule</th>
-                <td>{cronJobDetail.schedule ? cronJobDetail.schedule : "-"}</td>
+                <td>{cronJobDetail ? cronJobDetail.schedule : "-"}</td>
               </tr>
               <tr>
                 <th>Concurrency Policy</th>
-                <td>{cronJobDetail.concurrencyPolicy ? cronJobDetail.concurrencyPolicy : "-"}</td>
+                <td>{cronJobDetail ? cronJobDetail.concurrencyPolicy : "-"}</td>
                 <th>Successful Jobs History Limit</th>
-                <td>{cronJobDetail.successfulJobsHistoryLimit ? cronJobDetail.successfulJobsHistoryLimit : "-"}</td>
+                <td>
+                  {cronJobDetail
+                    ? cronJobDetail.successfulJobsHistoryLimit
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{cronJobDetail.creationTimestamp ? dateFormatter(cronJobDetail.creationTimestamp) : "-"}</td>
+                <td>
+                  {cronJobDetail
+                    ? dateFormatter(cronJobDetail.creationTimestamp)
+                    : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -105,25 +120,42 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          <table className="tb_data">
-            {containers?.map((item) => (
-              <tbody>
+          {containers ? (
+            containers.map((item) => (
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody className="tb_data_container">
+                  <tr>
+                    <th>Name</th>
+                    <td>{item.name}</td>
+                  </tr>
+                  <tr>
+                    <th>Image</th>
+                    <td>{item.image}</td>
+                  </tr>
+                </tbody>
+              </table>
+            ))
+          ) : (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody className="tb_data_container">
                 <tr>
-                  <th className="tb_workload_detail_th">Name</th>
-                  <td>{item?.name}</td>
+                  <th>Name</th>
+                  <td>-</td>
+                </tr>
+                <tr>
                   <th>Image</th>
-                  <td>{item?.image}</td>
+                  <td>-</td>
                 </tr>
               </tbody>
-            ))}
-          </table>
+            </table>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {label ? (
+            {label != null ? (
               Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -137,7 +169,7 @@ const Detail = observer(() => {
           <br />
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations != null ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -161,33 +193,37 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>References</TableTitle>
-          {cronjobInvolvesJobs
-            ? cronjobInvolvesJobs.map((job) => (
-                <>
-                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                    <tbody>
-                      <tr>
-                        <th style={{ width: "25%" }}>Name</th>
-                        <td>{job?.name}</td>
-                      </tr>
-                      <tr>
-                        <th>CompletionTime</th>
-                        <td>{dateFormatter(job?.completionTime)}</td>
-                      </tr>
-                      <tr>
-                        <th>StartTime</th>
-                        <td>{dateFormatter(job?.startTime)}</td>
-                      </tr>
-                      <tr>
-                        <th>Succeeded</th>
-                        <td>{job?.succeeded}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br />
-                </>
-              ))
-            : "No Info"}
+          {cronjobInvolvesJobs ? (
+            cronjobInvolvesJobs.map((job) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{job?.name}</td>
+                    </tr>
+                    <tr>
+                      <th>CompletionTime</th>
+                      <td>{dateFormatter(job?.completionTime)}</td>
+                    </tr>
+                    <tr>
+                      <th>StartTime</th>
+                      <td>{dateFormatter(job?.startTime)}</td>
+                    </tr>
+                    <tr>
+                      <th>Succeeded</th>
+                      <td>{job?.succeeded}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Reference Info</p>
+            </LabelContainer>
+          )}
           <br />
         </div>
       </CTabPanel>

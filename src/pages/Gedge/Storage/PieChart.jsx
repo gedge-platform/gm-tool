@@ -4,8 +4,6 @@ import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
   const { total, label, value } = props;
-  console.log("label : ", label)
-  console.log("value : ", value)
   const options = {
     labels: label,
     chart: {
@@ -15,7 +13,7 @@ const PieChart = observer((props) => {
       breakpoint: 480,
       options: {
         chart: {
-          width: 275
+          width: "100%"
         },
         legend: {
           position: 'bottom',
@@ -93,7 +91,7 @@ const PieChart = observer((props) => {
         options={options}
         series={series}
         type="donut"
-        width="275"
+        width="100%"
       />
     </div >)
     ;

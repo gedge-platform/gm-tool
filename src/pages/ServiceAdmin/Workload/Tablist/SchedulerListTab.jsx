@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
@@ -8,12 +7,10 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
-import CreatePod from "../Dialog/CreatePod";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
-import schedulerStore from "../../../../store/Scheduler";
+import { PanelBox } from "../../../../components/styles/PanelBox";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);

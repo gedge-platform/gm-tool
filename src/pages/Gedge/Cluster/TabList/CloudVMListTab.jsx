@@ -17,6 +17,7 @@ import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudVMListTab = observer(() => {
   // const currentPageTitle = Title.CloudZone;

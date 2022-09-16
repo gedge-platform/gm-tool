@@ -79,7 +79,7 @@ const Detail = observer(() => {
         <CTab label="Resources" />
         <CTab label="Metadata" />
         <CTab label="Events" />
-        <CTab label="Involves Data" />
+        {/* <CTab label="Involves Data" /> */}
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
@@ -236,10 +236,10 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={4}>
+      {/* <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPodList
+          {involvesPodList != null
             ? involvesPodList.map((pod) => (
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
@@ -271,18 +271,20 @@ const Detail = observer(() => {
           <TableTitle>References</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {Object.entries(ownerReferences).map(([key, value]) => (
-                <tr>
-                  <th style={{ width: "25%" }}>
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                  </th>
-                  <td>{value}</td>
-                </tr>
-              ))}
+              {ownerReferences != null
+                ? Object.entries(ownerReferences).map(([key, value]) => (
+                    <tr>
+                      <th style={{ width: "25%" }}>
+                        {key.charAt(0).toUpperCase() + key.slice(1)}
+                      </th>
+                      <td>{value}</td>
+                    </tr>
+                  ))
+                : "No Info"}
             </tbody>
           </table>
         </div>
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });
