@@ -12,12 +12,10 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
-import CreateCluster from "../Dialog/CreateCluster";
+import CreateVM from "../Dialog/CreateVM";
 import Terminal from "../Dialog/Terminal";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
-import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudVMListTab = observer(() => {
   // const currentPageTitle = Title.CloudZone;
@@ -27,18 +25,8 @@ const CloudVMListTab = observer(() => {
   //   setTabvalue(newValue);
   // };
   const [openTerminal, setOpenTerminal] = useState(false);
-  const {
-    clusterDetail,
-    clusterList,
-    loadCloudClusterList,
-    loadCluster,
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-    totalElements,
-  } = clusterStore;
+  const { clusterDetail, clusterList, loadCloudClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } =
+    clusterStore;
 
   const [columDefs] = useState([
     {
@@ -114,7 +102,7 @@ const CloudVMListTab = observer(() => {
 
   // const history = useHistory();
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     let fieldName = e.colDef.field;
     // loadCluster(e.data.clusterName);
     if (fieldName === "terminal") {
@@ -122,7 +110,7 @@ const CloudVMListTab = observer(() => {
     }
   };
 
-  const handleOpen = (e) => {
+  const handleOpen = e => {
     setOpen(true);
   };
 
@@ -159,7 +147,7 @@ const CloudVMListTab = observer(() => {
           <div className="tabPanelContainer">
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
-              <AgGrid2
+              <AgGrid
                 rowData={viewList}
                 columnDefs={columDefs}
                 isBottom={false}
@@ -178,8 +166,7 @@ const CloudVMListTab = observer(() => {
             // yaml={getYamlFile}
             onClose={handleCloseTerminal}
           />
-          {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
-          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
+          <CreateVM type={"cloud"} open={open} onClose={handleClose} />
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
@@ -187,3 +174,4 @@ const CloudVMListTab = observer(() => {
   );
 });
 export default CloudVMListTab;
+

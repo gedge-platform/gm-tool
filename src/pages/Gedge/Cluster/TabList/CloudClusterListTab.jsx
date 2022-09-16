@@ -119,7 +119,7 @@ const CloudClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
+          <CreateCluster type="cloud" open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

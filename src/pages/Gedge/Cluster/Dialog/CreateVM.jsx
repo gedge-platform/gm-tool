@@ -23,7 +23,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateCluster = observer(props => {
+const CreateVM = observer(props => {
   const { open } = props;
   const { loadClusterList, clusterList } = clusterStore;
 
@@ -41,7 +41,7 @@ const CreateCluster = observer(props => {
   }, []);
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={`Create Cluster`} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={`Create VM`} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
@@ -109,4 +109,4 @@ const CreateCluster = observer(props => {
     </CDialogNew>
   );
 });
-export default CreateCluster;
+export default CreateVM;
