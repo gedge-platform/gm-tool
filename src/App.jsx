@@ -38,6 +38,7 @@ import { getItem } from "./utils/sessionStorageFn";
 import axios from "axios";
 import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminDashboard";
 import { Redirect } from "react-router-dom";
+import ServiceAdminChart from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminChart";
 
 export const App = () => {
   // 새로고침하면 api header 설정이 날아가니까 안 날아가게 설정

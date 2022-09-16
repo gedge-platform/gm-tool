@@ -10,39 +10,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { observer } from "mobx-react";
-import ApexCharts from "apexcharts";
-
 import { unixToTime } from "../../Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 
-const ServiceAdminChart = observer(() => {
-  const { loadProjectName, deploymentMetrics, podMetrics, allMetrics } =
-    serviceAdminDashboardStore;
+const ServiceAdminPodChart = observer(() => {
+  const { loadProjectName, podMetrics } = serviceAdminDashboardStore;
 
-  let deployMetricsTable = [];
-  let podMetricsTemp = [];
+  let podMetricsArr = [];
 
-  deploymentMetrics.map((element) => {
+  podMetrics.map((element) => {
     const tempMetrics = {
       time: unixToTime(element[0]),
-      deployment: element[1],
-      pod: podMetrics.map((pod, i) => pod[1][i]),
+      pod: element[1],
     };
-    deployMetricsTable.push(tempMetrics);
+    podMetricsArr.push(tempMetrics);
   });
-
-  const test = () => {
-    podMetrics.map((element) => element[1]);
-  };
-
-  // podMetrics.map((element) => {
-  //   const tempMetrics1 = {
-  //     pod: element[1],
-  //   };
-  //   podMetricsTemp.push(tempMetrics1);
-  // });
-
-  console.log(deployMetricsTable);
 
   useEffect(() => {
     loadProjectName();
@@ -61,8 +43,7 @@ const ServiceAdminChart = observer(() => {
       ></div>
       <ResponsiveContainer>
         <LineChart
-          data={deployMetricsTable}
-          // 그래프 크기 조절
+          data={podMetricsArr}
           margin={{
             top: 5,
             right: 20,
@@ -73,17 +54,16 @@ const ServiceAdminChart = observer(() => {
           <CartesianGrid
             strokeWidth={0.3}
             vertical={false}
-            strokeDasharray="2 2"
+            strokeDasharray="3 3"
           />
           <XAxis dataKey="time" />
           <YAxis dataKey="value" domain={[0, 50]} />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="deployment"
-            stroke="#FF5A5A"
-            strokeDasharray="3 3"
-            activeDot={{ r: 3 }}
+            dataKey="pod"
+            stroke="#BDBDBD"
+            strokeDasharray="5 5"
           />
         </LineChart>
       </ResponsiveContainer>
@@ -91,4 +71,4 @@ const ServiceAdminChart = observer(() => {
   );
 });
 
-export default ServiceAdminChart;
+export default ServiceAdminPodChart;

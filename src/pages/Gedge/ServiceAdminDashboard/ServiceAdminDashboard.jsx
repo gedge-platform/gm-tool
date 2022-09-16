@@ -7,7 +7,14 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 import { observer } from "mobx-react";
 import { ResponsiveLine } from "@nivo/line";
-import ApexCharts from "apexcharts";
+import ServiceAdminChart from "./ServiceAdminChart";
+import ServiceAdminPodChart from "./ServiceAdminPodChart";
+import ServiceAdminVolumeChart from "./ServiceAdminVolumeChart";
+import {
+  unixStartTime,
+  stepConverter,
+  unixCurrentTime,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 
 const ServiceAdminWrap = styled.div`
   padding: 0 10px;
@@ -36,28 +43,29 @@ const ButtonStyle = styled.button`
 `;
 
 const ServiceAdminDashboard = observer(() => {
-  const { serviceAdminMonitoring } = serviceAdminDashboardStore;
-  useEffect(() => {
-    loadWorkspaceName();
-    loadServiceAdminDashboard(setWorkspaceName);
-    serviceAdminMonitoring();
-  }, []);
-
   const {
     loadServiceAdminDashboard,
     dashboardData,
     workspaceNameList,
     loadWorkspaceName,
-    setWorkspaceNameList,
     setWorkspaceName,
-    workspaceName,
     projectList,
     podCpuTop,
     podMemTop,
     projectCpuTop,
     projectMemTop,
     resource,
+    serviceAdminMonitoring,
+    loadProjectName,
+    setProjectNameInMonitoring,
   } = serviceAdminDashboardStore;
+
+  useEffect(() => {
+    loadWorkspaceName();
+    loadServiceAdminDashboard(setWorkspaceName);
+    loadProjectName();
+    serviceAdminMonitoring();
+  }, []);
 
   const currentPageTitle = Title.ServiceAdminDashboard;
 
@@ -65,10 +73,15 @@ const ServiceAdminDashboard = observer(() => {
     if (name === "workspace") {
       setWorkspaceName(value);
       loadServiceAdminDashboard(value);
-      return;
     }
-    if (name === "project") {
-      console.log(name, value);
+    if (name === "projectName") {
+      setProjectNameInMonitoring(value);
+      serviceAdminMonitoring(
+        value,
+        unixStartTime(60 * 6),
+        unixCurrentTime(),
+        stepConverter(5)
+      );
     }
   };
 
@@ -133,294 +146,6 @@ const ServiceAdminDashboard = observer(() => {
     }
     return arr;
   };
-
-  const workspaceEX = [
-    {
-      id: "japan",
-      color: "hsl(72, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 65,
-        },
-        {
-          x: "helicopter",
-          y: 86,
-        },
-        {
-          x: "boat",
-          y: 109,
-        },
-        {
-          x: "train",
-          y: 123,
-        },
-        {
-          x: "subway",
-          y: 158,
-        },
-        {
-          x: "bus",
-          y: 168,
-        },
-        {
-          x: "car",
-          y: 163,
-        },
-        {
-          x: "moto",
-          y: 37,
-        },
-        {
-          x: "bicycle",
-          y: 44,
-        },
-        {
-          x: "horse",
-          y: 218,
-        },
-        {
-          x: "skateboard",
-          y: 260,
-        },
-        {
-          x: "others",
-          y: 252,
-        },
-      ],
-    },
-  ];
-
-  const projectEX = [
-    {
-      id: "france",
-      color: "hsl(122, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 5,
-        },
-        {
-          x: "helicopter",
-          y: 33,
-        },
-        {
-          x: "boat",
-          y: 140,
-        },
-        {
-          x: "train",
-          y: 154,
-        },
-        {
-          x: "subway",
-          y: 296,
-        },
-        {
-          x: "bus",
-          y: 13,
-        },
-        {
-          x: "car",
-          y: 112,
-        },
-        {
-          x: "moto",
-          y: 109,
-        },
-        {
-          x: "bicycle",
-          y: 10,
-        },
-        {
-          x: "horse",
-          y: 78,
-        },
-        {
-          x: "skateboard",
-          y: 196,
-        },
-        {
-          x: "others",
-          y: 68,
-        },
-      ],
-    },
-  ];
-
-  const podEX = [
-    {
-      id: "france",
-      color: "hsl(122, 70%, 50%)",
-      data: [
-        {
-          x: "plane",
-          y: 5,
-        },
-        {
-          x: "helicopter",
-          y: 33,
-        },
-        {
-          x: "boat",
-          y: 140,
-        },
-        {
-          x: "train",
-          y: 154,
-        },
-        {
-          x: "subway",
-          y: 296,
-        },
-        {
-          x: "bus",
-          y: 13,
-        },
-        {
-          x: "car",
-          y: 112,
-        },
-        {
-          x: "moto",
-          y: 109,
-        },
-        {
-          x: "bicycle",
-          y: 10,
-        },
-        {
-          x: "horse",
-          y: 78,
-        },
-        {
-          x: "skateboard",
-          y: 196,
-        },
-        {
-          x: "others",
-          y: 68,
-        },
-      ],
-    },
-  ];
-
-  const workspaceEXgraph = () => (
-    <ResponsiveLine
-      data={workspaceEX}
-      margin={{ top: 15, right: 15, bottom: 15, left: 15 }}
-      colors={{ scheme: "accent" }} // 그래프 색
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
-      // enableGridX={false} // X축 실선
-      // enableGridY={false} // Y축 실선
-      // yFormat=" >-.2f"
-      // axisTop={null}
-      // axisRight={null}
-      axisBottom={{
-        enable: true,
-        orient: "bottom",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "transportation",
-        legendOffset: 36,
-        legendPosition: "middle",
-      }}
-      // axisLeft={{
-      //   orient: "left",
-      //   tickSize: 5,
-      //   tickPadding: 5,
-      //   tickRotation: 0,
-      //   legend: "count",
-      //   legendOffset: -40,
-      //   legendPosition: "middle",
-      // }}
-      pointSize={8}
-      // pointColor={{ theme: "background" }}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabelYOffset={-12}
-      useMesh={true} // 점선
-      // legends={[
-      //   {
-      //     anchor: "bottom-right",
-      //     direction: "column",
-      //     justify: false,
-      //     translateX: 100,
-      //     translateY: 0,
-      //     itemsSpacing: 0,
-      //     itemDirection: "left-to-right",
-      //     itemWidth: 80,
-      //     itemHeight: 20,
-      //     itemOpacity: 0.75,
-      //     symbolSize: 12,
-      //     symbolShape: "circle",
-      //     symbolBorderColor: "rgba(0, 0, 0, .5)",
-      //   },
-      // ]}
-    />
-  );
-
-  const projectEXgraph = () => (
-    <ResponsiveLine
-      data={projectEX}
-      margin={{ top: 15, right: 15, bottom: 15, left: 15 }}
-      colors={{ scheme: "category10" }}
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
-      // enableGridX={false} // X축 실선
-      // enableGridY={false} // Y축 실선
-      axisBottom={{
-        enable: true,
-        orient: "bottom",
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        legend: "transportation",
-        legendOffset: 36,
-        legendPosition: "middle",
-      }}
-      pointSize={8}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabelYOffset={-12}
-      useMesh={true}
-    />
-  );
-
-  const podEXgraph = () => (
-    <ResponsiveLine
-      data={podEX}
-      margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
-      colors={{ scheme: "dark2" }}
-      xScale={{ type: "point" }}
-      yScale={{
-        type: "linear",
-        min: "auto",
-        max: "auto",
-        stacked: true,
-        reverse: false,
-      }}
-      pointSize={8}
-      pointBorderWidth={2}
-      pointBorderColor={{ from: "serieColor" }}
-      pointLabelYOffset={-12}
-      useMesh={true}
-    />
-  );
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -574,7 +299,7 @@ const ServiceAdminDashboard = observer(() => {
               Monitoring
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
-                  <select name="project" onChange={onChange}>
+                  <select name="projectName" onChange={onChange}>
                     {Object.values(projectList).map((val) => (
                       <option value={val.projectName}>{val.projectName}</option>
                     ))}
@@ -585,17 +310,23 @@ const ServiceAdminDashboard = observer(() => {
             <div className="monitoringInner">
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Workspace 총 개수</div>
-                <div className="monitoringBoxCont">{workspaceEXgraph()}</div>
-              </div>
-
-              <div className="monitoringBox">
-                <div className="monitoringBoxTitle">Project 총 개수</div>
-                <div className="monitoringBoxCont">{projectEXgraph()}</div>
+                <div className="monitoringBoxCont">
+                  <ServiceAdminChart />
+                </div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Pod 총 개수</div>
-                <div className="monitoringBoxCont">{podEXgraph()}</div>
+                <div className="monitoringBoxCont">
+                  <ServiceAdminPodChart />
+                </div>
+              </div>
+
+              <div className="monitoringBox">
+                <div className="monitoringBoxTitle">Volume 총 개수</div>
+                <div className="monitoringBoxCont">
+                  <ServiceAdminVolumeChart />
+                </div>
               </div>
             </div>
           </div>
