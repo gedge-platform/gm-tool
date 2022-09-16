@@ -4,8 +4,6 @@ import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
   const { total, label, value } = props;
-  console.log("label : ", label)
-  console.log("value : ", value)
   const options = {
     labels: label,
     chart: {

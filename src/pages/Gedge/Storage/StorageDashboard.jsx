@@ -10,11 +10,37 @@ import Detail from "@/pages/Gedge/Platform/Detail";
 import clusterStore from "@/store/Cluster";
 import storageStore from "@/store/StorageClass";
 import PieChart from "./PieChart"
-import RadialBarChart from "./RadialBarChart"
+import AreaCharts from "./AreaCharts"
+import {
+  stepConverter,
+  unixCurrentTime,
+  unixStartTime,
+  unixToTime,
+} from "../Monitoring/Utils/MetricsVariableFormatter";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 const StoragePageWrap = styled.div`
   padding: 0 10px;
   .panel_summary {
     width: 100%;
+    margin-bottom: 12px;
+    background: #202842;
+    border: 0;
+    border-radius: 8px;
+    &::before {
+      display: none;
+    }
+  }
+  .panel_summary2 {
+    width: 100%;
+    height: 350px;
     margin-bottom: 12px;
     background: #202842;
     border: 0;
@@ -42,20 +68,34 @@ const StorageDashboard = observer(() => {
   };
 
   const { clusterDetail, loadClusterList } = clusterStore;
-  const { cephDashboard, loadStorageMonit } = storageStore;
+  const { cephDashboard, loadStorageMonit, loadCephMonit, osd_read_latency, osd_write_latency, overwrite_iops, read_iops, read_throughput, write_iops, write_throughput } = storageStore;
   const history = useHistory();
-
+  const [metric, setMetric] = useState([]);
   useLayoutEffect(() => {
-    // loadClusterList("edge");
-
 
 
   }, []);
 
   useEffect(() => {
     loadStorageMonit();
+    loadCephMonit(unixStartTime(60), unixCurrentTime(), stepConverter(5))
   }, []);
-
+  const searchMetrics = (MetricList, name) => {
+    let metrics = [];
+    MetricList.forEach((element) => {
+      const tempMetrics = {
+        x: unixToTime(element[0]),
+        y: parseFloat(element[1]),
+      };
+      metrics.push(tempMetrics);
+    })
+    const data = {
+      name: name,
+      data: metrics,
+    };
+    console.log("metrics,", metrics)
+    return data
+  };
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
@@ -252,28 +292,64 @@ const StorageDashboard = observer(() => {
             </div>*/}
           </div>
         </PanelBox>
-
-
-        <PanelBox className="panel_summary">
-          <div className="storageCircleBoxWrap">
+        <PanelBox className="panel_summary2">
+          <div className="storageCircleBoxWrap2">
             <div className="storageCircleBox2">
-              <div className="storageCircleBoxTitle2">Workspace 총 개수</div>
+              <div className="storageCircleBoxTitle2">Throughput</div>
               <div className="storageCircleBoxCont2">
-                <PieChart total={true} label={["healthy", "misplaced", "degraded", "unfound"]} value={[cephDashboard.ceph_objects_healthy, cephDashboard.ceph_objects_misplaced, cephDashboard.ceph_objects_degraded, cephDashboard.ceph_objects_unfound]} />
+                <AreaCharts seriesData={[searchMetrics(read_throughput, "read"), searchMetrics(write_throughput, "write")]} />
+                {/* <div style={{ width: "100%", height: "100%" }}>
+                  <div
+                    style={{
+                      // paddingLeft: "20px",
+                      // paddingTop: "20px",
+                      color: "#929da5",
+                      fontWeight: "bold",
+                    }}
+                  >
+                  </div>
+                  <ResponsiveContainer>
+                    <AreaChart
+                      data={searchMetrics(osd_read_latency)}
+                      margin={{
+                        top: 40,
+                        right: 30,
+                        left: -15,
+                        bottom: 30,
+                      }}
+                    >
+                      <CartesianGrid
+                        // horizontalPoints="3 3"
+                        strokeWidth={0.3}
+                        vertical={false}
+                        strokeDasharray="3 5"
+                      />
+                      <XAxis tickLine="false" dataKey="time" />
+                      <YAxis />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#007EFF"
+                        fill="#0080ff30"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div> */}
               </div>
             </div>
 
             <div className="storageCircleBox2">
-              <div className="storageCircleBoxTitle2">Project 총 개수</div>
+              <div className="storageCircleBoxTitle2">OSD Latency</div>
               <div className="storageCircleBoxCont2">
-                <PieChart total={true} label={["healthy", "misplaced", "degraded", "unfound"]} value={[cephDashboard.ceph_objects_healthy, cephDashboard.ceph_objects_misplaced, cephDashboard.ceph_objects_degraded, cephDashboard.ceph_objects_unfound]} />
+                <AreaCharts seriesData={[searchMetrics(osd_read_latency, "read"), searchMetrics(osd_write_latency, "write")]} />
               </div>
             </div>
 
             <div className="storageCircleBox2">
-              <div className="storageCircleBoxTitle2">Pod 총 개수</div>
+              <div className="storageCircleBoxTitle2">IOPS</div>
               <div className="storageCircleBoxCont2">
-                <PieChart total={true} label={["healthy", "misplaced", "degraded", "unfound"]} value={[cephDashboard.ceph_objects_healthy, cephDashboard.ceph_objects_misplaced, cephDashboard.ceph_objects_degraded, cephDashboard.ceph_objects_unfound]} />
+                <AreaCharts seriesData={[searchMetrics(read_iops, "read"), searchMetrics(overwrite_iops, "overwrite"), searchMetrics(write_iops, "write")]} />
               </div>
             </div>
           </div>
