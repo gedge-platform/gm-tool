@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
-import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const CloudClusterListTab = observer(() => {
@@ -94,12 +90,7 @@ const CloudClusterListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("edge")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
+          <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 

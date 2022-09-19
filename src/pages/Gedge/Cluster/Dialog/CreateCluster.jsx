@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import clusterStore from "../../../../store/Cluster";
+import { swalError } from "../../../../utils/swal-utils";
+import { SERVER_URL } from "@/config.jsx";
+import axios from "axios";
 
 const Button = styled.button`
   background-color: #fff;
@@ -25,11 +28,39 @@ const ButtonNext = styled.button`
 
 const CreateCluster = observer(props => {
   const { open } = props;
-  const { loadClusterList, clusterList } = clusterStore;
+  const { loadClusterList, clusterList, createCluster } = clusterStore;
+
+  const clusterType = props.type;
+  const [clusterName, setClusterName] = useState("");
+  const [clusterEndpoint, setClusterEndpoint] = useState("");
+  const [clusterToken, setClusterToken] = useState("");
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+  };
+
+  const handleSubmit = () => {
+    console.log("handleSubmit in");
+    // createCluster(clusterType, clusterName, clusterEndpoint, clusterToken, handleClose);
+
+    const body = {
+      clusterType: this.clusterType,
+      clusterName: this.clusterName,
+      clusterEndpoint: this.clusterEndpoint,
+      clusterToken: this.clusterToken,
+    };
+    console.log("body is : ", body);
+    axios
+      .post(`${SERVER_URL}/clusters`, body)
+      .then(res => {
+        if (res.status === 201) {
+          swalError("클러스터를 추가하였습니다.");
+        }
+      })
+      .catch(err => {
+        swalError("엣지 클러스터 추가에 실패하였습니다.");
+      });
   };
 
   const onChange = ({ target: { value } }) => {
@@ -52,6 +83,24 @@ const CreateCluster = observer(props => {
               <CTextField type="text" className="form_fullWidth" name="clusterName" value={props.type} disabled />
             </td>
           </tr>
+          {props.type == "cloud" && (
+            <>
+              <tr>
+                <th>
+                  Cloud Type
+                  <span className="requried">*</span>
+                </th>
+                <td>
+                  <FormControl className="form_fullWidth">
+                    <select name="cloudType" onChange={onChange}>
+                      <option value="aws">AWS</option>
+                      <option value="openstack">OpenStack</option>
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+            </>
+          )}
           <tr>
             <th>
               Cluster Name
@@ -103,7 +152,7 @@ const CreateCluster = observer(props => {
           }}
         >
           <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={handleClose}>생성</ButtonNext>
+          <ButtonNext onClick={handleSubmit}>생성</ButtonNext>
         </div>
       </div>
     </CDialogNew>

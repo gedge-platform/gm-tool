@@ -1,20 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons";
-import { CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateVM from "../Dialog/CreateVM";
 import Terminal from "../Dialog/Terminal";
-import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const CloudVMListTab = observer(() => {
@@ -134,14 +128,8 @@ const CloudVMListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("core")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
+          <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -166,7 +154,7 @@ const CloudVMListTab = observer(() => {
             // yaml={getYamlFile}
             onClose={handleCloseTerminal}
           />
-          <CreateVM type={"cloud"} open={open} onClose={handleClose} />
+          <CreateVM type="cloud" open={open} onClose={handleClose} />
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
@@ -174,4 +162,3 @@ const CloudVMListTab = observer(() => {
   );
 });
 export default CloudVMListTab;
-
