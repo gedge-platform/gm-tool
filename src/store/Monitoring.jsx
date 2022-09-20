@@ -104,6 +104,7 @@ class Monitoring {
               time: unixToTime(index),
               value: 0,
             });
+            console.log(array);
             array.push(clusterMetric);
           }
 
@@ -150,8 +151,6 @@ class Monitoring {
       )
       .then((res) => {
         this.coPieCPU = this.convertResponseToMonit(res);
-        console.log(res);
-        // console.log(this.coPieCPU[2]?.metrics);
       });
   };
 

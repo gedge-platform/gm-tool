@@ -30,8 +30,13 @@ class ServiceAdminDashboard {
   resource = {};
   allMetrics = [];
   deploymentMetrics = [];
+  jobMetrics = [];
   podMetrics = [];
   volumeMetrics = [];
+  cronjobMetrics = [];
+  daemonsetMetrics = [];
+  serviceMetrics = [];
+  statefulsetMetrics = [];
   lastTime = LastTimeList[1];
   interval = IntervalList[1];
   projectName = "";
@@ -84,11 +89,52 @@ class ServiceAdminDashboard {
       .then(() => {
         this.serviceAdminMonitoring(
           this.projectNameInMonitoring,
-          unixStartTime(60 * 6),
+          unixStartTime(60),
           unixCurrentTime(),
           stepConverter(5)
         );
       });
+  };
+
+  resourceMetric = [];
+  resourceMetricData = [];
+
+  convertResponseToMonit = (res) => {
+    const array = [];
+    runInAction(() => {
+      Object.entries(res.data?.items).map(([key, value]) => {
+        const MetricData = {
+          metricType: "",
+          metrics: [],
+        };
+        console.log([key, value]);
+        MetricData.metricType = key;
+
+        if (value.length === 0) {
+          for (
+            let index = unixStartTime(60 * 6);
+            index < unixCurrentTime();
+            index = index + 60 * 5
+          ) {
+            MetricData.metrics.push({
+              time: unixToTime(index),
+              value: 0,
+            });
+            array.push(MetricData);
+          }
+          return array;
+        }
+
+        value[0]?.values.forEach((element) => {
+          MetricData.metrics.push({
+            time: unixToTime(element[0]),
+            value: element[1],
+          });
+        });
+        array.push(MetricData);
+      });
+    });
+    return array;
   };
 
   serviceAdminMonitoring = async (
@@ -101,16 +147,46 @@ class ServiceAdminDashboard {
       .get(
         `${SERVER_URL}/resourceMonitoring?project=${projectNameInMonitoring}&start=${start}&end=${end}&step=${step}`
       )
+      // .then((res) => {
+      //   runInAction(() => {
+      //     console.log(res);
+      //     this.deploymentMetrics = res.data.items?.deployment_count[0].values
+      //       ? res.data.items?.deployment_count[0].values
+      //       : 0;
+      //     this.podMetrics = res.data.items?.pod_count[0].values
+      //       ? res.data.items?.pod_count[0].values
+      //       : 0;
+      //     this.jobMetrics =
+      //       res.data.items.job_count.length === 0
+      //         ? 0
+      //         : res.data.items.job_count[0].values;
+      //     this.cronjobMetrics =
+      //       res.data.items?.cronjob_count.length === 0
+      //         ? 0
+      //         : res.data.items?.cronjob_count[0].values;
+      //     this.volumeMetrics =
+      //       res.data.items?.pv_count.length === 0
+      //         ? 0
+      //         : res.data.items?.pv_count[0].values;
+      //     this.daemonsetMetrics = res.data.items?.daemonset_count.length
+      //       ? 0
+      //       : res.data.items?.daemonset_count[0].values;
+      //     this.serviceMetrics = res.data.items?.service_count.length
+      //       ? 0
+      //       : res.data.items?.service_count[0].values;
+      //     this.statefulsetMetrics =
+      //       res.data.items?.statefulset_count.length === 0
+      //         ? 0
+      //         : res.data.items?.statefulset_count[0].values;
+      //   });
+      // })
       .then((res) => {
-        runInAction(() => {
-          console.log(res);
-          this.allMetrics = res.data.items;
-          this.deploymentMetrics = res.data.items.deployment_count[0].values
-            ? res.data.items.deployment_count[0].values
-            : 0;
-          this.podMetrics = res.data.items.pod_count[0].values;
-          this.volumeMetrics = res.data.items.pv_count[0].values;
-        });
+        this.resourceMetricData = this.convertResponseToMonit(res);
+        console.log(
+          this.resourceMetricData.filter(
+            (type) => type.metricType === "cronjob_count"
+          )
+        );
       });
   };
 
@@ -154,20 +230,6 @@ class ServiceAdminDashboard {
       });
   };
 }
-
-// serviceAdminMonitoring = async () => {
-//   await axios
-//     .get(
-//       `${SERVER_URL}/resourceMonitoring?project=innogrid&start=1663134225&end=1663135225&step=30s`
-//     )
-//     .then((res) => {
-//       runInAction(() => {
-//         // this.allMetrics = res.data.items;
-//         this.allMetrics = res.data.items.deployment_count[0].values;
-//         console.log(this.allMetrics);
-//       });
-//     });
-// };
 
 const serviceAdminDashboardStore = new ServiceAdminDashboard();
 export default serviceAdminDashboardStore;

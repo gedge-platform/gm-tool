@@ -10,39 +10,127 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { observer } from "mobx-react";
-import ApexCharts from "apexcharts";
 
+import Chart from "react-apexcharts";
 import { unixToTime } from "../../Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 
-const ServiceAdminChart = observer(() => {
-  const { loadProjectName, deploymentMetrics, podMetrics, allMetrics } =
-    serviceAdminDashboardStore;
+const ServiceAdminChart = observer((props) => {
+  const { seriesData } = props;
+  console.log(seriesData);
+  const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
 
-  let deployMetricsTable = [];
-  let podMetricsTemp = [];
+  const cronjob = resourceMetricData.filter(
+    (type) => type.metricType === "cronjob_count"
+  );
+  const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
 
-  deploymentMetrics.map((element) => {
-    const tempMetrics = {
-      time: unixToTime(element[0]),
-      deployment: element[1],
-      pod: podMetrics.map((pod, i) => pod[1][i]),
-    };
-    deployMetricsTable.push(tempMetrics);
-  });
+  const option = {
+    chart: {
+      type: "line",
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
 
-  const test = () => {
-    podMetrics.map((element) => element[1]);
+    // responsive: [{
+    //   breakpoint: 480,
+    //   options: {
+    //     chart: {
+    //       height: "100%"
+    //     },
+    //   }
+    // }],
+    dataLabels: {
+      enabled: false,
+    },
+    series: { cronjobMetrics },
+    stroke: {
+      width: [3, 5, 3],
+      curve: "straight",
+      dashArray: [0, 6, 3],
+    },
+    labels: {
+      datetimeFormatter: {
+        year: "yyyy",
+        month: "MMM 'yy",
+        day: "dd MMM",
+        hour: "HH:mm",
+      },
+    },
+    colors: ["#2E93fA", "#66DA26", "#546E7A", "#E91E63", "#FF9800"],
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      offsetY: 5,
+      labels: {
+        colors: "#fff",
+      },
+      markers: {
+        size: 0,
+        hover: {
+          sizeOffset: 6,
+        },
+      },
+    },
+    grid: {
+      show: false,
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      padding: {
+        bottom: 20,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      // type: "datetime",
+      tooltip: {
+        enabled: false,
+      },
+      // type: "category",
+      tickPlacement: "between",
+      labels: {
+        show: true,
+        style: {
+          colors: "white",
+          fontSize: "12px",
+        },
+        datetimeUTC: true,
+        datetimeFormatter: {
+          year: "yyyy",
+          month: "MMM 'yy",
+          day: "dd MMM",
+          hour: "HH:mm",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        style: {
+          colors: ["#fff"],
+        },
+      },
+      min: 0,
+      max: 30,
+      showForNullSeries: true,
+      tickAmount: 5, // y축 간격. 숫자가 작을수록 간격이 넓어짐
+    },
+    tooltip: {
+      enabled: true,
+      theme: "dark",
+    },
   };
 
-  // podMetrics.map((element) => {
-  //   const tempMetrics1 = {
-  //     pod: element[1],
-  //   };
-  //   podMetricsTemp.push(tempMetrics1);
-  // });
-
-  console.log(deployMetricsTable);
+  const series = seriesData;
 
   useEffect(() => {
     loadProjectName();
@@ -50,44 +138,55 @@ const ServiceAdminChart = observer(() => {
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <div
-        style={{
-          paddingLeft: "20px",
-          paddingTop: "10px",
-          // color: "#929da5",
-          color: "darkgray",
-          fontWeight: "bold",
-        }}
-      ></div>
-      <ResponsiveContainer>
-        <LineChart
-          data={deployMetricsTable}
-          // 그래프 크기 조절
-          margin={{
-            top: 5,
-            right: 20,
-            left: -35,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid
-            strokeWidth={0.3}
-            vertical={false}
-            strokeDasharray="2 2"
-          />
-          <XAxis dataKey="time" />
-          <YAxis dataKey="value" domain={[0, 50]} />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey="deployment"
-            stroke="#FF5A5A"
-            strokeDasharray="3 3"
-            activeDot={{ r: 3 }}
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <Chart
+        options={option}
+        series={cronjobMetrics}
+        type="line"
+        // width="100%"
+        height={290}
+      />
     </div>
+
+    // <div style={{ width: "100%", height: "100%" }}>
+    //   <div
+    //     style={{
+    //       paddingLeft: "20px",
+    //       paddingTop: "10px",
+    //       // color: "#929da5",
+    //       color: "darkgray",
+    //       fontWeight: "bold",
+    //     }}
+    //   ></div>
+
+    //   <ResponsiveContainer>
+    //     <LineChart
+    //       data={cronjobMetrics}
+    //       // 그래프 크기 조절
+    //       margin={{
+    //         top: 5,
+    //         right: 20,
+    //         left: -35,
+    //         bottom: 5,
+    //       }}
+    //     >
+    //       <CartesianGrid
+    //         strokeWidth={0.3}
+    //         vertical={false}
+    //         strokeDasharray="2 2"
+    //       />
+    //       <XAxis dataKey="time" />
+    //       <YAxis dataKey="value" domain={[0, 50]} />
+    //       <Tooltip />
+    //       <Line
+    //         type="monotone"
+    //         dataKey="deployment"
+    //         stroke="#FF5A5A"
+    //         strokeDasharray="3 3"
+    //         activeDot={{ r: 3 }}
+    //       />
+    //     </LineChart>
+    //   </ResponsiveContainer>
+    // </div>
   );
 });
 

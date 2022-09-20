@@ -8,13 +8,13 @@ import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 import { observer } from "mobx-react";
 import { ResponsiveLine } from "@nivo/line";
 import ServiceAdminChart from "./ServiceAdminChart";
-import ServiceAdminPodChart from "./ServiceAdminPodChart";
-import ServiceAdminVolumeChart from "./ServiceAdminVolumeChart";
 import {
   unixStartTime,
   stepConverter,
   unixCurrentTime,
+  unixToTime,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import monitoringStore from "../../../store/Monitoring";
 
 const ServiceAdminWrap = styled.div`
   padding: 0 10px;
@@ -58,7 +58,36 @@ const ServiceAdminDashboard = observer(() => {
     serviceAdminMonitoring,
     loadProjectName,
     setProjectNameInMonitoring,
+    deploymentMetrics,
+    podMetrics,
+    jobMetrics,
+    volumeMetrics,
+    resourceMetricData,
   } = serviceAdminDashboardStore;
+
+  const cronjob = resourceMetricData.filter(
+    (type) => type.metricType === "cronjob_count"
+  );
+  const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
+
+  // const test = resourceMetricData.filter(
+  //   (type) => type.metricType === "cronjob_count"
+  // );
+  // console.log(test.map((item) => item.metrics));
+
+  // const cronjobCnt = resourceMetricData.filter(
+  //   (type) => type.metricType === "cronjob_count"
+  // );
+
+  // const daemonsetCnt = resourceMetricData.filter(
+  //   (type) => type.metricType === "daemonset_count"
+  // );
+
+  // const jobCnt = resourceMetricData.filter(
+  //   (type) => type.metricType === "job_count"
+  // );
+
+  const { lastTime, interval } = monitoringStore;
 
   useEffect(() => {
     loadWorkspaceName();
@@ -78,7 +107,7 @@ const ServiceAdminDashboard = observer(() => {
       setProjectNameInMonitoring(value);
       serviceAdminMonitoring(
         value,
-        unixStartTime(60 * 6),
+        unixStartTime(60),
         unixCurrentTime(),
         stepConverter(5)
       );
@@ -93,6 +122,69 @@ const ServiceAdminDashboard = observer(() => {
   const [togglePod, setTogglePod] = useState(false);
   const clickTogglePod = (e) => {
     setTogglePod((current) => !current);
+  };
+
+  // const searchMetrics = (MetricList, name) => {
+  //   let metrics = [];
+  //   console.log(MetricList);
+  //   if (MetricList?.length === 0) {
+  //     for (
+  //       let index = unixStartTime(lastTime.value);
+  //       index < unixCurrentTime();
+  //       index = index + 60 * interval.value
+  //     ) {
+  //       const tempMetrics = {
+  //         time: unixToTime(index),
+  //         value: 0,
+  //       };
+  //       metrics.push(tempMetrics);
+  //       console.log(metrics);
+  //     }
+  //   } else {
+  //     MetricList?.forEach((element) => {
+  //       const tempMetrics = {
+  //         x: unixToTime(element[0]),
+  //         y: parseInt(element[1]),
+  //       };
+  //       metrics.push(tempMetrics);
+  //     });
+  //     const data = {
+  //       name: name,
+  //       data: metrics,
+  //     };
+  //     return data;
+  //   }
+  // };
+
+  const searchMetrics = (MetricList, name) => {
+    let metrics = [];
+    if (MetricList?.length > 0) {
+      MetricList.forEach((element) => {
+        const tempMetrics = {
+          x: unixToTime(element[0]),
+          y: parseInt(element[1]),
+        };
+        metrics.push(tempMetrics);
+      });
+      const data = {
+        name: name,
+        data: metrics,
+      };
+      return data;
+    } else {
+      const tempMetrics = {
+        x: unixToTime(new Date()),
+        y: 0,
+      };
+      metrics.push(tempMetrics);
+      console.log(metrics);
+      const data = {
+        name: name,
+        data: [],
+      };
+      console.log(data);
+      return data;
+    }
   };
 
   const podCpuTop5 = () => {
@@ -311,21 +403,59 @@ const ServiceAdminDashboard = observer(() => {
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Workspace 총 개수</div>
                 <div className="monitoringBoxCont">
-                  <ServiceAdminChart />
+                  <ServiceAdminChart
+                    seriesData={
+                      searchMetrics([cronjob, "cronjob"])
+                      // searchMetrics(
+                      //   resourceMetricData.filter(
+                      //     (type) => type.metricType === "daemonset_count"
+                      //   ),
+                      //   "daemonset"
+                      // ),
+                      // searchMetrics(
+                      //   resourceMetricData.filter(
+                      //     (type) => type.metricType === "deployment_count"
+                      //   ),
+                      //   "deployment"
+                      // ),
+                      // searchMetrics(
+                      //   resourceMetricData.filter(
+                      //     (type) => type.metricType === "job_count"
+                      //   ),
+                      //   "job"
+                      // ),
+                      // searchMetrics(
+                      //   resourceMetricData.filter(
+                      //     (type) => type.metricType === "service_count"
+                      //   ),
+                      //   "service"
+                      // ),
+                      // searchMetrics(
+                      //   resourceMetricData.filter(
+                      //     (type) => type.metricType === "statefulset_count"
+                      //   ),
+                      //   "statefulset"
+                      // ),
+                    }
+                  />
                 </div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Pod 총 개수</div>
                 <div className="monitoringBoxCont">
-                  <ServiceAdminPodChart />
+                  <ServiceAdminChart
+                  // seriesData={[searchMetrics(podMetrics, "pod")]}
+                  />
                 </div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Volume 총 개수</div>
                 <div className="monitoringBoxCont">
-                  <ServiceAdminVolumeChart />
+                  <ServiceAdminChart
+                  // seriesData={[searchMetrics(volumeMetrics, "volume")]}
+                  />
                 </div>
               </div>
             </div>
