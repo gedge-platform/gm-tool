@@ -13,6 +13,7 @@ import userStore from "../../store/UserStore";
 //token의 playload 내용을 디코딩해줌
 
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
+import { time } from "react-dom-factories";
 
 const Login = () => {
   const history = useHistory();
@@ -22,7 +23,7 @@ const Login = () => {
   });
   const [check, setCheck] = useState(false);
   const { id, password } = inputs;
-  const { setUser } = userStore;
+  const { setUser, updateUser } = userStore;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -66,7 +67,15 @@ const Login = () => {
           // 속도가 느리지만 일단 작동은 됩니다.....
           // 로그인 후 새로고침을 다시 해서 데이터 받아오기 때문에 느리지만 데이터를 처음부터 체크하면서 받아오니까 잘 가져온다......
           // swalError("로그인 되었습니다.", () => history.push("/"));
-          swalError("로그인 되었습니다.", () => window.location.replace("/"));
+
+          swalError("로그인 되었습니다.", () => {
+            window.location.replace("/")
+          });
+          const logined_at = {
+            "logined_at": new Date(),
+          }
+          updateUser(logined_at);
+
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));
           setInputs({

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import {
   TotalDashboard,
   Cluster,
@@ -40,11 +40,21 @@ import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAd
 import { Redirect } from "react-router-dom";
 
 export const App = () => {
+  const navigate = useHistory();
+
   // 새로고침하면 api header 설정이 날아가니까 안 날아가게 설정
   const token = getItem("token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
   const userRole = getItem("userRole");
+
+
+  // useEffect(() => {
+  //   if (JSON.parse(localStorage.getItem("token")) == null) {
+  //     console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
+  //     navigate("/login");
+  //   }
+  // }, []);
+
   // const setMainPage = () => {
   //   if (userRole) {
   //     switch (userRole) {
@@ -57,7 +67,6 @@ export const App = () => {
   //     }
   //   }
   // };
-
   if (userRole === "PA") {
     return (
       <>
@@ -114,14 +123,14 @@ export const App = () => {
         </Switch>
       </>
     );
-  } else {
+  }
+  else {
     return (
       <>
         <AuthRoute path="/total" component={TotalDashboard} exact />
         <AuthRoute path="/" component={TotalDashboard} exact />
         <Switch>
           <Route path="/login" component={Login} />
-
           <Route component={NotFound} />
         </Switch>
       </>
