@@ -2,7 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
-
+import { getItem } from "../utils/sessionStorageFn";
 class User {
   userList = [];
   userDetail = {};
@@ -145,6 +145,18 @@ class User {
             swalError("멤버가 생성되었습니다.", callback);
             return true;
           }
+        });
+      })
+      .catch((err) => false);
+  };
+  updateUser = async (data) => {
+    const body = data
+    const { id } = getItem("user");
+    // return
+    await axios
+      .put(`${SERVER_URL}/members/${id}`, body)
+      .then((res) => {
+        runInAction(() => {
         });
       })
       .catch((err) => false);

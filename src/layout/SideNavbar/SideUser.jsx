@@ -8,6 +8,7 @@ import axios from "axios";
 import { SERVER_URL, BASIC_AUTH } from "@/config.jsx";
 import { getItem, removeItem, setItem } from "../../utils/sessionStorageFn";
 import { useHistory } from "react-router-dom";
+import { unixCurrentTime } from "../../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter"
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -131,11 +132,25 @@ const SideUser = ({ userName }) => {
     else return "Service Admin";
   };
   useEffect(async () => {
+    const { exp } = getItem("user");
+    const currentTime = unixCurrentTime()
+    console.log("exp :", exp)
+    console.log("currentTime :", currentTime)
+    if (currentTime >= exp) {
+      console.log("token expired time")
+      removeItem("user");
+      removeItem("name");
+      removeItem("userRole");
+      removeItem("token");
+      history.push("/login");
+    }
     const { id } = getItem("user");
+
     await axios.get(`${SERVER_URL}/members/${id}`).then((res) => {
       setName(res.data.memberName);
       setItem("name", res.data.memberName);
     });
+
   }, []);
   return (
     <UserArea className="hasNotify">
