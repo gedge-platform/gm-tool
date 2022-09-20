@@ -137,7 +137,7 @@ const EdgeClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type={"edge"} open={open} onClose={handleClose} />
+          <CreateCluster type="edge" open={open} onClose={handleClose} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
