@@ -1,49 +1,22 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
-import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons";
-import { CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
-import { Title } from "@/pages";
 import certificationStore from "../../../../store/Certification";
-import Terminal from "../Dialog/Terminal";
-import CreateCluster from "../Dialog/CreateOPENSTACK";
 import CreateCertification from "../Dialog/CreateCertification";
-import SelectProvider from "../Dialog/SelectProvider";
+import { swalUpdate } from "../../../../utils/swal-utils";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
-import styled from "styled-components";
-import { PanelBox2 } from "../../../../components/styles/PanelBox2";
-
-const CloudZoneWrap = styled.div`
-  .panel_summary {
-    width: 100%;
-    padding: 20px;
-    background: #202842;
-    border: 0;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    &::before {
-      display: none;
-    }
-  }
-`;
 
 const CertificationListTab = observer(() => {
-  const currentPageTitle = Title.Certification;
   const [open, setOpen] = useState(false);
-  const [tabvalue, setTabvalue] = useState(0);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
-  const [openTerminal, setOpenTerminal] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [certName, setCertName] = useState("");
+
   const {
+    deleteCredential,
     loadCredentialList,
     credential,
     clusterDetail,
@@ -116,17 +89,12 @@ const CertificationListTab = observer(() => {
     },
   ]);
 
-  const history = useHistory();
-
-  const handleClick = (e) => {
-    let fieldName = e.colDef.field;
-    loadCluster(e.data.clusterName);
-    if (fieldName === "terminal") {
-      handleOpenTerminal();
-    }
+  const handleClick = e => {
+    console.log("e is ", e.data.name);
+    setCertName(e.data.name);
   };
 
-  const handleOpen = (e) => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -134,35 +102,23 @@ const CertificationListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleOpenTerminal = () => {
-    setOpenTerminal(true);
-  };
-
-  const handleCloseTerminal = () => {
-    setOpenTerminal(false);
+  const handleDelete = () => {
+    swalUpdate("삭제하시겠습니까?", () => deleteCredential(certName, loadCredentialList));
   };
 
   useLayoutEffect(() => {
-    // loadClusterList("core");
     loadCredentialList();
   }, []);
 
   return (
-    // con/so/le.log(CredentialName),
     <CReflexBox>
       <PanelBox>
-        <CommActionBar
-        // reloadFunc={() => loadClusterList("core")}
-        // isSearch={true}
-        // isSelect={true}
-        // keywordList={["이름"]}
-        >
+        <CommActionBar>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-          {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
+          <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
 
         <div className="tabPanelContainer">
-          {/* <CTabPanel value={tabvalue} index={0}> */}
           <div className="grid-height2">
             <AgGrid2
               rowData={viewList}
@@ -176,18 +132,8 @@ const CertificationListTab = observer(() => {
               goPrevPage={goPrevPage}
             />
           </div>
-          {/* </CTabPanel> */}
         </div>
-        {/* <Terminal
-          open={openTerminal}
-          // yaml={getYamlFile}
-          onClose={handleCloseTerminal}
-        /> */}
-        <CreateCertification
-          open={open}
-          onClose={handleClose}
-          reloadFunc={loadCredentialList}
-        />
+        <CreateCertification open={open} onClose={handleClose} reloadFunc={loadCredentialList} />
       </PanelBox>
     </CReflexBox>
   );

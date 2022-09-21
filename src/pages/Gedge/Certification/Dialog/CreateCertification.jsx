@@ -1,8 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
 import { CDialogNew } from "../../../../components/dialogs";
-import FormControl from "@material-ui/core/FormControl";
-import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { swalError } from "../../../../utils/swal-utils";
 import certificationStore from "../../../../store/Certification";
@@ -30,64 +28,9 @@ const ButtonNext = styled.button`
 const CreateCertification = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const [size, setSize] = useState("md");
 
-  // const [inputs, setInput] = useState({
-  //   CredentialName: CredentialName,
-  //   IdentityEndPoint: IdentityEndPoint,
-  //   Username: Username,
-  //   Password: Password,
-  //   DomainName: DomainName,
-  //   ProjectID: ProjectID,
-  //   Region: Region,
-  //   Zone: Zone,
-  // });
-
-  // const inputs = {
-  //   CredentialName: CredentialName,
-  //   IdentityEndPoint: IdentityEndPoint,
-  //   Username: Username,
-  //   Password: Password,
-  //   DomainName: DomainName,
-  //   ProjectID: ProjectID,
-  //   Region: Region,
-  //   Zone: Zone,
-  //   CredentialName,
-  //   ProviderName,
-  //   IdentityEndPoint,
-  //   Username,
-  //   Password,
-  //   DomainName,
-  //   ProjectID,
-  //   Region,
-  //   Zone,
-  // };
-
-  const {
-    CredentialName,
-    // credentialName,
-    ProviderName,
-    ClientId,
-    ClientSecret,
-    IdentityEndPoint,
-    Username,
-    Password,
-    DomainName,
-    ProjectID,
-    Region,
-    Zone,
-  } = certificationStore;
-
-  // const CredentialName = "";
-
-  // const{
-  //   CredentialName,
-  //   ProviderName,
-  //   CliendId,
-  //   ClientSecret,
-  //   Region,
-  //   Zone,
-  // } = inputs;
+  const { CredentialName, ProviderName, ClientId, ClientSecret, IdentityEndPoint, Username, Password, DomainName, ProjectID, Region, Zone } =
+    certificationStore;
 
   const { postCredential } = certificationStore;
 
@@ -95,21 +38,7 @@ const CreateCertification = observer(props => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setStepValue(1);
-    // CredentialName = "";
-    // ProviderName = "";
-    // ClientId = "";
-    // ClientSecret = "";
-    // IdentityEndPoint = "";
-    // Username = "";
-    // Password = "";
-    // DomainName = "";
-    // ProjectID = "";
-    // Region = "";
-    // Zone = "";
   };
-
-  // const { CredentialName, ProviderName, ClientId, ClientSecret, Region, Zone } =
-  //   inputs;
 
   const onClickStepTwo = () => {
     if (ProviderName === "") {
@@ -122,13 +51,13 @@ const CreateCertification = observer(props => {
     }
     if (ProviderName === "OPENSTACK") {
       console.log(ProviderName);
-      setStepValue(3);
+      setStepValue(2);
     } else {
       return;
     }
   };
 
-  const onClickCreateAWS = () => {
+  const onClickCreateOPENSTACK = () => {
     if (CredentialName === "") {
       swalError("Name을 입력해주세요");
       return;
@@ -165,7 +94,7 @@ const CreateCertification = observer(props => {
     }
   };
 
-  const onClickCreateOPENSTACK = () => {
+  const onClickCreateAWS = () => {
     if (CredentialName === "") {
       swalError("Name을 입력해주세요");
       return;
@@ -198,7 +127,6 @@ const CreateCertification = observer(props => {
         IdentityEndPoint: IdentityEndPoint,
         Username: Username,
         Password: Password,
-        DomainName: DomainName,
         ProjectID: ProjectID,
         Region: Region,
         Zone: Zone,
@@ -214,20 +142,15 @@ const CreateCertification = observer(props => {
         Zone: Zone,
       };
       const result = await postCredential(inputs);
+      console.log("result is : ", result);
     }
-
     handleClose();
   };
 
-  // const createCredential = async (inputs) => {
-  //   console.log(inputs);
-  //   const result = await postCredential(inputs);
-  // };
-
-  useEffect(() => {
-    // const YAML = require("json-to-pretty-yaml");
-    // setContent(YAML.stringify(template));
-  });
+  // useEffect(() => {
+  //   const YAML = require("json-to-pretty-yaml");
+  //   setContent(YAML.stringify(template));
+  // });
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
@@ -254,7 +177,7 @@ const CreateCertification = observer(props => {
           </div>
         </>
       );
-    } else if (stepValue === 2) {
+    } else if (stepValue === 2 && ProviderName == "AWS") {
       return (
         <>
           <CreateAWS />
@@ -278,7 +201,7 @@ const CreateCertification = observer(props => {
           </div>
         </>
       );
-    } else if (stepValue === 3) {
+    } else if (stepValue === 2 && ProviderName == "OPENSTACK") {
       return (
         <>
           <CreateOPENSTACK />

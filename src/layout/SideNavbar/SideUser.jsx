@@ -8,7 +8,7 @@ import axios from "axios";
 import { SERVER_URL, BASIC_AUTH } from "@/config.jsx";
 import { getItem, removeItem, setItem } from "../../utils/sessionStorageFn";
 import { useHistory } from "react-router-dom";
-import { unixCurrentTime } from "../../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter"
+import { unixCurrentTime } from "../../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,7 +46,7 @@ const useStyles = makeStyles(() =>
         },
       },
     },
-  })
+  }),
 );
 
 const UserArea = styled.div`
@@ -89,8 +89,7 @@ const BtnArea = styled.div`
       border: 1px solid #016ee6;
       border-radius: 50%;
       padding: 2px;
-      background: #fff url(../images/layout/sideUser_avatar.png) no-repeat
-        center center;
+      background: #fff url(../images/layout/sideUser_avatar.png) no-repeat center center;
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
       img {
         width: 100%;
@@ -116,28 +115,31 @@ const SideUser = ({ userName }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [name, setName] = useState("");
 
-  const handleUserOpen = (event) => {
+  const handleUserOpen = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleUserClose = () => {
     setAnchorEl(null);
   };
   const handleItemClick = () => {
+    removeItem("user");
+    removeItem("name");
     removeItem("userRole");
+    removeItem("token");
     history.push("/login");
   };
 
-  const setRole = (role) => {
+  const setRole = role => {
     if (role === "PA") return "Platform Admin";
     else return "Service Admin";
   };
   useEffect(async () => {
     const { exp } = getItem("user");
-    const currentTime = unixCurrentTime()
-    console.log("exp :", exp)
-    console.log("currentTime :", currentTime)
+    const currentTime = unixCurrentTime();
+    console.log("exp :", exp);
+    console.log("currentTime :", currentTime);
     if (currentTime >= exp) {
-      console.log("token expired time")
+      console.log("token expired time");
       removeItem("user");
       removeItem("name");
       removeItem("userRole");
@@ -146,11 +148,10 @@ const SideUser = ({ userName }) => {
     }
     const { id } = getItem("user");
 
-    await axios.get(`${SERVER_URL}/members/${id}`).then((res) => {
+    await axios.get(`${SERVER_URL}/members/${id}`).then(res => {
       setName(res.data.memberName);
       setItem("name", res.data.memberName);
     });
-
   }, []);
   return (
     <UserArea className="hasNotify">
