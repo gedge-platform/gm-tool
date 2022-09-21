@@ -32,10 +32,10 @@ const useStyle = makeStyles(() =>
         borderRadius: "2px",
       },
     },
-  })
+  }),
 );
 
-const CTextField = (props) => {
+const CTextField = props => {
   const {
     id,
     name,
@@ -54,6 +54,7 @@ const CTextField = (props) => {
     inputProps,
     onKeyPress,
     onInput,
+    onClick,
     ...other
   } = props;
   const classes = useStyle();
@@ -77,7 +78,7 @@ const CTextField = (props) => {
   const handleClear = () => {
     props.onClear && props.onClear();
   };
-  const handleChange = (e) => {
+  const handleChange = e => {
     if (type === "number") {
       e.currentTarget.value = e.currentTarget.value.replace(/[^0-9.-]/g, "");
     }
@@ -87,7 +88,7 @@ const CTextField = (props) => {
     handleCheckError(e.currentTarget.value);
     setTvalue(e.currentTarget.value);
   };
-  const handleCheckError = (value) => {
+  const handleCheckError = value => {
     if (required) {
       if (!value) {
         setErrorFlag(true);
@@ -117,13 +118,10 @@ const CTextField = (props) => {
       onChange={handleChange}
       onKeyPress={onKeyPress}
       InputProps={{
-        startAdornment:
-          (clearable && (
-            <CIconButton icon="del" onClick={() => handleClear()} />
-          )) ||
-          undefined,
+        startAdornment: (clearable && <CIconButton icon="del" onClick={() => handleClear()} />) || undefined,
       }}
       onInput={onInput}
+      onClick={onClick}
     />
   );
 };

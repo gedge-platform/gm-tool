@@ -71,6 +71,7 @@ class Cluster {
       },
     ],
   };
+  statusCode = 0;
 
   clusters = [];
 
@@ -199,6 +200,7 @@ class Cluster {
       });
   };
 
+  /* TODO: 옳바르지 않은 클러스터 IP 예외처리 */
   loadCluster = async clusterName => {
     await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then(({ data: { data } }) => {
       runInAction(() => {
