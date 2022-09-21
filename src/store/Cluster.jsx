@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 class Cluster {
   clusterList = [];
   clusterNameList = [];
@@ -80,6 +81,7 @@ class Cluster {
   resultList = {};
   viewList = [];
   clusterListInWorkspace = [];
+  ProviderName = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -183,7 +185,7 @@ class Cluster {
       });
   };
 
-  loadCloudClusterList = async () => {
+  loadVMList = async () => {
     await axios
       .get(`${SERVER_URL}/spider/vmList`)
       .then(({ data: { data } }) => {
@@ -197,6 +199,37 @@ class Cluster {
       })
       .then(() => {
         this.convertList(this.clusterList, this.setClusterList);
+      });
+  };
+
+  postVM = async (data, callback) => {
+    const body = {
+      ...data,
+      enabled: true,
+    };
+    // return
+    await axios
+      .post(`${SERVER_URL}/spider/vm`, body)
+      .then(res => {
+        console.log(res);
+        runInAction(() => {
+          if (res.status === 201) {
+            swalError("VM이 생성되었습니다.", callback);
+            return true;
+          }
+        });
+      })
+      .catch(err => false);
+  };
+
+  deleteVM = async (vmName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/spider/vm/${vmName}`)
+      .then(res => {
+        if (res.status === 201) swalError("VM을 삭제했습니다.", callback);
+      })
+      .catch(err => {
+        swalError("삭제에 실패하였습니다.");
       });
   };
 
@@ -255,6 +288,43 @@ class Cluster {
     runInAction(() => {
       this.clusters = clusters;
     });
+  };
+
+  setProviderName = n => {
+    runInAction(() => {
+      this.ProviderName = n;
+    });
+  };
+
+  postCluster = async (data, callback) => {
+    const body = {
+      ...data,
+      enabled: true,
+    };
+    // return
+    await axios
+      .post(`${SERVER_URL}/clusters`, body)
+      .then(res => {
+        console.log("## : ", res);
+        runInAction(() => {
+          if (res.status === 201) {
+            swalError("클러스터를 추가하였습니다.", callback);
+            return true;
+          }
+        });
+      })
+      .catch(err => false);
+  };
+
+  deleteCluster = async (ClusterName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/clusters/${ClusterName}`)
+      .then(res => {
+        if (res.status === 200) swalError("클러스터를 제거하였습니다.", callback);
+      })
+      .catch(err => {
+        swalError("제거에 실패하였습니다.");
+      });
   };
 }
 
