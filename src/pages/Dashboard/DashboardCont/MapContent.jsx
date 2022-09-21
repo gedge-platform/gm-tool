@@ -26,50 +26,31 @@ const MapContent = observer(() => {
 
   useEffect(async () => {
     const result = await axios(`${SERVER_URL}/totalDashboard`);
-    const result2 = await axios(`${SERVER_URL}/clusters`);
-    const filterClusterType = result2.data.data.filter(
-      (item) => item.clusterType === "edge"
-    );
-
-    const clusterNameData = filterClusterType.map((item) => item.clusterName);
+    const edgeInfoTemp = result.data.data.edgeInfo;
+    const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
     setClusterName(clusterNameData[0]);
-    loadEdgeZoneDetailDashboard();
-
-    const dataEdgeInfo = Object.values(result.data).map((val) => val.edgeInfo);
-    setDataEdgeInfo(dataEdgeInfo);
-
-    const dataPoint = dataEdgeInfo.map((item) =>
-      Object.values(item).map((val) => val.point)
-    );
-    const dataStatus = dataEdgeInfo.map((item) =>
-      Object.values(item).map((val) => val.status)
-    );
-
+    setDataEdgeInfo(edgeInfoTemp);
+    const dataPoint = edgeInfoTemp.map((item) => item.point);
+    const dataStatus = edgeInfoTemp.map((item) => item.status);
     setData(dataPoint);
     setDataStatus(dataStatus);
 
     //지도
     mapRef.current = L.map("map", mapParams);
-    // ${dataEdgeInfo[0].map((item) => item.address)}
 
-    const marker = dataPoint.map((item) => {
-      item.map((point, i) => {
-        L.marker([point.y, point.x], {
-          icon: CustomIcon("green"),
-        })
-          .addTo(mapRef.current)
-          .bindPopup(
-            `
+    const marker = dataPoint.map((point, i) => {
+      L.marker([point.y, point.x], { icon: CustomIcon("green") })
+        .addTo(mapRef.current)
+        .bindPopup(
+          `
               <div class="leaflet-popup-title">
-              ${dataEdgeInfo[0].map((item) => item.address)[i]}
+              ${edgeInfoTemp.map((item) => item.address)[i]}
              </div>
              <div class="leaflet-popup-table">
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>${
-                     dataEdgeInfo[0].map((item) => item.clusterName)[i]
-                   }</td>
+                   <td>${edgeInfoTemp.map((item) => item.clusterName)[i]}</td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>
@@ -95,8 +76,7 @@ const MapContent = observer(() => {
                </table>
              </div>
              `
-          );
-      });
+        );
     });
   }, []);
 
@@ -258,8 +238,8 @@ const MapContent = observer(() => {
 
   const mapParams = {
     // center: [37.481, 126.893],
-    center: [37.5537586, 126.9809696],
-    zoom: 12,
+    center: [37.5587619, 126.974145],
+    zoom: 10,
     zoomControl: true,
     maxBounds: L.latLngBounds(L.latLng(-150, -240), L.latLng(150, 240)),
     layers: [MAP_TILE],
