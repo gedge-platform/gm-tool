@@ -17,13 +17,14 @@ import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 
 const ServiceAdminChart = observer((props) => {
   const { seriesData } = props;
-  console.log(seriesData);
+  const series = seriesData;
+  // console.log(seriesData);
   const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
 
-  const cronjob = resourceMetricData.filter(
-    (type) => type.metricType === "cronjob_count"
-  );
-  const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
+  // const cronjob = resourceMetricData.filter(
+  //   (type) => type.metricType === "cronjob_count"
+  // );
+  // const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
 
   const option = {
     chart: {
@@ -47,7 +48,7 @@ const ServiceAdminChart = observer((props) => {
     dataLabels: {
       enabled: false,
     },
-    series: { cronjobMetrics },
+    series: { series },
     stroke: {
       width: [3, 5, 3],
       curve: "straight",
@@ -61,7 +62,7 @@ const ServiceAdminChart = observer((props) => {
         hour: "HH:mm",
       },
     },
-    colors: ["#2E93fA", "#66DA26", "#546E7A", "#E91E63", "#FF9800"],
+    colors: ["#2E93fA", "#66DA26", "#546E7A", "#E91E63", "#FF9800", "#EAEAEA"],
     legend: {
       position: "top",
       horizontalAlign: "right",
@@ -130,8 +131,6 @@ const ServiceAdminChart = observer((props) => {
     },
   };
 
-  const series = seriesData;
-
   useEffect(() => {
     loadProjectName();
   }, []);
@@ -140,7 +139,7 @@ const ServiceAdminChart = observer((props) => {
     <div style={{ width: "100%", height: "100%" }}>
       <Chart
         options={option}
-        series={cronjobMetrics}
+        series={series}
         type="line"
         // width="100%"
         height={290}

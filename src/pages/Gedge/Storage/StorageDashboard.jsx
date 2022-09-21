@@ -102,7 +102,7 @@ const StorageDashboard = observer(() => {
       name: name,
       data: metrics,
     };
-    console.log("metrics,", metrics);
+
     return data;
   };
 

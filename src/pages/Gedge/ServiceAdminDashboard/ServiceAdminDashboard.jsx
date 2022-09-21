@@ -15,6 +15,7 @@ import {
   unixToTime,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import monitoringStore from "../../../store/Monitoring";
+import { data } from "react-dom-factories";
 
 const ServiceAdminWrap = styled.div`
   padding: 0 10px;
@@ -58,34 +59,17 @@ const ServiceAdminDashboard = observer(() => {
     serviceAdminMonitoring,
     loadProjectName,
     setProjectNameInMonitoring,
-    deploymentMetrics,
-    podMetrics,
-    jobMetrics,
-    volumeMetrics,
     resourceMetricData,
+    allMetrics,
+    deploymentMetrics,
+    jobMetrics,
+    podMetrics,
+    volumeMetrics,
+    cronjobMetrics,
+    daemonsetMetrics,
+    serviceMetrics,
+    statefulsetMetrics,
   } = serviceAdminDashboardStore;
-
-  const cronjob = resourceMetricData.filter(
-    (type) => type.metricType === "cronjob_count"
-  );
-  const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
-
-  // const test = resourceMetricData.filter(
-  //   (type) => type.metricType === "cronjob_count"
-  // );
-  // console.log(test.map((item) => item.metrics));
-
-  // const cronjobCnt = resourceMetricData.filter(
-  //   (type) => type.metricType === "cronjob_count"
-  // );
-
-  // const daemonsetCnt = resourceMetricData.filter(
-  //   (type) => type.metricType === "daemonset_count"
-  // );
-
-  // const jobCnt = resourceMetricData.filter(
-  //   (type) => type.metricType === "job_count"
-  // );
 
   const { lastTime, interval } = monitoringStore;
 
@@ -127,64 +111,57 @@ const ServiceAdminDashboard = observer(() => {
   // const searchMetrics = (MetricList, name) => {
   //   let metrics = [];
   //   console.log(MetricList);
-  //   if (MetricList?.length === 0) {
-  //     for (
-  //       let index = unixStartTime(lastTime.value);
-  //       index < unixCurrentTime();
-  //       index = index + 60 * interval.value
-  //     ) {
-  //       const tempMetrics = {
-  //         time: unixToTime(index),
-  //         value: 0,
-  //       };
-  //       metrics.push(tempMetrics);
-  //       console.log(metrics);
-  //     }
-  //   } else {
-  //     MetricList?.forEach((element) => {
+
+  //   if (MetricList[0].length > 0) {
+  //     MetricList[0].forEach((element) => {
   //       const tempMetrics = {
   //         x: unixToTime(element[0]),
-  //         y: parseInt(element[1]),
+  //         y: parseFloat(element[1]),
   //       };
   //       metrics.push(tempMetrics);
   //     });
   //     const data = {
-  //       name: name,
+  //       name: MetricList[1],
   //       data: metrics,
   //     };
+  //     console.log(data);
   //     return data;
+  //   } else {
+  //     for (
+  //       let index = unixStartTime(60);
+  //       index < unixCurrentTime();
+  //       index = index + 60 * 5
+  //     ) {
+  //       const tempMetrics = {
+  //         x: unixToTime(index),
+  //         y: 0,
+  //       };
+  //       metrics.push(tempMetrics);
+  //     }
+  //     const data = {
+  //       name: MetricList[1],
+  //       data: metrics,
+  //     };
+  //     console.log(data);
   //   }
+  //   return data;
   // };
 
   const searchMetrics = (MetricList, name) => {
     let metrics = [];
-    if (MetricList?.length > 0) {
-      MetricList.forEach((element) => {
-        const tempMetrics = {
-          x: unixToTime(element[0]),
-          y: parseInt(element[1]),
-        };
-        metrics.push(tempMetrics);
-      });
-      const data = {
-        name: name,
-        data: metrics,
-      };
-      return data;
-    } else {
+    console.log(MetricList);
+    MetricList[0].forEach((element) => {
       const tempMetrics = {
-        x: unixToTime(new Date()),
-        y: 0,
+        x: unixToTime(element[0]),
+        y: parseFloat(element[1]),
       };
       metrics.push(tempMetrics);
-      console.log(metrics);
-      const data = {
-        name: name,
-        data: [],
-      };
-      console.log(data);
-      return data;
-    }
+    });
+    const data = {
+      name: MetricList[1],
+      data: metrics,
+    };
+    return data;
   };
 
   const podCpuTop5 = () => {
@@ -404,48 +381,23 @@ const ServiceAdminDashboard = observer(() => {
                 <div className="monitoringBoxTitle">Workspace 총 개수</div>
                 <div className="monitoringBoxCont">
                   <ServiceAdminChart
-                    seriesData={
-                      searchMetrics([cronjob, "cronjob"])
-                      // searchMetrics(
-                      //   resourceMetricData.filter(
-                      //     (type) => type.metricType === "daemonset_count"
-                      //   ),
-                      //   "daemonset"
-                      // ),
-                      // searchMetrics(
-                      //   resourceMetricData.filter(
-                      //     (type) => type.metricType === "deployment_count"
-                      //   ),
-                      //   "deployment"
-                      // ),
-                      // searchMetrics(
-                      //   resourceMetricData.filter(
-                      //     (type) => type.metricType === "job_count"
-                      //   ),
-                      //   "job"
-                      // ),
-                      // searchMetrics(
-                      //   resourceMetricData.filter(
-                      //     (type) => type.metricType === "service_count"
-                      //   ),
-                      //   "service"
-                      // ),
-                      // searchMetrics(
-                      //   resourceMetricData.filter(
-                      //     (type) => type.metricType === "statefulset_count"
-                      //   ),
-                      //   "statefulset"
-                      // ),
-                    }
+                    seriesData={[
+                      searchMetrics([deploymentMetrics, "deployment"]),
+                      searchMetrics([cronjobMetrics, "cronjob"]),
+                      searchMetrics([jobMetrics, "job"]),
+                      searchMetrics([daemonsetMetrics, "daemonset"]),
+                      searchMetrics([statefulsetMetrics, "statefulset"]),
+                      searchMetrics([podMetrics, "pod"]),
+                    ]}
                   />
                 </div>
               </div>
 
               <div className="monitoringBox">
-                <div className="monitoringBoxTitle">Pod 총 개수</div>
+                <div className="monitoringBoxTitle">Service 총 개수</div>
                 <div className="monitoringBoxCont">
                   <ServiceAdminChart
-                  // seriesData={[searchMetrics(podMetrics, "pod")]}
+                    seriesData={[searchMetrics([serviceMetrics, "service"])]}
                   />
                 </div>
               </div>
@@ -454,7 +406,7 @@ const ServiceAdminDashboard = observer(() => {
                 <div className="monitoringBoxTitle">Volume 총 개수</div>
                 <div className="monitoringBoxCont">
                   <ServiceAdminChart
-                  // seriesData={[searchMetrics(volumeMetrics, "volume")]}
+                    seriesData={[searchMetrics([volumeMetrics, "volume"])]}
                   />
                 </div>
               </div>
