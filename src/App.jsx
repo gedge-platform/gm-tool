@@ -38,6 +38,7 @@ import { getItem } from "./utils/sessionStorageFn";
 import axios from "axios";
 import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminDashboard";
 import { Redirect } from "react-router-dom";
+import ServiceAdminChart from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminChart";
 
 export const App = () => {
   const navigate = useHistory();

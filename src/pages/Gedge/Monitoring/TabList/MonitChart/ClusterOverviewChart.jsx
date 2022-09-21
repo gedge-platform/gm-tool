@@ -29,40 +29,40 @@ const COAreaChartTop = observer(({ chartValue }) => {
   let maxData = 0;
 
   const searchMetrics = (metrics) => {
-    maxData = 0
-    metrics.map(data => {
+    maxData = 0;
+    metrics.map((data) => {
       if (maxData < parseFloat(data.value)) {
-        maxData = parseFloat(data.value)
+        maxData = parseFloat(data.value);
       }
-    })
+    });
   };
   switch (chartValue) {
     case "CPU":
       title = "CPU Util(%)";
       metrics = coPieCPU[2]?.metrics;
       if (metrics != undefined) {
-        searchMetrics(metrics)
+        searchMetrics(metrics);
       }
       break;
     case "MEMORY":
       title = "Memory Util(%)";
       metrics = coPieMemory[2]?.metrics;
       if (metrics != undefined) {
-        searchMetrics(metrics)
+        searchMetrics(metrics);
       }
       break;
     case "DISK":
       title = "Disk Util(%)";
       metrics = coPieDisk[2]?.metrics;
       if (metrics != undefined) {
-        searchMetrics(metrics)
+        searchMetrics(metrics);
       }
       break;
     case "POD":
       title = "Pods";
       metrics = coPiePod[2]?.metrics;
       if (metrics != undefined) {
-        searchMetrics(metrics)
+        searchMetrics(metrics);
       }
       break;
     default:
