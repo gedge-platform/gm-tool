@@ -1,29 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
-import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import { swalError } from "../../../../utils/swal-utils";
 import certificationStore from "../../../../store/Certification";
 import CreateCertification from "./CreateCertification";
-
-const Button = styled.button`
-  background-color: #fff;
-  border: 1px solid black;
-  color: black;
-  padding: 10px 35px;
-  margin-right: 10px;
-  border-radius: 4px;
-`;
-
-const ButtonNext = styled.button`
-  background-color: #0f5ce9;
-  color: white;
-  border: none;
-  padding: 10px 35px;
-  border-radius: 4px;
-`;
 
 const SelectProvider = observer((props) => {
   const { open } = props;
