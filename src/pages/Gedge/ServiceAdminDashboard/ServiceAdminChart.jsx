@@ -1,8 +1,8 @@
 import { display, padding } from "@mui/system";
 import React, { useState, useEffect, PureComponent } from "react";
 import {
-  AreaChart,
-  Area,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -10,84 +10,183 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { observer } from "mobx-react";
-import monitoringStore from "../../../../../store/Monitoring";
-import { ClusterMetricTypes } from "../../Utils/MetricsVariables";
-import { unixToTime } from "../../Utils/MetricsVariableFormatter";
 
-const APIAreaChart = observer(({ value }) => {
-  const { allMetrics } = monitoringStore;
+import Chart from "react-apexcharts";
+import { unixToTime } from "../../Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 
-  let title = "";
-  let metrics = [];
+const ServiceAdminChart = observer((props) => {
+  const { seriesData } = props;
+  const series = seriesData;
+  // console.log(seriesData);
+  const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
 
-  const searchMetrics = (filter) => {
-    Object.entries(allMetrics).map(([key, value]) => {
-      if (key === filter) {
-        value[0]?.values.forEach((element) => {
-          const tempMetrics = {
-            time: unixToTime(element[0]),
-            value: element[1],
-          };
-          metrics.push(tempMetrics);
-        });
-      }
-    });
+  // const cronjob = resourceMetricData.filter(
+  //   (type) => type.metricType === "cronjob_count"
+  // );
+  // const cronjobMetrics = cronjob.map((item) => item.metrics[0]);
+
+  const option = {
+    chart: {
+      type: "line",
+      zoom: {
+        enabled: false,
+      },
+      toolbar: {
+        show: false,
+      },
+    },
+
+    // responsive: [{
+    //   breakpoint: 480,
+    //   options: {
+    //     chart: {
+    //       height: "100%"
+    //     },
+    //   }
+    // }],
+    dataLabels: {
+      enabled: false,
+    },
+    series: { series },
+    stroke: {
+      width: [3, 5, 3],
+      curve: "straight",
+      dashArray: [0, 6, 3],
+    },
+    labels: {
+      datetimeFormatter: {
+        year: "yyyy",
+        month: "MMM 'yy",
+        day: "dd MMM",
+        hour: "HH:mm",
+      },
+    },
+    colors: ["#2E93fA", "#66DA26", "#546E7A", "#E91E63", "#FF9800", "#EAEAEA"],
+    legend: {
+      position: "top",
+      horizontalAlign: "right",
+      offsetY: 5,
+      labels: {
+        colors: "#fff",
+      },
+      markers: {
+        size: 0,
+        hover: {
+          sizeOffset: 6,
+        },
+      },
+    },
+    grid: {
+      show: false,
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      padding: {
+        bottom: 20,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    xaxis: {
+      // type: "datetime",
+      tooltip: {
+        enabled: false,
+      },
+      // type: "category",
+      tickPlacement: "between",
+      labels: {
+        show: true,
+        style: {
+          colors: "white",
+          fontSize: "12px",
+        },
+        datetimeUTC: true,
+        datetimeFormatter: {
+          year: "yyyy",
+          month: "MMM 'yy",
+          day: "dd MMM",
+          hour: "HH:mm",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        show: true,
+        style: {
+          colors: ["#fff"],
+        },
+      },
+      min: 0,
+      max: 30,
+      showForNullSeries: true,
+      tickAmount: 5, // y축 간격. 숫자가 작을수록 간격이 넓어짐
+    },
+    tooltip: {
+      enabled: true,
+      theme: "dark",
+    },
   };
 
-  switch (value) {
-    case ClusterMetricTypes.APISERVER_REQUEST_RATE:
-      title = "API Server Request Rate";
-      searchMetrics(value);
-      break;
-    case ClusterMetricTypes.APISERVER_LATENCY:
-      title = "API Server Latency";
-      searchMetrics(value);
-      break;
-    default:
-      break;
-  }
+  useEffect(() => {
+    loadProjectName();
+  }, []);
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <div
-        style={{
-          paddingLeft: "20px",
-          paddingTop: "20px",
-          color: "#929da5",
-          fontWeight: "bold",
-        }}
-      >
-        {title}
-      </div>
-      <ResponsiveContainer>
-        <AreaChart
-          data={metrics}
-          margin={{
-            top: 40,
-            right: 30,
-            left: -15,
-            bottom: 30,
-          }}
-        >
-          <CartesianGrid
-            // horizontalPoints="3 3"
-            strokeWidth={0.3}
-            vertical={false}
-            strokeDasharray="3 5"
-          />
-          <XAxis tickLine="false" dataKey="time" />
-          <YAxis />
-          <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke="#007EFF"
-            fill="#0080ff30"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+      <Chart
+        options={option}
+        series={series}
+        type="line"
+        // width="100%"
+        height={290}
+      />
     </div>
+
+    // <div style={{ width: "100%", height: "100%" }}>
+    //   <div
+    //     style={{
+    //       paddingLeft: "20px",
+    //       paddingTop: "10px",
+    //       // color: "#929da5",
+    //       color: "darkgray",
+    //       fontWeight: "bold",
+    //     }}
+    //   ></div>
+
+    //   <ResponsiveContainer>
+    //     <LineChart
+    //       data={cronjobMetrics}
+    //       // 그래프 크기 조절
+    //       margin={{
+    //         top: 5,
+    //         right: 20,
+    //         left: -35,
+    //         bottom: 5,
+    //       }}
+    //     >
+    //       <CartesianGrid
+    //         strokeWidth={0.3}
+    //         vertical={false}
+    //         strokeDasharray="2 2"
+    //       />
+    //       <XAxis dataKey="time" />
+    //       <YAxis dataKey="value" domain={[0, 50]} />
+    //       <Tooltip />
+    //       <Line
+    //         type="monotone"
+    //         dataKey="deployment"
+    //         stroke="#FF5A5A"
+    //         strokeDasharray="3 3"
+    //         activeDot={{ r: 3 }}
+    //       />
+    //     </LineChart>
+    //   </ResponsiveContainer>
+    // </div>
   );
 });
 
-export { APIAreaChart };
+export default ServiceAdminChart;

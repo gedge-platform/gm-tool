@@ -366,39 +366,43 @@ class StorageClass {
     });
   };
   loadCephMonit = async (start, end, step) => {
-    await axios.get(`${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`).then((res) => {
-      runInAction(() => {
-        // this.cephMetrics = res.data.items;
-        this.osd_read_latency = res.data.items.osd_read_latency[0].values
-        this.osd_write_latency = res.data.items.osd_write_latency[0].values
-        this.overwrite_iops = res.data.items.overwrite_iops[0].values
-        this.read_iops = res.data.items.read_iops[0].values
-        this.read_throughput = res.data.items.read_throughput[0].values
-        this.write_iops = res.data.items.write_iops[0].values
-        this.write_throughput = res.data.items.write_throughput[0].values
-        // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
-        // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
-        // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
-        // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
-        // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
-        // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
-        // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
+    await axios
+      .get(
+        `${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`
+      )
+      .then((res) => {
+        runInAction(() => {
+          // this.cephMetrics = res.data.items;
+          this.osd_read_latency = res.data.items.osd_read_latency[0].values;
+          console.log("this.osd_read_latency", this.osd_read_latency);
+          this.osd_write_latency = res.data.items.osd_write_latency[0].values;
+          this.overwrite_iops = res.data.items.overwrite_iops[0].values;
+          this.read_iops = res.data.items.read_iops[0].values;
+          this.read_throughput = res.data.items.read_throughput[0].values;
+          this.write_iops = res.data.items.write_iops[0].values;
+          this.write_throughput = res.data.items.write_throughput[0].values;
+          // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
+          // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
+          // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
+          // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
+          // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
+          // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
+          // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
+        });
       });
-    });
   };
-  searchMetrics = (MetricList) => {
-    let metrics = [];
-    MetricList.forEach((element) => {
-      const tempMetrics = {
-        time: unixToTime(element[0]),
-        value: element[1],
-      };
-      metrics.push(tempMetrics);
-    })
-    return metrics
-  };
+  // searchMetrics = (MetricList) => {
+  //   let metrics = [];
+  //   MetricList.forEach((element) => {
+  //     const tempMetrics = {
+  //       time: unixToTime(element[0]),
+  //       value: element[1],
+  //     };
+  //     metrics.push(tempMetrics);
+  //   })
+  //   return metrics
+  // };
 }
-
 
 const StorageClassStore = new StorageClass();
 export default StorageClassStore;
