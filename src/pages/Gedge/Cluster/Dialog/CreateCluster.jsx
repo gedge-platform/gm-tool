@@ -5,9 +5,11 @@ import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import clusterStore from "../../../../store/Cluster";
+import addressStore from "../../../../store/Address";
 import { swalError } from "../../../../utils/swal-utils";
 import { SERVER_URL } from "@/config.jsx";
 import axios from "axios";
+import SearchAddress from "../Dialog/SearchAddress";
 
 const Button = styled.button`
   background-color: #fff;
@@ -28,48 +30,92 @@ const ButtonNext = styled.button`
 
 const CreateCluster = observer(props => {
   const { open } = props;
+  const [openAddress, setOpenAddress] = useState(false);
   const { loadClusterList, clusterList, createCluster } = clusterStore;
+  const { loadAddress, clusterAddress } = addressStore;
+
+  const [inputs, setInputs] = useState({
+    clusterName: "",
+    clusterEndpoint: "",
+    clusterToken: "",
+  });
+  const { clusterName, clusterEndpoint, clusterToken } = inputs;
 
   const clusterType = props.type;
-  const [clusterName, setClusterName] = useState("");
-  const [clusterEndpoint, setClusterEndpoint] = useState("");
-  const [clusterToken, setClusterToken] = useState("");
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 
+  const validCheck = () => {
+    const endpointReg =
+      /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i;
+
+    if (clusterName === "") {
+      swalError("이름을 입력해주세요!");
+      return false;
+    }
+    if (clusterEndpoint === "" || !endpointReg.test(clusterEndpoint)) {
+      swalError("엔드포인트를 입력해주세요!");
+      return false;
+    }
+    if (clusterToken === "") {
+      swalError("토큰을 입력해주세요!");
+      return false;
+    }
+    if (clusterAddress === "") {
+      swalError("주소를 입력해주세요!");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = () => {
     console.log("handleSubmit in");
-    // createCluster(clusterType, clusterName, clusterEndpoint, clusterToken, handleClose);
-
-    const body = {
-      clusterType: this.clusterType,
-      clusterName: this.clusterName,
-      clusterEndpoint: this.clusterEndpoint,
-      clusterToken: this.clusterToken,
-    };
-    console.log("body is : ", body);
-    axios
-      .post(`${SERVER_URL}/clusters`, body)
-      .then(res => {
-        if (res.status === 201) {
-          swalError("클러스터를 추가하였습니다.");
-        }
-      })
-      .catch(err => {
-        swalError("엣지 클러스터 추가에 실패하였습니다.");
-      });
+    if (validCheck()) {
+      const body = {
+        clusterType: clusterType,
+        clusterName: clusterName,
+        clusterEndpoint: clusterEndpoint,
+        token: clusterToken,
+        address: clusterAddress,
+      };
+      console.log("body is : ", body);
+      axios
+        .post(`${SERVER_URL}/clusters`, body)
+        .then(res => {
+          if (res.status === 200) {
+            swalError("클러스터를 추가하였습니다.");
+            handleClose();
+          }
+        })
+        .catch(err => {
+          swalError("엣지 클러스터 추가에 실패하였습니다.");
+          handleClose();
+        });
+    }
   };
 
-  const onChange = ({ target: { value } }) => {
-    console.log(value);
+  const searchAddressOpen = () => {
+    setOpenAddress(true);
   };
 
-  useEffect(props => {
-    console.log("props is ", props);
-  }, []);
+  const searchAddressClose = () => {
+    setOpenAddress(false);
+  };
+
+  const onChange = ({ target }) => {
+    const { value, name } = target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  // useEffect(props => {
+  //   console.log("props is ", props);
+  // }, []);
 
   return (
     <CDialogNew id="myDialog" open={open} maxWidth="md" title={`Create Cluster`} onClose={handleClose} bottomArea={false} modules={["custom"]}>
@@ -80,7 +126,7 @@ const CreateCluster = observer(props => {
               Type <span className="requried">*</span>
             </th>
             <td style={{ width: "50%" }}>
-              <CTextField type="text" className="form_fullWidth" name="clusterName" value={props.type} disabled />
+              <CTextField type="text" className="form_fullWidth" name="clusterType" value={clusterType} disabled />
             </td>
           </tr>
           {props.type == "cloud" && (
@@ -107,7 +153,14 @@ const CreateCluster = observer(props => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Cluster Name" className="form_fullWidth" name="clusterName" onChange={onChange} value={""} />
+              <CTextField
+                type="text"
+                placeholder="Cluster Name"
+                className="form_fullWidth"
+                name="clusterName"
+                onChange={onChange}
+                value={clusterName}
+              />
             </td>
           </tr>
           <tr>
@@ -120,9 +173,9 @@ const CreateCluster = observer(props => {
                 type="text"
                 placeholder="Cluster Endpoint"
                 className="form_fullWidth"
-                name="clusterEnpoint"
+                name="clusterEndpoint"
                 onChange={onChange}
-                value={""}
+                value={clusterEndpoint}
               />
             </td>
           </tr>
@@ -132,8 +185,35 @@ const CreateCluster = observer(props => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Token" className="form_fullWidth" name="token" onChange={onChange} value={""} />
+              <CTextField type="text" placeholder="Token" className="form_fullWidth" name="clusterToken" onChange={onChange} value={clusterToken} />
             </td>
+          </tr>
+          <tr>
+            <th>
+              Address
+              <span className="requried">*</span>
+            </th>
+            {clusterAddress == "" && (
+              <>
+                <td>
+                  <CTextField type="text" placeholder="address" className="form_fullWidth" name="address" onClick={searchAddressOpen} />
+                </td>
+              </>
+            )}
+            {clusterAddress != "" && (
+              <>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="address"
+                    className="form_fullWidth"
+                    name="clusterAddress"
+                    onChange={onChange}
+                    value={clusterAddress}
+                  />
+                </td>
+              </>
+            )}
           </tr>
         </tbody>
       </table>
@@ -155,6 +235,7 @@ const CreateCluster = observer(props => {
           <ButtonNext onClick={handleSubmit}>생성</ButtonNext>
         </div>
       </div>
+      <SearchAddress open={openAddress} onClose={searchAddressClose} />
     </CDialogNew>
   );
 });

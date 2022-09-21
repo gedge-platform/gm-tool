@@ -6,19 +6,24 @@ import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
+import DeleteCluster from "../Dialog/DeleteCluster";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 
 const EdgeClusterListTab = observer(() => {
   const currentPageTitle = Title.EdgeZone;
-  const [open, setOpen] = useState(false);
+  const [Create, setCreateOpen] = useState(false);
+  const [Delete, setDeleteOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  const [reRun, setReRun] = useState(false);
+  const [clusterName, setClusterName] = useState("");
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -93,31 +98,46 @@ const EdgeClusterListTab = observer(() => {
 
   const handleClick = e => {
     loadCluster(e.data.clusterName);
+    setClusterName(e.data.clusterName);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleCreateOpen = () => {
+    setCreateOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCreateClose = () => {
+    setCreateOpen(false);
+  };
+
+  const handleDeleteOpen = () => {
+    if (clusterName === "") {
+      swalError("클러스터를 선택해주세요!");
+    }
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
+  const reloadData = () => {
+    setReRun(true);
   };
 
   useLayoutEffect(() => {
     loadClusterList("edge");
-  }, []);
+    return () => {
+      setReRun(false);
+    };
+  }, [reRun]);
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("edge")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          <CommActionBar>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CDeleteButton onClick={handleDeleteOpen}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -137,7 +157,8 @@ const EdgeClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type="edge" open={open} onClose={handleClose} />
+          <CreateCluster type="edge" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
+          <DeleteCluster type="edge" dName={clusterName} open={Delete} onClose={handleDeleteClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
