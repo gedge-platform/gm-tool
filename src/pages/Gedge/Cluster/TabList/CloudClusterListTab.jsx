@@ -5,14 +5,20 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
+import DeleteCluster from "../Dialog/DeleteCluster";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { swalError } from "../../../../utils/swal-utils";
 
 const CloudClusterListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+  const [Create, setCreateOpen] = useState(false);
+  const [Delete, setDeleteOpen] = useState(false);
+  const [reRun, setReRun] = useState(false);
+  const [clusterName, setClusterName] = useState("");
 
   const {
     clusterDetail,
@@ -72,26 +78,46 @@ const CloudClusterListTab = observer(() => {
 
   const handleClick = e => {
     loadCluster(e.data.clusterName);
+    setClusterName(e.data.clusterName);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleCreateOpen = () => {
+    setCreateOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCreateClose = () => {
+    setCreateOpen(false);
+  };
+
+  const handleDeleteOpen = () => {
+    if (clusterName === "") {
+      swalError("클러스터를 선택해주세요!");
+    }
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteClose = () => {
+    setDeleteOpen(false);
+  };
+
+  const reloadData = () => {
+    setReRun(true);
   };
 
   useLayoutEffect(() => {
     loadClusterList("cloud");
-  }, []);
+    return () => {
+      setReRun(false);
+    };
+  }, [reRun]);
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar>
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CDeleteButton onClick={handleDeleteOpen}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -110,7 +136,8 @@ const CloudClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type="cloud" open={open} onClose={handleClose} />
+          <CreateCluster type="cloud" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
+          <DeleteCluster type="cloud" dName={clusterName} open={Delete} onClose={handleDeleteClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

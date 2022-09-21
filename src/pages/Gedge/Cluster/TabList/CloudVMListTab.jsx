@@ -4,6 +4,7 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
@@ -104,7 +105,7 @@ const CloudVMListTab = observer(() => {
     }
   };
 
-  const handleOpen = e => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -130,6 +131,7 @@ const CloudVMListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            <CDeleteButton onClick={handleOpen}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
