@@ -5,14 +5,14 @@ import dashboardStore from "../../../store/Dashboard";
 
 const ClusterStatus = observer(() => {
   const {
-    loadCredentialName,
-    loadVMStatusCnt,
-    loadVMCnt,
+    // loadCredentialName,
+    // loadVMStatusCnt,
+    // loadVMCnt,
     // ConfigName,
     // vmCntList,
-    vmStatusList,
-    connectionconfig,
-    ProviderName,
+    // vmStatusList,
+    // connectionconfig,
+    // ProviderName,
   } = dashboardStore;
 
   useEffect(() => {

@@ -154,7 +154,7 @@ const TotalDashboard = () => {
               <ClusterStatus />
             </div>
             <div className="cluster_map">
-              <MapContent />
+              <MapContent dashboardType={total} />
             </div>
             <div className="cluster_recent">
               <ClusterRecent />

@@ -67,9 +67,8 @@ const MapContent = observer(() => {
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>${
-                     dataEdgeInfo[0].map((item) => item.clusterName)[i]
-                   }</td>
+                   <td>${dataEdgeInfo[0].map((item) => item.clusterName)[i]
+            }</td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>
@@ -284,7 +283,7 @@ const MapContent = observer(() => {
     <div
       id="map"
       style={{ height: "100%", width: "100%", pointerEvents: "none" }}
-      // 지도 크기 조정
+    // 지도 크기 조정
     ></div>
   );
 });
