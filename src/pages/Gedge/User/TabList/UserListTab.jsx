@@ -88,10 +88,10 @@ const UserListTab = observer(() => {
   const handleDelete = () => {
     if (userName === "") {
       swalError("사용자를 선택해주세요!");
-    }
-    if (userName != "") {
+    } else {
       swalUpdate(userName + "를 삭제하시겠습니까?", () => deleteUser(userName, loadUserList));
     }
+    setUserName("");
   };
 
   useLayoutEffect(() => {

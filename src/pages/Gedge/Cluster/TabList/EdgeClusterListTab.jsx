@@ -109,10 +109,10 @@ const EdgeClusterListTab = observer(() => {
   const handleDelete = () => {
     if (clusterName === "") {
       swalError("클러스터를 선택해주세요!");
-    }
-    if (clusterName != "") {
+    } else {
       swalUpdate(clusterName + "를 삭제하시겠습니까?", () => deleteCluster(clusterName, reloadData));
     }
+    setVMName("");
   };
 
   const reloadData = () => {

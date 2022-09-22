@@ -7,7 +7,7 @@ import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
 import certificationStore from "../../../../store/Certification";
 import CreateCertification from "../Dialog/CreateCertification";
-import { swalUpdate } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "../../../../utils/swal-utils";
 import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const CertificationListTab = observer(() => {
@@ -103,7 +103,13 @@ const CertificationListTab = observer(() => {
   };
 
   const handleDelete = () => {
-    swalUpdate("삭제하시겠습니까?", () => deleteCredential(certName, loadCredentialList));
+    if (certName === "") {
+      swalError("인증을 선택해주세요!");
+      return;
+    } else {
+      swalUpdate("삭제하시겠습니까?", () => deleteCredential(certName, loadCredentialList));
+    }
+    setCertName("");
   };
 
   useLayoutEffect(() => {

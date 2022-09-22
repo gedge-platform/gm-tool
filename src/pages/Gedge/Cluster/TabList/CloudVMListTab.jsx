@@ -93,10 +93,10 @@ const CloudVMListTab = observer(() => {
   const handleDelete = () => {
     if (vmName === "") {
       swalError("VM을 선택해주세요!");
-    }
-    if (vmName != "") {
+    } else {
       swalUpdate(vmName + "를 삭제하시겠습니까?", () => deleteVM(vmName, reloadData));
     }
+    setVMName("");
   };
 
   const reloadData = () => {
