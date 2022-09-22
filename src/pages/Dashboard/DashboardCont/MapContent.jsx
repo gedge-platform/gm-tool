@@ -50,7 +50,7 @@ const MapContent = observer(() => {
     setDataStatus(dataStatus);
 
     // nodeRunning 데이터
-    setClusterName(clusterNameData);
+    setClusterName(clusterNameData[0]);
     loadEdgeZoneDashboard();
     loadEdgeZoneDetailDashboard();
 
