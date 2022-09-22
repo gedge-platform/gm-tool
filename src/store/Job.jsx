@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
 
 class Job {
@@ -82,11 +83,7 @@ class Job {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadJobDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
+        this.loadJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
@@ -96,22 +93,18 @@ class Job {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadJobDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
+        this.loadJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -151,13 +144,13 @@ class Job {
     });
   };
 
-  setJobList = (list) => {
+  setJobList = list => {
     runInAction(() => {
       this.jobList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.jobList[n];
     });
@@ -168,15 +161,12 @@ class Job {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/jobs?user=${id}`)
-      // .get(`${SERVER_URL}/jobs`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           // const list = res.data.data.filter((item) => item.projectType === type);
           this.jobList = res.data.data;
           // this.jobDetail = list[0];
-          res.data.data === null
-            ? (this.totalElements = 0)
-            : (this.totalElements = res.data.data.length);
+          res.data.data === null ? (this.totalElements = 0) : (this.totalElements = res.data.data.length);
         });
       })
       .then(() => {
@@ -190,37 +180,40 @@ class Job {
         (this.annotations = null),
         (this.involvesPodList = null),
         (this.ownerReferences = null))
-      : this.loadJobDetail(
-          this.jobList[0].name,
-          this.jobList[0].cluster,
-          this.jobList[0].project
-        );
+      : this.loadJobDetail(this.jobList[0].name, this.jobList[0].cluster, this.jobList[0].project);
   };
 
   loadJobDetail = async (name, cluster, project) => {
-    await axios
-      .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`)
-      .then(({ data: { data, involves } }) => {
-        // console.log(data);
-        // console.log(involves);
-        runInAction(() => {
-          this.jobDetailData = data;
-          this.containers = data.containers;
-          this.jobDetailInvolves = involves;
-          this.labels = data.label;
-          this.annotations = data.annotations;
-          this.involvesPodList = involves.podList;
-          this.ownerReferences = involves.ownerReferences;
-          this.containers = data.containers;
-          console.log(this.containers);
+    await axios.get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`).then(({ data: { data, involves } }) => {
+      // console.log(data);
+      // console.log(involves);
+      runInAction(() => {
+        this.jobDetailData = data;
+        this.containers = data.containers;
+        this.jobDetailInvolves = involves;
+        this.labels = data.label;
+        this.annotations = data.annotations;
+        this.involvesPodList = involves.podList;
+        this.ownerReferences = involves.ownerReferences;
+        this.containers = data.containers;
+        console.log(this.containers);
 
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-        });
+        if (data.events !== null) {
+          this.events = data.events;
+        } else {
+          this.events = null;
+        }
       });
+    });
+  };
+
+  deleteJob = async (jobName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/jobs/${jobName}`)
+      .then(res => {
+        if (res.status === 201) swalError("Job이 삭제되었습니다.", callback);
+      })
+      .catch(err => swalError("삭제에 실패하였습니다."));
   };
 }
 

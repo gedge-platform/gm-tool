@@ -10,7 +10,7 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import workspacesStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
-import { swalUpdate } from "@/utils/swal-utils";
+import { swalUpdate, swalError } from "../../../../utils/swal-utils";
 import Detail from "../Detail";
 
 const WorkspaceListTab = observer(() => {
@@ -50,7 +50,7 @@ const WorkspaceListTab = observer(() => {
       field: "memberName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
       },
     },
     {
@@ -85,14 +85,9 @@ const WorkspaceListTab = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClick = async ({
-    data: { workspaceName },
-    colDef: { field },
-  }) => {
+  const handleClick = async ({ data: { workspaceName }, colDef: { field } }) => {
     if (field === "delete") {
-      swalUpdate("삭제하시겠습니까?", () =>
-        deleteWorkspace(workspaceName, loadWorkSpaceList)
-      );
+      swalUpdate("삭제하시겠습니까?", () => deleteWorkspace(workspaceName, loadWorkSpaceList));
     }
     loadWorkspaceDetail(workspaceName);
   };
@@ -109,12 +104,7 @@ const WorkspaceListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadWorkSpaceList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadWorkSpaceList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
@@ -136,12 +126,7 @@ const WorkspaceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateWorkSpace
-            reloadFunc={loadWorkSpaceList}
-            type={"user"}
-            open={open}
-            onClose={handleClose}
-          />
+          <CreateWorkSpace reloadFunc={loadWorkSpaceList} type={"user"} open={open} onClose={handleClose} />
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
