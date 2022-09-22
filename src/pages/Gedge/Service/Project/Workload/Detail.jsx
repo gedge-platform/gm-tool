@@ -60,6 +60,7 @@ const Detail = observer(() => {
     depServices,
     containersTemp,
   } = deploymentStore;
+  console.log(events);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

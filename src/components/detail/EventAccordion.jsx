@@ -31,7 +31,19 @@ const EventsContainer = styled.div`
 `;
 
 const EventAccordion = ({ events }) => {
-  if (events === null || events.map((item) => item.message === "")) {
+  console.log(events);
+  if (events === null || events === undefined) {
+    return (
+      <EventsContainer>
+        <p>No Events Info.</p>
+      </EventsContainer>
+    );
+  } else if (
+    // events.map((item) =>
+    events.message ? events.message === "" : events[0].message === ""
+
+    // )
+  ) {
     return (
       <EventsContainer>
         <p>No Events Info.</p>

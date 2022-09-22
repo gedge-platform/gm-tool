@@ -28,6 +28,16 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
+  // const nodeReady =
+  //   nodeData != 0
+  //     ? nodeData.filter((element) => "Ready" === element).length
+  //     : 0;
+  // const nodeNotReady =
+  //   nodeData != 0
+  //     ? nodeData.filter((element) => "NotReady" === element).length
+  //     : 0;
+  // console.log("node 개수 ", node);
+
   useEffect(async () => {
     // 지도 데이터
     const result = await axios(`${SERVER_URL}/totalDashboard`);

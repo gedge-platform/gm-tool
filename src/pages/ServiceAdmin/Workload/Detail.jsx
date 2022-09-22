@@ -132,17 +132,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Created</th>
-                <td>
-                  {deploymentDetail.createAt
-                    ? dateFormatter(deploymentDetail.createAt)
-                    : "-"}
-                </td>
+                <td>{dateFormatter(deploymentDetail.createAt)}</td>
                 <th>Updated</th>
-                <td>
-                  {deploymentDetail.updateAt
-                    ? dateFormatter(deploymentDetail.updateAt)
-                    : "-"}
-                </td>
+                <td>{dateFormatter(deploymentDetail.updateAt)}</td>
               </tr>
             </tbody>
           </table>
@@ -156,19 +148,15 @@ const Detail = observer(() => {
               <tbody className="tb_data_container">
                 <tr>
                   <th>Container Name</th>
-                  <td>{containers?.name ? containers?.name : "-"}</td>
+                  <td>{containers?.name}</td>
                 </tr>
                 <tr>
                   <th>Image</th>
-                  <td>{containers?.image ? containers?.image : "-"}</td>
+                  <td>{containers?.image}</td>
                 </tr>
                 <tr>
                   <th>ImagePullPolicy</th>
-                  <td>
-                    {containers?.imagePullPolicy
-                      ? containers?.imagePullPolicy
-                      : "-"}
-                  </td>
+                  <td>{containers?.imagePullPolicy}</td>
                 </tr>
 
                 <tr>
@@ -225,6 +213,55 @@ const Detail = observer(() => {
                     )}
                   </td>
                 </tr>
+                {/* <tr>
+                  <th>Resources</th>
+                  <td>
+                    <table className="tb_data">
+                      <tbody>
+                        <tr>
+                          <th style={{ width: "50%" }}>Limits</th>
+                        </tr>
+                        <tr>
+                          <td>
+                            {Object.entries(containers?.resources).map(
+                              ([key, value]) =>
+                                Object.entries(value).map(([key1, value1]) => (
+                                  <tr>
+                                    <th>{key1}</th>
+                                    <td>{value1}</td>
+                                  </tr>
+                                ))
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr> */}
+                {/* <tr>
+                  <th>SecurityContext</th>
+                  <td>
+                  {containers?.securityContext === undefined ? (
+                      <>-</>
+                    ) : (
+                      Object.entries(containers?.securityContext).map(
+                        ([key, value]) => (
+                          <table className="tb_data" style={{ width: "30%" }}>
+                            <tbody>
+                              <tr>
+                                <th>{key}</th>
+                              </tr>
+                              <tr>
+                                <td>{value}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        )
+                      )
+                    )}
+                  </td>
+                </tr> */}
+
                 <tr>
                   <th>VolumeMounts</th>
                   <td>

@@ -101,7 +101,7 @@ const WorkspaceListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadWorkSpaceList} isSearch={true} isSelect={true} keywordList={["이름"]}>
@@ -130,7 +130,7 @@ const WorkspaceListTab = observer(() => {
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default WorkspaceListTab;

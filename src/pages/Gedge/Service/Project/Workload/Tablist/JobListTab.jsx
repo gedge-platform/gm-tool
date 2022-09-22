@@ -125,7 +125,7 @@ const JobListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail job={jobDetail} />
+        <Detail job={Detail} />
       </CReflexBox>
     </>
   );

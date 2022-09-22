@@ -9,12 +9,22 @@ import schedulerStore from "../../../../store/Scheduler";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
 import { PanelBox } from "../../../../components/styles/PanelBox";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
 
-  const { loadYamlList, yamlList, totalElements, currentPage, totalPages, goPrevPage, goNextPage, viewList } = schedulerStore;
+  const {
+    loadYamlList,
+    yamlList,
+    totalElements,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+    viewList,
+  } = schedulerStore;
 
   const [columDefs] = useState([
     {
@@ -115,7 +125,11 @@ const SchedulerListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateScheduler open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreateScheduler
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
       </CReflexBox>
     </>

@@ -76,7 +76,7 @@ const CloudClusterListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     loadCluster(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
@@ -94,7 +94,9 @@ const CloudClusterListTab = observer(() => {
       swalError("클러스터를 선택해주세요!");
       return;
     } else {
-      swalUpdate(clusterName + "를 삭제하시겠습니까?", () => deleteCluster(clusterName, reloadData));
+      swalUpdate(clusterName + "를 삭제하시겠습니까?", () =>
+        deleteCluster(clusterName, reloadData)
+      );
     }
     setClusterName("");
   };
@@ -111,7 +113,7 @@ const CloudClusterListTab = observer(() => {
   }, [reRun]);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar>
@@ -135,11 +137,16 @@ const CloudClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type="cloud" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
+          <CreateCluster
+            type="cloud"
+            open={Create}
+            onClose={handleCreateClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default CloudClusterListTab;
