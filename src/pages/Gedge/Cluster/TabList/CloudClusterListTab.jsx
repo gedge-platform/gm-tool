@@ -14,6 +14,7 @@ import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const CloudClusterListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -74,7 +75,7 @@ const CloudClusterListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     loadCluster(e.data.clusterName);
   };
 
@@ -91,7 +92,7 @@ const CloudClusterListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -123,7 +124,7 @@ const CloudClusterListTab = observer(() => {
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default CloudClusterListTab;

@@ -12,6 +12,7 @@ import workspacesStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate } from "@/utils/swal-utils";
 import Detail from "../Detail";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -106,7 +107,7 @@ const WorkspaceListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -120,21 +121,21 @@ const WorkspaceListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  onCellClicked={handleClick}
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid
+                onCellClicked={handleClick}
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
           <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
@@ -145,7 +146,7 @@ const WorkspaceListTab = observer(() => {
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default WorkspaceListTab;

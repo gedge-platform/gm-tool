@@ -142,18 +142,20 @@ class StorageClass {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -273,14 +275,27 @@ class StorageClass {
         runInAction(() => {
           console.log(res);
           this.storageClasses = res.data.data;
-          this.totalElements = res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
-        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+        this.totalElements === 0
+          ? ((this.storageClass = null),
+            (this.scYamlFile = null),
+            (this.scAnnotations = null),
+            (this.scLables = null),
+            (this.scParameters = null),
+            (this.label = null),
+            (this.annotations = null),
+            (this.storageClassList = null))
+          : this.loadStorageClass(
+              this.viewList[0].name,
+              this.viewList[0].cluster
+            );
       })
       .then(() => {
         this.loadStorageClassName(this.viewList[0].cluster);
@@ -366,25 +381,29 @@ class StorageClass {
     });
   };
   loadCephMonit = async (start, end, step) => {
-    await axios.get(`${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`).then((res) => {
-      runInAction(() => {
-        // this.cephMetrics = res.data.items;
-        this.osd_read_latency = res.data.items.osd_read_latency[0].values
-        this.osd_write_latency = res.data.items.osd_write_latency[0].values
-        this.overwrite_iops = res.data.items.overwrite_iops[0].values
-        this.read_iops = res.data.items.read_iops[0].values
-        this.read_throughput = res.data.items.read_throughput[0].values
-        this.write_iops = res.data.items.write_iops[0].values
-        this.write_throughput = res.data.items.write_throughput[0].values
-        // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
-        // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
-        // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
-        // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
-        // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
-        // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
-        // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
+    await axios
+      .get(
+        `${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`
+      )
+      .then((res) => {
+        runInAction(() => {
+          // this.cephMetrics = res.data.items;
+          this.osd_read_latency = res.data.items.osd_read_latency[0].values;
+          this.osd_write_latency = res.data.items.osd_write_latency[0].values;
+          this.overwrite_iops = res.data.items.overwrite_iops[0].values;
+          this.read_iops = res.data.items.read_iops[0].values;
+          this.read_throughput = res.data.items.read_throughput[0].values;
+          this.write_iops = res.data.items.write_iops[0].values;
+          this.write_throughput = res.data.items.write_throughput[0].values;
+          // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
+          // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
+          // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
+          // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
+          // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
+          // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
+          // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
+        });
       });
-    });
   };
   searchMetrics = (MetricList) => {
     let metrics = [];
@@ -394,11 +413,10 @@ class StorageClass {
         value: element[1],
       };
       metrics.push(tempMetrics);
-    })
-    return metrics
+    });
+    return metrics;
   };
 }
-
 
 const StorageClassStore = new StorageClass();
 export default StorageClassStore;

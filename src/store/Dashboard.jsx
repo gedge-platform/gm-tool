@@ -132,6 +132,8 @@ class Dashboard {
   cloudResourceCnt = {};
 
   nodeRunning = [];
+  nodeReady = 0;
+  nodeNotReady = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -393,7 +395,9 @@ class Dashboard {
         this.totalElements = data.length;
       });
     });
-    this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
+    console.log(this.clusterNameList);
+    this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
+    // this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
@@ -423,6 +427,13 @@ class Dashboard {
           this.diskTotal = data.diskTotal ? data.diskTotal : 0;
           this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
           this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+          this.nodeReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "Ready" === element).length
+            : 0;
+          this.nodeNotReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "NotReady" === element)
+                .length
+            : 0;
         })
       );
   };

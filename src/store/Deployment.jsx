@@ -239,12 +239,17 @@ class Deployment {
           this.strategy = data.strategy;
           this.labels = data.labels;
           this.annotations = data.annotations;
-          this.events = data.events;
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
           this.pods = involvesData.pods;
           this.depServices = involvesData.services;
           // this.depServicesPort = involvesData.services.port;
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
+          console.log(this.events);
         });
       });
   };

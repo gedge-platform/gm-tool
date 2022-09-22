@@ -97,7 +97,7 @@ const UserServiceListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -110,21 +110,21 @@ const UserServiceListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  onCellClicked={handleClick}
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid
+                onCellClicked={handleClick}
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
           <CreateProject
             reloadFunc={() => loadProjectList()}
@@ -135,7 +135,7 @@ const UserServiceListTab = observer(() => {
         </PanelBox>
         <Detail project={projectDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default UserServiceListTab;

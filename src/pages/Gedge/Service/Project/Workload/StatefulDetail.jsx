@@ -132,10 +132,13 @@ const StatefulSetDetail = observer(() => {
                   <tr>
                     <th>Container Ports</th>
                     <td>
-                      {container?.ports.containerPort ? (
+                      {container?.ports ? (
                         container.ports?.map((port) => (
                           <p>
-                            {port.containerPort}/{port.protocol}
+                            {port.containerPort != null
+                              ? port.containerPort
+                              : "-"}
+                            /{port.protocol ? port.protocol : "-"}
                           </p>
                         ))
                       ) : (

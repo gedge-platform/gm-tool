@@ -106,7 +106,7 @@ const WorkspaceListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -145,7 +145,7 @@ const WorkspaceListTab = observer(() => {
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default WorkspaceListTab;

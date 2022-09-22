@@ -147,6 +147,7 @@ class Project {
         });
       })
       .then(() => {
+        console.log(this.projectList);
         this.convertList(this.projectList, this.setProjectList);
       })
       .then(() => {
@@ -184,9 +185,9 @@ class Project {
         });
       })
       .then(() => {
-        this.eventLength = this.events.length;
-        console.log(this.events);
-        this.convertEventList(this.events, this.setEventList);
+        // this.eventLength = this.events.length;
+        // console.log(this.events);
+        // this.convertEventList(this.events, this.setEventList);
       });
   };
 
@@ -311,56 +312,56 @@ class Project {
     });
   };
 
-  setTotalEvents = (n) => {
-    runInAction(() => {
-      this.totalEvents = n;
-    });
-  };
+  // setTotalEvents = (n) => {
+  //   runInAction(() => {
+  //     this.totalEvents = n;
+  //   });
+  // };
 
-  setEventViewList = (n) => {
-    runInAction(() => {
-      this.eventList = this.events[n];
-      console.log(this.eventList);
-    });
-  };
+  // setEventViewList = (n) => {
+  //   runInAction(() => {
+  //     this.eventList = this.events[n];
+  //     console.log(this.eventList);
+  //   });
+  // };
 
-  setEventList = (list) => {
-    runInAction(() => {
-      this.events = list;
-    });
-  };
+  // setEventList = (list) => {
+  //   runInAction(() => {
+  //     this.events = list;
+  //   });
+  // };
 
-  convertEventList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultEvent = {};
+  // convertEventList = (apiList, setFunc) => {
+  //   runInAction(() => {
+  //     let cnt = 1;
+  //     let totalCnt = 0;
+  //     let tempList = [];
+  //     let cntCheck = true;
+  //     this.resultEvent = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 5) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultEvent[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+  //     Object.entries(apiList).map(([_, value]) => {
+  //       cntCheck = true;
+  //       tempList.push(toJS(value));
+  //       cnt = cnt + 1;
+  //       if (cnt > 5) {
+  //         cntCheck = false;
+  //         cnt = 1;
+  //         this.resultEvent[totalCnt] = tempList;
+  //         totalCnt = totalCnt + 1;
+  //         tempList = [];
+  //       }
+  //     });
 
-      if (cntCheck) {
-        this.resultEvent[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
-      }
+  //     if (cntCheck) {
+  //       this.resultEvent[totalCnt] = tempList;
+  //       totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+  //     }
 
-      this.setTotalEvents(totalCnt);
-      setFunc(this.resultEvent);
-      this.setEventViewList(0);
-    });
-  };
+  //     this.setTotalEvents(totalCnt);
+  //     setFunc(this.resultEvent);
+  //     this.setEventViewList(0);
+  //   });
+  // };
 }
 
 const projectStore = new Project();

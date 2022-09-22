@@ -100,7 +100,7 @@ const DeploymentListTab = observer(() => {
   };
 
   return (
-    <div style={{ height: 1000 }}>
+    <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -136,7 +136,7 @@ const DeploymentListTab = observer(() => {
         </PanelBox>
         <Detail />
       </CReflexBox>
-    </div>
+    </>
   );
 });
 export default DeploymentListTab;

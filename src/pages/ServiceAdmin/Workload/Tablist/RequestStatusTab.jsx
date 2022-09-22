@@ -12,6 +12,7 @@ import requestStatusStore from "../../../../store/RequestStatus";
 import { toJS } from "mobx";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import { PanelBox2 } from "../../../../components/styles/PanelBox2";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const RequestStatusTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -111,22 +112,22 @@ const RequestStatusTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  totalElements={totalElements}
-                  isBottom={false}
-                  // onCellClicked={handleClick}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                  // totalElements={requestList.length}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid2
+                rowData={viewList}
+                columnDefs={columDefs}
+                totalElements={totalElements}
+                isBottom={false}
+                // onCellClicked={handleClick}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+                // totalElements={requestList.length}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
         </PanelBox>
       </CReflexBox>

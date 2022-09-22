@@ -12,6 +12,7 @@ import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
 import CreateScheduler from "../Dialog/CreateScheduler";
 import { PanelBox } from "../../../../components/styles/PanelBox";
 import schedulerStore from "../../../../store/Scheduler";
+import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -106,21 +107,21 @@ const SchedulerListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  // onCellClicked={handleClick}
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            {/* <CTabPanel value={tabvalue} index={0}> */}
+            <div className="grid-height2">
+              <AgGrid2
+                // onCellClicked={handleClick}
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
+            {/* </CTabPanel> */}
           </div>
           <CreateScheduler
             open={open}
