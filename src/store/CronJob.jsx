@@ -125,7 +125,6 @@ class CronJob {
     await axios
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;

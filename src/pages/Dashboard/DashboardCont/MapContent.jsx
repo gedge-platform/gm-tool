@@ -11,12 +11,16 @@ import { SERVER_URL } from "../../../config";
 const MapContent = observer(() => {
   const {
     clusterName,
-    nodeRunning,
+    edgeNodeRunning,
     setClusterName,
     loadEdgeZoneDetailDashboard,
+    loadEdgeZoneDashboard,
   } = dashboardStore;
-  const nodeData =
-    nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
+
+  console.log("edgeNodeRunning", edgeNodeRunning);
+
+  // const nodeData =
+  //   nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
 
   const mapRef = useRef(null);
   const [data, setData] = useState("");
@@ -25,15 +29,20 @@ const MapContent = observer(() => {
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
   useEffect(async () => {
+    // 지도 데이터
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const edgeInfoTemp = result.data.data.edgeInfo;
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
-    setClusterName(clusterNameData[0]);
     setDataEdgeInfo(edgeInfoTemp);
     const dataPoint = edgeInfoTemp.map((item) => item.point);
     const dataStatus = edgeInfoTemp.map((item) => item.status);
     setData(dataPoint);
     setDataStatus(dataStatus);
+
+    // nodeRunning 데이터
+    setClusterName(clusterNameData);
+    loadEdgeZoneDashboard();
+    loadEdgeZoneDetailDashboard();
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -59,7 +68,11 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>4</span>
+                       <span>${
+                         edgeNodeRunning.filter(
+                           (item) => item.status === "Ready"
+                         ).length
+                       }</span>
                      </div>
                    </td>
                  </tr>
