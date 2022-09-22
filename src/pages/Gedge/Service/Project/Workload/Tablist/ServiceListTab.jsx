@@ -94,7 +94,7 @@ const ServiceListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -130,7 +130,7 @@ const ServiceListTab = observer(() => {
         </PanelBox>
         <Detail service={serviceDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default ServiceListTab;

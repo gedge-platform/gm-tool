@@ -95,7 +95,7 @@ const JobListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -125,9 +125,9 @@ const JobListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <Detail job={jobDetail} />
+        <Detail job={Detail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default JobListTab;

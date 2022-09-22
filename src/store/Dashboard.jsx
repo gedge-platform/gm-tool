@@ -133,6 +133,8 @@ class Dashboard {
 
   edgeNodeRunning = [];
   nodeRunning = [];
+  nodeReady = 0;
+  nodeNotReady = 0;
 
   mapZoom = 1;
   setMapZoom = (value) => {
@@ -401,6 +403,8 @@ class Dashboard {
         this.totalElements = data.length;
       });
     });
+    console.log(this.clusterNameList);
+    // this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
     this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
@@ -431,7 +435,14 @@ class Dashboard {
           this.diskUtil = data.diskUtil ? data.diskUtil : 0;
           this.diskTotal = data.diskTotal ? data.diskTotal : 0;
           this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
-          this.edgeNodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+          this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+          this.nodeReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "Ready" === element).length
+            : 0;
+          this.nodeNotReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "NotReady" === element)
+                .length
+            : 0;
         })
       );
   };

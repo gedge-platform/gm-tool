@@ -76,7 +76,7 @@ const StatefulSetListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -108,7 +108,7 @@ const StatefulSetListTab = observer(() => {
         </PanelBox>
         <Detail statefulSet={statefulDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default StatefulSetListTab;

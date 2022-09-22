@@ -142,18 +142,20 @@ class StorageClass {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -273,14 +275,27 @@ class StorageClass {
         runInAction(() => {
           console.log(res);
           this.storageClasses = res.data.data;
-          this.totalElements = res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
-        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+        this.totalElements === 0
+          ? ((this.storageClass = null),
+            (this.scYamlFile = null),
+            (this.scAnnotations = null),
+            (this.scLables = null),
+            (this.scParameters = null),
+            (this.label = null),
+            (this.annotations = null),
+            (this.storageClassList = null))
+          : this.loadStorageClass(
+              this.viewList[0].name,
+              this.viewList[0].cluster
+            );
       })
       .then(() => {
         this.loadStorageClassName(this.viewList[0].cluster);

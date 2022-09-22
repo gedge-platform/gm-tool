@@ -27,8 +27,6 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
-  console.log("mapZoom", mapZoom);
-
   useEffect(async () => {
     // 지도 데이터
     const result = await axios(`${SERVER_URL}/totalDashboard`);

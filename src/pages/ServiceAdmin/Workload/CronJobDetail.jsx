@@ -21,6 +21,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -171,7 +175,7 @@ const Detail = observer(() => {
           <TableTitle>Annotations</TableTitle>
           {annotations != null ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody style={{ whiteSpace: "pre-line" }}>
+              <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
                   <tr>
                     <th className="tb_workload_detail_labels_th">{key}</th>

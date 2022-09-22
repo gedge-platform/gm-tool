@@ -21,6 +21,7 @@ class Volume {
   scAnnotations = {};
   getYamlFile = "";
   resultList = {};
+  annotations = {};
   events = [
     {
       kind: "",
@@ -85,18 +86,20 @@ class Volume {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -212,14 +215,21 @@ class Volume {
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
-          this.totalElements = this.pVolumesList.length;
+          this.totalElements =
+            res.data.data === null ? 0 : this.pVolumesList.length;
         });
       })
       .then(() => {
         this.convertList(this.pVolumesList, this.setPVolumesList);
       })
       .then(() => {
-        this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
+        this.totalElements === 0
+          ? ((this.pVolume = null),
+            (this.pVolumeYamlFile = null),
+            (this.pVolumeMetadata = null),
+            (this.annotations = null),
+            (this.events = null))
+          : this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
   };
 
@@ -231,7 +241,10 @@ class Volume {
           this.pVolume = data;
           this.pVolumeYamlFile = "";
           this.pVolumeMetadata = {};
+          this.annotations = data.annotations;
           this.events = data.events;
+
+          console.log(data);
           Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
             try {
               const YAML = require("json-to-pretty-yaml");

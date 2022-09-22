@@ -104,7 +104,7 @@ const PodListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -141,7 +141,7 @@ const PodListTab = observer(() => {
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default PodListTab;

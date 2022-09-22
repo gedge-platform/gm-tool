@@ -93,7 +93,7 @@ const CronJobListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -125,7 +125,7 @@ const CronJobListTab = observer(() => {
         </PanelBox>
         <Detail cronJob={cronJobDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default CronJobListTab;

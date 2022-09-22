@@ -7,7 +7,7 @@ import { SideNavbar } from "./SideNavbar";
 import { MainContents } from "./MainContents";
 import WebSocketContainer from "./WebSocket/WebSocketContainer";
 
-export const Layout = props => {
+export const Layout = (props) => {
   const currentPage = props.currentPage;
   const currentPageTitle = props.currentPageTitle;
   const resize = props.resize;
@@ -16,7 +16,11 @@ export const Layout = props => {
     <ThemeProvider theme={theme}>
       {/* <WebSocketContainer> */}
       <SideNavbar />
-      <MainContents currentPage={currentPage} currentPageTitle={currentPageTitle} resize={resize}>
+      <MainContents
+        currentPage={currentPage}
+        currentPageTitle={currentPageTitle}
+        resize={resize}
+      >
         {props.children}
         <ToastContainer position="top-right" autoClose={10000} />
       </MainContents>
