@@ -7,13 +7,14 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const devMode = process.env.NODE_ENV !== "production";
-let dotenv;
 
-if (devMode) {
-  dotenv = require("dotenv").config({ path: __dirname + "/.env" });
-} else {
-  dotenv = require("dotenv").config({ path: __dirname + "/.env.production" });
-}
+// if (devMode) {
+//   dotenv = require("dotenv").config({ path: __dirname + "/.env" });
+// } else {
+//   dotenv = require("dotenv").config({ path: __dirname + "/.env.production" });
+// }
+
+let dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 
 const { REACT_APP_BASE_URI } = dotenv.parsed;
 const { WEB_SOCKET_URI } = dotenv.parsed;
@@ -44,7 +45,10 @@ module.exports = function () {
   };
 
   return {
-    entry: ["./src/index.jsx"],
+    entry: {
+      main: "./src/index.jsx",
+      vendor: ["moment", "lodash"],
+    },
     target: "web",
     mode: "development",
     output: {
@@ -67,7 +71,7 @@ module.exports = function () {
       port: 8080,
       disableHostCheck: true,
       inline: true,
-      hot: true,
+      hot: false,
       contentBase: path.resolve(__dirname, "public", "dist"),
       historyApiFallback: true,
       proxy: {
@@ -80,6 +84,46 @@ module.exports = function () {
         "/websocket": {
           target: WEB_SOCKET_URI,
           ws: true,
+        },
+      },
+    },
+
+    optimization: {
+      minimize: devMode ? false : true,
+      // minimizer: devMode
+      //   ? []
+      //   : [
+      //       new TerserPlugin({
+      //         terserOptions: {
+      //           ecma: 6,
+      //           compress: { drop_console: true },
+      //           output: { comments: false, beautify: false },
+      //         },
+      //       }),
+      //     ],
+      concatenateModules: devMode ? false : true,
+      runtimeChunk: {
+        name: "runtime",
+      },
+      splitChunks: {
+        name: true,
+        chunks: "async",
+        minSize: 20000,
+        minSize: 0,
+        minChunks: 1,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
+        cacheGroups: {
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+            // reuseExistingChunk: true,
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
         },
       },
     },
@@ -161,9 +205,9 @@ module.exports = function () {
         minify: devMode
           ? false
           : {
-              collapseWhitespace: true,
-              removeComments: true,
-            },
+            collapseWhitespace: true,
+            removeComments: true,
+          },
       }),
       new MiniCssExtractPlugin({
         filename: devMode ? "[name].css" : "[name].[hash].css",
