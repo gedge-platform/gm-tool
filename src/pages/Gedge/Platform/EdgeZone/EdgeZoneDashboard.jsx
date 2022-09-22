@@ -31,7 +31,8 @@ const EdgeZoneDashboard = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-  const { loadEdgeZoneDashboard, loadEdgeZoneDetailDashboard } = dashboardStore;
+  const { loadEdgeZoneDashboard, loadEdgeZoneDetailDashboard, setMapZoom } =
+    dashboardStore;
 
   const history = useHistory();
 
@@ -54,7 +55,7 @@ const EdgeZoneDashboard = observer(() => {
             <ClusterInfo />
           </div>
           <div className="ClusterMapWrap">
-            <MapContent />
+            <MapContent zoom={setMapZoom(2)} />
           </div>
 
           <div className="SummaryWrap">

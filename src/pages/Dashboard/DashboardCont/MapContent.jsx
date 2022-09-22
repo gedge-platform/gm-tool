@@ -15,9 +15,8 @@ const MapContent = observer(() => {
     setClusterName,
     loadEdgeZoneDetailDashboard,
     loadEdgeZoneDashboard,
+    mapZoom,
   } = dashboardStore;
-
-  console.log("edgeNodeRunning", edgeNodeRunning);
 
   // const nodeData =
   //   nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
@@ -28,11 +27,16 @@ const MapContent = observer(() => {
   const [dataStatus, setDataStatus] = useState("");
   const [nodeDatas, setNodeDatas] = useState(clusterName);
 
+  console.log("mapZoom", mapZoom);
+
   useEffect(async () => {
     // 지도 데이터
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const edgeInfoTemp = result.data.data.edgeInfo;
+    const nodeRunning = result.data.data.nodeRunning;
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
+    // 엣지존, 클라우드 대시보드의 클러스터 이름
+    setClusterName(clusterNameData[0]);
     setDataEdgeInfo(edgeInfoTemp);
     const dataPoint = edgeInfoTemp.map((item) => item.point);
     const dataStatus = edgeInfoTemp.map((item) => item.status);
@@ -40,9 +44,8 @@ const MapContent = observer(() => {
     setDataStatus(dataStatus);
 
     // nodeRunning 데이터
-    setClusterName(clusterNameData);
-    loadEdgeZoneDashboard();
-    loadEdgeZoneDetailDashboard();
+    // loadEdgeZoneDashboard();
+    // loadEdgeZoneDetailDashboard();
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -52,7 +55,7 @@ const MapContent = observer(() => {
         .addTo(mapRef.current)
         .bindPopup(
           `
-              <div class="leaflet-popup-title">
+          <div class="leaflet-popup-title">
               ${edgeInfoTemp.map((item) => item.address)[i]}
              </div>
              <div class="leaflet-popup-table">
@@ -252,7 +255,7 @@ const MapContent = observer(() => {
   const mapParams = {
     // center: [37.481, 126.893],
     center: [37.5587619, 126.974145],
-    zoom: 10,
+    zoom: mapZoom, // usestate 값 저장 store
     zoomControl: true,
     maxBounds: L.latLngBounds(L.latLng(-150, -240), L.latLng(150, 240)),
     layers: [MAP_TILE],
