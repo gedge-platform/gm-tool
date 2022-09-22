@@ -42,7 +42,6 @@ const CreateCluster = observer(props => {
   const clusterType = props.type;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       clusterName: "",
@@ -85,6 +84,7 @@ const CreateCluster = observer(props => {
   const createCluster = async body => {
     const result = await postCluster(body);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const searchAddressOpen = () => {

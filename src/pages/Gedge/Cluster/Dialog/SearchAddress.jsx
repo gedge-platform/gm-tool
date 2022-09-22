@@ -26,7 +26,6 @@ const SearchAddress = observer(props => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 

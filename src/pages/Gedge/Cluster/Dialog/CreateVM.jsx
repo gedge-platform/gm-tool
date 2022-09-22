@@ -40,7 +40,6 @@ const CreateVM = observer(props => {
   const { name, config, image, flavor } = inputs;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       name: "",
@@ -110,6 +109,7 @@ const CreateVM = observer(props => {
   const createVM = async body => {
     const result = await postVM(body);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const onChange = ({ target: { name, value } }) => {
