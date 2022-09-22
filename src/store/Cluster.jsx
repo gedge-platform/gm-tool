@@ -163,6 +163,12 @@ class Cluster {
     });
   };
 
+  setInitViewList = n => {
+    runInAction(() => {
+      this.viewList = [];
+    });
+  };
+
   loadClusterList = async type => {
     await axios
       .get(`${SERVER_URL}/clusters`)

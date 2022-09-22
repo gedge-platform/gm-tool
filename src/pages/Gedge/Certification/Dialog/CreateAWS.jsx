@@ -40,7 +40,6 @@ const CreateAWS = observer(props => {
   const { postCredential, setCredentialName, setClientId, setClientSecret, setRegion, setZone } = certificationStore;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       CredentialName: "",
@@ -75,6 +74,7 @@ const CreateAWS = observer(props => {
   const createCredential = async () => {
     const result = await postCredential(inputs);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {});

@@ -6,7 +6,6 @@ import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CDeleteButton } from "@/components/buttons/CDeleteButton";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../PodDetail";
 import podStore from "../../../../store/Pod";
@@ -100,7 +99,7 @@ const PodListTab = observer(() => {
   const reloadData = () => {
     setReRun(true);
   };
-  
+
   useEffect(() => {
     loadPodList();
     return () => {

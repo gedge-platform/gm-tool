@@ -24,7 +24,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateUser = observer((props) => {
+const CreateUser = observer(props => {
   const { open } = props;
   const [inputs, setInputs] = useState({
     memberId: "",
@@ -35,20 +35,11 @@ const CreateUser = observer((props) => {
     memberDescription: "",
     memberRole: "PA",
   });
-  const {
-    memberId,
-    memberName,
-    password,
-    memberRole,
-    email,
-    contact,
-    memberDescription,
-  } = inputs;
+  const { memberId, memberName, password, memberRole, email, contact, memberDescription } = inputs;
 
   const { postUser } = userStore;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       memberId: "",
@@ -96,20 +87,13 @@ const CreateUser = observer((props) => {
   const createUser = async () => {
     const result = await postUser(inputs);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {}, []);
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={`Create Member`}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={`Create Member`} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
@@ -118,14 +102,7 @@ const CreateUser = observer((props) => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Mermber Id"
-                className="form_fullWidth"
-                name="memberId"
-                onChange={onChange}
-                value={memberId}
-              />
+              <CTextField type="text" placeholder="Mermber Id" className="form_fullWidth" name="memberId" onChange={onChange} value={memberId} />
             </td>
           </tr>
           <tr>
@@ -150,14 +127,7 @@ const CreateUser = observer((props) => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Member Name"
-                className="form_fullWidth"
-                name="memberName"
-                onChange={onChange}
-                value={memberName}
-              />
+              <CTextField type="text" placeholder="Member Name" className="form_fullWidth" name="memberName" onChange={onChange} value={memberName} />
             </td>
           </tr>
           <tr>
@@ -166,14 +136,7 @@ const CreateUser = observer((props) => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Member Email"
-                className="form_fullWidth"
-                name="email"
-                onChange={onChange}
-                value={email}
-              />
+              <CTextField type="text" placeholder="Member Email" className="form_fullWidth" name="email" onChange={onChange} value={email} />
             </td>
           </tr>
           <tr>
@@ -182,14 +145,7 @@ const CreateUser = observer((props) => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Member Contact"
-                className="form_fullWidth"
-                name="contact"
-                onChange={onChange}
-                value={contact}
-              />
+              <CTextField type="text" placeholder="Member Contact" className="form_fullWidth" name="contact" onChange={onChange} value={contact} />
             </td>
           </tr>
           {/* <tr>

@@ -29,24 +29,14 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreatePod = observer((props) => {
+const CreatePod = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
-  const {
-    podName,
-    containerName,
-    containerImage,
-    containerPort,
-    workspace,
-    project,
-    content,
-    clearAll,
-    setContent,
-  } = podStore;
+  const { podName, containerName, containerImage, containerPort, workspace, project, content, clearAll, setContent } = podStore;
 
   const template = {
     apiVersion: "v1",
@@ -71,7 +61,6 @@ const CreatePod = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -83,6 +72,7 @@ const CreatePod = observer((props) => {
 
     postWorkload(requestId, workspace, project, "Pod");
     postScheduler(requestId, content, handleClose);
+    props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {
@@ -169,15 +159,7 @@ const CreatePod = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Pod"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Pod"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );
