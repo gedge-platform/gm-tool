@@ -25,6 +25,7 @@ const EdgeClusterListTab = observer(() => {
   const [clusterName, setClusterName] = useState("");
 
   const {
+    setInitViewList,
     deleteCluster,
     clusterDetail,
     clusterList,
@@ -120,6 +121,7 @@ const EdgeClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    setInitViewList();
     loadClusterList("edge");
     return () => {
       setReRun(false);

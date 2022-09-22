@@ -20,6 +20,7 @@ const CloudClusterListTab = observer(() => {
   const [clusterName, setClusterName] = useState("");
 
   const {
+    setInitViewList,
     deleteCluster,
     clusterDetail,
     clusterList,
@@ -104,6 +105,7 @@ const CloudClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    setInitViewList();
     loadClusterList("cloud");
     return () => {
       setReRun(false);

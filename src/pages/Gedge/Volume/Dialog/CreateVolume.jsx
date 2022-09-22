@@ -35,7 +35,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateVolume = observer((props) => {
+const CreateVolume = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const { setProjectListinWorkspace } = projectStore;
@@ -81,7 +81,7 @@ const CreateVolume = observer((props) => {
     },
   };
 
-  const onClickStepOne = (e) => {
+  const onClickStepOne = e => {
     console.log(e);
     if (volumeName === "") {
       swalError("Volume 이름을 입력해주세요");
@@ -122,7 +122,6 @@ const CreateVolume = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -145,6 +144,8 @@ const CreateVolume = observer((props) => {
   const CreateVolume = () => {
     // for문으로 복수의 클러스터이름 보내게
     createVolume(require("json-to-pretty-yaml").stringify(template));
+    handleClose();
+    props.reloadFunc && props.reloadFunc();
     // setSelectClusters();
   };
 
@@ -175,7 +176,7 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={(e) => onClickStepOne(e)}>다음</ButtonNext>
+              <ButtonNext onClick={e => onClickStepOne(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -230,9 +231,7 @@ const CreateVolume = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={() => CreateVolume()}>
-                Schedule Apply
-              </ButtonNext>
+              <ButtonNext onClick={() => CreateVolume()}>Schedule Apply</ButtonNext>
             </div>
           </div>
         </>
@@ -241,15 +240,7 @@ const CreateVolume = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Volume"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Volume"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );

@@ -25,7 +25,7 @@ const CreateOPENSTACK = observer(props => {
   // const { open } = props;
   const [inputs, setInputs] = useState({
     credentialName: "",
-    ProviderName: "AWS",
+    ProviderName: "OPENSTACK",
     IdentityEndPoint: "",
     Username: "",
     Password: "",

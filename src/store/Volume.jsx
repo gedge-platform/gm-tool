@@ -65,13 +65,13 @@ class Volume {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -109,73 +109,73 @@ class Volume {
     });
   };
 
-  setPVolumesList = (list) => {
+  setPVolumesList = list => {
     runInAction(() => {
       this.pVolumesList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.pVolumesList[n];
     });
   };
 
-  setMetricsLastTime = (time) => {
+  setMetricsLastTime = time => {
     runInAction(() => {
       this.lastTime = time;
     });
   };
 
-  setVolumeName = (value) => {
+  setVolumeName = value => {
     runInAction(() => {
       this.volumeName = value;
     });
   };
 
-  setAccessMode = (name) => {
+  setAccessMode = name => {
     runInAction(() => {
       this.accessMode = name;
     });
   };
 
-  setVolumeCapacity = (value) => {
+  setVolumeCapacity = value => {
     runInAction(() => {
       this.volumeCapacity = value;
     });
   };
 
-  setContent = (content) => {
+  setContent = content => {
     runInAction(() => {
       this.content = content;
     });
   };
 
-  setResponseData = (data) => {
+  setResponseData = data => {
     runInAction(() => {
       this.responseData = data;
     });
   };
 
-  setCluster = (clusterName) => {
+  setCluster = clusterName => {
     runInAction(() => {
       this.cluster = clusterName;
     });
   };
 
-  setProject = (value) => {
+  setProject = value => {
     runInAction(() => {
       this.project = value;
     });
   };
 
-  setSelectClusters = (value) => {
+  setSelectClusters = value => {
     runInAction(() => {
       this.selectClusters = value;
     });
   };
 
-  setStorageClass = (value) => {
+  setStorageClass = value => {
     runInAction(() => {
       this.storageClass = value;
     });
@@ -191,16 +191,12 @@ class Volume {
   };
 
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
-    await axios
-      .get(
-        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          const YAML = require("json-to-pretty-yaml");
-          this.getYamlFile = YAML.stringify(res.data.data);
-        });
+    await axios.get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`).then(res => {
+      runInAction(() => {
+        const YAML = require("json-to-pretty-yaml");
+        this.getYamlFile = YAML.stringify(res.data.data);
       });
+    });
   };
 
   // 볼륨 관리
@@ -209,7 +205,7 @@ class Volume {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/pvs?user=${id}`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
           this.totalElements = this.pVolumesList.length;
@@ -224,42 +220,40 @@ class Volume {
   };
 
   loadPVolume = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL}/pvs/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pVolume = data;
-          this.pVolumeYamlFile = "";
-          this.pVolumeMetadata = {};
-          this.events = data.events;
-          Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pVolumeYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.pVolumeMetadata[key] = value;
-              }
+    await axios.get(`${SERVER_URL}/pvs/${name}?cluster=${cluster}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pVolume = data;
+        this.pVolumeYamlFile = "";
+        this.pVolumeMetadata = {};
+        this.events = data.events;
+        Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
+          try {
+            const YAML = require("json-to-pretty-yaml");
+            this.pVolumeYamlFile = YAML.stringify(JSON.parse(value));
+          } catch (e) {
+            if (key && value) {
+              this.pVolumeMetadata[key] = value;
             }
-          });
+          }
         });
       });
+    });
   };
 
   createVolume = (template, callback) => {
     const YAML = require("yamljs");
     axios
       .post(
-        `http://192.168.160.235:8011/gmcapi/v2/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
+        `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
 
-        YAML.parse(this.content)
+        YAML.parse(this.content),
       )
-      .then((res) => {
+      .then(res => {
         if (res.status === 201) {
           swalError("Volume이 생성되었습니다!", callback);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         swalError("프로젝트 생성에 실패하였습니다.", callback);
         console.error(err);
       });

@@ -30,21 +30,11 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateScheduler = observer((props) => {
+const CreateScheduler = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
-  const {
-    podReplicas,
-    content,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    workspace,
-    setContent,
-    clearAll,
-  } = deploymentStore;
+  const { podReplicas, content, containerName, containerImage, containerPort, project, workspace, setContent, clearAll } = deploymentStore;
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler2 } = schedulerStore;
 
@@ -89,7 +79,6 @@ const CreateScheduler = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -104,6 +93,7 @@ const CreateScheduler = observer((props) => {
     postWorkload(requestId, workspace, project);
     // postWorkload(requestId, workspace, project);
     postScheduler2(requestId, content, handleClose);
+    props.reloadFunc && props.reloadFunc();
 
     // let formData = new FormData();
     // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
@@ -220,15 +210,7 @@ const CreateScheduler = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Workload"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Workload"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );

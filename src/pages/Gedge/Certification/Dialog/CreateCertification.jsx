@@ -35,7 +35,6 @@ const CreateCertification = observer(props => {
   const { postCredential } = certificationStore;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setStepValue(1);
   };
@@ -145,6 +144,7 @@ const CreateCertification = observer(props => {
       console.log("result is : ", result);
     }
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   // useEffect(() => {

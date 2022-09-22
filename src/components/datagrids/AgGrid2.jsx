@@ -83,6 +83,8 @@ const AgGrid2 = (props) => {
         onGridReady={onGridReady}
         onFirstDataRendered={onFirstDataRendered}
         onGridSizeChanged={onGridSizeChanged}
+        overlayLoadingTemplate={'<span class="ag-overlay-loading-center">No Data</span>'}
+        overlayNoRowsTemplate={'<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">Data Loading....</span>'}
         rowData={rowData}
         columnDefs={columnDefs}
         autoWidth={autoWidth}

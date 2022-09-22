@@ -117,8 +117,7 @@ const CreateClaim = observer((props) => {
     }
   };
 
-  const handleClose = () => {
-    props.reloadFunc && props.reloadFunc(); // 이거 때문에 500 error
+  const handleClose = () => {// 이거 때문에 500 error
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -142,6 +141,7 @@ const CreateClaim = observer((props) => {
     // for문으로 복수의 클러스터이름 보내게
     createVolumeClaim(require("json-to-pretty-yaml").stringify(template));
     handleClose();
+    props.reloadFunc && props.reloadFunc(); 
     // setSelectClusters();
   };
 
