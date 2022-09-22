@@ -254,5 +254,5 @@ class Workspace {
   };
 }
 
-const workspacestore = new Workspace();
-export default workspacestore;
+const workspaceStore = new Workspace();
+export default workspaceStore;

@@ -3,13 +3,11 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import BasicInformation from "./BasicInformation";
 import PodSettins from "./PodSettins";
-import deploymentStore from "../../../../store/Deployment";
+import { deploymentStore, projectStore, schedulerStore } from "@/store";
 import DeploymentYaml from "./DeploymentYaml";
 import DeploymentPopup from "./DeploymentPopup";
-import projectStore from "../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
-import { CDialogNew } from "../../../../components/dialogs";
-import schedulerStore from "../../../../store/Scheduler";
+import { CDialogNew } from "@/components/dialogs";
 
 const Button = styled.button`
   background-color: #fff;

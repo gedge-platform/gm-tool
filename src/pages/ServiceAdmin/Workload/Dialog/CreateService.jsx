@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { CDialog } from "@/components/dialogs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import serviceStore from "../../../../store/Service";
+import { serviceStore, projectStore, schedulerStore } from "@/store";
 import ServiceBasicInformation from "../Dialog/ServiceBasicInformation";
 import ServiceYaml from "./ServiceYaml";
-import { CDialogNew } from "../../../../components/dialogs";
-import projectStore from "../../../../store/Project";
-import schedulerStore from "../../../../store/Scheduler";
-import { randomString } from "../../../../utils/common-utils";
+import { CDialogNew } from "@/components/dialogs";
+import { randomString } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;

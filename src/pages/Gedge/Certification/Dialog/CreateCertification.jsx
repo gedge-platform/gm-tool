@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import styled from "styled-components";
-import { swalError } from "../../../../utils/swal-utils";
-import certificationStore from "../../../../store/Certification";
+import { swalError } from "@/utils/swal-utils";
+import { certificationStore } from "@/store";
 import SelectProvider from "./SelectProvider";
 import CreateAWS from "./CreateAWS";
 import CreateOPENSTACK from "./CreateOPENSTACK";

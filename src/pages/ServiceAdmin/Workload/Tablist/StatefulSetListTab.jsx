@@ -4,12 +4,11 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../StatefulDetail";
-import statefulSetStore from "../../../../store/StatefulSet";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { statefulSetStore } from "@/store";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const StatefulSetListTab = observer(() => {
   const [open, setOpen] = useState(false);

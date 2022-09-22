@@ -6,12 +6,7 @@ import { NavScrollbar } from "@/components/scrollbars";
 import { Title } from "@/pages";
 import { useHistory } from "react-router-dom";
 import { getItem } from "@/utils/sessionStorageFn";
-import TreeItem from "@mui/lab/TreeItem";
-import { TreeView } from "@mui/lab";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { ListItem, ListItemText } from "@mui/material";
+import { TreeItem, TreeView } from "@mui/lab";
 
 const CustomTreeItem = styled(TreeItem)`
 // & .MuiTreeItem-group {
@@ -208,12 +203,7 @@ export const SideMenu = () => {
       <NavScrollbar>
         {userRole === "PA" ? (
           <ul>
-            <TreeView
-              // defaultCollapseIcon={<ExpandMoreIcon />}
-              // defaultExpandIcon={<ChevronRightIcon />}
-              sx={{ overflowY: "auto" }}
-              aria-expanded={false}
-            >
+            <TreeView sx={{ overflowY: "auto" }} aria-expanded={false}>
               <li>
                 <NavLink exact to="/total" activeClassName="active">
                   {Title.TotalDashboard}
@@ -320,12 +310,7 @@ export const SideMenu = () => {
           </ul>
         ) : (
           <ul>
-            <TreeView
-              // defaultCollapseIcon={<ExpandMoreIcon />}
-              // defaultExpandIcon={<ChevronRightIcon />}
-              sx={{ overflowY: "auto" }}
-              aria-expanded={false}
-            >
+            <TreeView sx={{ overflowY: "auto" }} aria-expanded={false}>
               <li>
                 <NavLink exact to="/service" activeClassName="active">
                   {Title.ServiceAdminDashboard}

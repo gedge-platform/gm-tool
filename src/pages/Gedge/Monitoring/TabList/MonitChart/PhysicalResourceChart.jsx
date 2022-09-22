@@ -1,21 +1,9 @@
-import React, { useState, useEffect, PureComponent } from "react";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import React from "react";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { observer } from "mobx-react";
-import monitoringStore from "../../../../../store/Monitoring";
+import { monitoringStore } from "@/store";
 import { ClusterMetricTypes } from "../../Utils/MetricsVariables";
-import {
-  unixCurrentTime,
-  unixStartTime,
-  unixToTime,
-} from "../../Utils/MetricsVariableFormatter";
+import { unixCurrentTime, unixStartTime, unixToTime } from "../../Utils/MetricsVariableFormatter";
 
 const PrAreaChart = observer(({ value }) => {
   const { lastTime, interval, allMetrics } = monitoringStore;
@@ -26,28 +14,28 @@ const PrAreaChart = observer(({ value }) => {
   let dataMax = [];
   let maxData = 0;
 
-  const searchMetrics = (filter) => {
+  const searchMetrics = filter => {
     Object.entries(allMetrics).map(([key, value]) => {
       if (key === filter) {
-        maxData = 0
-        value[0]?.values.forEach((element) => {
+        maxData = 0;
+        value[0]?.values.forEach(element => {
           const tempMetrics = {
             time: unixToTime(element[0]),
             value: element[1],
           };
           metrics.push(tempMetrics);
           if (maxData < parseFloat(element[1])) {
-            maxData = parseFloat(element[1])
+            maxData = parseFloat(element[1]);
           }
         });
       }
     });
   };
 
-  const searchMax = (filter) => {
+  const searchMax = filter => {
     Object.entries(allMetrics).map(([key, value]) => {
       if (key === filter) {
-        value[0]?.values.forEach((element) => {
+        value[0]?.values.forEach(element => {
           metricsY = element[1];
         });
       }
@@ -58,7 +46,7 @@ const PrAreaChart = observer(({ value }) => {
     case ClusterMetricTypes.CPU_USAGE:
       title = "CPU Usage (Core)";
       searchMax("cpu_total");
-      dataMax = [0, Number(metricsY)]
+      dataMax = [0, Number(metricsY)];
       searchMetrics(value);
       // dataMax = [0, Math.round(maxData * 1.2)];
       break;
@@ -77,7 +65,7 @@ const PrAreaChart = observer(({ value }) => {
       title = "Memory Usage (GB)";
       // searchMetrics(value);
       searchMax("memory_total");
-      dataMax = [0, Number(metricsY)]
+      dataMax = [0, Number(metricsY)];
       searchMetrics(value);
       // dataMax = [0, Math.round(maxData * 1.2)];
       break;
@@ -166,12 +154,7 @@ const PrAreaChart = observer(({ value }) => {
           <XAxis tickLine="false" dataKey="time" />
           <YAxis type="number" domain={dataMax} />
           <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke="#007EFF"
-            fill="#0080ff30"
-          />
+          <Area type="monotone" dataKey="value" stroke="#007EFF" fill="#0080ff30" />
         </AreaChart>
       </ResponsiveContainer>
     </div>

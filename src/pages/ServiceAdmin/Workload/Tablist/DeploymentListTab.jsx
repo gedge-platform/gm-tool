@@ -3,15 +3,14 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
-import deploymentStore from "../../../../store/Deployment";
+import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);

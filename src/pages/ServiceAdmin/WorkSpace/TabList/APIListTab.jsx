@@ -4,14 +4,13 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
-import workspacesStore from "@/store/WorkSpace";
+import workspaceStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 import Detail from "../Detail";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { AgGrid2 } from "@/components/datagrids/AgGrid2";
 
 const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -30,7 +29,7 @@ const WorkspaceListTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
-  } = workspacesStore;
+  } = workspaceStore;
 
   const [columDefs] = useState([
     {
@@ -48,7 +47,7 @@ const WorkspaceListTab = observer(() => {
       field: "memberName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
       },
     },
     {
@@ -69,7 +68,7 @@ const WorkspaceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     console.log("e is ", e.data.workspaceName);
     setWorkspaceName(e.data.workspaceName);
   };
@@ -86,9 +85,7 @@ const WorkspaceListTab = observer(() => {
     if (workspaceName === "") {
       swalError("워크스페이스를 선택해주세요!");
     } else {
-      swalUpdate(workspaceName + "를 삭제하시겠습니까?", () =>
-        deleteWorkspace(workspaceName, reloadData)
-      );
+      swalUpdate(workspaceName + "를 삭제하시겠습니까?", () => deleteWorkspace(workspaceName, reloadData));
     }
     setWorkspaceName("");
   };
@@ -133,12 +130,7 @@ const WorkspaceListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateWorkSpace
-            type={"user"}
-            open={open}
-            onClose={handleClose}
-            reloadFunc={reloadData}
-          />
+          <CreateWorkSpace type={"user"} open={open} onClose={handleClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>

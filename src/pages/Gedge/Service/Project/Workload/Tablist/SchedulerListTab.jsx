@@ -8,12 +8,9 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../PodDetail";
-import podStore from "../../../../../../store/Pod";
-import CreatePod from "../Dialog/CreatePod";
+import { podStore } from "@/store";
 import CreateScheduler from "../Dialog/CreateScheduler";
-import { drawStatus } from "../../../../../../components/datagrids/AggridFormatter";
-import { PanelBox2 } from "../../../../../../components/styles/PanelBox2";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -22,18 +19,7 @@ const SchedulerListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const {
-    podList,
-    podDetail,
-    totalYElements,
-    loadPodList,
-    loadPodDetail,
-    currentYPage,
-    totalYPages,
-    viewYList,
-    goPrevPage,
-    goNextPage,
-  } = podStore;
+  const { podList, podDetail, totalYElements, loadPodList, loadPodDetail, currentYPage, totalYPages, viewYList, goPrevPage, goNextPage } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -89,7 +75,7 @@ const SchedulerListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadPodDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -125,11 +111,7 @@ const SchedulerListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateScheduler
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadPodList}
-          />
+          <CreateScheduler open={open} onClose={handleClose} reloadFunc={loadPodList} />
         </PanelBox>
       </CReflexBox>
     </>

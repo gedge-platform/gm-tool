@@ -8,8 +8,8 @@ import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
 import MapContent from "@/pages/Dashboard/DashboardCont/MapContent";
 import EdgeZoneSummary from "./EdgeZoneSummary";
 import styled from "styled-components";
-import NodeList from "../../../Dashboard/DashboardCont/NodeList";
-import dashboardStore from "../../../../store/Dashboard";
+import NodeList from "@/pages/Dashboard/DashboardCont/NodeList";
+import { dashboardStore } from "@/store";
 
 const EdgeZoneWrap = styled.div`
   .panel_summary {

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import clusterStore from "../../../../store/Cluster";
-import { dateFormatter, duplicateCheck } from "../../../../utils/common-utils";
-import { CCreateButton } from "@/components/buttons";
-import workspacesStore from "../../../../store/WorkSpace";
-import { swalConfirm, swalError } from "../../../../utils/swal-utils";
+import { clusterStore, workspaceStore } from "@/store";
+import { dateFormatter, duplicateCheck } from "@/utils/common-utils";
+import { swalConfirm, swalError } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -29,7 +27,7 @@ const ButtonNext = styled.button`
 const CreateWorkSpace = observer(props => {
   const { open } = props;
   const { loadClusterList, clusterListInWorkspace } = clusterStore;
-  const { createWorkspace } = workspacesStore;
+  const { createWorkspace } = workspaceStore;
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
   const [selectCluster, setSelectCluster] = useState([]);

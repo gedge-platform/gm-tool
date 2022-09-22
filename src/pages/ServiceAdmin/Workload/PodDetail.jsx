@@ -3,7 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
-import podStore from "../../../store/Pod";
+import { podStore } from "@/store";
 import { observer } from "mobx-react-lite";
 import EventAccordion from "@/components/detail/EventAccordion";
 
@@ -50,15 +50,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const {
-    podDetail,
-    label,
-    annotations,
-    events,
-    podContainers,
-    containerStatuses,
-    involvesData,
-  } = podStore;
+  const { podDetail, label, annotations, events, podContainers, containerStatuses, involvesData } = podStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -110,11 +102,7 @@ const Detail = observer(() => {
                 <th>Qos Class</th>
                 <td>{podDetail.qosClass ? podDetail.qosClass : "-"}</td>
                 <th>Created</th>
-                <td>
-                  {podDetail.creationTimestamp
-                    ? dateFormatter(podDetail.creationTimestamp)
-                    : "-"}
-                </td>
+                <td>{podDetail.creationTimestamp ? dateFormatter(podDetail.creationTimestamp) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -123,7 +111,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container" style={{ tableLayout: "fixed" }}>
           <TableTitle>Pod Containers</TableTitle>
-          {podContainers.map((pod) => (
+          {podContainers.map(pod => (
             <>
               <table className="tb_data">
                 <tbody>
@@ -147,17 +135,11 @@ const Detail = observer(() => {
                                 <th>ContainerPort</th>
                                 <th>Protocol</th>
                               </tr>
-                              {pod?.ports.map((port) => (
+                              {pod?.ports.map(port => (
                                 <tr>
                                   <td>{port?.name ? port.name : "-"}</td>
-                                  <td>
-                                    {port?.containerPort
-                                      ? port.containerPort
-                                      : "-"}
-                                  </td>
-                                  <td>
-                                    {port?.protocol ? port.protocol : "-"}
-                                  </td>
+                                  <td>{port?.containerPort ? port.containerPort : "-"}</td>
+                                  <td>{port?.protocol ? port.protocol : "-"}</td>
                                 </tr>
                               ))}
                             </tbody>
@@ -180,7 +162,7 @@ const Detail = observer(() => {
                               <th>Mountpath</th>
                               <th>readonly</th>
                             </tr>
-                            {pod?.volumemounts.map((vol) => (
+                            {pod?.volumemounts.map(vol => (
                               <tr>
                                 <td>{vol.name ? vol.name : "-"}</td>
                                 <td>{vol.mountpath ? vol.mountpath : "-"}</td>
@@ -205,7 +187,7 @@ const Detail = observer(() => {
                                 <th>Name</th>
                                 <th>Value</th>
                               </tr>
-                              {pod.env?.map((item) => (
+                              {pod.env?.map(item => (
                                 <tr>
                                   <td>{item.name ? item.name : <>-</>}</td>
                                   <td>{item.value ? item.value : <>-</>}</td>
@@ -279,7 +261,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={3}>
         <div className="tb_container">
           <TableTitle>Container Statuses</TableTitle>
-          {containerStatuses.map((status) => (
+          {containerStatuses.map(status => (
             <>
               <table className="tb_data">
                 <tbody>
@@ -324,27 +306,15 @@ const Detail = observer(() => {
             <tbody className="tb_workload_pod_detail">
               <tr>
                 <th>Name</th>
-                <td>
-                  {involvesData.workloadList.name
-                    ? involvesData.workloadList.name
-                    : "-"}
-                </td>
+                <td>{involvesData.workloadList.name ? involvesData.workloadList.name : "-"}</td>
               </tr>
               <tr>
                 <th>Kind</th>
-                <td>
-                  {involvesData.workloadList.kind
-                    ? involvesData.workloadList.kind
-                    : "-"}
-                </td>
+                <td>{involvesData.workloadList.kind ? involvesData.workloadList.kind : "-"}</td>
               </tr>
               <tr>
                 <th>ReplicaName</th>
-                <td>
-                  {involvesData.workloadList.replicaName
-                    ? involvesData.workloadList.replicaName
-                    : "-"}
-                </td>
+                <td>{involvesData.workloadList.replicaName ? involvesData.workloadList.replicaName : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -363,21 +333,11 @@ const Detail = observer(() => {
                         <th>Created</th>
                       </tr>
                       {involvesData?.serviceList ? (
-                        involvesData?.serviceList?.map((item) => (
+                        involvesData?.serviceList?.map(item => (
                           <tr>
-                            <td>
-                              {item.metadata.name ? item.metadata.name : "-"}
-                            </td>
-                            <td>
-                              {item.metadata.namespace
-                                ? item.metadata.namespace
-                                : "-"}
-                            </td>
-                            <td>
-                              {item.metadata.creationTimestamp
-                                ? dateFormatter(item.metadata.creationTimestamp)
-                                : "-"}
-                            </td>
+                            <td>{item.metadata.name ? item.metadata.name : "-"}</td>
+                            <td>{item.metadata.namespace ? item.metadata.namespace : "-"}</td>
+                            <td>{item.metadata.creationTimestamp ? dateFormatter(item.metadata.creationTimestamp) : "-"}</td>
                           </tr>
                         ))
                       ) : (
@@ -407,7 +367,7 @@ const Detail = observer(() => {
                           <td>-</td>
                         </tr>
                       ) : (
-                        involvesData?.serviceList?.map((item) =>
+                        involvesData?.serviceList?.map(item =>
                           Object.entries(item?.subsets).map(([inx, value]) =>
                             value.addresses === undefined ? (
                               <tr>
@@ -415,25 +375,18 @@ const Detail = observer(() => {
                                 <td>-</td>
                               </tr>
                             ) : (
-                              involvesData?.serviceList?.map((item) =>
-                                Object.entries(item?.subsets).map(
-                                  ([inx, value]) =>
-                                    Object.entries(value?.addresses).map(
-                                      ([key, value]) => (
-                                        <tr>
-                                          <td>
-                                            {value?.nodename
-                                              ? value?.nodename
-                                              : "-"}
-                                          </td>
-                                          <td>{value?.ip ? value?.ip : "-"}</td>
-                                        </tr>
-                                      )
-                                    )
-                                )
+                              involvesData?.serviceList?.map(item =>
+                                Object.entries(item?.subsets).map(([inx, value]) =>
+                                  Object.entries(value?.addresses).map(([key, value]) => (
+                                    <tr>
+                                      <td>{value?.nodename ? value?.nodename : "-"}</td>
+                                      <td>{value?.ip ? value?.ip : "-"}</td>
+                                    </tr>
+                                  )),
+                                ),
                               )
-                            )
-                          )
+                            ),
+                          ),
                         )
                       )}
                     </tbody>
@@ -463,18 +416,16 @@ const Detail = observer(() => {
                         //           <td>-</td>
                         //           <td>-</td>
                         //         </tr>
-                        involvesData?.serviceList?.map((item) =>
+                        involvesData?.serviceList?.map(item =>
                           Object.entries(item?.subsets).map(([inx, value]) =>
                             Object.entries(value?.ports).map(([key, value]) => (
                               <tr>
                                 <td>{value?.name ? value?.name : "-"}</td>
                                 <td>{value?.port ? value?.port : "-"}</td>
-                                <td>
-                                  {value?.protocol ? value?.protocol : "-"}
-                                </td>
+                                <td>{value?.protocol ? value?.protocol : "-"}</td>
                               </tr>
-                            ))
-                          )
+                            )),
+                          ),
                         )
                       )}
                     </tbody>
