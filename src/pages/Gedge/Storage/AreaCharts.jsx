@@ -10,12 +10,12 @@ const AreaCharts = observer((props) => {
 
   const option = {
     chart: {
-      stacked: true,
+      // stacked: true,
       width: "100%",
       toolbar: {
         show: false
       },
-      stackType: "normal"
+      // stackType: "normal"
     },
     // responsive: [{
     //   breakpoint: 480,
@@ -98,7 +98,7 @@ const AreaCharts = observer((props) => {
     },
     tooltip: {
       enabled: true,
-      colors: "black"
+      theme: "dark",
     }
   };
   const series = seriesData

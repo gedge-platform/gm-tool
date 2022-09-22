@@ -309,6 +309,16 @@ class Pod {
   };
 
   createPod = async () => {};
+
+
+  deletePod = async (podName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/pods/${podName}`)
+      .then(res => {
+        if (res.status === 201) swalError("Pod가 삭제되었습니다.", callback);
+      })
+      .catch(err => swalError("삭제에 실패하였습니다."));
+  };  
 }
 
 const podStore = new Pod();

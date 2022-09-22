@@ -180,6 +180,16 @@ class CronJob {
         });
       });
   };
+
+  deleteCronJob = async (cronjobName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/cronjobs/${cronjobName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("CronJob이 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
+  };
 }
 
 const cronJobStore = new CronJob();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
@@ -13,7 +13,6 @@ import RequestStatusTab from "./Tablist/RequestStatusTab";
 import SchedulerListTab from "./Tablist/SchedulerListTab";
 
 const Workload = () => {
-  // console.log("77");
   const currentPageTitle = Title.Workload;
 
   const [tabvalue, setTabvalue] = useState(0);

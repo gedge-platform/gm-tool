@@ -278,7 +278,7 @@ class Project {
       });
   };
 
-  deleteProject = (projectName, callback) => {
+  deleteProject = async (projectName, callback) => {
     axios
       .delete(`${SERVER_URL}/projects/${projectName}`)
       .then((res) => {

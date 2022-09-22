@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
 
 class Job {
@@ -168,7 +169,6 @@ class Job {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/jobs?user=${id}`)
-      // .get(`${SERVER_URL}/jobs`)
       .then((res) => {
         runInAction(() => {
           // const list = res.data.data.filter((item) => item.projectType === type);
@@ -222,6 +222,15 @@ class Job {
           }
         });
       });
+  };
+
+  deleteJob = async (jobName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/jobs/${jobName}`)
+      .then((res) => {
+        if (res.status === 201) swalError("Job이 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

@@ -100,10 +100,12 @@ class Monitoring {
             index < unixCurrentTime();
             index = index + 60 * 5
           ) {
+            console.log(clusterMetric);
             clusterMetric.metrics.push({
               time: unixToTime(index),
               value: 0,
             });
+            console.log(array);
             array.push(clusterMetric);
           }
 
@@ -149,9 +151,8 @@ class Monitoring {
         { auth: BASIC_AUTH }
       )
       .then((res) => {
+        console.log(res.data?.items);
         this.coPieCPU = this.convertResponseToMonit(res);
-        console.log(res);
-        // console.log(this.coPieCPU[2]?.metrics);
       });
   };
 

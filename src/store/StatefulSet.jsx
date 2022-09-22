@@ -200,6 +200,16 @@ class StatefulSet {
         });
       });
   };
+
+  deleteStatefulSet = async (statefulsetName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/statefulsets/${statefulsetName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("StatefulSet가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
+  };
 }
 
 const statefulSetStore = new StatefulSet();

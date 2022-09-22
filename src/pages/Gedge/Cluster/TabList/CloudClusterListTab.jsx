@@ -1,25 +1,26 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
-import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { swalUpdate, swalError } from "../../../../utils/swal-utils";
 
 const CloudClusterListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+  const [Create, setCreateOpen] = useState(false);
+  const [Delete, setDeleteOpen] = useState(false);
+  const [reRun, setReRun] = useState(false);
+  const [clusterName, setClusterName] = useState("");
 
   const {
+    deleteCluster,
     clusterDetail,
     clusterList,
     totalElements,
@@ -77,31 +78,47 @@ const CloudClusterListTab = observer(() => {
 
   const handleClick = (e) => {
     loadCluster(e.data.clusterName);
+    setClusterName(e.data.clusterName);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleCreateOpen = () => {
+    setCreateOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCreateClose = () => {
+    setCreateOpen(false);
+  };
+
+  const handleDelete = () => {
+    if (clusterName === "") {
+      swalError("클러스터를 선택해주세요!");
+      return;
+    } else {
+      swalUpdate(clusterName + "를 삭제하시겠습니까?", () =>
+        deleteCluster(clusterName, reloadData)
+      );
+    }
+    setClusterName("");
+  };
+
+  const reloadData = () => {
+    setReRun(true);
   };
 
   useLayoutEffect(() => {
     loadClusterList("cloud");
-  }, []);
+    return () => {
+      setReRun(false);
+    };
+  }, [reRun]);
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("edge")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          <CommActionBar>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -120,7 +137,12 @@ const CloudClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
+          <CreateCluster
+            type="cloud"
+            open={Create}
+            onClose={handleCreateClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { useHistory } from "react-router";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
@@ -383,6 +382,16 @@ class Deployment {
       .then(() => {
         return;
       });
+  };
+
+  deleteDeployment = async (deploymentName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/deployments/${deploymentName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("Deployment가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

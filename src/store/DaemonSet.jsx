@@ -187,6 +187,16 @@ class DaemonSet {
         });
       });
   };
+
+  deleteDaemonSet = async (daemonsetName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/daemonsets/${daemonsetName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("DaemonSet이 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
+  };
 }
 
 const daemonSetStore = new DaemonSet();

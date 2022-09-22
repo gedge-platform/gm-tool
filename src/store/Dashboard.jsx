@@ -131,6 +131,7 @@ class Dashboard {
 
   cloudResourceCnt = {};
 
+  edgeNodeRunning = [];
   nodeRunning = [];
   nodeReady = 0;
   nodeNotReady = 0;
@@ -396,8 +397,8 @@ class Dashboard {
       });
     });
     console.log(this.clusterNameList);
-    this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
-    // this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
+    // this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
+    this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
@@ -405,6 +406,7 @@ class Dashboard {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
+          console.log("data", data);
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
           this.type = this.nodeInfo.map((val) => val.type);
@@ -454,7 +456,6 @@ class Dashboard {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${cloudName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
-          console.log(data);
           this.cloudName = cloudName;
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
@@ -477,7 +478,6 @@ class Dashboard {
           this.diskUtil = data.diskUtil ? data.diskUtil : 0;
           this.diskTotal = data.diskTotal ? data.diskTotal : 0;
           this.cloudResourceCnt = data.resourceCnt ? data.resourceCnt : 0;
-          console.log(this.cloudResourceCnt);
           this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
         })
       );

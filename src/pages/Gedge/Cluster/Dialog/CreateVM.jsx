@@ -1,10 +1,9 @@
+import React, { useState } from "react";
 import { observer } from "mobx-react";
-import React, { useEffect, useState } from "react";
 import { CDialogNew } from "../../../../components/dialogs";
+import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
-import { swalError } from "../../../../utils/swal-utils";
-import certificationStore from "../../../../store/Certification";
-import SelectProvider from "./SelectProvider";
+import clusterStore from "../../../../store/Cluster";
 import CreateAWS from "./CreateAWS";
 import CreateOPENSTACK from "./CreateOPENSTACK";
 
@@ -25,19 +24,30 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateCertification = observer(props => {
+const CreateVM = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const { postVM, ProviderName, setProviderName } = clusterStore;
 
-  const { CredentialName, ProviderName, ClientId, ClientSecret, IdentityEndPoint, Username, Password, DomainName, ProjectID, Region, Zone } =
-    certificationStore;
+  const ProviderList = ["AWS", "OPENSTACK"];
 
-  const { postCredential } = certificationStore;
+  const [inputs, setInputs] = useState({
+    name: "",
+    config: "",
+    image: "",
+    flavor: "",
+  });
+  const { name, config, image, flavor } = inputs;
 
   const handleClose = () => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
-    setStepValue(1);
+    setInputs({
+      name: "",
+      config: "",
+      image: "",
+      flavor: "",
+    });
   };
 
   const onClickStepTwo = () => {
@@ -57,106 +67,84 @@ const CreateCertification = observer(props => {
     }
   };
 
-  const onClickCreateOPENSTACK = () => {
-    if (CredentialName === "") {
-      swalError("Name을 입력해주세요");
-      return;
-    }
-    if (DomainName === "") {
-      swalError("DomainName를 입력해주세요");
-      return;
-    }
-    if (IdentityEndPoint === "") {
-      swalError("Identity Endpoint을 입력해주세요");
-      return;
-    }
-    if (Password === "") {
-      swalError("Password를 입력해주세요");
-      return;
-    }
-    if (ProjectID === "") {
-      swalError("projectID를 입력해주세요");
-      return;
-    }
-    if (Username === "") {
-      swalError("Username를 입력해주세요");
-      return;
-    }
-    if (Region === "") {
-      swalError("Region을 입력해주세요");
-      return;
-    }
-    if (Zone === "") {
-      swalError("Zone을 입력해주세요");
-      return;
-    } else {
-      createCredential();
-    }
-  };
-
-  const onClickCreateAWS = () => {
-    if (CredentialName === "") {
-      swalError("Name을 입력해주세요");
-      return;
-    }
-    if (ClientId === "") {
-      swalError("ClientId를 입력해주세요");
-      return;
-    }
-    if (ClientSecret === "") {
-      swalError("Client Secert을 입력해주세요");
-      return;
-    }
-    if (Region === "") {
-      swalError("Region을 입력해주세요");
-      return;
-    }
-    if (Zone === "") {
-      swalError("Zone을 입력해주세요");
-      return;
-    } else {
-      createCredential();
-    }
-  };
-
-  const createCredential = async () => {
+  const verify = () => {
     if (ProviderName === "AWS") {
-      const inputs = {
-        CredentialName: CredentialName,
-        ProviderName: ProviderName,
-        IdentityEndPoint: IdentityEndPoint,
-        Username: Username,
-        Password: Password,
-        ProjectID: ProjectID,
-        Region: Region,
-        Zone: Zone,
-      };
-      const result = await postCredential(inputs);
-    } else if (ProviderName === "OPENSTACK") {
-      const inputs = {
-        CredentialName: CredentialName,
-        ProviderName: ProviderName,
-        ClientId: ClientId,
-        ClientSecret: ClientSecret,
-        Region: Region,
-        Zone: Zone,
-      };
-      const result = await postCredential(inputs);
-      console.log("result is : ", result);
+      if (name === "") {
+        swalError("이름을 입력해주세요!");
+        return;
+      }
+      if (config === "") {
+        swalError("콘픽을 선택해주세요!");
+        return;
+      }
+      if (image === "") {
+        swalError("OS이미지를 선택해주세요!");
+        return;
+      }
+      if (flavor === "") {
+        swalError("사양을 선택해주세요!");
+        return;
+      }
     }
+    if (ProviderName === "OPENSTACK") {
+      if (name === "") {
+        swalError("이름을 입력해주세요!");
+        return;
+      }
+      if (config === "") {
+        swalError("콘픽을 선택해주세요!");
+        return;
+      }
+      if (image === "") {
+        swalError("OS이미지를 선택해주세요!");
+        return;
+      }
+      if (flavor === "") {
+        swalError("사양을 선택해주세요!");
+        return;
+      }
+    }
+    createVM(body);
+  };
+
+  const createVM = async body => {
+    const result = await postVM(body);
     handleClose();
   };
 
-  // useEffect(() => {
-  //   const YAML = require("json-to-pretty-yaml");
-  //   setContent(YAML.stringify(template));
-  // });
+  const onChange = ({ target: { name, value } }) => {
+    if (value === "AWS") setProviderName(value);
+    else if (value === "OPENSTACK") setProviderName(value);
+  };
+
+  // useEffect(props => {
+  //   console.log("props is ", props);
+  // }, []);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
       return (
         <>
-          <SelectProvider />
+          <table className="tb_data_new tb_write">
+            <tbody>
+              <tr>
+                <th>
+                  Select Provider Name
+                  <span className="requried">*</span>
+                </th>
+                <td>
+                  <FormControl className="form_fullWidth">
+                    <select name="ProviderName" onChange={onChange}>
+                      <option value={""}>Select Provider</option>
+                      {ProviderList.map(provider => (
+                        <option value={provider}>{provider}</option>
+                      ))}
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <div
             style={{
               display: "flex",
@@ -229,9 +217,9 @@ const CreateCertification = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Credential"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create VM"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );
 });
-export default CreateCertification;
+export default CreateVM;

@@ -1,44 +1,21 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
-import { CIconButton } from "@/components/buttons";
-import { CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
+import { CDeleteButton } from "@/components/buttons/CDeleteButton";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
-import CreateCluster from "../Dialog/CreateCluster";
-import Terminal from "../Dialog/Terminal";
-import { Title } from "@/pages";
+import CreateVM from "../Dialog/CreateVM";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
-import { PanelBox2 } from "../../../../components/styles/PanelBox2";
 
 const CloudVMListTab = observer(() => {
-  // const currentPageTitle = Title.CloudZone;
   const [open, setOpen] = useState(false);
-  // const [tabvalue, setTabvalue] = useState(0);
-  // const handleTabChange = (event, newValue) => {
-  //   setTabvalue(newValue);
-  // };
-  const [openTerminal, setOpenTerminal] = useState(false);
-  const {
-    clusterDetail,
-    clusterList,
-    loadCloudClusterList,
-    loadCluster,
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-    totalElements,
-  } = clusterStore;
+  const [reRun, setReRun] = useState(false);
+  const [vmName, setVMName] = useState("");
+
+  const { deleteVM, loadVMList, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -99,30 +76,13 @@ const CloudVMListTab = observer(() => {
       field: "SSHAccessPoint",
       filter: true,
     },
-    // {
-    //   headerName: "VM",
-    //   field: "terminal",
-    //   minWidth: 100,
-    //   maxWidth: 100,
-    //   cellRenderer: function () {
-    //     // return `<span class="state_ico_new terminal" onClick></span> `;
-    //     return `<button class="tb_volume_yaml" onClick>Terminal</button>`;
-    //   },
-    //   cellStyle: { textAlign: "center" },
-    // },
   ]);
 
-  // const history = useHistory();
-
-  const handleClick = (e) => {
-    let fieldName = e.colDef.field;
-    // loadCluster(e.data.clusterName);
-    if (fieldName === "terminal") {
-      handleOpenTerminal();
-    }
+  const handleClick = e => {
+    setVMName(e.data.name);
   };
 
-  const handleOpen = (e) => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -130,36 +90,39 @@ const CloudVMListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleOpenTerminal = () => {
-    setOpenTerminal(true);
+  const handleDelete = () => {
+    if (vmName === "") {
+      swalError("VM을 선택해주세요!");
+    } else {
+      swalUpdate(vmName + "를 삭제하시겠습니까?", () => deleteVM(vmName, reloadData));
+    }
+    setVMName("");
   };
 
-  const handleCloseTerminal = () => {
-    setOpenTerminal(false);
+  const reloadData = () => {
+    setReRun(true);
   };
 
   useLayoutEffect(() => {
-    loadCloudClusterList();
-  }, []);
+    loadVMList();
+    return () => {
+      setReRun(false);
+    };
+  }, [reRun]);
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("core")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
+          <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
-              <AgGrid2
+              <AgGrid
                 rowData={viewList}
                 columnDefs={columDefs}
                 isBottom={false}
@@ -173,13 +136,7 @@ const CloudVMListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <Terminal
-            open={openTerminal}
-            // yaml={getYamlFile}
-            onClose={handleCloseTerminal}
-          />
-          {/* <CreateCluster type={"core"} open={open} onClose={handleClose} /> */}
-          <CreateCluster type={"cloud"} open={open} onClose={handleClose} />
+          <CreateVM open={open} onClose={handleClose} reloadFunc={reloadData} />
         </PanelBox>
         {/* <Detail cluster={clusterDetail} /> */}
       </CReflexBox>
