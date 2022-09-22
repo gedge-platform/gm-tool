@@ -211,8 +211,7 @@ class Volume {
       .then(res => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
-          this.totalElements =
-            res.data.data === null ? 0 : this.pVolumesList.length;
+          this.totalElements = res.data.data === null ? 0 : this.pVolumesList.length;
         });
       })
       .then(() => {
@@ -220,35 +219,25 @@ class Volume {
       })
       .then(() => {
         this.totalElements === 0
-          ? ((this.pVolume = null),
-            (this.pVolumeYamlFile = null),
-            (this.pVolumeMetadata = null),
-            (this.annotations = null),
-            (this.events = null))
+          ? ((this.pVolume = null), (this.pVolumeYamlFile = null), (this.pVolumeMetadata = null), (this.annotations = null), (this.events = null))
           : this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
   };
 
   loadPVolume = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL}/pvs/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pVolume = data;
-          this.pVolumeYamlFile = "";
-          this.pVolumeMetadata = {};
-          this.annotations = data.annotations;
-          this.events = data.events;
-
-          console.log(data);
-          Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pVolumeYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.pVolumeMetadata[key] = value;
-              }
+    await axios.get(`${SERVER_URL}/pvs/${name}?cluster=${cluster}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pVolume = data;
+        this.pVolumeYamlFile = "";
+        this.pVolumeMetadata = {};
+        this.events = data.events;
+        Object.entries(this.pVolume?.annotations).forEach(([key, value]) => {
+          try {
+            const YAML = require("json-to-pretty-yaml");
+            this.pVolumeYamlFile = YAML.stringify(JSON.parse(value));
+          } catch (e) {
+            if (key && value) {
+              this.pVolumeMetadata[key] = value;
             }
           }
         });
