@@ -146,8 +146,8 @@ class StatefulSet {
       .get(`${SERVER_URL}/statefulsets?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          // this.totalElements =
+          //   res.data.data === null ? 0 : res.data.data.length;
           this.statefulSetList = res.data.data;
           // this.statefulSetDetail = list[0];
           res.data.data === null
@@ -199,6 +199,16 @@ class StatefulSet {
           }
         });
       });
+  };
+
+  deleteStatefulSet = async (statefulsetName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/statefulsets/${statefulsetName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("StatefulSet가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

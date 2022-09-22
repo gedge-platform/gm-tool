@@ -7,15 +7,14 @@ import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton } from "@/components/buttons";
 import { CDeleteButton } from "@/components/buttons/CDeleteButton";
-import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
 import clusterStore from "../../../../store/Cluster";
 import CreateCluster from "../Dialog/CreateCluster";
-import DeleteCluster from "../Dialog/DeleteCluster";
 import { Title } from "@/pages";
 import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "../../../../utils/swal-utils";
 
 const EdgeClusterListTab = observer(() => {
   const currentPageTitle = Title.EdgeZone;
@@ -24,11 +23,10 @@ const EdgeClusterListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [reRun, setReRun] = useState(false);
   const [clusterName, setClusterName] = useState("");
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
 
   const {
+    setInitViewList,
+    deleteCluster,
     clusterDetail,
     clusterList,
     totalElements,
@@ -109,15 +107,13 @@ const EdgeClusterListTab = observer(() => {
     setCreateOpen(false);
   };
 
-  const handleDeleteOpen = () => {
+  const handleDelete = () => {
     if (clusterName === "") {
       swalError("클러스터를 선택해주세요!");
+    } else {
+      swalUpdate(clusterName + "를 삭제하시겠습니까?", () => deleteCluster(clusterName, reloadData));
     }
-    setDeleteOpen(true);
-  };
-
-  const handleDeleteClose = () => {
-    setDeleteOpen(false);
+    setVMName("");
   };
 
   const reloadData = () => {
@@ -125,6 +121,7 @@ const EdgeClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    setInitViewList();
     loadClusterList("edge");
     return () => {
       setReRun(false);
@@ -137,7 +134,7 @@ const EdgeClusterListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
-            <CDeleteButton onClick={handleDeleteOpen}>삭제</CDeleteButton>
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -158,7 +155,6 @@ const EdgeClusterListTab = observer(() => {
             {/* </CTabPanel> */}
           </div>
           <CreateCluster type="edge" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
-          <DeleteCluster type="edge" dName={clusterName} open={Delete} onClose={handleDeleteClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

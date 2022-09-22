@@ -349,7 +349,7 @@ const Detail = observer(() => {
             </tbody>
           </table>
           <br />
-          <TableTitle>Srvice</TableTitle>
+          <TableTitle>Service</TableTitle>
           <table className="tb_data">
             <tbody className="tb_workload_pod_detail">
               <tr>

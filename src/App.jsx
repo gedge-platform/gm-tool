@@ -76,7 +76,7 @@ export const App = () => {
         <Switch>
           <AuthRoute path="/cluster" component={Cluster} />
           <AuthRoute path="/project" component={Project} />
-          <AuthRoute path="/userProject" component={Project} />
+          <AuthRoute path="/userProject" component={CreateUser} />
           <AuthRoute path="/platformProject" component={PlatformProject} />
 
           <AuthRoute path="/component" component={ComponentManage} />

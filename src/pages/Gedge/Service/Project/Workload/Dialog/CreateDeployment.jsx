@@ -37,7 +37,7 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateDeployment = observer((props) => {
+const CreateDeployment = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
@@ -60,15 +60,7 @@ const CreateDeployment = observer((props) => {
     setContentVolume,
   } = deploymentStore;
 
-  const {
-    setVolumeName,
-    setAccessMode,
-    setVolumeCapacity,
-    volumeCapacity,
-    volumeName,
-    selectClusters,
-    accessMode,
-  } = volumeStore;
+  const { setVolumeName, setAccessMode, setVolumeCapacity, volumeCapacity, volumeName, selectClusters, accessMode } = volumeStore;
 
   const { setStorageClass, selectStorageClass } = StorageClassStore;
 
@@ -209,7 +201,6 @@ const CreateDeployment = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -269,6 +260,7 @@ const CreateDeployment = observer((props) => {
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   // useEffect는 component가 rendeing될 때마다 특정 작업을 실행할 수 있도록하는 Hook
@@ -423,15 +415,7 @@ const CreateDeployment = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Deployment"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Deployment"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );

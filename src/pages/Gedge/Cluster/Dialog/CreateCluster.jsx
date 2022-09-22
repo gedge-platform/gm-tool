@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { CDialogNew } from "../../../../components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
@@ -7,8 +7,6 @@ import styled from "styled-components";
 import clusterStore from "../../../../store/Cluster";
 import addressStore from "../../../../store/Address";
 import { swalError } from "../../../../utils/swal-utils";
-import { SERVER_URL } from "@/config.jsx";
-import axios from "axios";
 import SearchAddress from "../Dialog/SearchAddress";
 
 const Button = styled.button`
@@ -31,7 +29,7 @@ const ButtonNext = styled.button`
 const CreateCluster = observer(props => {
   const { open } = props;
   const [openAddress, setOpenAddress] = useState(false);
-  const { loadClusterList, clusterList, createCluster } = clusterStore;
+  const { postCluster } = clusterStore;
   const { loadAddress, clusterAddress } = addressStore;
 
   const [inputs, setInputs] = useState({
@@ -44,36 +42,34 @@ const CreateCluster = observer(props => {
   const clusterType = props.type;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    setInputs({
+      clusterName: "",
+      clusterEndpoint: "",
+      clusterToken: "",
+    });
   };
 
-  const validCheck = () => {
+  const onClickCreateCluster = () => {
     const endpointReg =
       /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/i;
 
     if (clusterName === "") {
       swalError("이름을 입력해주세요!");
-      return false;
+      return;
     }
     if (clusterEndpoint === "" || !endpointReg.test(clusterEndpoint)) {
       swalError("엔드포인트를 입력해주세요!");
-      return false;
+      return;
     }
     if (clusterToken === "") {
       swalError("토큰을 입력해주세요!");
-      return false;
+      return;
     }
     if (clusterAddress === "") {
       swalError("주소를 입력해주세요!");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = () => {
-    console.log("handleSubmit in");
-    if (validCheck()) {
+      return;
+    } else {
       const body = {
         clusterType: clusterType,
         clusterName: clusterName,
@@ -81,20 +77,14 @@ const CreateCluster = observer(props => {
         token: clusterToken,
         address: clusterAddress,
       };
-      console.log("body is : ", body);
-      axios
-        .post(`${SERVER_URL}/clusters`, body)
-        .then(res => {
-          if (res.status === 200) {
-            swalError("클러스터를 추가하였습니다.");
-            handleClose();
-          }
-        })
-        .catch(err => {
-          swalError("엣지 클러스터 추가에 실패하였습니다.");
-          handleClose();
-        });
+      createCluster(body);
     }
+  };
+
+  const createCluster = async body => {
+    const result = await postCluster(body);
+    handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const searchAddressOpen = () => {
@@ -232,7 +222,7 @@ const CreateCluster = observer(props => {
           }}
         >
           <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={handleSubmit}>생성</ButtonNext>
+          <ButtonNext onClick={onClickCreateCluster}>생성</ButtonNext>
         </div>
       </div>
       <SearchAddress open={openAddress} onClose={searchAddressClose} />

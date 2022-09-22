@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
-import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import { swalError } from "../../../../utils/swal-utils";
 import certificationStore from "../../../../store/Certification";
 
 const Button = styled.button`

@@ -97,18 +97,20 @@ class DaemonSet {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? "-"
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -148,11 +150,19 @@ class DaemonSet {
       .then(() => {
         this.convertList(this.daemonSetList, this.setPDaemonSetList);
       });
-    this.loadDaemonSetDetail(
-      this.viewList[0].name,
-      this.viewList[0].cluster,
-      this.viewList[0].project
-    );
+    this.totalElements === 0
+      ? ((this.daemonSetDetail = null),
+        (this.involvesData = null),
+        (this.pods = null),
+        (this.containers = null),
+        (this.services = null),
+        (this.label = null),
+        (this.annotations = null))
+      : this.loadDaemonSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
   };
 
   loadDaemonSetDetail = async (name, cluster, project) => {
@@ -176,6 +186,16 @@ class DaemonSet {
           }
         });
       });
+  };
+
+  deleteDaemonSet = async (daemonsetName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/daemonsets/${daemonsetName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("DaemonSet이 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

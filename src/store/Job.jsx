@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
+import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
 
 class Job {
@@ -168,7 +169,6 @@ class Job {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/jobs?user=${id}`)
-      // .get(`${SERVER_URL}/jobs`)
       .then((res) => {
         runInAction(() => {
           // const list = res.data.data.filter((item) => item.projectType === type);
@@ -182,18 +182,19 @@ class Job {
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
       });
-    this.jobList === null
-      ? ((this.jobDetailData = null),
-        (this.containers = null),
-        (this.jobDetailInvolves = null),
+    console.log(this.jobList);
+    this.totalElements === 0
+      ? ((this.containers = null),
+        (this.jobDetailData = null),
         (this.labels = null),
+        (this.involvesPodList = null),
         (this.annotations = null),
         (this.involvesPodList = null),
         (this.ownerReferences = null))
       : this.loadJobDetail(
-          this.jobList[0].name,
-          this.jobList[0].cluster,
-          this.jobList[0].project
+          this.jobList[0][0].name,
+          this.jobList[0][0].cluster,
+          this.jobList[0][0].project
         );
   };
 
@@ -221,6 +222,15 @@ class Job {
           }
         });
       });
+  };
+
+  deleteJob = async (jobName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/jobs/${jobName}`)
+      .then((res) => {
+        if (res.status === 201) swalError("Job이 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

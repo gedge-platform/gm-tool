@@ -374,12 +374,12 @@ const Detail = observer(() => {
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
-        <div className="grid-height2">
-          {/* {eventsTable()} */}
-          {/* <EventAccordion events={events} /> */}
-          {/* <EventAccordion events={eventList}> */}
-          <EventAccordion events={eventList} />
-          <div style={{ height: 0 }}>
+        {/* <div className="grid-height2"> */}
+        {/* {eventsTable()} */}
+        {/* <EventAccordion events={events} /> */}
+        {/* <EventAccordion events={eventList}> */}
+        <EventAccordion events={events} />
+        {/* <div style={{ height: 0 }}>
             <AgGrid
               // rowData={eventAccor()}
               // columDefs={columDefs}
@@ -390,9 +390,9 @@ const Detail = observer(() => {
               goNextPage={goNextEvent}
               goPrevPage={goPrevEvent}
             />
-          </div>
-          {/* </AgGrid> */}
-        </div>
+          </div> */}
+        {/* </AgGrid> */}
+        {/* </div> */}
       </CTabPanel>
     </PanelBox>
   );

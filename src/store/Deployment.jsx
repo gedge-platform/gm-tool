@@ -1,6 +1,5 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
-import { useHistory } from "react-router";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
@@ -239,12 +238,17 @@ class Deployment {
           this.strategy = data.strategy;
           this.labels = data.labels;
           this.annotations = data.annotations;
-          this.events = data.events;
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
           this.pods = involvesData.pods;
           this.depServices = involvesData.services;
           // this.depServicesPort = involvesData.services.port;
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
+          console.log(this.events);
         });
       });
   };
@@ -378,6 +382,16 @@ class Deployment {
       .then(() => {
         return;
       });
+  };
+
+  deleteDeployment = async (deploymentName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/deployments/${deploymentName}`)
+      .then((res) => {
+        if (res.status === 201)
+          swalError("Deployment가 삭제되었습니다.", callback);
+      })
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 
