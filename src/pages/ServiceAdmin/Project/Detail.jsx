@@ -124,7 +124,7 @@ const Detail = observer(() => {
             <tr>
               {cluster?.resourceUsage ? (
                 <>
-                  <th>CPU</th>
+                  {/* <th>CPU</th>
                   <td>
                     {cluster?.resourceUsage?.cpu_usage
                       ? cluster?.resourceUsage?.cpu_usage
@@ -135,10 +135,24 @@ const Detail = observer(() => {
                     {cluster?.resourceUsage?.memory_usage
                       ? cluster?.resourceUsage?.memory_usage
                       : "-"}
+                  </td> */}
+                  <th>CPU</th>
+                  <td>
+                    {cluster?.resourceUsage?.namespace_cpu
+                      ? cluster?.resourceUsage?.namespace_cpu
+                      : "-"}
+                  </td>
+                  <th>MEMORY</th>
+                  <td>
+                    {cluster?.resourceUsage?.namespace_memory
+                      ? cluster?.resourceUsage?.namespace_memory
+                      : "-"}
                   </td>
                 </>
               ) : (
-                <></>
+                <LabelContainer>
+                  <p>No Resource Usage Info.</p>
+                </LabelContainer>
               )}
             </tr>
           </tbody>
@@ -191,10 +205,10 @@ const Detail = observer(() => {
                       ? resources?.resource?.job_count
                       : "-"}
                   </td>
-                  <th>Volume</th>
+                  <th>PV</th>
                   <td>
-                    {resources?.resource?.volume_count
-                      ? resources?.resource?.volume_count
+                    {resources?.resource?.pv_count
+                      ? resources?.resource?.pv_count
                       : "-"}
                   </td>
                 </tr>
@@ -246,10 +260,14 @@ const Detail = observer(() => {
                 <td>{projectDetail.projectType}</td>
               </tr>
               <tr>
-                <th className="tb_workload_detail_th">Workspace Name</th>
+                {/* <th className="tb_workload_detail_th">Workspace Name</th>
                 <td>{Object.values(workspace)[0]}</td>
                 <th>Workspace Description</th>
-                <td>{Object.values(workspace)[1]}</td>
+                <td>{Object.values(workspace)[1]}</td> */}
+                <th className="tb_workload_detail_th">Workspace Name</th>
+                <td>{workspace.workspaceName}</td>
+                <th>Workspace Description</th>
+                <td>{workspace.workspaceDescription}</td>
               </tr>
               <tr>
                 <th>Cluster Name</th>

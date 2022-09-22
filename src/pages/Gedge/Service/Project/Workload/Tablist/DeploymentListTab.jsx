@@ -134,7 +134,7 @@ const DeploymentListTab = observer(() => {
             reloadFunc={loadDeploymentList}
           />
         </PanelBox>
-        <Detail />
+        <Detail deployment={deploymentDetail} />
       </CReflexBox>
     </>
   );

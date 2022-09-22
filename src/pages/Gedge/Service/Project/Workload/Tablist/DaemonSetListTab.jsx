@@ -76,7 +76,7 @@ const DaemonSetListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -108,7 +108,7 @@ const DaemonSetListTab = observer(() => {
         </PanelBox>
         <Detail daemonSet={daemonSetDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default DaemonSetListTab;

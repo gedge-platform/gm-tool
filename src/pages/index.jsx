@@ -52,7 +52,6 @@ const Title = {
   Certification: "인증",
   Cluster: "클러스터 관리",
   WorkSpace: "워크스페이스",
-  UserProject: "사용자 생성",
   PlatformProject: "플랫폼 관리",
   Component: "컴포넌트",
   Volume: "볼륨",

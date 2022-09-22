@@ -73,6 +73,8 @@ const Detail = observer(() => {
     setOpen(false);
   };
 
+  console.log(services);
+
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -88,20 +90,16 @@ const Detail = observer(() => {
             <tbody>
               <tr>
                 <th className="tb_workload_detail_th">Name</th>
-                <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
+                <td>{daemonSetDetail ? daemonSetDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>
-                  {daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}
-                </td>
+                <td>{daemonSetDetail ? daemonSetDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>
-                  {daemonSetDetail.project ? daemonSetDetail.project : "-"}
-                </td>
+                <td>{daemonSetDetail ? daemonSetDetail.project : "-"}</td>
                 <th>Created</th>
                 <td>
-                  {daemonSetDetail.createAt
+                  {daemonSetDetail
                     ? dateFormatter(daemonSetDetail.createAt)
                     : "-"}
                 </td>
@@ -113,116 +111,126 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers.map((container) => (
-            <>
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody className="tb_workload_pod_detail">
-                  <tr>
-                    <th>Container Name</th>
-                    <td>{container.name}</td>
-                  </tr>
-                  <tr>
-                    <th>Args</th>
-                    <td>
-                      {container.args ? JSON.stringify(container.args) : <>-</>}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Command</th>
-                    <td>
-                      {container.command ? (
-                        JSON.stringify(container.command)
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Environment</th>
-                    <td>
-                      <table
-                        className="tb_data"
-                        style={{ tableLayout: "fixed" }}
-                      >
-                        <tbody className="tb_workload_pod_detail">
-                          <tr>
-                            <th>Name</th>
-                            <th>Value</th>
-                            <th>Source</th>
-                          </tr>
-                          {container.env ? (
-                            container.env?.map((env) => (
-                              <>
-                                <tr>
-                                  <td>{env.name ? env.name : "-"}</td>
-                                  <td>{env.value ? env.value : "-"}</td>
-                                  <td>
-                                    {env.valueFrom?.fieldRef?.fieldPath
-                                      ? env.valueFrom?.fieldRef?.fieldPath
-                                      : "-"}
-                                  </td>
-                                </tr>
-                              </>
-                            ))
-                          ) : (
+          {containers ? (
+            containers.map((container) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody className="tb_workload_pod_detail">
+                    <tr>
+                      <th>Container Name</th>
+                      <td>{container.name}</td>
+                    </tr>
+                    <tr>
+                      <th>Args</th>
+                      <td>
+                        {container.args ? (
+                          JSON.stringify(container.args)
+                        ) : (
+                          <>-</>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Command</th>
+                      <td>
+                        {container.command ? (
+                          JSON.stringify(container.command)
+                        ) : (
+                          <>-</>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Environment</th>
+                      <td>
+                        <table
+                          className="tb_data"
+                          style={{ tableLayout: "fixed" }}
+                        >
+                          <tbody className="tb_workload_pod_detail">
                             <tr>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
+                              <th>Name</th>
+                              <th>Value</th>
+                              <th>Source</th>
                             </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Image</th>
-                    <td>{container.image}</td>
-                  </tr>
-                  <tr>
-                    <th>volumeMounts</th>
-                    <td>
-                      <table
-                        className="tb_data"
-                        style={{ tableLayout: "fixed" }}
-                      >
-                        <tbody className="tb_workload_pod_detail">
-                          <tr>
-                            <th>Name</th>
-                            <th>Mount Path</th>
-                            <th>Propagation</th>
-                          </tr>
-                          {container.volumeMounts ? (
-                            container.volumeMounts.map((volume) => (
+                            {container.env ? (
+                              container.env?.map((env) => (
+                                <>
+                                  <tr>
+                                    <td>{env.name ? env.name : "-"}</td>
+                                    <td>{env.value ? env.value : "-"}</td>
+                                    <td>
+                                      {env.valueFrom?.fieldRef?.fieldPath
+                                        ? env.valueFrom?.fieldRef?.fieldPath
+                                        : "-"}
+                                    </td>
+                                  </tr>
+                                </>
+                              ))
+                            ) : (
                               <tr>
-                                <td>{volume.name}</td>
-                                <td>{volume.mountPath}</td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                               </tr>
-                            ))
-                          ) : (
+                            )}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Image</th>
+                      <td>{container.image}</td>
+                    </tr>
+                    <tr>
+                      <th>volumeMounts</th>
+                      <td>
+                        <table
+                          className="tb_data"
+                          style={{ tableLayout: "fixed" }}
+                        >
+                          <tbody className="tb_workload_pod_detail">
                             <tr>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
+                              <th>Name</th>
+                              <th>Mount Path</th>
+                              <th>Propagation</th>
                             </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </>
-          ))}
+                            {container.volumeMounts ? (
+                              container.volumeMounts.map((volume) => (
+                                <tr>
+                                  <td>{volume.name}</td>
+                                  <td>{volume.mountPath}</td>
+                                  <td></td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Containers Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {label ? (
+            {label != null ? (
               Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -326,7 +334,7 @@ const Detail = observer(() => {
               <tbody className="tb_workload_pod_detail">
                 <tr>
                   <th>Name</th>
-                  <td>{services.name ? services.name : "-"}</td>
+                  <td>{services ? services.name : "-"}</td>
                 </tr>
                 <tr>
                   <th>Port</th>
@@ -338,8 +346,8 @@ const Detail = observer(() => {
                           <th>Port</th>
                           <th>Protocol</th>
                         </tr>
-                        {services.port ? (
-                          services.port?.map((port) => (
+                        {services?.port ? (
+                          services?.port?.map((port) => (
                             <tr>
                               <td>{port.name}</td>
                               <td>{port.port}</td>

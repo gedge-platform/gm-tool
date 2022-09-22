@@ -131,7 +131,10 @@ class Dashboard {
 
   cloudResourceCnt = {};
 
+  edgeNodeRunning = [];
   nodeRunning = [];
+  nodeReady = 0;
+  nodeNotReady = 0;
 
   constructor() {
     makeAutoObservable(this);
@@ -393,6 +396,8 @@ class Dashboard {
         this.totalElements = data.length;
       });
     });
+    console.log(this.clusterNameList);
+    // this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
     this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
@@ -401,6 +406,7 @@ class Dashboard {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
+          console.log("data", data);
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
           this.type = this.nodeInfo.map((val) => val.type);
@@ -423,6 +429,13 @@ class Dashboard {
           this.diskTotal = data.diskTotal ? data.diskTotal : 0;
           this.resourceCnt = data.resourceCnt ? data.resourceCnt : 0;
           this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
+          this.nodeReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "Ready" === element).length
+            : 0;
+          this.nodeNotReady = this.nodeRunning
+            ? this.nodeRunning.filter((element) => "NotReady" === element)
+                .length
+            : 0;
         })
       );
   };
@@ -443,7 +456,6 @@ class Dashboard {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${cloudName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
-          console.log(data);
           this.cloudName = cloudName;
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
@@ -466,7 +478,6 @@ class Dashboard {
           this.diskUtil = data.diskUtil ? data.diskUtil : 0;
           this.diskTotal = data.diskTotal ? data.diskTotal : 0;
           this.cloudResourceCnt = data.resourceCnt ? data.resourceCnt : 0;
-          console.log(this.cloudResourceCnt);
           this.nodeRunning = data.nodeRunning ? data.nodeRunning : 0;
         })
       );
