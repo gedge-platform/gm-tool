@@ -3,12 +3,11 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 import CreateVM from "../Dialog/CreateVM";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const CloudVMListTab = observer(() => {
   const [open, setOpen] = useState(false);

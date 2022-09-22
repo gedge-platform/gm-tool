@@ -3,7 +3,7 @@ import React from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import serviceStore from "../../../../store/Service";
+import { serviceStore } from "@/store";
 
 const ServiceYaml = observer(() => {
   const { content, setContent } = serviceStore;
@@ -27,7 +27,7 @@ const ServiceYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
+        onChange={value => {
           // setContent(value);
         }}
         fontSize={14}

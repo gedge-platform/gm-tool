@@ -4,26 +4,14 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
 import { observer } from "mobx-react";
-import requestStatusStore from "../../../../store/RequestStatus";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { PanelBox2 } from "../../../../components/styles/PanelBox2";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { requestStatusStore } from "@/store";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const RequestStatusTab = observer(() => {
   const [reRun, setReRun] = useState(false);
 
-  const {
-    requestList,
-    loadRequestList,
-    totalElements,
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-  } = requestStatusStore;
+  const { requestList, loadRequestList, totalElements, currentPage, totalPages, viewList, goPrevPage, goNextPage } = requestStatusStore;
 
   const [columDefs] = useState([
     {

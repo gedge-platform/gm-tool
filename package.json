@@ -6,7 +6,7 @@
   "repository": "https://github.com/gedge-platform/gm-tool.git",
   "scripts": {
     "start": "cross-env NODE_ENV=production webpack-dev-server --progress",
-    "dev": "webpack-dev-server --open --watch --port 8080 --progress",
+    "dev": "webpack-dev-server --open --watch --hot --port 8080 --progress",
     "production-build": "cross-env NODE_ENV=production webpack --optimize-minimize",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --optimize-minimize",

@@ -9,7 +9,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../DaemonSetDetail";
-import daemonSetStore from "../../../../../../store/DaemonSet";
+import { daemonSetStore } from "@/store";
 
 const DaemonSetListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -64,7 +64,7 @@ const DaemonSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -79,12 +79,7 @@ const DaemonSetListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadDaemonSetList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadDaemonSetList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

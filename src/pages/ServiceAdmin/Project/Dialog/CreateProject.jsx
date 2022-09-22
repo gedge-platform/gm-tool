@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import projectStore from "../../../../store/Project";
-import workspacesStore from "../../../../store/WorkSpace";
-import clusterStore from "../../../../store/Cluster";
-import { dateFormatter } from "@/utils/common-utils";
-import { swalConfirm, swalError } from "../../../../utils/swal-utils";
-import { duplicateCheck } from "../../../../utils/common-utils";
+import { projectStore, workspaceStore, clusterStore } from "@/store";
+import { swalConfirm, swalError } from "@/utils/swal-utils";
+import { duplicateCheck } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -68,7 +65,7 @@ const Circle = styled.div`
 const CreateProject = observer(props => {
   const { open } = props;
   const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
-  const { workSpaceList, loadWorkSpaceList, selectClusterInfo, setSelectClusterInfo, loadWorkspaceDetail, viewList } = workspacesStore;
+  const { workSpaceList, loadWorkSpaceList, selectClusterInfo, setSelectClusterInfo, loadWorkspaceDetail, viewList } = workspaceStore;
   const { createProject } = projectStore;
 
   const [projectName, setProjectName] = useState("");

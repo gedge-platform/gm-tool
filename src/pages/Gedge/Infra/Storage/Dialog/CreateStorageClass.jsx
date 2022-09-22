@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../../components/dialogs";
-import { CTextFeild } from "../../../../../components/textfields";
-import { swalError } from "../../../../../utils/swal-utils";
+import { CDialogNew } from "@/components/dialogs";
+import { swalError } from "@/utils/swal-utils";
 
-import { Projection } from "leaflet";
-import deploymentStore from "../../../../../store/Deployment";
-import projectStore from "../../../../../store/Project";
-import workspacestore from "../../../../../store/WorkSpace";
-import { values } from "lodash";
-
-import StorageClassStore from "../../../../../store/StorageClass";
+import { StorageClassStore } from "@/store";
 import StorageClassBasicInfo from "./StorageClassBasicInfo";
 import StorageClassAdvancedSetting from "./StorageClassAdvancedSetting";
 import StorageClassYamlPopup from "./StorageClassYamlPopup";

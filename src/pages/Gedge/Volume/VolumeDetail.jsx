@@ -5,7 +5,7 @@ import { observer } from "mobx-react";
 import ReactJson from "react-json-view";
 import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
-import volumeStore from "../../../store/Volume";
+import { volumeStore } from "@/store";
 import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
 
@@ -73,7 +73,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
           <tr>
             <th>{key}</th>
             <td>{value}</td>
-          </tr>
+          </tr>,
         );
       })
     : null;
@@ -93,17 +93,12 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
             <th style={{ width: "20%" }}>{key}</th>
             <td>
               {isValidJSON(value) ? (
-                <ReactJson
-                  src={JSON.parse(value)}
-                  theme="summerfruit"
-                  displayDataTypes={false}
-                  displayObjectSize={false}
-                />
+                <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
               ) : (
                 value
               )}
             </td>
-          </tr>
+          </tr>,
         );
       });
     }
@@ -165,27 +160,17 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
                 <th className="tb_volume_detail_th">name</th>
                 <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
                 <th className="tb_volume_detail_th">namespace</th>
-                <td>
-                  {pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}
-                </td>
+                <td>{pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}</td>
               </tr>
               <tr>
                 <th>kind</th>
                 <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
                 <th>apiVersion</th>
-                <td>
-                  {pVolume?.claim?.apiVersion
-                    ? pVolume?.claim?.apiVersion
-                    : "-"}
-                </td>
+                <td>{pVolume?.claim?.apiVersion ? pVolume?.claim?.apiVersion : "-"}</td>
               </tr>
               <tr>
                 <th>resourceVersion</th>
-                <td>
-                  {pVolume?.claim?.resourceVersion
-                    ? pVolume?.claim?.resourceVersion
-                    : "-"}
-                </td>
+                <td>{pVolume?.claim?.resourceVersion ? pVolume?.claim?.resourceVersion : "-"}</td>
                 <th>uid</th>
                 <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
               </tr>

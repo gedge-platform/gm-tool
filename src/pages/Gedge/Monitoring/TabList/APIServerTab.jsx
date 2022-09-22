@@ -9,7 +9,7 @@ import {
 } from "@/components/buttons";
 import { observer } from "mobx-react";
 import moment from "moment";
-import monitoringStore from "../../../../store/Monitoring";
+import { monitoringStore } from "@/store";
 import {
   stepConverter,
   unixCurrentTime,

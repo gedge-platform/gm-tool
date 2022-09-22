@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import statefulSetStore from "../../../store/StatefulSet";
+import { statefulSetStore } from "@/store";
 import { observer } from "mobx-react-lite";
-import { isValidJSON } from "../../../utils/common-utils";
+import { isValidJSON } from "@/utils/common-utils";
 import ReactJson from "react-json-view";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
@@ -105,11 +105,7 @@ const StatefulSetDetail = observer(() => {
                 <th>Project</th>
                 <td>{statefulSetDetail ? statefulSetDetail.project : "-"}</td>
                 <th>Created</th>
-                <td>
-                  {statefulSetDetail
-                    ? dateFormatter(statefulSetDetail.createAt)
-                    : "-"}
-                </td>
+                <td>{statefulSetDetail ? dateFormatter(statefulSetDetail.createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -119,7 +115,7 @@ const StatefulSetDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers ? (
-            containers.map((container) => (
+            containers.map(container => (
               <table className="tb_data tb_data_container">
                 <tbody>
                   <tr>
@@ -134,7 +130,7 @@ const StatefulSetDetail = observer(() => {
                     <th>Container Ports</th>
                     <td>
                       {container?.ports.containerPort ? (
-                        container.ports?.map((port) => (
+                        container.ports?.map(port => (
                           <p>
                             {port.containerPort}/{port.protocol}
                           </p>
@@ -156,15 +152,11 @@ const StatefulSetDetail = observer(() => {
                               <th>Value</th>
                               <th>Source</th>
                             </tr>
-                            {container.env.map((item) => (
+                            {container.env.map(item => (
                               <tr>
                                 <td>{item.name ? item.name : "-"}</td>
                                 <td>{item.value ? item.value : "-"}</td>
-                                <td>
-                                  {item.valueFrom?.fieldRef?.fieldPath
-                                    ? item.valueFrom?.fieldRef?.fieldPath
-                                    : "-"}
-                                </td>
+                                <td>{item.valueFrom?.fieldRef?.fieldPath ? item.valueFrom?.fieldRef?.fieldPath : "-"}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -176,9 +168,7 @@ const StatefulSetDetail = observer(() => {
                   </tr>
                   <tr>
                     <th>Args</th>
-                    <td>
-                      {container.args ? JSON.stringify(container.args) : "-"}
-                    </td>
+                    <td>{container.args ? JSON.stringify(container.args) : "-"}</td>
                   </tr>
                   <tr>
                     <th>Volume Mounts</th>
@@ -193,12 +183,10 @@ const StatefulSetDetail = observer(() => {
                               <th>Mount Path</th>
                               <th>Propagation</th>
                             </tr>
-                            {container.volumeMounts.map((volume) => (
+                            {container.volumeMounts.map(volume => (
                               <tr>
                                 <td>{volume.name ? volume.name : "-"}</td>
-                                <td>
-                                  {volume.mountPath ? volume.mountPath : "-"}
-                                </td>
+                                <td>{volume.mountPath ? volume.mountPath : "-"}</td>
                                 <td>-</td>
                               </tr>
                             ))}
@@ -241,12 +229,7 @@ const StatefulSetDetail = observer(() => {
                     <th style={{ width: "20%" }}>{key}</th>
                     <td>
                       {isValidJSON(value) ? (
-                        <ReactJson
-                          src={JSON.parse(value)}
-                          theme="summerfruit"
-                          displayDataTypes={false}
-                          displayObjectSize={false}
-                        />
+                        <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
                       ) : (
                         value
                       )}

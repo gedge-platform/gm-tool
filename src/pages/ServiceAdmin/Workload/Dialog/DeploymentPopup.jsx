@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import deploymentStore from "../../../../store/Deployment";
+import { deploymentStore } from "@/store";
 
 const DeploymentPopup = observer(() => {
   const { responseData } = deploymentStore;

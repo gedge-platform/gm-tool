@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import dashboardStore from "../../../../store/Dashboard";
+import React from "react";
+import { dashboardStore } from "@/store";
 import { observer } from "mobx-react";
-import clusterStore from "../../../../store/Cluster";
 
 const EdgeZoneSummary = observer(() => {
   const { resourceCnt } = dashboardStore;

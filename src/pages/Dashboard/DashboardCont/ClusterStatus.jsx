@@ -1,7 +1,6 @@
-import axios from "axios";
 import { observer } from "mobx-react";
-import React, { useEffect, useLayoutEffect } from "react";
-import dashboardStore from "../../../store/Dashboard";
+import React, { useEffect } from "react";
+import { dashboardStore } from "@/store";
 
 const ClusterStatus = observer(() => {
   const {

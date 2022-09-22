@@ -4,13 +4,12 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
-import projectStore from "../../../../store/Project";
+import { projectStore } from "@/store";
 import CreateProject from "../Dialog/CreateProject";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const UserServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -47,7 +46,7 @@ const UserServiceListTab = observer(() => {
       field: "selectCluster",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
       },
     },
     {
@@ -71,7 +70,7 @@ const UserServiceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     console.log("e is ", e.data.projectName);
     setUserProjectName(e.data.projectName);
   };
@@ -88,9 +87,7 @@ const UserServiceListTab = observer(() => {
     if (userProjectName === "") {
       swalError("프로젝트를 선택해주세요!");
     } else {
-      swalUpdate(userProjectName + "를 삭제하시겠습니까?", () =>
-        deleteProject(userProjectName, reloadData)
-      );
+      swalUpdate(userProjectName + "를 삭제하시겠습니까?", () => deleteProject(userProjectName, reloadData));
     }
     setUserProjectName("");
   };
@@ -135,12 +132,7 @@ const UserServiceListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateProject
-            type={"user"}
-            open={open}
-            onClose={handleClose}
-            reloadFunc={reloadData}
-          />
+          <CreateProject type={"user"} open={open} onClose={handleClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail project={projectDetail} />
       </CReflexBox>

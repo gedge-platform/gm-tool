@@ -8,10 +8,9 @@ import { observer } from "mobx-react";
 import userStore from "@/store/UserStore";
 import CommActionBar from "@/components/common/CommActionBar";
 import moment from "moment";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateUser from "../Dialog/CreateUser";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);

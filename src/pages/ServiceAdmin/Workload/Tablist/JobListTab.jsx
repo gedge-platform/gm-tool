@@ -4,13 +4,12 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../JobDetail";
-import jobStore from "../../../../store/Job";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { jobStore } from "@/store";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const JobListTab = observer(() => {
   const [open, setOpen] = useState(false);
