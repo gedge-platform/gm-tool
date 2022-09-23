@@ -100,12 +100,10 @@ class Monitoring {
             index < unixCurrentTime();
             index = index + 60 * 5
           ) {
-            console.log(clusterMetric);
             clusterMetric.metrics.push({
               time: unixToTime(index),
               value: 0,
             });
-            console.log(array);
             array.push(clusterMetric);
           }
 
