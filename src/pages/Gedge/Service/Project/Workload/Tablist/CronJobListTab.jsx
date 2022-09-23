@@ -83,7 +83,7 @@ const CronJobListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadCronJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
@@ -110,7 +110,7 @@ const CronJobListTab = observer(() => {
         </PanelBox>
         <Detail cronJob={cronJobDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default CronJobListTab;

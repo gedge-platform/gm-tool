@@ -6,7 +6,6 @@ import { serviceAdminDashboardStore } from "@/store";
 const ServiceAdminChart = observer(props => {
   const { seriesData } = props;
   const series = seriesData;
-  // console.log(seriesData);
   const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
 
   // const cronjob = resourceMetricData.filter(
@@ -24,19 +23,10 @@ const ServiceAdminChart = observer(props => {
         show: false,
       },
     },
-
-    // responsive: [{
-    //   breakpoint: 480,
-    //   options: {
-    //     chart: {
-    //       height: "100%"
-    //     },
-    //   }
-    // }],
     dataLabels: {
       enabled: false,
     },
-    series: { series },
+    series: { seriesData },
     stroke: {
       width: [3, 5, 3],
       curve: "straight",

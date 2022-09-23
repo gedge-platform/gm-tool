@@ -136,6 +136,13 @@ class Dashboard {
   nodeReady = 0;
   nodeNotReady = 0;
 
+  mapZoom = 1;
+  setMapZoom = (value) => {
+    runInAction(() => {
+      this.mapZoom = value;
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
