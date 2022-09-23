@@ -25,7 +25,7 @@ import {
   PlatformControl,
   Template,
   StorageDashboard,
-  PlatformServiceListTab,
+  // PlatformServiceListTab,
   PlatformProject,
   CloudZone,
 } from "@/pages";
@@ -47,7 +47,6 @@ export const App = () => {
   const token = getItem("token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   const userRole = getItem("userRole");
-
 
   // useEffect(() => {
   //   if (JSON.parse(localStorage.getItem("token")) == null) {
@@ -124,8 +123,7 @@ export const App = () => {
         </Switch>
       </>
     );
-  }
-  else {
+  } else {
     return (
       <>
         <AuthRoute path="/total" component={TotalDashboard} exact />
