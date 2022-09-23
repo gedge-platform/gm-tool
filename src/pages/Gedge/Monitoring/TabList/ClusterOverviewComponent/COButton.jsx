@@ -10,15 +10,8 @@ import onAPILogo from "@/images/ico-action/api_icon_select.png";
 import offScheduleLogo from "@/images/ico-action/schedule_icon_normal.png";
 import onScheduleLogo from "@/images/ico-action/schedule_icon_select.png";
 import { COPieChartCPU, COPieChartDisk, COPieChartMemory, COPieChartPod, COPieChartETC } from "../MonitChart/ClusterOverviewChart";
-import { CCreateButton, CSelectButton, CSelectButtonM } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import moment from "moment";
-import axios from "axios";
-import styled from "styled-components";
 import monitoringStore from "@/store/Monitoring";
-import { stepConverter, unixCurrentTime, unixStartTime, combinationMetrics } from "../../Utils/MetricsVariableFormatter";
 
 const COButtonCPU = observer(({ isOn, onClick }) => {
   const { coPieCPU } = monitoringStore;
