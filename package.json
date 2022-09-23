@@ -90,5 +90,9 @@
       "last 1 safari version",
       "IE 11"
     ]
+  },
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": ">=16.0.0"
   }
 }
