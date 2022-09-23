@@ -51,11 +51,7 @@ class Claim {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVClaim(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadPVClaim(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       }
     });
   };
@@ -65,22 +61,18 @@ class Claim {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPVClaim(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadPVClaim(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -118,73 +110,73 @@ class Claim {
     });
   };
 
-  setPvClaimList = (list) => {
+  setPvClaimList = list => {
     runInAction(() => {
       this.pvClaims = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.pvClaims[n];
     });
   };
 
-  setMetricsLastTime = (time) => {
+  setMetricsLastTime = time => {
     runInAction(() => {
       this.lastTime = time;
     });
   };
 
-  setVolumeName = (value) => {
+  setVolumeName = value => {
     runInAction(() => {
       this.volumeName = value;
     });
   };
 
-  setClaimName = (value) => {
+  setClaimName = value => {
     runInAction(() => {
       this.claimName = value;
     });
   };
 
-  setAccessMode = (name) => {
+  setAccessMode = name => {
     runInAction(() => {
       this.accessMode = name;
     });
   };
 
-  setVolumeCapacity = (value) => {
+  setVolumeCapacity = value => {
     runInAction(() => {
       this.volumeCapacity = value;
     });
   };
 
-  setContent = (content) => {
+  setContent = content => {
     runInAction(() => {
       this.content = content;
     });
   };
 
-  setResponseData = (data) => {
+  setResponseData = data => {
     runInAction(() => {
       this.responseData = data;
     });
   };
 
-  setCluster = (cluster) => {
+  setCluster = cluster => {
     runInAction(() => {
       this.cluster = cluster;
     });
   };
 
-  setProject = (value) => {
+  setProject = value => {
     runInAction(() => {
       this.project = value;
     });
   };
 
-  setSelectClusters = (value) => {
+  setSelectClusters = value => {
     runInAction(() => {
       this.selectClusters = value;
     });
@@ -204,16 +196,12 @@ class Claim {
   };
 
   loadVolumeYaml = async (name, clusterName, projectName, kind) => {
-    await axios
-      .get(
-        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          const YAML = require("json-to-pretty-yaml");
-          this.getYamlFile = YAML.stringify(res.data.data);
-        });
+    await axios.get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`).then(res => {
+      runInAction(() => {
+        const YAML = require("json-to-pretty-yaml");
+        this.getYamlFile = YAML.stringify(res.data.data);
       });
+    });
   };
 
   // 클레임 관리
@@ -222,7 +210,7 @@ class Claim {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/pvcs?user=${id}`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           console.log(res);
           this.pvClaims = res.data.data;
@@ -233,43 +221,35 @@ class Claim {
         this.convertList(this.pvClaims, this.setPvClaimList);
       })
       .then(() => {
-        this.loadPVClaim(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadPVClaim(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       });
   };
 
   loadPVClaim = async (name, clusterName, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
-      )
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.pvClaim = data;
-          this.pvClaimYamlFile = "";
-          this.pvClaimAnnotations = {};
-          this.pvClaimLables = {};
-          this.events = data.events;
-          this.label = data.label;
-          Object.entries(this.pvClaim?.label).map(([key, value]) => {
-            this.pvClaimLables[key] = value;
-          });
+    await axios.get(`${SERVER_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.pvClaim = data;
+        this.pvClaimYamlFile = "";
+        this.pvClaimAnnotations = {};
+        this.pvClaimLables = {};
+        this.events = data.events;
+        this.label = data.label;
+        Object.entries(this.pvClaim?.label).map(([key, value]) => {
+          this.pvClaimLables[key] = value;
+        });
 
-          Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
-            try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
-            } catch (e) {
-              if (key && value) {
-                this.pvClaimAnnotations[key] = value;
-              }
+        Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
+          try {
+            const YAML = require("json-to-pretty-yaml");
+            this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
+          } catch (e) {
+            if (key && value) {
+              this.pvClaimAnnotations[key] = value;
             }
-          });
+          }
         });
       });
+    });
   };
 
   createVolumeClaim = (template, callback) => {
@@ -278,17 +258,26 @@ class Claim {
       .post(
         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
 
-        YAML.parse(this.content)
+        YAML.parse(this.content),
       )
-      .then((res) => {
+      .then(res => {
         if (res.status === 201) {
           swalError("Volume이 생성되었습니다!", callback);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         swalError("Volume 생성에 실패하였습니다.", callback);
         console.error(err);
       });
+  };
+
+  deletePvClaim = async (claimName, callback) => {
+    axios
+      .delete(`${SERVER_URL}/pvcs/${claimName}`)
+      .then(res => {
+        if (res.status === 201) swalError("Claim이 삭제되었습니다.", callback);
+      })
+      .catch(err => swalError("삭제에 실패하였습니다."));
   };
 }
 

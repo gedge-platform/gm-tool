@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import clusterStore from "../../../../store/Cluster";
-import addressStore from "../../../../store/Address";
-import { swalError } from "../../../../utils/swal-utils";
+import { clusterStore, addressStore } from "@/store";
+import { swalError } from "@/utils/swal-utils";
 import SearchAddress from "../Dialog/SearchAddress";
 
 const Button = styled.button`
@@ -42,7 +41,6 @@ const CreateCluster = observer(props => {
   const clusterType = props.type;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       clusterName: "",
@@ -85,6 +83,7 @@ const CreateCluster = observer(props => {
   const createCluster = async body => {
     const result = await postCluster(body);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const searchAddressOpen = () => {

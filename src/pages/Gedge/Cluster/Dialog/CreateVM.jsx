@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 import CreateAWS from "./CreateAWS";
 import CreateOPENSTACK from "./CreateOPENSTACK";
 
@@ -40,7 +40,6 @@ const CreateVM = observer(props => {
   const { name, config, image, flavor } = inputs;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setInputs({
       name: "",
@@ -110,6 +109,7 @@ const CreateVM = observer(props => {
   const createVM = async body => {
     const result = await postVM(body);
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const onChange = ({ target: { name, value } }) => {

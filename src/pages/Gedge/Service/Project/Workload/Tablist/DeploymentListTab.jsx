@@ -8,11 +8,9 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
-import deploymentStore from "../../../../../../store/Deployment";
-
+import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
-import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -80,7 +78,7 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -103,12 +101,7 @@ const DeploymentListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadDeploymentList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadDeploymentList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -128,11 +121,7 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
+          <CreateDeployment open={open} onClose={handleClose} reloadFunc={loadDeploymentList} />
         </PanelBox>
         <Detail deployment={deploymentDetail} />
       </CReflexBox>

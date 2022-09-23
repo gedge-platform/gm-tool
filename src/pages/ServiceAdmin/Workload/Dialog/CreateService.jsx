@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { CDialog } from "@/components/dialogs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import serviceStore from "../../../../store/Service";
+import { serviceStore, projectStore, schedulerStore } from "@/store";
 import ServiceBasicInformation from "../Dialog/ServiceBasicInformation";
 import ServiceYaml from "./ServiceYaml";
-import { CDialogNew } from "../../../../components/dialogs";
-import projectStore from "../../../../store/Project";
-import schedulerStore from "../../../../store/Scheduler";
-import { randomString } from "../../../../utils/common-utils";
+import { CDialogNew } from "@/components/dialogs";
+import { randomString } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -29,26 +26,14 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreatePod = observer((props) => {
+const CreatePod = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [loading, setLoading] = useState(false);
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
-  const {
-    serviceName,
-    appName,
-    protocol,
-    port,
-    targetPort,
-    workspace,
-    project,
-    content,
-    clearAll,
-    setContent,
-    postService,
-  } = serviceStore;
+  const { serviceName, appName, protocol, port, targetPort, workspace, project, content, clearAll, setContent, postService } = serviceStore;
 
   const template = {
     apiVersion: "v1",
@@ -71,7 +56,6 @@ const CreatePod = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -83,6 +67,7 @@ const CreatePod = observer((props) => {
 
     postWorkload(requestId, workspace, project, "Service");
     postScheduler(requestId, content, handleClose);
+    props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {
@@ -160,12 +145,8 @@ const CreatePod = observer((props) => {
             >
               <Button onClick={handleClose}>취소</Button>
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={() => console.log("")}>
-                Schedule Apply
-              </ButtonNext>
-              <ButtonNext onClick={() => console.log("")}>
-                Default Apply
-              </ButtonNext>
+              <ButtonNext onClick={() => console.log("")}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={() => console.log("")}>Default Apply</ButtonNext>
             </div>
           </div>
         </>
@@ -174,15 +155,7 @@ const CreatePod = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Service"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Service"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );

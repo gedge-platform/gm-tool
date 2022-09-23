@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
-import { Title } from "@/pages";
-// import ClusterInfo from "@/pages/Dashboard/DashboardCont/ClusterInfo";
-import CloudClusterInfo from "../../../Dashboard/DashboardCont/CloudClusterInfo";
+import CloudClusterInfo from "@/pages/Dashboard/DashboardCont/CloudClusterInfo";
 import CloudZoneSummary from "./CloudZoneSummary";
 import CloudZoneSlider from "./CloudZoneSlider";
 import styled from "styled-components";
-import NodeList from "../../../Dashboard/DashboardCont/NodeList";
-import dashboardStore from "../../../../store/Dashboard";
+import NodeList from "@/pages/Dashboard/DashboardCont/NodeList";
+import { dashboardStore } from "@/store";
 
 const CloudZoneWrap = styled.div`
   .panel_summary {
@@ -38,8 +33,7 @@ const CloudZoneDashboard = observer(() => {
   };
 
   // const { clusterDetail, loadClusterList } = clusterStore;
-  const { loadCloudZoneDashboard, loadCloudZoneDetailDashboard } =
-    dashboardStore;
+  const { loadCloudZoneDashboard, loadCloudZoneDetailDashboard } = dashboardStore;
   const history = useHistory();
 
   useLayoutEffect(() => {

@@ -1,12 +1,9 @@
-import { display, padding } from "@mui/system";
 import React, { useState, useEffect, PureComponent } from "react";
 import { observer } from "mobx-react";
-
 import Chart from "react-apexcharts";
-import { unixToTime } from "../../Gedge/Monitoring/Utils/MetricsVariableFormatter";
-import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
+import { serviceAdminDashboardStore } from "@/store";
 
-const ServiceAdminChart = observer((props) => {
+const ServiceAdminChart = observer(props => {
   const { seriesData } = props;
   const series = seriesData;
   const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
@@ -68,9 +65,6 @@ const ServiceAdminChart = observer((props) => {
       padding: {
         bottom: 20,
       },
-    },
-    dataLabels: {
-      enabled: false,
     },
     xaxis: {
       // type: "datetime",

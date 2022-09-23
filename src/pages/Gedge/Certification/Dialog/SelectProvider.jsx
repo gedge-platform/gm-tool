@@ -1,33 +1,20 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-import FormControl from "@material-ui/core/FormControl";
-import styled from "styled-components";
-import certificationStore from "../../../../store/Certification";
-import CreateCertification from "./CreateCertification";
+import { FormControl } from "@material-ui/core";
+import { certificationStore } from "@/store";
 
-const SelectProvider = observer((props) => {
-  const { open } = props;
+const SelectProvider = observer(props => {
   const { loadCredentialList, setProviderName } = certificationStore;
 
   const ProviderList = ["AWS", "OPENSTACK"];
-
-  const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
-    props.onClose && props.onClose();
-  };
 
   const onChange = ({ target: { name, value } }) => {
     if (value === "AWS") setProviderName(value);
     else if (value === "OPENSTACK") setProviderName(value);
   };
 
-  const onClickNext = () => {
-    CreateCertification();
-  };
-
   useEffect(() => {
     loadCredentialList();
-    // console.log(ProviderName);
   }, []);
 
   return (
@@ -43,7 +30,7 @@ const SelectProvider = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="ProviderName" onChange={onChange}>
                   <option value={""}>Select Provider</option>
-                  {ProviderList.map((provider) => (
+                  {ProviderList.map(provider => (
                     <option value={provider}>{provider}</option>
                   ))}
                 </select>

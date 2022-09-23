@@ -3,13 +3,11 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import BasicInformation from "./BasicInformation";
 import PodSettins from "./PodSettins";
-import deploymentStore from "../../../../../../store/Deployment";
+import { deploymentStore, projectStore, schedulerStore } from "@/store";
 import DeploymentYaml from "./DeploymentYaml";
 import DeploymentPopup from "./DeploymentPopup";
-import projectStore from "../../../../../../store/Project";
 import { randomString } from "@/utils/common-utils";
-import schedulerStore from "../../../../../../store/Scheduler";
-import { CDialogNew } from "../../../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,21 +28,11 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateScheduler = observer((props) => {
+const CreateScheduler = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
-  const {
-    podReplicas,
-    content,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    workspace,
-    setContent,
-    clearAll,
-  } = deploymentStore;
+  const { podReplicas, content, containerName, containerImage, containerPort, project, workspace, setContent, clearAll } = deploymentStore;
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler2 } = schedulerStore;
 
@@ -89,7 +77,6 @@ const CreateScheduler = observer((props) => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setProjectListinWorkspace();
     setStepValue(1);
@@ -104,6 +91,7 @@ const CreateScheduler = observer((props) => {
     postWorkload(requestId, workspace, project);
     // postWorkload(requestId, workspace, project);
     postScheduler2(requestId, content, handleClose);
+    props.reloadFunc && props.reloadFunc();
 
     // let formData = new FormData();
     // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
@@ -220,15 +208,7 @@ const CreateScheduler = observer((props) => {
   };
 
   return (
-    <CDialogNew
-      id="myDialog"
-      open={open}
-      maxWidth="md"
-      title={"Create Workload"}
-      onClose={handleClose}
-      bottomArea={false}
-      modules={["custom"]}
-    >
+    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Workload"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
       {stepOfComponent()}
     </CDialogNew>
   );

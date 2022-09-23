@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import workspacestore from "../../../../../../store/WorkSpace";
-import projectStore from "../../../../../../store/Project";
-import deploymentStore from "../../../../../../store/Deployment";
-import volumeStore from "../../../../../../store/Volume";
-import StorageClassStore from "../../../../../../store/StorageClass";
+import { workspaceStore, projectStore, deploymentStore, volumeStore, StorageClassStore } from "@/store";
 
 const Button = styled.button`
   background-color: #fff;
@@ -27,24 +23,15 @@ const ButtonNext = styled.button`
 `;
 
 const DeploymentVolumeSetting = observer(() => {
-  const { loadWorkSpaceList } = workspacestore;
-  const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } =
-    projectStore;
+  const { loadWorkSpaceList } = workspaceStore;
+  const { selectClusterInfo, setSelectClusterInfo, loadProjectDetail } = projectStore;
   const { project } = deploymentStore;
 
-  const {
-    setVolumeName,
-    setAccessMode,
-    setVolumeCapacity,
-    volumeCapacity,
-    volumeName,
-    setSelectClusters,
-  } = volumeStore;
+  const { setVolumeName, setAccessMode, setVolumeCapacity, volumeCapacity, volumeName, setSelectClusters } = volumeStore;
 
-  const { loadStorageClassName, storageClassNameData, setSelectStorageClass } =
-    StorageClassStore;
+  const { loadStorageClassName, storageClassNameData, setSelectStorageClass } = StorageClassStore;
 
-  const onChange = async (e) => {
+  const onChange = async e => {
     const { value, name } = e.target;
     if (name === "volumeName") {
       if (value === "") {
@@ -123,14 +110,7 @@ const DeploymentVolumeSetting = observer(() => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Volume Name"
-                className="form_fullWidth"
-                name="volumeName"
-                onChange={onChange}
-                value={volumeName}
-              />
+              <CTextField type="text" placeholder="Volume Name" className="form_fullWidth" name="volumeName" onChange={onChange} value={volumeName} />
             </td>
             <th></th>
           </tr>
@@ -147,22 +127,16 @@ const DeploymentVolumeSetting = observer(() => {
                     <th>타입</th>
                     <th>IP</th>
                   </tr>
-                  {selectClusterInfo.map(
-                    ({ clusterName, clusterType, clusterEndpoint }) => (
-                      <tr>
-                        <td style={{ textAlign: "center" }}>
-                          <input
-                            type="checkbox"
-                            name="selectClusters"
-                            onChange={(e) => checkCluster(e, clusterName)}
-                          />
-                        </td>
-                        <td>{clusterName}</td>
-                        <td>{clusterType}</td>
-                        <td>{clusterEndpoint}</td>
-                      </tr>
-                    )
-                  )}
+                  {selectClusterInfo.map(({ clusterName, clusterType, clusterEndpoint }) => (
+                    <tr>
+                      <td style={{ textAlign: "center" }}>
+                        <input type="checkbox" name="selectClusters" onChange={e => checkCluster(e, clusterName)} />
+                      </td>
+                      <td>{clusterName}</td>
+                      <td>{clusterType}</td>
+                      <td>{clusterEndpoint}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </td>
@@ -181,11 +155,7 @@ const DeploymentVolumeSetting = observer(() => {
                 >
                   <option value={""}>Select StorageClass</option>
                   {storageClassNameData
-                    ? storageClassNameData.map((storageClass) => (
-                        <option value={storageClass.name}>
-                          {storageClass.name}
-                        </option>
-                      ))
+                    ? storageClassNameData.map(storageClass => <option value={storageClass.name}>{storageClass.name}</option>)
                     : ""}
                 </select>
               </FormControl>

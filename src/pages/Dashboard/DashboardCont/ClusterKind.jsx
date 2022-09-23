@@ -1,10 +1,7 @@
 import React from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-import "swiper/swiper-bundle.min.css";
-import "swiper/swiper.min.css";
-import "swiper/modules/navigation/navigation.min.css";
+import "swiper/css";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination]);
@@ -27,9 +24,9 @@ const ClusterKind = () => {
           nextEl: navigationNextRef.current,
         }}
         // navigation
-        onSwiper={(swiper) => console.log(swiper)}
+        onSwiper={swiper => console.log(swiper)}
         onSlideChange={() => console.log("slide change")}
-        onInit={(swiper) => {
+        onInit={swiper => {
           swiper.params.navigation.prevEl = navigationPrevRef.current;
           swiper.params.navigation.nextEl = navigationNextRef.current;
           swiper.navigation.init();

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
-import addressStore from "../../../../store/Address";
+import { CDialogNew } from "@/components/dialogs";
+import { addressStore } from "@/store";
 import DaumPostcode from "react-daum-postcode";
 
 const SearchAddress = observer(props => {
@@ -26,7 +26,6 @@ const SearchAddress = observer(props => {
   };
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 

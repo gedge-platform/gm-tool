@@ -4,16 +4,14 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
-import { useHistory } from "react-router";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../PodDetail";
-import podStore from "../../../../store/Pod";
+import { podStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import CreatePod from "../Dialog/CreatePod";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -100,7 +98,7 @@ const PodListTab = observer(() => {
   const reloadData = () => {
     setReRun(true);
   };
-  
+
   useEffect(() => {
     loadPodList();
     return () => {

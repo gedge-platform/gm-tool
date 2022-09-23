@@ -1,5 +1,4 @@
-import { display, padding } from "@mui/system";
-import React, { useState, useEffect, PureComponent } from "react";
+import React from "react";
 import {
   AreaChart,
   Area,
@@ -11,7 +10,7 @@ import {
 } from "recharts";
 import { observer } from "mobx-react";
 import { PieChart, Pie, Sector, Cell } from "recharts";
-import monitoringStore from "../../../../../store/Monitoring";
+import { monitoringStore } from "@/store";
 
 const COAreaChartTop = observer(({ chartValue }) => {
   const {

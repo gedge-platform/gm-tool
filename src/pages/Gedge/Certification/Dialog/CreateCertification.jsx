@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import styled from "styled-components";
-import { swalError } from "../../../../utils/swal-utils";
-import certificationStore from "../../../../store/Certification";
+import { swalError } from "@/utils/swal-utils";
+import { certificationStore } from "@/store";
 import SelectProvider from "./SelectProvider";
 import CreateAWS from "./CreateAWS";
 import CreateOPENSTACK from "./CreateOPENSTACK";
@@ -35,7 +35,6 @@ const CreateCertification = observer(props => {
   const { postCredential } = certificationStore;
 
   const handleClose = () => {
-    props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     setStepValue(1);
   };
@@ -145,6 +144,7 @@ const CreateCertification = observer(props => {
       console.log("result is : ", result);
     }
     handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   // useEffect(() => {

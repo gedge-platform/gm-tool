@@ -6,14 +6,10 @@ import tit_welcome from "./images/tit_welcome.png";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import { SERVER_URL } from "@/config.jsx";
-import { setItem } from "../../utils/sessionStorageFn";
-import { swalError } from "../../utils/swal-utils";
+import { setItem } from "@/utils/sessionStorageFn";
+import { swalError } from "@/utils/swal-utils";
 import jwtDecode from "jwt-decode";
-import userStore from "../../store/UserStore";
-//token의 playload 내용을 디코딩해줌
-
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
-import { time } from "react-dom-factories";
+import { userStore } from "@/store";
 
 const Login = () => {
   const history = useHistory();
@@ -67,13 +63,12 @@ const Login = () => {
           // swalError("로그인 되었습니다.", () => history.push("/"));
 
           swalError("로그인 되었습니다.", () => {
-            window.location.replace("/")
+            window.location.replace("/");
           });
           const logined_at = {
-            "logined_at": new Date(),
-          }
+            logined_at: new Date(),
+          };
           updateUser(logined_at);
-
         } else {
           swalError("로그인 정보를 확인해주세요.", () => setCheck(true));
           setInputs({

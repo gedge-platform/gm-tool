@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
 import L from "leaflet";
 import { observer } from "mobx-react";
-import { address } from "react-dom-factories";
-import { runInAction } from "mobx";
 import axios from "axios";
-import dashboardStore from "../../../store/Dashboard";
-import { forEach } from "lodash";
-import { SERVER_URL } from "../../../config";
+import { dashboardStore } from "@/store";
+import { SERVER_URL } from "@/config";
 
 const MapContent = observer(() => {
   const {

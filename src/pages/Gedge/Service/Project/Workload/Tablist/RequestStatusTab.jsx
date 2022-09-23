@@ -4,14 +4,11 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import requestStatusStore from "../../../../../../store/RequestStatus";
-import { toJS } from "mobx";
-import { drawStatus } from "../../../../../../components/datagrids/AggridFormatter";
-import { PanelBox2 } from "../../../../../../components/styles/PanelBox2";
+import { requestStatusStore } from "@/store";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const RequestStatusTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -19,16 +16,7 @@ const RequestStatusTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const {
-    requestList,
-    loadRequestList,
-    totalElements,
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-  } = requestStatusStore;
+  const { requestList, loadRequestList, totalElements, currentPage, totalPages, viewList, goPrevPage, goNextPage } = requestStatusStore;
 
   const [columDefs] = useState([
     {
@@ -101,12 +89,7 @@ const RequestStatusTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-            reloadFunc={loadRequestList}
-          >
+          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]} reloadFunc={loadRequestList}>
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 

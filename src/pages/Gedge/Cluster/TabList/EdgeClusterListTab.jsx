@@ -5,16 +5,15 @@ import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import Layout from "@/layout";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 import CreateCluster from "../Dialog/CreateCluster";
 import { Title } from "@/pages";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const EdgeClusterListTab = observer(() => {
   const currentPageTitle = Title.EdgeZone;
@@ -25,6 +24,7 @@ const EdgeClusterListTab = observer(() => {
   const [clusterName, setClusterName] = useState("");
 
   const {
+    setInitViewList,
     deleteCluster,
     clusterDetail,
     clusterList,
@@ -120,6 +120,7 @@ const EdgeClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    setInitViewList();
     loadClusterList("edge");
     return () => {
       setReRun(false);

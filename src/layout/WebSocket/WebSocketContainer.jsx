@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Toastify } from "../../utils/common-utils";
+import { Toastify } from "@/utils/common-utils";
 
-const WebSocketContainer = (props) => {
+const WebSocketContainer = props => {
   const [socketConnectd, setSocketConnected] = useState(false);
 
   const socketUrl = "ws://localhost:3111";
@@ -13,14 +13,14 @@ const WebSocketContainer = (props) => {
       console.log("connect!!!");
       setSocketConnected(true);
     };
-    ws.current.onclose = (e) => {
+    ws.current.onclose = e => {
       console.log("disconnect!!" + e);
       setSocketConnected(false);
     };
-    ws.current.onerror = (e) => {
+    ws.current.onerror = e => {
       console.log("error!!" + e);
     };
-    ws.current.onmessage = (evt) => {
+    ws.current.onmessage = evt => {
       // const data = JSON.parse(evt.data);
       console.log(evt.data);
       Toastify(evt.data);
@@ -34,14 +34,14 @@ const WebSocketContainer = (props) => {
         console.log("connect!!!");
         setSocketConnected(true);
       };
-      ws.current.onclose = (e) => {
+      ws.current.onclose = e => {
         console.log("disconnect!!" + e);
         setSocketConnected(false);
       };
-      ws.current.onerror = (e) => {
+      ws.current.onerror = e => {
         console.log("error!!" + e);
       };
-      ws.current.onmessage = (evt) => {
+      ws.current.onmessage = evt => {
         // const data = JSON.parse(evt.data);
         console.log(evt.data);
         Toastify(evt.data);
