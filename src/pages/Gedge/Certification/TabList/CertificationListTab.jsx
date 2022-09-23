@@ -2,13 +2,12 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
-import certificationStore from "../../../../store/Certification";
+import { certificationStore } from "@/store";
 import CreateCertification from "../Dialog/CreateCertification";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
-import { AgGrid2 } from "../../../../components/datagrids/AgGrid2";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
+import { AgGrid2 } from "@/components/datagrids/AgGrid2";
 
 const CertificationListTab = observer(() => {
   const [open, setOpen] = useState(false);

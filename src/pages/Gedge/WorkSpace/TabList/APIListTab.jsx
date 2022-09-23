@@ -8,9 +8,9 @@ import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import workspacesStore from "@/store/WorkSpace";
+import workspaceStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 import Detail from "../Detail";
 
 const WorkspaceListTab = observer(() => {
@@ -32,7 +32,7 @@ const WorkspaceListTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
-  } = workspacesStore;
+  } = workspaceStore;
 
   const [columDefs] = useState([
     {

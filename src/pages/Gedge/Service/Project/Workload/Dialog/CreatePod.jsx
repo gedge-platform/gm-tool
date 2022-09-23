@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import podStore from "../../../../../../store/Pod";
+import { podStore, projectStore, schedulerStore } from "@/store";
 import PodBasicInformation from "./PodBasicInformation";
 import PodSettings from "./PodSettings";
 import PodYaml from "./PodYaml";
-import { CDialogNew } from "../../../../../../components/dialogs";
-import projectStore from "../../../../../../store/Project";
-import schedulerStore from "../../../../../../store/Scheduler";
-import { randomString } from "../../../../../../utils/common-utils";
+import { CDialogNew } from "@/components/dialogs";
+import { randomString } from "@/utils/common-utils";
 
 const Button = styled.button`
   background-color: #fff;

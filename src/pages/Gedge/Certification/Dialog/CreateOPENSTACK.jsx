@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import certificationStore from "../../../../store/Certification";
+import { certificationStore } from "@/store";
 
 const Button = styled.button`
   background-color: #fff;

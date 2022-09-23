@@ -15,13 +15,9 @@ import {
   CSelectButtonM,
   CIconButton,
 } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import moment from "moment";
-import axios from "axios";
-import styled from "styled-components";
-import monitoringStore from "../../../../store/Monitoring";
+import { monitoringStore } from "@/store";
 import {
   stepConverter,
   unixCurrentTime,

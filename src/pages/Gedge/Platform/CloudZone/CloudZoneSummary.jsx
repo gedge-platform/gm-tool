@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import dashboardStore from "../../../../store/Dashboard";
+import { dashboardStore } from "@/store";
 
 const EdgeZoneSummary = observer(() => {
   const { cloudResourceCnt } = dashboardStore;

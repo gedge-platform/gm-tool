@@ -1,21 +1,18 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import workspacesStore from "../../../../store/WorkSpace";
-import projectStore from "../../../../store/Project";
+import { workspaceStore, projectStore, clusterStore, podStore } from "@/store";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
-import clusterStore from "../../../../store/Cluster";
-import podStore from "../../../../store/Pod";
 
 const podBasicInformation = observer(() => {
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
-  const { loadWorkSpaceList, workSpaceList, workspace } = workspacesStore;
+  const { loadWorkSpaceList, workSpaceList, workspace } = workspaceStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
   const { podName, setPodName, setWorkspace, setProject } = podStore;
   const { loadClusterInProject, clusterList } = clusterStore;
 
-  const onChange = (e) => {
+  const onChange = e => {
     const { value, name } = e.target;
     if (name === "workspace") {
       loadProjectListInWorkspace(value);
@@ -59,7 +56,7 @@ const podBasicInformation = observer(() => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
-                  {workspace.map((item) => (
+                  {workspace.map(item => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
@@ -73,16 +70,10 @@ const podBasicInformation = observer(() => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select
-                  disabled={projectEnable}
-                  name="project"
-                  onChange={onChange}
-                >
+                <select disabled={projectEnable} name="project" onChange={onChange}>
                   <option value={""}>Select Project</option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
+                  {projectListinWorkspace.map(project => (
+                    <option value={project.projectName}>{project.projectName}</option>
                   ))}
                 </select>
               </FormControl>
@@ -117,14 +108,7 @@ const podBasicInformation = observer(() => {
               <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="Pod Name"
-                className="form_fullWidth"
-                name="Pod Name"
-                onChange={onChange}
-                value={podName}
-              />
+              <CTextField type="text" placeholder="Pod Name" className="form_fullWidth" name="Pod Name" onChange={onChange} value={podName} />
             </td>
             <th></th>
           </tr>

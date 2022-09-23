@@ -4,7 +4,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
-import platformProjectStore from "../../../store/PlatformProject";
+import { platformProjectStore } from "@/store";
 import "@grapecity/wijmo.styles/wijmo.css";
 import EventAccordion from "@/components/detail/EventAccordion";
 
@@ -51,15 +51,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const {
-    labels,
-    annotations,
-    events,
-    resource,
-    resourceUsage,
-    detailInfo,
-    platformProjectDetail,
-  } = platformProjectStore;
+  const { labels, annotations, events, resource, resourceUsage, detailInfo, platformProjectDetail } = platformProjectStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -101,17 +93,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>CPU Usage</th>
-                <td>
-                  {resourceUsage.namespace_cpu !== null
-                    ? resourceUsage.namespace_cpu
-                    : 0}
-                </td>
+                <td>{resourceUsage.namespace_cpu !== null ? resourceUsage.namespace_cpu : 0}</td>
                 <th>Memory Usage</th>
-                <td>
-                  {resourceUsage.namespace_memory !== null
-                    ? resourceUsage.namespace_memory
-                    : 0}
-                </td>
+                <td>{resourceUsage.namespace_memory !== null ? resourceUsage.namespace_memory : 0}</td>
               </tr>
             </tbody>
           </table>

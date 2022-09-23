@@ -9,7 +9,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../CronJobDetail";
-import cronJobStore from "../../../../../../store/CronJob";
+import { cronJobStore } from "@/store";
 
 const CronJobListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -17,18 +17,8 @@ const CronJobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const {
-    viewList,
-    cronJobList,
-    cronJobDetail,
-    totalElements,
-    loadCronJobList,
-    loadCronJobDetail,
-    currentPage,
-    totalPages,
-    goPrevPage,
-    goNextPage,
-  } = cronJobStore;
+  const { viewList, cronJobList, cronJobDetail, totalElements, loadCronJobList, loadCronJobDetail, currentPage, totalPages, goPrevPage, goNextPage } =
+    cronJobStore;
 
   const [columDefs] = useState([
     {
@@ -81,7 +71,7 @@ const CronJobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -96,12 +86,7 @@ const CronJobListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadCronJobList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadCronJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

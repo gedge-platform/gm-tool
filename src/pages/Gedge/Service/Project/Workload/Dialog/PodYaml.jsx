@@ -3,7 +3,7 @@ import React from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import podStore from "../../../../../../store/Pod";
+import { podStore } from "@/store";
 
 const PodYaml = observer(() => {
   const { content, setContent } = podStore;
@@ -31,7 +31,7 @@ const PodYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
+        onChange={value => {
           // setContent(value);
         }}
         fontSize={14}

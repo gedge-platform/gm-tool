@@ -3,10 +3,9 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import daemonSetStore from "../../../../../store/DaemonSet";
+import { daemonSetStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
-import { PanelBox2 } from "../../../../../components/styles/PanelBox2";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -51,15 +50,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const {
-    daemonSetDetail,
-    label,
-    annotations,
-    events,
-    pods,
-    services,
-    containers,
-  } = daemonSetStore;
+  const { daemonSetDetail, label, annotations, events, pods, services, containers } = daemonSetStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -91,21 +82,13 @@ const Detail = observer(() => {
                 <th className="tb_workload_detail_th">Name</th>
                 <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>
-                  {daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}
-                </td>
+                <td>{daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}</td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>
-                  {daemonSetDetail.project ? daemonSetDetail.project : "-"}
-                </td>
+                <td>{daemonSetDetail.project ? daemonSetDetail.project : "-"}</td>
                 <th>Created</th>
-                <td>
-                  {daemonSetDetail.createAt
-                    ? dateFormatter(daemonSetDetail.createAt)
-                    : "-"}
-                </td>
+                <td>{daemonSetDetail.createAt ? dateFormatter(daemonSetDetail.createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -115,7 +98,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers ? (
-            containers.map((container) => (
+            containers.map(container => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody className="tb_workload_pod_detail">
@@ -125,31 +108,16 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>Args</th>
-                      <td>
-                        {container.args ? (
-                          JSON.stringify(container.args)
-                        ) : (
-                          <>-</>
-                        )}
-                      </td>
+                      <td>{container.args ? JSON.stringify(container.args) : <>-</>}</td>
                     </tr>
                     <tr>
                       <th>Command</th>
-                      <td>
-                        {container.command ? (
-                          JSON.stringify(container.command)
-                        ) : (
-                          <>-</>
-                        )}
-                      </td>
+                      <td>{container.command ? JSON.stringify(container.command) : <>-</>}</td>
                     </tr>
                     <tr>
                       <th>Environment</th>
                       <td>
-                        <table
-                          className="tb_data"
-                          style={{ tableLayout: "fixed" }}
-                        >
+                        <table className="tb_data" style={{ tableLayout: "fixed" }}>
                           <tbody className="tb_workload_pod_detail">
                             <tr>
                               <th>Name</th>
@@ -157,16 +125,12 @@ const Detail = observer(() => {
                               <th>Source</th>
                             </tr>
                             {container.env ? (
-                              container.env?.map((env) => (
+                              container.env?.map(env => (
                                 <>
                                   <tr>
                                     <td>{env.name ? env.name : "-"}</td>
                                     <td>{env.value ? env.value : "-"}</td>
-                                    <td>
-                                      {env.valueFrom?.fieldRef?.fieldPath
-                                        ? env.valueFrom?.fieldRef?.fieldPath
-                                        : "-"}
-                                    </td>
+                                    <td>{env.valueFrom?.fieldRef?.fieldPath ? env.valueFrom?.fieldRef?.fieldPath : "-"}</td>
                                   </tr>
                                 </>
                               ))
@@ -188,10 +152,7 @@ const Detail = observer(() => {
                     <tr>
                       <th>volumeMounts</th>
                       <td>
-                        <table
-                          className="tb_data"
-                          style={{ tableLayout: "fixed" }}
-                        >
+                        <table className="tb_data" style={{ tableLayout: "fixed" }}>
                           <tbody className="tb_workload_pod_detail">
                             <tr>
                               <th>Name</th>
@@ -199,7 +160,7 @@ const Detail = observer(() => {
                               <th>Propagation</th>
                             </tr>
                             {container.volumeMounts ? (
-                              container.volumeMounts.map((volume) => (
+                              container.volumeMounts.map(volume => (
                                 <tr>
                                   <td>{volume.name}</td>
                                   <td>{volume.mountPath}</td>
@@ -273,7 +234,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {pods ? (
-            pods.map((item) => (
+            pods.map(item => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody className="tb_workload_pod_detail">
@@ -350,7 +311,7 @@ const Detail = observer(() => {
                           <th>Protocol</th>
                         </tr>
                         {services?.port ? (
-                          services.port?.map((port) => (
+                          services.port?.map(port => (
                             <tr>
                               <td>{port.name}</td>
                               <td>{port.port}</td>

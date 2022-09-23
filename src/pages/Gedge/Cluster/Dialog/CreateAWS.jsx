@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
-import certificationStore from "../../../../store/Certification";
+import { certificationStore } from "@/store";
 
 const CreateAWS = observer(props => {
   const [inputs, setInputs] = useState({

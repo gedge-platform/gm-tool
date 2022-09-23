@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 
 const Button = styled.button`
   background-color: #fff;

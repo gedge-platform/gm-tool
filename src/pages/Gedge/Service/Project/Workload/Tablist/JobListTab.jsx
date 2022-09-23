@@ -9,9 +9,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../JobDetail";
-import jobStore from "../../../../../../store/Job";
-import { drawStatus } from "../../../../../../components/datagrids/AggridFormatter";
-import moment from "moment";
+import { jobStore } from "@/store";
 
 const JobListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -19,18 +17,7 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const {
-    viewList,
-    jobList,
-    jobDetail,
-    totalElements,
-    loadJobList,
-    loadJobDetail,
-    currentPage,
-    totalPages,
-    goPrevPage,
-    goNextPage,
-  } = jobStore;
+  const { viewList, jobList, jobDetail, totalElements, loadJobList, loadJobDetail, currentPage, totalPages, goPrevPage, goNextPage } = jobStore;
 
   const [columDefs] = useState([
     {
@@ -83,7 +70,7 @@ const JobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -98,12 +85,7 @@ const JobListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadJobList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

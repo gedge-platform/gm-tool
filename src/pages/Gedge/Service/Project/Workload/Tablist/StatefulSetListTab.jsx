@@ -9,7 +9,7 @@ import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../StatefulDetail";
-import statefulSetStore from "../../../../../../store/StatefulSet";
+import { statefulSetStore } from "@/store";
 
 const StatefulSetListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
@@ -64,7 +64,7 @@ const StatefulSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadStatefulSetDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -79,12 +79,7 @@ const StatefulSetListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadStatefulSetList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadStatefulSetList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 

@@ -3,7 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
-import serviceStore from "../../../store/Service";
+import { serviceStore } from "@/store";
 import { observer } from "mobx-react-lite";
 
 const TableTitle = styled.p`
@@ -49,8 +49,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
-    serviceStore;
+  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } = serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -91,23 +90,21 @@ const Detail = observer(() => {
                 <th>Selector</th>
                 <td>
                   {serviceDetail.selector ? (
-                    Object.entries(serviceDetail.selector).map(
-                      ([key, value]) => (
-                        <>
-                          <table className="tb_data" style={{ width: "50%" }}>
-                            <tbody>
-                              <tr>
-                                <th>{key}</th>
-                              </tr>
-                              <tr>
-                                <td>{value}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                          <br />
-                        </>
-                      )
-                    )
+                    Object.entries(serviceDetail.selector).map(([key, value]) => (
+                      <>
+                        <table className="tb_data" style={{ width: "50%" }}>
+                          <tbody>
+                            <tr>
+                              <th>{key}</th>
+                            </tr>
+                            <tr>
+                              <td>{value}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <br />
+                      </>
+                    ))
                   ) : (
                     <>-</>
                   )}
@@ -119,25 +116,15 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster IP</th>
-                <td>
-                  {serviceDetail.clusterIp ? serviceDetail.clusterIp : "-"}
-                </td>
+                <td>{serviceDetail.clusterIp ? serviceDetail.clusterIp : "-"}</td>
               </tr>
               <tr>
                 <th>Session Affinity</th>
-                <td>
-                  {serviceDetail.sessionAffinity
-                    ? serviceDetail.sessionAffinity
-                    : "-"}
-                </td>
+                <td>{serviceDetail.sessionAffinity ? serviceDetail.sessionAffinity : "-"}</td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>
-                  {serviceDetail.createAt
-                    ? dateFormatter(serviceDetail.createAt)
-                    : "-"}
-                </td>
+                <td>{serviceDetail.createAt ? dateFormatter(serviceDetail.createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -151,7 +138,7 @@ const Detail = observer(() => {
               <p>No Pods Info.</p>
             </LabelContainer>
           ) : (
-            involvesPods.map((pod) => (
+            involvesPods.map(pod => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
@@ -176,7 +163,7 @@ const Detail = observer(() => {
           <br />
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads !== null ? (
-            involvesWorkloads.map((workload) => (
+            involvesWorkloads.map(workload => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
@@ -190,9 +177,7 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>Replica Name</th>
-                      <td>
-                        {workload?.replicaName ? workload?.replicaName : "-"}
-                      </td>
+                      <td>{workload?.replicaName ? workload?.replicaName : "-"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -208,7 +193,7 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp.map((port) => (
+          {portTemp.map(port => (
             <>
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>

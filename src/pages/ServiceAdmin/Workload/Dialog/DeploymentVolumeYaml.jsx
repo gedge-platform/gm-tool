@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
-import deploymentStore from "../../../../store/Deployment";
+import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
@@ -35,7 +35,7 @@ const DeploymentVolumeYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
+        onChange={value => {
           // setContent(value);
         }}
         fontSize={14}
