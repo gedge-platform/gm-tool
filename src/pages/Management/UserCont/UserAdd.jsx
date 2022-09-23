@@ -166,7 +166,7 @@ const UserAdd = observer(props => {
                   height: "30px",
                   backgroundColor: "#0a2348",
                   color: "white",
-                  fontSize: "bold",
+                  fontWeight: "bold",
                   borderRadius: "2px",
                   fontSize: "13px",
                   border: "none",

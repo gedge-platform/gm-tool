@@ -1094,7 +1094,7 @@ textarea {
   vertical-align: middle;
 }
 
-.wrap_inputBtn input[type="file" i] {
+.wrap_inputBtn input[type="file"] {
   position: absolute;
   width: 0;
   height: 0;
