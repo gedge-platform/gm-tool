@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { RouteProps } from "react-router-dom";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { CIconButton } from "@/components/buttons";
 

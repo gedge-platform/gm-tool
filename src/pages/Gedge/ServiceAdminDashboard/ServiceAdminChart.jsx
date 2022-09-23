@@ -76,9 +76,6 @@ const ServiceAdminChart = observer(props => {
         bottom: 20,
       },
     },
-    dataLabels: {
-      enabled: false,
-    },
     xaxis: {
       // type: "datetime",
       tooltip: {

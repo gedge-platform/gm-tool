@@ -15,13 +15,8 @@ COPY package.json ./
 # yarn ignore-engines
 RUN yarn config set ignore-engines true
 
-# Add node-sass
-#RUN mkdir -p node_modules/node-sass/vendor/linux-x64-83
-#RUN curl -L https://github.com/sass/node-sass/releases/download/v4.14.1/linux-x64-83_binding.node -o node_modules/node-sass/vendor/linux-x64-83/binding.node
-
 RUN yarn install
 RUN yarn cache clean
-#RUN yarn rebuild node-sass
 
 # add app
 COPY . ./
