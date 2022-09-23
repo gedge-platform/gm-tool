@@ -56,7 +56,6 @@ const Detail = observer(() => {
   } = cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  console.log(containers.map((val) => val.name));
   // console.log("cronjobDetail: ", cronJobDetail);
 
   // const containers = cronJobDetail.containers;

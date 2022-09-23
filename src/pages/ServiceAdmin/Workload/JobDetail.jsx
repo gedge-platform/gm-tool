@@ -60,7 +60,6 @@ const Detail = observer(() => {
     containers,
   } = jobStore;
 
-  console.log(jobDetailData);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

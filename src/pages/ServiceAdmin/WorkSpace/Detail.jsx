@@ -109,7 +109,6 @@ const Detail = observer(() => {
     changeProject,
     selectClusterInfo,
   } = workspaceStore;
-  console.log(detailInfo);
   const [tabvalue, setTabvalue] = useState(0);
 
   const projectChange = (e) => {

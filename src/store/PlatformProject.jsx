@@ -135,7 +135,6 @@ class PlatformProject {
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
           this.platformProjectList = res.data.data;
           this.platformDetail = res.data.data[0];
           // const temp = new Set(

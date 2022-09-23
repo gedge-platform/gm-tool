@@ -119,7 +119,6 @@ const CreateUserDetail = observer(() => {
     goNextEvent,
   } = projectStore;
 
-  console.log(events);
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

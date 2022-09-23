@@ -149,7 +149,6 @@ const ServiceAdminDashboard = observer(() => {
 
   const searchMetrics = (MetricList, name) => {
     let metrics = [];
-    console.log(MetricList);
     MetricList[0].forEach((element) => {
       const tempMetrics = {
         x: unixToTime(element[0]),

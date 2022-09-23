@@ -31,7 +31,6 @@ const EventsContainer = styled.div`
 `;
 
 const EventAccordion = ({ events }) => {
-  console.log(events);
   if (events === null || events === undefined) {
     return (
       <EventsContainer>

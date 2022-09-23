@@ -72,7 +72,6 @@ const UserServiceListTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
-    console.log("e is ", e.data.projectName);
     setUserProjectName(e.data.projectName);
   };
 
