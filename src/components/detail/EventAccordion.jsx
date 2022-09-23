@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { dateFormatter, strFormatByLength } from "@/utils/common-utils";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
-import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
+import { ExpandMoreRounded } from "@mui/icons-material";
 import theme from "@/styles/theme";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import { color } from "@mui/system";
@@ -53,112 +50,99 @@ const EventAccordion = ({ events }) => {
       <div className="tb_container">
         <table className="tb_data">
           <tbody>
-            {events.map(
-              ({
-                message,
-                kind,
-                name,
-                namespace,
-                cluster,
-                reason,
-                type,
-                eventTime,
-              }) => (
-                <div>
-                  <Accordion>
-                    <AccordionSummary
-                      expandIcon={
-                        <ExpandMoreRoundedIcon
-                          sx={{
-                            backgroundColor: "#2f3855",
-                            color: "rgba(255,255,255,0.7)",
-                          }}
-                        />
-                      }
-                      aria-controls="ProjectEvent-content"
-                      id="ProjectEvent-header"
-                      // sx={{ bgcolor: theme.colors.primaryDark }}
-                      sx={{ backgroundColor: "#2f3855" }}
-                    >
-                      {type === "Warning" ? (
-                        <Typography
-                          sx={{
-                            width: "10%",
-                            fontSize: 13,
-                            color: "rgba(255,0,0,0.9)",
-                          }}
-                        >
-                          {type}
-                        </Typography>
-                      ) : (
-                        <Typography
-                          sx={{
-                            width: "10%",
-                            fontSize: 13,
-                            color: "rgba(255,255,255,0.7)",
-                            backgroundColor: "#2f3855",
-                          }}
-                        >
-                          {type}
-                        </Typography>
-                      )}
+            {events.map(({ message, kind, name, namespace, cluster, reason, type, eventTime }) => (
+              <div>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={
+                      <ExpandMoreRounded
+                        sx={{
+                          backgroundColor: "#2f3855",
+                          color: "rgba(255,255,255,0.7)",
+                        }}
+                      />
+                    }
+                    aria-controls="ProjectEvent-content"
+                    id="ProjectEvent-header"
+                    // sx={{ bgcolor: theme.colors.primaryDark }}
+                    sx={{ backgroundColor: "#2f3855" }}
+                  >
+                    {type === "Warning" ? (
+                      <Typography
+                        sx={{
+                          width: "10%",
+                          fontSize: 13,
+                          color: "rgba(255,0,0,0.9)",
+                        }}
+                      >
+                        {type}
+                      </Typography>
+                    ) : (
+                      <Typography
+                        sx={{
+                          width: "10%",
+                          fontSize: 13,
+                          color: "rgba(255,255,255,0.7)",
+                          backgroundColor: "#2f3855",
+                        }}
+                      >
+                        {type}
+                      </Typography>
+                    )}
 
-                      <Typography
-                        sx={{
-                          fontSize: 13,
-                          color: "rgba(255,255,255,0.7)",
-                          backgroundColor: "#2f3855",
-                        }}
-                      >
-                        {strFormatByLength(message)}
-                      </Typography>
-                    </AccordionSummary>
-                    {/* <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}> */}
-                    <AccordionDetails sx={{ backgroundColor: "#2f3855" }}>
-                      <Typography
-                        sx={{
-                          fontSize: 13,
-                          color: "rgba(255,255,255,0.7)",
-                          // bgcolor: theme.colors.primary,
-                          backgroundColor: "#2f3855",
-                        }}
-                      >
-                        <table className="tb_data">
-                          <tbody className="tb_data_detail">
-                            <tr>
-                              <th>Kind</th>
-                              <td>{kind ? kind : "-"}</td>
-                              <th>Name</th>
-                              <td>{name ? name : "-"}</td>
-                            </tr>
-                            <tr>
-                              <th>Namespace</th>
-                              <td>{namespace ? namespace : "-"}</td>
-                              <th>Cluster</th>
-                              <td>{cluster ? cluster : "-"}</td>
-                            </tr>
-                            <tr>
-                              <th>Reason</th>
-                              <td>{reason ? reason : "-"}</td>
-                              <th>Type</th>
-                              <td>{type ? type : "-"}</td>
-                            </tr>
-                            <tr>
-                              <th>Event Time</th>
-                              <td>
-                                {eventTime ? dateFormatter(eventTime) : "-"}
-                              </td>
-                              <th></th>
-                              <td></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-              )
-            )}
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        color: "rgba(255,255,255,0.7)",
+                        backgroundColor: "#2f3855",
+                      }}
+                    >
+                      {strFormatByLength(message)}
+                    </Typography>
+                  </AccordionSummary>
+                  {/* <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}> */}
+                  <AccordionDetails sx={{ backgroundColor: "#2f3855" }}>
+                    <Typography
+                      sx={{
+                        fontSize: 13,
+                        color: "rgba(255,255,255,0.7)",
+                        // bgcolor: theme.colors.primary,
+                        backgroundColor: "#2f3855",
+                      }}
+                    >
+                      <table className="tb_data">
+                        <tbody className="tb_data_detail">
+                          <tr>
+                            <th>Kind</th>
+                            <td>{kind ? kind : "-"}</td>
+                            <th>Name</th>
+                            <td>{name ? name : "-"}</td>
+                          </tr>
+                          <tr>
+                            <th>Namespace</th>
+                            <td>{namespace ? namespace : "-"}</td>
+                            <th>Cluster</th>
+                            <td>{cluster ? cluster : "-"}</td>
+                          </tr>
+                          <tr>
+                            <th>Reason</th>
+                            <td>{reason ? reason : "-"}</td>
+                            <th>Type</th>
+                            <td>{type ? type : "-"}</td>
+                          </tr>
+                          <tr>
+                            <th>Event Time</th>
+                            <td>{eventTime ? dateFormatter(eventTime) : "-"}</td>
+                            <th></th>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            ))}
           </tbody>
         </table>
       </div>

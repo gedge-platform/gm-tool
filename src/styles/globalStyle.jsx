@@ -2,21 +2,17 @@ import React from "react";
 import reset from "styled-reset";
 import theme from "@/styles/theme";
 import { createGlobalStyle } from "styled-components";
-import NotoR2 from "@/fonts/NotoSansKR/NotoSans-Regular.woff2";
-import NotoR from "@/fonts/NotoSansKR/NotoSans-Regular.woff";
-import NotoROtf from "@/fonts/NotoSansKR/NotoSansKR-Regular.otf";
+import NotoR2 from "@/fonts/NotoSansKR/NotoSansKR-Regular.woff2";
+import NotoR from "@/fonts/NotoSansKR/NotoSansKR-Regular.woff";
 
-import NotoL2 from "@/fonts/NotoSansKR/NotoSans-Light.woff2";
-import NotoL from "@/fonts/NotoSansKR/NotoSans-Light.woff";
-import NotoLOtf from "@/fonts/NotoSansKR/NotoSansKR-Light.otf";
+import NotoL2 from "@/fonts/NotoSansKR/NotoSansKR-Light.woff2";
+import NotoL from "@/fonts/NotoSansKR/NotoSansKR-Light.woff";
 
-import NotoM2 from "@/fonts/NotoSansKR/NotoSans-Medium.woff2";
-import NotoM from "@/fonts/NotoSansKR/NotoSans-Medium.woff";
-import NotoMOtf from "@/fonts/NotoSansKR/NotoSansKR-Medium.otf";
+import NotoM2 from "@/fonts/NotoSansKR/NotoSansKR-Medium.woff2";
+import NotoM from "@/fonts/NotoSansKR/NotoSansKR-Medium.woff";
 
-import NotoB2 from "@/fonts/NotoSansKR/NotoSans-Bold.woff2";
-import NotoB from "@/fonts/NotoSansKR/NotoSans-Bold.woff";
-import NotoBOtf from "@/fonts/NotoSansKR/NotoSansKR-Bold.otf";
+import NotoB2 from "@/fonts/NotoSansKR/NotoSansKR-Bold.woff2";
+import NotoB from "@/fonts/NotoSansKR/NotoSansKR-Bold.woff";
 
 import selectArr from "@/images/bullet/select_arr.png";
 import passed from "@/images/bullet/ico_step_passed.png";
@@ -31,39 +27,35 @@ const globalStyles = createGlobalStyle`
   ${reset};
 
   @font-face {
-    font-family: 'Noto Sans';
+    font-family: 'Noto Sans KR';
     font-style: normal;
     font-weight: 400;
-    src: url(${NotoROtf}) format('opentype'),
-    url(${NotoR2}) format('woff2'),
+    src: url(${NotoR2}) format('woff2'),
     url(${NotoR}) format('woff');
     
   }
 
   @font-face {
-    font-family: 'Noto Sans';
+    font-family: 'Noto Sans KR';
     font-style: normal;
     font-weight: 300;
-    src: url(${NotoLOtf}) format('opentype'),
-    url(${NotoL2}) format('woff2'),
+    src: url(${NotoL2}) format('woff2'),
     url(${NotoL}) format('woff');
   }
 
   @font-face {
-    font-family: 'Noto Sans';
+    font-family: 'Noto Sans KR';
     font-style: normal;
     font-weight: 500;
-    src: url(${NotoMOtf}) format('opentype'),
-    url(${NotoM2}) format('woff2'),
+    src: url(${NotoM2}) format('woff2'),
     url(${NotoM}) format('woff');
   }
 
   @font-face {
-    font-family: 'Noto Sans';
+    font-family: 'Noto Sans KR';
     font-style: normal;
     font-weight: 700;
-    src: url(${NotoBOtf}) format('opentype'),
-    url(${NotoB2}) format('woff2'),
+    src: url(${NotoB2}) format('woff2'),
     url(${NotoB}) format('woff');
   }
   
@@ -89,7 +81,7 @@ const globalStyles = createGlobalStyle`
 
 
   body, input, button, select, textarea, td {
-    font-family: "Noto Sans", sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
     color: #626b7a;
     font-size: 12px;
     font-weight: 400

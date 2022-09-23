@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { CDialogNew } from "../../../../components/dialogs";
+import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 import CreateAWS from "./CreateAWS";
 import CreateOPENSTACK from "./CreateOPENSTACK";
 

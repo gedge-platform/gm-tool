@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { randomString } from "@/utils/common-utils";
-import { CDialogNew } from "../../../../components/dialogs";
-import { swalError } from "../../../../utils/swal-utils";
-import { Projection } from "leaflet";
+import { CDialogNew } from "@/components/dialogs";
+import { swalError } from "@/utils/swal-utils";
 import VolumeBasicInformation from "./VolumeBasicInformation";
-import deploymentStore from "../../../../store/Deployment";
-import volumeStore from "../../../../store/Volume";
 import VolumeAdvancedSetting from "./VolumeAdvancedSetting";
 import VolumYamlPopup from "./VolumYamlPopup";
 import VolumePopup from "./VolumePopup";
-import projectStore from "../../../../store/Project";
-import schedulerStore from "../../../../store/Scheduler";
-import workspacestore from "../../../../store/WorkSpace";
-import volumeBasicInformation from "./VolumeBasicInformation";
-import { values } from "lodash";
-import StorageClassStore from "../../../../store/StorageClass";
+import { deploymentStore, volumeStore, projectStore, StorageClassStore } from "@/store";
 
 const Button = styled.button`
   background-color: #fff;

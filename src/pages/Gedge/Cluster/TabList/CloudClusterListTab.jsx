@@ -4,14 +4,13 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton } from "@/components/buttons";
-import { CDeleteButton } from "@/components/buttons/CDeleteButton";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import Detail from "../Detail";
-import clusterStore from "../../../../store/Cluster";
+import { clusterStore } from "@/store";
 import CreateCluster from "../Dialog/CreateCluster";
-import { drawStatus } from "../../../../components/datagrids/AggridFormatter";
-import { swalUpdate, swalError } from "../../../../utils/swal-utils";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const CloudClusterListTab = observer(() => {
   const [Create, setCreateOpen] = useState(false);
@@ -77,7 +76,7 @@ const CloudClusterListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     loadCluster(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
@@ -95,9 +94,7 @@ const CloudClusterListTab = observer(() => {
       swalError("클러스터를 선택해주세요!");
       return;
     } else {
-      swalUpdate(clusterName + "를 삭제하시겠습니까?", () =>
-        deleteCluster(clusterName, reloadData)
-      );
+      swalUpdate(clusterName + "를 삭제하시겠습니까?", () => deleteCluster(clusterName, reloadData));
     }
     setClusterName("");
   };
@@ -139,12 +136,7 @@ const CloudClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster
-            type="cloud"
-            open={Create}
-            onClose={handleCreateClose}
-            reloadFunc={reloadData}
-          />
+          <CreateCluster type="cloud" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

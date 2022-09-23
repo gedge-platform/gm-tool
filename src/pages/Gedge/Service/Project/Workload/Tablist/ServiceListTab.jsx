@@ -9,10 +9,8 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../ServiceDetail";
-import serviceStore from "../../../../../../store/Service";
+import { serviceStore } from "@/store";
 import CreateService from "../Dialog/CreateService";
-import { ViewList } from "@mui/icons-material";
-import { toJS } from "mobx";
 
 const ServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -82,7 +80,7 @@ const ServiceListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     loadServiceDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -97,12 +95,7 @@ const ServiceListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadServiceList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadServiceList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -122,11 +115,7 @@ const ServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateService
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadServiceList}
-          />
+          <CreateService open={open} onClose={handleClose} reloadFunc={loadServiceList} />
         </PanelBox>
         <Detail service={serviceDetail} />
       </CReflexBox>

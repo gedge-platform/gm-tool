@@ -6,9 +6,9 @@ import theme from "@/styles/theme";
 import { Menu, MenuItem } from "@material-ui/core";
 import axios from "axios";
 import { SERVER_URL, BASIC_AUTH } from "@/config.jsx";
-import { getItem, removeItem, setItem } from "../../utils/sessionStorageFn";
+import { getItem, removeItem, setItem } from "@/utils/sessionStorageFn";
 import { useHistory } from "react-router-dom";
-import { unixCurrentTime } from "../../pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 
 const useStyles = makeStyles(() =>
   createStyles({

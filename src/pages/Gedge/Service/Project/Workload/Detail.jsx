@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
-import deploymentStore from "../../../../../store/Deployment";
+import { deploymentStore } from "@/store";
 import { observer } from "mobx-react";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";

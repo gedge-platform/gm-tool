@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-import FormControl from "@material-ui/core/FormControl";
-import certificationStore from "../../../../store/Certification";
+import { FormControl } from "@material-ui/core";
+import { certificationStore } from "@/store";
 
-const SelectProvider = observer((props) => {
+const SelectProvider = observer(props => {
   const { loadCredentialList, setProviderName } = certificationStore;
 
   const ProviderList = ["AWS", "OPENSTACK"];
@@ -30,7 +30,7 @@ const SelectProvider = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="ProviderName" onChange={onChange}>
                   <option value={""}>Select Provider</option>
-                  {ProviderList.map((provider) => (
+                  {ProviderList.map(provider => (
                     <option value={provider}>{provider}</option>
                   ))}
                 </select>

@@ -3,7 +3,7 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import jobStore from "../../../store/Job";
+import { jobStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 
@@ -50,15 +50,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const {
-    jobDetailData,
-    involvesPodList,
-    labels,
-    annotations,
-    events,
-    ownerReferences,
-    containers,
-  } = jobStore;
+  const { jobDetailData, involvesPodList, labels, annotations, events, ownerReferences, containers } = jobStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -105,15 +97,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Start Time</th>
-                <td>
-                  {jobDetailData ? dateFormatter(jobDetailData.startTime) : "-"}
-                </td>
+                <td>{jobDetailData ? dateFormatter(jobDetailData.startTime) : "-"}</td>
                 <th>Created</th>
-                <td>
-                  {jobDetailData
-                    ? dateFormatter(jobDetailData.created_at)
-                    : "-"}
-                </td>
+                <td>{jobDetailData ? dateFormatter(jobDetailData.created_at) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -123,7 +109,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers ? (
-            containers.map((containers) => (
+            containers.map(containers => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
                   <tr>
@@ -133,22 +119,14 @@ const Detail = observer(() => {
                   <tr>
                     <th>Command</th>
                     <td>
-                      {containers?.command?.map((item) => (
+                      {containers?.command?.map(item => (
                         <p>{item ? item : "-"}</p>
                       ))}
                     </td>
                   </tr>
                   <tr>
                     <th>Args</th>
-                    <td>
-                      {containers?.args ? (
-                        containers?.args?.map((item) => (
-                          <p>{item ? item : "-"}</p>
-                        ))
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
+                    <td>{containers?.args ? containers?.args?.map(item => <p>{item ? item : "-"}</p>) : <>-</>}</td>
                   </tr>
                   <tr>
                     <th>Image</th>
@@ -156,11 +134,7 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>ImagePullPolicy</th>
-                    <td>
-                      {containers?.imagePullPolicy
-                        ? containers?.imagePullPolicy
-                        : "-"}
-                    </td>
+                    <td>{containers?.imagePullPolicy ? containers?.imagePullPolicy : "-"}</td>
                   </tr>
                   <tr>
                     <th>resources</th>
@@ -168,19 +142,11 @@ const Detail = observer(() => {
                   </tr>
                   <tr>
                     <th>TerminationMessagePath</th>
-                    <td>
-                      {containers?.terminationMessagePath
-                        ? containers?.terminationMessagePath
-                        : "-"}
-                    </td>
+                    <td>{containers?.terminationMessagePath ? containers?.terminationMessagePath : "-"}</td>
                   </tr>
                   <tr>
                     <th>TerminationMessagePolicy</th>
-                    <td>
-                      {containers?.terminationMessagePolicy
-                        ? containers?.terminationMessagePolicy
-                        : "-"}
-                    </td>
+                    <td>{containers?.terminationMessagePolicy ? containers?.terminationMessagePolicy : "-"}</td>
                   </tr>
                 </tbody>
               </table>
@@ -236,7 +202,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {involvesPodList ? (
-            involvesPodList.map((pod) => (
+            involvesPodList.map(pod => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
                   <tr>
@@ -274,9 +240,7 @@ const Detail = observer(() => {
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
                   <tr>
-                    <th style={{ width: "25%" }}>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </th>
+                    <th style={{ width: "25%" }}>{key.charAt(0).toUpperCase() + key.slice(1)}</th>
                     <td>{value}</td>
                   </tr>
                 </tbody>

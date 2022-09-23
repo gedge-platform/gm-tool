@@ -9,10 +9,10 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../PodDetail";
-import podStore from "../../../../../../store/Pod";
+import { podStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import CreatePod from "../Dialog/CreatePod";
-import { drawStatus } from "../../../../../../components/datagrids/AggridFormatter";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
 const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -21,18 +21,7 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const {
-    podList,
-    podDetail,
-    totalElements,
-    loadPodList,
-    loadPodDetail,
-    currentPage,
-    totalPages,
-    goPrevPage,
-    goNextPage,
-    viewList,
-  } = podStore;
+  const { podList, podDetail, totalElements, loadPodList, loadPodDetail, currentPage, totalPages, goPrevPage, goNextPage, viewList } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -88,7 +77,7 @@ const PodListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     const fieldName = e.colDef.field;
     const data = e.data.status;
     if (data === "Failed") {
@@ -107,12 +96,7 @@ const PodListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={loadPodList}
-            isSearch={true}
-            isSelect={true}
-            keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={loadPodList} isSearch={true} isSelect={true} keywordList={["이름"]}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
@@ -133,11 +117,7 @@ const PodListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreatePod
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadPodList}
-          />
+          <CreatePod open={open} onClose={handleClose} reloadFunc={loadPodList} />
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>

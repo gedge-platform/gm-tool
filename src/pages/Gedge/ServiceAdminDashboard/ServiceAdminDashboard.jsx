@@ -4,9 +4,8 @@ import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
 import { FormControl, MenuItem, Select } from "@mui/material";
-import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
+import { serviceAdminDashboardStore, monitoringStore } from "@/store";
 import { observer } from "mobx-react";
-import { ResponsiveLine } from "@nivo/line";
 import ServiceAdminChart from "./ServiceAdminChart";
 import {
   unixStartTime,
@@ -14,7 +13,6 @@ import {
   unixCurrentTime,
   unixToTime,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
-import monitoringStore from "../../../store/Monitoring";
 import { data } from "react-dom-factories";
 
 const ServiceAdminWrap = styled.div`

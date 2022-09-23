@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import { FormControl, MenuItem, Select } from "@mui/material";
 import { observer } from "mobx-react";
-import clusterStore from "../../../store/Cluster";
-import dashboardStore from "../../../store/Dashboard";
-import ApexCharts from "apexcharts";
-import ReactApexChart from "react-apexcharts";
+import { dashboardStore } from "@/store";
 import styled from "styled-components";
 
 const Cluster_resoureceGraphData = styled.div`
