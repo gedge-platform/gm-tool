@@ -4,17 +4,49 @@ import { observer } from "mobx-react";
 import axios from "axios";
 import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
+import { LineElement } from "chart.js";
+import { map } from "lodash";
 
 const MapContent = observer(() => {
   const {
     clusterName,
-    edgeNodeRunning,
     setClusterName,
     loadEdgeZoneDetailDashboard,
     loadEdgeZoneDashboard,
+    loadMapStatus,
+    edgeNodeRunning,
+    clusterNameList,
   } = dashboardStore;
 
-  console.log("edgeNodeRunning", edgeNodeRunning);
+  // console.log(
+  //   "clusterNameList : ",
+  //   clusterNameList.map((item) => item)
+  // );
+  // console.log(
+  //   edgeNodeRunning.filter((val) => val.cluster === clusterNameList[0])
+  // );
+  console.log(edgeNodeRunning);
+  console.log(
+    // edgeNodeRunning.filter(
+    //   (element) =>
+    //     "Ready" ===
+    clusterNameList.map(
+      (item) =>
+        edgeNodeRunning
+          .filter((val) => val.cluster === item)
+          .filter((element) => element.status === "Ready").length
+    )
+
+    // ).length
+  );
+
+  // edgeNodeRunning
+  //                          .filter(
+  //                            (val) =>
+  //                              val.cluster ===
+  //                              edgeInfoTemp.map((item) => item.clusterName[i])
+  //                          )
+  //                          .filter((val) => val.status === "Ready").length
 
   // const nodeData =
   //   nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
@@ -45,11 +77,18 @@ const MapContent = observer(() => {
     const dataStatus = edgeInfoTemp.map((item) => item.status);
     setData(dataPoint);
     setDataStatus(dataStatus);
+    loadMapStatus();
 
     // nodeRunning 데이터
-    setClusterName(clusterNameData[0]);
+    // setClusterName(clusterNameData[0]);
     loadEdgeZoneDashboard();
-    loadEdgeZoneDetailDashboard();
+    // loadEdgeZoneDetailDashboard();
+
+    // console.log(
+    //   edgeNodeRunning.filter(
+    //     (val) => val.cluster === edgeInfoTemp.map((item) => item.clusterName)
+    //   ).length
+    // );
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -76,9 +115,13 @@ const MapContent = observer(() => {
                         Ready 
                        </span>
                        <span>${
-                         edgeNodeRunning.filter(
-                           (item) => item.status === "Ready"
-                         ).length
+                         //  clusterNameList.map(
+                         //    (item) =>
+                         edgeNodeRunning
+                           .filter((val) => val.cluster === clusterNameList[i])
+                           .filter((element) => element.status === "Ready")
+                           .length
+                         //  )
                        }</span>
                      </div>
                    </td>
@@ -89,7 +132,11 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready 
                      </span>
-                     <span>0</span>
+                     <span>${
+                       edgeNodeRunning
+                         .filter((val) => val.cluster === clusterNameList[i])
+                         .filter((element) => element.status === "Ready").length
+                     }</span>
                      </div>
                    </td>
                  </tr>
