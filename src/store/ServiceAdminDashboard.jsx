@@ -30,6 +30,11 @@ class ServiceAdminDashboard {
   resource = {};
   allMetrics = [];
   deploymentMetrics = [];
+  setDeploymentMetrics = (value) => {
+    runInAction(() => {
+      this.deploymentMetrics = value;
+    });
+  };
   jobMetrics = [];
   podMetrics = [];
   volumeMetrics = [];
@@ -98,45 +103,6 @@ class ServiceAdminDashboard {
 
   resourceMetric = [];
   resourceMetricData = [];
-
-  // convertResponseToMonit = (res) => {
-  //   const array = [];
-
-  //   runInAction(() => {
-  //     Object.entries(res.data?.items).map(([key, value]) => {
-  //       const MetricData = {
-  //         metricType: "",
-  //         metrics: [],
-  //       };
-  //       MetricData.metricType = key;
-
-  //       if (value.length === 0) {
-  //         for (
-  //           let index = unixStartTime(60 * 6);
-  //           index < unixCurrentTime();
-  //           index = index + 60 * 5
-  //         ) {
-  //           MetricData.metrics.push({
-  //             time: unixToTime(index),
-  //             value: 0,
-  //           });
-  //           array.push(MetricData);
-  //         }
-  //         return array;
-  //       } else {
-  //         value[0]?.values.forEach((element) => {
-  //           MetricData.metrics.push({
-  //             time: unixToTime(element[0]),
-  //             value: element[1],
-  //           });
-  //         });
-  //         // console.log("MetricData", MetricData);
-  //         array.push(MetricData);
-  //       }
-  //     });
-  //   });
-  //   return array;
-  // };
 
   serviceAdminMonitoring = async (
     projectNameInMonitoring,

@@ -62,6 +62,7 @@ const ServiceAdminDashboard = observer(() => {
     resourceMetricData,
     allMetrics,
     deploymentMetrics,
+    setDeploymentMetrics,
     jobMetrics,
     podMetrics,
     volumeMetrics,
@@ -72,6 +73,7 @@ const ServiceAdminDashboard = observer(() => {
   } = serviceAdminDashboardStore;
 
   const { lastTime, interval } = monitoringStore;
+  const [resetTest, setResetTest] = useState("");
 
   useEffect(() => {
     loadWorkspaceName();
@@ -88,6 +90,7 @@ const ServiceAdminDashboard = observer(() => {
       loadServiceAdminDashboard(value);
     }
     if (name === "projectName") {
+      console.log("projectName", value);
       setProjectNameInMonitoring(value);
       serviceAdminMonitoring(
         value,
@@ -95,6 +98,7 @@ const ServiceAdminDashboard = observer(() => {
         unixCurrentTime(),
         stepConverter(5)
       );
+      // setDeploymentMetrics("");
     }
   };
 
@@ -147,9 +151,10 @@ const ServiceAdminDashboard = observer(() => {
   //   return data;
   // };
 
+  let MetricList = [];
   const searchMetrics = (MetricList, name) => {
-    let metrics = [];
     console.log(MetricList);
+    let metrics = [];
     MetricList[0].forEach((element) => {
       const tempMetrics = {
         x: unixToTime(element[0]),
@@ -368,11 +373,21 @@ const ServiceAdminDashboard = observer(() => {
               Monitoring
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
-                  <select name="projectName" onChange={onChange}>
-                    {Object.values(projectList).map((val) => (
-                      <option value={val.projectName}>{val.projectName}</option>
-                    ))}
-                  </select>
+                  {projectList !== 0 ? (
+                    <select name="projectName" onChange={onChange}>
+                      {Object.values(projectList).map((val) => (
+                        <option value={val.projectName}>
+                          {val.projectName}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <></>
+                  )}
+
+                  {/* {Object.values(projectList).map((val) => (
+                       <option value={val.projectName}>{val.projectName}</option>
+                     ))} */}
                 </FormControl>
               </div>
             </div>

@@ -83,8 +83,6 @@ const StorageDashboard = observer(() => {
   const history = useHistory();
   const [metric, setMetric] = useState([]);
 
-  console.log(osd_read_latency);
-
   useEffect(() => {
     loadStorageMonit();
     loadCephMonit(unixStartTime(60), unixCurrentTime(), stepConverter(5));

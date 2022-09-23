@@ -5,8 +5,8 @@
   "main": "index.jsx",
   "repository": "https://github.com/gedge-platform/gm-tool.git",
   "scripts": {
-    "start": "webpack-dev-server -d --watch --history-api-fallback --host 0.0.0.0 --port 8080 --disable-host-check",
-    "dev": "webpack-dev-server --open --watch",
+    "start": "webpack-dev-server -d --watch --hot --history-api-fallback --host 0.0.0.0 --port 8080 --disable-host-check",
+    "dev": "webpack-dev-server --open --watch --hot --port 8080 --progress",
     "production-build": "cross-env NODE_ENV=production webpack --optimize-minimize",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --optimize-minimize",

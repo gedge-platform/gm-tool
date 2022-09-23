@@ -1,14 +1,5 @@
 import { display, padding } from "@mui/system";
 import React, { useState, useEffect, PureComponent } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { observer } from "mobx-react";
 
 import Chart from "react-apexcharts";
@@ -18,7 +9,6 @@ import serviceAdminDashboardStore from "../../../store/ServiceAdminDashboard";
 const ServiceAdminChart = observer((props) => {
   const { seriesData } = props;
   const series = seriesData;
-  // console.log(seriesData);
   const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
 
   // const cronjob = resourceMetricData.filter(
@@ -36,19 +26,10 @@ const ServiceAdminChart = observer((props) => {
         show: false,
       },
     },
-
-    // responsive: [{
-    //   breakpoint: 480,
-    //   options: {
-    //     chart: {
-    //       height: "100%"
-    //     },
-    //   }
-    // }],
     dataLabels: {
       enabled: false,
     },
-    series: { series },
+    series: { seriesData },
     stroke: {
       width: [3, 5, 3],
       curve: "straight",

@@ -18,9 +18,6 @@ const MapContent = observer(() => {
     mapZoom,
   } = dashboardStore;
 
-  // const nodeData =
-  //   nodeRunning === 0 ? 0 : nodeRunning.map((item) => item.status);
-
   const mapRef = useRef(null);
   const [data, setData] = useState("");
   const [dataEdgeInfo, setDataEdgeInfo] = useState("");
@@ -32,7 +29,17 @@ const MapContent = observer(() => {
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const edgeInfoTemp = result.data.data.edgeInfo;
     const nodeRunning = result.data.data.nodeRunning;
+
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
+    // console.log("clusterNameData", clusterNameData);
+    const clusterNameInNode = nodeRunning.filter(
+      (item, i) => item.cluster == clusterNameData[i]
+    );
+
+    // for (let i = 0; clusterNameInNode.length > 0; i++) {}
+
+    // console.log("clusterNameInNode", clusterNameInNode);
+
     // 엣지존, 클라우드 대시보드의 클러스터 이름
     setClusterName(clusterNameData[0]);
     setDataEdgeInfo(edgeInfoTemp);
@@ -44,6 +51,9 @@ const MapContent = observer(() => {
     // nodeRunning 데이터
     // loadEdgeZoneDashboard();
     // loadEdgeZoneDetailDashboard();
+    console.log(
+      nodeRunning.filter((item) => item.cluster === clusterNameData[0])
+    );
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -68,12 +78,10 @@ const MapContent = observer(() => {
                      <div class="box run">
                        <span class="tit">
                         Ready 
-                       </span>
-                       <span>${
-                         edgeNodeRunning.filter(
-                           (item) => item.status === "Ready"
-                         ).length
-                       }</span>
+                       </span>${"ddd"}
+                       <span>
+
+                         </span>
                      </div>
                    </td>
                  </tr>
@@ -251,9 +259,8 @@ const MapContent = observer(() => {
   };
 
   const mapParams = {
-    // center: [37.481, 126.893],
     center: [37.5587619, 126.974145],
-    zoom: mapZoom, // usestate 값 저장 store
+    zoom: mapZoom, // store에 저장
     zoomControl: true,
     maxBounds: L.latLngBounds(L.latLng(-150, -240), L.latLng(150, 240)),
     layers: [MAP_TILE],
