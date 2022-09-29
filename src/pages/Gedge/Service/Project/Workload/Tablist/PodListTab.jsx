@@ -93,7 +93,7 @@ const PodListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadPodList} isSearch={true} isSelect={true} keywordList={["이름"]}>
@@ -121,7 +121,7 @@ const PodListTab = observer(() => {
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default PodListTab;
