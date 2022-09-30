@@ -29,6 +29,9 @@ export default ({ mode }) => {
       // publicPath: "",
       sourcemap: false,
       minify: true,
+      commonjsOptions: {
+        transformMixedEsModules: true,
+      },
     },
     plugins: [
       react({

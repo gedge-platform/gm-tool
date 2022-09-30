@@ -116,6 +116,8 @@ const CreateDeployment = observer((props) => {
     },
   };
 
+  console.log("template:", template);
+
   const templatePVC = {
     apiVersion: "v1",
     kind: "PersistentVolumeClaim",

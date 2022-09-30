@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import axios from "axios";
 import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
+import { serviceAdminDashboardStore, monitoringStore } from "@/store";
 import { LineElement } from "chart.js";
 import { map } from "lodash";
 
@@ -65,10 +66,10 @@ const MapContent = observer(() => {
     const nodeRunning = result.data.data.nodeRunning;
 
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
-    // console.log("clusterNameData", clusterNameData);
-    const clusterNameInNode = nodeRunning.filter(
-      (item, i) => item.cluster == clusterNameData[i]
-    );
+    // // console.log("clusterNameData", clusterNameData);
+    // const clusterNameInNode = nodeRunning.filter(
+    //   (item, i) => item.cluster == clusterNameData[i]
+    // );
 
     // for (let i = 0; clusterNameInNode.length > 0; i++) {}
 
@@ -87,12 +88,6 @@ const MapContent = observer(() => {
     // setClusterName(clusterNameData[0]);
     loadEdgeZoneDashboard();
     // loadEdgeZoneDetailDashboard();
-
-    // console.log(
-    //   edgeNodeRunning.filter(
-    //     (val) => val.cluster === edgeInfoTemp.map((item) => item.clusterName)
-    //   ).length
-    // );
 
     //지도
     mapRef.current = L.map("map", mapParams);

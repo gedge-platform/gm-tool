@@ -30,6 +30,7 @@ export { default as ServiceAdminDashboard } from "./Gedge/ServiceAdminDashboard/
 export { default as StorageDashboard } from "./Gedge/Storage/StorageDashboard";
 
 // Gedgd SA
+export { default as ServiceAdminMapDashboard } from "./Gedge/ServiceAdminDashboard/ServiceAdminMapDashboard";
 export { default as ServiceProject } from "./ServiceAdmin/Project/Project";
 export { default as ServiceWorkSpace } from "./ServiceAdmin/WorkSpace/WorkSpace";
 export { default as ServiceWorkload } from "./ServiceAdmin/Workload/Workload";
@@ -71,6 +72,7 @@ const Title = {
   Template: "템플릿",
 
   ServiceAdminDashboard: "통합 대시보드",
+  ServiceAdminMapDashboard: "지도 대시보드",
 };
 
 export { Title };
