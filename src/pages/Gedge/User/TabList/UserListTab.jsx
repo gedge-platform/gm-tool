@@ -7,7 +7,7 @@ import UserDetail from "../../User/UserDetail";
 import { observer } from "mobx-react";
 import userStore from "@/store/UserStore";
 import CommActionBar from "@/components/common/CommActionBar";
-import moment from "moment";
+import dayjs from "dayjs";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateUser from "../Dialog/CreateUser";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
@@ -42,7 +42,7 @@ const UserListTab = observer(() => {
       field: "logined_at",
       filter: true,
       cellRenderer: function (data) {
-        if (moment(data.value).year() === 1) {
+        if (dayjs(data.value).year() === 1) {
           return `<span>-</span>`;
         }
         return `<span>${dateFormatter(data.value)}</span>`;

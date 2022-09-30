@@ -16,7 +16,7 @@ import {
   CIconButton,
 } from "@/components/buttons";
 import { observer } from "mobx-react";
-import moment from "moment";
+import dayjs from "dayjs";
 import { monitoringStore } from "@/store";
 import {
   stepConverter,
@@ -319,7 +319,7 @@ const ClusterOverview = observer(() => {
           </CSelectButtonM>
         </div>
         <div className="date">
-          {moment(new Date()).format("YYYY-MM-DD")}
+          {dayjs(new Date()).format("YYYY-MM-DD")}
           <CIconButton
             onClick={calledMetrics}
             icon="refresh"
