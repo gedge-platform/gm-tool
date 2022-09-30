@@ -48,7 +48,7 @@ const ServiceAdminMapDashboard = observer(() => {
                       </tr>
                       <tr>
                         <th>Status</th>
-                        <td>Ready</td>
+                        <td>Running</td>
                       </tr>
                       <tr>
                         <th>IP</th>
@@ -75,7 +75,7 @@ const ServiceAdminMapDashboard = observer(() => {
           </tr>
           <tr>
             <th>Status</th>
-            <td>Ready</td>
+            <td>Running</td>
           </tr>
           <tr>
             <th>IP</th>
@@ -102,7 +102,7 @@ const ServiceAdminMapDashboard = observer(() => {
           </tr>
           <tr>
             <th>Status</th>
-            <td>Ready</td>
+            <td>Running</td>
           </tr>
           <tr>
             <th>IP</th>
@@ -125,19 +125,19 @@ const ServiceAdminMapDashboard = observer(() => {
         <table>
           <tr>
             <th>Name</th>
-            <td>pod/preprocess2-68d6866cb4-cpxfg</td>
+            <td>preprocess2-5b786958f6-dsdpj</td>
           </tr>
           <tr>
             <th>Status</th>
-            <td>Ready</td>
+            <td>Running</td>
           </tr>
           <tr>
             <th>IP</th>
-            <td>10.244.8.98</td>
+            <td>10.244.0.5</td>
           </tr>
           <tr>
             <th>Node</th>
-            <td>gedgew01</td>
+            <td>aws-edge-1</td>
           </tr>
         </table>
       </div>
