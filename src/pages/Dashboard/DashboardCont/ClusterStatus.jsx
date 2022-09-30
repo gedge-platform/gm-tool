@@ -106,13 +106,13 @@ const ClusterStatus = observer(() => {
             3 <span>클러스터</span>
           </div>
           <div className="Count">
-            3 <span>VM</span>
+            4 <span>VM</span>
           </div>
         </div>
         <div className="ClusterStatusList">
           <ul>
             <li className="run">
-              <span className="tit">실행</span> <span>3</span>
+              <span className="tit">실행</span> <span>4</span>
             </li>
             <li className="stop">
               <span className="tit">중지</span> <span>0</span>
