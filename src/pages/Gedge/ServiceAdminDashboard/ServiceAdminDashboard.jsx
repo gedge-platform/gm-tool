@@ -86,9 +86,15 @@ const ServiceAdminDashboard = observer(() => {
     if (name === "workspace") {
       setWorkspaceName(value);
       loadServiceAdminDashboard(value);
+      setProjectNameInMonitoring("");
+      serviceAdminMonitoring(
+        value,
+        unixStartTime(60),
+        unixCurrentTime(),
+        stepConverter(5)
+      );
     }
     if (name === "projectName") {
-      console.log("projectName", value);
       setProjectNameInMonitoring(value);
       serviceAdminMonitoring(
         value,
