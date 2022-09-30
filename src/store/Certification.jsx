@@ -5,6 +5,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Certification {
   credential = [];
+  certificationDetail = {};
   CredentialName = "";
   // credentialName = "";
   DomainName = "";
@@ -35,7 +36,7 @@ class Certification {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCluster(this.viewList[0].clusterName);
+        this.loadCertificationDetail(this.viewList[0].name);
       }
     });
   };
@@ -45,7 +46,7 @@ class Certification {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCluster(this.viewList[0].clusterName);
+        this.loadCertificationDetail(this.viewList[0].name);
       }
     });
   };
@@ -212,7 +213,19 @@ class Certification {
       })
       .then(() => {
         this.convertList(this.credential, this.setCredentialList);
+      })
+      .then(() => {
+        this.loadCertificationDetail(this.viewList[0].name);
       });
+  };
+
+  loadCertificationDetail = async certId => {
+    await axios.get(`${SERVER_URL}/certifications/${certId}`).then(res => {
+      runInAction(() => {
+        this.certificationDetail = res.data;
+      });
+      console.log(this.certificationDetail);
+    });
   };
 
   postCredential = async (data, callback) => {
