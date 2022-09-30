@@ -45,6 +45,7 @@ const EventWrap = styled.div`
 
   .MuiPaper-elevation8 {
     height: 40px;
+    background-color: #2f3855;
   }
 `;
 
@@ -98,10 +99,19 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { workSpaceDetail, labels, annotations, detailInfo, dataUsage, events, changeProject, selectClusterInfo } = workspaceStore;
+  const {
+    workSpaceDetail,
+    labels,
+    annotations,
+    detailInfo,
+    dataUsage,
+    events,
+    changeProject,
+    selectClusterInfo,
+  } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
 
-  const projectChange = e => {
+  const projectChange = (e) => {
     changeProject(e.target.value);
   };
 
@@ -132,7 +142,7 @@ const Detail = observer(() => {
 
   const clusterProjectTable = () => {
     return detailInfo ? (
-      detailInfo.map(project => (
+      detailInfo.map((project) => (
         <>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody className="project_table">
@@ -143,13 +153,21 @@ const Detail = observer(() => {
                       <th> Name</th>
                       <td>{project?.projectName}</td>
                       <th>Cluster</th>
-                      <td style={{ whiteSpace: "pre-wrap" }}>{selectClusterInfo.map(item => item.clusterName + "\n")}</td>
+                      <td style={{ whiteSpace: "pre-wrap" }}>
+                        {selectClusterInfo.map(
+                          (item) => item.clusterName + "\n"
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Created</th>
                       <td>{dateFormatter(project?.created_at)}</td>
                       <th>Creator</th>
-                      <td>{project?.projectCreator ? project?.projectCreator : "-"}</td>
+                      <td>
+                        {project?.projectCreator
+                          ? project?.projectCreator
+                          : "-"}
+                      </td>
                     </tr>
                   </>
                 ) : (
@@ -258,7 +276,9 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td style={{ whiteSpace: "pre-wrap" }}>{selectClusterInfo.map(item => item.clusterName + "\n")}</td>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
+                </td>
                 <th>Creator</th>
                 <td>{workSpaceDetail.memberName}</td>
               </tr>
@@ -276,11 +296,15 @@ const Detail = observer(() => {
                       <tbody>
                         <tr>
                           <th style={{ width: "307px" }}>CPU</th>
-                          <td style={{ width: "307px" }}>{dataUsage?.cpu_usage}</td>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.cpu_usage}
+                          </td>
                         </tr>
                         <tr>
                           <th style={{ width: "307px" }}>MEMORY</th>
-                          <td style={{ width: "307px" }}>{dataUsage?.memory_usage}</td>
+                          <td style={{ width: "307px" }}>
+                            {dataUsage?.memory_usage}
+                          </td>
                         </tr>
                       </tbody>
                     </table>

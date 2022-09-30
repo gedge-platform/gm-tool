@@ -154,7 +154,6 @@ class StatefulSet {
             ? (this.totalElements = 0)
             : (this.totalElements = this.statefulSetList.length);
         });
-        console.log(this.statefulSetList);
       })
       .then(() => {
         this.convertList(this.statefulSetList, this.setPStatefulSetList);

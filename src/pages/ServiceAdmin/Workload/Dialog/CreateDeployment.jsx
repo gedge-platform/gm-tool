@@ -16,6 +16,8 @@ import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "@/utils/swal-utils";
 import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
+import { require } from "ace-builds";
+import { stringify } from "json-to-pretty-yaml";
 
 const Button = styled.button`
   background-color: #fff;

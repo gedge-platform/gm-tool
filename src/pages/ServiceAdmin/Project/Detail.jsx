@@ -44,6 +44,7 @@ const EventWrap = styled.div`
 
   .MuiPaper-elevation8 {
     height: 40px;
+    background-color: #2f3855;
   }
 `;
 
@@ -97,7 +98,17 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { projectDetail, labels, annotations, detailInfo, clusterList, selectClusterInfo, changeCluster, workspace, events } = projectStore;
+  const {
+    projectDetail,
+    labels,
+    annotations,
+    detailInfo,
+    clusterList,
+    selectClusterInfo,
+    changeCluster,
+    workspace,
+    events,
+  } = projectStore;
   const [tabvalue, setTabvalue] = useState(0);
 
   // const clusterChange = (e) => {
@@ -105,7 +116,7 @@ const Detail = observer(() => {
   // };
 
   const clusterResourceTable = () => {
-    return detailInfo.map(cluster => (
+    return detailInfo.map((cluster) => (
       <>
         <ClusterTitle>{cluster.clusterName}</ClusterTitle>
         <table className="tb_data">
@@ -126,9 +137,17 @@ const Detail = observer(() => {
                       : "-"}
                   </td> */}
                   <th>CPU</th>
-                  <td>{cluster?.resourceUsage?.namespace_cpu ? cluster?.resourceUsage?.namespace_cpu : "-"}</td>
+                  <td>
+                    {cluster?.resourceUsage?.namespace_cpu
+                      ? cluster?.resourceUsage?.namespace_cpu
+                      : "-"}
+                  </td>
                   <th>MEMORY</th>
-                  <td>{cluster?.resourceUsage?.namespace_memory ? cluster?.resourceUsage?.namespace_memory : "-"}</td>
+                  <td>
+                    {cluster?.resourceUsage?.namespace_memory
+                      ? cluster?.resourceUsage?.namespace_memory
+                      : "-"}
+                  </td>
                 </>
               ) : (
                 <LabelContainer>
@@ -144,7 +163,7 @@ const Detail = observer(() => {
   };
 
   const resourcesTable = () => {
-    return detailInfo.map(resources => (
+    return detailInfo.map((resources) => (
       <>
         <ClusterTitle>{resources.clusterName}</ClusterTitle>
         <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -153,27 +172,59 @@ const Detail = observer(() => {
               <>
                 <tr>
                   <th>Deployment</th>
-                  <td>{resources?.resource?.deployment_count ? resources?.resource?.deployment_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.deployment_count
+                      ? resources?.resource?.deployment_count
+                      : "-"}
+                  </td>
                   <th>Pod</th>
-                  <td>{resources?.resource?.pod_count ? resources?.resource?.pod_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.pod_count
+                      ? resources?.resource?.pod_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Service</th>
-                  <td>{resources?.resource?.service_count ? resources?.resource?.service_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.service_count
+                      ? resources?.resource?.service_count
+                      : "-"}
+                  </td>
                   <th>CronJob</th>
-                  <td>{resources?.resource?.cronjob_count ? resources?.resource?.cronjob_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.cronjob_count
+                      ? resources?.resource?.cronjob_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Job</th>
-                  <td>{resources?.resource?.job_count ? resources?.resource?.job_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.job_count
+                      ? resources?.resource?.job_count
+                      : "-"}
+                  </td>
                   <th>PV</th>
-                  <td>{resources?.resource?.pv_count ? resources?.resource?.pv_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.pv_count
+                      ? resources?.resource?.pv_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Statefulset</th>
-                  <td>{resources?.resource?.Statefulset_count ? resources?.resource?.Statefulset_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.Statefulset_count
+                      ? resources?.resource?.Statefulset_count
+                      : "-"}
+                  </td>
                   <th>Daemonset</th>
-                  <td>{resources?.resource?.daemonset_count ? resources?.resource?.daemonset_count : "-"}</td>
+                  <td>
+                    {resources?.resource?.daemonset_count
+                      ? resources?.resource?.daemonset_count
+                      : "-"}
+                  </td>
                 </tr>
               </>
             ) : (
@@ -220,7 +271,11 @@ const Detail = observer(() => {
               </tr>
               <tr>
                 <th>Cluster Name</th>
-                <td style={{ whiteSpace: "pre-wrap" }}>{selectClusterInfo?.map(cluster => cluster.clusterName + "\n")}</td>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {selectClusterInfo?.map(
+                    (cluster) => cluster.clusterName + "\n"
+                  )}
+                </td>
                 <th>Creator</th>
                 <td>{projectDetail.memberName}</td>
               </tr>

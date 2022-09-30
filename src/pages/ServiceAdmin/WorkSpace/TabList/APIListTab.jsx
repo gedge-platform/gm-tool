@@ -9,8 +9,7 @@ import { observer } from "mobx-react";
 import workspaceStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
-import Detail from "../Detail";
-import { AgGrid2 } from "@/components/datagrids/AgGrid2";
+import WorkspaceDetail from "../Detail";
 
 const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -47,7 +46,7 @@ const WorkspaceListTab = observer(() => {
       field: "memberName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
       },
     },
     {
@@ -68,9 +67,9 @@ const WorkspaceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
-    console.log("e is ", e.data.workspaceName);
+  const handleClick = (e) => {
     setWorkspaceName(e.data.workspaceName);
+    loadWorkspaceDetail(e.data.workspaceName);
   };
 
   const handleOpen = () => {
@@ -85,7 +84,9 @@ const WorkspaceListTab = observer(() => {
     if (workspaceName === "") {
       swalError("워크스페이스를 선택해주세요!");
     } else {
-      swalUpdate(workspaceName + "를 삭제하시겠습니까?", () => deleteWorkspace(workspaceName, reloadData));
+      swalUpdate(workspaceName + "를 삭제하시겠습니까?", () =>
+        deleteWorkspace(workspaceName, reloadData)
+      );
     }
     setWorkspaceName("");
   };
@@ -130,9 +131,14 @@ const WorkspaceListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateWorkSpace type={"user"} open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreateWorkSpace
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
-        <Detail workSpace={workSpaceDetail} />
+        <WorkspaceDetail workSpace={workSpaceDetail} />
       </CReflexBox>
     </div>
   );
