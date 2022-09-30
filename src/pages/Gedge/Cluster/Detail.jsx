@@ -126,8 +126,10 @@ const Detail = observer(props => {
   };
 
   useEffect(() => {
-    labelByNode();
-    annotationByNode();
+    if (nodesChk.length >= 1) {
+      labelByNode();
+      annotationByNode();
+    }
   }, [nodeNum]);
 
   return (
@@ -253,12 +255,12 @@ const Detail = observer(props => {
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>Labels({nodes[nodeNum].name})</TableTitle>
-          <LabelContainer>{labelByNode()}</LabelContainer>
+          <TableTitle>Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})</TableTitle>
+          <LabelContainer>{nodesChk.length >= 1 ? labelByNode() : ""}</LabelContainer>
 
-          <TableTitle>Annotations({nodes[nodeNum].name})</TableTitle>
+          <TableTitle>Annotations({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})</TableTitle>
           <table className="tb_data">
-            <tbody>{annotationByNode()}</tbody>
+            <tbody>{nodesChk.length >= 1 ? annotationByNode() : ""}</tbody>
           </table>
         </div>
       </CTabPanel>

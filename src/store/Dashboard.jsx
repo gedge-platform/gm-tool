@@ -133,8 +133,6 @@ class Dashboard {
 
   edgeNodeRunning = [];
   nodeRunning = [];
-  nodeReady = 0;
-  nodeNotReady = 0;
 
   mapZoom = 1;
   setMapZoom = (value) => {
@@ -188,6 +186,17 @@ class Dashboard {
           this.podMemTop5 = data.podMemTop5;
         });
         // console.log(toJS(this.clusterCpuTop5))
+      });
+  };
+
+  loadMapStatus = async () => {
+    await axios
+      .get(`${SERVER_URL}/totalDashboard`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.edgeNodeRunning = data.nodeRunning;
+        });
+        console.log(this.edgeNodeRunning);
       });
   };
 
@@ -403,7 +412,7 @@ class Dashboard {
         this.totalElements = data.length;
       });
     });
-    console.log(this.clusterNameList);
+    // console.log(this.clusterNameList);
     // this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
     this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
@@ -414,7 +423,7 @@ class Dashboard {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
-          console.log("data", data);
+          // console.log("data", data);
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
           this.type = this.nodeInfo.map((val) => val.type);

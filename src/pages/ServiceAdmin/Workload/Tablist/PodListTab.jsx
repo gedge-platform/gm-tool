@@ -18,8 +18,19 @@ const PodListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [podName, setPodName] = useState("");
 
-  const { podList, podDetail, totalElements, loadPodList, loadPodDetail, deletePod, currentPage, totalPages, goPrevPage, goNextPage, viewList } =
-    podStore;
+  const {
+    podList,
+    podDetail,
+    totalElements,
+    loadPodList,
+    loadPodDetail,
+    deletePod,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+    viewList,
+  } = podStore;
 
   const [columDefs] = useState([
     {
@@ -68,8 +79,7 @@ const PodListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
-    console.log("e is ", e.data.name);
+  const handleClick = (e) => {
     setPodName(e.data.name);
     const data = e.data.status;
     if (data === "Failed") {
@@ -90,7 +100,9 @@ const PodListTab = observer(() => {
     if (podName === "") {
       swalError("Pod를 선택해주세요!");
     } else {
-      swalUpdate(podName + "를 삭제하시겠습니까?", () => deletePod(podName, reloadData));
+      swalUpdate(podName + "를 삭제하시겠습니까?", () =>
+        deletePod(podName, reloadData)
+      );
     }
     setPodName("");
   };
@@ -135,7 +147,11 @@ const PodListTab = observer(() => {
               />
             </div>
           </div>
-          <CreatePod open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreatePod
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>

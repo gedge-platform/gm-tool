@@ -125,7 +125,6 @@ class CronJob {
     await axios
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;
@@ -156,7 +155,6 @@ class CronJob {
           this.cronJobList[0].cluster,
           this.cronJobList[0].project
         );
-    console.log(this.label);
   };
 
   loadCronJobDetail = async (name, cluster, project) => {
@@ -166,7 +164,6 @@ class CronJob {
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          console.log(data);
           this.cronJobDetail = data;
           this.containers = data.containers;
           this.label = data.label;

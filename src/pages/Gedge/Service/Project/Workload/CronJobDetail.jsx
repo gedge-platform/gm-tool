@@ -46,10 +46,16 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { containers, cronJobDetail, label, annotations, events, cronjobInvolvesJobs } = cronJobStore;
+  const {
+    containers,
+    cronJobDetail,
+    label,
+    annotations,
+    events,
+    cronjobInvolvesJobs,
+  } = cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  console.log(containers.map(val => val.name));
   // console.log("cronjobDetail: ", cronJobDetail);
 
   // const containers = cronJobDetail.containers;
@@ -94,11 +100,19 @@ const Detail = observer(() => {
                 <th>Concurrency Policy</th>
                 <td>{cronJobDetail ? cronJobDetail.concurrencyPolicy : "-"}</td>
                 <th>Successful Jobs History Limit</th>
-                <td>{cronJobDetail ? cronJobDetail.successfulJobsHistoryLimit : "-"}</td>
+                <td>
+                  {cronJobDetail
+                    ? cronJobDetail.successfulJobsHistoryLimit
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{cronJobDetail ? dateFormatter(cronJobDetail.creationTimestamp) : "-"}</td>
+                <td>
+                  {cronJobDetail
+                    ? dateFormatter(cronJobDetail.creationTimestamp)
+                    : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -108,7 +122,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers != null ? (
-            containers.map(item => (
+            containers.map((item) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_container">
                   <tr>
@@ -181,7 +195,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>References</TableTitle>
           {cronjobInvolvesJobs ? (
-            cronjobInvolvesJobs.map(job => (
+            cronjobInvolvesJobs.map((job) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>

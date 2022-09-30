@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.5.1",
     "@mui/lab": "^5.0.0-alpha.73",
     "@mui/material": "^5.5.1",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "ace-builds": "^1.4.14",
     "ag-grid-community": "^25.2.1",
     "apexcharts": "^3.35.5",

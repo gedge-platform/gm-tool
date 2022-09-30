@@ -182,7 +182,6 @@ class Job {
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
       });
-    console.log(this.jobList);
     this.totalElements === 0
       ? ((this.containers = null),
         (this.jobDetailData = null),
@@ -213,7 +212,6 @@ class Job {
           this.involvesPodList = involves.podList;
           this.ownerReferences = involves.ownerReferences;
           this.containers = data.containers;
-          console.log(this.containers);
 
           if (data.events !== null) {
             this.events = data.events;
