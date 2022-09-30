@@ -290,7 +290,7 @@ class Cluster {
 
   loadClusterInProject = async (project) => {
     await axios
-      .get(`${SERVER_URL}/clusterInfo?project=${project}`)
+      .get(`${SERVER_URL}/clusters?project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {

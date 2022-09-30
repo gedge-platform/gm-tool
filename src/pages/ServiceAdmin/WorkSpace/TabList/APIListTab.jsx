@@ -9,8 +9,7 @@ import { observer } from "mobx-react";
 import workspaceStore from "@/store/WorkSpace";
 import CreateWorkSpace from "@/pages/Gedge/WorkSpace/Dialog/CreateWorkSpace";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
-import Detail from "../Detail";
-import { AgGrid2 } from "@/components/datagrids/AgGrid2";
+import WorkspaceDetail from "../Detail";
 
 const WorkspaceListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -70,6 +69,7 @@ const WorkspaceListTab = observer(() => {
 
   const handleClick = (e) => {
     setWorkspaceName(e.data.workspaceName);
+    loadWorkspaceDetail(e.data.workspaceName);
   };
 
   const handleOpen = () => {
@@ -138,7 +138,7 @@ const WorkspaceListTab = observer(() => {
             reloadFunc={reloadData}
           />
         </PanelBox>
-        <Detail workSpace={workSpaceDetail} />
+        <WorkspaceDetail workSpace={workSpaceDetail} />
       </CReflexBox>
     </div>
   );

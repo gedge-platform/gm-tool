@@ -3,13 +3,21 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
-import { deploymentStore, projectStore, schedulerStore, volumeStore, StorageClassStore } from "@/store";
+import {
+  deploymentStore,
+  projectStore,
+  schedulerStore,
+  volumeStore,
+  StorageClassStore,
+} from "@/store";
 import DeploymentYaml from "./DeploymentYaml";
 import DeploymentPopup from "./DeploymentPopup";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "@/utils/swal-utils";
 import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
+import { require } from "ace-builds";
+import { stringify } from "json-to-pretty-yaml";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,7 +38,7 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateDeployment = observer(props => {
+const CreateDeployment = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const [size, setSize] = useState("md");
@@ -53,7 +61,15 @@ const CreateDeployment = observer(props => {
     setContentVolume,
   } = deploymentStore;
 
-  const { setVolumeName, setAccessMode, setVolumeCapacity, volumeCapacity, volumeName, selectClusters, accessMode } = volumeStore;
+  const {
+    setVolumeName,
+    setAccessMode,
+    setVolumeCapacity,
+    volumeCapacity,
+    volumeName,
+    selectClusters,
+    accessMode,
+  } = volumeStore;
 
   const { setStorageClass, selectStorageClass } = StorageClassStore;
 
@@ -408,7 +424,15 @@ const CreateDeployment = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Deployment"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create Deployment"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {stepOfComponent()}
     </CDialogNew>
   );

@@ -82,7 +82,7 @@ const JobListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
@@ -109,7 +109,7 @@ const JobListTab = observer(() => {
         </PanelBox>
         <Detail job={Detail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default JobListTab;

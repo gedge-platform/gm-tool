@@ -45,6 +45,7 @@ const EventWrap = styled.div`
 
   .MuiPaper-elevation8 {
     height: 40px;
+    background-color: #2f3855;
   }
 `;
 
@@ -97,7 +98,7 @@ const Label = styled.span`
   }
 `;
 
-const Detail = observer(() => {
+const WorkspaceDetail = observer(() => {
   const {
     workSpaceDetail,
     labels,
@@ -113,6 +114,8 @@ const Detail = observer(() => {
   const projectChange = (e) => {
     changeProject(e.target.value);
   };
+
+  console.log(workSpaceDetail);
 
   const clusterResourceTable = () => {
     return (
@@ -364,4 +367,4 @@ const Detail = observer(() => {
     </PanelBox>
   );
 });
-export default Detail;
+export default WorkspaceDetail;

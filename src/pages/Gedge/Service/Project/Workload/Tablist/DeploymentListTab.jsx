@@ -98,7 +98,7 @@ const DeploymentListTab = observer(() => {
   };
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadDeploymentList} isSearch={true} isSelect={true} keywordList={["이름"]}>
@@ -125,7 +125,7 @@ const DeploymentListTab = observer(() => {
         </PanelBox>
         <Detail deployment={deploymentDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default DeploymentListTab;

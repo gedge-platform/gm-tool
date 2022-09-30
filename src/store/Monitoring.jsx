@@ -151,7 +151,6 @@ class Monitoring {
         { auth: BASIC_AUTH }
       )
       .then((res) => {
-        console.log(res.data?.items);
         this.coPieCPU = this.convertResponseToMonit(res);
       });
   };
