@@ -13,23 +13,32 @@ const LeafletContainer = styled.div`
 `;
 
 const ServiceAdminMapDashboard = observer(() => {
-  const currentPageTitle = Title.Dashboard;
+  const currentPageTitle = "Pod 대시보드";
   const mapRef = useRef();
 
   useEffect(() => {
     mapRef.current = L.map("serviceadminmap", mapParams);
 
-    const pod = L.marker([37.681, 126.793], {
-      icon: CustomIcon("violet"),
+    const ilsanPod = L.marker([37.6637621, 126.7689594], {
+      icon: CustomIcon("red"),
     }).addTo(mapRef.current);
-    const pod2 = L.marker([37.4133351, -122.081267], {
+
+    const ilsanPod2 = L.marker([37.6641716, 126.7686815], {
+      icon: CustomIcon("blue"),
+    }).addTo(mapRef.current);
+
+    const ilsanPod3 = L.marker([37.6639636, 126.7689594], {
       icon: CustomIcon("green"),
     }).addTo(mapRef.current);
 
-    pod.bindPopup(
+    const americaPod1 = L.marker([40.09341, -82.75018], {
+      icon: CustomIcon("red"),
+    }).addTo(mapRef.current);
+
+    ilsanPod.bindPopup(
       `
                   <div class="leaflet-popup-title">
-                      SEOUL, Republic of Korea
+                  경기도 고양시 일산동구 중앙로 1333
                     </div>
                   <div class="leaflet-popup-table">
                     <table>
@@ -49,48 +58,89 @@ const ServiceAdminMapDashboard = observer(() => {
                         <th>Node</th>
                         <td>gedgew01</td>
                       </tr>
-                     
-                     
-                      
                     </table>
                   </div>
                 `
     );
-    pod2.bindPopup(
+    ilsanPod2.bindPopup(
       `
-                  <div class="leaflet-popup-title">
-                  Mountain View, America
-                  </div>
-                  <div class="leaflet-popup-table">
-                    <table>
-                      <tr>
-                        <th>Cluster</th>
-                        <td>AZURE</td>
-                      </tr>
-                      <tr>
-                        <th rowspan="3">Status</th>
-                        <td>
-                          <div class="box run">
-                            <span class="tit">실행</span><span>7</span>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="box stop">
-                            <span class="tit">중지</span><span>2</span>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div class="box pause">
-                            <span class="tit">일시중지</span><span>1</span>
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
+      <div class="leaflet-popup-title">
+      경기도 고양시 일산동구 중앙로 1333
+        </div>
+      <div class="leaflet-popup-table">
+        <table>
+          <tr>
+            <th>Name</th>
+            <td>pod/postprocess2-8b65c487b-ttdvv</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>Ready</td>
+          </tr>
+          <tr>
+            <th>IP</th>
+            <td>10.244.8.103</td>
+          </tr>
+          <tr>
+            <th>Node</th>
+            <td>gedgew01</td>
+          </tr>
+        </table>
+      </div>
+                `
+    );
+    ilsanPod3.bindPopup(
+      `
+      <div class="leaflet-popup-title">
+      경기도 고양시 일산동구 중앙로 1333
+        </div>
+      <div class="leaflet-popup-table">
+        <table>
+          <tr>
+            <th>Name</th>
+            <td>pod/preprocess2-68d6866cb4-cpxfg</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>Ready</td>
+          </tr>
+          <tr>
+            <th>IP</th>
+            <td>10.244.8.98</td>
+          </tr>
+          <tr>
+            <th>Node</th>
+            <td>gedgew01</td>
+          </tr>
+        </table>
+      </div>
+                `
+    );
+    americaPod1.bindPopup(
+      `
+      <div class="leaflet-popup-title">
+      2570 Beech Rd NW, Johnstown, OH 43031 미국
+        </div>
+      <div class="leaflet-popup-table">
+        <table>
+          <tr>
+            <th>Name</th>
+            <td>pod/preprocess2-68d6866cb4-cpxfg</td>
+          </tr>
+          <tr>
+            <th>Status</th>
+            <td>Ready</td>
+          </tr>
+          <tr>
+            <th>IP</th>
+            <td>10.244.8.98</td>
+          </tr>
+          <tr>
+            <th>Node</th>
+            <td>gedgew01</td>
+          </tr>
+        </table>
+      </div>
                 `
     );
   }, []);
@@ -131,10 +181,13 @@ const ServiceAdminMapDashboard = observer(() => {
 
   return (
     <Layout currentPageTitle={currentPageTitle}>
-      <div
-        id="serviceadminmap"
-        style={{ height: "100%", width: "100%", pointerEvents: "none" }}
-      ></div>
+      <>
+        {" "}
+        <div
+          id="serviceadminmap"
+          style={{ height: "100%", width: "100%", pointerEvents: "none" }}
+        ></div>
+      </>
     </Layout>
   );
 });

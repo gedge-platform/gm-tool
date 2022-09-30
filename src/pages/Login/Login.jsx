@@ -64,6 +64,7 @@ const Login = () => {
           // swalError("로그인 되었습니다.", () => history.push("/"));
 
           swalError("로그인 되었습니다.", () => {
+            console.log("sdf");
             window.location.replace("/");
           });
           const logined_at = {
