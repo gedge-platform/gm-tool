@@ -27,10 +27,6 @@ const ServiceAdminMapDashboard = observer(() => {
       icon: CustomIcon("blue"),
     }).addTo(mapRef.current);
 
-    const ilsanPod3 = L.marker([37.6639636, 126.7689594], {
-      icon: CustomIcon("green"),
-    }).addTo(mapRef.current);
-
     const americaPod1 = L.marker([40.09341, -82.75018], {
       icon: CustomIcon("red"),
     }).addTo(mapRef.current);
@@ -80,33 +76,6 @@ const ServiceAdminMapDashboard = observer(() => {
           <tr>
             <th>IP</th>
             <td>10.244.8.103</td>
-          </tr>
-          <tr>
-            <th>Node</th>
-            <td>gedgew01</td>
-          </tr>
-        </table>
-      </div>
-                `
-    );
-    ilsanPod3.bindPopup(
-      `
-      <div class="leaflet-popup-title">
-      경기도 고양시 일산동구 중앙로 1333
-        </div>
-      <div class="leaflet-popup-table">
-        <table>
-          <tr>
-            <th>Name</th>
-            <td>pod/preprocess2-68d6866cb4-cpxfg</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>Running</td>
-          </tr>
-          <tr>
-            <th>IP</th>
-            <td>10.244.8.98</td>
           </tr>
           <tr>
             <th>Node</th>
