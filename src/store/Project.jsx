@@ -147,7 +147,6 @@ class Project {
         });
       })
       .then(() => {
-        console.log(this.projectList);
         this.convertList(this.projectList, this.setProjectList);
       })
       .then(() => {
