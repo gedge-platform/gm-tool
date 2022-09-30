@@ -52,7 +52,6 @@ const Label = styled.span`
 const Detail = observer(() => {
   const { jobDetailData, involvesPodList, labels, annotations, events, ownerReferences, containers } = jobStore;
 
-  console.log(jobDetailData);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

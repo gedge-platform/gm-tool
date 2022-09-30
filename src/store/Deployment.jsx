@@ -248,7 +248,6 @@ class Deployment {
           // this.depServicesPort = involvesData.services.port;
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
-          console.log(this.events);
         });
       });
   };

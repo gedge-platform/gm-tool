@@ -50,8 +50,16 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { deploymentDetail, events, strategy, labels, annotations, pods, depServices, containersTemp } = deploymentStore;
-  console.log(events);
+  const {
+    deploymentDetail,
+    events,
+    strategy,
+    labels,
+    annotations,
+    pods,
+    depServices,
+    containersTemp,
+  } = deploymentStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -73,7 +81,12 @@ const Detail = observer(() => {
   if (strategyTemp.type === "Recreate") {
     strategyTable = strategyTemp.type;
   } else if (strategyTemp.type === "RollingUpdate") {
-    strategyTable = "maxUnavailable : " + strategyTemp.rollingUpdate.maxUnavailable + "\n" + "maxSurge : " + strategyTemp.rollingUpdate.maxSurge;
+    strategyTable =
+      "maxUnavailable : " +
+      strategyTemp.rollingUpdate.maxUnavailable +
+      "\n" +
+      "maxSurge : " +
+      strategyTemp.rollingUpdate.maxSurge;
   }
 
   useEffect(() => {});
@@ -95,13 +108,21 @@ const Detail = observer(() => {
                 <th className="tb_workload_detail_th">Name</th>
                 <td>{deploymentDetail.name ? deploymentDetail.name : "-"}</td>
                 <th className="tb_workload_detail_th">Cluster</th>
-                <td>{deploymentDetail.cluster ? deploymentDetail.cluster : "-"}</td>
+                <td>
+                  {deploymentDetail.cluster ? deploymentDetail.cluster : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Project</th>
-                <td>{deploymentDetail.project ? deploymentDetail.project : "-"}</td>
+                <td>
+                  {deploymentDetail.project ? deploymentDetail.project : "-"}
+                </td>
                 <th>Workspace</th>
-                <td>{deploymentDetail.workspace ? deploymentDetail.workspace : "-"}</td>
+                <td>
+                  {deploymentDetail.workspace
+                    ? deploymentDetail.workspace
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Status</th>
@@ -122,7 +143,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containersTemp.map(containers => (
+          {containersTemp.map((containers) => (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody className="tb_data_container">
                 <tr>
@@ -151,7 +172,7 @@ const Detail = observer(() => {
                             <th style={{ width: "33%" }}>Value</th>
                             <th style={{ width: "33%" }}>Source</th>
                           </tr>
-                          {containers.env.map(env => (
+                          {containers.env.map((env) => (
                             <tr>
                               <td>{env.name}</td>
                               <td>{env.value}</td>
@@ -165,7 +186,9 @@ const Detail = observer(() => {
                 </tr>
                 <tr>
                   <th>Args</th>
-                  <td>{containers.args ? JSON.stringify(containers.args) : <>-</>}</td>
+                  <td>
+                    {containers.args ? JSON.stringify(containers.args) : <>-</>}
+                  </td>
                 </tr>
                 <tr>
                   <th>Ports</th>
@@ -179,7 +202,7 @@ const Detail = observer(() => {
                             <th style={{ width: "50%" }}>ContainerPort</th>
                             <th style={{ width: "50%" }}>Protocol</th>
                           </tr>
-                          {containers.ports?.map(port => (
+                          {containers.ports?.map((port) => (
                             <tr>
                               <td>{port.containerPort}</td>
                               <td>{port.protocol}</td>
@@ -250,7 +273,7 @@ const Detail = observer(() => {
                             <th style={{ width: "33%" }}>MountPath</th>
                             <th style={{ width: "33%" }}>Propagation</th>
                           </tr>
-                          {containers.volumeMounts?.map(vol => (
+                          {containers.volumeMounts?.map((vol) => (
                             <tr>
                               <td>{vol.name}</td>
                               <td>{vol.mountPath}</td>
@@ -318,7 +341,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {pods ? (
-            pods?.map(pod => (
+            pods?.map((pod) => (
               <>
                 <table className="tb_data">
                   <tbody className="tb_workload_detail_th">
@@ -368,9 +391,15 @@ const Detail = observer(() => {
                             <th>Port</th>
                             <th>Protocol</th>
                           </tr>
-                          {depServices.port?.map(port => (
+                          {depServices.port?.map((port) => (
                             <tr>
-                              <td>{port.name === undefined ? <>-</> : <>{port?.name}</>}</td>
+                              <td>
+                                {port.name === undefined ? (
+                                  <>-</>
+                                ) : (
+                                  <>{port?.name}</>
+                                )}
+                              </td>
                               <td>{port.port}</td>
                               <td>{port.protocol}</td>
                             </tr>

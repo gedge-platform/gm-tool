@@ -7,7 +7,12 @@ import { FormControl, MenuItem, Select } from "@mui/material";
 import { serviceAdminDashboardStore, monitoringStore } from "@/store";
 import { observer } from "mobx-react";
 import ServiceAdminChart from "./ServiceAdminChart";
-import { unixStartTime, stepConverter, unixCurrentTime, unixToTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import {
+  unixStartTime,
+  stepConverter,
+  unixCurrentTime,
+  unixToTime,
+} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { data } from "react-dom-factories";
 
 const ServiceAdminWrap = styled.div`
@@ -81,6 +86,12 @@ const ServiceAdminDashboard = observer(() => {
     if (name === "workspace") {
       setWorkspaceName(value);
       loadServiceAdminDashboard(value);
+      setDeploymentMetrics([
+        {
+          0: 1663883550,
+          1: "0",
+        },
+      ]);
     }
     if (name === "projectName") {
       console.log("projectName", value);
@@ -91,18 +102,17 @@ const ServiceAdminDashboard = observer(() => {
         unixCurrentTime(),
         stepConverter(5)
       );
-      // setDeploymentMetrics("");
     }
   };
 
   const [toggleProject, setToggleProject] = useState(false);
-  const clickToggleProject = e => {
-    setToggleProject(current => !current);
+  const clickToggleProject = (e) => {
+    setToggleProject((current) => !current);
   };
 
   const [togglePod, setTogglePod] = useState(false);
-  const clickTogglePod = e => {
-    setTogglePod(current => !current);
+  const clickTogglePod = (e) => {
+    setTogglePod((current) => !current);
   };
 
   // const searchMetrics = (MetricList, name) => {
@@ -146,8 +156,9 @@ const ServiceAdminDashboard = observer(() => {
 
   let MetricList = [];
   const searchMetrics = (MetricList, name) => {
+    console.log("MetricList", MetricList);
     let metrics = [];
-    MetricList[0].forEach(element => {
+    MetricList[0].forEach((element) => {
       const tempMetrics = {
         x: unixToTime(element[0]),
         y: parseFloat(element[1]),
@@ -168,7 +179,7 @@ const ServiceAdminDashboard = observer(() => {
         <li>
           <span>{i + 1}</span>
           {podCpuTop[i] ? podCpuTop[i]["name"] : "-"}
-        </li>,
+        </li>
       );
     }
     return arr;
@@ -181,7 +192,7 @@ const ServiceAdminDashboard = observer(() => {
         <li>
           <span>{i + 1}</span>
           {projectMemTop[i] ? projectMemTop[i]["name"] : "-"}
-        </li>,
+        </li>
       );
     }
     return arr;
@@ -194,7 +205,7 @@ const ServiceAdminDashboard = observer(() => {
         <li>
           <span>{i + 1}</span>
           {projectCpuTop[i] ? projectCpuTop[i]["name"] : "-"}
-        </li>,
+        </li>
       );
     }
     return arr;
@@ -207,7 +218,7 @@ const ServiceAdminDashboard = observer(() => {
         <li>
           <span>{i + 1}</span>
           {podMemTop[i] ? podMemTop[i]["name"] : "-"}
-        </li>,
+        </li>
       );
     }
     return arr;
@@ -235,7 +246,7 @@ const ServiceAdminDashboard = observer(() => {
               <div className="ServiceSelect">
                 <FormControl className="form_serviceAdmin">
                   <select name="workspace" onChange={onChange}>
-                    {workspaceNameList.map(name => (
+                    {workspaceNameList.map((name) => (
                       <option value={name}>{name}</option>
                     ))}
                   </select>
@@ -249,7 +260,9 @@ const ServiceAdminDashboard = observer(() => {
           <div className="ServiceCircleWrap">
             <div className="service_circle_inner">
               <div className="service_circle">
-                <span className="count">{projectList ? projectList?.length : 0}</span>
+                <span className="count">
+                  {projectList ? projectList?.length : 0}
+                </span>
                 <div className="title">Project</div>
               </div>
 
@@ -300,7 +313,11 @@ const ServiceAdminDashboard = observer(() => {
               {/* <div className="ServiceRecentTitle"> */}
               {toggleProject ? (
                 <div className="ServiceRecentInner">
-                  <ButtonStyle variant="contained" onClick={clickToggleProject} toggle={toggleProject}>
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickToggleProject}
+                    toggle={toggleProject}
+                  >
                     Project CPU Top 5
                   </ButtonStyle>
                   {/* </div> */}
@@ -310,7 +327,11 @@ const ServiceAdminDashboard = observer(() => {
                 </div>
               ) : (
                 <div className="ServiceRecentInner">
-                  <ButtonStyle variant="contained" onClick={clickToggleProject} toggle={toggleProject}>
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickToggleProject}
+                    toggle={toggleProject}
+                  >
                     Project Memory Top 5
                   </ButtonStyle>
                   <div className="ServiceRecentListWrap">
@@ -320,7 +341,11 @@ const ServiceAdminDashboard = observer(() => {
               )}
               {togglePod ? (
                 <div className="ServiceRecentInner">
-                  <ButtonStyle variant="contained" onClick={clickTogglePod} toggle={togglePod}>
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickTogglePod}
+                    toggle={togglePod}
+                  >
                     Pod CPU Top 5
                   </ButtonStyle>
                   <div className="ServiceRecentListWrap">
@@ -329,7 +354,11 @@ const ServiceAdminDashboard = observer(() => {
                 </div>
               ) : (
                 <div className="ServiceRecentInner">
-                  <ButtonStyle variant="contained" onClick={clickTogglePod} toggle={togglePod}>
+                  <ButtonStyle
+                    variant="contained"
+                    onClick={clickTogglePod}
+                    toggle={togglePod}
+                  >
                     Pod Memory Top 5
                   </ButtonStyle>
                   <div className="ServiceRecentListWrap">
@@ -385,14 +414,18 @@ const ServiceAdminDashboard = observer(() => {
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Service 총 개수</div>
                 <div className="monitoringBoxCont">
-                  <ServiceAdminChart seriesData={[searchMetrics([serviceMetrics, "service"])]} />
+                  <ServiceAdminChart
+                    seriesData={[searchMetrics([serviceMetrics, "service"])]}
+                  />
                 </div>
               </div>
 
               <div className="monitoringBox">
                 <div className="monitoringBoxTitle">Volume 총 개수</div>
                 <div className="monitoringBoxCont">
-                  <ServiceAdminChart seriesData={[searchMetrics([volumeMetrics, "volume"])]} />
+                  <ServiceAdminChart
+                    seriesData={[searchMetrics([volumeMetrics, "volume"])]}
+                  />
                 </div>
               </div>
             </div>

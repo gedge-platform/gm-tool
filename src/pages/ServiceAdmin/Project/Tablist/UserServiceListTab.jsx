@@ -46,7 +46,7 @@ const UserServiceListTab = observer(() => {
       field: "selectCluster",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
       },
     },
     {
@@ -70,9 +70,9 @@ const UserServiceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
-    console.log("e is ", e.data.projectName);
+  const handleClick = (e) => {
     setUserProjectName(e.data.projectName);
+    loadProjectDetail(e.data.projectName);
   };
 
   const handleOpen = () => {
@@ -87,7 +87,9 @@ const UserServiceListTab = observer(() => {
     if (userProjectName === "") {
       swalError("프로젝트를 선택해주세요!");
     } else {
-      swalUpdate(userProjectName + "를 삭제하시겠습니까?", () => deleteProject(userProjectName, reloadData));
+      swalUpdate(userProjectName + "를 삭제하시겠습니까?", () =>
+        deleteProject(userProjectName, reloadData)
+      );
     }
     setUserProjectName("");
   };
@@ -132,7 +134,12 @@ const UserServiceListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateProject type={"user"} open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreateProject
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail project={projectDetail} />
       </CReflexBox>

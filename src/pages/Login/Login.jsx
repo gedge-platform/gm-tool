@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import BrandArea from "./BrandArea";
 import "./css/Login.css";
 import tit_welcome from "./images/tit_welcome.png";
@@ -12,7 +11,7 @@ import jwtDecode from "jwt-decode";
 import { userStore } from "@/store";
 
 const Login = () => {
-  const history = useHistory();
+  // const history = useHistory();
   const [inputs, setInputs] = useState({
     id: "",
     password: "",
@@ -21,14 +20,14 @@ const Login = () => {
   const { id, password } = inputs;
   const { setUser, updateUser } = userStore;
 
-  const onChange = e => {
+  const onChange = (e) => {
     const { value, name } = e.target;
     setInputs({
       ...inputs,
       [name]: value,
     });
   };
-  const login = async e => {
+  const login = async (e) => {
     e.preventDefault();
     if (id === "") {
       setCheck(true);
@@ -49,7 +48,9 @@ const Login = () => {
           // setItem("userRole", data.userRole);
           // setItem("user", id);
 
-          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+          axios.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
           setItem("user", jwtDecode(accessToken));
           setItem("userRole", jwtDecode(accessToken).role);
           setItem("token", accessToken); // local storage에 저장
@@ -63,6 +64,7 @@ const Login = () => {
           // swalError("로그인 되었습니다.", () => history.push("/"));
 
           swalError("로그인 되었습니다.", () => {
+            console.log("sdf");
             window.location.replace("/");
           });
           const logined_at = {
@@ -78,7 +80,7 @@ const Login = () => {
           return;
         }
       })
-      .catch(e => {
+      .catch((e) => {
         swalError("로그인에 실패했습니다. 다시 시도해주세요.");
         console.log(e.response);
       });
@@ -131,7 +133,11 @@ const Login = () => {
                 </li>
               </ul>
               <div className="loginBtns">
-                <button type="submit" className="btn_contained primary" onClick={login}>
+                <button
+                  type="submit"
+                  className="btn_contained primary"
+                  onClick={login}
+                >
                   로그인
                 </button>
               </div>
@@ -144,7 +150,9 @@ const Login = () => {
           </div> */}
           {check && (
             <div className="login-err">
-              <p className="notice">가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.</p>
+              <p className="notice">
+                가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.
+              </p>
             </div>
           )}
         </div>

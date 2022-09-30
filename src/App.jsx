@@ -37,6 +37,7 @@ import DeploymentPopup from "./pages/ServiceAdmin/Workload/Dialog/DeploymentPopu
 import { getItem } from "./utils/sessionStorageFn";
 import axios from "axios";
 import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminDashboard";
+import ServiceAdminMapDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminMapDashboard";
 import { Redirect } from "react-router-dom";
 import ServiceAdminChart from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminChart";
 
@@ -111,6 +112,7 @@ export const App = () => {
         <AuthRoute path="/service" component={ServiceAdminDashboard} exact />
         <AuthRoute path="/" component={ServiceAdminDashboard} exact />
         <Switch>
+          <AuthRoute path="/service/map" component={ServiceAdminMapDashboard} />
           <AuthRoute path="/service/project" component={ServiceProject} />
           <AuthRoute path="/service/workload" component={ServiceWorkload} />
           <AuthRoute path="/service/Workspace" component={ServiceWorkSpace} />

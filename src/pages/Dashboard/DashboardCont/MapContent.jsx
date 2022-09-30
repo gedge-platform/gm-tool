@@ -4,15 +4,20 @@ import { observer } from "mobx-react";
 import axios from "axios";
 import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
+import { serviceAdminDashboardStore, monitoringStore } from "@/store";
+import { LineElement } from "chart.js";
+import { map } from "lodash";
 
 const MapContent = observer(() => {
   const {
     clusterName,
-    edgeNodeRunning,
     setClusterName,
     loadEdgeZoneDetailDashboard,
     loadEdgeZoneDashboard,
     mapZoom,
+    loadMapStatus,
+    edgeNodeRunning,
+    clusterNameList,
   } = dashboardStore;
 
   const mapRef = useRef(null);
@@ -28,10 +33,10 @@ const MapContent = observer(() => {
     const nodeRunning = result.data.data.nodeRunning;
 
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
-    // console.log("clusterNameData", clusterNameData);
-    const clusterNameInNode = nodeRunning.filter(
-      (item, i) => item.cluster == clusterNameData[i]
-    );
+    // // console.log("clusterNameData", clusterNameData);
+    // const clusterNameInNode = nodeRunning.filter(
+    //   (item, i) => item.cluster == clusterNameData[i]
+    // );
 
     // for (let i = 0; clusterNameInNode.length > 0; i++) {}
 
@@ -44,13 +49,12 @@ const MapContent = observer(() => {
     const dataStatus = edgeInfoTemp.map((item) => item.status);
     setData(dataPoint);
     setDataStatus(dataStatus);
+    loadMapStatus();
 
     // nodeRunning 데이터
-    // loadEdgeZoneDashboard();
+    // setClusterName(clusterNameData[0]);
+    loadEdgeZoneDashboard();
     // loadEdgeZoneDetailDashboard();
-    console.log(
-      nodeRunning.filter((item) => item.cluster === clusterNameData[0])
-    );
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -75,10 +79,8 @@ const MapContent = observer(() => {
                      <div class="box run">
                        <span class="tit">
                         Ready 
-                       </span>${"ddd"}
-                       <span>
-
-                         </span>
+                       </span>
+                       <span>5</span>
                      </div>
                    </td>
                  </tr>
