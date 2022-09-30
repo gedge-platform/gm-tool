@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import axios from "axios";
 import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
+import { serviceAdminDashboardStore, monitoringStore } from "@/store";
 
 const MapContent = observer(() => {
   const {
@@ -28,10 +29,10 @@ const MapContent = observer(() => {
     const nodeRunning = result.data.data.nodeRunning;
 
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
-    // console.log("clusterNameData", clusterNameData);
-    const clusterNameInNode = nodeRunning.filter(
-      (item, i) => item.cluster == clusterNameData[i]
-    );
+    // // console.log("clusterNameData", clusterNameData);
+    // const clusterNameInNode = nodeRunning.filter(
+    //   (item, i) => item.cluster == clusterNameData[i]
+    // );
 
     // for (let i = 0; clusterNameInNode.length > 0; i++) {}
 
@@ -48,9 +49,6 @@ const MapContent = observer(() => {
     // nodeRunning 데이터
     // loadEdgeZoneDashboard();
     // loadEdgeZoneDetailDashboard();
-    console.log(
-      nodeRunning.filter((item) => item.cluster === clusterNameData[0])
-    );
 
     //지도
     mapRef.current = L.map("map", mapParams);

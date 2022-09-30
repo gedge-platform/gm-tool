@@ -118,6 +118,7 @@ class ServiceAdminDashboard {
         runInAction(() => {
           this.allMetrics = res.data?.items;
           this.deploymentMetrics = res.data?.items?.deployment_count[0].values;
+          console.log(this.deploymentMetrics);
           this.podMetrics = res.data?.items?.pod_count[0].values;
           this.volumeMetrics = res.data?.items?.pv_count[0].values;
           this.cronjobMetrics = res.data?.items?.cronjob_count[0].values;
@@ -126,6 +127,7 @@ class ServiceAdminDashboard {
           this.statefulsetMetrics =
             res.data?.items?.statefulset_count[0].values;
         });
+        console.log(this.deploymentMetrics);
       });
   };
 

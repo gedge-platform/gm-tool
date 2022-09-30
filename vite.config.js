@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import postcss from "./postcss.config.js";
 import copy from "rollup-plugin-copy";
+import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
@@ -28,6 +29,9 @@ export default ({ mode }) => {
       // publicPath: "",
       sourcemap: false,
       minify: true,
+      commonjsOptions: {
+        transformMixedEsModules: true,
+      },
     },
     plugins: [
       react({
@@ -56,6 +60,7 @@ export default ({ mode }) => {
         copyOnce: true, // 실행하고 한번만 copy 하게 만들어줌
         hook: "config", // hook으로 config의 실행 시점으로 일치 시켜줌
       }),
+      viteCommonjs(),
     ],
     resolve: {
       alias: {
