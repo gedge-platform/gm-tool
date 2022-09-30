@@ -2,6 +2,7 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
+import CertificationDetail from "../Detail";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { observer } from "mobx-react";
 import { certificationStore } from "@/store";
@@ -17,6 +18,8 @@ const CertificationListTab = observer(() => {
   const {
     deleteCredential,
     loadCredentialList,
+    loadCertificationDetail,
+    certificationDetail,
     credential,
     clusterDetail,
     clusterList,
@@ -90,6 +93,7 @@ const CertificationListTab = observer(() => {
 
   const handleClick = e => {
     console.log("e is ", e.data.name);
+    loadCertificationDetail(e.data.name);
     setCertName(e.data.name);
   };
 
@@ -140,6 +144,7 @@ const CertificationListTab = observer(() => {
         </div>
         <CreateCertification open={open} onClose={handleClose} reloadFunc={loadCredentialList} />
       </PanelBox>
+      <CertificationDetail cert={certificationDetail} />
     </CReflexBox>
   );
 });
