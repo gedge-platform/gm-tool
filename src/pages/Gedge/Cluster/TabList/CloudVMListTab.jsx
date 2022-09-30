@@ -41,6 +41,11 @@ const CloudVMListTab = observer(() => {
       filter: true,
     },
     {
+      headerName: "디스크",
+      field: "RootDiskSize",
+      filter: true,
+    },
+    {
       headerName: "이미지",
       field: "ImageIId.NameId",
       filter: true,
