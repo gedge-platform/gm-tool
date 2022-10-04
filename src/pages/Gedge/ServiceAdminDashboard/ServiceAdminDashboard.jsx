@@ -86,15 +86,15 @@ const ServiceAdminDashboard = observer(() => {
     if (name === "workspace") {
       setWorkspaceName(value);
       loadServiceAdminDashboard(value);
-      setDeploymentMetrics([
-        {
-          0: 1663883550,
-          1: "0",
-        },
-      ]);
+      setProjectNameInMonitoring("");
+      serviceAdminMonitoring(
+        value,
+        unixStartTime(60),
+        unixCurrentTime(),
+        stepConverter(5)
+      );
     }
     if (name === "projectName") {
-      console.log("projectName", value);
       setProjectNameInMonitoring(value);
       serviceAdminMonitoring(
         value,
@@ -154,9 +154,7 @@ const ServiceAdminDashboard = observer(() => {
   //   return data;
   // };
 
-  let MetricList = [];
   const searchMetrics = (MetricList, name) => {
-    console.log("MetricList", MetricList);
     let metrics = [];
     MetricList[0].forEach((element) => {
       const tempMetrics = {

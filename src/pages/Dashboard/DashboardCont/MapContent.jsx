@@ -59,46 +59,152 @@ const MapContent = observer(() => {
     //지도
     mapRef.current = L.map("map", mapParams);
 
-    const marker = dataPoint.map((point, i) => {
-      L.marker([point.y, point.x], { icon: CustomIcon("green") })
-        .addTo(mapRef.current)
-        .bindPopup(
-          `
-          <div class="leaflet-popup-title">
-              ${edgeInfoTemp.map((item) => item.address)[i]}
-             </div>
-             <div class="leaflet-popup-table">
-               <table>
-                 <tr>
-                   <th>Cluster</th>
-                   <td>${edgeInfoTemp.map((item) => item.clusterName)[i]}</td>
-                 </tr>
-                 <tr>
-                   <th rowspan="3">Status</th>
-                   <td>
-                     <div class="box run">
-                       <span class="tit">
-                        Ready 
-                       </span>
-                       <span>5</span>
-                     </div>
-                   </td>
-                 </tr>
-                 <tr>
-                   <td>
-                     <div class="box stop">
-                       <span class="tit">
-                      Not Ready 
-                     </span>
-                     <span>0</span>
-                     </div>
-                   </td>
-                 </tr>
-               </table>
-             </div>
-             `
-        );
-    });
+    const cluster1 = L.marker([37.493254787, 126.923915647], {
+      icon: CustomIcon("red"),
+    }).addTo(mapRef.current);
+
+    const cluster2 = L.marker([37.6641929, 126.768667], {
+      icon: CustomIcon("blue"),
+    }).addTo(mapRef.current);
+
+    const cluster3 = L.marker([40.09341, -82.75018], {
+      icon: CustomIcon("green"),
+    }).addTo(mapRef.current);
+
+    cluster1.bindPopup(
+      `
+                  <div class="leaflet-popup-title">
+                  서울시 동작구 보라매로 5길 35
+                    </div>
+                          
+                          <div class="leaflet-popup-table">
+                            <table>
+                              <tr>
+                                <th>Cluster</th>
+                                <td>onpremise(dongjak)</td>
+                              </tr>
+                              <tr>
+                                <th rowspan="3">Status</th>
+                                <td>
+                                  <div class="box run">
+                                    <span class="tit">Ready</span><span>5</span>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="box stop">
+                                    <span class="tit">Not Ready</span><span>0</span>
+                                  </div>
+                                </td>
+                              </tr> 
+                            </table>
+                          </div>
+                `
+    );
+    cluster2.bindPopup(
+      `
+                  <div class="leaflet-popup-title">
+                  경기도 고양시 일산동구 중앙로 1333
+                    </div>
+                          
+                          <div class="leaflet-popup-table">
+                            <table>
+                              <tr>
+                                <th>Cluster</th>
+                                <td>mec(ilsan)</td>
+                              </tr>
+                              <tr>
+                                <th rowspan="3">Status</th>
+                                <td>
+                                  <div class="box run">
+                                    <span class="tit">Ready</span><span>4</span>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="box stop">
+                                    <span class="tit">Not Ready</span><span>0</span>
+                                  </div>
+                                </td>
+                              </tr> 
+                            </table>
+                          </div>
+                `
+    );
+    cluster3.bindPopup(
+      `
+                  <div class="leaflet-popup-title">
+                  2570 Beech Rd NW, Johnstown, OH 43031 미국
+                    </div>
+                          
+                          <div class="leaflet-popup-table">
+                            <table>
+                              <tr>
+                                <th>Cluster</th>
+                                <td>preprocess2-5b786958f6-dsdpj</td>
+                              </tr>
+                              <tr>
+                                <th rowspan="3">Status</th>
+                                <td>
+                                  <div class="box run">
+                                    <span class="tit">Ready</span><span>4</span>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                  <div class="box stop">
+                                    <span class="tit">Not Ready</span><span>0</span>
+                                  </div>
+                                </td>
+                              </tr> 
+                            </table>
+                          </div>
+                `
+    );
+
+    // const marker = dataPoint.map((point, i) => {
+    //   L.marker([point.y, point.x], { icon: CustomIcon("green") })
+    //     .addTo(mapRef.current)
+    //     .bindPopup(
+    //       `
+    //       <div class="leaflet-popup-title">
+    //           ${edgeInfoTemp.map((item) => item.address)[i]}
+    //          </div>
+    //          <div class="leaflet-popup-table">
+    //            <table>
+    //              <tr>
+    //                <th>Cluster</th>
+    //                <td>${edgeInfoTemp.map((item) => item.clusterName)[i]}</td>
+    //              </tr>
+    //              <tr>
+    //                <th rowspan="3">Status</th>
+    //                <td>
+    //                  <div class="box run">
+    //                    <span class="tit">
+    //                     Ready
+    //                    </span>
+    //                    <span>5</span>
+    //                  </div>
+    //                </td>
+    //              </tr>
+    //              <tr>
+    //                <td>
+    //                  <div class="box stop">
+    //                    <span class="tit">
+    //                   Not Ready
+    //                  </span>
+    //                  <span>0</span>
+    //                  </div>
+    //                </td>
+    //              </tr>
+    //            </table>
+    //          </div>
+    //          `
+    //     );
+    // });
   }, []);
 
   // useEffect(() => {
