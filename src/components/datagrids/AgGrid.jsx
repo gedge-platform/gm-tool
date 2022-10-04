@@ -1,6 +1,6 @@
 import React, { useEffect, useState, forwardRef } from "react";
 import { ModuleRegistry } from "@ag-grid-community/core";
-import { ClientSideRowModelModule } from "@ag-grid-community/all-modules";
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import { AgGridReact } from "@ag-grid-community/react";
 
 import "@ag-grid-community/core/dist/styles/ag-grid.css";
@@ -30,18 +30,28 @@ const AgGrid = props => {
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
 
+  const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>',
+  );
+
+  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState('<span class="ag-overlay-loading-center">No Data</span>');
+
   useEffect(() => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
+      gridApi.hideOverlay();
+      gridApi.showLoadingOverlay();
     }
   }, [rowData]);
+
   const onGridReady = params => {
     setGridApi(params.api);
-    // setGridColumnApi(params.columnApi);
   };
+
   const onFirstDataRendered = params => {
     params.api.sizeColumnsToFit();
   };
+
   const onGridSizeChanged = params => {
     const gridWidth = document.getElementById("my-grid").offsetWidth;
     const columnsToShow = [];
@@ -61,6 +71,7 @@ const AgGrid = props => {
     params.columnApi.setColumnsVisible(columnsToHide, false);
     params.api.sizeColumnsToFit();
   };
+
   const defaultColDef = {
     sortable: true,
     resizable: true,
@@ -71,6 +82,7 @@ const AgGrid = props => {
     const tempArr = api.getSelectedRows();
     setDetail(tempArr[0].id);
   };
+
   return (
     <div
       id="my-grid"
@@ -82,8 +94,8 @@ const AgGrid = props => {
         onGridReady={onGridReady}
         onFirstDataRendered={onFirstDataRendered}
         onGridSizeChanged={onGridSizeChanged}
-        overlayLoadingTemplate={'<span class="ag-overlay-loading-center">No Data</span>'}
-        overlayNoRowsTemplate={'<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">Data Loading....</span>'}
+        overlayNoRowsTemplate={overlayNoRowsTemplate}
+        overlayLoadingTemplate={overlayLoadingTemplate}
         rowData={rowData}
         columnDefs={columnDefs}
         autoWidth={autoWidth}
