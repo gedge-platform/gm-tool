@@ -91,8 +91,7 @@ const CertificationListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
-    console.log("e is ", e.data.name);
+  const handleClick = (e) => {
     loadCertificationDetail(e.data.name);
     setCertName(e.data.name);
   };
@@ -110,7 +109,9 @@ const CertificationListTab = observer(() => {
       swalError("인증을 선택해주세요!");
       return;
     } else {
-      swalUpdate("삭제하시겠습니까?", () => deleteCredential(certName, loadCredentialList));
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteCredential(certName, loadCredentialList)
+      );
     }
     setCertName("");
   };
@@ -124,6 +125,7 @@ const CertificationListTab = observer(() => {
       <PanelBox>
         <CommActionBar>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          &nbsp;&nbsp;
           <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
 
@@ -142,7 +144,11 @@ const CertificationListTab = observer(() => {
             />
           </div>
         </div>
-        <CreateCertification open={open} onClose={handleClose} reloadFunc={loadCredentialList} />
+        <CreateCertification
+          open={open}
+          onClose={handleClose}
+          reloadFunc={loadCredentialList}
+        />
       </PanelBox>
       <CertificationDetail cert={certificationDetail} />
     </CReflexBox>

@@ -57,13 +57,13 @@ class Workspace {
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -107,13 +107,19 @@ class Workspace {
     });
   };
 
-  setViewList = n => {
+  // setWorkSpaceList = (workSpaceList = []) => {
+  //   runInAction(() => {
+  //     this.workSpaceList = workSpaceList;
+  //   });
+  // };
+
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.workSpaceList[n];
     });
   };
 
-  setMetricsLastTime = time => {
+  setMetricsLastTime = (time) => {
     runInAction(() => {
       this.lastTime = time;
     });
@@ -124,11 +130,11 @@ class Workspace {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
-      .then(res => {
+      .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data.data;
           this.totalElements = res.data.data.length;
-          this.workspace = this.workSpaceList.map(item => item.workspaceName);
+          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
         });
       })
       .then(() => {
@@ -143,8 +149,8 @@ class Workspace {
   };
 
   // 워크스페이스에서 클러스터 불러오면 된다
-  loadWorkspaceDetail = async workspaceName => {
-    await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then(res => {
+  loadWorkspaceDetail = async (workspaceName) => {
+    await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
         this.dataUsage = this.workSpaceDetail.resourceUsage;
@@ -175,13 +181,12 @@ class Workspace {
     });
   };
 
-  setWorkSpaceList = (workSpaceList = []) => {
-    runInAction(() => {
-      this.workSpaceList = workSpaceList;
-    });
-  };
-
-  createWorkspace = (workspaceName, workspaceDescription, selectCluster, callback) => {
+  createWorkspace = (
+    workspaceName,
+    workspaceDescription,
+    selectCluster,
+    callback
+  ) => {
     const body = {
       workspaceName,
       workspaceDescription,
@@ -202,35 +207,35 @@ class Workspace {
     // return
     axios
       .post(`${SERVER_URL}/workspaces`, body)
-      .then(res => {
+      .then((res) => {
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         swalError("워크스페이스 생성에 실패하였습니다.");
       });
   };
 
-  changeCluster = cluster => {
+  changeCluster = (cluster) => {
     runInAction(() => {
       this.selectCluster = cluster;
     });
   };
 
-  changeProject = project => {
+  changeProject = (project) => {
     runInAction(() => {
       this.selectProject = project;
     });
   };
 
-  setWorkspace = workspace => {
+  setWorkspace = (workspace) => {
     runInAction(() => {
       this.workspace = workspace;
     });
   };
 
-  setProjectList = value => {
+  setProjectList = (value) => {
     runInAction(() => {
       this.projectList = value;
     });
@@ -239,15 +244,16 @@ class Workspace {
   deleteWorkspace = async (workspaceName, callback) => {
     axios
       .delete(`${SERVER_URL}/workspaces/${workspaceName}`)
-      .then(res => {
-        if (res.status === 200) swalError("워크스페이스가 삭제되었습니다.", callback);
+      .then((res) => {
+        if (res.status === 200)
+          swalError("워크스페이스가 삭제되었습니다.", callback);
       })
-      .catch(err => {
+      .catch((err) => {
         swalError("삭제에 실패하였습니다.");
       });
   };
 
-  setSelectClusterInfo = selectClusterInfo => {
+  setSelectClusterInfo = (selectClusterInfo) => {
     runInAction(() => {
       this.selectClusterInfo = selectClusterInfo;
     });

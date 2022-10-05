@@ -63,7 +63,7 @@ const StatefulSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setStatefulSetName(e.data.name);
     loadStatefulSetDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -80,7 +80,9 @@ const StatefulSetListTab = observer(() => {
     if (statefulSetName === "") {
       swalError("StatefulSet을 선택해주세요!");
     } else {
-      swalUpdate(statefulSetName + "을 삭제하시겠습니까?", () => deleteStatefulSet(statefulSetName, reloadData));
+      swalUpdate(statefulSetName + "을 삭제하시겠습니까?", () =>
+        deleteStatefulSet(statefulSetName, reloadData)
+      );
     }
     setStatefulSetName("");
   };
@@ -107,6 +109,7 @@ const StatefulSetListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">

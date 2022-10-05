@@ -63,7 +63,7 @@ const DaemonSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     console.log("e is ", e.data.name);
     setDaemonSetName(e.data.name);
     loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
@@ -81,7 +81,9 @@ const DaemonSetListTab = observer(() => {
     if (daemonSetName === "") {
       swalError("DaemonSet을 선택해주세요!");
     } else {
-      swalUpdate(daemonSetName + "을 삭제하시겠습니까?", () => deleteDaemonSet(daemonSetName, reloadData));
+      swalUpdate(daemonSetName + "을 삭제하시겠습니까?", () =>
+        deleteDaemonSet(daemonSetName, reloadData)
+      );
     }
     setDaemonSetName("");
   };
@@ -108,6 +110,7 @@ const DaemonSetListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 

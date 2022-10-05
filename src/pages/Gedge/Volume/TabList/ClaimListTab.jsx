@@ -105,11 +105,16 @@ const ClaimListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     setClaimName(e.data.name);
     loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
-    loadVolumeYaml(e.data.name, e.data.clusterName, e.data.namespace, "persistentvolumeclaims");
+    loadVolumeYaml(
+      e.data.name,
+      e.data.clusterName,
+      e.data.namespace,
+      "persistentvolumeclaims"
+    );
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -135,7 +140,9 @@ const ClaimListTab = observer(() => {
     if (claimName === "") {
       swalError("Claim를 선택해주세요!");
     } else {
-      swalUpdate(claimName + "를 삭제하시겠습니까?", () => deletePvClaim(claimName, reloadData));
+      swalUpdate(claimName + "를 삭제하시겠습니까?", () =>
+        deletePvClaim(claimName, reloadData)
+      );
     }
     setClaimName("");
   };
@@ -162,6 +169,7 @@ const ClaimListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
@@ -180,8 +188,16 @@ const ClaimListTab = observer(() => {
               />
             </div>
           </div>
-          <ViewYaml open={openYaml} yaml={getYamlFile} onClose={handleCloseYaml} />
-          <CreateClaim open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <ViewYaml
+            open={openYaml}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+          />
+          <CreateClaim
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <ClaimDetail
           pvClaim={pvClaim}
