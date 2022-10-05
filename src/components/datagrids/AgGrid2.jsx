@@ -1,6 +1,6 @@
 import React, { useEffect, useState, forwardRef } from "react";
 import { ModuleRegistry } from "@ag-grid-community/core";
-import { ClientSideRowModelModule } from "@ag-grid-community/all-modules";
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import { AgGridReact } from "@ag-grid-community/react";
 
 import "@ag-grid-community/core/dist/styles/ag-grid.css";
@@ -10,7 +10,7 @@ import "@/styles/ag-custom.scss";
 ModuleRegistry.register(ClientSideRowModelModule);
 // detail 없는 부분
 
-const AgGrid2 = (props) => {
+const AgGrid2 = props => {
   const {
     rowData,
     columnDefs,
@@ -31,19 +31,29 @@ const AgGrid2 = (props) => {
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
 
+  const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>',
+  );
+
+  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState('<span class="ag-overlay-loading-center">No Data</span>');
+
   useEffect(() => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
+      gridApi.hideOverlay();
+      // gridApi.showLoadingOverlay();
     }
   }, [rowData]);
-  const onGridReady = (params) => {
+
+  const onGridReady = params => {
     setGridApi(params.api);
-    // setGridColumnApi(params.columnApi);
   };
-  const onFirstDataRendered = (params) => {
+
+  const onFirstDataRendered = params => {
     params.api.sizeColumnsToFit();
   };
-  const onGridSizeChanged = (params) => {
+
+  const onGridSizeChanged = params => {
     const gridWidth = document.getElementById("my-grid").offsetWidth;
     const columnsToShow = [];
     const columnsToHide = [];
@@ -62,6 +72,7 @@ const AgGrid2 = (props) => {
     params.columnApi.setColumnsVisible(columnsToHide, false);
     params.api.sizeColumnsToFit();
   };
+
   const defaultColDef = {
     sortable: true,
     resizable: true,
@@ -72,6 +83,7 @@ const AgGrid2 = (props) => {
     const tempArr = api.getSelectedRows();
     setDetail(tempArr[0].id);
   };
+
   return (
     <div
       id="my-grid"
@@ -83,8 +95,8 @@ const AgGrid2 = (props) => {
         onGridReady={onGridReady}
         onFirstDataRendered={onFirstDataRendered}
         onGridSizeChanged={onGridSizeChanged}
-        overlayLoadingTemplate={'<span class="ag-overlay-loading-center">No Data</span>'}
-        overlayNoRowsTemplate={'<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow">Data Loading....</span>'}
+        overlayNoRowsTemplate={overlayNoRowsTemplate}
+        overlayLoadingTemplate={overlayLoadingTemplate}
         rowData={rowData}
         columnDefs={columnDefs}
         autoWidth={autoWidth}
@@ -95,14 +107,7 @@ const AgGrid2 = (props) => {
         onCellClicked={onCellClicked}
         onSelectionChanged={onSelectionChanged}
       />
-      <div
-        id="pagination"
-        style={
-          showPagination && pagination
-            ? { display: "block" }
-            : { display: "none" }
-        }
-      >
+      <div id="pagination" style={showPagination && pagination ? { display: "block" } : { display: "none" }}>
         <div className="paging-wrap">
           <div>
             {/* <select className="btn_comm">
