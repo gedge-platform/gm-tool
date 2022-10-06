@@ -20,28 +20,6 @@ const MapContent = observer(() => {
     clusterNameList,
   } = dashboardStore;
 
-  // console.log(
-  //   "clusterNameList : ",
-  //   clusterNameList.map((item) => item)
-  // );
-  // console.log(
-  //   edgeNodeRunning.filter((val) => val.cluster === clusterNameList[0])
-  // );
-  console.log(edgeNodeRunning);
-  console.log(
-    // edgeNodeRunning.filter(
-    //   (element) =>
-    //     "Ready" ===
-    clusterNameList.map(
-      (item) =>
-        edgeNodeRunning
-          .filter((val) => val.cluster === item)
-          .filter((element) => element.status === "Ready").length
-    )
-
-    // ).length
-  );
-
   // edgeNodeRunning
   //                          .filter(
   //                            (val) =>
@@ -113,15 +91,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready 
                        </span>
-                       <span>${
-                         //  clusterNameList.map(
-                         //    (item) =>
-                         edgeNodeRunning
-                           .filter((val) => val.cluster === clusterNameList[i])
-                           .filter((element) => element.status === "Ready")
-                           .length
-                         //  )
-                       }</span>
+                       <span>5</span>
                      </div>
                    </td>
                  </tr>
@@ -131,11 +101,7 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready 
                      </span>
-                     <span>${
-                       edgeNodeRunning
-                         .filter((val) => val.cluster === clusterNameList[i])
-                         .filter((element) => element.status === "Ready").length
-                     }</span>
+                     <span>0</span>
                      </div>
                    </td>
                  </tr>

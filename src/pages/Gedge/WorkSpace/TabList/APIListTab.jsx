@@ -50,7 +50,7 @@ const WorkspaceListTab = observer(() => {
       field: "memberName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
       },
     },
     {
@@ -85,9 +85,14 @@ const WorkspaceListTab = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClick = async ({ data: { workspaceName }, colDef: { field } }) => {
+  const handleClick = async ({
+    data: { workspaceName },
+    colDef: { field },
+  }) => {
     if (field === "delete") {
-      swalUpdate("삭제하시겠습니까?", () => deleteWorkspace(workspaceName, loadWorkSpaceList));
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteWorkspace(workspaceName, loadWorkSpaceList)
+      );
     }
     loadWorkspaceDetail(workspaceName);
   };
@@ -104,7 +109,7 @@ const WorkspaceListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadWorkSpaceList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadWorkSpaceList}>
             {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
@@ -126,7 +131,12 @@ const WorkspaceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateWorkSpace reloadFunc={loadWorkSpaceList} type={"user"} open={open} onClose={handleClose} />
+          <CreateWorkSpace
+            reloadFunc={loadWorkSpaceList}
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>

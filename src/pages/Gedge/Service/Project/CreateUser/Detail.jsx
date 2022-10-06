@@ -267,7 +267,9 @@ const CreateUserDetail = observer(() => {
                 </tr>
               </>
             ) : (
-              <></>
+              <LabelContainer>
+                <p>No Resources Info.</p>
+              </LabelContainer>
             )}
           </tbody>
         </table>
@@ -303,23 +305,35 @@ const CreateUserDetail = observer(() => {
                 <th className="tb_workload_detail_th">Project Name</th>
                 <td>{projectDetail.projectName}</td>
                 <th>Project Type</th>
-                <td>{projectDetail.projectType}</td>
+                <td>
+                  {projectDetail.projectType ? projectDetail.projectType : "-"}
+                </td>
               </tr>
               <tr>
                 <th className="tb_workload_detail_th">Workspace Name</th>
-                <td>{workspace.workspaceName}</td>
+                <td>
+                  {workspace.workspaceName ? workspace.workspaceName : "-"}
+                </td>
                 <th>Workspace Description</th>
-                <td>{workspace.workspaceDescription}</td>
+                <td>
+                  {workspace.workspaceDescription
+                    ? workspace.workspaceDescription
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Cluster Name</th>
                 <td>
-                  {selectClusterInfo?.map(
-                    (cluster) => cluster.clusterName + " "
-                  )}
+                  {selectClusterInfo
+                    ? selectClusterInfo?.map(
+                        (cluster) => cluster.clusterName + " "
+                      )
+                    : "-"}
                 </td>
                 <th>Creator</th>
-                <td>{projectDetail.memberName}</td>
+                <td>
+                  {projectDetail.memberName ? projectDetail.memberName : "-"}
+                </td>
               </tr>
             </tbody>
           </table>

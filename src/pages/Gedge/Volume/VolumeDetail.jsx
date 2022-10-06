@@ -73,7 +73,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
           <tr>
             <th>{key}</th>
             <td>{value}</td>
-          </tr>,
+          </tr>
         );
       })
     : null;
@@ -93,12 +93,17 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
             <th style={{ width: "20%" }}>{key}</th>
             <td>
               {isValidJSON(value) ? (
-                <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
+                <ReactJson
+                  src={JSON.parse(value)}
+                  theme="summerfruit"
+                  displayDataTypes={false}
+                  displayObjectSize={false}
+                />
               ) : (
                 value
               )}
             </td>
-          </tr>,
+          </tr>
         );
       });
     }
@@ -118,36 +123,79 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
         <div className="panelCont">
           <table className="tb_data">
             <tbody className="tb_data_detail">
-              <tr>
-                <th>name</th>
-                <td>{pVolume ? pVolume.name : "-"}</td>
-                <th>capacity</th>
-                <td>{pVolume ? pVolume.capacity : "-"}</td>
-              </tr>
-              <tr>
-                <th>accessMode</th>
-                <td>{pVolume ? pVolume.accessMode : "-"}</td>
-                <th>reclaimPolicy</th>
-                <td>{pVolume ? pVolume.reclaimPolicy : "-"}</td>
-              </tr>
-              <tr>
-                <th>status</th>
-                <td>{pVolume ? pVolume.status : "-"}</td>
-                <th>claim</th>
-                <td>{pVolume ? pVolume?.claim?.name : "-"}</td>
-              </tr>
-              <tr>
-                <th>cluster</th>
-                <td>{pVolume ? pVolume.cluster : "-"}</td>
-                <th>storageClass</th>
-                <td>{pVolume ? pVolume.storageClass : "-"}</td>
-              </tr>
-              <tr>
-                <th>volumeMode</th>
-                <td>{pVolume ? pVolume.volumeMode : "-"}</td>
-                <th>created</th>
-                <td>{pVolume ? dateFormatter(pVolume?.createAt) : "-"}</td>
-              </tr>
+              {pVolume ? (
+                <>
+                  <tr>
+                    <th>name</th>
+                    <td>{pVolume.name ? pVolume.name : "-"}</td>
+                    <th>capacity</th>
+                    <td>{pVolume.capacity ? pVolume.capacity : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>accessMode</th>
+                    <td>{pVolume.accessMode ? pVolume.accessMode : "-"}</td>
+                    <th>reclaimPolicy</th>
+                    <td>
+                      {pVolume.reclaimPolicy ? pVolume.reclaimPolicy : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>status</th>
+                    <td>{pVolume.status ? pVolume.status : "-"}</td>
+                    <th>claim</th>
+                    <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>cluster</th>
+                    <td>{pVolume.cluster ? pVolume.cluster : "-"}</td>
+                    <th>storageClass</th>
+                    <td>{pVolume.storageClass ? pVolume.storageClass : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>volumeMode</th>
+                    <td>{pVolume.volumeMode ? pVolume.volumeMode : "-"}</td>
+                    <th>created</th>
+                    <td>
+                      {pVolume.createAt
+                        ? dateFormatter(pVolume?.createAt)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <>
+                  <tr>
+                    <th>name</th>
+                    <td>-</td>
+                    <th>capacity</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>accessMode</th>
+                    <td>-</td>
+                    <th>reclaimPolicy</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>status</th>
+                    <td>-</td>
+                    <th>claim</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>cluster</th>
+                    <td>-</td>
+                    <th>storageClass</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>volumeMode</th>
+                    <td>-</td>
+                    <th>created</th>
+                    <td>-</td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
@@ -160,17 +208,27 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
                 <th className="tb_volume_detail_th">name</th>
                 <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
                 <th className="tb_volume_detail_th">namespace</th>
-                <td>{pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}</td>
+                <td>
+                  {pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}
+                </td>
               </tr>
               <tr>
                 <th>kind</th>
                 <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
                 <th>apiVersion</th>
-                <td>{pVolume?.claim?.apiVersion ? pVolume?.claim?.apiVersion : "-"}</td>
+                <td>
+                  {pVolume?.claim?.apiVersion
+                    ? pVolume?.claim?.apiVersion
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>resourceVersion</th>
-                <td>{pVolume?.claim?.resourceVersion ? pVolume?.claim?.resourceVersion : "-"}</td>
+                <td>
+                  {pVolume?.claim?.resourceVersion
+                    ? pVolume?.claim?.resourceVersion
+                    : "-"}
+                </td>
                 <th>uid</th>
                 <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
               </tr>

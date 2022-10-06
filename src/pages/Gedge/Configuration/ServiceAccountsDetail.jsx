@@ -50,10 +50,18 @@ const Label = styled.span`
 
 const ServiceAccountsDetail = observer(() => {
   const {
-    serviceAccountDetail: { annotations, cluster, createAt, label, name, namespace, secretCnt, secrets },
+    serviceAccountDetail: {
+      annotations,
+      cluster,
+      createAt,
+      label,
+      name,
+      namespace,
+      secretCnt,
+      secrets,
+    },
   } = serviceAccountStore;
 
-  console.log(secrets);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -95,7 +103,13 @@ const ServiceAccountsDetail = observer(() => {
             <tbody>
               <tr>
                 <th style={{ width: "15%" }}>Secrets Name</th>
-                <td style={{ whiteSpace: "pre-wrap" }}>{secrets !== null ? secrets.map(secret => secret.name + "\n") : <></>}</td>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {secrets !== null ? (
+                    secrets.map((secret) => secret.name + "\n")
+                  ) : (
+                    <></>
+                  )}
+                </td>
               </tr>
               <tr>
                 <th>Secrets Count</th>

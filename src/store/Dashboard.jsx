@@ -196,7 +196,6 @@ class Dashboard {
         runInAction(() => {
           this.edgeNodeRunning = data.nodeRunning;
         });
-        console.log(this.edgeNodeRunning);
       });
   };
 
@@ -475,15 +474,19 @@ class Dashboard {
           this.cloudName = cloudName;
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
-          this.type = this.nodeInfo.map((val) => val.type);
-          this.master = this.type.reduce(
-            (cnt, element) => cnt + ("master" === element),
-            0
-          );
-          this.worker = this.type.reduce(
-            (cnt, element) => cnt + ("worker" === element),
-            0
-          );
+          this.type = this.nodeInfo ? this.nodeInfo.map((val) => val.type) : "";
+          this.master = this.type
+            ? this.type.reduce(
+                (cnt, element) => cnt + ("master" === element),
+                0
+              )
+            : 0;
+          this.worker = this.type
+            ? this.type.reduce(
+                (cnt, element) => cnt + ("worker" === element),
+                0
+              )
+            : 0;
           this.cpuUsage = data.cpuUsage ? data.cpuUsage : 0;
           this.cpuUtil = data.cpuUtil ? data.cpuUtil : 0;
           this.cpuTotal = data.cpuTotal ? data.cpuTotal : 0;

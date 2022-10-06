@@ -155,39 +155,52 @@ class Project {
   };
 
   loadProjectDetail = async (projectName) => {
-    await axios
-      .get(`${SERVER_URL}/userProjects/${projectName}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.projectDetail = data;
-          this.detailInfo = data.DetailInfo;
-          this.workspace = data.workspace;
-          this.labels = data.DetailInfo[0].labels;
-          this.annotations = data.DetailInfo[0].annotations;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-          this.selectClusterInfo = data.selectCluster;
+    try {
+      await axios
+        .get(`${SERVER_URL}/userProjects/${projectName}`)
+        .then(({ data: { data } }) => {
+          runInAction(() => {
+            this.projectDetail = data;
+            this.detailInfo = data.DetailInfo;
+            this.workspace = data.workspace;
+            this.labels = data.DetailInfo[0].labels;
+            this.annotations = data.DetailInfo[0].annotations;
+            if (data.events !== null) {
+              this.events = data.events;
+            } else {
+              this.events = null;
+            }
+            this.selectClusterInfo = data.selectCluster;
 
-          const tempSelectCluster = data.selectCluster;
-          this.clusterList = tempSelectCluster.map(
-            (cluster) => cluster.clusterName
-          );
-          this.selectCluster = this.clusterList[0];
-          this.resourceUsage = this.detailInfo.map(
-            (data) => data.resourceUsage
-          );
-          // const temp = new Set(res.data.map((cluster) => cluster.clusterName));
-          // this.clusterList = [...temp];
+            const tempSelectCluster = data.selectCluster;
+            this.clusterList = tempSelectCluster.map(
+              (cluster) => cluster.clusterName
+            );
+            this.selectCluster = this.clusterList[0];
+            this.resourceUsage = this.detailInfo.map(
+              (data) => data.resourceUsage
+            );
+            // const temp = new Set(res.data.map((cluster) => cluster.clusterName));
+            // this.clusterList = [...temp];
+          });
         });
-      })
-      .then(() => {
-        // this.eventLength = this.events.length;
-        // console.log(this.events);
-        // this.convertEventList(this.events, this.setEventList);
-      });
+    } catch (e) {
+      this.projectDetail = { projectName: projectName };
+      this.detailInfo = [{}];
+      this.workspace = {};
+      this.labels = null;
+      this.annotations = null;
+      this.events = null;
+      this.selectClusterInfo = null;
+      this.clusterList = null;
+      this.selectCluster = null;
+      this.resourceUsage = { namespace_cpu: null, namespace_memory: null };
+      // .then(() => {
+      // this.eventLength = this.events.length;
+      // console.log(this.events);
+      // this.convertEventList(this.events, this.setEventList);
+      // });
+    }
   };
 
   loadProjectListInWorkspace = async (workspaceName) => {

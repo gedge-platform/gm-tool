@@ -21,7 +21,18 @@ const PodListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalElements, loadPodList, loadPodDetail, currentPage, totalPages, goPrevPage, goNextPage, viewList } = podStore;
+  const {
+    podList,
+    podDetail,
+    totalElements,
+    loadPodList,
+    loadPodDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+    viewList,
+  } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -77,7 +88,7 @@ const PodListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     const data = e.data.status;
     if (data === "Failed") {
@@ -96,7 +107,7 @@ const PodListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadPodList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadPodList}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
 
@@ -117,7 +128,11 @@ const PodListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreatePod open={open} onClose={handleClose} reloadFunc={loadPodList} />
+          <CreatePod
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
         <Detail pod={podDetail} />
       </CReflexBox>

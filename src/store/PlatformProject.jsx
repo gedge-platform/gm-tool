@@ -57,7 +57,10 @@ class PlatformProject {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPlatformDetail(this.viewList[0].projectName);
+        this.loadPlatformProjectDetail(
+          this.viewList[0].projectName,
+          this.viewList[0].clusterName
+        );
       }
     });
   };
@@ -67,7 +70,10 @@ class PlatformProject {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadPlatformDetail(this.viewList[0].projectName);
+        this.loadPlatformProjectDetail(
+          this.viewList[0].projectName,
+          this.viewList[0].clusterName
+        );
       }
     });
   };

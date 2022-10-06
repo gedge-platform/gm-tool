@@ -64,7 +64,7 @@ const DaemonSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -79,7 +79,7 @@ const DaemonSetListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDaemonSetList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadDaemonSetList}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

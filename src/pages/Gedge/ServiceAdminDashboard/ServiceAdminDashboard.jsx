@@ -70,6 +70,7 @@ const ServiceAdminDashboard = observer(() => {
     statefulsetMetrics,
   } = serviceAdminDashboardStore;
 
+  console.log(serviceMetrics);
   const { lastTime, interval } = monitoringStore;
   const [resetTest, setResetTest] = useState("");
 
@@ -156,7 +157,7 @@ const ServiceAdminDashboard = observer(() => {
 
   let MetricList = [];
   const searchMetrics = (MetricList, name) => {
-    console.log("MetricList", MetricList);
+    // console.log("MetricList", MetricList);
     let metrics = [];
     MetricList[0].forEach((element) => {
       const tempMetrics = {
