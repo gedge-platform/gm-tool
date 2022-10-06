@@ -6,7 +6,6 @@ import { observer } from "mobx-react";
 
 const Detail = observer(props => {
   const { cert } = props;
-  console.log("cert is : ", cert);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

@@ -109,7 +109,7 @@ const ConfigmapsDetail = observer(() => {
           <TableTitle>Data</TableTitle>
           {metadata ? (
             <table className="tb_data">
-              <tbody>
+              <tbody className="tb_data_detail" style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
                     <th style={{ width: "15%" }}>{key}</th>

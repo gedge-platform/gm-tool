@@ -4,6 +4,7 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import CertificationDetail from "../Detail";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { observer } from "mobx-react";
 import { certificationStore } from "@/store";
 import CreateCertification from "../Dialog/CreateCertification";
@@ -87,7 +88,13 @@ const CertificationListTab = observer(() => {
     {
       headerName: "생성날짜",
       field: "created_at",
-      filter: true,
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${dateFormatter(data.value)}</span>`;
+      },
     },
   ]);
 
