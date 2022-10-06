@@ -15,9 +15,8 @@ import { StorageClassStore } from "@/store";
 const StorageClassListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [open, setOpen] = useState(false);
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
-  };
+  const [reRun, setReRun] = useState(false);
+  const [storageClassName, setStorageClassName] = useState("");
 
   const {
     loadStorageClasses,
@@ -88,8 +87,9 @@ const StorageClassListTab = observer(() => {
     },
   ]);
 
-  const handleOpen = e => {
+  const handleClick = e => {
     let fieldName = e.colDef.field;
+    setStorageClassName(e.data.name);
     loadStorageClass(e.data.name, e.data.cluster);
     loadStorageClassYaml(e.data.name, e.data.cluster, null, "storageclasses");
     if (fieldName === "yaml") {
@@ -105,21 +105,26 @@ const StorageClassListTab = observer(() => {
     setOpen(false);
   };
 
-  const history = useHistory();
+  const reloadData = () => {
+    setReRun(true);
+  };
 
   useEffect(() => {
     loadStorageClasses();
-  }, []);
+    return () => {
+      setReRun(false);
+    };
+  }, [reRun]);
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
-          // reloadFunc={loadStorageClasses}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
+            reloadFunc={reloadData}
+            // isSearch={true}
+            // isSelect={true}
+            // keywordList={["이름"]}
           >
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
@@ -128,7 +133,7 @@ const StorageClassListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  onCellClicked={handleOpen}
+                  onCellClicked={handleClick}
                   //  rowData={viewList}
                   rowData={viewList}
                   columnDefs={columDefs}
@@ -142,7 +147,7 @@ const StorageClassListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} reloadFunc={reloadData} />
         </PanelBox>
         <StorageClassDetail />
       </CReflexBox>

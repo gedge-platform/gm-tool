@@ -2,7 +2,9 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
+import CertificationDetail from "../Detail";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { observer } from "mobx-react";
 import { certificationStore } from "@/store";
 import CreateCertification from "../Dialog/CreateCertification";
@@ -17,6 +19,8 @@ const CertificationListTab = observer(() => {
   const {
     deleteCredential,
     loadCredentialList,
+    loadCertificationDetail,
+    certificationDetail,
     credential,
     clusterDetail,
     clusterList,
@@ -84,11 +88,19 @@ const CertificationListTab = observer(() => {
     {
       headerName: "생성날짜",
       field: "created_at",
-      filter: true,
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function (data) {
+        return `<span>${dateFormatter(data.value)}</span>`;
+      },
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
+    console.log("e is ", e.data.name);
+    loadCertificationDetail(e.data.name);
     setCertName(e.data.name);
   };
 
@@ -105,9 +117,7 @@ const CertificationListTab = observer(() => {
       swalError("인증을 선택해주세요!");
       return;
     } else {
-      swalUpdate("삭제하시겠습니까?", () =>
-        deleteCredential(certName, loadCredentialList)
-      );
+      swalUpdate("삭제하시겠습니까?", () => deleteCredential(certName, loadCredentialList));
     }
     setCertName("");
   };
@@ -139,12 +149,9 @@ const CertificationListTab = observer(() => {
             />
           </div>
         </div>
-        <CreateCertification
-          open={open}
-          onClose={handleClose}
-          reloadFunc={loadCredentialList}
-        />
+        <CreateCertification open={open} onClose={handleClose} reloadFunc={loadCredentialList} />
       </PanelBox>
+      <CertificationDetail cert={certificationDetail} />
     </CReflexBox>
   );
 });

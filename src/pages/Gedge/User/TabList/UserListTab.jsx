@@ -20,15 +20,20 @@ const UserListTab = observer(() => {
     userStore;
 
   const [columnDefs] = useState([
+    // {
+    //   headerName: "NO",
+    //   field: "memberNum",
+    //   filter: false,
+    //   minWidth: 80,
+    //   maxWidth: 80,
+    // },
     {
-      headerName: "NO",
-      field: "memberNum",
-      filter: false,
-      minWidth: 80,
-      maxWidth: 80,
+      headerName: "아이디",
+      field: "memberId",
+      filter: true,
     },
     {
-      headerName: "사용자 이름",
+      headerName: "닉네임",
       field: "memberName",
       filter: true,
     },
