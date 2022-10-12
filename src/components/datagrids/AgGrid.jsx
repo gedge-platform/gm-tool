@@ -10,7 +10,7 @@ import "@/styles/ag-custom.scss";
 ModuleRegistry.register(ClientSideRowModelModule);
 
 const AgGrid = props => {
-  const {
+  var {
     rowData,
     columnDefs,
     pagination = true,
@@ -37,6 +37,7 @@ const AgGrid = props => {
   const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState('<span class="ag-overlay-loading-center">No Data</span>');
 
   useEffect(() => {
+    // console.log("rowData is ", rowData);
     if (gridApi) {
       gridApi.sizeColumnsToFit();
       gridApi.hideOverlay();
@@ -46,6 +47,8 @@ const AgGrid = props => {
 
   const onGridReady = params => {
     setGridApi(params.api);
+    currentPage = 1;
+    rowData = 0;
   };
 
   const onFirstDataRendered = params => {

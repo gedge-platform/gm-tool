@@ -40,11 +40,7 @@ class Secret {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadsecretTabList(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadsecretTabList(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       }
     });
   };
@@ -54,22 +50,18 @@ class Secret {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadsecretTabList(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadsecretTabList(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -102,19 +94,20 @@ class Secret {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
   // Pagenation Custom Function Start
-  setSecretList = (list) => {
+  setSecretList = list => {
     runInAction(() => {
       this.secretList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.secretList[n];
     });
@@ -136,11 +129,7 @@ class Secret {
       })
       // then(() => List Detail Change)
       .then(() => {
-        this.loadsecretTabList(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        this.loadsecretTabList(this.viewList[0].name, this.viewList[0].clusterName, this.viewList[0].namespace);
       });
   };
 
@@ -167,19 +156,15 @@ class Secret {
   // };
 
   loadsecretTabList = async (name, clusterName, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL}/secrets/${name}?cluster=${clusterName}&project=${namespace}`
-      )
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.secretTabList = data;
-          this.data = data.data;
-          this.label = data.label;
-          this.annotations = data.annotations;
-          this.events = data.events;
-        });
+    await axios.get(`${SERVER_URL}/secrets/${name}?cluster=${clusterName}&project=${namespace}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.secretTabList = data;
+        this.data = data.data;
+        this.label = data.label;
+        this.annotations = data.annotations;
+        this.events = data.events;
       });
+    });
   };
 }
 

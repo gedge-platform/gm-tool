@@ -76,13 +76,13 @@ class Project {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -115,18 +115,19 @@ class Project {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
-  setProjectList = (list) => {
+  setProjectList = list => {
     runInAction(() => {
       this.projectList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.projectList[n];
     });
@@ -137,7 +138,7 @@ class Project {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/userProjects?user=${id}`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           // const list = res.data.data.filter(
           //   (item) => item.projectType === type
@@ -154,7 +155,7 @@ class Project {
       });
   };
 
-  loadProjectDetail = async (projectName) => {
+  loadProjectDetail = async projectName => {
     await axios
       .get(`${SERVER_URL}/userProjects/${projectName}`)
       .then(({ data: { data } }) => {
@@ -172,13 +173,9 @@ class Project {
           this.selectClusterInfo = data.selectCluster;
 
           const tempSelectCluster = data.selectCluster;
-          this.clusterList = tempSelectCluster.map(
-            (cluster) => cluster.clusterName
-          );
+          this.clusterList = tempSelectCluster.map(cluster => cluster.clusterName);
           this.selectCluster = this.clusterList[0];
-          this.resourceUsage = this.detailInfo.map(
-            (data) => data.resourceUsage
-          );
+          this.resourceUsage = this.detailInfo.map(data => data.resourceUsage);
           // const temp = new Set(res.data.map((cluster) => cluster.clusterName));
           // this.clusterList = [...temp];
         });
@@ -190,20 +187,18 @@ class Project {
       });
   };
 
-  loadProjectListInWorkspace = async (workspaceName) => {
-    await axios
-      .get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`)
-      .then((res) => {
-        runInAction(() => {
-          this.projectListinWorkspace = res.data.data;
-        });
+  loadProjectListInWorkspace = async workspaceName => {
+    await axios.get(`${SERVER_URL}/userProjects?workspace=${workspaceName}`).then(res => {
+      runInAction(() => {
+        this.projectListinWorkspace = res.data.data;
       });
+    });
   };
 
   loadSystemProjectList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
-    await axios.get(`${SERVER_URL}/systemProjects?user=${id}`).then((res) => {
+    await axios.get(`${SERVER_URL}/systemProjects?user=${id}`).then(res => {
       runInAction(() => {
         console.log(res);
         this.systemProjectList = res.data.data;
@@ -218,27 +213,19 @@ class Project {
     });
   };
 
-  changeCluster = (cluster) => {
+  changeCluster = cluster => {
     runInAction(() => {
       this.selectCluster = cluster;
     });
   };
 
-  setSelectClusterInfo = (selectClusterInfo) => {
+  setSelectClusterInfo = selectClusterInfo => {
     runInAction(() => {
       this.selectClusterInfo = selectClusterInfo;
     });
   };
 
-  createProject = (
-    projectName,
-    projectDescription,
-    projectType,
-    workspaceName,
-    selectCluster,
-    istioCheck,
-    callback
-  ) => {
+  createProject = (projectName, projectDescription, projectType, workspaceName, selectCluster, istioCheck, callback) => {
     const { id } = getItem("user");
     const body = {
       projectName: projectName,
@@ -265,13 +252,13 @@ class Project {
     //   .catch((err) => console.error(err));
     axios
       .post(`${SERVER_URL}/projects`, body)
-      .then((res) => {
+      .then(res => {
         console.log(res);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         swalError("프로젝트 생성에 실패하였습니다.", callback);
         console.error(err);
       });
@@ -280,14 +267,13 @@ class Project {
   deleteProject = async (projectName, callback) => {
     axios
       .delete(`${SERVER_URL}/projects/${projectName}`)
-      .then((res) => {
-        if (res.status === 200)
-          swalError("프로젝트가 삭제되었습니다.", callback);
+      .then(res => {
+        if (res.status === 200) swalError("프로젝트가 삭제되었습니다.", callback);
       })
-      .catch((err) => swalError("삭제에 실패하였습니다."));
+      .catch(err => swalError("삭제에 실패하였습니다."));
   };
 
-  setCurrentEvent = (n) => {
+  setCurrentEvent = n => {
     runInAction(() => {
       this.currentEvent = n;
     });
