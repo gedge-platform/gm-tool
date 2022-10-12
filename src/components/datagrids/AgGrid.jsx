@@ -40,7 +40,7 @@ const AgGrid = props => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
       gridApi.hideOverlay();
-      // gridApi.showLoadingOverlay();
+      gridApi.showLoadingOverlay();
     }
   }, [rowData]);
 
