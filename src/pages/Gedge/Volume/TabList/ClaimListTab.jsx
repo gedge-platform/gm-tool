@@ -12,8 +12,13 @@ import ClaimDetail from "../ClaimDetail";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import CreateClaim from "../ClaimDialog/CreateClaim";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
+// import { useLocation } from "react-router";
+
+// let prePath = "";
 
 const ClaimListTab = observer(() => {
+  // let locations = useLocation();
+
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [claimName, setClaimName] = useState("");
@@ -157,6 +162,15 @@ const ClaimListTab = observer(() => {
       setReRun(false);
     };
   }, [reRun]);
+
+  // useEffect(() => {
+  //   if (prePath.indexOf("/service/volumes") !== -1) {
+  //     console.log("새로고침");
+  //     prePath = "";
+  //     window.location.reload();
+  //   }
+  //   prePath = location.pathname;
+  // }, [location]);
 
   return (
     <>

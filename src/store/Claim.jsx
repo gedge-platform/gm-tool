@@ -42,6 +42,62 @@ class Claim {
   volumeCapacity = "";
   content = ""; //초기화를 잘 합시다2
 
+  labels = [
+    {
+      id: 0,
+      key: "",
+      value: "",
+    },
+  ];
+
+  setLabels = (value) => {
+    runInAction(() => {
+      this.labels = value;
+    });
+  };
+
+  inputLabelKey = "";
+  setInputLabelKey = (value) => {
+    runInAction(() => {
+      this.inputLabelKey = value;
+    });
+  };
+
+  inputLabelValue = "";
+  setInputLabelValue = (value) => {
+    runInAction(() => {
+      this.inputLabelValue = value;
+    });
+  };
+
+  annotations = [
+    {
+      id: 0,
+      key: "",
+      value: "",
+    },
+  ];
+
+  setAnnotations = (value) => {
+    runInAction(() => {
+      this.annotations = value;
+    });
+  };
+
+  inputAnnotationsKey = "";
+  setInputAnnotationsKey = (value) => {
+    runInAction(() => {
+      this.inputAnnotationsKey = value;
+    });
+  };
+
+  inputAnnotationsValue = "";
+  setInputAnnotationsValue = (value) => {
+    runInAction(() => {
+      this.inputAnnotationsValue = value;
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }

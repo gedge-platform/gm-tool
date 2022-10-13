@@ -37,7 +37,6 @@ const ClaimBasicInformation = observer((props) => {
     projectList,
     viewList,
   } = workspaceStore;
-  console.log(projectList);
 
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);

@@ -126,7 +126,6 @@ class ServiceAdminDashboard {
           this.statefulsetMetrics =
             res.data?.items?.statefulset_count[0].values;
         });
-        console.log(this.deploymentMetrics);
       });
   };
 

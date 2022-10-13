@@ -100,7 +100,6 @@ class Scheduler {
       .then((res) => {
         runInAction(() => {
           console.log(res);
-
           this.yamlList = res.data.data;
           this.totalElements =
             res.data.data === null ? 0 : res.data.data.length;
