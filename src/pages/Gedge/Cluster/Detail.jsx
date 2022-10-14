@@ -61,7 +61,7 @@ const NoInfo = styled.div`
   background-color: #141a30;
 `;
 
-const Detail = observer(props => {
+const Detail = observer((props) => {
   const {
     clusterDetail: {
       clusterName,
@@ -73,7 +73,16 @@ const Detail = observer(props => {
       events,
       ipAddr,
       nodes,
-      resource: { cronjob_count, deployment_count, job_count, pod_count, service_count, volume_count, Statefulset_count, daemonset_count },
+      resource: {
+        cronjob_count,
+        deployment_count,
+        job_count,
+        pod_count,
+        service_count,
+        volume_count,
+        Statefulset_count,
+        daemonset_count,
+      },
     },
   } = clusterStore;
   const nodesChk = nodes === null ? 0 : nodes;
@@ -119,7 +128,16 @@ const Detail = observer(props => {
       <tr>
         <th style={{ width: "40%" }}>{key}</th>
         <td>
-          {isValidJSON(value) ? <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} /> : value}
+          {isValidJSON(value) ? (
+            <ReactJson
+              src={JSON.parse(value)}
+              theme="summerfruit"
+              displayDataTypes={false}
+              displayObjectSize={false}
+            />
+          ) : (
+            value
+          )}
         </td>
       </tr>
     ));
@@ -202,27 +220,27 @@ const Detail = observer(props => {
             <tbody className="tb_data_detail">
               <tr>
                 <th>Deployment</th>
-                <td>{deployment_count}</td>
+                <td>{deployment_count ? deployment_count : "-"}</td>
                 <th>Pod</th>
-                <td>{pod_count}</td>
+                <td>{pod_count ? pod_count : "-"}</td>
               </tr>
               <tr>
                 <th>Service</th>
-                <td>{service_count}</td>
+                <td>{service_count ? service_count : "-"}</td>
                 <th>Cronjob</th>
-                <td>{cronjob_count}</td>
+                <td>{cronjob_count ? cronjob_count : "-"}</td>
               </tr>
               <tr>
                 <th>StatefulSet</th>
-                <td>{Statefulset_count}</td>
+                <td>{Statefulset_count ? Statefulset_count : "-"}</td>
                 <th>DaemonSet</th>
-                <td>{daemonset_count}</td>
+                <td>{daemonset_count ? daemonset_count : "-"}</td>
               </tr>
               <tr>
                 <th>Job</th>
-                <td>{job_count}</td>
+                <td>{job_count ? job_count : "-"}</td>
                 <th>Volume</th>
-                <td>{volume_count}</td>
+                <td>{volume_count ? volume_count : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -255,12 +273,23 @@ const Detail = observer(props => {
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})</TableTitle>
-          <LabelContainer>{nodesChk.length >= 1 ? labelByNode() : ""}</LabelContainer>
+          <TableTitle>
+            Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
+          </TableTitle>
+          <LabelContainer>
+            {nodesChk.length >= 1 ? labelByNode() : "No Label Info."}
+          </LabelContainer>
 
-          <TableTitle>Annotations({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})</TableTitle>
+          <TableTitle>
+            Annotations(
+            {nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
+          </TableTitle>
           <table className="tb_data">
-            <tbody>{nodesChk.length >= 1 ? annotationByNode() : ""}</tbody>
+            <tbody>
+              {nodesChk.length >= 1
+                ? annotationByNode()
+                : "No Annotation Info."}
+            </tbody>
           </table>
         </div>
       </CTabPanel>

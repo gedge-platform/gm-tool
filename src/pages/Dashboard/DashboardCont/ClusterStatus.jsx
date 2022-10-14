@@ -12,6 +12,7 @@ const ClusterStatus = observer(() => {
     vmStatusList,
     connectionconfig,
     ProviderName,
+    ConfigNameList,
   } = dashboardStore;
 
   useEffect(() => {
@@ -19,8 +20,8 @@ const ClusterStatus = observer(() => {
     // loadVMStatusCnt();
     // clusterStatus2();
   }, []);
-
   // console.log(vmStatusList);
+
   // if (vmStatusList === undefined) {
   //   loadVMStatusCnt();
   // } else {
