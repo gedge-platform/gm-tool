@@ -205,7 +205,7 @@ class Certification {
       .get(`${SERVER_URL}/spider/credentialList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          // console.log("data is ", data);
+          console.log("data is ", data);
           this.credential = data;
           this.totalElements = this.credential.length;
           this.CredentialName = this.credential.map((list) => list.name);

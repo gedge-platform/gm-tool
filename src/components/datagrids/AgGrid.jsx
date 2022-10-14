@@ -9,7 +9,7 @@ import "@/styles/ag-custom.scss";
 
 ModuleRegistry.register(ClientSideRowModelModule);
 
-const AgGrid = props => {
+const AgGrid = (props) => {
   var {
     rowData,
     columnDefs,
@@ -31,10 +31,12 @@ const AgGrid = props => {
   const [setGridColumnApi] = useState(null);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
-    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>',
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>'
   );
 
-  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState('<span class="ag-overlay-loading-center">No Data</span>');
+  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState(
+    '<span class="ag-overlay-loading-center">No Data</span>'
+  );
 
   useEffect(() => {
     // console.log("rowData is ", rowData);
@@ -45,17 +47,17 @@ const AgGrid = props => {
     }
   }, [rowData]);
 
-  const onGridReady = params => {
+  const onGridReady = (params) => {
     setGridApi(params.api);
     currentPage = 1;
     rowData = 0;
   };
 
-  const onFirstDataRendered = params => {
+  const onFirstDataRendered = (params) => {
     params.api.sizeColumnsToFit();
   };
 
-  const onGridSizeChanged = params => {
+  const onGridSizeChanged = (params) => {
     const gridWidth = document.getElementById("my-grid").offsetWidth;
     const columnsToShow = [];
     const columnsToHide = [];
@@ -109,7 +111,14 @@ const AgGrid = props => {
         onCellClicked={onCellClicked}
         onSelectionChanged={onSelectionChanged}
       />
-      <div id="pagination" style={showPagination && pagination ? { display: "block" } : { display: "none" }}>
+      <div
+        id="pagination"
+        style={
+          showPagination && pagination
+            ? { display: "block" }
+            : { display: "none" }
+        }
+      >
         <div className="paging-wrap">
           <div>
             {/* <select className="btn_comm">

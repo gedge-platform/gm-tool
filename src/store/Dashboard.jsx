@@ -318,7 +318,7 @@ class Dashboard {
       `http://210.207.104.188:1024/spider/connectionconfig`
     );
     const configResult = await Promise.all([urls]).then((res) => {
-      console.log(res);
+      console.log("configResult", res);
       return res;
     });
     const configNameList = configResult[0].data.connectionconfig;

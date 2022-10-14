@@ -14,7 +14,17 @@ const CloudVMListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [vmName, setVMName] = useState("");
 
-  const { setInitViewList, deleteVM, loadVMList, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } = clusterStore;
+  const {
+    setInitViewList,
+    deleteVM,
+    loadVMList,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
+  } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -82,7 +92,7 @@ const CloudVMListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setVMName(e.data.name);
   };
 
@@ -98,7 +108,9 @@ const CloudVMListTab = observer(() => {
     if (vmName === "") {
       swalError("VM을 선택해주세요!");
     } else {
-      swalUpdate(vmName + "를 삭제하시겠습니까?", () => deleteVM(vmName, reloadData));
+      swalUpdate(vmName + "를 삭제하시겠습니까?", () =>
+        deleteVM(vmName, reloadData)
+      );
     }
     setVMName("");
   };
@@ -121,6 +133,7 @@ const CloudVMListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 

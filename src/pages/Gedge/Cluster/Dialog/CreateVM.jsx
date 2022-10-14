@@ -24,7 +24,7 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateVM = observer(props => {
+const CreateVM = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
   const { postVM, ProviderName, setProviderName } = clusterStore;
@@ -55,11 +55,9 @@ const CreateVM = observer(props => {
       return;
     }
     if (ProviderName === "AWS") {
-      console.log(ProviderName);
       setStepValue(2);
     }
     if (ProviderName === "OPENSTACK") {
-      console.log(ProviderName);
       setStepValue(2);
     } else {
       return;
@@ -106,7 +104,7 @@ const CreateVM = observer(props => {
     createVM(body);
   };
 
-  const createVM = async body => {
+  const createVM = async (body) => {
     const result = await postVM(body);
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -136,7 +134,7 @@ const CreateVM = observer(props => {
                   <FormControl className="form_fullWidth">
                     <select name="ProviderName" onChange={onChange}>
                       <option value={""}>Select Provider</option>
-                      {ProviderList.map(provider => (
+                      {ProviderList.map((provider) => (
                         <option value={provider}>{provider}</option>
                       ))}
                     </select>
@@ -217,7 +215,15 @@ const CreateVM = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create VM"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create VM"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {stepOfComponent()}
     </CDialogNew>
   );
