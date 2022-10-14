@@ -78,7 +78,7 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -101,7 +101,7 @@ const DeploymentListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadDeploymentList}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -121,7 +121,11 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment open={open} onClose={handleClose} reloadFunc={loadDeploymentList} />
+          <CreateDeployment
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadDeploymentList}
+          />
         </PanelBox>
         <Detail deployment={deploymentDetail} />
       </CReflexBox>

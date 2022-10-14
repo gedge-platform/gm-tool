@@ -50,7 +50,14 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { containers, cronJobDetail, label, annotations, events, cronjobInvolvesJobs } = cronJobStore;
+  const {
+    containers,
+    cronJobDetail,
+    label,
+    annotations,
+    events,
+    cronjobInvolvesJobs,
+  } = cronJobStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -80,28 +87,75 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Name</th>
-                <td>{cronJobDetail ? cronJobDetail.name : "-"}</td>
-                <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cronJobDetail ? cronJobDetail.cluster : "-"}</td>
-              </tr>
-              <tr>
-                <th>Project</th>
-                <td>{cronJobDetail ? cronJobDetail.project : "-"}</td>
-                <th>Schedule</th>
-                <td>{cronJobDetail ? cronJobDetail.schedule : "-"}</td>
-              </tr>
-              <tr>
-                <th>Concurrency Policy</th>
-                <td>{cronJobDetail ? cronJobDetail.concurrencyPolicy : "-"}</td>
-                <th>Successful Jobs History Limit</th>
-                <td>{cronJobDetail ? cronJobDetail.successfulJobsHistoryLimit : "-"}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{cronJobDetail ? dateFormatter(cronJobDetail.creationTimestamp) : "-"}</td>
-              </tr>
+              {cronJobDetail ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Name</th>
+                    <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                    <th className="tb_workload_detail_th">Cluster</th>
+                    <td>
+                      {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Project</th>
+                    <td>
+                      {cronJobDetail.project ? cronJobDetail.project : "-"}
+                    </td>
+                    <th>Schedule</th>
+                    <td>
+                      {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Concurrency Policy</th>
+                    <td>
+                      {cronJobDetail.concurrencyPolicy
+                        ? cronJobDetail.concurrencyPolicy
+                        : "-"}
+                    </td>
+                    <th>Successful Jobs History Limit</th>
+                    <td>
+                      {cronJobDetail.successfulJobsHistoryLimit
+                        ? cronJobDetail.successfulJobsHistoryLimit
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {cronJobDetail.creationTimestamp
+                        ? dateFormatter(cronJobDetail.creationTimestamp)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Name</th>
+                    <td>-</td>
+                    <th className="tb_workload_detail_th">Cluster</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>Project</th>
+                    <td>-</td>
+                    <th>Schedule</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>Concurrency Policy</th>
+                    <td>-</td>
+                    <th>Successful Jobs History Limit</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>-</td>
+                  </tr>
+                </>
+              )}
             </tbody>
           </table>
         </div>
@@ -110,7 +164,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
           {containers ? (
-            containers.map(item => (
+            containers.map((item) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_container">
                   <tr>
@@ -183,7 +237,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>References</TableTitle>
           {cronjobInvolvesJobs ? (
-            cronjobInvolvesJobs.map(job => (
+            cronjobInvolvesJobs.map((job) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>

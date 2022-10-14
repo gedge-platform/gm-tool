@@ -119,7 +119,7 @@ const Detail = observer(() => {
     return (
       <>
         {/* <ClusterTitle>{workSpaceDetail.workspaceName}</ClusterTitle> */}
-        <table className="tb_data">
+        <table className="tb_dat a">
           <tbody className="tb_workload_detail_th">
             <tr>
               {dataUsage ? (
