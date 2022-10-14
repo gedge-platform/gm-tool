@@ -35,11 +35,7 @@ class ServiceAccount {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceAccountTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       }
     });
   };
@@ -49,22 +45,18 @@ class ServiceAccount {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceAccountTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -97,18 +89,19 @@ class ServiceAccount {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
-  setServiceAccountList = (list) => {
+  setServiceAccountList = list => {
     runInAction(() => {
       this.serviceAccountList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.serviceAccountList[n];
     });
@@ -128,24 +121,16 @@ class ServiceAccount {
         this.convertList(this.serviceAccountList, this.setServiceAccountList);
       })
       .then(() => {
-        this.loadServiceAccountTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       });
   };
 
   loadServiceAccountTabList = async (name, cluster, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          this.serviceAccountDetail = res.data.data;
-        });
+    await axios.get(`${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`).then(res => {
+      runInAction(() => {
+        this.serviceAccountDetail = res.data.data;
       });
+    });
   };
 }
 
