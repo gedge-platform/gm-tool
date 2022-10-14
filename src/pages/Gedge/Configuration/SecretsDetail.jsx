@@ -74,7 +74,7 @@ const SecretDetail = observer(() => {
           {/* 강제로 줄바꿈 */}
           {value}
         </td>
-      </tr>,
+      </tr>
     );
   });
 
@@ -89,18 +89,30 @@ const SecretDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th style={{ width: "15%" }}>Name</th>
-                <td>{secretTabList.name}</td>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <td>{secretTabList.type}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{dateFormatter(secretTabList.createAt)}</td>
-              </tr>
+              {secretTabList ? (
+                <>
+                  <tr>
+                    <th style={{ width: "15%" }}>Name</th>
+                    <td>{secretTabList.name ? secretTabList.name : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Type</th>
+                    <td>{secretTabList.type ? secretTabList.type : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {secretTabList.createAt
+                        ? dateFormatter(secretTabList.createAt)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
           <br />

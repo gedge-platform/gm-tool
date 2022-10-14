@@ -133,32 +133,9 @@ const Detail = observer(() => {
                   </tr>
                 </>
               ) : (
-                <>
-                  <tr>
-                    <th>Name</th>
-                    <td>-</td>
-                    <th>Cluster</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>-</td>
-                    <th>Status</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>BackOffLimit</th>
-                    <td>-</td>
-                    <th>Completions</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Start Time</th>
-                    <td>-</td>
-                    <th>Created</th>
-                    <td>-</td>
-                  </tr>
-                </>
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
               )}
             </tbody>
           </table>
@@ -286,23 +263,23 @@ const Detail = observer(() => {
                 <tbody>
                   <tr>
                     <th style={{ width: "25%" }}>Name</th>
-                    <td>{pod?.name}</td>
+                    <td>{pod?.name ? pod?.name : "-"}</td>
                   </tr>
                   <tr>
                     <th>Pod IP</th>
-                    <td>{pod?.podIP}</td>
+                    <td>{pod?.podIP ? pod?.podIP : "-"}</td>
                   </tr>
                   <tr>
                     <th>Host IP</th>
-                    <td>{pod?.hostIP}</td>
+                    <td>{pod?.hostIP ? pod?.hostIP : "-"}</td>
                   </tr>
                   <tr>
                     <th>Node Name</th>
-                    <td>{pod?.nodeName}</td>
+                    <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
                   </tr>
                   <tr>
                     <th>Status</th>
-                    <td>{pod?.status}</td>
+                    <td>{pod?.status ? pod?.status : "-"}</td>
                   </tr>
                 </tbody>
               </table>

@@ -125,20 +125,9 @@ const StatefulSetDetail = observer(() => {
                   </tr>
                 </>
               ) : (
-                <>
-                  <tr>
-                    <th className="tb_workload_detail_th">Name</th>
-                    <td>-</td>
-                    <th className="tb_workload_detail_th">Cluster</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>-</td>
-                    <th>Created</th>
-                    <td>-</td>
-                  </tr>
-                </>
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
               )}
             </tbody>
           </table>

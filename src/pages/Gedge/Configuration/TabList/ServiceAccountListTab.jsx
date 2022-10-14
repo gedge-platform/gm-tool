@@ -64,7 +64,7 @@ const ServiceAccountListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadServiceAccountTabList(e.data.name, e.data.cluster, e.data.namespace);
   };
@@ -76,7 +76,7 @@ const ServiceAccountListTab = observer(() => {
   }, []);
 
   return (
-    <>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar
@@ -108,7 +108,7 @@ const ServiceAccountListTab = observer(() => {
         </PanelBox>
         <ServiceAccountsDetail serviceAccount={serviceAccountDetail} />
       </CReflexBox>
-    </>
+    </div>
   );
 });
 export default ServiceAccountListTab;

@@ -130,7 +130,11 @@ const Detail = observer(() => {
                   <td>{dataUsage?.memory_usage}</td>
                 </>
               ) : (
-                <></>
+                <>
+                  <LabelContainer>
+                    <p>No Detail Info.</p>
+                  </LabelContainer>
+                </>
               )}
             </tr>
           </tbody>
@@ -147,32 +151,20 @@ const Detail = observer(() => {
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody className="project_table">
               <tr>
-                {detailInfo ? (
-                  <>
-                    <tr>
-                      <th> Name</th>
-                      <td>{project?.projectName}</td>
-                      <th>Cluster</th>
-                      <td style={{ whiteSpace: "pre-wrap" }}>
-                        {selectClusterInfo.map(
-                          (item) => item.clusterName + "\n"
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td>{dateFormatter(project?.created_at)}</td>
-                      <th>Creator</th>
-                      <td>
-                        {project?.projectCreator
-                          ? project?.projectCreator
-                          : "-"}
-                      </td>
-                    </tr>
-                  </>
-                ) : (
-                  <></>
-                )}
+                <th> Name</th>
+                <td>{project?.projectName}</td>
+                <th>Cluster</th>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
+                </td>
+              </tr>
+              <tr>
+                <th>Created</th>
+                <td>{dateFormatter(project?.created_at)}</td>
+                <th>Creator</th>
+                <td>
+                  {project?.projectCreator ? project?.projectCreator : "-"}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -185,20 +177,9 @@ const Detail = observer(() => {
           <tbody className="project_table">
             <tr>
               {
-                <>
-                  <tr>
-                    <th> Name</th>
-                    <td>-</td>
-                    <th>Cluster</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>-</td>
-                    <th>Creator</th>
-                    <td>-</td>
-                  </tr>
-                </>
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
               }
             </tr>
           </tbody>
@@ -218,31 +199,61 @@ const Detail = observer(() => {
               <>
                 <tr>
                   <th>Deployment</th>
-                  <td>{workSpaceDetail.resource.deployment_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.deployment_count
+                      ? workSpaceDetail.resource.deployment_count
+                      : "-"}
+                  </td>
                   <th>Pod</th>
                   <td>{workSpaceDetail.resource.pod_count}</td>
                 </tr>
                 <tr>
                   <th>Service</th>
-                  <td>{workSpaceDetail.resource.service_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.service_count
+                      ? workSpaceDetail.resource.service_count
+                      : "-"}
+                  </td>
                   <th>CronJob</th>
-                  <td>{workSpaceDetail.resource.cronjob_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.cronjob_count
+                      ? workSpaceDetail.resource.cronjob_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Job</th>
-                  <td>{workSpaceDetail.resource.job_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.job_count
+                      ? workSpaceDetail.resource.job_count
+                      : "-"}
+                  </td>
                   <th>Volume</th>
-                  <td>{workSpaceDetail.resource.volume_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.volume_count
+                      ? workSpaceDetail.resource.volume_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Statefulset</th>
-                  <td>{workSpaceDetail.resource.Statefulset_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.Statefulset_count
+                      ? workSpaceDetail.resource.Statefulset_count
+                      : "-"}
+                  </td>
                   <th>Daemonset</th>
-                  <td>{workSpaceDetail.resource.daemonset_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.daemonset_count
+                      ? workSpaceDetail.resource.daemonset_count
+                      : "-"}
+                  </td>
                 </tr>
               </>
             ) : (
-              <></>
+              <LabelContainer>
+                <p>No Resource Info.</p>
+              </LabelContainer>
             )}
           </tbody>
         </table>
@@ -268,20 +279,44 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr className="tb_workload_detail_th">
-                <th>Workspace Name</th>
-                <td>{workSpaceDetail.workspaceName}</td>
-                <th>Description</th>
-                <td>{workSpaceDetail.workspaceDescription}</td>
-              </tr>
-              <tr>
-                <th>Cluster Name</th>
-                <td style={{ whiteSpace: "pre-wrap" }}>
-                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
-                </td>
-                <th>Creator</th>
-                <td>{workSpaceDetail.memberName}</td>
-              </tr>
+              {workSpaceDetail ? (
+                <>
+                  <tr className="tb_workload_detail_th">
+                    <th>Workspace Name</th>
+                    <td>
+                      {workSpaceDetail.workspaceName
+                        ? workSpaceDetail.workspaceName
+                        : "-"}
+                    </td>
+                    <th>Description</th>
+                    <td>
+                      {workSpaceDetail.workspaceDescription
+                        ? workSpaceDetail.workspaceDescription
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Cluster Name</th>
+                    <td style={{ whiteSpace: "pre-wrap" }}>
+                      {selectClusterInfo
+                        ? selectClusterInfo.map(
+                            (item) => item.clusterName + "\n"
+                          )
+                        : "-"}
+                    </td>
+                    <th>Creator</th>
+                    <td>
+                      {workSpaceDetail.memberName
+                        ? workSpaceDetail.memberName
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>
@@ -297,20 +332,22 @@ const Detail = observer(() => {
                         <tr>
                           <th style={{ width: "307px" }}>CPU</th>
                           <td style={{ width: "307px" }}>
-                            {dataUsage?.cpu_usage}
+                            {dataUsage?.cpu_usage ? dataUsage?.cpu_usage : "-"}
                           </td>
-                        </tr>
-                        <tr>
                           <th style={{ width: "307px" }}>MEMORY</th>
                           <td style={{ width: "307px" }}>
-                            {dataUsage?.memory_usage}
+                            {dataUsage?.memory_usage
+                              ? dataUsage?.memory_usage
+                              : "-"}
                           </td>
                         </tr>
                       </tbody>
                     </table>
                   </>
                 ) : (
-                  <>-</>
+                  <LabelContainer>
+                    <p>No Resource Usage Info.</p>
+                  </LabelContainer>
                 )}
               </td>
             </tr>

@@ -186,7 +186,7 @@ class Project {
           });
         });
     } catch (e) {
-      this.projectDetail = { projectName: projectName };
+      this.projectDetail = null;
       this.detailInfo = [{}];
       this.workspace = {};
       this.labels = null;
