@@ -17,8 +17,18 @@ const CronJobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { viewList, cronJobList, cronJobDetail, totalElements, loadCronJobList, loadCronJobDetail, currentPage, totalPages, goPrevPage, goNextPage } =
-    cronJobStore;
+  const {
+    viewList,
+    cronJobList,
+    cronJobDetail,
+    totalElements,
+    loadCronJobList,
+    loadCronJobDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+  } = cronJobStore;
 
   const [columDefs] = useState([
     {
@@ -71,7 +81,7 @@ const CronJobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -86,7 +96,7 @@ const CronJobListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadCronJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadCronJobList}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

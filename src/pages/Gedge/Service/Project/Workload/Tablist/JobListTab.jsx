@@ -17,7 +17,18 @@ const JobListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { viewList, jobList, jobDetail, totalElements, loadJobList, loadJobDetail, currentPage, totalPages, goPrevPage, goNextPage } = jobStore;
+  const {
+    viewList,
+    jobList,
+    jobDetail,
+    totalElements,
+    loadJobList,
+    loadJobDetail,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+  } = jobStore;
 
   const [columDefs] = useState([
     {
@@ -70,7 +81,7 @@ const JobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -85,7 +96,7 @@ const JobListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadJobList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadJobList}>
             <CCreateButton>생성</CCreateButton>
           </CommActionBar>
 

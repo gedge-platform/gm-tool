@@ -120,9 +120,9 @@ class ServiceAdminDashboard {
           this.deploymentMetrics = res.data?.items?.deployment_count[0].values;
           this.podMetrics = res.data?.items?.pod_count[0].values;
           this.volumeMetrics = res.data?.items?.pv_count[0].values;
+          this.serviceMetrics = res.data?.items?.service_count[0].values;
           this.cronjobMetrics = res.data?.items?.cronjob_count[0].values;
           this.daemonsetMetrics = res.data?.items?.daemonset_count[0].values;
-          this.serviceMetrics = res.data?.items?.service_count[0].values;
           this.statefulsetMetrics =
             res.data?.items?.statefulset_count[0].values;
         });
