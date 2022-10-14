@@ -78,13 +78,13 @@ class PlatformProject {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -117,18 +117,19 @@ class PlatformProject {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
-  setPlatformProjectList = (list) => {
+  setPlatformProjectList = list => {
     runInAction(() => {
       this.platformProjectList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.platformProjectList[n];
     });
@@ -139,7 +140,7 @@ class PlatformProject {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           this.platformProjectList = res.data.data;
           this.platformDetail = res.data.data[0];
@@ -154,10 +155,7 @@ class PlatformProject {
         this.convertList(this.platformProjectList, this.setPlatformProjectList);
       })
       .then(() => {
-        this.loadPlatformProjectDetail(
-          this.viewList[0].projectName,
-          this.viewList[0].clusterName
-        );
+        this.loadPlatformProjectDetail(this.viewList[0].projectName, this.viewList[0].clusterName);
         // this.loadCluster(
         //   this.viewList[0].projectName,
         //   this.viewList[0].clusterName
@@ -168,27 +166,23 @@ class PlatformProject {
   };
 
   loadPlatformProjectDetail = async (projectName, clusterName) => {
-    await axios
-      .get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`)
-      .then((res) => {
-        runInAction(() => {
-          this.platformProjectDetail = res.data;
-          this.detailInfo = res.data.DetailInfo;
-          this.labels = this.detailInfo.labels ? this.detailInfo.labels : "-";
+    await axios.get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`).then(res => {
+      runInAction(() => {
+        this.platformProjectDetail = res.data;
+        this.detailInfo = res.data.DetailInfo;
+        this.labels = this.detailInfo.labels ? this.detailInfo.labels : "-";
 
-          this.annotations = this.detailInfo.annotations;
-          this.resource = this.detailInfo.resource;
-          this.evetns = res.data.events;
-          // if (data.events !== null) {
-          //   this.events = data.events;
-          // } else {
-          //   this.events = null;
-          // }
-          this.resourceUsage = this.detailInfo.resourceUsage
-            ? this.detailInfo.resourceUsage
-            : 0;
-        });
+        this.annotations = this.detailInfo.annotations;
+        this.resource = this.detailInfo.resource;
+        this.evetns = res.data.events;
+        // if (data.events !== null) {
+        //   this.events = data.events;
+        // } else {
+        //   this.events = null;
+        // }
+        this.resourceUsage = this.detailInfo.resourceUsage ? this.detailInfo.resourceUsage : 0;
       });
+    });
   };
 
   // loadCluster = async (projectName, clusterName) => {
