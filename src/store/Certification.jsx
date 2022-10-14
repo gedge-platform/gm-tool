@@ -223,7 +223,7 @@ class Certification {
   loadCertificationDetail = async (certId) => {
     await axios.get(`${SERVER_URL}/certifications/${certId}`).then((res) => {
       runInAction(() => {
-        console.log("detail", res);
+        console.log(res);
         this.certificationDetail = res.data;
       });
       console.log(this.certificationDetail);

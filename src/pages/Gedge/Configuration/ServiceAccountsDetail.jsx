@@ -88,11 +88,11 @@ const ServiceAccountsDetail = observer(() => {
             <tbody>
               <tr>
                 <th style={{ width: "15%" }}>Name</th>
-                <td>{name}</td>
+                <td>{name ? name : "-"}</td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{dateFormatter(createAt)}</td>
+                <td>{createAt ? dateFormatter(createAt) : "-"}</td>
               </tr>
             </tbody>
           </table>
@@ -107,7 +107,7 @@ const ServiceAccountsDetail = observer(() => {
                   {secrets !== null ? (
                     secrets.map((secret) => secret.name + "\n")
                   ) : (
-                    <></>
+                    <>-</>
                   )}
                 </td>
               </tr>

@@ -49,7 +49,8 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } = serviceStore;
+  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
+    serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -74,58 +75,85 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th style={{ width: "25%" }}>Service Name</th>
-                <td>{serviceDetail.name}</td>
-              </tr>
-              <tr>
-                <th>Cluster</th>
-                <td>{serviceDetail.cluster}</td>
-              </tr>
-              <tr>
-                <th>Project</th>
-                <td>{serviceDetail.project}</td>
-              </tr>
-              <tr>
-                <th>Selector</th>
-                <td>
-                  {serviceDetail.selector ? (
-                    Object.entries(serviceDetail.selector).map(([key, value]) => (
-                      <>
-                        <table className="tb_data" style={{ width: "50%" }}>
-                          <tbody>
-                            <tr>
-                              <th>{key}</th>
-                            </tr>
-                            <tr>
-                              <td>{value}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        <br />
-                      </>
-                    ))
-                  ) : (
-                    <>-</>
-                  )}
-                </td>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <td>{serviceDetail.type}</td>
-              </tr>
-              <tr>
-                <th>Cluster IP</th>
-                <td>{serviceDetail.clusterIp}</td>
-              </tr>
-              <tr>
-                <th>Session Affinity</th>
-                <td>{serviceDetail.sessionAffinity}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{dateFormatter(serviceDetail.createAt)}</td>
-              </tr>
+              {serviceDetail ? (
+                <>
+                  <tr>
+                    <th style={{ width: "25%" }}>Service Name</th>
+                    <td>{serviceDetail.name ? serviceDetail.name : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Cluster</th>
+                    <td>
+                      {serviceDetail.cluster ? serviceDetail.cluster : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Project</th>
+                    <td>
+                      {serviceDetail.project ? serviceDetail.project : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Selector</th>
+                    <td>
+                      {serviceDetail.selector ? (
+                        Object.entries(serviceDetail.selector).map(
+                          ([key, value]) => (
+                            <>
+                              <table
+                                className="tb_data"
+                                style={{ width: "50%" }}
+                              >
+                                <tbody>
+                                  <tr>
+                                    <th>{key}</th>
+                                  </tr>
+                                  <tr>
+                                    <td>{value}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <br />
+                            </>
+                          )
+                        )
+                      ) : (
+                        <>-</>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Type</th>
+                    <td>{serviceDetail.type ? serviceDetail.type : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Cluster IP</th>
+                    <td>
+                      {serviceDetail.clusterIp ? serviceDetail.clusterIp : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Session Affinity</th>
+                    <td>
+                      {serviceDetail.sessionAffinity
+                        ? serviceDetail.sessionAffinity
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {serviceDetail.createAt
+                        ? dateFormatter(serviceDetail.createAt)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>
@@ -138,7 +166,7 @@ const Detail = observer(() => {
               <p>No Pods Info.</p>
             </LabelContainer>
           ) : (
-            involvesPods.map(pod => (
+            involvesPods.map((pod) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
@@ -163,7 +191,7 @@ const Detail = observer(() => {
           <br />
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads !== null ? (
-            involvesWorkloads.map(workload => (
+            involvesWorkloads.map((workload) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
@@ -177,7 +205,9 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>Replica Name</th>
-                      <td>{workload?.replicaName ? workload?.replicaName : "-"}</td>
+                      <td>
+                        {workload?.replicaName ? workload?.replicaName : "-"}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -193,27 +223,33 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp.map(port => (
-            <>
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th>Name</th>
-                    <td>{port?.name ? port?.name : "-"}</td>
-                    <th>Port</th>
-                    <td>{port?.port ? port?.port : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Protocol</th>
-                    <td>{port?.protocol ? port?.protocol : "-"}</td>
-                    <th>TargetPort</th>
-                    <td>{port?.targetPort ? port?.targetPort : "-"}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </>
-          ))}
+          {portTemp ? (
+            portTemp.map((port) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th>Name</th>
+                      <td>{port?.name ? port?.name : "-"}</td>
+                      <th>Port</th>
+                      <td>{port?.port ? port?.port : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Protocol</th>
+                      <td>{port?.protocol ? port?.protocol : "-"}</td>
+                      <th>TargetPort</th>
+                      <td>{port?.targetPort ? port?.targetPort : "-"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Port Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

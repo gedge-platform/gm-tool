@@ -1500,6 +1500,18 @@ const globalStyles = createGlobalStyle`
   height: 100%;
 }
 
+.tb_job_detail_th{
+  th,td {
+    width: 70%;
+  }
+}
+
+.tb_job_detail_resource_th{
+  tr,th,td {
+    width: 70%;
+  }
+}
+
 //map-----------------------
 .leaflet-container {
   width: 100%;

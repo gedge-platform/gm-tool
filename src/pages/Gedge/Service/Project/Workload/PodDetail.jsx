@@ -120,32 +120,9 @@ const Detail = observer(() => {
                   </tr>
                 </>
               ) : (
-                <>
-                  <tr>
-                    <th className="tb_workload_detail_th">Name</th>
-                    <td>-</td>
-                    <th>Cluster</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>-</td>
-                    <th>Status</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Pod IP</th>
-                    <td>-</td>
-                    <th>Node Name</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Qos Class</th>
-                    <td>-</td>
-                    <th>Created</th>
-                    <td>-</td>
-                  </tr>
-                </>
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
               )}
             </tbody>
           </table>
@@ -154,120 +131,126 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container" style={{ tableLayout: "fixed" }}>
           <TableTitle>Pod Containers</TableTitle>
-          {podContainers.map((pod) => (
-            <>
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th style={{ width: "20%" }}>Name</th>
-                    <td>{pod?.name}</td>
-                  </tr>
-                  <tr>
-                    <th>image</th>
-                    <td>{pod?.image}</td>
-                  </tr>
-                  <tr>
-                    <th>Ports</th>
-                    <td>
-                      {pod?.ports ? (
+          {podContainers ? (
+            podContainers.map((pod) => (
+              <>
+                <table className="tb_data">
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "20%" }}>Name</th>
+                      <td>{pod?.name ? pod?.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>image</th>
+                      <td>{pod?.image ? pod?.image : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Ports</th>
+                      <td>
+                        {pod?.ports ? (
+                          <>
+                            <table className="tb_data">
+                              <tbody className="tb_services_detail_th">
+                                <tr>
+                                  <th>Name</th>
+                                  <th>ContainerPort</th>
+                                  <th>Protocol</th>
+                                </tr>
+                                {pod?.ports.map((port) => (
+                                  <tr>
+                                    <td>{port?.name ? port.name : "-"}</td>
+                                    <td>
+                                      {port?.containerPort
+                                        ? port.containerPort
+                                        : "-"}
+                                    </td>
+                                    <td>
+                                      {port?.protocol ? port.protocol : "-"}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            <br />
+                          </>
+                        ) : (
+                          <>-</>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Volumemounts</th>
+                      <td>
                         <>
                           <table className="tb_data">
                             <tbody className="tb_services_detail_th">
                               <tr>
                                 <th>Name</th>
-                                <th>ContainerPort</th>
-                                <th>Protocol</th>
+                                <th>Mountpath</th>
+                                <th>readonly</th>
                               </tr>
-                              {pod?.ports.map((port) => (
+                              {pod?.volumemounts.map((vol) => (
                                 <tr>
-                                  <td>{port?.name ? port.name : "-"}</td>
-                                  <td>
-                                    {port?.containerPort
-                                      ? port.containerPort
-                                      : "-"}
-                                  </td>
-                                  <td>
-                                    {port?.protocol ? port.protocol : "-"}
-                                  </td>
+                                  <td>{vol.name ? vol.name : "-"}</td>
+                                  <td>{vol.mountpath ? vol.mountpath : "-"}</td>
+                                  <td>{vol.readonly ? "true" : "false"}</td>
                                 </tr>
                               ))}
                             </tbody>
                           </table>
                           <br />
                         </>
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Volumemounts</th>
-                    <td>
-                      <>
-                        <table className="tb_data">
-                          <tbody className="tb_services_detail_th">
-                            <tr>
-                              <th>Name</th>
-                              <th>Mountpath</th>
-                              <th>readonly</th>
-                            </tr>
-                            {pod?.volumemounts.map((vol) => (
-                              <tr>
-                                <td>{vol.name ? vol.name : "-"}</td>
-                                <td>{vol.mountpath ? vol.mountpath : "-"}</td>
-                                <td>{vol.readonly ? "true" : "false"}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <br />
-                      </>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Environment</th>
-                    <td>
-                      {/* 배열은 length */}
-                      {pod?.env?.length >= 1 ? (
-                        <>
-                          <table className="tb_data">
-                            <tbody className="tb_resources_detail_th">
-                              <tr>
-                                <th>Name</th>
-                                <th>Value</th>
-                              </tr>
-                              {pod.env?.map((item) => (
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Environment</th>
+                      <td>
+                        {/* 배열은 length */}
+                        {pod?.env?.length >= 1 ? (
+                          <>
+                            <table className="tb_data">
+                              <tbody className="tb_resources_detail_th">
                                 <tr>
-                                  <td>{item.name ? item.name : <>-</>}</td>
-                                  <td>{item.value ? item.value : <>-</>}</td>
+                                  <th>Name</th>
+                                  <th>Value</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          <br />
-                        </>
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>ready</th>
-                    <td> {pod?.ready ? "true" : "false"}</td>
-                  </tr>
-                  <tr>
-                    <th>restartCount</th>
-                    <td>{podDetail?.restart}</td>
-                  </tr>
-                  <tr>
-                    <th>started</th>
-                    <td>{pod?.started ? "true" : "false"}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </>
-          ))}
+                                {pod.env?.map((item) => (
+                                  <tr>
+                                    <td>{item.name ? item.name : <>-</>}</td>
+                                    <td>{item.value ? item.value : <>-</>}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            <br />
+                          </>
+                        ) : (
+                          <>-</>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>ready</th>
+                      <td> {pod?.ready ? "true" : "false"}</td>
+                    </tr>
+                    <tr>
+                      <th>restartCount</th>
+                      <td>{podDetail?.restart ? podDetail?.restart : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>started</th>
+                      <td>{pod?.started ? "true" : "false"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Resource Info.</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
@@ -317,11 +300,11 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th>containerID</th>
-                      <td>{status?.containerID}</td>
+                      <td>{status?.containerID ? status?.containerID : "-"}</td>
                     </tr>
                     <tr>
                       <th>Name</th>
-                      <td>{status?.name}</td>
+                      <td>{status?.name ? status?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>Ready</th>
@@ -329,11 +312,13 @@ const Detail = observer(() => {
                     </tr>
                     <tr>
                       <th>RestartCount</th>
-                      <td>{status?.restartCount}</td>
+                      <td>
+                        {status?.restartCount ? status?.restartCount : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>Image</th>
-                      <td>{status?.image}</td>
+                      <td>{status?.image ? status?.image : "-"}</td>
                     </tr>
                     <tr>
                       <th>started</th>

@@ -115,8 +115,6 @@ const WorkspaceDetail = observer(() => {
     changeProject(e.target.value);
   };
 
-  console.log(workSpaceDetail);
-
   const clusterResourceTable = () => {
     return (
       <>
@@ -148,65 +146,39 @@ const WorkspaceDetail = observer(() => {
         <>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody className="project_table">
+              {/* <tr>
+                  <> */}
               <tr>
-                {detailInfo ? (
-                  <>
-                    <tr>
-                      <th> Name</th>
-                      <td>{project?.projectName}</td>
-                      <th>Cluster</th>
-                      <td style={{ whiteSpace: "pre-wrap" }}>
-                        {selectClusterInfo.map(
-                          (item) => item.clusterName + "\n"
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td>{dateFormatter(project?.created_at)}</td>
-                      <th>Creator</th>
-                      <td>
-                        {project?.projectCreator
-                          ? project?.projectCreator
-                          : "-"}
-                      </td>
-                    </tr>
-                  </>
-                ) : (
-                  <></>
-                )}
+                <th> Name</th>
+                <td>{project?.projectName}</td>
+                <th>Cluster</th>
+                <td style={{ whiteSpace: "pre-wrap" }}>
+                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
+                </td>
               </tr>
+              <tr>
+                <th>Created</th>
+                <td>
+                  {project?.created_at
+                    ? dateFormatter(project?.created_at)
+                    : "-"}
+                </td>
+                <th>Creator</th>
+                <td>
+                  {project?.projectCreator ? project?.projectCreator : "-"}
+                </td>
+              </tr>
+              {/* </>
+              </tr> */}
             </tbody>
           </table>
           <br />
         </>
       ))
     ) : (
-      <>
-        <table className="tb_data" style={{ tableLayout: "fixed" }}>
-          <tbody className="project_table">
-            <tr>
-              {
-                <>
-                  <tr>
-                    <th> Name</th>
-                    <td>-</td>
-                    <th>Cluster</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>-</td>
-                    <th>Creator</th>
-                    <td>-</td>
-                  </tr>
-                </>
-              }
-            </tr>
-          </tbody>
-        </table>
-        <br />
-      </>
+      <LabelContainer>
+        <p>No Detail Info.</p>
+      </LabelContainer>
     );
   };
 
@@ -270,20 +242,44 @@ const WorkspaceDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr className="tb_workload_detail_th">
-                <th>Workspace Name</th>
-                <td>{workSpaceDetail.workspaceName}</td>
-                <th>Description</th>
-                <td>{workSpaceDetail.workspaceDescription}</td>
-              </tr>
-              <tr>
-                <th>Cluster Name</th>
-                <td style={{ whiteSpace: "pre-wrap" }}>
-                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
-                </td>
-                <th>Creator</th>
-                <td>{workSpaceDetail.memberName}</td>
-              </tr>
+              {workSpaceDetail ? (
+                <>
+                  <tr className="tb_workload_detail_th">
+                    <th>Workspace Name</th>
+                    <td>
+                      {workSpaceDetail.workspaceName
+                        ? workSpaceDetail.workspaceName
+                        : "-"}
+                    </td>
+                    <th>Description</th>
+                    <td>
+                      {workSpaceDetail.workspaceDescription
+                        ? workSpaceDetail.workspaceDescription
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Cluster Name</th>
+                    <td style={{ whiteSpace: "pre-wrap" }}>
+                      {selectClusterInfo
+                        ? selectClusterInfo.map(
+                            (item) => item.clusterName + "\n"
+                          )
+                        : "-"}
+                    </td>
+                    <th>Creator</th>
+                    <td>
+                      {workSpaceDetail.memberName
+                        ? workSpaceDetail.memberName
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>
@@ -299,13 +295,15 @@ const WorkspaceDetail = observer(() => {
                         <tr>
                           <th style={{ width: "307px" }}>CPU</th>
                           <td style={{ width: "307px" }}>
-                            {dataUsage?.cpu_usage}
+                            {dataUsage?.cpu_usage ? dataUsage?.cpu_usage : "-"}
                           </td>
                         </tr>
                         <tr>
                           <th style={{ width: "307px" }}>MEMORY</th>
                           <td style={{ width: "307px" }}>
-                            {dataUsage?.memory_usage}
+                            {dataUsage?.memory_usage
+                              ? dataUsage?.memory_usage
+                              : "-"}
                           </td>
                         </tr>
                       </tbody>

@@ -301,40 +301,56 @@ const CreateUserDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Project Name</th>
-                <td>{projectDetail.projectName}</td>
-                <th>Project Type</th>
-                <td>
-                  {projectDetail.projectType ? projectDetail.projectType : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th className="tb_workload_detail_th">Workspace Name</th>
-                <td>
-                  {workspace.workspaceName ? workspace.workspaceName : "-"}
-                </td>
-                <th>Workspace Description</th>
-                <td>
-                  {workspace.workspaceDescription
-                    ? workspace.workspaceDescription
-                    : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>Cluster Name</th>
-                <td>
-                  {selectClusterInfo
-                    ? selectClusterInfo?.map(
-                        (cluster) => cluster.clusterName + " "
-                      )
-                    : "-"}
-                </td>
-                <th>Creator</th>
-                <td>
-                  {projectDetail.memberName ? projectDetail.memberName : "-"}
-                </td>
-              </tr>
+              {projectDetail ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Project Name</th>
+                    <td>
+                      {projectDetail.projectName
+                        ? projectDetail.projectName
+                        : "-"}
+                    </td>
+                    <th>Project Type</th>
+                    <td>
+                      {projectDetail.projectType
+                        ? projectDetail.projectType
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="tb_workload_detail_th">Workspace Name</th>
+                    <td>
+                      {workspace.workspaceName ? workspace.workspaceName : "-"}
+                    </td>
+                    <th>Workspace Description</th>
+                    <td>
+                      {workspace.workspaceDescription
+                        ? workspace.workspaceDescription
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Cluster Name</th>
+                    <td>
+                      {selectClusterInfo
+                        ? selectClusterInfo?.map(
+                            (cluster) => cluster.clusterName + " "
+                          )
+                        : "-"}
+                    </td>
+                    <th>Creator</th>
+                    <td>
+                      {projectDetail.memberName
+                        ? projectDetail.memberName
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
           <br />

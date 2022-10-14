@@ -51,7 +51,15 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { labels, annotations, events, resource, resourceUsage, detailInfo, platformProjectDetail } = platformProjectStore;
+  const {
+    labels,
+    annotations,
+    events,
+    resource,
+    resourceUsage,
+    detailInfo,
+    platformProjectDetail,
+  } = platformProjectStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -79,24 +87,54 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Project Name</th>
-                <td>{platformProjectDetail.projectName}</td>
-                <th className="tb_workload_detail_th">Cluster Name</th>
-                <td>{detailInfo.clusterName}</td>
-              </tr>
-              <tr>
-                <th>Status</th>
-                <td>{platformProjectDetail.status}</td>
-                <th>Created</th>
-                <td>{dateFormatter(platformProjectDetail.created_at)}</td>
-              </tr>
-              <tr>
-                <th>CPU Usage</th>
-                <td>{resourceUsage.namespace_cpu !== null ? resourceUsage.namespace_cpu : 0}</td>
-                <th>Memory Usage</th>
-                <td>{resourceUsage.namespace_memory !== null ? resourceUsage.namespace_memory : 0}</td>
-              </tr>
+              {platformProjectDetail ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Project Name</th>
+                    <td>
+                      {platformProjectDetail.projectName
+                        ? platformProjectDetail.projectName
+                        : "-"}
+                    </td>
+                    <th className="tb_workload_detail_th">Cluster Name</th>
+                    <td>
+                      {detailInfo.clusterName ? detailInfo.clusterName : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Status</th>
+                    <td>
+                      {platformProjectDetail.status
+                        ? platformProjectDetail.status
+                        : "-"}
+                    </td>
+                    <th>Created</th>
+                    <td>
+                      {platformProjectDetail.created_at
+                        ? dateFormatter(platformProjectDetail.created_at)
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>CPU Usage</th>
+                    <td>
+                      {resourceUsage.namespace_cpu
+                        ? resourceUsage.namespace_cpu
+                        : 0}
+                    </td>
+                    <th>Memory Usage</th>
+                    <td>
+                      {resourceUsage.namespace_memory
+                        ? resourceUsage.namespace_memory
+                        : 0}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>
@@ -105,30 +143,58 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Deployment</th>
-                <td>{resource.namespace_count}</td>
-                <th className="tb_workload_detail_th">Deployment</th>
-                <td>{resource.deployment_count}</td>
-                <th className="tb_workload_detail_th">Pod</th>
-                <td>{resource.pod_count}</td>
-              </tr>
-              <tr>
-                <th>Service</th>
-                <td>{resource.service_count}</td>
-                <th>Job</th>
-                <td>{resource.job_count}</td>
-                <th>CronJob</th>
-                <td>{resource.cronjob_count}</td>
-              </tr>
-              <tr>
-                <th>Daemonset</th>
-                <td>{resource.daemonset_count}</td>
-                <th>Statefulset</th>
-                <td>{resource.statefulset_count}</td>
-                <th>Volume</th>
-                <td>{resource.pv_count}</td>
-              </tr>
+              {resource ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Deployment</th>
+                    <td>
+                      {resource.namespace_count
+                        ? resource.namespace_count
+                        : "-"}
+                    </td>
+                    <th className="tb_workload_detail_th">Deployment</th>
+                    <td>
+                      {resource.deployment_count
+                        ? resource.deployment_count
+                        : "-"}
+                    </td>
+                    <th className="tb_workload_detail_th">Pod</th>
+                    <td>{resource.pod_count ? resource.pod_count : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Service</th>
+                    <td>
+                      {resource.service_count ? resource.service_count : "-"}
+                    </td>
+                    <th>Job</th>
+                    <td>{resource.job_count ? resource.job_count : "-"}</td>
+                    <th>CronJob</th>
+                    <td>
+                      {resource.cronjob_count ? resource.cronjob_count : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Daemonset</th>
+                    <td>
+                      {resource.daemonset_count
+                        ? resource.daemonset_count
+                        : "-"}
+                    </td>
+                    <th>Statefulset</th>
+                    <td>
+                      {resource.statefulset_count
+                        ? resource.statefulset_count
+                        : "-"}
+                    </td>
+                    <th>Volume</th>
+                    <td>{resource.pv_count ? resource.pv_count : "-"}</td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Resources Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>

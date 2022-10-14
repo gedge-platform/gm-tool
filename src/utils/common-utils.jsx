@@ -11,7 +11,11 @@ export const agDateColumnFilter = () => {
       const dateAsString = cellValue;
       if (dateAsString == null) return -1;
       const dateParts = dateAsString.split("/");
-      const cellDate = new Date(Number(dateParts[0]), Number(dateParts[1]) - 1, Number(dateParts[2]));
+      const cellDate = new Date(
+        Number(dateParts[0]),
+        Number(dateParts[1]) - 1,
+        Number(dateParts[2])
+      );
       if (filterLocalDateAtMidnight.getTime() === cellDate.getTime()) {
         return 0;
       }
@@ -28,7 +32,7 @@ export const agDateColumnFilter = () => {
   };
 };
 
-export const Toastify = message => {
+export const Toastify = (message) => {
   toast.info(message);
 };
 
@@ -43,11 +47,11 @@ export const randomString = () => {
   return randomstring;
 };
 
-export const nullCheck = str => {
+export const nullCheck = (str) => {
   return str ?? "Null";
 };
 
-export const isValidJSON = text => {
+export const isValidJSON = (text) => {
   if (text === "true" || parseInt(text) || text === "0") return false;
   try {
     JSON.parse(text);
@@ -57,29 +61,31 @@ export const isValidJSON = text => {
   }
 };
 
-export const dateFormatter = date => {
+export const dateFormatter = (date) => {
   return dayjs(new Date(date)).format("YYYY-MM-DD HH:mm");
 };
 
 export const strFormatByLength = (str, length = 200) => {
-  if (str.length >= length) return `${str.substr(0, length)}...`;
+  if (str === undefined) {
+    console.log("dshkasdjksad");
+  } else if (str.length >= length) return `${str.substr(0, length)}...`;
   return str;
 };
 
 export const duplicateCheck = async (name, type) => {
   return await axios
     .get(
-      `${SERVER_URL}/duplicateCheck/${name}?type=${type}`,
+      `${SERVER_URL}/duplicateCheck/${name}?type=${type}`
       // , {
       //   auth: BASIC_AUTH,
       // }
     )
-    .then(res => {
+    .then((res) => {
       if (res.status === 200) {
         return true;
       }
     })
-    .catch(err => {
+    .catch((err) => {
       return false;
     });
 };
