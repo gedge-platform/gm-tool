@@ -119,23 +119,11 @@ const Detail = observer(() => {
     return detailInfo.map((cluster) => (
       <>
         <ClusterTitle>{cluster.clusterName}</ClusterTitle>
-        <table className="tb_data">
-          <tbody className="tb_workload_detail_th">
-            <tr>
-              {cluster?.resourceUsage ? (
+        {cluster?.resourceUsage ? (
+          <table className="tb_data">
+            <tbody className="tb_workload_detail_th">
+              <tr>
                 <>
-                  {/* <th>CPU</th>
-                  <td>
-                    {cluster?.resourceUsage?.cpu_usage
-                      ? cluster?.resourceUsage?.cpu_usage
-                      : "-"}
-                  </td>
-                  <th>MEMORY</th>
-                  <td>
-                    {cluster?.resourceUsage?.memory_usage
-                      ? cluster?.resourceUsage?.memory_usage
-                      : "-"}
-                  </td> */}
                   <th>CPU</th>
                   <td>
                     {cluster?.resourceUsage?.namespace_cpu
@@ -149,14 +137,14 @@ const Detail = observer(() => {
                       : "-"}
                   </td>
                 </>
-              ) : (
-                <LabelContainer>
-                  <p>No Resource Usage Info.</p>
-                </LabelContainer>
-              )}
-            </tr>
-          </tbody>
-        </table>
+              </tr>
+            </tbody>
+          </table>
+        ) : (
+          <LabelContainer>
+            <p>No Resource Usage Info.</p>
+          </LabelContainer>
+        )}
         <br />
       </>
     ));
@@ -166,9 +154,9 @@ const Detail = observer(() => {
     return detailInfo.map((resources) => (
       <>
         <ClusterTitle>{resources.clusterName}</ClusterTitle>
-        <table className="tb_data" style={{ tableLayout: "fixed" }}>
-          <tbody>
-            {resources?.resource ? (
+        {resources?.resource ? (
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
               <>
                 <tr>
                   <th>Deployment</th>
@@ -227,13 +215,13 @@ const Detail = observer(() => {
                   </td>
                 </tr>
               </>
-            ) : (
-              <LabelContainer>
-                <p>No Resources Info.</p>
-              </LabelContainer>
-            )}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        ) : (
+          <LabelContainer>
+            <p>No Resources Info.</p>
+          </LabelContainer>
+        )}
         <br />
       </>
     ));
@@ -253,9 +241,9 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {projectDetail ? (
+          {projectDetail ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
                 <>
                   <tr>
                     <th className="tb_workload_detail_th">Project Name</th>
@@ -272,10 +260,6 @@ const Detail = observer(() => {
                     </td>
                   </tr>
                   <tr>
-                    {/* <th className="tb_workload_detail_th">Workspace Name</th>
-                <td>{Object.values(workspace)[0]}</td>
-                <th>Workspace Description</th>
-                <td>{Object.values(workspace)[1]}</td> */}
                     <th className="tb_workload_detail_th">Workspace Name</th>
                     <td>
                       {workspace.workspaceName ? workspace.workspaceName : "-"}
@@ -304,13 +288,13 @@ const Detail = observer(() => {
                     </td>
                   </tr>
                 </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info.</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info.</p>
+            </LabelContainer>
+          )}
           <br />
           {clusterResourceTable()}
         </div>
