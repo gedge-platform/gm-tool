@@ -163,6 +163,7 @@ class StorageClass {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
@@ -273,7 +274,10 @@ class StorageClass {
       .then((res) => {
         runInAction(() => {
           console.log(res);
-          this.storageClasses = res.data.data !== null ? res.data.data : null;
+          // this.storageClasses = res.data.data !== null ? res.data.data : null;
+          // this.totalElements =
+          //   res.data.data === null ? 0 : res.data.data.length;
+          this.storageClasses = res.data.data;
           this.totalElements =
             res.data.data === null ? 0 : res.data.data.length;
         });

@@ -27,11 +27,7 @@ class Configmaps {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadconfigmapsTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadconfigmapsTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       }
     });
   };
@@ -41,22 +37,18 @@ class Configmaps {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadconfigmapsTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadconfigmapsTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -89,18 +81,19 @@ class Configmaps {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
-  setConfigmapsList = (list) => {
+  setConfigmapsList = list => {
     runInAction(() => {
       this.configmapsList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.configmapsList[n];
     });
@@ -120,37 +113,27 @@ class Configmaps {
         this.convertList(this.configmapsList, this.setConfigmapsList);
       })
       .then(() => {
-        this.loadconfigmapsTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
-        );
+        this.loadconfigmapsTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
       });
   };
 
   loadconfigmapsTabList = async (name, cluster, namespace) => {
-    await axios
-      .get(
-        `${SERVER_URL}/configmaps/${name}?cluster=${cluster}&project=${namespace}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          this.configmapsTabList = res.data.data;
-          // this.data = res.data.data;
-          // this.annotations = res.data.annotations;
-          this.configmapsData = {};
+    await axios.get(`${SERVER_URL}/configmaps/${name}?cluster=${cluster}&project=${namespace}`).then(res => {
+      runInAction(() => {
+        this.configmapsTabList = res.data.data;
+        // this.data = res.data.data;
+        // this.annotations = res.data.annotations;
+        this.configmapsData = {};
 
-          Object.entries(this.configmapsTabList?.data).map(([key, value]) => {
-            this.configmapsData[key] = value;
-          });
+        Object.entries(this.configmapsTabList?.data).map(([key, value]) => {
+          this.configmapsData[key] = value;
+        });
 
-          Object.entries(this.configmapsTabList?.annotations).map(
-            ([key, value]) => {
-              this.configmapsData[key] = value;
-            }
-          );
+        Object.entries(this.configmapsTabList?.annotations).map(([key, value]) => {
+          this.configmapsData[key] = value;
         });
       });
+    });
   };
 }
 

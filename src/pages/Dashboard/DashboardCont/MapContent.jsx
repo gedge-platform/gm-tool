@@ -30,17 +30,8 @@ const MapContent = observer(() => {
     // 지도 데이터
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const edgeInfoTemp = result.data.data.edgeInfo;
-    const nodeRunning = result.data.data.nodeRunning;
-
+    const nodeStatus = edgeInfoTemp.map((item) => item.node_status);
     const clusterNameData = edgeInfoTemp.map((item) => item.clusterName);
-    // // console.log("clusterNameData", clusterNameData);
-    // const clusterNameInNode = nodeRunning.filter(
-    //   (item, i) => item.cluster == clusterNameData[i]
-    // );
-
-    // for (let i = 0; clusterNameInNode.length > 0; i++) {}
-
-    // console.log("clusterNameInNode", clusterNameInNode);
 
     // 엣지존, 클라우드 대시보드의 클러스터 이름
     setClusterName(clusterNameData[0]);
@@ -50,11 +41,7 @@ const MapContent = observer(() => {
     setData(dataPoint);
     setDataStatus(dataStatus);
     loadMapStatus();
-
-    // nodeRunning 데이터
-    // setClusterName(clusterNameData[0]);
     loadEdgeZoneDashboard();
-    // loadEdgeZoneDetailDashboard();
 
     //지도
     mapRef.current = L.map("map", mapParams);
@@ -80,7 +67,10 @@ const MapContent = observer(() => {
                        <span class="tit">
                         Ready
                        </span>
-                       <span>5</span>
+                       <span>${
+                         nodeStatus[i].filter((item) => item.status === "Ready")
+                           .length
+                       }</span>
                      </div>
                    </td>
                  </tr>
@@ -90,7 +80,11 @@ const MapContent = observer(() => {
                        <span class="tit">
                       Not Ready
                      </span>
-                     <span>0</span>
+                     <span>${
+                       nodeStatus[i].filter(
+                         (item) => item.status === "NotReady"
+                       ).length
+                     }</span>
                      </div>
                    </td>
                  </tr>
@@ -100,146 +94,6 @@ const MapContent = observer(() => {
         );
     });
   }, []);
-
-  // useEffect(() => {
-  //   // console.log("step1");
-  //   // loadMapInfo();
-
-  //   // 지도
-  //   // mapRef.current = L.map("map", mapParams);
-
-  //   //좌표
-  //   // pointArr?.map((item) => {
-  //   //   console.log(item.y, item.x);
-  //   //   L.marker([item.y, item.x], {
-  //   //     icon: CustomIcon("green"),
-  //   //   }).addTo(mapRef.current);
-  //   // });
-
-  //   // const cluster1 = L.marker([y, x], {
-  //   //   icon: CustomIcon("green"),
-  //   // }).addTo(mapRef.current);
-  //   // const cluster2 = L.marker([37.681, 126.793], {
-  //   //   icon: CustomIcon("violet"),
-  //   // }).addTo(mapRef.current);
-  //   // const cluster = L.marker([x.map((x) => x), y.map((y) => y)]).addTo(
-  //   //   mapRef.current
-  //   // );
-  //   // const cluster3 = L.marker([37.581, 127.003], {
-  //   //   icon: CustomIcon("red"),
-  //   // }).addTo(mapRef.current);
-  //   // cluster.bindPopup(
-  //   //   `
-  //   //     <div class="leaflet-popup-title">
-  //   //       SEOUL, Republic of Korea
-  //   //     </div>
-  //   //     <div class="leaflet-popup-table">
-  //   //       <table>
-  //   //         <tr>
-  //   //           <th>Cluster</th>
-  //   //           <td>AZURE</td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <th rowspan="3">Status</th>
-  //   //           <td>
-  //   //             <div class="box run">
-  //   //               <span class="tit">실행</span><span>7</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box stop">
-  //   //               <span class="tit">중지</span><span>2</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box pause">
-  //   //               <span class="tit">일시중지</span><span>1</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //       </table>
-  //   //     </div>
-  //   //   `
-  //   // );
-  //   // cluster2.bindPopup(
-  //   //   `
-  //   //     <div class="leaflet-popup-title">
-  //   //         SEOUL, Republic of Korea
-  //   //       </div>
-  //   //     <div class="leaflet-popup-table">
-  //   //       <table>
-  //   //         <tr>
-  //   //           <th>Cluster</th>
-  //   //           <td>AZURE</td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <th rowspan="3">Status</th>
-  //   //           <td>
-  //   //             <div class="box run">
-  //   //               <span class="tit">실행</span><span>7</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box stop">
-  //   //               <span class="tit">중지</span><span>2</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box pause">
-  //   //               <span class="tit">일시중지</span><span>1</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //       </table>
-  //   //     </div>
-  //   //   `
-  //   // );
-  //   // cluster3.bindPopup(
-  //   //   `
-  //   //     <div class="leaflet-popup-title">
-  //   //       SEOUL, Republic of Korea
-  //   //     </div>
-  //   //     <div class="leaflet-popup-table">
-  //   //       <table>
-  //   //         <tr>
-  //   //           <th>Cluster</th>
-  //   //           <td>AZURE</td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <th rowspan="3">Status</th>
-  //   //           <td>
-  //   //             <div class="box run">
-  //   //               <span class="tit">실행</span><span>7</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box stop">
-  //   //               <span class="tit">중지</span><span>2</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //         <tr>
-  //   //           <td>
-  //   //             <div class="box pause">
-  //   //               <span class="tit">일시중지</span><span>1</span>
-  //   //             </div>
-  //   //           </td>
-  //   //         </tr>
-  //   //       </table>
-  //   //     </div>
-  //   //   `
-  //   // );
-  // }, []);
 
   const MAP_TILE = L.tileLayer(
     "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=0f6be85b-e0ce-41a2-af27-e96c56b394fb",
