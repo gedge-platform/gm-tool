@@ -107,13 +107,13 @@ class Cluster {
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -152,33 +152,36 @@ class Cluster {
     });
   };
 
-  setClusterList = list => {
+  setClusterList = (list) => {
     runInAction(() => {
       this.clusterList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.clusterList[n];
     });
   };
 
-  setInitViewList = n => {
+  setInitViewList = (n) => {
     runInAction(() => {
       this.viewList = [];
     });
   };
 
-  loadClusterList = async type => {
+  loadClusterList = async (type) => {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.clusterListInWorkspace = data;
-          const list = type === "" ? data : data.filter(item => item.clusterType === type);
+          const list =
+            type === ""
+              ? data
+              : data.filter((item) => item.clusterType === type);
           this.clusterList = list;
-          this.clusterNameList = list.map(item => item.clusterName);
+          this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = list.length;
         });
       })
@@ -196,9 +199,10 @@ class Cluster {
       .get(`${SERVER_URL}/spider/vmList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
+          console.log("vmlist", data);
           const list = data;
           this.clusterList = list;
-          this.clusterNameList = list.map(item => item.IId.NameId);
+          this.clusterNameList = list.map((item) => item.IId.NameId);
           this.totalElements = list.length;
         });
       })
@@ -215,7 +219,7 @@ class Cluster {
     // return
     await axios
       .post(`${SERVER_URL}/spider/vm`, body)
-      .then(res => {
+      .then((res) => {
         console.log(res);
         runInAction(() => {
           if (res.status === 201) {
@@ -224,77 +228,94 @@ class Cluster {
           }
         });
       })
-      .catch(err => false);
+      .catch((err) => false);
   };
 
   deleteVM = async (vmName, callback) => {
     axios
       .delete(`${SERVER_URL}/spider/vm/${vmName}`)
-      .then(res => {
+      .then((res) => {
         if (res.status === 201) swalError("VM을 삭제했습니다.", callback);
       })
-      .catch(err => {
+      .catch((err) => {
         swalError("삭제에 실패하였습니다.");
       });
   };
 
   /* TODO: 옳바르지 않은 클러스터 IP 예외처리 */
-  loadCluster = async clusterName => {
-    await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.clusterDetail = data;
-        this.nodes = this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+  loadCluster = async (clusterName) => {
+    await axios
+      .get(`${SERVER_URL}/clusters/${clusterName}`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.clusterDetail = data;
+          this.nodes =
+            this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+        });
       });
-    });
     return this.clusterDetail;
   };
 
-  loadClusterDetail = async clusterName => {
-    await axios.get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.clusterName = clusterName;
-        this.cloudDashboardDetail = data;
-        this.clusterInfo = data.ClusterInfo;
-        this.address = data.ClusterInfo.address;
-        this.nodeInfo = data.nodeInfo;
-        this.type = this.nodeInfo.map(val => val.type);
-        this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
-        this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
-        this.cpuUsage = data.cpuUsage;
-        this.cpuUtil = data.cpuUtil;
-        this.cpuTotal = data.cpuTotal;
-        this.memoryUsage = data.memoryUsage;
-        this.memoryUtil = data.memoryUtil;
-        this.memoryTotal = data.memoryTotal;
-        this.diskUsage = data.diskUsage;
-        this.diskUtil = data.diskUtil;
-        this.diskTotal = data.diskTotal;
-        this.resourceCnt = data.resourceCnt;
-        this.nodeRunning = data.nodeRunning;
+  loadClusterDetail = async (clusterName) => {
+    await axios
+      .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.clusterName = clusterName;
+          this.cloudDashboardDetail = data;
+          this.clusterInfo = data.ClusterInfo;
+          this.address = data.ClusterInfo.address;
+          this.nodeInfo = data.nodeInfo;
+          this.type = this.nodeInfo.map((val) => val.type);
+          this.master = this.type.reduce(
+            (cnt, element) => cnt + ("master" === element),
+            0
+          );
+          this.worker = this.type.reduce(
+            (cnt, element) => cnt + ("worker" === element),
+            0
+          );
+          this.cpuUsage = data.cpuUsage;
+          this.cpuUtil = data.cpuUtil;
+          this.cpuTotal = data.cpuTotal;
+          this.memoryUsage = data.memoryUsage;
+          this.memoryUtil = data.memoryUtil;
+          this.memoryTotal = data.memoryTotal;
+          this.diskUsage = data.diskUsage;
+          this.diskUtil = data.diskUtil;
+          this.diskTotal = data.diskTotal;
+          this.resourceCnt = data.resourceCnt;
+          this.nodeRunning = data.nodeRunning;
+        });
       });
-    });
   };
 
-  loadClusterInProject = async project => {
-    await axios.get(`${SERVER_URL}/clusters?project=${project}`).then(res => runInAction(() => (this.clusters = res.data.data)));
+  loadClusterInProject = async (project) => {
+    await axios
+      .get(`${SERVER_URL}/clusters?project=${project}`)
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
-  loadClusterInWorkspace = async workspace => {
-    await axios.get(`${SERVER_URL}/clusters?workspace=${workspace}`).then(res => runInAction(() => (this.clusters = res.data.data)));
+  loadClusterInWorkspace = async (workspace) => {
+    await axios
+      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
+      .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 
-  setDetail = num => {
+  setDetail = (num) => {
     runInAction(() => {
-      this.clusterDetail = this.clusterList.find(item => item.clusterNum === num);
+      this.clusterDetail = this.clusterList.find(
+        (item) => item.clusterNum === num
+      );
     });
   };
 
-  setClusters = clusters => {
+  setClusters = (clusters) => {
     runInAction(() => {
       this.clusters = clusters;
     });
   };
 
-  setProviderName = n => {
+  setProviderName = (n) => {
     runInAction(() => {
       this.ProviderName = n;
     });
@@ -308,7 +329,7 @@ class Cluster {
     // return
     await axios
       .post(`${SERVER_URL}/clusters`, body)
-      .then(res => {
+      .then((res) => {
         console.log("## : ", res);
         runInAction(() => {
           if (res.status === 201) {
@@ -317,16 +338,17 @@ class Cluster {
           }
         });
       })
-      .catch(err => false);
+      .catch((err) => false);
   };
 
   deleteCluster = async (ClusterName, callback) => {
     axios
       .delete(`${SERVER_URL}/clusters/${ClusterName}`)
-      .then(res => {
-        if (res.status === 200) swalError("클러스터를 제거하였습니다.", callback);
+      .then((res) => {
+        if (res.status === 200)
+          swalError("클러스터를 제거하였습니다.", callback);
       })
-      .catch(err => {
+      .catch((err) => {
         swalError("제거에 실패하였습니다.");
       });
   };

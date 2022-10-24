@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import Chart from "react-apexcharts";
 import { serviceAdminDashboardStore } from "@/store";
 
-const ServiceAdminChart = observer(props => {
+const ServiceAdminChart = observer((props) => {
   const { seriesData } = props;
   const series = seriesData;
   const { loadProjectName, resourceMetricData } = serviceAdminDashboardStore;
@@ -25,6 +25,12 @@ const ServiceAdminChart = observer(props => {
     },
     dataLabels: {
       enabled: false,
+    },
+    noData: {
+      text: "noData",
+      style: {
+        color: "#fff",
+      },
     },
     series: { seriesData },
     stroke: {

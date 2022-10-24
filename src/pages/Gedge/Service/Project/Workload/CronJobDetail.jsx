@@ -84,36 +84,54 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              <tr>
-                <th className="tb_workload_detail_th">Name</th>
-                <td>{cronJobDetail ? cronJobDetail.name : "-"}</td>
-                <th className="tb_workload_detail_th">Cluster</th>
-                <td>{cronJobDetail ? cronJobDetail.cluster : "-"}</td>
-              </tr>
-              <tr>
-                <th>Project</th>
-                <td>{cronJobDetail ? cronJobDetail.project : "-"}</td>
-                <th>Schedule</th>
-                <td>{cronJobDetail ? cronJobDetail.schedule : "-"}</td>
-              </tr>
-              <tr>
-                <th>Concurrency Policy</th>
-                <td>{cronJobDetail ? cronJobDetail.concurrencyPolicy : "-"}</td>
-                <th>Successful Jobs History Limit</th>
-                <td>
-                  {cronJobDetail
-                    ? cronJobDetail.successfulJobsHistoryLimit
-                    : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>
-                  {cronJobDetail
-                    ? dateFormatter(cronJobDetail.creationTimestamp)
-                    : "-"}
-                </td>
-              </tr>
+              {cronJobDetail ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Name</th>
+                    <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                    <th className="tb_workload_detail_th">Cluster</th>
+                    <td>
+                      {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Project</th>
+                    <td>
+                      {cronJobDetail.project ? cronJobDetail.project : "-"}
+                    </td>
+                    <th>Schedule</th>
+                    <td>
+                      {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Concurrency Policy</th>
+                    <td>
+                      {cronJobDetail.concurrencyPolicy
+                        ? cronJobDetail.concurrencyPolicy
+                        : "-"}
+                    </td>
+                    <th>Successful Jobs History Limit</th>
+                    <td>
+                      {cronJobDetail.successfulJobsHistoryLimit
+                        ? cronJobDetail.successfulJobsHistoryLimit
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {cronJobDetail.creationTimestamp
+                        ? dateFormatter(cronJobDetail.creationTimestamp)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Datail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>
@@ -127,28 +145,19 @@ const Detail = observer(() => {
                 <tbody className="tb_data_container">
                   <tr>
                     <th>Name</th>
-                    <td>{item.name}</td>
+                    <td>{item.name ? item.name : "-"}</td>
                   </tr>
                   <tr>
                     <th>Image</th>
-                    <td>{item.image}</td>
+                    <td>{item.image ? item.image : "-"}</td>
                   </tr>
                 </tbody>
               </table>
             ))
           ) : (
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody className="tb_data_container">
-                <tr>
-                  <th>Name</th>
-                  <td>-</td>
-                </tr>
-                <tr>
-                  <th>Image</th>
-                  <td>-</td>
-                </tr>
-              </tbody>
-            </table>
+            <LabelContainer>
+              <p>No Containers Info.</p>
+            </LabelContainer>
           )}
         </div>
       </CTabPanel>
@@ -201,19 +210,25 @@ const Detail = observer(() => {
                   <tbody>
                     <tr>
                       <th style={{ width: "25%" }}>Name</th>
-                      <td>{job?.name}</td>
+                      <td>{job?.name ? job?.name : "-"}</td>
                     </tr>
                     <tr>
                       <th>CompletionTime</th>
-                      <td>{dateFormatter(job?.completionTime)}</td>
+                      <td>
+                        {job?.completionTime
+                          ? dateFormatter(job?.completionTime)
+                          : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>StartTime</th>
-                      <td>{dateFormatter(job?.startTime)}</td>
+                      <td>
+                        {job?.startTime ? dateFormatter(job?.startTime) : "-"}
+                      </td>
                     </tr>
                     <tr>
                       <th>Succeeded</th>
-                      <td>{job?.succeeded}</td>
+                      <td>{job?.succeeded ? job?.succeeded : "-"}</td>
                     </tr>
                   </tbody>
                 </table>

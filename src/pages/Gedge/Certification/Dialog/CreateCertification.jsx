@@ -25,12 +25,23 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateCertification = observer(props => {
+const CreateCertification = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
-  const { CredentialName, ProviderName, ClientId, ClientSecret, IdentityEndPoint, Username, Password, DomainName, ProjectID, Region, Zone } =
-    certificationStore;
+  const {
+    CredentialName,
+    ProviderName,
+    ClientId,
+    ClientSecret,
+    IdentityEndPoint,
+    Username,
+    Password,
+    DomainName,
+    ProjectID,
+    Region,
+    Zone,
+  } = certificationStore;
 
   const { postCredential } = certificationStore;
 
@@ -45,11 +56,9 @@ const CreateCertification = observer(props => {
       return;
     }
     if (ProviderName === "AWS") {
-      console.log(ProviderName);
       setStepValue(2);
     }
     if (ProviderName === "OPENSTACK") {
-      console.log(ProviderName);
       setStepValue(2);
     } else {
       return;
@@ -141,7 +150,6 @@ const CreateCertification = observer(props => {
         Zone: Zone,
       };
       const result = await postCredential(inputs);
-      console.log("result is : ", result);
     }
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -229,7 +237,15 @@ const CreateCertification = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Credential"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create Credential"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {stepOfComponent()}
     </CDialogNew>
   );

@@ -16,7 +16,16 @@ const RequestStatusTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { requestList, loadRequestList, totalElements, currentPage, totalPages, viewList, goPrevPage, goNextPage } = requestStatusStore;
+  const {
+    requestList,
+    loadRequestList,
+    totalElements,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+  } = requestStatusStore;
 
   const [columDefs] = useState([
     {
@@ -89,7 +98,7 @@ const RequestStatusTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]} reloadFunc={loadRequestList}>
+          <CommActionBar reloadFunc={loadRequestList}>
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 

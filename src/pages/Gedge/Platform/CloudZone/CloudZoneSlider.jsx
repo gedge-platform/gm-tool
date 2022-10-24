@@ -1,14 +1,73 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { observer } from "mobx-react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import { dashboardStore } from "@/store";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination]);
 
-const CloudZoneSlider = () => {
+const CloudZoneSlider = observer(() => {
+  const {
+    loadCredentialName,
+    ConfigNameList,
+    vmStatusList,
+    loadVMStatusCnt,
+    ProviderName,
+    setVmStatusList,
+  } = dashboardStore;
+
+  useEffect(() => {
+    setVmStatusList();
+    // loadVMStatusCnt();
+    loadCredentialName();
+  }, []);
+
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
+
+  const icon = (provider) => {
+    // vmStatusList.map((vmstatus) =>
+    if (provider === "AWS") {
+      return <div className="iconBox aws">{provider}</div>;
+    } else if (provider === "OPENSTACK") {
+      return <div className="iconBox openstack">{provider}</div>;
+    }
+    // )
+  };
+
+  const vmStatus = () => {
+    return vmStatusList.map((vmstatus) => (
+      <div className="SliderBox">
+        {/* <div className="iconBox aws">{vmstatus[1]}</div> */}
+        {icon(vmstatus[1])}
+        <div className="contentsBox">
+          <div className="countBox">
+            <div class="Count">
+              2 <span>클러스터</span>
+            </div>
+            <div class="Count">
+              3 <span>VM</span>
+            </div>
+          </div>
+          <div className="StatusList">
+            <ul>
+              <li className="run">
+                <span className="tit">실행</span> <span>{vmstatus[2]}</span>
+              </li>
+              <li className="stop">
+                <span className="tit">중지</span> <span>{vmstatus[3]}</span>
+              </li>
+              <li className="pause">
+                <span className="tit">일시중지</span> <span>{vmstatus[4]}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <div className="CloudZoneSliderWrap">
@@ -26,9 +85,9 @@ const CloudZoneSlider = () => {
           nextEl: navigationNextRef.current,
         }}
         // navigation
-        onSwiper={swiper => console.log(swiper)}
+        onSwiper={(swiper) => console.log(swiper)}
         onSlideChange={() => console.log("slide change")}
-        onInit={swiper => {
+        onInit={(swiper) => {
           swiper.params.navigation.prevEl = navigationPrevRef.current;
           swiper.params.navigation.nextEl = navigationNextRef.current;
           swiper.navigation.init();
@@ -37,6 +96,7 @@ const CloudZoneSlider = () => {
       >
         <SwiperSlide>
           <div className="SliderWrap">
+            {vmStatus()}
             {/* <div className="SliderBox">
                             <div className="iconBox azure">AZURE</div>
                             <div className="contentsBox">
@@ -105,34 +165,7 @@ const CloudZoneSlider = () => {
                             </div>
                         </div> */}
 
-            <div className="SliderBox">
-              <div className="iconBox openstack">OPENSTACK</div>
-              <div className="contentsBox">
-                <div className="countBox">
-                  <div class="Count">
-                    2 <span>클러스터</span>
-                  </div>
-                  <div class="Count">
-                    3 <span>VM</span>
-                  </div>
-                </div>
-                <div className="StatusList">
-                  <ul>
-                    <li className="run">
-                      <span className="tit">실행</span> <span>8</span>
-                    </li>
-                    <li className="stop">
-                      <span className="tit">중지</span> <span>0</span>
-                    </li>
-                    <li className="pause">
-                      <span className="tit">일시중지</span> <span>0</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="SliderBox">
+            {/* <div className="SliderBox">
               <div className="iconBox aws">AWS</div>
               <div className="contentsBox">
                 <div className="countBox">
@@ -265,7 +298,7 @@ const CloudZoneSlider = () => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </SwiperSlide>
         {/* 아래는 추가를 위한 확인용 슬라이드 */}
@@ -383,5 +416,5 @@ const CloudZoneSlider = () => {
       </Swiper>
     </div>
   );
-};
+});
 export default CloudZoneSlider;
