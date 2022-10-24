@@ -184,7 +184,7 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={onClickCreateAWS}>생성</ButtonNext>
+              <ButtonNext onClick={verify}>생성</ButtonNext>
             </div>
           </div>
         </>
@@ -208,7 +208,7 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={onClickCreateOPENSTACK}>생성</ButtonNext>
+              <ButtonNext onClick={verify}>생성</ButtonNext>
             </div>
           </div>
         </>
