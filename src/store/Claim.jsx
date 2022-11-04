@@ -303,6 +303,7 @@ class Claim {
         `${SERVER_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
       .then(({ data: { data } }) => {
+        console.log(data);
         runInAction(() => {
           this.pvClaim = data;
           this.pvClaimYamlFile = "";

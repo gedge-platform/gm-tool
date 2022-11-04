@@ -62,7 +62,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
   const [tabvalue, setTabvalue] = useState(0);
 
   const { pVolume, events, annotations } = volumeStore;
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = (newValue) => {
     setTabvalue(newValue);
   };
   const labelTable = [];

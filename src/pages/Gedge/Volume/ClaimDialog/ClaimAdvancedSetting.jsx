@@ -39,7 +39,7 @@ const Span = styled.span`
   background-color: #fff;
 `;
 
-const VolumeAdvancedSetting = observer(() => {
+const ClaimAdvancedSetting = observer(() => {
   const {
     labels,
     setLabels,
@@ -55,8 +55,19 @@ const VolumeAdvancedSetting = observer(() => {
     setAnnotations,
   } = claimStore;
 
+  console.log(labels);
+
   const [labelsNextId, setLabelsNextId] = useState(1);
   const [annotationsNextId, setAnnotationsNextId] = useState(1);
+
+  // const handleChange = (e) => {
+  //   const { value, name } = e.target;
+  //   setLabels({
+  //     ...labels,
+  //     [name]: value,
+  //   });
+  //   console.log(labels);
+  // };
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -88,20 +99,23 @@ const VolumeAdvancedSetting = observer(() => {
   // };
 
   const addLabels = () => {
-    // let inputLabelKey = "";
-    // let inputLabelValue = "";
-    const newLabelsList = labels.concat({
-      id: labelsNextId,
-      key: inputLabelKey,
-      value: inputLabelValue,
-    });
+    // setInputLabelKey(""); //왜...자꾸 값을 들고있어....
+    // setInputLabelValue("");
+    let inputLabelKey = "";
+    let inputLabelValue = "";
+    const newLabelsList = labels.concat([
+      {
+        id: labelsNextId,
+        key: inputLabelKey,
+        value: inputLabelValue,
+      },
+    ]);
+    console.log("newLabelsList", newLabelsList);
     setLabelsNextId(labelsNextId + 1);
-    setLabels([...labels, newLabelsList]); // 이렇게 하면 통으로 삭제 됨
-    setInputLabelKey(inputLabelKey); // 왜 한 칸 걸러 초기화되는가...?
-    setInputLabelValue(inputLabelValue);
+    setLabels([...newLabelsList]);
+    setInputLabelKey([...newLabelsList]);
   };
 
-  console.log(labels);
   const deleteLabels = (id) => {
     if (labels.length == 1) return;
     const deletedNewList = labels.filter((labels) => labels.id !== id);
@@ -163,7 +177,6 @@ const VolumeAdvancedSetting = observer(() => {
                   className="form_fullWidth"
                   name="LabelsKey"
                   onChange={handleChange}
-                  // value={inputLabelKey}
                   value={item.key || ""}
                 />
               </td>
@@ -174,7 +187,6 @@ const VolumeAdvancedSetting = observer(() => {
                   className="form_fullWidth"
                   name="LabelsValue"
                   onChange={handleChange}
-                  // value={inputLabelValue}
                   value={item.value}
                 />
               </td>
@@ -223,4 +235,4 @@ const VolumeAdvancedSetting = observer(() => {
   );
 });
 
-export default VolumeAdvancedSetting;
+export default ClaimAdvancedSetting;
