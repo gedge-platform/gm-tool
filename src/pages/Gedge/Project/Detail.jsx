@@ -346,7 +346,7 @@ const Detail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -365,7 +365,7 @@ const Detail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />

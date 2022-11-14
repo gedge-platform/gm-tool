@@ -132,7 +132,7 @@ const Detail = observer(() => {
               ) : (
                 <>
                   <LabelContainer>
-                    <p>No Detail Info.</p>
+                    <p>No Detail Info</p>
                   </LabelContainer>
                 </>
               )}
@@ -178,7 +178,7 @@ const Detail = observer(() => {
             <tr>
               {
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               }
             </tr>
@@ -252,7 +252,7 @@ const Detail = observer(() => {
               </>
             ) : (
               <LabelContainer>
-                <p>No Resource Info.</p>
+                <p>No Resource Info</p>
               </LabelContainer>
             )}
           </tbody>
@@ -314,7 +314,7 @@ const Detail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -346,7 +346,7 @@ const Detail = observer(() => {
                   </>
                 ) : (
                   <LabelContainer>
-                    <p>No Resource Usage Info.</p>
+                    <p>No Resource Usage Info</p>
                   </LabelContainer>
                 )}
               </td>
@@ -372,7 +372,7 @@ const Detail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -391,7 +391,7 @@ const Detail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />

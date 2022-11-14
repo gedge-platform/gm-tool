@@ -118,7 +118,7 @@ const ConfigmapsDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -141,7 +141,7 @@ const ConfigmapsDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Data Info.</p>
+              <p>No Data Info</p>
             </LabelContainer>
           )}
           {/* <table className="tb_data">
@@ -150,7 +150,7 @@ const ConfigmapsDetail = observer(() => {
                 dataTable
               ) : (
                 <LabelContainer>
-                  <p>No Data Info.</p>
+                  <p>No Data Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -186,7 +186,7 @@ const ConfigmapsDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

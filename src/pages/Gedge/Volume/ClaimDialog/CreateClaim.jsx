@@ -12,9 +12,10 @@ import {
   volumeStore,
 } from "@/store";
 import ClaimBasicInformation from "./ClaimBasicInformation";
-import VolumeAdvancedSetting from "../Dialog/VolumeAdvancedSetting";
+// import VolumeAdvancedSetting from "../Dialog/VolumeAdvancedSetting";
 import VolumYamlPopup from "../Dialog/VolumYamlPopup";
 import VolumePopup from "../Dialog/VolumePopup";
+import ClaimAdvancedSetting from "./ClaimAdvancedSetting";
 
 const Button = styled.button`
   background-color: #fff;
@@ -83,8 +84,9 @@ const CreateClaim = observer((props) => {
       name: claimName,
       namespace: project,
       labels: {
-        labelsKey: inputLabelKey,
-        labelsValue: inputLabelValue,
+        // labelsKey: inputLabelKey,
+        // labelsValue: inputLabelValue,
+        inputLabelKey: inputLabelValue,
       },
     },
     spec: {
@@ -203,7 +205,7 @@ const CreateClaim = observer((props) => {
     } else if (stepValue === 2) {
       return (
         <>
-          <VolumeAdvancedSetting />
+          <ClaimAdvancedSetting />
           <div
             style={{
               display: "flex",

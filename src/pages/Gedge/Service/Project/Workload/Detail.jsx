@@ -149,7 +149,7 @@ const Detail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Resources Info.</p>
+                  <p>No Resources Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -313,7 +313,7 @@ const Detail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Resources Info.</p>
+              <p>No Resources Info</p>
             </LabelContainer>
           )}
         </div>
@@ -330,7 +330,7 @@ const Detail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
 
@@ -349,7 +349,7 @@ const Detail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />
@@ -392,14 +392,14 @@ const Detail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Pod Info.</p>
+              <p>No Pod Info</p>
             </LabelContainer>
           )}
 
           {depServices.name === "" ? (
             <>
               <LabelContainer>
-                <p>No Service Info.</p>
+                <p>No Service Info</p>
               </LabelContainer>
             </>
           ) : (

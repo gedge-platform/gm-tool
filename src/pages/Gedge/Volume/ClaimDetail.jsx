@@ -69,7 +69,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
       <tr>
         <th className="tb_volume_detail_th">{key}</th>
         <td>{value}</td>
-      </tr>,
+      </tr>
     );
   });
 
@@ -81,12 +81,17 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
           <th style={{ width: "20%" }}>{key}</th>
           <td>
             {isValidJSON(value) ? (
-              <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
             ) : (
               value
             )}
           </td>
-        </tr>,
+        </tr>
       );
     });
   }
@@ -143,7 +148,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
 
