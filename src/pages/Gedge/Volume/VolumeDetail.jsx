@@ -65,25 +65,25 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
   const handleTabChange = (newValue) => {
     setTabvalue(newValue);
   };
-  const labelTable = [];
+  // const labelTable = [];
 
-  metadata
-    ? Object.entries(metadata).map(([key, value]) => {
-        labelTable.push(
-          <tr>
-            <th>{key}</th>
-            <td>{value}</td>
-          </tr>
-        );
-      })
-    : null;
+  // metadata
+  //   ? Object.entries(metadata).map(([key, value]) => {
+  //       labelTable.push(
+  //         <tr>
+  //           <th>{key}</th>
+  //           <td>{value}</td>
+  //         </tr>
+  //       );
+  //     })
+  //   : null;
 
   const metaTable = () => {
     console.log(annotations);
     if (annotations === null) {
       return (
         <LabelContainer>
-          <p>No Annotations Info.</p>
+          <p>No Annotations Info</p>
         </LabelContainer>
       );
     } else {
@@ -108,8 +108,6 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       });
     }
   };
-
-  useEffect(() => {});
 
   return (
     <PanelBox>

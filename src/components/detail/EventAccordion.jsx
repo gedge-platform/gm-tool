@@ -36,7 +36,7 @@ const EventAccordion = ({ events }) => {
   if (events === null || events === undefined) {
     return (
       <EventsContainer>
-        <p>No Events Info.</p>
+        <p>No Events Info</p>
       </EventsContainer>
     );
   } else if (
@@ -47,7 +47,7 @@ const EventAccordion = ({ events }) => {
   ) {
     return (
       <EventsContainer>
-        <p>No Events Info.</p>
+        <p>No Events Info</p>
       </EventsContainer>
     );
   } else {

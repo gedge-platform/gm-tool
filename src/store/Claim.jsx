@@ -42,13 +42,16 @@ class Claim {
   volumeCapacity = "";
   content = ""; //초기화를 잘 합시다2
 
-  labels = [
-    {
-      id: 0,
-      key: "",
-      value: "",
-    },
-  ];
+  labelInput = {
+    labelKey: "",
+    labelValue: "",
+  };
+
+  setLabelInput = (value) => {
+    runInAction(() => {
+      this.labelInput = value;
+    });
+  };
 
   setLabels = (value) => {
     runInAction(() => {
@@ -303,7 +306,6 @@ class Claim {
         `${SERVER_URL}/pvcs/${name}?cluster=${clusterName}&project=${namespace}`
       )
       .then(({ data: { data } }) => {
-        console.log(data);
         runInAction(() => {
           this.pvClaim = data;
           this.pvClaimYamlFile = "";

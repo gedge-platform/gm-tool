@@ -156,7 +156,7 @@ const StorageClassDetail = observer(({}) => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -175,7 +175,7 @@ const StorageClassDetail = observer(({}) => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -194,7 +194,7 @@ const StorageClassDetail = observer(({}) => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />
@@ -215,7 +215,7 @@ const StorageClassDetail = observer(({}) => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No parameters Info.</p>
+              <p>No parameters Info</p>
             </LabelContainer>
           )}
         </div>
