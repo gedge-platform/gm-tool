@@ -119,7 +119,7 @@ const StatefulSetDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -184,7 +184,7 @@ const StatefulSetDetail = observer(() => {
                           </tbody>
                         </table>
                       ) : (
-                        "No Env Info."
+                        "No Env Info"
                       )}
                     </td>
                   </tr>
@@ -198,7 +198,7 @@ const StatefulSetDetail = observer(() => {
                     <th>Volume Mounts</th>
                     <td>
                       {container.volumeMounts.length === 0 ? (
-                        "No Volume Info."
+                        "No Volume Info"
                       ) : (
                         <table className="tb_data">
                           <tbody>
@@ -226,7 +226,7 @@ const StatefulSetDetail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Containers Info.</p>
+              <p>No Containers Info</p>
             </LabelContainer>
           )}
         </div>
@@ -243,7 +243,7 @@ const StatefulSetDetail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <TableTitle>Annotations</TableTitle>
@@ -271,7 +271,7 @@ const StatefulSetDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

@@ -3,7 +3,12 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import ReactJson from "react-json-view";
-import { agDateColumnFilter, dateFormatter, isValidJSON, nullCheck } from "@/utils/common-utils";
+import {
+  agDateColumnFilter,
+  dateFormatter,
+  isValidJSON,
+  nullCheck,
+} from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import styled from "styled-components";
 import { StorageClassStore } from "@/store";
@@ -68,12 +73,17 @@ const StorageClassDetail = observer(({}) => {
           <th style={{ width: "20%" }}>{key}</th>
           <td>
             {isValidJSON(value) ? (
-              <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
             ) : (
               value
             )}
           </td>
-        </tr>,
+        </tr>
       );
     });
   }
@@ -97,19 +107,37 @@ const StorageClassDetail = observer(({}) => {
               </tr>
               <tr>
                 <th>Reclaim Policy</th>
-                <td>{storageClass?.reclaimPolicy ? storageClass?.reclaimPolicy : "-"}</td>
+                <td>
+                  {storageClass?.reclaimPolicy
+                    ? storageClass?.reclaimPolicy
+                    : "-"}
+                </td>
                 <th>Provisioner</th>
-                <td>{storageClass?.provisioner ? storageClass?.provisioner : "-"}</td>
+                <td>
+                  {storageClass?.provisioner ? storageClass?.provisioner : "-"}
+                </td>
               </tr>
               <tr>
                 <th>VolumeBindingMode</th>
-                <td>{storageClass?.volumeBindingMode ? storageClass?.volumeBindingMode : "-"}</td>
+                <td>
+                  {storageClass?.volumeBindingMode
+                    ? storageClass?.volumeBindingMode
+                    : "-"}
+                </td>
                 <th>AllowVolumeExpansion</th>
-                <td>{storageClass?.allowVolumeExpansion ? storageClass?.allowVolumeExpansion : "-"}</td>
+                <td>
+                  {storageClass?.allowVolumeExpansion
+                    ? storageClass?.allowVolumeExpansion
+                    : "-"}
+                </td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{storageClass?.createAt ? dateFormatter(storageClass?.createAt) : "-"}</td>
+                <td>
+                  {storageClass?.createAt
+                    ? dateFormatter(storageClass?.createAt)
+                    : "-"}
+                </td>
                 <th>{null}</th>
                 <td>{null}</td>
               </tr>
@@ -129,7 +157,7 @@ const StorageClassDetail = observer(({}) => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -148,7 +176,7 @@ const StorageClassDetail = observer(({}) => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />

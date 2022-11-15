@@ -83,7 +83,7 @@ const Detail = observer((props) => {
                   </>
                 ) : (
                   <LabelContainer>
-                    <p>No Detail Info.</p>
+                    <p>No Detail Info</p>
                   </LabelContainer>
                 )}
               </tbody>

@@ -91,7 +91,6 @@ class Cluster {
     name: "",
     config: "",
     image: "",
-    name: "",
     disk: "50",
   };
 
@@ -213,6 +212,7 @@ class Cluster {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
+        console.log("data", data);
         runInAction(() => {
           this.clusterListInWorkspace = data;
           const list = type === "" ? data : data.filter(item => item.clusterType === type);
