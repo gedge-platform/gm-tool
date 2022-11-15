@@ -208,7 +208,7 @@ class Volume {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/pvs?user=${id}`)
+      .get(`${SERVER_URL}/pvs`)
       .then(res => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
