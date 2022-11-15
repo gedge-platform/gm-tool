@@ -3,11 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
-import {
-  unixToTime,
-  unixStartTime,
-  stepConverter,
-} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { unixToTime, unixStartTime, stepConverter } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class StorageClass {
   viewList = [];
@@ -96,7 +92,7 @@ class StorageClass {
     makeAutoObservable(this);
   }
 
-  setContent = (content) => {
+  setContent = content => {
     runInAction(() => {
       this.content = content;
     });
@@ -122,13 +118,13 @@ class StorageClass {
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -169,117 +165,112 @@ class StorageClass {
     });
   };
 
-  setStorageClasses = (list) => {
+  setStorageClasses = list => {
     runInAction(() => {
       this.storageClasses = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.storageClasses[n];
     });
   };
 
-  setMetricsLastTime = (time) => {
+  setMetricsLastTime = time => {
     runInAction(() => {
       this.lastTime = time;
     });
   };
 
-  setStorageClassNameData = (value) => {
+  setStorageClassNameData = value => {
     runInAction(() => {
       this.storageClassNameData = value;
     });
   };
 
-  setStorageClass = (value) => {
+  setStorageClass = value => {
     runInAction(() => {
       this.storageClass = value;
     });
   };
 
-  setSelectStorageClass = (value) => {
+  setSelectStorageClass = value => {
     runInAction(() => {
       this.selectStorageClass = value;
     });
   };
 
-  setStorageClassName = (value) => {
+  setStorageClassName = value => {
     runInAction(() => {
       this.storageClassName = value;
     });
   };
 
-  setStorageSystem = (value) => {
+  setStorageSystem = value => {
     runInAction(() => {
       this.storageSystem = value;
     });
   };
 
-  setVolumeExpansion = (value) => {
+  setVolumeExpansion = value => {
     runInAction(() => {
       this.volumeExpansion = value;
     });
   };
 
-  setReclaimPolicy = (value) => {
+  setReclaimPolicy = value => {
     runInAction(() => {
       this.reclaimPolicy = value;
     });
   };
 
-  setAccessMode = (value) => {
+  setAccessMode = value => {
     runInAction(() => {
       this.accessMode = value;
     });
   };
 
-  setVolumeBindingMode = (value) => {
+  setVolumeBindingMode = value => {
     runInAction(() => {
       this.volumeBindingMode = value;
     });
   };
 
-  setResponseData = (data) => {
+  setResponseData = data => {
     runInAction(() => {
       this.responseData = data;
     });
   };
 
-  setSelectClusters = (value) => {
+  setSelectClusters = value => {
     runInAction(() => {
       this.selectClusters = value;
     });
   };
 
   loadStorageClassYaml = async (name, clusterName, projectName, kind) => {
-    await axios
-      .get(
-        `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          const YAML = require("json-to-pretty-yaml");
-          this.getYamlFile = YAML.stringify(res.data.data);
-        });
+    await axios.get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`).then(res => {
+      runInAction(() => {
+        const YAML = require("json-to-pretty-yaml");
+        this.getYamlFile = YAML.stringify(res.data.data);
       });
+    });
   };
 
   loadStorageClasses = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/storageclasses?user=${id}`)
-      .then((res) => {
+      .get(`${SERVER_URL}/storageclasses`)
+      .then(res => {
         runInAction(() => {
           console.log(res);
           // this.storageClasses = res.data.data !== null ? res.data.data : null;
           // this.totalElements =
           //   res.data.data === null ? 0 : res.data.data.length;
           this.storageClasses = res.data.data;
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          this.totalElements = res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
@@ -295,88 +286,79 @@ class StorageClass {
             (this.label = null),
             (this.annotations = null),
             (this.storageClassList = null))
-          : this.loadStorageClass(
-              this.viewList[0].name,
-              this.viewList[0].cluster
-            );
-      })
-      .then(() => {
-        this.loadStorageClassName(this.viewList[0].cluster);
+          : this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       });
+    // .then(() => {
+    //   this.loadStorageClassName(this.viewList[0].cluster);
+    // });
   };
 
   loadStorageClass = async (name, cluster) => {
-    await axios
-      .get(`${SERVER_URL}/storageclasses/${name}?cluster=${cluster}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.storageClass = data;
-          this.scYamlFile = "";
-          this.scAnnotations = {};
-          this.scLables = {};
-          this.scParameters = data.parameters ? data.parameters : "-";
-          this.label = data.labels;
-          this.annotations = data.annotations;
-          this.storageClassList = data.name;
+    await axios.get(`${SERVER_URL}/storageclasses/${name}?cluster=${cluster}`).then(({ data: { data } }) => {
+      runInAction(() => {
+        this.storageClass = data;
+        this.scYamlFile = "";
+        this.scAnnotations = {};
+        this.scLables = {};
+        this.scParameters = data.parameters ? data.parameters : "-";
+        this.label = data.labels;
+        this.annotations = data.annotations;
+        this.storageClassList = data.name;
 
-          Object.entries(this.storageClass?.annotations).forEach(
-            ([key, value]) => {
-              try {
-                const YAML = require("json-to-pretty-yaml");
-                if (value === "true" || value === "false") {
-                  throw e;
-                }
-                this.scYamlFile = YAML.stringify(JSON.parse(value));
-              } catch (e) {
-                if (key && value) {
-                  this.scAnnotations[key] = value;
-                }
-              }
+        Object.entries(this.storageClass?.annotations).forEach(([key, value]) => {
+          try {
+            const YAML = require("json-to-pretty-yaml");
+            if (value === "true" || value === "false") {
+              throw e;
             }
-          );
+            this.scYamlFile = YAML.stringify(JSON.parse(value));
+          } catch (e) {
+            if (key && value) {
+              this.scAnnotations[key] = value;
+            }
+          }
+        });
 
-          Object.entries(this.storageClass?.labels).map(([key, value]) => {
-            this.scLables[key] = value;
-          });
+        Object.entries(this.storageClass?.labels).map(([key, value]) => {
+          this.scLables[key] = value;
+        });
 
-          Object.entries(this.storageClass?.parameters).map(([key, value]) => {
-            this.scParameters[key] = value;
-          });
+        Object.entries(this.storageClass?.parameters).map(([key, value]) => {
+          this.scParameters[key] = value;
         });
       });
+    });
   };
 
-  loadStorageClassName = async (cluster) => {
-    await axios
-      .get(`${SERVER_URL}/storageclasses?cluster=${cluster}`)
-      .then((res) => {
-        runInAction(() => {
-          this.storageClassNameData = res.data.data;
-        });
+  loadStorageClassName = async cluster => {
+    await axios.get(`${SERVER_URL}/storageclasses?cluster=${cluster}`).then(res => {
+      runInAction(() => {
+        this.storageClassNameData = res.data.data;
       });
+    });
   };
 
-  postStorageClass = (callback) => {
+  postStorageClass = callback => {
     const YAML = require("yamljs");
     axios
       .post(
         `${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`,
 
-        YAML.parse(this.content)
+        YAML.parse(this.content),
       )
-      .then((res) => {
+      .then(res => {
         console.log(res);
         if (res.status === 201) {
           swalError("StorageClass가 생성되었습니다", callback);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         swalError("StorageClass 생성에 실패하였습니다.", callback);
         console.log(err);
       });
   };
   loadStorageMonit = async () => {
-    await axios.get(`${SERVER_URL}/ceph/monit`).then((res) => {
+    await axios.get(`${SERVER_URL}/ceph/monit`).then(res => {
       runInAction(() => {
         this.cephDashboard = res.data.data;
         console.log("loadStorageMonit");
@@ -384,29 +366,25 @@ class StorageClass {
     });
   };
   loadCephMonit = async (start, end, step) => {
-    await axios
-      .get(
-        `${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`
-      )
-      .then((res) => {
-        runInAction(() => {
-          // this.cephMetrics = res.data.items;
-          this.osd_read_latency = res.data.items.osd_read_latency[0].values;
-          this.osd_write_latency = res.data.items.osd_write_latency[0].values;
-          this.overwrite_iops = res.data.items.overwrite_iops[0].values;
-          this.read_iops = res.data.items.read_iops[0].values;
-          this.read_throughput = res.data.items.read_throughput[0].values;
-          this.write_iops = res.data.items.write_iops[0].values;
-          this.write_throughput = res.data.items.write_throughput[0].values;
-          // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
-          // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
-          // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
-          // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
-          // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
-          // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
-          // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
-        });
+    await axios.get(`${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`).then(res => {
+      runInAction(() => {
+        // this.cephMetrics = res.data.items;
+        this.osd_read_latency = res.data.items.osd_read_latency[0].values;
+        this.osd_write_latency = res.data.items.osd_write_latency[0].values;
+        this.overwrite_iops = res.data.items.overwrite_iops[0].values;
+        this.read_iops = res.data.items.read_iops[0].values;
+        this.read_throughput = res.data.items.read_throughput[0].values;
+        this.write_iops = res.data.items.write_iops[0].values;
+        this.write_throughput = res.data.items.write_throughput[0].values;
+        // this.osd_read_latency = this.searchMetrics(res.data.items.osd_read_latency[0].values)
+        // this.osd_write_latency = this.searchMetrics(res.data.items.osd_write_latency[0].values)
+        // this.overwrite_iops = this.searchMetrics(res.data.items.overwrite_iops[0].values)
+        // this.read_iops = this.searchMetrics(res.data.items.read_iops[0].values)
+        // this.read_throughput = this.searchMetrics(res.data.items.read_throughput[0].values)
+        // this.write_iops = this.searchMetrics(res.data.items.write_iops[0].values)
+        // this.write_throughput = this.searchMetrics(res.data.items.write_throughput[0].values)
       });
+    });
   };
   // searchMetrics = (MetricList) => {
   //   let metrics = [];

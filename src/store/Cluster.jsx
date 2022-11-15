@@ -1,7 +1,9 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
-import { swalError } from "../utils/swal-utils";
+import Swal from "sweetalert2";
+import { swalError, swalLoading } from "../utils/swal-utils";
+
 class Cluster {
   clusterList = [];
   clusterNameList = [];
@@ -82,6 +84,16 @@ class Cluster {
   viewList = [];
   clusterListInWorkspace = [];
   ProviderName = "";
+  vmImageList = [];
+  vmSpecList = [];
+
+  vmBody = {
+    name: "",
+    config: "",
+    image: "",
+    name: "",
+    disk: "50",
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -170,6 +182,33 @@ class Cluster {
     });
   };
 
+  setVMBody = (type, value) => {
+    runInAction(() => {
+      if (type === "name") {
+        this.vmBody.name = value;
+        return;
+      } else if (type === "config") {
+        this.vmBody.config = value;
+        return;
+      } else if (type === "image") {
+        this.vmBody.image = value;
+        return;
+      } else if (type === "flavor") {
+        this.vmBody.flavor = value;
+        return;
+      } else if (type === "disk") {
+        this.vmBody.disk = value;
+        return;
+      }
+    });
+  };
+
+  setInitViewList = n => {
+    runInAction(() => {
+      this.viewList = [];
+    });
+  };
+
   loadClusterList = async type => {
     await axios
       .get(`${SERVER_URL}/clusters`)
@@ -208,18 +247,44 @@ class Cluster {
       });
   };
 
+  loadImageList = async provider => {
+    await axios.get(`${SERVER_URL}/spider/specList?provider=${provider}&type=image`).then(({ data: { data } }) => {
+      runInAction(() => {
+        console.log("vmImageList", data);
+        const list = data;
+        this.vmImageList = list;
+        // this.clusterNameList = list.map(item => item.IId.NameId);
+        this.totalElements = list.length;
+      });
+    });
+    // .then(() => {
+    //   this.convertList(this.clusterList, this.setClusterList);
+    // });
+  };
+
+  loadSpecList = async provider => {
+    await axios.get(`${SERVER_URL}/spider/specList?provider=${provider}&type=flavor`).then(({ data: { data } }) => {
+      runInAction(() => {
+        console.log("vmSpecList", data);
+        const list = data;
+        this.vmSpecList = list;
+        // this.clusterNameList = list.map(item => item.IId.NameId);
+        this.totalElements = list.length;
+      });
+    });
+    // .then(() => {
+    //   this.convertList(this.clusterList, this.setClusterList);
+    // });
+  };
+
   postVM = async (data, callback) => {
-    const body = {
-      ...data,
-      enabled: true,
-    };
-    // return
     await axios
-      .post(`${SERVER_URL}/spider/vm`, body)
+      .post(`${SERVER_URL}/spider/vm?name=${data.name}&config=${data.config}-config&image=${data.image}&flavor=${data.flavor}&disk=${data.disk}`)
       .then(res => {
         console.log(res);
         runInAction(() => {
           if (res.status === 201) {
+            Swal.close();
             swalError("VM이 생성되었습니다.", callback);
             return true;
           }
@@ -228,11 +293,22 @@ class Cluster {
       .catch(err => false);
   };
 
-  deleteVM = async (vmName, callback) => {
+  deleteVM = async (vmName, config, callback) => {
+    const body = {
+      ConnectionName: `${config}`,
+      enabled: true,
+    };
     axios
-      .delete(`${SERVER_URL}/spider/vm/${vmName}`)
+      .delete(`${SERVER_URL}/spider/vm/${vmName}`, {
+        data: {
+          ConnectionName: `${config}`,
+        },
+      })
       .then(res => {
-        if (res.status === 201) swalError("VM을 삭제했습니다.", callback);
+        if (res.status === 200) {
+          Swal.close();
+          swalError("VM을 삭제했습니다.", callback);
+        }
       })
       .catch(err => {
         swalError("삭제에 실패하였습니다.");

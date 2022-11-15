@@ -4,8 +4,9 @@ import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { clusterStore } from "@/store";
-import CreateAWS from "./CreateAWS";
-import CreateOPENSTACK from "./CreateOPENSTACK";
+import { certificationStore } from "@/store";
+import CreateAdvanced from "./CreateAdvanced";
+import { swalError, swalLoading } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -27,94 +28,69 @@ const ButtonNext = styled.button`
 const CreateVM = observer(props => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const { postVM, ProviderName, setProviderName } = clusterStore;
+  const { postVM, ProviderName, setProviderName, vmBody, setVMBody } = clusterStore;
 
   const ProviderList = ["AWS", "OPENSTACK"];
 
-  const [inputs, setInputs] = useState({
-    name: "",
-    config: "",
-    image: "",
-    flavor: "",
-  });
-  const { name, config, image, flavor } = inputs;
-
   const handleClose = () => {
     props.onClose && props.onClose();
-    setInputs({
-      name: "",
-      config: "",
-      image: "",
-      flavor: "",
-    });
+    setVMBody("name", "");
+    setVMBody("config", "");
+    setVMBody("image", "");
+    setVMBody("flavor", "");
+    setVMBody("disk", "50");
     setProviderName("");
     setStepValue(1);
   };
 
-  const onClickStepTwo = () => {
+  const onClickStepOne = () => {
     if (ProviderName === "") {
       swalError("Provider Name를 선택해주세요");
       return;
-    }
-    if (ProviderName === "AWS") {
-      setStepValue(2);
-    }
-    if (ProviderName === "OPENSTACK") {
-      setStepValue(2);
     } else {
+      setStepValue(2);
       return;
     }
   };
 
   const verify = () => {
-    if (ProviderName === "AWS") {
-      if (name === "") {
-        swalError("이름을 입력해주세요!");
-        return;
-      }
-      if (config === "") {
-        swalError("콘픽을 선택해주세요!");
-        return;
-      }
-      if (image === "") {
-        swalError("OS이미지를 선택해주세요!");
-        return;
-      }
-      if (flavor === "") {
-        swalError("사양을 선택해주세요!");
-        return;
-      }
+    console.log("vmBody.name : ", vmBody.name);
+    console.log("vmBody.config : ", vmBody.config);
+    console.log("vmBody.image : ", vmBody.image);
+    console.log("vmBody.flavor : ", vmBody.flavor);
+    console.log("vmBody.disk : ", vmBody.disk);
+    if (vmBody.name === "") {
+      swalError("이름을 입력해주세요!");
+      return;
     }
-    if (ProviderName === "OPENSTACK") {
-      if (name === "") {
-        swalError("이름을 입력해주세요!");
-        return;
-      }
-      if (config === "") {
-        swalError("콘픽을 선택해주세요!");
-        return;
-      }
-      if (image === "") {
-        swalError("OS이미지를 선택해주세요!");
-        return;
-      }
-      if (flavor === "") {
-        swalError("사양을 선택해주세요!");
-        return;
-      }
+    if (vmBody.config === "") {
+      swalError("콘픽을 선택해주세요!");
+      return;
     }
-    createVM(body);
+    if (vmBody.image === "") {
+      swalError("OS이미지를 선택해주세요!");
+      return;
+    }
+    if (vmBody.flavor === "" || vmBody.flavor === undefined) {
+      swalError("사양을 선택해주세요!");
+      return;
+    }
+    if (vmBody.disk === "") {
+      swalError("Disk 용량을 입력해주세요!");
+      return;
+    }
+    createVM(vmBody);
   };
 
   const createVM = async body => {
+    // swalLoading("VM 생성중..", 100000, "이 창은 VM 생성이 완료되면 사라집니다. (<b></b> ms)", props.onClose && props.onClose());
+    swalLoading("VM 생성중..", 1000000, "이 창은 VM 생성이 완료되면 사라집니다.", props.onClose && props.onClose());
     const result = await postVM(body);
-    handleClose();
     props.reloadFunc && props.reloadFunc();
   };
 
   const onChange = ({ target: { name, value } }) => {
-    if (value === "AWS") setProviderName(value);
-    else if (value === "OPENSTACK") setProviderName(value);
+    setProviderName(value);
   };
 
   // useEffect(props => {
@@ -160,15 +136,17 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => onClickStepTwo()}>다음</ButtonNext>
+              <ButtonNext onClick={e => onClickStepOne(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
-    } else if (stepValue === 2 && ProviderName == "AWS") {
+    } else if (stepValue === 2) {
+      // loadTypeCredentialList(ProviderName);
       return (
         <>
-          <CreateAWS />
+          <CreateAdvanced provider={ProviderName} />
+          {/* <CreateAdvanced provider={ProviderName} /> */}
           <div
             style={{
               display: "flex",
@@ -180,30 +158,6 @@ const CreateVM = observer(props => {
               style={{
                 display: "flex",
                 width: "300px",
-                justifyContent: "center",
-              }}
-            >
-              <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={verify}>생성</ButtonNext>
-            </div>
-          </div>
-        </>
-      );
-    } else if (stepValue === 2 && ProviderName == "OPENSTACK") {
-      return (
-        <>
-          <CreateOPENSTACK />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "32px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "240px",
                 justifyContent: "center",
               }}
             >
