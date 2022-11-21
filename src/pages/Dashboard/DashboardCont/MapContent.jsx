@@ -12,12 +12,9 @@ const MapContent = observer(() => {
   const {
     clusterName,
     setClusterName,
-    loadEdgeZoneDetailDashboard,
     loadEdgeZoneDashboard,
     mapZoom,
     loadMapStatus,
-    edgeNodeRunning,
-    clusterNameList,
   } = dashboardStore;
 
   const mapRef = useRef(null);
@@ -58,7 +55,8 @@ const MapContent = observer(() => {
                <table>
                  <tr>
                    <th>Cluster</th>
-                   <td>${edgeInfoTemp.map((item) => item.clusterName)[i]}</td>
+                   <td>${edgeInfoTemp.map((item) => item.clusterName)[i]}
+          </td>
                  </tr>
                  <tr>
                    <th rowspan="3">Status</th>
@@ -68,8 +66,11 @@ const MapContent = observer(() => {
                         Ready
                        </span>
                        <span>${
-                         nodeStatus[i].filter((item) => item.status === "Ready")
-                           .length
+                         nodeStatus[i] !== null
+                           ? nodeStatus[i].filter(
+                               (item) => item.status === "Ready"
+                             ).length
+                           : 0
                        }</span>
                      </div>
                    </td>
@@ -81,9 +82,11 @@ const MapContent = observer(() => {
                       Not Ready
                      </span>
                      <span>${
-                       nodeStatus[i].filter(
-                         (item) => item.status === "NotReady"
-                       ).length
+                       nodeStatus[i] !== null
+                         ? nodeStatus[i].filter(
+                             (item) => item.status === "NotReady"
+                           ).length
+                         : 0
                      }</span>
                      </div>
                    </td>

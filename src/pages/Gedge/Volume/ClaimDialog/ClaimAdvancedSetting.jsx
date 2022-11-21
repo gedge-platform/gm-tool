@@ -41,8 +41,6 @@ const Span = styled.span`
 
 const ClaimAdvancedSetting = observer(() => {
   const {
-    // labels,
-    setLabels,
     inputLabelKey,
     setInputLabelKey,
     inputLabelValue,
@@ -51,10 +49,6 @@ const ClaimAdvancedSetting = observer(() => {
     setInputAnnotationsKey,
     inputAnnotationsValue,
     setInputAnnotationsValue,
-    annotations,
-    setAnnotations,
-    // labelInput,
-    // setLabelInput,
   } = claimStore;
 
   const [labelInput, setLabelInput] = useState({
@@ -63,52 +57,45 @@ const ClaimAdvancedSetting = observer(() => {
   });
   const { labelKey, labelValue } = labelInput;
 
+  const [annotationInput, setAnnotationInput] = useState({
+    annotationKey: "",
+    annotationValue: "",
+  });
+  const { annotationKey, annotationValue } = annotationInput;
+
   const handleChange = (e) => {
     const { value, name } = e.target;
     setLabelInput({
       ...labelInput, // 기존의 labelInput 객체를 복사한 뒤
       [name]: value, // name 키를 가진 값을 value로 설정
     });
-    console.log(labelInput);
+    setAnnotationInput({
+      ...annotationInput,
+      [name]: value,
+    });
   };
 
-  const nextID = useRef(1);
-
-  // const handleChange = (e) => {
-  //   const { value, name } = e.target;
-  //   if (name === "LabelsKey") {
-  //     setInputLabelKey(value);
-  //     return;
-  //   } else if (name === "LabelsValue") {
-  //     setInputLabelValue(value);
-  //     return;
-  //   } else if (name === "AnnotationsKey") {
-  //     setInputAnnotationsKey(value);
-  //     return;
-  //   } else if (name === "AnnotationsValue") {
-  //     setInputAnnotationsValue(value);
-  //     return;
-  //   }
-  // };
-
-  const labels = [
-    {
-      id: 0,
-      key: "",
-      value: "",
-    },
-  ];
+  const [labels, setLabels] = useState([]);
+  const [annotations, setAnnotations] = useState([]);
 
   const addLabels = () => {
+    if (labelKey == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+    if (labelValue == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+
     const newLabelsList = [
       {
-        id: nextID.current,
-        inputLabelKey,
-        inputLabelValue,
+        labelKey,
+        labelValue,
       },
     ];
+
     setLabels(labels.concat(newLabelsList));
-    console.log("labels", labels);
     setLabelInput({
       labelKey: "",
       labelValue: "",
@@ -117,35 +104,35 @@ const ClaimAdvancedSetting = observer(() => {
     // labels[inputLabelKey] = inputLabelValue;
   };
 
-  const deleteLabels = (id) => {
-    if (labels.length == 1) return;
-    const deletedNewList = labels.filter((labels) => labels.id !== id);
-    setLabels(deletedNewList);
+  const deleteLabels = (labelKey) => {
+    // if (labels.length == 1) return;
+    setLabels(labels.filter((item) => item.labelKey !== labelKey));
   };
-
-  // const handleChangeAnnotations = (e) => {
-  //   const { value } = e.target;
-  //   setInputAnnotationsKey(value);
-  //   setInputAnnotationsValue(value);
-  // };
 
   const addAnnotations = () => {
-    const newAnnotationsList = annotations.concat({
-      id: annotationsNextId,
-      key: inputAnnotationsKey,
-      value: inputAnnotationsValue,
-    });
-    setAnnotationsNextId(annotationsNextId + 1);
-    setAnnotations(newAnnotationsList);
-    setInputAnnotationsKey("");
-    setInputAnnotationsValue("");
-    return;
-  };
+    if (annotationsKey == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+    if (annotationsValue == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
 
-  const deleteAnnotations = (id) => {
-    if (annotations.length == 1) return;
-    const deletedNewList = annotations.filter((labels) => labels.id !== id);
-    setAnnotations(deletedNewList);
+    const newLabelsList = [
+      {
+        labelKey,
+        labelValue,
+      },
+    ];
+
+    setLabels(labels.concat(newLabelsList));
+    setLabelInput({
+      labelKey: "",
+      labelValue: "",
+    });
+
+    // labels[inputLabelKey] = inputLabelValue;
   };
 
   return (
@@ -192,14 +179,44 @@ const ClaimAdvancedSetting = observer(() => {
             <td>
               <Button onClick={addLabels}>+</Button>
               &nbsp;&nbsp;
-              <Button onClick={() => deleteLabels(item.id)}>-</Button>
+              {/* <Button
+                onClick={() =>
+                  deleteLabels(labels.map((item) => item.labelKey))
+                }
+              >
+                -
+              </Button> */}
             </td>
           </tr>
-          <tr>
-            <th></th>
-            <td>{labelKey}</td>
-            <td>{labelValue}</td>
-          </tr>
+
+          {labels.map((item) => (
+            <tr>
+              <th>Labels</th>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelValue}
+              </td>
+              <td>
+                <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
+              </td>
+            </tr>
+          ))}
+          {/* {labels.map((item) => (
+            <tr>
+              <th>Labels</th>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelValue}
+              </td>
+              <td>
+                <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
+              </td>
+            </tr>
+          ))} */}
 
           {annotations.map((item, i) => (
             <tr>
@@ -209,9 +226,9 @@ const ClaimAdvancedSetting = observer(() => {
                   type="text"
                   placeholder="Key"
                   className="form_fullWidth"
-                  name="AnnotationsKey"
+                  name="annotationsKey"
                   onChange={handleChange}
-                  value={inputAnnotationsKey}
+                  value={annotationsKey}
                   // value={item.key}
                 />
               </td>
@@ -220,9 +237,9 @@ const ClaimAdvancedSetting = observer(() => {
                   type="text"
                   placeholder="Value"
                   className="form_fullWidth"
-                  name="AnnotationsValue"
+                  name="annotationsValue"
                   onChange={handleChange}
-                  value={inputAnnotationsValue}
+                  value={annotationsValue}
                   // value={item.value}
                 />
               </td>
