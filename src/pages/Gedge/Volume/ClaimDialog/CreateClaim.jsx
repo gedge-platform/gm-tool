@@ -35,7 +35,7 @@ const ButtonNext = styled.button`
 `;
 
 const CreateClaim = observer((props) => {
-  const { open } = props;
+  const { open, labelsList } = props;
   const [stepValue, setStepValue] = useState(1);
   const { setProjectListinWorkspace } = projectStore;
   const {
@@ -63,7 +63,7 @@ const CreateClaim = observer((props) => {
     setLabelsView,
     inputLabelKey,
     inputLabelValue,
-    labels,
+    // labels,
     setLabels,
     setInputLabelKey,
     setInputLabelValue,
@@ -77,17 +77,15 @@ const CreateClaim = observer((props) => {
     setSelectStorageClass,
   } = StorageClassStore;
 
+  console.log("labelsList step3", labelsList);
   const template = {
     apiVersion: "v1",
     kind: "PersistentVolumeClaim",
     metadata: {
       name: claimName,
       namespace: project,
-      labels: {
-        // labelsKey: inputLabelKey,
-        // labelsValue: inputLabelValue,
-        inputLabelKey: inputLabelValue,
-      },
+      labels: labelsList,
+      annotations: {},
     },
     spec: {
       storageClassName: selectStorageClass,
@@ -142,15 +140,15 @@ const CreateClaim = observer((props) => {
     setWorkspace("");
     setProject("");
     setSelectStorageClass("");
-    setInputLabelKey("");
-    setInputLabelValue("");
-    setLabels([
-      {
-        id: 0,
-        key: "",
-        value: "",
-      },
-    ]);
+    // setInputLabelKey("");
+    // setInputLabelValue("");
+    // setLabels([
+    //   {
+    //     id: 0,
+    //     key: "",
+    //     value: "",
+    //   },
+    // ]);
   };
 
   const onClickStepTwo = () => {
@@ -236,7 +234,7 @@ const CreateClaim = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <VolumYamlPopup />
+          <VolumYamlPopup labelsList={labelsList} />
           <div
             style={{
               display: "flex",

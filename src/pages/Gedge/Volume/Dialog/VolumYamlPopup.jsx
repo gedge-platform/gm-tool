@@ -8,8 +8,6 @@ import "ace-builds/src-noconflict/theme-monokai";
 const VolumYamlPopup = observer(() => {
   // const { content, setContent, volumeName } = volumeStore;
   const { content, claimName } = claimStore;
-  // console.log("claim " + claimName);
-  console.log(content);
 
   return (
     <>
@@ -34,7 +32,7 @@ const VolumYamlPopup = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={value => {
+        onChange={(value) => {
           // setContent(value);
         }}
         fontSize={14}
