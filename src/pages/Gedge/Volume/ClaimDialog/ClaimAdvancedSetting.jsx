@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { CTextField } from "@/components/textfields";
 import { observer } from "mobx-react";
@@ -39,9 +39,9 @@ const Span = styled.span`
   background-color: #fff;
 `;
 
-const VolumeAdvancedSetting = observer(() => {
+const ClaimAdvancedSetting = observer(() => {
   const {
-    labels,
+    // labels,
     setLabels,
     inputLabelKey,
     setInputLabelKey,
@@ -53,55 +53,70 @@ const VolumeAdvancedSetting = observer(() => {
     setInputAnnotationsValue,
     annotations,
     setAnnotations,
+    // labelInput,
+    // setLabelInput,
   } = claimStore;
 
-  const [labelsNextId, setLabelsNextId] = useState(1);
-  const [annotationsNextId, setAnnotationsNextId] = useState(1);
+  const [labelInput, setLabelInput] = useState({
+    labelKey: "",
+    labelValue: "",
+  });
+  const { labelKey, labelValue } = labelInput;
 
   const handleChange = (e) => {
     const { value, name } = e.target;
-    if (name === "LabelsKey") {
-      setInputLabelKey(value);
-      return;
-    } else if (name === "LabelsValue") {
-      setInputLabelValue(value);
-      return;
-    } else if (name === "AnnotationsKey") {
-      setInputAnnotationsKey(value);
-      return;
-    } else if (name === "AnnotationsValue") {
-      setInputAnnotationsValue(value);
-      return;
-    }
+    setLabelInput({
+      ...labelInput, // 기존의 labelInput 객체를 복사한 뒤
+      [name]: value, // name 키를 가진 값을 value로 설정
+    });
+    console.log(labelInput);
   };
 
-  // let setInputLabelKey = async () => {
-  //   runInAction(() => {
-  //     inputLabelKey = "";
-  //   });
+  const nextID = useRef(1);
+
+  // const handleChange = (e) => {
+  //   const { value, name } = e.target;
+  //   if (name === "LabelsKey") {
+  //     setInputLabelKey(value);
+  //     return;
+  //   } else if (name === "LabelsValue") {
+  //     setInputLabelValue(value);
+  //     return;
+  //   } else if (name === "AnnotationsKey") {
+  //     setInputAnnotationsKey(value);
+  //     return;
+  //   } else if (name === "AnnotationsValue") {
+  //     setInputAnnotationsValue(value);
+  //     return;
+  //   }
   // };
 
-  // let setInputLabelValue = async () => {
-  //   runInAction(() => {
-  //     inputLabelValue = "";
-  //   });
-  // };
+  const labels = [
+    {
+      id: 0,
+      key: "",
+      value: "",
+    },
+  ];
 
   const addLabels = () => {
-    // let inputLabelKey = "";
-    // let inputLabelValue = "";
-    const newLabelsList = labels.concat({
-      id: labelsNextId,
-      key: inputLabelKey,
-      value: inputLabelValue,
+    const newLabelsList = [
+      {
+        id: nextID.current,
+        inputLabelKey,
+        inputLabelValue,
+      },
+    ];
+    setLabels(labels.concat(newLabelsList));
+    console.log("labels", labels);
+    setLabelInput({
+      labelKey: "",
+      labelValue: "",
     });
-    setLabelsNextId(labelsNextId + 1);
-    setLabels([...labels, newLabelsList]); // 이렇게 하면 통으로 삭제 됨
-    setInputLabelKey(inputLabelKey); // 왜 한 칸 걸러 초기화되는가...?
-    setInputLabelValue(inputLabelValue);
+
+    // labels[inputLabelKey] = inputLabelValue;
   };
 
-  console.log(labels);
   const deleteLabels = (id) => {
     if (labels.length == 1) return;
     const deletedNewList = labels.filter((labels) => labels.id !== id);
@@ -150,41 +165,42 @@ const VolumeAdvancedSetting = observer(() => {
           </div>
         </div>
       </div>
-
       <table className="tb_data_new tb_write">
         <tbody>
-          {labels.map((item, i) => (
-            <tr>
-              <th>Labels</th>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Key"
-                  className="form_fullWidth"
-                  name="LabelsKey"
-                  onChange={handleChange}
-                  // value={inputLabelKey}
-                  value={item.key || ""}
-                />
-              </td>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Value"
-                  className="form_fullWidth"
-                  name="LabelsValue"
-                  onChange={handleChange}
-                  // value={inputLabelValue}
-                  value={item.value}
-                />
-              </td>
-              <td>
-                <Button onClick={addLabels}>+</Button>
-                &nbsp;&nbsp;
-                <Button onClick={() => deleteLabels(item.id)}>-</Button>
-              </td>
-            </tr>
-          ))}
+          <tr>
+            <th>Labels</th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Key"
+                className="form_fullWidth"
+                name="labelKey"
+                onChange={handleChange}
+                value={labelKey}
+              />
+            </td>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Value"
+                className="form_fullWidth"
+                name="labelValue"
+                onChange={handleChange}
+                value={labelValue}
+              />
+            </td>
+            <td>
+              <Button onClick={addLabels}>+</Button>
+              &nbsp;&nbsp;
+              <Button onClick={() => deleteLabels(item.id)}>-</Button>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>{labelKey}</td>
+            <td>{labelValue}</td>
+          </tr>
+
           {annotations.map((item, i) => (
             <tr>
               <th>Annotations</th>
@@ -223,4 +239,4 @@ const VolumeAdvancedSetting = observer(() => {
   );
 });
 
-export default VolumeAdvancedSetting;
+export default ClaimAdvancedSetting;

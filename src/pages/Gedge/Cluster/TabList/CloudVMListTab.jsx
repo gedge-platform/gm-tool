@@ -8,23 +8,15 @@ import { observer } from "mobx-react";
 import { clusterStore } from "@/store";
 import CreateVM from "../Dialog/CreateVM";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalError, swalUpdate, swalLoading } from "@/utils/swal-utils";
 
 const CloudVMListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [vmName, setVMName] = useState("");
+  const [config, setConfig] = useState("");
 
-  const {
-    setInitViewList,
-    deleteVM,
-    loadVMList,
-    currentPage,
-    totalPages,
-    viewList,
-    goPrevPage,
-    goNextPage,
-    totalElements,
-  } = clusterStore;
+  const { setInitViewList, deleteVM, loadVMList, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -92,8 +84,12 @@ const CloudVMListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
-    setVMName(e.data.name);
+  const handleClick = e => {
+    setVMName(e.data.IId.NameId);
+
+    var configStr = e.data.KeyPairIId.NameId;
+    configStr = configStr.replace("-key", "");
+    setConfig(configStr);
   };
 
   const handleOpen = () => {
@@ -108,9 +104,10 @@ const CloudVMListTab = observer(() => {
     if (vmName === "") {
       swalError("VM을 선택해주세요!");
     } else {
-      swalUpdate(vmName + "를 삭제하시겠습니까?", () =>
-        deleteVM(vmName, reloadData)
-      );
+      swalUpdate(vmName + "를 삭제하시겠습니까?", () => {
+        swalLoading("VM 삭제중..", 1000000, "이 창은 VM 삭제가 완료되면 사라집니다.");
+        deleteVM(vmName, config, reloadData);
+      });
     }
     setVMName("");
   };
@@ -131,7 +128,7 @@ const CloudVMListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar>
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>

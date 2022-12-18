@@ -209,7 +209,7 @@ const Detail = observer((props) => {
             </>
           ) : (
             <LabelContainer>
-              <p>No GPU Info.</p>
+              <p>No GPU Info</p>
             </LabelContainer>
           )}
         </div>
@@ -277,18 +277,23 @@ const Detail = observer((props) => {
             Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
           </TableTitle>
           <LabelContainer>
-            {nodesChk.length >= 1 ? labelByNode() : "No Label Info."}
+            {nodesChk.length >= 1 ? labelByNode() : <p>No Label Info</p>}
           </LabelContainer>
-
+          <br />
+          <br />
           <TableTitle>
             Annotations(
             {nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
           </TableTitle>
           <table className="tb_data">
             <tbody>
-              {nodesChk.length >= 1
-                ? annotationByNode()
-                : "No Annotation Info."}
+              {nodesChk.length >= 1 ? (
+                annotationByNode()
+              ) : (
+                <LabelContainer>
+                  <p>No Annotation Info</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
         </div>

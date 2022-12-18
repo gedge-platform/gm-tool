@@ -151,7 +151,7 @@ const Detail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -163,7 +163,7 @@ const Detail = observer(() => {
           <TableTitle>Pod</TableTitle>
           {involvesPods === null ? (
             <LabelContainer>
-              <p>No Pods Info.</p>
+              <p>No Pods Info</p>
             </LabelContainer>
           ) : (
             involvesPods.map((pod) => (
@@ -216,7 +216,7 @@ const Detail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Workloads Info.</p>
+              <p>No Workloads Info</p>
             </LabelContainer>
           )}
         </div>
@@ -247,7 +247,7 @@ const Detail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Port Info.</p>
+              <p>No Port Info</p>
             </LabelContainer>
           )}
         </div>

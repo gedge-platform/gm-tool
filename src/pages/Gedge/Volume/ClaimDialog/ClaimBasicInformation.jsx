@@ -72,8 +72,11 @@ const ClaimBasicInformation = observer((props) => {
     if (name === "claimName") {
       setClaimName(value);
     } else if (name === "workspace") {
+      console.log();
+      setSelectClusterInfo([]);
       loadWorkspaceDetail(value);
       setWorkspace(value);
+      // setProject("");
       setProjectEnable(false);
       return;
     } else if (name === "project") {
