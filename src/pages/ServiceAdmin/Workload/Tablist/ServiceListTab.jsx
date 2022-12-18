@@ -70,7 +70,7 @@ const ServiceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setServiceName(e.data.name);
     loadServiceDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -87,7 +87,9 @@ const ServiceListTab = observer(() => {
     if (serviceName === "") {
       swalError("Service를 선택해주세요!");
     } else {
-      swalUpdate(serviceName + "를 삭제하시겠습니까?", () => deleteService(serviceName, reloadData));
+      swalUpdate(serviceName + "를 삭제하시겠습니까?", () =>
+        deleteService(serviceName, reloadData)
+      );
     }
     setServiceName("");
   };
@@ -114,6 +116,7 @@ const ServiceListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -131,7 +134,11 @@ const ServiceListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateService open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreateService
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail service={serviceDetail} />
       </CReflexBox>

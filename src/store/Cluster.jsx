@@ -81,7 +81,7 @@ class Cluster {
   resultList = {};
   viewList = [];
   clusterListInWorkspace = [];
-  ProviderName = {};
+  ProviderName = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -146,6 +146,7 @@ class Cluster {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
@@ -195,6 +196,7 @@ class Cluster {
       .get(`${SERVER_URL}/spider/vmList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
+          console.log("vmlist", data);
           const list = data;
           this.clusterList = list;
           this.clusterNameList = list.map(item => item.IId.NameId);

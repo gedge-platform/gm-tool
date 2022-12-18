@@ -91,25 +91,46 @@ const ConfigmapsDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data">
             <tbody>
-              <tr>
-                <th style={{ width: "15%" }}>Name</th>
-                <td>{configmapsTabList.name}</td>
-              </tr>
-              <tr>
-                <th>Data Count</th>
-                <td>{configmapsTabList.dataCnt}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{dateFormatter(configmapsTabList.createAt)}</td>
-              </tr>
+              {configmapsTabList ? (
+                <>
+                  <tr>
+                    <th style={{ width: "15%" }}>Name</th>
+                    <td>
+                      {configmapsTabList.name ? configmapsTabList.name : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Data Count</th>
+                    <td>
+                      {configmapsTabList.dataCnt
+                        ? configmapsTabList.dataCnt
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {configmapsTabList.createAt
+                        ? dateFormatter(configmapsTabList.createAt)
+                        : "-"}
+                    </td>
+                  </tr>
+                </>
+              ) : (
+                <LabelContainer>
+                  <p>No Detail Info.</p>
+                </LabelContainer>
+              )}
             </tbody>
           </table>
           <br />
           <TableTitle>Data</TableTitle>
           {metadata ? (
             <table className="tb_data">
-              <tbody className="tb_data_detail" style={{ whiteSpace: "pre-line" }}>
+              <tbody
+                className="tb_data_detail"
+                style={{ whiteSpace: "pre-line" }}
+              >
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
                     <th style={{ width: "15%" }}>{key}</th>
@@ -149,7 +170,12 @@ const ConfigmapsDetail = observer(() => {
                     <th className="tb_workload_detail_labels_th">{key}</th>
                     <td>
                       {isValidJSON(value) ? (
-                        <ReactJson src={JSON.parse(value)} theme="summerfruit" displayDataTypes={false} displayObjectSize={false} />
+                        <ReactJson
+                          src={JSON.parse(value)}
+                          theme="summerfruit"
+                          displayDataTypes={false}
+                          displayObjectSize={false}
+                        />
                       ) : (
                         value
                       )}

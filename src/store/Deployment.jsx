@@ -122,11 +122,7 @@ class Deployment {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
+        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
@@ -136,22 +132,18 @@ class Deployment {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadDeploymentDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
+        this.loadDeploymentDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  setCurrentPage = n => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
+  setTotalPages = n => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -184,18 +176,19 @@ class Deployment {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
   };
 
-  setPDeploymentList = (list) => {
+  setPDeploymentList = list => {
     runInAction(() => {
       this.pDeploymentList = list;
     });
   };
 
-  setViewList = (n) => {
+  setViewList = n => {
     runInAction(() => {
       this.viewList = this.pDeploymentList[n];
     });
@@ -206,87 +199,78 @@ class Deployment {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/deployments?user=${id}`)
-      .then((res) => {
+      .then(res => {
         runInAction(() => {
           this.deploymentList = res.data.data;
           this.deploymentDetail = res.data.data[0];
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          this.totalElements = res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.deploymentList, this.setPDeploymentList);
       });
-    this.loadDeploymentDetail(
-      this.deploymentList[0].name,
-      this.deploymentList[0].cluster,
-      this.deploymentList[0].project
-    );
+    this.loadDeploymentDetail(this.deploymentList[0].name, this.deploymentList[0].cluster, this.deploymentList[0].project);
   };
 
   loadDeploymentDetail = async (name, cluster, project) => {
-    await axios
-      .get(
-        `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`
-      )
-      .then(({ data: { data, involvesData } }) => {
-        runInAction(() => {
-          this.deploymentDetail = data;
-          this.workspace = data.workspace;
-          this.workspaceName = data.workspace;
-          this.projectName = data.project;
-          this.strategy = data.strategy;
-          this.labels = data.labels;
-          this.annotations = data.annotations;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-          this.pods = involvesData.pods;
-          this.depServices = involvesData.services;
-          // this.depServicesPort = involvesData.services.port;
-          this.deploymentEvents = data.events;
-          this.containersTemp = data.containers;
-        });
+    await axios.get(`${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`).then(({ data: { data, involvesData } }) => {
+      runInAction(() => {
+        this.deploymentDetail = data;
+        this.workspace = data.workspace;
+        this.workspaceName = data.workspace;
+        this.projectName = data.project;
+        this.strategy = data.strategy;
+        this.labels = data.labels;
+        this.annotations = data.annotations;
+        if (data.events !== null) {
+          this.events = data.events;
+        } else {
+          this.events = null;
+        }
+        this.pods = involvesData.pods;
+        this.depServices = involvesData.services;
+        // this.depServicesPort = involvesData.services.port;
+        this.deploymentEvents = data.events;
+        this.containersTemp = data.containers;
       });
+    });
   };
 
-  setWorkspace = (workspace) => {
+  setWorkspace = workspace => {
     runInAction(() => {
       this.workspace = workspace;
     });
   };
-  setCluster = (cluster) => {
+  setCluster = cluster => {
     runInAction(() => {
       this.cluster = cluster;
     });
   };
-  setProject = (project) => {
+  setProject = project => {
     runInAction(() => {
       this.project = project;
     });
   };
 
-  setDeployName = (name) => {
+  setDeployName = name => {
     runInAction(() => {
       this.deploymentName = name;
     });
   };
 
-  setWorkspaceName = (workspace) => {
+  setWorkspaceName = workspace => {
     runInAction(() => {
       this.workspaceName = workspace;
     });
   };
 
-  setProjectName = (project) => {
+  setProjectName = project => {
     runInAction(() => {
       this.projectName = project;
     });
   };
 
-  setPodReplicas = (type) => {
+  setPodReplicas = type => {
     if (type === "plus") {
       runInAction(() => {
         this.podReplicas++;
@@ -298,43 +282,43 @@ class Deployment {
     }
   };
 
-  setContainerName = (value) => {
+  setContainerName = value => {
     runInAction(() => {
       this.containerName = value;
     });
   };
 
-  setContainerImage = (value) => {
+  setContainerImage = value => {
     runInAction(() => {
       this.containerImage = value;
     });
   };
 
-  setContainerPortName = (value) => {
+  setContainerPortName = value => {
     runInAction(() => {
       this.containerPortName = value;
     });
   };
 
-  setContainerPort = (value) => {
+  setContainerPort = value => {
     runInAction(() => {
       this.containerPort = value;
     });
   };
 
-  setContent = (content) => {
+  setContent = content => {
     runInAction(() => {
       this.content = content;
     });
   };
 
-  setContentVolume = (contentVolume) => {
+  setContentVolume = contentVolume => {
     runInAction(() => {
       this.contentVolume = contentVolume;
     });
   };
 
-  setResponseData = (data) => {
+  setResponseData = data => {
     runInAction(() => {
       this.responseData = data;
     });
@@ -353,16 +337,13 @@ class Deployment {
     });
   };
 
-  postDeploymentGM = async (callback) => {
+  postDeploymentGM = async callback => {
     const { selectClusters } = volumeStore;
     const YAML = require("yamljs");
 
     await axios
-      .post(
-        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
-        YAML.parse(this.content)
-      )
-      .then((res) => {
+      .post(`${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`, YAML.parse(this.content))
+      .then(res => {
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
         }
@@ -373,24 +354,18 @@ class Deployment {
     const YAML = require("yamljs");
     const { selectClusters } = volumeStore;
 
-    await axios
-      .post(
-        `${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`,
-        YAML.parse(this.contentVolume)
-      )
-      .then(() => {
-        return;
-      });
+    await axios.post(`${SERVER_URL}/pvcs?cluster=${selectClusters}&project=${this.project}`, YAML.parse(this.contentVolume)).then(() => {
+      return;
+    });
   };
 
   deleteDeployment = async (deploymentName, callback) => {
     axios
       .delete(`${SERVER_URL}/deployments/${deploymentName}`)
-      .then((res) => {
-        if (res.status === 201)
-          swalError("Deployment가 삭제되었습니다.", callback);
+      .then(res => {
+        if (res.status === 201) swalError("Deployment가 삭제되었습니다.", callback);
       })
-      .catch((err) => swalError("삭제에 실패하였습니다."));
+      .catch(err => swalError("삭제에 실패하였습니다."));
   };
 }
 

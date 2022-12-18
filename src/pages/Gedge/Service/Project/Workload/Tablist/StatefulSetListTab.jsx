@@ -64,7 +64,7 @@ const StatefulSetListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadStatefulSetDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -79,7 +79,7 @@ const StatefulSetListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadStatefulSetList} isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadStatefulSetList}>
             {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 

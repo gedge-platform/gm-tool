@@ -163,6 +163,7 @@ class StorageClass {
       }
 
       this.setTotalPages(totalCnt);
+      this.setCurrentPage(1);
       setFunc(this.resultList);
       this.setViewList(0);
     });
@@ -267,13 +268,15 @@ class StorageClass {
 
   loadStorageClasses = async () => {
     let { id, role } = getItem("user");
-    console.log(id, role);
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/storageclasses?user=${id}`)
       .then((res) => {
         runInAction(() => {
           console.log(res);
+          // this.storageClasses = res.data.data !== null ? res.data.data : null;
+          // this.totalElements =
+          //   res.data.data === null ? 0 : res.data.data.length;
           this.storageClasses = res.data.data;
           this.totalElements =
             res.data.data === null ? 0 : res.data.data.length;

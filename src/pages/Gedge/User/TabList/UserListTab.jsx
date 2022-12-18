@@ -16,8 +16,18 @@ const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState("");
 
-  const { deleteUser, userDetail, loadUserList, loadUserDetail, totalElements, currentPage, totalPages, viewList, goPrevPage, goNextPage } =
-    userStore;
+  const {
+    deleteUser,
+    userDetail,
+    loadUserList,
+    loadUserDetail,
+    totalElements,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+  } = userStore;
 
   const [columnDefs] = useState([
     // {
@@ -77,7 +87,7 @@ const UserListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     loadUserDetail(e.data.memberId);
     setUserName(e.data.memberId);
   };
@@ -93,7 +103,9 @@ const UserListTab = observer(() => {
     if (userName === "") {
       swalError("사용자를 선택해주세요!");
     } else {
-      swalUpdate(userName + "를 삭제하시겠습니까?", () => deleteUser(userName, loadUserList));
+      swalUpdate(userName + "를 삭제하시겠습니까?", () =>
+        deleteUser(userName, loadUserList)
+      );
     }
     setUserName("");
   };
@@ -108,6 +120,7 @@ const UserListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="grid-height2">
@@ -123,7 +136,11 @@ const UserListTab = observer(() => {
               goPrevPage={goPrevPage}
             />
           </div>
-          <CreateUser open={open} onClose={handleClose} reloadFunc={loadUserList} />
+          <CreateUser
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadUserList}
+          />
         </PanelBox>
         <UserDetail user={userDetail} />
       </CReflexBox>

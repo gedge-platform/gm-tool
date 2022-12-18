@@ -12,8 +12,13 @@ import ClaimDetail from "../ClaimDetail";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import CreateClaim from "../ClaimDialog/CreateClaim";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
+// import { useLocation } from "react-router";
+
+// let prePath = "";
 
 const ClaimListTab = observer(() => {
+  // let locations = useLocation();
+
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [claimName, setClaimName] = useState("");
@@ -105,11 +110,16 @@ const ClaimListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     setClaimName(e.data.name);
     loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
-    loadVolumeYaml(e.data.name, e.data.clusterName, e.data.namespace, "persistentvolumeclaims");
+    loadVolumeYaml(
+      e.data.name,
+      e.data.clusterName,
+      e.data.namespace,
+      "persistentvolumeclaims"
+    );
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -135,7 +145,9 @@ const ClaimListTab = observer(() => {
     if (claimName === "") {
       swalError("Claim를 선택해주세요!");
     } else {
-      swalUpdate(claimName + "를 삭제하시겠습니까?", () => deletePvClaim(claimName, reloadData));
+      swalUpdate(claimName + "를 삭제하시겠습니까?", () =>
+        deletePvClaim(claimName, reloadData)
+      );
     }
     setClaimName("");
   };
@@ -151,6 +163,15 @@ const ClaimListTab = observer(() => {
     };
   }, [reRun]);
 
+  // useEffect(() => {
+  //   if (prePath.indexOf("/service/volumes") !== -1) {
+  //     console.log("새로고침");
+  //     prePath = "";
+  //     window.location.reload();
+  //   }
+  //   prePath = location.pathname;
+  // }, [location]);
+
   return (
     <>
       <CReflexBox>
@@ -162,6 +183,7 @@ const ClaimListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
@@ -180,8 +202,16 @@ const ClaimListTab = observer(() => {
               />
             </div>
           </div>
-          <ViewYaml open={openYaml} yaml={getYamlFile} onClose={handleCloseYaml} />
-          <CreateClaim open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <ViewYaml
+            open={openYaml}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+          />
+          <CreateClaim
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <ClaimDetail
           pvClaim={pvClaim}

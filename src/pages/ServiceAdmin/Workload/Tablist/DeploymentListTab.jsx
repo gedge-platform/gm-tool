@@ -77,7 +77,7 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     setDeploymentName(e.data.name);
     loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -95,9 +95,7 @@ const DeploymentListTab = observer(() => {
     if (deploymentName === "") {
       swalError("Deployment를 선택해주세요!");
     } else {
-      swalUpdate(deploymentName + "를 삭제하시겠습니까?", () =>
-        deleteDeployment(deploymentName, reloadData)
-      );
+      swalUpdate(deploymentName + "를 삭제하시겠습니까?", () => deleteDeployment(deploymentName, reloadData));
     }
     setDeploymentName("");
   };
@@ -124,6 +122,7 @@ const DeploymentListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">
@@ -141,11 +140,7 @@ const DeploymentListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={reloadData}
-          />
+          <CreateDeployment open={open} onClose={handleClose} reloadFunc={reloadData} />
         </PanelBox>
         <Detail />
       </CReflexBox>

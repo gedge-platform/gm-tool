@@ -47,6 +47,8 @@ const CreateVM = observer(props => {
       image: "",
       flavor: "",
     });
+    setProviderName("");
+    setStepValue(1);
   };
 
   const onClickStepTwo = () => {
@@ -55,11 +57,9 @@ const CreateVM = observer(props => {
       return;
     }
     if (ProviderName === "AWS") {
-      console.log(ProviderName);
       setStepValue(2);
     }
     if (ProviderName === "OPENSTACK") {
-      console.log(ProviderName);
       setStepValue(2);
     } else {
       return;
@@ -184,7 +184,7 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={onClickCreateAWS}>생성</ButtonNext>
+              <ButtonNext onClick={verify}>생성</ButtonNext>
             </div>
           </div>
         </>
@@ -208,7 +208,7 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={onClickCreateOPENSTACK}>생성</ButtonNext>
+              <ButtonNext onClick={verify}>생성</ButtonNext>
             </div>
           </div>
         </>

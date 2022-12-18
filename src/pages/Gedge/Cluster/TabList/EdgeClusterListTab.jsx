@@ -93,7 +93,7 @@ const EdgeClusterListTab = observer(() => {
 
   const history = useHistory();
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     loadCluster(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
@@ -110,7 +110,9 @@ const EdgeClusterListTab = observer(() => {
     if (clusterName === "") {
       swalError("클러스터를 선택해주세요!");
     } else {
-      swalUpdate(clusterName + "를 삭제하시겠습니까?", () => deleteCluster(clusterName, reloadData));
+      swalUpdate(clusterName + "를 삭제하시겠습니까?", () =>
+        deleteCluster(clusterName, reloadData)
+      );
     }
     setVMName("");
   };
@@ -133,6 +135,7 @@ const EdgeClusterListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
@@ -153,7 +156,12 @@ const EdgeClusterListTab = observer(() => {
             </div>
             {/* </CTabPanel> */}
           </div>
-          <CreateCluster type="edge" open={Create} onClose={handleCreateClose} reloadFunc={reloadData} />
+          <CreateCluster
+            type="edge"
+            open={Create}
+            onClose={handleCreateClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>

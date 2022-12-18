@@ -19,7 +19,18 @@ const SchedulerListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { podList, podDetail, totalYElements, loadPodList, loadPodDetail, currentYPage, totalYPages, viewYList, goPrevPage, goNextPage } = podStore;
+  const {
+    podList,
+    podDetail,
+    totalYElements,
+    loadPodList,
+    loadPodDetail,
+    currentYPage,
+    totalYPages,
+    viewYList,
+    goPrevPage,
+    goNextPage,
+  } = podStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -75,7 +86,7 @@ const SchedulerListTab = observer(() => {
     setOpen(false);
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadPodDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -90,7 +101,7 @@ const SchedulerListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar isSearch={true} isSelect={true} keywordList={["이름"]}>
+          <CommActionBar reloadFunc={loadPodList}>
             <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
@@ -111,7 +122,11 @@ const SchedulerListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateScheduler open={open} onClose={handleClose} reloadFunc={loadPodList} />
+          <CreateScheduler
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadPodList}
+          />
         </PanelBox>
       </CReflexBox>
     </>
