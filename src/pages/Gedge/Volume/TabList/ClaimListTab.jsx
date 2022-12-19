@@ -31,7 +31,7 @@ const ClaimListTab = observer(() => {
     pvClaimYamlFile,
     pvClaimAnnotations,
     pvClaimLables,
-    loadVolumeYaml,
+    loadClaimYaml,
     deletePvClaim,
     getYamlFile,
     // pvClaimEvents,
@@ -114,7 +114,7 @@ const ClaimListTab = observer(() => {
     let fieldName = e.colDef.field;
     setClaimName(e.data.name);
     loadPVClaim(e.data.name, e.data.clusterName, e.data.namespace);
-    loadVolumeYaml(
+    loadClaimYaml(
       e.data.name,
       e.data.clusterName,
       e.data.namespace,

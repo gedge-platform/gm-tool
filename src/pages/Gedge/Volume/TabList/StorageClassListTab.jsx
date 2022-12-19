@@ -9,7 +9,10 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import StorageClassDetail from "../StorageClassDetail";
 import ViewYaml from "../Dialog/ViewYaml";
-import { converterCapacity, drawStatus } from "@/components/datagrids/AggridFormatter";
+import {
+  converterCapacity,
+  drawStatus,
+} from "@/components/datagrids/AggridFormatter";
 import { StorageClassStore } from "@/store";
 
 const StorageClassListTab = observer(() => {
@@ -87,11 +90,11 @@ const StorageClassListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     setStorageClassName(e.data.name);
     loadStorageClass(e.data.name, e.data.cluster);
-    loadStorageClassYaml(e.data.name, e.data.cluster, null, "storageclasses");
+    loadStorageClassYaml(e.data.name, e.data.cluster, "storageclasses");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -147,7 +150,12 @@ const StorageClassListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <ViewYaml open={open} yaml={getYamlFile} onClose={handleCloseYaml} reloadFunc={reloadData} />
+          <ViewYaml
+            open={open}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <StorageClassDetail />
       </CReflexBox>
