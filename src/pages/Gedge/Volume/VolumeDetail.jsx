@@ -61,8 +61,9 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  const { pVolume, events, annotations } = volumeStore;
-  const handleTabChange = (newValue) => {
+  const { pVolume, events, annotations, annotationsTmp } = volumeStore;
+
+  const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
   // const labelTable = [];
@@ -78,39 +79,61 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
   //     })
   //   : null;
 
-  const metaTable = () => {
-    console.log(annotations);
-    if (annotations === null) {
-      return (
-        <LabelContainer>
-          <p>No Annotations Info</p>
-        </LabelContainer>
+  // const metaTable = () => {
+  //   if (annotationsTmp === null) {
+  //     return (
+  //       <LabelContainer>
+  //         <p>No Annotations Info</p>
+  //       </LabelContainer>
+  //     );
+  //   } else {
+  //     return Object.entries(annotationsTmp).map(([key, value]) => {
+  //       metaTable.push(
+  //         <tr>
+  //           <th style={{ width: "20%" }}>{key}</th>
+  //           <td>
+  //             {isValidJSON(value) ? (
+  //               <ReactJson
+  //                 src={JSON.parse(value)}
+  //                 theme="summerfruit"
+  //                 displayDataTypes={false}
+  //                 displayObjectSize={false}
+  //               />
+  //             ) : (
+  //               value
+  //             )}
+  //           </td>
+  //         </tr>
+  //       );
+  //     });
+  //   }
+  // };
+
+  const metaTable = [];
+  if (annotationsTmp) {
+    Object.entries(annotationsTmp).map(([key, value]) => {
+      metaTable.push(
+        <tr>
+          <th style={{ width: "20%" }}>{key}</th>
+          <td>
+            {isValidJSON(value) ? (
+              <ReactJson
+                src={JSON.parse(value)}
+                theme="summerfruit"
+                displayDataTypes={false}
+                displayObjectSize={false}
+              />
+            ) : (
+              value
+            )}
+          </td>
+        </tr>
       );
-    } else {
-      return Object.entries(annotations).map(([key, value]) => {
-        metaTable.push(
-          <tr>
-            <th style={{ width: "20%" }}>{key}</th>
-            <td>
-              {isValidJSON(value) ? (
-                <ReactJson
-                  src={JSON.parse(value)}
-                  theme="summerfruit"
-                  displayDataTypes={false}
-                  displayObjectSize={false}
-                />
-              ) : (
-                value
-              )}
-            </td>
-          </tr>
-        );
-      });
-    }
-  };
+    });
+  }
 
   return (
-    <PanelBox>
+    <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
         <CTab label="Overview" />
         <CTab label="Claim Info" />
@@ -237,7 +260,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       <CTabPanel value={tabvalue} index={2}>
         <div className="panelCont">
           <table className="tb_data">
-            <tbody>{metaTable()}</tbody>
+            <tbody>{metaTable}</tbody>
           </table>
         </div>
       </CTabPanel>

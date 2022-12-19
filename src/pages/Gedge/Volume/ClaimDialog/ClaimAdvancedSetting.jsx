@@ -4,6 +4,7 @@ import { CTextField } from "@/components/textfields";
 import { observer } from "mobx-react";
 import { claimStore } from "@/store";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
+import CreateClaim from "./CreateClaim";
 
 const HeaderContainer = styled.div`
   width: 320px;
@@ -40,28 +41,17 @@ const Span = styled.span`
 `;
 
 const ClaimAdvancedSetting = observer(() => {
-  const {
-    // labels,
-    setLabels,
-    inputLabelKey,
-    setInputLabelKey,
-    inputLabelValue,
-    setInputLabelValue,
-    inputAnnotationsKey,
-    setInputAnnotationsKey,
-    inputAnnotationsValue,
-    setInputAnnotationsValue,
-    annotations,
-    setAnnotations,
-    // labelInput,
-    // setLabelInput,
-  } = claimStore;
-
   const [labelInput, setLabelInput] = useState({
     labelKey: "",
     labelValue: "",
   });
   const { labelKey, labelValue } = labelInput;
+
+  const [annotationInput, setAnnotationInput] = useState({
+    annotationKey: "",
+    annotationValue: "",
+  });
+  const { annotationKey, annotationValue } = annotationInput;
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -69,83 +59,81 @@ const ClaimAdvancedSetting = observer(() => {
       ...labelInput, // 기존의 labelInput 객체를 복사한 뒤
       [name]: value, // name 키를 가진 값을 value로 설정
     });
-    console.log(labelInput);
+    setAnnotationInput({
+      ...annotationInput,
+      [name]: value,
+    });
   };
 
-  const nextID = useRef(1);
-
-  // const handleChange = (e) => {
-  //   const { value, name } = e.target;
-  //   if (name === "LabelsKey") {
-  //     setInputLabelKey(value);
-  //     return;
-  //   } else if (name === "LabelsValue") {
-  //     setInputLabelValue(value);
-  //     return;
-  //   } else if (name === "AnnotationsKey") {
-  //     setInputAnnotationsKey(value);
-  //     return;
-  //   } else if (name === "AnnotationsValue") {
-  //     setInputAnnotationsValue(value);
-  //     return;
-  //   }
-  // };
-
-  const labels = [
-    {
-      id: 0,
-      key: "",
-      value: "",
-    },
-  ];
+  const [labels, setLabels] = useState([]);
+  const [annotations, setAnnotations] = useState([]);
 
   const addLabels = () => {
+    if (labelKey == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+    if (labelValue == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+
     const newLabelsList = [
       {
-        id: nextID.current,
-        inputLabelKey,
-        inputLabelValue,
+        // [labelKey]: labelValue,
+        labelKey,
+        labelValue,
       },
     ];
+
     setLabels(labels.concat(newLabelsList));
-    console.log("labels", labels);
     setLabelInput({
       labelKey: "",
       labelValue: "",
+    });
+  };
+
+  const labelsList = labels.reduce(
+    (obj, item) => Object.assign(obj, { [item.labelKey]: item.labelValue }),
+    {}
+  );
+  console.log("step 2", labelsList); //{1: '2'}
+
+  const deleteLabels = (labelKey) => {
+    // if (labels.length == 1) return;
+    setLabels(labels.filter((item) => item.labelKey !== labelKey));
+  };
+
+  const addAnnotations = () => {
+    if (annotationKey == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+    if (annotationValue == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+
+    const newAnnotationsList = [
+      {
+        annotationKey,
+        annotationValue,
+      },
+    ];
+
+    setAnnotations(annotations.concat(newAnnotationsList));
+    setAnnotationInput({
+      annotationKey: "",
+      annotationValue: "",
     });
 
     // labels[inputLabelKey] = inputLabelValue;
   };
 
-  const deleteLabels = (id) => {
-    if (labels.length == 1) return;
-    const deletedNewList = labels.filter((labels) => labels.id !== id);
-    setLabels(deletedNewList);
-  };
-
-  // const handleChangeAnnotations = (e) => {
-  //   const { value } = e.target;
-  //   setInputAnnotationsKey(value);
-  //   setInputAnnotationsValue(value);
-  // };
-
-  const addAnnotations = () => {
-    const newAnnotationsList = annotations.concat({
-      id: annotationsNextId,
-      key: inputAnnotationsKey,
-      value: inputAnnotationsValue,
-    });
-    setAnnotationsNextId(annotationsNextId + 1);
-    setAnnotations(newAnnotationsList);
-    setInputAnnotationsKey("");
-    setInputAnnotationsValue("");
-    return;
-  };
-
-  const deleteAnnotations = (id) => {
-    if (annotations.length == 1) return;
-    const deletedNewList = annotations.filter((labels) => labels.id !== id);
-    setAnnotations(deletedNewList);
+  const deleteAnnotations = (annotationKey) => {
+    setAnnotations(
+      annotations.filter((item) => item.annotationKey !== annotationKey)
+    );
   };
 
   return (
@@ -191,50 +179,67 @@ const ClaimAdvancedSetting = observer(() => {
             </td>
             <td>
               <Button onClick={addLabels}>+</Button>
-              &nbsp;&nbsp;
-              <Button onClick={() => deleteLabels(item.id)}>-</Button>
             </td>
           </tr>
-          <tr>
-            <th></th>
-            <td>{labelKey}</td>
-            <td>{labelValue}</td>
-          </tr>
-
-          {annotations.map((item, i) => (
+          {labels.map((item) => (
             <tr>
-              <th>Annotations</th>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Key"
-                  className="form_fullWidth"
-                  name="AnnotationsKey"
-                  onChange={handleChange}
-                  value={inputAnnotationsKey}
-                  // value={item.key}
-                />
+              <th>Labels</th>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelValue}
               </td>
               <td>
-                <CTextField
-                  type="text"
-                  placeholder="Value"
-                  className="form_fullWidth"
-                  name="AnnotationsValue"
-                  onChange={handleChange}
-                  value={inputAnnotationsValue}
-                  // value={item.value}
-                />
+                <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
               </td>
-              <td colSpan={2}>
-                <Button onClick={addAnnotations}>+</Button>
-                &nbsp;&nbsp;
-                <Button onClick={() => deleteAnnotations(item.id)}>-</Button>
+            </tr>
+          ))}
+          <tr>
+            <th>Annotations</th>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Key"
+                className="form_fullWidth"
+                name="annotationKey"
+                onChange={handleChange}
+                value={annotationKey}
+              />
+            </td>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Value"
+                className="form_fullWidth"
+                name="annotationValue"
+                onChange={handleChange}
+                value={annotationValue}
+              />
+            </td>
+            <td colSpan={2}>
+              <Button onClick={addAnnotations}>+</Button>
+            </td>
+          </tr>
+          {annotations.map((item) => (
+            <tr>
+              <th>Labels</th>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.annotationKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.annotationValue}
+              </td>
+              <td>
+                <Button onClick={() => deleteAnnotations(item.annotationKey)}>
+                  -
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <CreateClaim labelsList={labelsList} />
     </>
   );
 });

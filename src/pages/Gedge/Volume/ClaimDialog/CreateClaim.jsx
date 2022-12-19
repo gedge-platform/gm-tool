@@ -16,6 +16,7 @@ import ClaimBasicInformation from "./ClaimBasicInformation";
 import VolumYamlPopup from "../Dialog/VolumYamlPopup";
 import VolumePopup from "../Dialog/VolumePopup";
 import ClaimAdvancedSetting from "./ClaimAdvancedSetting";
+import ClaimYamlPopup from "./ClaimYamlPopup";
 
 const Button = styled.button`
   background-color: #fff;
@@ -35,7 +36,7 @@ const ButtonNext = styled.button`
 `;
 
 const CreateClaim = observer((props) => {
-  const { open } = props;
+  const { open, labelsList } = props;
   const [stepValue, setStepValue] = useState(1);
   const { setProjectListinWorkspace } = projectStore;
   const {
@@ -63,7 +64,7 @@ const CreateClaim = observer((props) => {
     setLabelsView,
     inputLabelKey,
     inputLabelValue,
-    labels,
+    // labels,
     setLabels,
     setInputLabelKey,
     setInputLabelValue,
@@ -83,11 +84,8 @@ const CreateClaim = observer((props) => {
     metadata: {
       name: claimName,
       namespace: project,
-      labels: {
-        // labelsKey: inputLabelKey,
-        // labelsValue: inputLabelValue,
-        inputLabelKey: inputLabelValue,
-      },
+      labels: labelsList,
+      annotations: {},
     },
     spec: {
       storageClassName: selectStorageClass,
@@ -142,15 +140,15 @@ const CreateClaim = observer((props) => {
     setWorkspace("");
     setProject("");
     setSelectStorageClass("");
-    setInputLabelKey("");
-    setInputLabelValue("");
-    setLabels([
-      {
-        id: 0,
-        key: "",
-        value: "",
-      },
-    ]);
+    // setInputLabelKey("");
+    // setInputLabelValue("");
+    // setLabels([
+    //   {
+    //     id: 0,
+    //     key: "",
+    //     value: "",
+    //   },
+    // ]);
   };
 
   const onClickStepTwo = () => {
@@ -236,7 +234,7 @@ const CreateClaim = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <VolumYamlPopup />
+          <ClaimYamlPopup labelsList={labelsList} />
           <div
             style={{
               display: "flex",
