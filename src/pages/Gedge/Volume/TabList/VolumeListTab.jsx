@@ -109,7 +109,8 @@ const VolumeListTab = observer(() => {
     let fieldName = e.colDef.field;
     setVolumeName(e.data.name);
     loadPVolume(e.data.name, e.data.cluster);
-    loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
+    loadVolumeYaml(e.data.name, e.data.cluster, "persistentvolumes");
+    // loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }

@@ -263,7 +263,7 @@ class Claim {
     window.close();
   };
 
-  loadVolumeYaml = async (name, clusterName, projectName, kind) => {
+  loadClaimYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
         `${SERVER_URL}/view/${name}?cluster=${clusterName}&project=${projectName}&kind=${kind}`

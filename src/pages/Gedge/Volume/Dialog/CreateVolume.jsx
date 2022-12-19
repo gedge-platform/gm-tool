@@ -58,7 +58,7 @@ const CreateVolume = observer((props) => {
 
   const template = {
     apiVersion: "v1",
-    kind: "PersistentVolumeClaim",
+    kind: "persistentvolumes",
     metadata: {
       name: volumeName,
       namespace: project,

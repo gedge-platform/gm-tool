@@ -67,7 +67,6 @@ const ClaimAdvancedSetting = observer(() => {
 
   const [labels, setLabels] = useState([]);
   const [annotations, setAnnotations] = useState([]);
-  // const [labelsList, setLabelsList] = useState({});
 
   const addLabels = () => {
     if (labelKey == "") {
@@ -92,7 +91,6 @@ const ClaimAdvancedSetting = observer(() => {
       labelKey: "",
       labelValue: "",
     });
-    // console.log("step 1", labelsList);
   };
 
   const labelsList = labels.reduce(
@@ -100,8 +98,6 @@ const ClaimAdvancedSetting = observer(() => {
     {}
   );
   console.log("step 2", labelsList); //{1: '2'}
-
-  // console.log(labelsList);
 
   const deleteLabels = (labelKey) => {
     // if (labels.length == 1) return;

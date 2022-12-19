@@ -16,6 +16,7 @@ import ClaimBasicInformation from "./ClaimBasicInformation";
 import VolumYamlPopup from "../Dialog/VolumYamlPopup";
 import VolumePopup from "../Dialog/VolumePopup";
 import ClaimAdvancedSetting from "./ClaimAdvancedSetting";
+import ClaimYamlPopup from "./ClaimYamlPopup";
 
 const Button = styled.button`
   background-color: #fff;
@@ -77,7 +78,6 @@ const CreateClaim = observer((props) => {
     setSelectStorageClass,
   } = StorageClassStore;
 
-  console.log("labelsList step3", labelsList);
   const template = {
     apiVersion: "v1",
     kind: "PersistentVolumeClaim",
@@ -234,7 +234,7 @@ const CreateClaim = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <VolumYamlPopup labelsList={labelsList} />
+          <ClaimYamlPopup labelsList={labelsList} />
           <div
             style={{
               display: "flex",
