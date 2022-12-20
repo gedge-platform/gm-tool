@@ -369,7 +369,7 @@ class Dashboard {
           this.Paused,
         ]);
       });
-    console.log(vmStatusList);
+    // console.log(vmStatusList);
   };
 
   // loadVMStatusCnt = async () => {

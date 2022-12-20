@@ -360,24 +360,24 @@ const Detail = observer(() => {
           )}
           <br />
           <TableTitle>References</TableTitle>
-          {ownerReferences ? (
-            Object.entries(ownerReferences).map(([key, value]) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {ownerReferences ? (
+                Object.entries(ownerReferences).map(([key, value]) => (
                   <tr>
                     <th style={{ width: "25%" }}>
                       {key.charAt(0).toUpperCase() + key.slice(1)}
                     </th>
                     <td>{value}</td>
                   </tr>
-                </tbody>
-              </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Reference Info</p>
-            </LabelContainer>
-          )}
+                ))
+              ) : (
+                <LabelContainer>
+                  <p>No Reference Info</p>
+                </LabelContainer>
+              )}
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>

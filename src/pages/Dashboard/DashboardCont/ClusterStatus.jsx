@@ -3,24 +3,12 @@ import React, { useEffect } from "react";
 import { dashboardStore } from "@/store";
 
 const ClusterStatus = observer(() => {
-  const {
-    loadCredentialName,
-    loadVMStatusCnt,
-    loadVMCnt,
-    // ConfigName,
-    // vmCntList,
-    vmStatusList,
-    connectionconfig,
-    ProviderName,
-    ConfigNameList,
-  } = dashboardStore;
+  const { loadCredentialName, vmStatusList, setVmStatusList } = dashboardStore;
 
   useEffect(() => {
-    // loadCredentialName();
-    // loadVMStatusCnt();
-    // clusterStatus2();
+    setVmStatusList();
+    loadCredentialName();
   }, []);
-  // console.log(vmStatusList);
 
   // if (vmStatusList === undefined) {
   //   loadVMStatusCnt();
@@ -72,10 +60,50 @@ const ClusterStatus = observer(() => {
   //   </div>
   // });
   // };
+  const icon = (provider) => {
+    // vmStatusList.map((vmstatus) =>
+    if (provider === "AWS") {
+      return <div className="ClusterStatusIcon aws"></div>;
+    } else if (provider === "OPENSTACK") {
+      return <div className="ClusterStatusIcon openstack"></div>;
+    }
+    // )
+  };
+
+  const vmStatus = () => {
+    return vmStatusList.map((vmstatus) => (
+      <div className="ClusterStatusBox">
+        {/* <div className="ClusterStatusIcon openstack"></div> */}
+        {icon(vmstatus[1])}
+        <div className="ClusterStatusInfoBox">
+          <div className="Count">
+            2 <span>클러스터</span>
+          </div>
+          <div className="Count">
+            3 <span>VM</span>
+          </div>
+        </div>
+        <div className="ClusterStatusList">
+          <ul>
+            <li className="run">
+              <span className="tit">실행</span> <span>{vmstatus[2]}</span>
+            </li>
+            <li className="stop">
+              <span className="tit">중지</span> <span>{vmstatus[3]}</span>
+            </li>
+            <li className="pause">
+              <span className="tit">일시중지</span> <span>{vmstatus[4]}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    ));
+  };
 
   return (
     <div className="ClusterStatusWrap">
-      <div className="ClusterStatusBox">
+      {vmStatus()}
+      {/* <div className="ClusterStatusBox">
         <div className="ClusterStatusIcon openstack"></div>
         <div className="ClusterStatusInfoBox">
           <div className="Count">
@@ -126,7 +154,7 @@ const ClusterStatus = observer(() => {
       </div>
 
       {/* 스크롤 영역 테스트 */}
-      <div className="ClusterStatusBox">
+      {/* <div className="ClusterStatusBox">
         <div className="ClusterStatusIcon"></div>
 
         <div className="ClusterStatusInfoBox">
@@ -175,7 +203,7 @@ const ClusterStatus = observer(() => {
             </li>
           </ul>
         </div>
-      </div>
+      </div>  */}
     </div>
   );
 });
