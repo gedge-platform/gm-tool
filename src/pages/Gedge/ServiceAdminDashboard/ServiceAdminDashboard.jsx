@@ -70,7 +70,8 @@ const ServiceAdminDashboard = observer(() => {
     statefulsetMetrics,
   } = serviceAdminDashboardStore;
 
-  console.log(serviceMetrics);
+  console.log("projectList", projectList);
+
   const { lastTime, interval } = monitoringStore;
   const [resetTest, setResetTest] = useState("");
 
@@ -86,6 +87,7 @@ const ServiceAdminDashboard = observer(() => {
   const onChange = ({ target: { name, value } }) => {
     if (name === "workspace") {
       setWorkspaceName(value);
+      console.log("workspace", value);
       loadServiceAdminDashboard(value);
       setProjectNameInMonitoring("");
       serviceAdminMonitoring(
@@ -96,7 +98,9 @@ const ServiceAdminDashboard = observer(() => {
       );
     }
     if (name === "projectName") {
+      console.log("projectName");
       setProjectNameInMonitoring(value);
+      console.log("projectName", value);
       serviceAdminMonitoring(
         value,
         unixStartTime(60),

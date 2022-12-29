@@ -14,7 +14,6 @@ const CloudZoneSlider = observer(() => {
     ConfigNameList,
     vmStatusList,
     loadVMStatusCnt,
-    ProviderName,
     setVmStatusList,
   } = dashboardStore;
 
@@ -27,12 +26,12 @@ const CloudZoneSlider = observer(() => {
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
 
-  const icon = (provider) => {
+  const icon = (Provider) => {
     // vmStatusList.map((vmstatus) =>
-    if (provider === "AWS") {
-      return <div className="iconBox aws">{provider}</div>;
-    } else if (provider === "OPENSTACK") {
-      return <div className="iconBox openstack">{provider}</div>;
+    if (Provider === "AWS") {
+      return <div className="iconBox aws">{Provider}</div>;
+    } else if (Provider === "OPENSTACK") {
+      return <div className="iconBox openstack">{Provider}</div>;
     }
     // )
   };
