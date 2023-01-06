@@ -335,11 +335,13 @@ class Dashboard {
     // );
     // })
   };
+
   setVmStatusList = async () => {
     runInAction(() => {
       this.vmStatusList = [];
     });
   };
+
   loadVMStatusCnt = async (configName, providerName) => {
     axios
       .post(

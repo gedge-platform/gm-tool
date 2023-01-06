@@ -133,8 +133,12 @@ const ConfigmapsDetail = observer(() => {
               >
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
-                    <th style={{ width: "15%" }}>{key}</th>
-                    <td>{value}</td>
+                    <th style={{ width: "5%" }}>{key}</th>
+                    <td
+                      style={{ wordBreak: "break-all", wordWrap: "break-word" }}
+                    >
+                      {value}
+                    </td>
                   </tr>
                 ))}
               </tbody>

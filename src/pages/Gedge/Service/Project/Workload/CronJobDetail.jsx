@@ -125,6 +125,8 @@ const Detail = observer(() => {
                         ? dateFormatter(cronJobDetail.creationTimestamp)
                         : "-"}
                     </td>
+                    <th></th>
+                    <td></td>
                   </tr>
                 </>
               ) : (
