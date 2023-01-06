@@ -116,7 +116,9 @@ class ServiceAdminDashboard {
       )
       .then((res) => {
         runInAction(() => {
+          console.log("res", res);
           this.allMetrics = res.data?.items;
+          console.log("this.allMetrics", this.allMetrics);
           this.deploymentMetrics = res.data?.items?.deployment_count[0].values;
           this.podMetrics = res.data?.items?.pod_count[0].values;
           this.volumeMetrics = res.data?.items?.pv_count[0].values;
@@ -165,6 +167,7 @@ class ServiceAdminDashboard {
           this.projectCpuTop = data?.projectCpuTop5 ? data?.projectCpuTop5 : 0;
           this.projectMemTop = data?.projectMemTop5 ? data?.projectMemTop5 : 0;
           this.resource = data?.resource ? data?.resource : 0;
+          console.log("this.resource", this.resource);
         });
       });
   };

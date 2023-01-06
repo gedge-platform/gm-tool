@@ -4,17 +4,12 @@ import { dashboardStore } from "@/store";
 
 const ClusterSummary = observer(() => {
   const {
-    dashboardDetail,
     clusterCnt,
-    // coreClusterCnt,
     credentialCnt,
     edgeClusterCnt,
     workspaceCnt,
     projectCnt,
-    loadClusterCnt,
     loadDashboardCnt,
-    setClusterCnt,
-    setDashBoardDetail,
   } = dashboardStore;
 
   useEffect(() => {
