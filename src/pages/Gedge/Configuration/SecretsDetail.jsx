@@ -6,7 +6,7 @@ import { secretStore } from "@/store";
 import styled from "styled-components";
 import EventAccordion from "@/components/detail/EventAccordion";
 import { dateFormatter } from "@/utils/common-utils";
-
+import SeeMoreBtn from "./SeeMoreBtn";
 import {
   Accordion,
   AccordionDetails,
@@ -177,65 +177,17 @@ const SecretDetail = observer(() => {
   // };
 
   const dataAccordion = () => {
-    const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
-    const onClickShow = (e) => {
-      setIsShowMore(!isShowMore); // 클릭 시 상태 반전
-    };
+  
 
     Object.entries(data).map(([keys, value]) => {
-      const [checkShow, setCheckShow] = useState(false);
-      const onClickShow2 = (e) => {
-        setCheckShow(!checkShow);
-      };
+     
       secretTable.push(
-        <>
-          <tr>
-            <th style={{ width: "15%" }}>{keys}</th>
-            <td
-              style={{ wordBreak: "break-all", wordWrap: "break-word" }} //강제로 줄바꿈
-              key={value}
-            >
-              {value.length > 250
-                ? checkShow
-                  ? value
-                  : value.substr(0, 250)
-                : value}
-              {value.length > 250 &&
-                (checkShow ? (
-                  <button onClick={(e) => onClickShow2(e)}>[닫기]</button>
-                ) : (
-                  <button onClick={(e) => onClickShow2(e)}>...[더보기]</button>
-                ))}
-            </td>
-          </tr>
-        </>
+        <SeeMoreBtn name={secretTabList.name} keys={keys}value={value}/>
+       
       );
     });
     return secretTable;
   };
-
-  // Object.entries(data).map(([keys, value]) => {
-  //   secretTable.push(
-  //     <>
-  //       <tr>
-  //         <th style={{ width: "15%" }}>{keys}</th>
-  //         <td
-  //           style={{ wordBreak: "break-all", wordWrap: "break-word" }} //강제로 줄바꿈
-  //         >
-  //           {/* {value} */}
-  //           {value.length < 300 ? value : value.substr(0, 300)}
-  //           {isShowMore ? (
-  //             <button onClick={() => setIsShowMore(!isShowMore)}>
-  //               ...[더보기]
-  //             </button>
-  //           ) : (
-  //             value
-  //           )}
-  //         </td>
-  //       </tr>
-  //     </>
-  //   );
-  // });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>

@@ -154,7 +154,6 @@ class Secret {
   //     this.secretList[0].namespace
   //   );
   // };
-
   loadsecretTabList = async (name, clusterName, namespace) => {
     await axios.get(`${SERVER_URL}/secrets/${name}?cluster=${clusterName}&project=${namespace}`).then(({ data: { data } }) => {
       runInAction(() => {
