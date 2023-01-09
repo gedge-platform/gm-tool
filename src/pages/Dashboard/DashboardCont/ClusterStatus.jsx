@@ -4,9 +4,9 @@ import { dashboardStore } from "@/store";
 
 const ClusterStatus = observer(() => {
   const {
-    loadCredentialName,
-    loadVMStatusCnt,
-    loadVMCnt,
+    // loadCredentialName,
+    // loadVMStatusCnt,
+    // loadVMCnt,
     // ConfigName,
     // vmCntList,
     vmStatusList,
@@ -20,7 +20,6 @@ const ClusterStatus = observer(() => {
     // loadVMStatusCnt();
     // clusterStatus2();
   }, []);
-  // console.log(vmStatusList);
 
   // if (vmStatusList === undefined) {
   //   loadVMStatusCnt();

@@ -152,15 +152,21 @@ const Detail = observer(() => {
             <tbody className="project_table">
               <tr>
                 <th> Name</th>
-                <td>{project?.projectName}</td>
+                <td>{project?.projectName ? project?.projectName : "-"}</td>
                 <th>Cluster</th>
                 <td style={{ whiteSpace: "pre-wrap" }}>
-                  {selectClusterInfo.map((item) => item.clusterName + "\n")}
+                  {selectClusterInfo
+                    ? selectClusterInfo.map((item) => item.clusterName + "\n")
+                    : "-"}
                 </td>
               </tr>
               <tr>
                 <th>Created</th>
-                <td>{dateFormatter(project?.created_at)}</td>
+                <td>
+                  {project?.created_at
+                    ? dateFormatter(project?.created_at)
+                    : "-"}
+                </td>
                 <th>Creator</th>
                 <td>
                   {project?.projectCreator ? project?.projectCreator : "-"}
@@ -173,18 +179,9 @@ const Detail = observer(() => {
       ))
     ) : (
       <>
-        <table className="tb_data" style={{ tableLayout: "fixed" }}>
-          <tbody className="project_table">
-            <tr>
-              {
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              }
-            </tr>
-          </tbody>
-        </table>
-        <br />
+        <LabelContainer>
+          <p>No Projects Information</p>
+        </LabelContainer>
       </>
     );
   };
@@ -205,7 +202,11 @@ const Detail = observer(() => {
                       : "-"}
                   </td>
                   <th>Pod</th>
-                  <td>{workSpaceDetail.resource.pod_count}</td>
+                  <td>
+                    {workSpaceDetail.resource.pod_count
+                      ? workSpaceDetail.resource.pod_count
+                      : "-"}
+                  </td>
                 </tr>
                 <tr>
                   <th>Service</th>
@@ -314,7 +315,7 @@ const Detail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info</p>
+                  <p>No Information</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -346,7 +347,7 @@ const Detail = observer(() => {
                   </>
                 ) : (
                   <LabelContainer>
-                    <p>No Resource Usage Info</p>
+                    <p>No Resource Usage Information</p>
                   </LabelContainer>
                 )}
               </td>
@@ -372,7 +373,7 @@ const Detail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info</p>
+              <p>No Labels Information</p>
             )}
           </LabelContainer>
           <br />

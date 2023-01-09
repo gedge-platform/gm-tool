@@ -188,7 +188,7 @@ const Detail = observer(() => {
               </>
             ))
           )}
-          <br />
+
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads !== null ? (
             involvesWorkloads.map((workload) => (
