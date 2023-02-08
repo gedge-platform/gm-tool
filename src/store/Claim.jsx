@@ -1,5 +1,4 @@
 import axios from "axios";
-import { template } from "lodash";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";

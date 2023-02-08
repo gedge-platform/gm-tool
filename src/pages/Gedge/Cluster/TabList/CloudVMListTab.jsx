@@ -105,7 +105,7 @@ const CloudVMListTab = observer(() => {
       swalError("VM을 선택해주세요!");
     } else {
       swalUpdate(vmName + "를 삭제하시겠습니까?", () => {
-        swalLoading("VM 삭제중..", 1000000, "이 창은 VM 삭제가 완료되면 사라집니다.");
+        swalLoading("VM 삭제중..", 3000000, "이 창은 VM 삭제가 완료되면 사라집니다.");
         deleteVM(vmName, config, reloadData);
       });
     }

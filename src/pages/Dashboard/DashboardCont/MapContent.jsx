@@ -6,7 +6,6 @@ import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
 import { serviceAdminDashboardStore, monitoringStore } from "@/store";
 import { LineElement } from "chart.js";
-import { map } from "lodash";
 
 const MapContent = observer(() => {
   const {
