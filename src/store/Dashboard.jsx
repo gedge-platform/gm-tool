@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { SERVER_URL } from "../config";
+import { SERVER_URL, SPIDER } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -57,7 +57,14 @@ class Dashboard {
   y = [];
   pointArr = [];
 
-  connectionconfig = [];
+  connectionconfig = [{
+    ConfigName: "",
+    ProviderName: "", 
+    DriverName: "",
+    CredentialName: "",
+    RegionName:" "
+  }
+  ];
   ConfigName = [];
   ProviderName = [];
   CredentialName = [];
@@ -224,20 +231,13 @@ class Dashboard {
 
   loadCredentialName = async () => {
     await axios
-      .get(`http://210.207.104.188:1024/spider/connectionconfig`)
+      .get(`${SERVER_URL}/spider/connectionconfig`)
       .then((res) => {
         runInAction(() => {
           this.connectionconfig = res.data.connectionconfig;
-          this.ConfigNameList = this.connectionconfig.map(
-            (name) => name.ConfigName
-          );
-          this.ProviderName = this.connectionconfig.map(
-            (provider) => provider.ProviderName
-          );
-
-          this.CredentialName = this.connectionconfig.map(
-            (credentialName) => credentialName.CredentialName
-          );
+          this.ConfigNameList = this.connectionconfig ? this.connectionconfig.map((name) => name.ConfigName ) : "";
+          this.ProviderName = this.connectionconfig ? this.connectionconfig.map((provider) => provider.ProviderName ) : "";
+          this.ProviderName = this.connectionconfig ? this.connectionconfig.map((credentialName) => credentialName.CredentialName ) : "";
         });
       })
       .then(() => {
@@ -311,7 +311,7 @@ class Dashboard {
   // };
   loadVMCnt = async () => {
     const urls = axios.get(
-      `http://210.207.104.188:1024/spider/connectionconfig`
+      `${SPIDER}/spider/connectionconfig`
     );
     const configResult = await Promise.all([urls]).then((res) => {
       return res;
@@ -321,7 +321,7 @@ class Dashboard {
     await configNameList.forEach((config) => {
       let configName = config.ConfigName;
       axios
-        .post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`, {
+        .post(`${SERVER_URL}/gmcapi/v2/spider/vm/vmCount`, {
           ConnectionName: configName,
         })
         .then((res) => {
@@ -345,7 +345,7 @@ class Dashboard {
   loadVMStatusCnt = async (configName, providerName) => {
     axios
       .post(
-        `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
+        `${SERVER_URL}/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
         {
           ConnectionName: configName,
         }
