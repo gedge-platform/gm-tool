@@ -71,5 +71,8 @@ export default ({ mode }) => {
       postcss,
       devSourcemap: true,
     },
+    optimizeDeps: {
+      auto: true,
+    },
   });
 };

@@ -118,7 +118,7 @@ const ConfigmapsDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -133,15 +133,19 @@ const ConfigmapsDetail = observer(() => {
               >
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
-                    <th style={{ width: "15%" }}>{key}</th>
-                    <td>{value}</td>
+                    <th style={{ width: "5%" }}>{key}</th>
+                    <td
+                      style={{ wordBreak: "break-all", wordWrap: "break-word" }}
+                    >
+                      {value}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
             <LabelContainer>
-              <p>No Data Info.</p>
+              <p>No Data Info</p>
             </LabelContainer>
           )}
           {/* <table className="tb_data">
@@ -150,7 +154,7 @@ const ConfigmapsDetail = observer(() => {
                 dataTable
               ) : (
                 <LabelContainer>
-                  <p>No Data Info.</p>
+                  <p>No Data Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -186,7 +190,7 @@ const ConfigmapsDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

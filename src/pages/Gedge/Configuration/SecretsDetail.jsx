@@ -6,6 +6,14 @@ import { secretStore } from "@/store";
 import styled from "styled-components";
 import EventAccordion from "@/components/detail/EventAccordion";
 import { dateFormatter } from "@/utils/common-utils";
+import SeeMoreBtn from "./SeeMoreBtn";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
+import { ExpandMoreRounded } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -49,6 +57,20 @@ const Label = styled.span`
   }
 `;
 
+const EventsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 99%;
+  margin: 8px 8px 8px 8px;
+  padding: 12px 12px;
+  border-radius: 4px;
+  background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
+`;
+
 const SecretDetail = observer(() => {
   const { secretTabList, events, data, label, annotations } = secretStore;
   const secretTable = [];
@@ -66,17 +88,106 @@ const SecretDetail = observer(() => {
     setOpen(false);
   };
 
-  Object.entries(data).map(([keys, value]) => {
-    secretTable.push(
-      <tr>
-        <th style={{ width: "15%" }}>{keys}</th>
-        <td style={{ wordBreak: "break-all", wordWrap: "break-word" }}>
-          {/* 강제로 줄바꿈 */}
-          {value}
-        </td>
-      </tr>
-    );
-  });
+  // const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
+  // const textLimit = useRef(170); // 글자수 제한 선언
+  // const commenter = useMemo(() => {
+  //   // 조건에 따라 게시글을 보여주는 함수
+  //   const shortReview = comment.slice(0, textLimit.current); // 원본에서 글자 수만큼 잘라서 짧은 버전 준비
+  //   if (comment.length > textLimit.current) {
+  //     // 원본이 길면
+  //     if (isShowMore) {
+  //       // 더보기가 true이면
+  //       return comment; // 원본을 return
+  //     }
+  //     return shortReview; // 더보기가 false이면 짧은 버전을 리턴
+  //   }
+  //   return comment; //원본이 길지 않으면 comment를 return
+  // }, [isShowMore]); // isShowMore의 상태가 바뀔 때마다 호출
+
+  // const accordion = () => {
+  //   {
+  //     Object.entries(data).map(([keys, value]) => {
+  //       secretTable.push(
+  //         <div>
+  //           <Accordion>
+  //             <AccordionSummary
+  //               expandIcon={
+  //                 <ExpandMoreRounded
+  //                   sx={{
+  //                     backgroundColor: "#2f3855",
+  //                     color: "rgba(255,255,255,0.7)",
+  //                   }}
+  //                 />
+  //               }
+  //               aria-controls="ProjectEvent-content"
+  //               id="ProjectEvent-header"
+  //               sx={{ backgroundColor: "#2f3855" }}
+  //             >
+  //               <Typography
+  //                 sx={{
+  //                   width: "15%",
+  //                   fontSize: 13,
+  //                   color: "rgba(255,255,255,0.7)",
+  //                   backgroundColor: "#2f3855",
+  //                 }}
+  //               >
+  //                 {keys}
+  //               </Typography>
+
+  //               <Typography
+  //                 sx={{
+  //                   fontSize: 13,
+  //                   color: "rgba(255,255,255,0.7)",
+  //                   backgroundColor: "#2f3855",
+  //                 }}
+  //               >
+  //                 {value.length < 150 ? value : value.substr(0, 150)}
+  //               </Typography>
+  //             </AccordionSummary>
+  //             <AccordionDetails sx={{ backgroundColor: "#2f3855" }}>
+  //               <Typography
+  //                 sx={{
+  //                   fontSize: 13,
+  //                   color: "rgba(255,255,255,0.7)",
+  //                   backgroundColor: "#2f3855",
+  //                 }}
+  //               >
+  //                 <table className="tb_data">
+  //                   <tbody className="tb_data_detail">
+  //                     <tr>
+  //                       <td
+  //                         style={{
+  //                           wordBreak: "break-all",
+  //                           wordWrap: "break-word",
+  //                         }}
+  //                       >
+  //                         {value}
+  //                       </td>
+  //                     </tr>
+  //                   </tbody>
+  //                 </table>
+  //               </Typography>
+  //             </AccordionDetails>
+  //           </Accordion>
+  //         </div>
+  //       );
+  //     });
+  //   }
+  //   return secretTable;
+  // };
+
+  const dataAccordion = () => {
+  
+
+    Object.entries(data).map(([keys, value]) => {
+     
+      secretTable.push(
+        <SeeMoreBtn name={secretTabList.name} keys={keys}value={value}/>
+       
+      );
+    });
+    return secretTable;
+  };
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
@@ -110,7 +221,7 @@ const SecretDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -118,7 +229,7 @@ const SecretDetail = observer(() => {
           <br />
           <TableTitle>Data</TableTitle>
           <table className="tb_data">
-            <tbody>{secretTable}</tbody>
+            <tbody>{dataAccordion()}</tbody>
           </table>
         </div>
       </CTabPanel>
@@ -134,7 +245,7 @@ const SecretDetail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -153,7 +264,7 @@ const SecretDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

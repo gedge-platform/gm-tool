@@ -67,6 +67,7 @@ const StatefulSetDetail = observer(() => {
     status,
     // },
   } = statefulSetStore;
+
   console.log(containers);
 
   const [open, setOpen] = useState(false);
@@ -126,7 +127,7 @@ const StatefulSetDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -136,7 +137,7 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length != 0 ? (
             containers.map((container) => (
               <table className="tb_data tb_data_container">
                 <tbody>
@@ -148,7 +149,7 @@ const StatefulSetDetail = observer(() => {
                     <th>Image</th>
                     <td>{container.image ? container.image : "-"}</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th>Container Ports</th>
                     <td>
                       {container?.ports.containerPort ? (
@@ -161,9 +162,26 @@ const StatefulSetDetail = observer(() => {
                         <p>-</p>
                       )}
                     </td>
+                  </tr> */}
+                  <tr>
+                    <th>Container Ports</th>
+                    <td>
+                      {container?.ports ? (
+                        container.ports?.map((port) => (
+                          <p>
+                            {port.containerPort != null
+                              ? port.containerPort
+                              : "-"}
+                            /{port.protocol ? port.protocol : "-"}
+                          </p>
+                        ))
+                      ) : (
+                        <p>-</p>
+                      )}
+                    </td>
                   </tr>
 
-                  <tr>
+                  {/* <tr>
                     <th>Environment</th>
                     <td>
                       {container.env.name ? (
@@ -188,7 +206,36 @@ const StatefulSetDetail = observer(() => {
                           </tbody>
                         </table>
                       ) : (
-                        "No Env Info."
+                        "No Env Info"
+                      )}
+                    </td>
+                  </tr> */}
+                  <tr>
+                    <th>Environment</th>
+                    <td>
+                      {container.env ? (
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Value</th>
+                              <th>Source</th>
+                            </tr>
+                            {container.env.map((item) => (
+                              <tr>
+                                <td>{item.name ? item.name : "-"}</td>
+                                <td>{item.value ? item.value : "-"}</td>
+                                <td>
+                                  {item.valueFrom?.fieldRef?.fieldPath
+                                    ? item.valueFrom?.fieldRef?.fieldPath
+                                    : "-"}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        "-"
                       )}
                     </td>
                   </tr>
@@ -198,11 +245,11 @@ const StatefulSetDetail = observer(() => {
                       {container.args ? JSON.stringify(container.args) : "-"}
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th>Volume Mounts</th>
                     <td>
                       {container.volumeMounts.length === 0 ? (
-                        "No Volume Info."
+                        "No Volume Info"
                       ) : (
                         <table className="tb_data">
                           <tbody>
@@ -224,13 +271,40 @@ const StatefulSetDetail = observer(() => {
                         </table>
                       )}
                     </td>
+                  </tr> */}
+                  <tr>
+                    <th>Volume Mounts</th>
+                    <td>
+                      {container.volumeMounts ? (
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Mount Path</th>
+                              <th>Propagation</th>
+                            </tr>
+                            {container.volumeMounts.map((volume) => (
+                              <tr>
+                                <td>{volume.name ? volume.name : "-"}</td>
+                                <td>
+                                  {volume.mountPath ? volume.mountPath : "-"}
+                                </td>
+                                <td>-</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
                   </tr>
                 </tbody>
               </table>
             ))
           ) : (
             <LabelContainer>
-              <p>No Containers Info.</p>
+              <p>No Containers Info</p>
             </LabelContainer>
           )}
         </div>
@@ -247,7 +321,7 @@ const StatefulSetDetail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <TableTitle>Annotations</TableTitle>
@@ -275,7 +349,7 @@ const StatefulSetDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

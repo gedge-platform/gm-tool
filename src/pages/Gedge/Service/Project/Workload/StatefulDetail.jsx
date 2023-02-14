@@ -119,7 +119,7 @@ const StatefulSetDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -129,7 +129,7 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length != 0 ? (
             containers.map((container) => (
               <table className="tb_data tb_data_container">
                 <tbody>
@@ -184,7 +184,7 @@ const StatefulSetDetail = observer(() => {
                           </tbody>
                         </table>
                       ) : (
-                        "No Env Info."
+                        "-"
                       )}
                     </td>
                   </tr>
@@ -196,9 +196,9 @@ const StatefulSetDetail = observer(() => {
                   </tr>
                   <tr>
                     <th>Volume Mounts</th>
-                    <td>
+                    {/* <td>
                       {container.volumeMounts.length === 0 ? (
-                        "No Volume Info."
+                        "No Volume Info"
                       ) : (
                         <table className="tb_data">
                           <tbody>
@@ -219,6 +219,30 @@ const StatefulSetDetail = observer(() => {
                           </tbody>
                         </table>
                       )}
+                    </td> */}
+                    <td>
+                      {container.volumeMounts ? (
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Mount Path</th>
+                              <th>Propagation</th>
+                            </tr>
+                            {container.volumeMounts.map((volume) => (
+                              <tr>
+                                <td>{volume.name ? volume.name : "-"}</td>
+                                <td>
+                                  {volume.mountPath ? volume.mountPath : "-"}
+                                </td>
+                                <td>-</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                   </tr>
                 </tbody>
@@ -226,7 +250,7 @@ const StatefulSetDetail = observer(() => {
             ))
           ) : (
             <LabelContainer>
-              <p>No Containers Info.</p>
+              <p>No Containers Info</p>
             </LabelContainer>
           )}
         </div>
@@ -243,7 +267,7 @@ const StatefulSetDetail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <TableTitle>Annotations</TableTitle>
@@ -271,7 +295,7 @@ const StatefulSetDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

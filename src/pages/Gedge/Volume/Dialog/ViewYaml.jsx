@@ -20,9 +20,8 @@ const Button = styled.button`
   border-radius: 4px;
 `;
 
-const ViewDialog = observer(props => {
+const ViewDialog = observer((props) => {
   const { open, yaml } = props;
-  const { getYamlFile } = volumeStore;
   const handleClose = () => {
     props.onClose && props.onClose();
   };
@@ -52,7 +51,15 @@ const ViewDialog = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Volume Yaml"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Volume Yaml"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {ViewOfComponent()}
     </CDialogNew>
   );

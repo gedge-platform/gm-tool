@@ -3,7 +3,17 @@ import React, { useEffect } from "react";
 import { dashboardStore } from "@/store";
 
 const ClusterStatus = observer(() => {
-  const { loadCredentialName, vmStatusList, setVmStatusList } = dashboardStore;
+  const {
+    // loadCredentialName,
+    // loadVMStatusCnt,
+    // loadVMCnt,
+    // ConfigName,
+    // vmCntList,
+    vmStatusList,
+    connectionconfig,
+    ProviderName,
+    ConfigNameList,
+  } = dashboardStore;
 
   useEffect(() => {
     setVmStatusList();

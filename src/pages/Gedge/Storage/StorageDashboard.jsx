@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
-import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import styled from "styled-components";
-import Detail from "@/pages/Gedge/Platform/Detail";
 import clusterStore from "@/store/Cluster";
 import storageStore from "@/store/StorageClass";
 import PieChart from "./PieChart";
@@ -17,15 +15,6 @@ import {
   unixStartTime,
   unixToTime,
 } from "../Monitoring/Utils/MetricsVariableFormatter";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 const StoragePageWrap = styled.div`
   padding: 0 10px;
   .panel_summary {

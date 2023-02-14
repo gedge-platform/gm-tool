@@ -137,6 +137,8 @@ class Dashboard {
   edgeNodeRunning = [];
   nodeRunning = [];
 
+  firstCloudName = "";
+
   mapZoom = 1;
   setMapZoom = (value) => {
     runInAction(() => {
@@ -163,7 +165,6 @@ class Dashboard {
   loadDashboardCnt = async () => {
     await axios
       .get(`${SERVER_URL}/totalDashboard`)
-      // .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
@@ -173,7 +174,6 @@ class Dashboard {
           this.workspaceCnt = data.workspaceCnt;
           this.projectCnt = data.projectCnt;
         });
-        // console.log(this.credentialCnt);
       });
   };
 
@@ -188,7 +188,6 @@ class Dashboard {
           this.clusterMemTop5 = data.clusterMemTop5;
           this.podMemTop5 = data.podMemTop5;
         });
-        // console.log(toJS(this.clusterCpuTop5))
       });
   };
 
@@ -232,8 +231,6 @@ class Dashboard {
           this.ConfigNameList = this.connectionconfig.map(
             (name) => name.ConfigName
           );
-          // this.ConfigNameList = this.connectionconfig.ConfigName;
-          // const ConfigNameList = Object.values(this.ConfigName);
           this.ProviderName = this.connectionconfig.map(
             (provider) => provider.ProviderName
           );
@@ -244,7 +241,6 @@ class Dashboard {
         });
       })
       .then(() => {
-        // this.loadVMStatusCnt(this.ConfigNameList);
         for (let i = 0; i < this.ConfigNameList.length; i++) {
           this.loadVMStatusCnt(this.ConfigNameList[i], this.ProviderName[i]);
         }
@@ -318,7 +314,6 @@ class Dashboard {
       `http://210.207.104.188:1024/spider/connectionconfig`
     );
     const configResult = await Promise.all([urls]).then((res) => {
-      console.log(res);
       return res;
     });
     const configNameList = configResult[0].data.connectionconfig;
@@ -331,9 +326,7 @@ class Dashboard {
         })
         .then((res) => {
           const vmCnt = res.data.VMCnt;
-          // console.log("test : ", res);
           vmCntList.push({ configName, vmCnt });
-          // return vmCntList;
         });
     });
     // res.forEach((result) => {
@@ -342,11 +335,13 @@ class Dashboard {
     // );
     // })
   };
+
   setVmStatusList = async () => {
     runInAction(() => {
       this.vmStatusList = [];
     });
   };
+
   loadVMStatusCnt = async (configName, providerName) => {
     axios
       .post(
@@ -369,7 +364,6 @@ class Dashboard {
           this.Paused,
         ]);
       });
-    // console.log(vmStatusList);
   };
 
   // loadVMStatusCnt = async () => {
@@ -447,17 +441,15 @@ class Dashboard {
         this.totalElements = data.length;
       });
     });
-    // console.log(this.clusterNameList);
-    // this.clusterNameList.map((item) => this.loadEdgeZoneDetailDashboard(item));
     this.loadEdgeZoneDetailDashboard(this.clusterNameList[0]);
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
+    console.log("loadEdgeZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
-          // console.log("data", data);
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
           this.type = this.nodeInfo.map((val) => val.type);
@@ -496,13 +488,15 @@ class Dashboard {
       runInAction(() => {
         this.cloudType = data.filter((item) => item.clusterType === "cloud");
         this.cloudNameList = this.cloudType.map((item) => item.clusterName);
+        this.firstCloudName = this.cloudNameList[0];
         this.totalElements = data.length;
       });
     });
-    this.loadCloudZoneDetailDashboard(this.cloudNameList[0]);
+    this.loadCloudZoneDetailDashboard(this.firstCloudName);
   };
 
   loadCloudZoneDetailDashboard = async (cloudName) => {
+    console.log("loadCloudZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${cloudName}`)
       .then(({ data: { data } }) =>

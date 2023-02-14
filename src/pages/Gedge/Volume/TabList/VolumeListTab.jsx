@@ -9,7 +9,10 @@ import { observer } from "mobx-react";
 import VolumeDetail from "../VolumeDetail";
 import volumeStore from "@/store/Volume";
 import ViewYaml from "../Dialog/ViewYaml";
-import { converterCapacity, drawStatus } from "@/components/datagrids/AggridFormatter";
+import {
+  converterCapacity,
+  drawStatus,
+} from "@/components/datagrids/AggridFormatter";
 import { SearchV1 } from "@/components/search/SearchV1";
 import CreateVolume from "../Dialog/CreateVolume";
 
@@ -40,7 +43,7 @@ const VolumeListTab = observer(() => {
       headerName: "Name",
       field: "name",
       filter: true,
-      getQuickFilterText: params => {
+      getQuickFilterText: (params) => {
         return params.value.name;
       },
     },
@@ -102,11 +105,12 @@ const VolumeListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     let fieldName = e.colDef.field;
     setVolumeName(e.data.name);
     loadPVolume(e.data.name, e.data.cluster);
-    loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
+    loadVolumeYaml(e.data.name, e.data.cluster, "persistentvolumes");
+    // loadVolumeYaml(e.data.name, e.data.cluster, null, "persistentvolumes");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
@@ -132,7 +136,9 @@ const VolumeListTab = observer(() => {
     if (volumeName === "") {
       swalError("Volume을 선택해주세요!");
     } else {
-      swalUpdate(volumeName + "를 삭제하시겠습니까?", () => deleteVolume(volumeName, reloadData));
+      swalUpdate(volumeName + "를 삭제하시겠습니까?", () =>
+        deleteVolume(volumeName, reloadData)
+      );
     }
     setVolumeName("");
   };
@@ -177,7 +183,11 @@ const VolumeListTab = observer(() => {
               />
             </div>
           </div>
-          <ViewYaml open={openYaml} yaml={getYamlFile} onClose={handleCloseYaml} />
+          <ViewYaml
+            open={openYaml}
+            yaml={getYamlFile}
+            onClose={handleCloseYaml}
+          />
           {/* <CreateVolume open={open} onClose={handleClose} reloadFunc={reloadData} /> */}
         </PanelBox>
         <VolumeDetail pVolume={pVolume} metadata={pVolumeMetadata} />

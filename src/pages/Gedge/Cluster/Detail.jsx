@@ -14,12 +14,6 @@ const TableTitle = styled.p`
   margin: 8px 0;
   color: rgba(255, 255, 255, 0.8);
 `;
-const TableSubTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  margin: 12px 0;
-  color: rgba(255, 255, 255, 0.8);
-`;
 
 const LabelContainer = styled.div`
   display: flex;
@@ -209,7 +203,7 @@ const Detail = observer((props) => {
             </>
           ) : (
             <LabelContainer>
-              <p>No GPU Info.</p>
+              <p>No GPU Info</p>
             </LabelContainer>
           )}
         </div>
@@ -259,12 +253,16 @@ const Detail = observer((props) => {
                 <th>OS</th>
                 <th>Created</th>
               </tr>
-
               {nodesChk.length >= 1 ? (
                 nodeList()
               ) : (
                 <tr>
-                  <td>No Nodes Information</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
                 </tr>
               )}
             </tbody>
@@ -277,20 +275,23 @@ const Detail = observer((props) => {
             Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
           </TableTitle>
           <LabelContainer>
-            {nodesChk.length >= 1 ? labelByNode() : "No Label Info."}
+            {nodesChk.length >= 1 ? labelByNode() : <p>No Labels Info</p>}
           </LabelContainer>
-
+          <br />
+          <br />
           <TableTitle>
             Annotations(
             {nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
           </TableTitle>
-          <table className="tb_data">
-            <tbody>
-              {nodesChk.length >= 1
-                ? annotationByNode()
-                : "No Annotation Info."}
-            </tbody>
-          </table>
+          {nodesChk.length >= 1 ? (
+            <table className="tb_data">
+              <tbody>{annotationByNode()}</tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={4}>

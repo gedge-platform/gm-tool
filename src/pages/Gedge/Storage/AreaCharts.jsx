@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 
 const AreaCharts = observer((props) => {
   const { seriesData } = props;
-  console.log(seriesData)
+  // console.log(seriesData)
   const categoryArray = ["enero", "febrero", "marzo", "abril", "mayo"];
 
 
@@ -55,7 +55,8 @@ const AreaCharts = observer((props) => {
       xaxis: {
         lines: {
           show: false
-        }
+        },
+        // tickAmount: 6
       },
       padding: {
         bottom: 20

@@ -192,7 +192,7 @@ const CreateUserDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Resource Usage Info.</p>
+                  <p>No Resource Usage Info</p>
                 </LabelContainer>
               )}
             </tr>
@@ -270,7 +270,7 @@ const CreateUserDetail = observer(() => {
               </>
             ) : (
               <LabelContainer>
-                <p>No Resources Info.</p>
+                <p>No Resources Info</p>
               </LabelContainer>
             )}
           </tbody>
@@ -350,7 +350,7 @@ const CreateUserDetail = observer(() => {
                 </>
               ) : (
                 <LabelContainer>
-                  <p>No Detail Info.</p>
+                  <p>No Detail Info</p>
                 </LabelContainer>
               )}
             </tbody>
@@ -374,7 +374,7 @@ const CreateUserDetail = observer(() => {
                 </Label>
               ))
             ) : (
-              <p>No Labels Info.</p>
+              <p>No Labels Info</p>
             )}
           </LabelContainer>
           <br />
@@ -393,7 +393,7 @@ const CreateUserDetail = observer(() => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotations Info.</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
           <br />

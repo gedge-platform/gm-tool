@@ -80,7 +80,7 @@ const CronJobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setCronJobName(e.data.name);
     loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -97,7 +97,9 @@ const CronJobListTab = observer(() => {
     if (cronjobName === "") {
       swalError("Cron Job을 선택해주세요!");
     } else {
-      swalUpdate(cronjobName + "을 삭제하시겠습니까?", () => deleteCronJob(cronjobName, reloadData));
+      swalUpdate(cronjobName + "을 삭제하시겠습니까?", () =>
+        deleteCronJob(cronjobName, reloadData)
+      );
     }
     setCronJobName("");
   };
@@ -124,6 +126,7 @@ const CronJobListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">

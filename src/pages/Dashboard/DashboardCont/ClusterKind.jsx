@@ -24,9 +24,9 @@ const ClusterKind = () => {
           nextEl: navigationNextRef.current,
         }}
         // navigation
-        onSwiper={swiper => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
-        onInit={swiper => {
+        // onSwiper={(swiper) => console.log()}
+        // onSlideChange={() => console.log("slide change")}
+        onInit={(swiper) => {
           swiper.params.navigation.prevEl = navigationPrevRef.current;
           swiper.params.navigation.nextEl = navigationNextRef.current;
           swiper.navigation.init();

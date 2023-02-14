@@ -28,7 +28,7 @@ const EventsContainer = styled.div`
   background-color: #2f3855;
 
   p {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.6);
   }
 `;
 
@@ -36,7 +36,7 @@ const EventAccordion = ({ events }) => {
   if (events === null || events === undefined) {
     return (
       <EventsContainer>
-        <p>No Events Info.</p>
+        <p>No Events Info</p>
       </EventsContainer>
     );
   } else if (
@@ -47,7 +47,7 @@ const EventAccordion = ({ events }) => {
   ) {
     return (
       <EventsContainer>
-        <p>No Events Info.</p>
+        <p>No Events Info</p>
       </EventsContainer>
     );
   } else {

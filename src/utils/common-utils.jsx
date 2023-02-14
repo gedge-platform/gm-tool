@@ -83,6 +83,8 @@ export const duplicateCheck = async (name, type) => {
     .then((res) => {
       if (res.status === 200) {
         return true;
+      }else{
+        return false;
       }
     })
     .catch((err) => {

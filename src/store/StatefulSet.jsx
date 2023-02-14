@@ -47,7 +47,8 @@ class StatefulSet {
     },
   ];
   totalElements = 0;
-  containers = [{ env: [], ports: [], volumeMounts: [] }];
+  containers = [];
+  // containers = [{}];
 
   constructor() {
     makeAutoObservable(this);
@@ -58,7 +59,11 @@ class StatefulSet {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadStatefulSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadStatefulSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -68,18 +73,22 @@ class StatefulSet {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadStatefulSetDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadStatefulSetDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -120,13 +129,13 @@ class StatefulSet {
     });
   };
 
-  setPStatefulSetList = list => {
+  setPStatefulSetList = (list) => {
     runInAction(() => {
       this.pStatefulSetList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pStatefulSetList[n];
     });
@@ -137,13 +146,15 @@ class StatefulSet {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/statefulsets?user=${id}`)
-      .then(res => {
+      .then((res) => {
         runInAction(() => {
           // this.totalElements =
           //   res.data.data === null ? 0 : res.data.data.length;
           this.statefulSetList = res.data.data;
           // this.statefulSetDetail = list[0];
-          res.data.data === null ? (this.totalElements = 0) : (this.totalElements = this.statefulSetList.length);
+          res.data.data === null
+            ? (this.totalElements = 0)
+            : (this.totalElements = this.statefulSetList.length);
         });
       })
       .then(() => {
@@ -161,33 +172,44 @@ class StatefulSet {
     //     this.convertList(this.statefulSetList, this.setPStatefulSetList);
     //   })
     this.statefulSetList === null
-      ? ((this.statefulSetDetail = null), (this.label = null), (this.annotations = null))
-      : this.loadStatefulSetDetail(this.statefulSetList[0].name, this.statefulSetList[0].cluster, this.statefulSetList[0].project);
+      ? ((this.statefulSetDetail = null),
+        (this.label = null),
+        (this.annotations = null))
+      : this.loadStatefulSetDetail(
+          this.statefulSetList[0].name,
+          this.statefulSetList[0].cluster,
+          this.statefulSetList[0].project
+        );
   };
 
   loadStatefulSetDetail = async (name, cluster, project) => {
-    await axios.get(`${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`).then(({ data: { data } }) => {
-      runInAction(() => {
-        this.statefulSetDetail = data;
-        this.containers = data.containers;
-        this.label = data.label;
-        this.annotations = data.annotations;
-        if (data.events !== null) {
-          this.events = data.events;
-        } else {
-          this.events = null;
-        }
+    await axios
+      .get(
+        `${SERVER_URL}/statefulsets/${name}?cluster=${cluster}&project=${project}`
+      )
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.statefulSetDetail = data;
+          this.containers = data.containers;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
+        });
       });
-    });
   };
 
   deleteStatefulSet = async (statefulsetName, callback) => {
     axios
       .delete(`${SERVER_URL}/statefulsets/${statefulsetName}`)
-      .then(res => {
-        if (res.status === 201) swalError("StatefulSet가 삭제되었습니다.", callback);
+      .then((res) => {
+        if (res.status === 201)
+          swalError("StatefulSet가 삭제되었습니다.", callback);
       })
-      .catch(err => swalError("삭제에 실패하였습니다."));
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

@@ -16,8 +16,19 @@ const JobListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [jobName, setJobName] = useState("");
 
-  const { viewList, jobList, jobDetail, totalElements, loadJobList, loadJobDetail, deleteJob, currentPage, totalPages, goPrevPage, goNextPage } =
-    jobStore;
+  const {
+    viewList,
+    jobList,
+    jobDetail,
+    totalElements,
+    loadJobList,
+    loadJobDetail,
+    deleteJob,
+    currentPage,
+    totalPages,
+    goPrevPage,
+    goNextPage,
+  } = jobStore;
 
   const [columDefs] = useState([
     {
@@ -70,7 +81,7 @@ const JobListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setJobName(e.data.name);
     loadJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
@@ -87,7 +98,9 @@ const JobListTab = observer(() => {
     if (jobName === "") {
       swalError("Job을 선택해주세요!");
     } else {
-      swalUpdate(jobName + "을 삭제하시겠습니까?", () => deleteJob(jobName, reloadData));
+      swalUpdate(jobName + "을 삭제하시겠습니까?", () =>
+        deleteJob(jobName, reloadData)
+      );
     }
     setJobName("");
   };
@@ -114,6 +127,7 @@ const JobListTab = observer(() => {
             // keywordList={["이름"]}
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">
