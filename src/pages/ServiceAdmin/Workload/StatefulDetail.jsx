@@ -68,6 +68,8 @@ const StatefulSetDetail = observer(() => {
     // },
   } = statefulSetStore;
 
+  console.log(containers);
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -135,7 +137,7 @@ const StatefulSetDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length != 0 ? (
             containers.map((container) => (
               <table className="tb_data tb_data_container">
                 <tbody>
@@ -147,7 +149,7 @@ const StatefulSetDetail = observer(() => {
                     <th>Image</th>
                     <td>{container.image ? container.image : "-"}</td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th>Container Ports</th>
                     <td>
                       {container?.ports.containerPort ? (
@@ -160,9 +162,26 @@ const StatefulSetDetail = observer(() => {
                         <p>-</p>
                       )}
                     </td>
+                  </tr> */}
+                  <tr>
+                    <th>Container Ports</th>
+                    <td>
+                      {container?.ports ? (
+                        container.ports?.map((port) => (
+                          <p>
+                            {port.containerPort != null
+                              ? port.containerPort
+                              : "-"}
+                            /{port.protocol ? port.protocol : "-"}
+                          </p>
+                        ))
+                      ) : (
+                        <p>-</p>
+                      )}
+                    </td>
                   </tr>
 
-                  <tr>
+                  {/* <tr>
                     <th>Environment</th>
                     <td>
                       {container.env.name ? (
@@ -190,6 +209,35 @@ const StatefulSetDetail = observer(() => {
                         "No Env Info"
                       )}
                     </td>
+                  </tr> */}
+                  <tr>
+                    <th>Environment</th>
+                    <td>
+                      {container.env ? (
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Value</th>
+                              <th>Source</th>
+                            </tr>
+                            {container.env.map((item) => (
+                              <tr>
+                                <td>{item.name ? item.name : "-"}</td>
+                                <td>{item.value ? item.value : "-"}</td>
+                                <td>
+                                  {item.valueFrom?.fieldRef?.fieldPath
+                                    ? item.valueFrom?.fieldRef?.fieldPath
+                                    : "-"}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
                   </tr>
                   <tr>
                     <th>Args</th>
@@ -197,7 +245,7 @@ const StatefulSetDetail = observer(() => {
                       {container.args ? JSON.stringify(container.args) : "-"}
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <th>Volume Mounts</th>
                     <td>
                       {container.volumeMounts.length === 0 ? (
@@ -221,6 +269,33 @@ const StatefulSetDetail = observer(() => {
                             ))}
                           </tbody>
                         </table>
+                      )}
+                    </td>
+                  </tr> */}
+                  <tr>
+                    <th>Volume Mounts</th>
+                    <td>
+                      {container.volumeMounts ? (
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th>Name</th>
+                              <th>Mount Path</th>
+                              <th>Propagation</th>
+                            </tr>
+                            {container.volumeMounts.map((volume) => (
+                              <tr>
+                                <td>{volume.name ? volume.name : "-"}</td>
+                                <td>
+                                  {volume.mountPath ? volume.mountPath : "-"}
+                                </td>
+                                <td>-</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      ) : (
+                        "-"
                       )}
                     </td>
                   </tr>

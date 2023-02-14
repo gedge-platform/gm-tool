@@ -49,6 +49,7 @@
     "react-dom-factories": "^1.0.2",
     "react-json-view": "^1.21.3",
     "react-leaflet": "^4.0.2",
+    "react-measure": "^2.5.2",
     "react-reflex": "^4.0.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -63,8 +64,7 @@
     "xterm-addon-fit": "^0.5.0",
     "xterm-for-react": "^1.0.4",
     "yamljs": "^0.3.0",
-    "yarn": "^1.22.10",
-    "react-measure": "^2.5.2"
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@ag-grid-community/core": "^25.2.1",
