@@ -147,35 +147,35 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
               {pVolume ? (
                 <>
                   <tr>
-                    <th>name</th>
+                    <th>Name</th>
                     <td>{pVolume.name ? pVolume.name : "-"}</td>
-                    <th>capacity</th>
+                    <th>Capacity</th>
                     <td>{pVolume.capacity ? pVolume.capacity : "-"}</td>
                   </tr>
                   <tr>
-                    <th>accessMode</th>
+                    <th>AccessMode</th>
                     <td>{pVolume.accessMode ? pVolume.accessMode : "-"}</td>
-                    <th>reclaimPolicy</th>
+                    <th>ReclaimPolicy</th>
                     <td>
                       {pVolume.reclaimPolicy ? pVolume.reclaimPolicy : "-"}
                     </td>
                   </tr>
                   <tr>
-                    <th>status</th>
+                    <th>Status</th>
                     <td>{pVolume.status ? pVolume.status : "-"}</td>
-                    <th>claim</th>
+                    <th>Claim</th>
                     <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
                   </tr>
                   <tr>
-                    <th>cluster</th>
+                    <th>Cluster</th>
                     <td>{pVolume.cluster ? pVolume.cluster : "-"}</td>
-                    <th>storageClass</th>
+                    <th>StorageClass</th>
                     <td>{pVolume.storageClass ? pVolume.storageClass : "-"}</td>
                   </tr>
                   <tr>
-                    <th>volumeMode</th>
+                    <th>VolumeMode</th>
                     <td>{pVolume.volumeMode ? pVolume.volumeMode : "-"}</td>
-                    <th>created</th>
+                    <th>Created</th>
                     <td>
                       {pVolume.createAt
                         ? dateFormatter(pVolume?.createAt)
@@ -186,33 +186,33 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
               ) : (
                 <>
                   <tr>
-                    <th>name</th>
+                    <th>Name</th>
                     <td>-</td>
-                    <th>capacity</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>accessMode</th>
-                    <td>-</td>
-                    <th>reclaimPolicy</th>
+                    <th>Capacity</th>
                     <td>-</td>
                   </tr>
                   <tr>
-                    <th>status</th>
+                    <th>AccessMode</th>
                     <td>-</td>
-                    <th>claim</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>cluster</th>
-                    <td>-</td>
-                    <th>storageClass</th>
+                    <th>ReclaimPolicy</th>
                     <td>-</td>
                   </tr>
                   <tr>
-                    <th>volumeMode</th>
+                    <th>Status</th>
                     <td>-</td>
-                    <th>created</th>
+                    <th>Claim</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>Cluster</th>
+                    <td>-</td>
+                    <th>StorageClass</th>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <th>VolumeMode</th>
+                    <td>-</td>
+                    <th>Created</th>
                     <td>-</td>
                   </tr>
                 </>
@@ -226,17 +226,17 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
           <table className="tb_data">
             <tbody className="tb_data_detail">
               <tr>
-                <th className="tb_volume_detail_th">name</th>
+                <th className="tb_volume_detail_th">Name</th>
                 <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
-                <th className="tb_volume_detail_th">namespace</th>
+                <th className="tb_volume_detail_th">Namespace</th>
                 <td>
                   {pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}
                 </td>
               </tr>
               <tr>
-                <th>kind</th>
+                <th>Kind</th>
                 <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
-                <th>apiVersion</th>
+                <th>ApiVersion</th>
                 <td>
                   {pVolume?.claim?.apiVersion
                     ? pVolume?.claim?.apiVersion
@@ -244,13 +244,13 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
                 </td>
               </tr>
               <tr>
-                <th>resourceVersion</th>
+                <th>ResourceVersion</th>
                 <td>
                   {pVolume?.claim?.resourceVersion
                     ? pVolume?.claim?.resourceVersion
                     : "-"}
                 </td>
-                <th>uid</th>
+                <th>Uid</th>
                 <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
               </tr>
             </tbody>

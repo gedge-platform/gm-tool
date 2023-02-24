@@ -40,6 +40,7 @@ import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAd
 import ServiceAdminMapDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminMapDashboard";
 import { Redirect } from "react-router-dom";
 import ServiceAdminChart from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminChart";
+import TotalClusterResources from "./pages/Dashboard/DashboardCont/TotalClusterResources";
 
 export const App = () => {
   const navigate = useHistory();

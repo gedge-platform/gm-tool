@@ -1911,6 +1911,7 @@ const globalStyles = createGlobalStyle`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    background: #202842;
     .ClusterSummary {
       width: calc(20% - 10px);
       height: 132px;
@@ -1947,38 +1948,55 @@ const globalStyles = createGlobalStyle`
   }
 
   /* CLUSTER SLIDER - CLUSTER KIND */
-  .cluster_slideResourWrap {
-     width: 100%;
-     height: 320px;
-     padding: 12px;
-     background: #202842;
-     border-radius: 5px;
-     display: absolute;
-     justify-content: space-between;
-      .ClusterKindWrap {
-    /* width: calc(50% - 10px); */
-    width: 63%;
-    height: 100%;
-    margin-top: 10px;
-    padding: 50px;
-    background: #202842;
-    border-radius: 5px;
-    position: relative;
-
-    .slide {
-      width: 204px;
-      height: 204px;
-      padding-top: 140px;
-      margin-left: 25px;
-      /* margin-right: 0px; */
-      border: 8px solid #2b334e;
-      border-radius: 100%;
-      background: #171e33;
-      text-align: center;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 500;
-      justify-content: space-between;
+  .cluster_slideWrap{
+    width: 100%;
+      height: 300px;
+      background: #202842;
+      border-radius: 5px;
+      display: flex;
+      /* justify-content: space-between; */
+      margin: 10px 0px;
+      .cluster_slide {
+      width: 100%;
+      background: #171E33;
+      border-radius: 5px;
+      display: flex;
+      /* justify-content: space-between; */
+      .cluster_totalResources{
+        border-radius: 5px;
+        /* width: calc(64% - 10px); */
+        width: 30%;
+        height: 100%;
+        background: #202842;
+        border-radius: 5px;
+        position: relative;
+        /* position: absolute; */
+        margin-left: 13px;
+      }
+      .cluster_kind {
+        border-radius: 5px;
+        /* width: calc(64% - 10px); */
+        width: 70%;
+        height: 100%;
+        background: #202842;
+        border-radius: 5px;
+        position: relative;
+        /* position: absolute; */
+      
+      .slide {
+        width: 204px;
+        height: 204px;
+        padding-top: 140px;
+        margin-left: 25px;
+        /* margin-right: 0px; */
+        border: 8px solid #2b334e;
+        border-radius: 100%;
+        background: #171e33;
+        text-align: center;
+        color: #fff;
+        font-size: 15px;
+        font-weight: 500;
+        justify-content: space-between;
       &.azure {
         background:  url(../images/dashboard/icon_azure.png) no-repeat center 45px #171e33;
       }
@@ -2006,10 +2024,10 @@ const globalStyles = createGlobalStyle`
     }
     .btn_prev, .btn_next {
       position: absolute;
-      top: 50%;
+      top: 58%;
       width: 50px;
       height: 50px;
-      margin-top: -25px;
+      margin-top: -50px;
       z-index: 10;
       cursor: pointer;
       display: flex;
@@ -2017,33 +2035,26 @@ const globalStyles = createGlobalStyle`
       justify-content: center;
     }
     .btn_prev {
-      left: 0px;
+      left: 14px;
       right: auto;
       background: url(../images/dashboard/btn_next.png) no-repeat center center;
       transform: rotate(-180deg);
     }
     .btn_next {
-      right: 50px;
+      right: 51px;
       left: auto;
       background: url(../images/dashboard/btn_next.png) no-repeat center center;
     }
     .swiper-button-disabled {
       opacity: 0.35;
     }
-  }
-  .total_cluster_resources{
-    /* width: calc(40% - 10px); */
-    width: 50%;
-    height: 100%;
-    margin-top: 10px;
-    padding: 50px 145px;
-    background: #202842;
-    border-radius: 5px;
-    position: relative;
-  }
-  }
+  } 
   
+  }
+  }
 
+  
+   
   /* cluster_serviceWrap */
   .cluster_serviceWrap {
       width: 100%;
@@ -2053,6 +2064,7 @@ const globalStyles = createGlobalStyle`
       border-radius: 5px;
       display: flex;
       justify-content: space-between;
+      margin: 10px 0px;
       .cluster_map {
         width: calc(40% - 10px);
         border-radius: 5px;
