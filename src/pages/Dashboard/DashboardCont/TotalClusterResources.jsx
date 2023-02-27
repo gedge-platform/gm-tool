@@ -9,6 +9,7 @@ const TotalClusterResources = observer(() => {
   const TotalClusterResourcesPieChart = {
     series: [
       {
+        name: "",
         data: [400, 430, 448],
       },
     ],
@@ -16,13 +17,14 @@ const TotalClusterResources = observer(() => {
       chart: {
         type: "bar",
         height: 350,
+        foreColor: "#fff",
       },
       plotOptions: {
         bar: {
           borderRadius: 4,
           horizontal: true,
           distributed: true, // bar color 다르게 해줌
-          barHeight: "50%",
+          barHeight: "45%",
         },
       },
       dataLabels: {

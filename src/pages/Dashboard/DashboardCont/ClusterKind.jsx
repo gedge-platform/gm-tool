@@ -18,8 +18,8 @@ const ClusterKind = () => {
 
       <Swiper
         // install Swiper modules
-        spaceBetween={10}
-        slidesPerView={3}
+        spaceBetween={0}
+        slidesPerView={4}
         navigation={{
           prevEl: navigationPrevRef.current,
           nextEl: navigationNextRef.current,

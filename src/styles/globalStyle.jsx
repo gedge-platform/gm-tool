@@ -1987,7 +1987,7 @@ const globalStyles = createGlobalStyle`
         width: 204px;
         height: 204px;
         padding-top: 140px;
-        margin-left: 25px;
+        margin-left: 5px;
         /* margin-right: 0px; */
         border: 8px solid #2b334e;
         border-radius: 100%;
@@ -2035,13 +2035,13 @@ const globalStyles = createGlobalStyle`
       justify-content: center;
     }
     .btn_prev {
-      left: 14px;
+      left: 10px;
       right: auto;
       background: url(../images/dashboard/btn_next.png) no-repeat center center;
       transform: rotate(-180deg);
     }
     .btn_next {
-      right: 51px;
+      right: 7px;
       left: auto;
       background: url(../images/dashboard/btn_next.png) no-repeat center center;
     }
