@@ -2,40 +2,37 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import { deploymentStore } from "@/store";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { jobStore } from "@/store";
+import JobAdminDetail from "../Detail/JobAdminDetail";
 
-const DeploymentListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+const JobAdminTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    deploymentList,
-    deploymentDetail,
+    viewList,
+    jobList,
+    jobDetail,
     totalElements,
-    loadDeploymentList,
-    loadDeploymentDetail,
-    setWorkspace,
+    loadAdminJobList,
+    loadJobDetail,
     currentPage,
     totalPages,
-    viewList,
     goPrevPage,
     goNextPage,
-  } = deploymentStore;
+  } = jobStore;
 
   const [columDefs] = useState([
     {
-      headerName: "디플로이먼트 이름",
+      headerName: "잡 이름",
       field: "name",
       filter: true,
     },
@@ -53,21 +50,27 @@ const DeploymentListTab = observer(() => {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
     },
     {
       headerName: "상태",
-      field: "ready",
+      field: "completions",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
+      // cellRenderer: ({ value }) => {
+      //   if (value === 1) {
+      //     return drawStatus("True");
+      //   } else {
+      //     return drawStatus("False");
+      //   }
       // },
     },
     {
-      headerName: "생성일",
-      field: "createAt",
+      headerName: "지속시간(초)",
+      field: "duration",
+      filter: true,
+    },
+    {
+      headerName: "완료날짜",
+      field: "created_at",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -80,31 +83,23 @@ const DeploymentListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+    loadJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
   const history = useHistory();
 
   useEffect(() => {
-    loadDeploymentList();
+    loadAdminJobList();
   }, []);
-
-  const handleCreateOpen = () => {
-    setWorkspace("");
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+          <CommActionBar reloadFunc={loadAdminJobList}>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
+
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
@@ -122,15 +117,10 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <JobAdminDetail job={jobDetail} />
       </CReflexBox>
     </div>
   );
 });
-export default DeploymentListTab;
+export default JobAdminTab;

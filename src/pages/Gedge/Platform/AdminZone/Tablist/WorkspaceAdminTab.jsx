@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
@@ -8,13 +8,11 @@ import { CCreateButton } from "@/components/buttons";
 import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import { clusterStore } from "@/store";
-import CreateCluster from "../Dialog/CreateCluster";
-import Layout from "@/layout";
-import { Title } from "@/pages";
+import workspaceStore from "@/store/WorkSpace";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
+import WorkspceAdminDetail from "../Detail/WorkspaceAdminDetail";
 
-const EdgeZoneListTab = observer(() => {
-  const currentPageTitle = Title.EdgeZone;
+const WorkspaceAdminTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -22,52 +20,41 @@ const EdgeZoneListTab = observer(() => {
   };
 
   const {
-    clusterDetail,
-    clusterList,
+    workSpaceList,
+    loadAdminWorkSpaceList,
     totalElements,
-    loadClusterList,
-    loadCluster,
-    currentPage,
+    deleteWorkspace,
+    workSpaceDetail,
+    loadWorkspaceDetail,
     totalPages,
     viewList,
     goPrevPage,
     goNextPage,
-  } = clusterStore;
+    currentPage,
+  } = workspaceStore;
 
   const [columDefs] = useState([
     {
-      headerName: "",
-      field: "check",
-      minWidth: 53,
-      maxWidth: 53,
-      filter: false,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
-      checkboxSelection: true,
-    },
-    {
       headerName: "이름",
-      field: "clusterName",
+      field: "workspaceName",
       filter: true,
     },
     {
-      headerName: "타입",
-      field: "clusterType",
+      headerName: "설명",
+      field: "workspaceDescription",
       filter: true,
     },
     {
-      headerName: "생성자",
-      field: "clusterCreator",
+      headerName: "클러스터",
+      field: "memberName",
       filter: true,
+      cellRenderer: function ({ data: { selectCluster } }) {
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      },
     },
     {
-      headerName: "노드개수",
-      field: "nodeCnt",
-      filter: true,
-    },
-    {
-      headerName: "IP",
-      field: "clusterEndpoint",
+      headerName: "CREATOR",
+      field: "memberName",
       filter: true,
     },
     {
@@ -81,43 +68,60 @@ const EdgeZoneListTab = observer(() => {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
+    {
+      headerName: "삭제",
+      field: "delete",
+      minWidth: 100,
+      maxWidth: 100,
+      cellRenderer: function () {
+        return `<span class="state_ico_new delete"></span>`;
+      },
+      cellStyle: { textAlign: "center", cursor: "pointer" },
+    },
   ]);
 
   const history = useHistory();
-
-  const handleClick = (e) => {
-    loadCluster(e.data.clusterName);
-  };
-
   const handleOpen = () => {
     setOpen(true);
+  };
+  const handleClick = async ({
+    data: { workspaceName },
+    colDef: { field },
+  }) => {
+    if (field === "delete") {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteWorkspace(workspaceName, loadAdminWorkSpaceList)
+      );
+    }
+    loadWorkspaceDetail(workspaceName);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  useLayoutEffect(() => {
-    loadClusterList("edge");
+  useEffect(() => {
+    loadAdminWorkSpaceList();
   }, []);
 
   return (
-    <Layout currentPageTitle={currentPageTitle}>
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar>
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          <CommActionBar reloadFunc={loadAdminWorkSpaceList}>
+            {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
+            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
+                  onCellClicked={handleClick}
                   rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
-                  onCellClicked={handleClick}
                   totalPages={totalPages}
                   currentPage={currentPage}
                   goNextPage={goNextPage}
@@ -126,11 +130,16 @@ const EdgeZoneListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateCluster type={"edge"} open={open} onClose={handleClose} />
+          {/* <CreateWorkSpace
+            reloadFunc={loadWorkSpaceList}
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+          /> */}
         </PanelBox>
+        <WorkspceAdminDetail workSpace={workSpaceDetail} />
       </CReflexBox>
-    </Layout>
+    </div>
   );
 });
-
-export default EdgeZoneListTab;
+export default WorkspaceAdminTab;

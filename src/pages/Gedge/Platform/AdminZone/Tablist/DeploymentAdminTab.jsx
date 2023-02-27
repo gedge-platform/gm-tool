@@ -1,37 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
-import CommActionBar from "@/components/common/CommActionBar";
-import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import { deploymentStore } from "@/store";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import CommActionBar from "@/components/common/CommActionBar";
+import { CCreateButton, CSelectButton } from "@/components/buttons";
+import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { AgGrid } from "@/components/datagrids";
 
-const DeploymentListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+import deploymentStore from "../../../../../store/Deployment";
+import DeploymentAdminDetail from "../Detail/DeploymentAdminDetail";
+
+const DeploymentAdminTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    deploymentList,
+    loadAdminDeploymentList,
     deploymentDetail,
-    totalElements,
-    loadDeploymentList,
     loadDeploymentDetail,
-    setWorkspace,
+    // deploymentList,
+    adminList,
     currentPage,
     totalPages,
     viewList,
     goPrevPage,
     goNextPage,
+    totalElements,
   } = deploymentStore;
+
+  console.log(totalElements);
 
   const [columDefs] = useState([
     {
@@ -86,25 +87,17 @@ const DeploymentListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadDeploymentList();
+    loadAdminDeploymentList();
   }, []);
-
-  const handleCreateOpen = () => {
-    setWorkspace("");
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+          <CommActionBar reloadFunc={loadAdminDeploymentList}>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
+
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
@@ -122,15 +115,10 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <DeploymentAdminDetail deployment={deploymentDetail} />
       </CReflexBox>
     </div>
   );
 });
-export default DeploymentListTab;
+export default DeploymentAdminTab;

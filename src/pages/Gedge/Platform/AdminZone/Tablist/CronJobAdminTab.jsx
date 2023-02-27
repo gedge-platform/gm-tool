@@ -2,40 +2,37 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import { deploymentStore } from "@/store";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { cronJobStore } from "@/store";
+import CronJobAdminDetail from "../Detail/CronJobAdminDetail";
 
-const DeploymentListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+const CronJobAdminTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    deploymentList,
-    deploymentDetail,
+    viewList,
+    cronJobList,
+    cronJobDetail,
     totalElements,
-    loadDeploymentList,
-    loadDeploymentDetail,
-    setWorkspace,
+    loadAdminCronJobList,
+    loadCronJobDetail,
     currentPage,
     totalPages,
-    viewList,
     goPrevPage,
     goNextPage,
-  } = deploymentStore;
+  } = cronJobStore;
 
   const [columDefs] = useState([
     {
-      headerName: "디플로이먼트 이름",
+      headerName: "크론잡 이름",
       field: "name",
       filter: true,
     },
@@ -44,6 +41,7 @@ const DeploymentListTab = observer(() => {
       field: "cluster",
       filter: true,
     },
+
     {
       headerName: "프로젝트",
       field: "project",
@@ -53,21 +51,26 @@ const DeploymentListTab = observer(() => {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
+    },
+    {
+      headerName: "스케줄",
+      field: "schedule",
+      filter: true,
+    },
+    {
+      headerName: "생성날짜",
+      field: "creationTimestamp",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
       cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
+        return `<span>${dateFormatter(data.value)}</span>`;
       },
     },
     {
-      headerName: "상태",
-      field: "ready",
-      filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
-    },
-    {
-      headerName: "생성일",
-      field: "createAt",
+      headerName: "완료날짜",
+      field: "lastScheduleTime",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -80,31 +83,23 @@ const DeploymentListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+    loadCronJobDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
   const history = useHistory();
 
   useEffect(() => {
-    loadDeploymentList();
+    loadAdminCronJobList();
   }, []);
-
-  const handleCreateOpen = () => {
-    setWorkspace("");
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+          <CommActionBar reloadFunc={loadAdminCronJobList}>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
+
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
@@ -122,15 +117,10 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <CronJobAdminDetail cronJob={cronJobDetail} />
       </CReflexBox>
     </div>
   );
 });
-export default DeploymentListTab;
+export default CronJobAdminTab;

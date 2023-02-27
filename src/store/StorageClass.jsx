@@ -11,6 +11,7 @@ import {
 import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class StorageClass {
   viewList = [];
+  adminList = [];
   currentPage = 1;
   totalPages = 1;
   totalElements = 0;
@@ -298,6 +299,32 @@ class StorageClass {
     // .then(() => {
     //   this.loadStorageClassName(this.viewList[0].cluster);
     // });
+  };
+
+  loadAdminStorageClasses = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/storageclasses`)
+      .then((res) => {
+        runInAction(() => {
+          this.storageClasses = res.data.data;
+          this.adminList = this.storageClasses.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          this.storageClass = this.adminList[0];
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setStorageClasses);
+      })
+      .then(() => {
+        this.loadStorageClass(
+          this.adminList[0].name,
+          this.adminList[0].cluster
+        );
+      });
   };
 
   loadStorageClass = async (name, cluster) => {

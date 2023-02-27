@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import { deploymentStore } from "@/store";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { podStore } from "@/store";
+import { dateFormatter } from "@/utils/common-utils";
+import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import PodAdminDetail from "../Detail/PodAdminDetail";
 
-const DeploymentListTab = observer(() => {
+const PodAdminTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -20,22 +21,20 @@ const DeploymentListTab = observer(() => {
   };
 
   const {
-    deploymentList,
-    deploymentDetail,
+    podList,
+    podDetail,
     totalElements,
-    loadDeploymentList,
-    loadDeploymentDetail,
-    setWorkspace,
+    loadAdminPodList,
+    loadPodDetail,
     currentPage,
     totalPages,
-    viewList,
     goPrevPage,
     goNextPage,
-  } = deploymentStore;
-
+    viewList,
+  } = podStore;
   const [columDefs] = useState([
     {
-      headerName: "디플로이먼트 이름",
+      headerName: "파드 이름",
       field: "name",
       filter: true,
     },
@@ -50,24 +49,26 @@ const DeploymentListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
+      headerName: "파드 IP",
+      field: "podIP",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
+    },
+    {
+      headerName: "재시작 수",
+      field: "restart",
+      filter: true,
     },
     {
       headerName: "상태",
-      field: "ready",
+      field: "status",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
+      cellRenderer: ({ value }) => {
+        return drawStatus(value);
+      },
     },
     {
-      headerName: "생성일",
-      field: "createAt",
+      headerName: "생성 날짜",
+      field: "creationTimestamp",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
       minWidth: 150,
@@ -78,19 +79,7 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
-  };
-
-  const history = useHistory();
-
-  useEffect(() => {
-    loadDeploymentList();
-  }, []);
-
   const handleCreateOpen = () => {
-    setWorkspace("");
     setOpen(true);
   };
 
@@ -98,13 +87,29 @@ const DeploymentListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleClick = (e) => {
+    const fieldName = e.colDef.field;
+    const data = e.data.status;
+    if (data === "Failed") {
+      return;
+    }
+    loadPodDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
+  const history = useHistory();
+
+  useEffect(() => {
+    loadAdminPodList();
+  }, []);
+
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+          <CommActionBar reloadFunc={loadAdminPodList}>
+            {/* <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton> */}
           </CommActionBar>
+
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
@@ -122,15 +127,15 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
+          {/* <CreatePod
             open={open}
             onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
+            reloadFunc={loadPodList}
+          /> */}
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <PodAdminDetail pod={podDetail} />
       </CReflexBox>
     </div>
   );
 });
-export default DeploymentListTab;
+export default PodAdminTab;

@@ -8,6 +8,7 @@ class Project {
   projectList = [];
   projectDetail = {};
   resourceUsage = {};
+  adminList = [];
   labels = {};
   annotations = {};
   events = [
@@ -144,6 +145,7 @@ class Project {
           //   (item) => item.projectType === type
           // );
           this.projectList = res.data.data;
+          console.log(this.projectList);
           this.totalElements = res.data.data.length;
         });
       })
@@ -152,6 +154,42 @@ class Project {
       })
       .then(() => {
         this.loadProjectDetail(this.viewList[0].projectName);
+      });
+  };
+
+  loadAdminProjectList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/userProjects?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.adminList = [];
+          // const list = res.data.data.filter(
+          //   (item) => item.projectType === type
+          // );
+          this.projectList = res.data.data;
+          console.log(this.projectList);
+          for (let i = 0; i < this.projectList.length; i++) {
+            var test = [];
+            this.projectList[i].selectCluster.map((x) => {
+              test.push(x.clusterName);
+            });
+            test.indexOf("gm-cluster") < 0
+              ? ""
+              : this.adminList.push(this.projectList[i]);
+          }
+          console.log(this.projectList);
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setProjectList);
+      })
+      .then(() => {
+        this.loadProjectDetail(
+          this.adminList[0] ? this.adminList[0].projectName : null
+        );
       });
   };
 

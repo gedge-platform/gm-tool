@@ -8,6 +8,7 @@ class Workspace {
   workSpaceList = [];
   workSpaceDetail = [];
   totalElements = 0;
+  adminList = [];
   events = [
     {
       kind: "",
@@ -117,6 +118,7 @@ class Workspace {
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.workSpaceList[n];
+      console.log(this.viewList);
     });
   };
 
@@ -149,11 +151,51 @@ class Workspace {
       });
   };
 
+  loadAdminWorkSpaceList = async (type = false) => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/workspaces?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.adminList = [];
+          this.workSpaceList = res.data.data;
+          console.log(this.workSpaceList);
+          for (let i = 0; i < this.workSpaceList.length; i++) {
+            var test = [];
+            this.workSpaceList[i].selectCluster.map((x) => {
+              test.push(x.clusterName);
+            });
+            test.indexOf("gm-cluster") < 0
+              ? ""
+              : this.adminList.push(this.workSpaceList[i]);
+          }
+        });
+      })
+      .then((res) => {
+        runInAction(() => {
+          this.selectClusterInfo = this.workSpaceList.map((data) =>
+            data.selectCluster.map((e) => e.clusterName)
+          );
+          // console.log(this.selectClusterInfo);
+          this.totalElements = this.adminList.length;
+          this.workSpaceDetail = this.adminList[0];
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setWorkSpaceList);
+      });
+    // .then(() => {
+    //   type ? null : this.loadWorkspaceDetail(this.adminList[0].workspaceName);
+    // });
+  };
+
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
+        console.log(this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;

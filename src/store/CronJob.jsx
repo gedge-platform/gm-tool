@@ -8,6 +8,7 @@ class CronJob {
   totalPages = 1;
   resultList = {};
   viewList = [];
+  adminList = [];
   pCronjobList = [];
   cronJobList = [];
   cronJobDetail = {};
@@ -38,7 +39,11 @@ class CronJob {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -48,18 +53,22 @@ class CronJob {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadCronJobDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadCronJobDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -100,13 +109,13 @@ class CronJob {
     });
   };
 
-  setPCronjobList = list => {
+  setPCronjobList = (list) => {
     runInAction(() => {
       this.pCronjobList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pCronjobList[n];
     });
@@ -117,12 +126,14 @@ class CronJob {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
-      .then(res => {
+      .then((res) => {
         runInAction(() => {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;
           // this.cronJobDetail = list[0];
-          res.data.data === null ? (this.totalElements = 0) : (this.totalElements = res.data.data.length);
+          res.data.data === null
+            ? (this.totalElements = 0)
+            : (this.totalElements = res.data.data.length);
         });
       })
       .then(() => {
@@ -141,33 +152,75 @@ class CronJob {
         (this.annotations = null),
         (this.cronjobInvolvesJobs = null),
         (this.events = null))
-      : this.loadCronJobDetail(this.cronJobList[0].name, this.cronJobList[0].cluster, this.cronJobList[0].project);
+      : this.loadCronJobDetail(
+          this.cronJobList[0].name,
+          this.cronJobList[0].cluster,
+          this.cronJobList[0].project
+        );
+  };
+
+  loadAdminCronJobList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/cronjobs?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.cronJobList = res.data.data;
+          this.adminList = this.cronJobList.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          console.log(this.adminList);
+          // this.cronJobDetail = this.adminList[0];
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setPCronjobList);
+      });
+    this.adminList.length === 0
+      ? ((this.containers = null),
+        (this.label = null),
+        (this.cronJobDetail = null),
+        (this.annotations = null),
+        (this.cronjobInvolvesJobs = null),
+        (this.events = null))
+      : this.loadCronJobDetail(
+          this.adminList[0].name,
+          this.adminList[0].cluster,
+          this.adminList[0].project
+        );
   };
 
   loadCronJobDetail = async (name, cluster, project) => {
-    await axios.get(`${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`).then(({ data: { data, involvesData } }) => {
-      runInAction(() => {
-        this.cronJobDetail = data;
-        this.containers = data.containers;
-        this.label = data.label;
-        this.annotations = data.annotations;
-        this.cronjobInvolvesJobs = involvesData.jobs;
-        if (data.events !== null) {
-          this.events = data.events;
-        } else {
-          this.events = null;
-        }
+    await axios
+      .get(
+        `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
+      )
+      .then(({ data: { data, involvesData } }) => {
+        runInAction(() => {
+          this.cronJobDetail = data;
+          this.containers = data.containers;
+          this.label = data.label;
+          this.annotations = data.annotations;
+          this.cronjobInvolvesJobs = involvesData.jobs;
+          if (data.events !== null) {
+            this.events = data.events;
+          } else {
+            this.events = null;
+          }
+        });
       });
-    });
   };
 
   deleteCronJob = async (cronjobName, callback) => {
     axios
       .delete(`${SERVER_URL}/cronjobs/${cronjobName}`)
-      .then(res => {
-        if (res.status === 201) swalError("CronJob이 삭제되었습니다.", callback);
+      .then((res) => {
+        if (res.status === 201)
+          swalError("CronJob이 삭제되었습니다.", callback);
       })
-      .catch(err => swalError("삭제에 실패하였습니다."));
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

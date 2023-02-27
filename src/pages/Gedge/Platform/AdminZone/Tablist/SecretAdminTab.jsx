@@ -1,72 +1,65 @@
-import React, { useState, useEffect } from "react";
+//Pagenation Import useLayoutEffect
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../Detail";
-import { deploymentStore } from "@/store";
-import CreateDeployment from "../Dialog/CreateDeployment";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { secretStore } from "@/store";
+import SecretAdminDetail from "../Detail/SecretAdminDetail";
 
-const DeploymentListTab = observer(() => {
-  const [open, setOpen] = useState(false);
+const SecretAdminListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
   const {
-    deploymentList,
-    deploymentDetail,
+    secretList,
+    secretDetail,
     totalElements,
-    loadDeploymentList,
-    loadDeploymentDetail,
-    setWorkspace,
+    loadAdminsecretList,
+    loadsecretTabList,
+
+    //Pagenation Variable
     currentPage,
     totalPages,
     viewList,
     goPrevPage,
     goNextPage,
-  } = deploymentStore;
+  } = secretStore;
 
   const [columDefs] = useState([
     {
-      headerName: "디플로이먼트 이름",
+      headerName: "이름",
       field: "name",
       filter: true,
     },
     {
-      headerName: "클러스터",
-      field: "cluster",
-      filter: true,
-    },
-    {
       headerName: "프로젝트",
-      field: "project",
+      field: "namespace",
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
+      headerName: "타입",
+      field: "type",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "데이터 개수",
+      field: "dataCnt",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
     },
     {
-      headerName: "생성일",
+      headerName: "클러스터",
+      field: "clusterName",
+      filter: true,
+    },
+    {
+      headerName: "생성날짜",
       field: "createAt",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -80,31 +73,21 @@ const DeploymentListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
+    loadsecretTabList(e.data.name, e.data.clusterName, e.data.namespace);
   };
 
   const history = useHistory();
 
-  useEffect(() => {
-    loadDeploymentList();
+  //Pagenation useEffect -> useLayoutEffect
+  useLayoutEffect(() => {
+    loadAdminsecretList();
   }, []);
-
-  const handleCreateOpen = () => {
-    setWorkspace("");
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
-          </CommActionBar>
+          <CommActionBar />
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
@@ -122,15 +105,10 @@ const DeploymentListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateDeployment
-            open={open}
-            onClose={handleClose}
-            reloadFunc={loadDeploymentList}
-          />
         </PanelBox>
-        <Detail deployment={deploymentDetail} />
+        <SecretAdminDetail secret={secretDetail} />
       </CReflexBox>
     </div>
   );
 });
-export default DeploymentListTab;
+export default SecretAdminListTab;

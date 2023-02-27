@@ -8,6 +8,7 @@ class StatefulSet {
   totalPages = 1;
   resultList = {};
   viewList = [];
+  adminList = [];
   pStatefulSetList = [];
   statefulSetList = [];
   statefulSetDetail = {
@@ -179,6 +180,35 @@ class StatefulSet {
           this.statefulSetList[0].name,
           this.statefulSetList[0].cluster,
           this.statefulSetList[0].project
+        );
+  };
+
+  loadAdminStatefulSetList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/statefulsets?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.statefulSetList = res.data.data;
+          this.adminList = this.statefulSetList.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          this.statefulSetDetail = this.adminList[0];
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setPStatefulSetList);
+      });
+    this.statefulSetList === null
+      ? ((this.statefulSetDetail = null),
+        (this.label = null),
+        (this.annotations = null))
+      : this.loadStatefulSetDetail(
+          this.adminList[0].name,
+          this.adminList[0].cluster,
+          this.adminList[0].project
         );
   };
 
