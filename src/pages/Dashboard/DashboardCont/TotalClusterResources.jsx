@@ -1,23 +1,71 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { observer } from "mobx-react";
 import ReactApexChart from "react-apexcharts";
+import dashboardStore from "../../../store/Dashboard";
+import PieChart from "../../Gedge/Storage/PieChart";
 
 const TotalClusterResources = observer(() => {
-  const TotalClusterResourcesPieChart = {
+  const {
+    loadDashboardCnt,
+    dashboardDetail,
+    totalCpu,
+    totalMem,
+    totalDisk,
+    usageTotalCpu,
+    usageTotalMem,
+    usageTotalDisk,
+  } = dashboardStore;
+
+  const availCpu = totalCpu - usageTotalCpu;
+  const availMem = totalMem - usageTotalMem;
+  const availDisk = totalDisk - usageTotalDisk;
+
+  const totalCpuTB = totalCpu / 1024;
+  const totalMemTB = totalMem / 1024;
+  const totalDiskTB = totalDisk / 1024;
+
+  const cpuTemp = (usageTotalCpu / totalCpu) * 100;
+  const clusterTotalCpu = cpuTemp.toFixed(2);
+
+  const memTemp = (usageTotalMem / totalMem) * 100;
+  const clusterTotalMem = memTemp.toFixed(2);
+
+  const diskTemp = (usageTotalDisk / totalDisk) * 100;
+  const clusterTotalDisk = diskTemp.toFixed(2);
+
+  const TotalClusterResourcesBarChart = {
     series: [
       {
-        name: "",
-        data: [400, 430, 448],
+        data: [
+          {
+            x: "Total CPU(/ " + totalCpuTB,
+            y: clusterTotalCpu,
+          },
+          {
+            x: "Total Memory",
+            y: clusterTotalMem,
+          },
+          {
+            x: "Total Disk",
+            y: clusterTotalDisk,
+          },
+        ],
       },
     ],
+    // series: [
+    //   {
+    //     data: [clusterTotalCpu, clusterTotalMem, clusterTotalDisk],
+    //   },
+    // ],
     options: {
       chart: {
         type: "bar",
         height: 350,
         foreColor: "#fff",
+        stacked: true,
       },
       plotOptions: {
         bar: {
@@ -28,23 +76,99 @@ const TotalClusterResources = observer(() => {
         },
       },
       dataLabels: {
-        enabled: false,
+        enabled: true,
       },
-      xaxis: {
-        categories: ["Total CPU", "Total Memory", "Total Disk"],
+      yaxis: {
+        show: true,
+        showAlways: true,
+        showForNullSeries: true,
+        seriesName: undefined,
+        logarithmic: false,
+        logBase: 10,
+        tickAmount: 4,
+        min: 0,
+        max: 100,
+      },
+      tooltip: {
+        // 상세 박스
       },
     },
   };
 
+  useEffect(() => {
+    loadDashboardCnt();
+  }, [
+    totalCpu,
+    totalMem,
+    totalDisk,
+    usageTotalCpu,
+    usageTotalMem,
+    usageTotalDisk,
+  ]);
+
   return (
-    <div className="TotalClusterResourcesWrap">
-      <div className="chart" style={{ marginTop: "5px" }}>
-        <ReactApexChart
-          options={TotalClusterResourcesPieChart.options}
-          series={TotalClusterResourcesPieChart.series}
-          type="bar"
-          width="450"
-          // padding="20px"
+    <div
+      className="TotalClusterResourcesWrap"
+      style={{
+        display: "flex",
+      }}
+    >
+      <div
+        className="chart"
+        style={{
+          marginTop: "40px",
+          width: "300px",
+        }}
+      >
+        <PieChart
+          total={true}
+          label={["avail", "used"]}
+          value={[Math.round(availCpu), Math.round(usageTotalCpu)]}
+        />
+      </div>
+      <div className="test">
+        <div className="TotalClusterResourcesContTxt">
+          <ul>
+            <li className="used">
+              <span className="tit">Used</span> <span>1 GiB</span>
+            </li>
+            <li className="avail">
+              <span className="tit">Avail</span> <span>1 GiB</span>
+            </li>
+            <li className="total">
+              {" "}
+              <span className="tit">Total</span> <span>1 GiB</span>
+            </li>
+            <li className="none"></li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        className="chart"
+        style={{
+          marginTop: "40px",
+          width: "300px",
+        }}
+      >
+        <PieChart
+          total={true}
+          label={["avail", "used"]}
+          value={[Math.round(availMem), Math.round(usageTotalMem)]}
+        />
+      </div>
+
+      <div
+        className="chart"
+        style={{
+          marginTop: "40px",
+          width: "300px",
+        }}
+      >
+        <PieChart
+          total={true}
+          label={["avail", "used"]}
+          value={[Math.round(availDisk), Math.round(usageTotalDisk)]}
         />
       </div>
     </div>
@@ -52,7 +176,3 @@ const TotalClusterResources = observer(() => {
 });
 
 export default TotalClusterResources;
-
-{
-  /* <div className="ClusterTotalResourceWrap"></div> */
-}

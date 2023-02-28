@@ -1963,20 +1963,148 @@ const globalStyles = createGlobalStyle`
       display: flex;
       /* justify-content: space-between; */
       .cluster_totalResources{
+        justify-content: space-between;
         border-radius: 5px;
         /* width: calc(64% - 10px); */
-        width: 30%;
+        width: 45%;
         height: 100%;
         background: #202842;
         border-radius: 5px;
         position: relative;
         /* position: absolute; */
         margin-left: 13px;
+          .TotalClusterResourcesContTxt {
+          width: 100%;
+            ul {
+              width: 100%; 
+              border-top: 1px solid #11162a;
+              border-bottom-left-radius: 8px;
+              border-bottom-right-radius: 8px;
+              li {
+                width: 100%;
+                height: 40px;
+                border-bottom: 1px solid #11162a;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: relative;
+                font-size: 12px;
+                background: url(../images/resource/cloudzone_list_dot_bg.png) repeat-x center center;
+                &::before {
+                  content: '';
+                  width: 7px;
+                  height: 7px;
+                  position: absolute;
+                  top: 17px;
+                  left: 20px;
+                }
+                &:last-of-type {
+                  border-bottom: 0;
+                }
+                &.none {
+                  background: transparent;
+                }
+                &.used {
+                  &::before {
+                    background: #EA78EA;
+                  }
+                  span {
+                    color: #EA78EA;
+                  }
+                }
+                &.avail {
+                  &::before {
+                    background: #E04AE0;
+                  }
+                  span {
+                    color: #E04AE0;
+                  }
+                }
+                 &.total {
+                  &::before {
+                    background: #CE00CE;
+                  }
+                  span {
+                    color: #CE00CE;
+                  }
+                }
+                &.clean {
+                  &::before {
+                    background: #1cdd49;
+                  }
+                  span {
+                    color: #1cdd49;
+                  }
+                }
+                &.working {
+                  &::before {
+                    background: #e8990f;
+                  }
+                  span {
+                    color: #e8990f;
+                  }
+                }
+                &.warning {
+                  &::before {
+                    background: #e85c0f;
+                  }
+                  span {
+                    color: #e85c0f;
+                  }
+                }
+                &.unknown {
+                  &::before {
+                    background: #ce0000;
+                  }
+                  span {
+                    color: #ce0000;
+                  }
+                }
+                 &.down {
+                  &::before {
+                    background: #ce0000;
+                  }
+                  span {
+                    color: #ce0000;
+                  }
+                }
+                &.reads {
+                  &::before {
+                    background: #00beea;
+                  }
+                  span {
+                    color: #00beea;
+                  }
+                }
+                &.writes {
+                  &::before {
+                    background: #4646ff;
+                  }
+                  span {
+                    color: #4646ff;
+                  }
+                }
+                span {
+                  padding: 0 30px 0 10px;
+                  font-size: 13px;
+                  background: #1d243c;
+                }
+                span.tit {
+                  padding: 0 10px 0 35px;
+                  font-size: 13px;
+                  color: rgba(255, 255, 255, 0.7);
+                }
+              }
+            }
+          }
+   
+        }
+        
       }
       .cluster_kind {
         border-radius: 5px;
         /* width: calc(64% - 10px); */
-        width: 70%;
+        width: 55%;
         height: 100%;
         background: #202842;
         border-radius: 5px;

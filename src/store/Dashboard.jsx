@@ -139,6 +139,13 @@ class Dashboard {
 
   firstCloudName = "";
 
+  totalCpu = "";
+  totalMem = "";
+  totalDisk = "";
+  usageTotalCpu = "";
+  usageTotalMem = "";
+  usageTotalDisk = "";
+
   mapZoom = 1;
   setMapZoom = (value) => {
     runInAction(() => {
@@ -173,6 +180,14 @@ class Dashboard {
           this.edgeClusterCnt = data.edgeClusterCnt;
           this.workspaceCnt = data.workspaceCnt;
           this.projectCnt = data.projectCnt;
+
+          this.totalCpu = data.totalCpu;
+          this.totalMem = data.totalMem;
+          this.totalDisk = data.totalDisk;
+
+          this.usageTotalCpu = data.usageTotalCpu;
+          this.usageTotalMem = data.usageTotalMem;
+          this.usageTotalDisk = data.usageTotalDisk;
         });
       });
   };
@@ -445,7 +460,6 @@ class Dashboard {
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
-    console.log("loadEdgeZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>

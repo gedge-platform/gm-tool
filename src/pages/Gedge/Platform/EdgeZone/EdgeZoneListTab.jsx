@@ -21,8 +21,18 @@ const EdgeZoneListTab = observer(() => {
     setTabvalue(newValue);
   };
 
-  const { clusterDetail, clusterList, totalElements, loadClusterList, loadCluster, currentPage, totalPages, viewList, goPrevPage, goNextPage } =
-    clusterStore;
+  const {
+    clusterDetail,
+    clusterList,
+    totalElements,
+    loadClusterList,
+    loadCluster,
+    currentPage,
+    totalPages,
+    viewList,
+    goPrevPage,
+    goNextPage,
+  } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -75,7 +85,7 @@ const EdgeZoneListTab = observer(() => {
 
   const history = useHistory();
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     loadCluster(e.data.clusterName);
   };
 
