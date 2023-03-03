@@ -86,7 +86,7 @@ const DaemonSetAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {daemonSetDetail ? (
+              {daemonSetDetail.length !== 0 ? (
                 <>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
@@ -121,7 +121,7 @@ const DaemonSetAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length !== 0 ? (
             containers.map((container) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -242,7 +242,7 @@ const DaemonSetAdminDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {label ? (
+            {label.length !== 0 ? (
               Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -256,7 +256,7 @@ const DaemonSetAdminDetail = observer(() => {
           <br />
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations.length !== 0 ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -282,35 +282,41 @@ const DaemonSetAdminDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {pods ? (
-            pods.map((item) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody className="tb_workload_pod_detail">
-                    <tr>
-                      <th>Name</th>
-                      <td>{item.name ? item.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Node</th>
-                      <td>{item.node ? item.node : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Pod IP</th>
-                      <td>{item.podIP ? item.podIP : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Status</th>
-                      <td>{item.status ? item.status : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Restart</th>
-                      <td>{item.restart ? item.restart : "-"}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
+            pods.length !== 0 ? (
+              pods.map((item) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody className="tb_workload_pod_detail">
+                      <tr>
+                        <th>Name</th>
+                        <td>{item.name ? item.name : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Node</th>
+                        <td>{item.node ? item.node : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Pod IP</th>
+                        <td>{item.podIP ? item.podIP : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Status</th>
+                        <td>{item.status ? item.status : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Restart</th>
+                        <td>{item.restart ? item.restart : "-"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Pod Info</p>
+              </LabelContainer>
+            )
           ) : (
             <LabelContainer>
               <p>No Pod Info</p>
@@ -320,7 +326,7 @@ const DaemonSetAdminDetail = observer(() => {
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <>
               <tbody className="tb_workload_pod_detail">
-                {services ? (
+                {services.name ? (
                   <>
                     <tr>
                       <th>Name</th>

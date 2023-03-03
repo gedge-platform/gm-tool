@@ -79,38 +79,9 @@ class Pod {
       started: true,
     },
   ];
-  involvesData = {
-    workloadList: {
-      name: "",
-      kind: "",
-      replicaName: "",
-    },
-    serviceList: [
-      {
-        metadata: {
-          name: "",
-          namespace: "",
-          creationTimestamp: "",
-        },
-        subsets: [
-          {
-            addresses: [
-              {
-                nodename: "",
-                ip: "",
-              },
-            ],
-            ports: [
-              {
-                port: 0,
-                protocol: "",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+  involvesData = [];
+  workloadList = [];
+  serviceList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -258,11 +229,11 @@ class Pod {
           this.podDetail = data;
           this.involvesData = involvesData;
           this.workloadList = involvesData.workloadList;
-          if (involvesData.serviceList !== null) {
-            this.serviceList = involvesData.serviceList;
-          } else {
-            this.serviceList = null;
-          }
+          this.serviceList = involvesData.serviceList;
+          // if (involvesData.serviceList !== null) {
+          // } else {
+          //   this.serviceList = null;
+          // }
 
           this.label = data.label;
           this.annotations = data.annotations;

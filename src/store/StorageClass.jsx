@@ -259,7 +259,6 @@ class StorageClass {
       .get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&kind=${kind}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
           const YAML = require("json-to-pretty-yaml");
           this.getYamlFile = YAML.stringify(res.data.data);
         });
@@ -282,19 +281,7 @@ class StorageClass {
         this.convertList(this.storageClasses, this.setStorageClasses);
       })
       .then(() => {
-        this.totalElements === 0
-          ? ((this.storageClass = null),
-            (this.scYamlFile = null),
-            (this.scAnnotations = null),
-            (this.scLables = null),
-            (this.scParameters = null),
-            (this.label = null),
-            (this.annotations = null),
-            (this.storageClassList = null))
-          : this.loadStorageClass(
-              this.viewList[0].name,
-              this.viewList[0].cluster
-            );
+        this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       });
     // .then(() => {
     //   this.loadStorageClassName(this.viewList[0].cluster);
@@ -336,7 +323,7 @@ class StorageClass {
           this.scYamlFile = "";
           this.scAnnotations = {};
           this.scLables = {};
-          this.scParameters = data.parameters ? data.parameters : "-";
+          this.scParameters = data.parameters;
           this.label = data.labels;
           this.annotations = data.annotations;
           this.storageClassList = data.name;

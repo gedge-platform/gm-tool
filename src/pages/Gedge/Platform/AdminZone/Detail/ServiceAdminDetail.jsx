@@ -51,6 +51,8 @@ const Label = styled.span`
 const ServiceAdminDetail = observer(() => {
   const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
     serviceStore;
+
+  console.log(involvesPods);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -161,36 +163,42 @@ const ServiceAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPods === null ? (
+          {involvesPods ? (
+            involvesPods.length !== 0 ? (
+              involvesPods.map((pod) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{pod?.name ? pod?.name : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>IP</th>
+                        <td>{pod?.ip ? pod?.ip : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Node Name</th>
+                        <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Pods Info</p>
+              </LabelContainer>
+            )
+          ) : (
             <LabelContainer>
               <p>No Pods Info</p>
             </LabelContainer>
-          ) : (
-            involvesPods.map((pod) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody>
-                    <tr>
-                      <th style={{ width: "25%" }}>Name</th>
-                      <td>{pod?.name ? pod?.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>IP</th>
-                      <td>{pod?.ip ? pod?.ip : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Node Name</th>
-                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
           )}
 
           <TableTitle>Workload</TableTitle>
-          {involvesWorkloads !== null ? (
+          {involvesWorkloads ? (
             involvesWorkloads.map((workload) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -223,7 +231,7 @@ const ServiceAdminDetail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp ? (
+          {portTemp.length !== 0 ? (
             portTemp.map((port) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>

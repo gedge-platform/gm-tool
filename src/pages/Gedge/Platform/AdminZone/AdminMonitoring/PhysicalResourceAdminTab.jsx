@@ -121,14 +121,15 @@ const PsysicalResourceAdminTab = observer(() => {
       <div className="panelTitBar panelTitBar_clear">
         <div className="tit">
           <span style={{ marginRight: "10px", color: "white " }}>
-            Select Cluster
+            Select Cluster :
           </span>
-          <CSelectButtonM
+          <span style={{ color: "white" }}>{clusterName}</span>
+          {/* <CSelectButtonM
             className="none_transform"
             items={clusterNameActionList}
           >
             {clusterName}
-          </CSelectButtonM>
+          </CSelectButtonM> */}
         </div>
         <div className="date">
           {dayjs(new Date()).format("YYYY-MM-DD")}

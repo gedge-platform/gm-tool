@@ -195,7 +195,7 @@ const StorageClassAdminDetail = observer(({}) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {scParameters ? (
+          {scParameters !== "" ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(scParameters).map(([key, value]) => (
@@ -213,7 +213,7 @@ const StorageClassAdminDetail = observer(({}) => {
           )}
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
+      {/* <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
@@ -224,7 +224,7 @@ const StorageClassAdminDetail = observer(({}) => {
             </tbody>
           </table>
         </div>
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });

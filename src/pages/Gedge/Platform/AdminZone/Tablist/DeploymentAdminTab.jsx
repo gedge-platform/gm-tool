@@ -32,8 +32,6 @@ const DeploymentAdminTab = observer(() => {
     totalElements,
   } = deploymentStore;
 
-  console.log(totalElements);
-
   const [columDefs] = useState([
     {
       headerName: "디플로이먼트 이름",

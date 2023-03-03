@@ -39,17 +39,12 @@ const EventAccordion = ({ events }) => {
         <p>No Events Info</p>
       </EventsContainer>
     );
-  } else if (
-    // events.map((item) =>
-    events.message ? events.message === "" : events[0].message === ""
-
-    // )
-  ) {
-    return (
-      <EventsContainer>
-        <p>No Events Info</p>
-      </EventsContainer>
-    );
+    // } else if (events.message === null || events.message === "") {
+    //   return (
+    //     <EventsContainer>
+    //       <p>No Events Info</p>
+    //     </EventsContainer>
+    //   );
   } else {
     return (
       <div className="tb_container">
@@ -112,7 +107,7 @@ const EventAccordion = ({ events }) => {
                           backgroundColor: "#2f3855",
                         }}
                       >
-                        {strFormatByLength(message)}
+                        {message ? strFormatByLength(message) : "No Message"}
                       </Typography>
                     </AccordionSummary>
                     {/* <AccordionDetails sx={{ bgcolor: theme.colors.panelTit }}> */}

@@ -156,7 +156,7 @@ const WorkspceAdminDetail = observer(() => {
                 <th>Cluster</th>
                 <td style={{ whiteSpace: "pre-wrap" }}>
                   {selectClusterInfo
-                    ? selectClusterInfo.map((item) => item.clusterName + "\n")
+                    ? selectClusterInfo.map((item) => item[0] + "\n")
                     : "-"}
                 </td>
               </tr>

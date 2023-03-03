@@ -276,7 +276,6 @@ class Deployment {
       .then((res) => {
         runInAction(() => {
           this.deploymentList = res.data.data;
-          console.log(this.deploymentList);
           this.adminList = this.deploymentList.filter(
             (data) => data.cluster === "gm-cluster"
           );

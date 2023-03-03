@@ -13,28 +13,29 @@ class Job {
   pJobList = [];
   jobList = [];
   containers = [];
-  jobDetailData = {
-    containers: [
-      {
-        name: "",
-        image: "",
-      },
-    ],
-    ownerReferences: [
-      {
-        name: "",
-        apiVersion: "",
-        kind: "",
-      },
-    ],
-    conditions: [
-      {
-        status: "",
-        type: "",
-        lastProbeTime: "",
-      },
-    ],
-  };
+  jobDetailData = [];
+  // jobDetailData = {
+  //   containers: [
+  //     {
+  //       name: "",
+  //       image: "",
+  //     },
+  //   ],
+  //   ownerReferences: [
+  //     {
+  //       name: "",
+  //       apiVersion: "",
+  //       kind: "",
+  //     },
+  //   ],
+  //   conditions: [
+  //     {
+  //       status: "",
+  //       type: "",
+  //       lastProbeTime: "",
+  //     },
+  //   ],
+  // };
   depServicesPort = [
     {
       name: "",
@@ -42,26 +43,12 @@ class Job {
       protocol: "",
     },
   ];
-  involvesPodList = [
-    {
-      metadata: {
-        name: "",
-      },
-      status: {
-        phase: "",
-        hostIP: "",
-        podIP: "",
-      },
-      spec: {
-        nodeName: "",
-      },
-    },
-  ];
-  ownerReferences = {};
+  involvesPodList = [];
+  ownerReferences = [];
 
   totalElements = 0;
-  labels = {};
-  annotations = {};
+  labels = [];
+  annotations = [];
   events = [
     {
       kind: "",
@@ -125,10 +112,10 @@ class Job {
       let totalCnt = 0;
       let tempList = [];
       let cntCheck = true;
-      this.resultList = {};
+      this.resultList = [];
 
       apiList === null
-        ? "-"
+        ? (cntCheck = false)
         : Object.entries(apiList).map(([_, value]) => {
             cntCheck = true;
             tempList.push(toJS(value));
@@ -173,9 +160,7 @@ class Job {
       .get(`${SERVER_URL}/jobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          // const list = res.data.data.filter((item) => item.projectType === type);
           this.jobList = res.data.data;
-          // this.jobDetail = list[0];
           res.data.data === null
             ? (this.totalElements = 0)
             : (this.totalElements = res.data.data.length);
@@ -183,20 +168,23 @@ class Job {
       })
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
+        this.jobList.length === 0
+          ? this.jobDetailData === null
+          : this.loadJobDetail(
+              this.jobList[0][0].name,
+              this.jobList[0][0].cluster,
+              this.jobList[0][0].project
+            );
       });
-    this.totalElements === 0
-      ? ((this.containers = null),
-        (this.jobDetailData = null),
-        (this.labels = null),
-        (this.involvesPodList = null),
-        (this.annotations = null),
-        (this.involvesPodList = null),
-        (this.ownerReferences = null))
-      : this.loadJobDetail(
-          this.jobList[0][0].name,
-          this.jobList[0][0].cluster,
-          this.jobList[0][0].project
-        );
+    // this.totalElements === 0
+    //   ? ((this.containers = null),
+    //     (this.jobDetailData = null),
+    //     (this.labels = null),
+    //     (this.involvesPodList = null),
+    //     (this.annotations = null),
+    //     (this.involvesPodList = null),
+    //     (this.ownerReferences = null))
+    //   :
   };
 
   loadAdminJobList = async () => {
@@ -239,12 +227,7 @@ class Job {
           this.involvesPodList = involves.podList;
           this.ownerReferences = involves.ownerReferences;
           this.containers = data.containers;
-
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
+          this.events = data.events;
         });
       });
   };

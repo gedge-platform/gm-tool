@@ -58,6 +58,8 @@ const PodAdminDetail = observer(() => {
     podContainers,
     containerStatuses,
     involvesData,
+    serviceList,
+    workloadList,
   } = podStore;
 
   const [open, setOpen] = useState(false);
@@ -342,169 +344,203 @@ const PodAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={5}>
         <div className="tb_container">
           <TableTitle>Workload</TableTitle>
-          <table className="tb_data">
-            <tbody className="tb_workload_pod_detail">
-              <tr>
-                <th>Name</th>
-                <td>
-                  {involvesData.workloadList.name
-                    ? involvesData.workloadList.name
-                    : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>Kind</th>
-                <td>
-                  {involvesData.workloadList.kind
-                    ? involvesData.workloadList.kind
-                    : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>ReplicaName</th>
-                <td>
-                  {involvesData.workloadList.replicaName
-                    ? involvesData.workloadList.replicaName
-                    : "-"}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          {workloadList?.length === 0 ? (
+            <LabelContainer>
+              <p>No Pod Info</p>
+            </LabelContainer>
+          ) : (
+            <table className="tb_data">
+              <tbody className="tb_workload_pod_detail">
+                <tr>
+                  <th>Name</th>
+                  <td>
+                    {involvesData.workloadList.name
+                      ? involvesData.workloadList.name
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Kind</th>
+                  <td>
+                    {involvesData.workloadList.kind
+                      ? involvesData.workloadList.kind
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>ReplicaName</th>
+                  <td>
+                    {involvesData.workloadList.replicaName
+                      ? involvesData.workloadList.replicaName
+                      : "-"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
           <br />
           <TableTitle>Service</TableTitle>
-          <table className="tb_data">
-            <tbody className="tb_workload_pod_detail">
-              <tr>
-                <th>Metadata</th>
-                <td>
-                  <table className="tb_data">
-                    <tbody className="tb_services_detail_th">
-                      <tr>
-                        <th>Name</th>
-                        <th>Namespace</th>
-                        <th>Created</th>
-                      </tr>
-                      {involvesData?.serviceList ? (
-                        involvesData?.serviceList?.map((item) => (
+          {serviceList ? (
+            serviceList.length !== 0 ? (
+              <table className="tb_data">
+                <tbody className="tb_workload_pod_detail">
+                  <tr>
+                    <th>Metadata</th>
+                    <td>
+                      <table className="tb_data">
+                        <tbody className="tb_services_detail_th">
                           <tr>
-                            <td>
-                              {item.metadata.name ? item.metadata.name : "-"}
-                            </td>
-                            <td>
-                              {item.metadata.namespace
-                                ? item.metadata.namespace
-                                : "-"}
-                            </td>
-                            <td>
-                              {item.metadata.creationTimestamp
-                                ? dateFormatter(item.metadata.creationTimestamp)
-                                : "-"}
-                            </td>
+                            <th>Name</th>
+                            <th>Namespace</th>
+                            <th>Created</th>
                           </tr>
-                        ))
-                      ) : (
-                        <>
-                          <td>-</td>
-                          <td>-</td>
-                          <td>-</td>
-                        </>
-                      )}
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <th>Subsets</th>
-                <td>
-                  <TableTitle>Addresses</TableTitle>
-                  <table className="tb_data">
-                    <tbody className="tb_workload_pod_detail">
-                      <tr>
-                        <th>Nodename</th>
-                        <th>IP</th>
-                      </tr>
-                      {involvesData?.serviceList === null ? (
-                        <tr>
-                          <td>-</td>
-                          <td>-</td>
-                        </tr>
-                      ) : (
-                        involvesData?.serviceList?.map((item) =>
-                          Object.entries(item?.subsets).map(([inx, value]) =>
-                            value.addresses === undefined ? (
+                          {involvesData?.serviceList ? (
+                            involvesData?.serviceList?.map((item) => (
                               <tr>
-                                <td>-</td>
-                                <td>-</td>
-                              </tr>
-                            ) : (
-                              involvesData?.serviceList?.map((item) =>
-                                Object.entries(item?.subsets).map(
-                                  ([inx, value]) =>
-                                    Object.entries(value?.addresses).map(
-                                      ([key, value]) => (
-                                        <tr>
-                                          <td>
-                                            {value?.nodename
-                                              ? value?.nodename
-                                              : "-"}
-                                          </td>
-                                          <td>{value?.ip ? value?.ip : "-"}</td>
-                                        </tr>
-                                      )
-                                    )
-                                )
-                              )
-                            )
-                          )
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                  <br />
-                  <TableTitle>Ports</TableTitle>
-                  <table className="tb_data">
-                    <tbody className="tb_workload_pod_detail">
-                      <tr>
-                        <th>Name</th>
-                        <th>Port</th>
-                        <th>Protocol</th>
-                      </tr>
-                      {involvesData?.serviceList === null ? (
-                        <tr>
-                          <td>-</td>
-                          <td>-</td>
-                          <td>-</td>
-                        </tr>
-                      ) : (
-                        // ) : (
-                        //   involvesData?.serviceList?.map((item) =>
-                        //     Object.entries(item?.subsets).map(([inx, value]) =>
-                        //       value.ports === undefined ? (
-                        //         <tr>
-                        //           <td>-</td>
-                        //           <td>-</td>
-                        //           <td>-</td>
-                        //         </tr>
-                        involvesData?.serviceList?.map((item) =>
-                          Object.entries(item?.subsets).map(([inx, value]) =>
-                            Object.entries(value?.ports).map(([key, value]) => (
-                              <tr>
-                                <td>{value?.name ? value?.name : "-"}</td>
-                                <td>{value?.port ? value?.port : "-"}</td>
                                 <td>
-                                  {value?.protocol ? value?.protocol : "-"}
+                                  {item.metadata.name
+                                    ? item.metadata.name
+                                    : "-"}
+                                </td>
+                                <td>
+                                  {item.metadata.namespace
+                                    ? item.metadata.namespace
+                                    : "-"}
+                                </td>
+                                <td>
+                                  {item.metadata.creationTimestamp
+                                    ? dateFormatter(
+                                        item.metadata.creationTimestamp
+                                      )
+                                    : "-"}
                                 </td>
                               </tr>
                             ))
-                          )
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                          ) : (
+                            <>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                            </>
+                          )}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Subsets</th>
+                    <td>
+                      <TableTitle>Addresses</TableTitle>
+                      <table className="tb_data">
+                        <tbody className="tb_workload_pod_detail">
+                          <tr>
+                            <th>Nodename</th>
+                            <th>IP</th>
+                          </tr>
+                          {involvesData?.serviceList === null ? (
+                            <tr>
+                              <td>-</td>
+                              <td>-</td>
+                            </tr>
+                          ) : (
+                            involvesData?.serviceList?.map((item) =>
+                              Object.entries(item?.subsets).map(
+                                ([inx, value]) =>
+                                  value.addresses === undefined ? (
+                                    <tr>
+                                      <td>-</td>
+                                      <td>-</td>
+                                    </tr>
+                                  ) : (
+                                    involvesData?.serviceList?.map((item) =>
+                                      Object.entries(item?.subsets).map(
+                                        ([inx, value]) =>
+                                          Object.entries(value?.addresses).map(
+                                            ([key, value]) => (
+                                              <tr>
+                                                <td>
+                                                  {value?.nodename
+                                                    ? value?.nodename
+                                                    : "-"}
+                                                </td>
+                                                <td>
+                                                  {value?.ip ? value?.ip : "-"}
+                                                </td>
+                                              </tr>
+                                            )
+                                          )
+                                      )
+                                    )
+                                  )
+                              )
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                      <br />
+                      <TableTitle>Ports</TableTitle>
+                      <table className="tb_data">
+                        <tbody className="tb_workload_pod_detail">
+                          <tr>
+                            <th>Name</th>
+                            <th>Port</th>
+                            <th>Protocol</th>
+                          </tr>
+                          {involvesData?.serviceList === null ? (
+                            <tr>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                            </tr>
+                          ) : (
+                            // ) : (
+                            //   involvesData?.serviceList?.map((item) =>
+                            //     Object.entries(item?.subsets).map(([inx, value]) =>
+                            //       value.ports === undefined ? (
+                            //         <tr>
+                            //           <td>-</td>
+                            //           <td>-</td>
+                            //           <td>-</td>
+                            //         </tr>
+                            involvesData?.serviceList?.map((item) =>
+                              Object.entries(item?.subsets).map(
+                                ([inx, value]) =>
+                                  Object.entries(value?.ports).map(
+                                    ([key, value]) => (
+                                      <tr>
+                                        <td>
+                                          {value?.name ? value?.name : "-"}
+                                        </td>
+                                        <td>
+                                          {value?.port ? value?.port : "-"}
+                                        </td>
+                                        <td>
+                                          {value?.protocol
+                                            ? value?.protocol
+                                            : "-"}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )
+                              )
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <LabelContainer>
+                <p>No Service Info</p>
+              </LabelContainer>
+            )
+          ) : (
+            <LabelContainer>
+              <p>No Service Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

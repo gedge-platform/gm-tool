@@ -11,13 +11,10 @@ class DaemonSet {
   adminList = [];
   pDaemonSetList = [];
   daemonSetList = [];
-  daemonSetDetail = {
-    status: {},
-    strategy: {},
-  };
+  daemonSetDetail = [];
   totalElements = 0;
-  label = {};
-  annotations = {};
+  label = [];
+  annotations = [];
   events = [
     {
       kind: "",
@@ -30,21 +27,10 @@ class DaemonSet {
       eventTime: "",
     },
   ];
-  pods = [
-    {
-      name: "",
-      status: "",
-      node: "",
-      podIP: "",
-      restart: 0,
-    },
-  ];
-  services = {
-    name: "",
-    port: 0,
-  };
+  pods = [];
+  services = {};
 
-  containers = [{}];
+  containers = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -151,20 +137,14 @@ class DaemonSet {
       })
       .then(() => {
         this.convertList(this.daemonSetList, this.setPDaemonSetList);
+        this.daemonSetList === null
+          ? this.daemonSetDetail === null
+          : this.loadDaemonSetDetail(
+              this.viewList[0].name,
+              this.viewList[0].cluster,
+              this.viewList[0].project
+            );
       });
-    this.totalElements === 0
-      ? ((this.daemonSetDetail = null),
-        (this.involvesData = null),
-        (this.pods = null),
-        (this.containers = null),
-        (this.services = null),
-        (this.label = null),
-        (this.annotations = null))
-      : this.loadDaemonSetDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
   };
 
   loadAdminDaemonSetList = async () => {
@@ -184,20 +164,14 @@ class DaemonSet {
       })
       .then(() => {
         this.convertList(this.adminList, this.setPDaemonSetList);
+        this.daemonSetList === null
+          ? this.daemonSetDetail === null
+          : this.loadDaemonSetDetail(
+              this.viewList[0].name,
+              this.viewList[0].cluster,
+              this.viewList[0].project
+            );
       });
-    this.totalElements === 0
-      ? ((this.daemonSetDetail = null),
-        (this.involvesData = null),
-        (this.pods = null),
-        (this.containers = null),
-        (this.services = null),
-        (this.label = null),
-        (this.annotations = null))
-      : this.loadDaemonSetDetail(
-          this.adminList[0].name,
-          this.adminList[0].cluster,
-          this.adminList[0].project
-        );
   };
 
   loadDaemonSetDetail = async (name, cluster, project) => {
@@ -219,6 +193,7 @@ class DaemonSet {
           } else {
             this.events = null;
           }
+          console.log(this.containers);
         });
       });
   };

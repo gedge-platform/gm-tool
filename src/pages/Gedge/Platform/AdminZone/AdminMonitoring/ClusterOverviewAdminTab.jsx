@@ -55,6 +55,7 @@ const ClusterOverviewAdminTab = observer(() => {
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
+  const [name, setName] = useState("");
 
   const {
     clusterName,
@@ -70,6 +71,8 @@ const ClusterOverviewAdminTab = observer(() => {
     loadCoSchedulerRate,
     setClusterName,
   } = monitoringStore;
+
+  // const clusterName = "gm-cluster";
 
   const calledMetrics = () => {
     loadCoCPU(
@@ -299,9 +302,9 @@ const ClusterOverviewAdminTab = observer(() => {
       },
     };
   });
+  setClusterName("gm-cluster");
 
   useEffect(() => {
-    setClusterName("gm-cluster");
     if (clusterName === "") {
       loadClusterNames(calledMetrics);
     }
@@ -312,17 +315,15 @@ const ClusterOverviewAdminTab = observer(() => {
       <div className="panelTitBar panelTitBar_clear">
         <div className="tit">
           <span style={{ marginRight: "10px", color: "white " }}>
-            Select Cluster
+            Select Cluster :
           </span>
-          {/* <span style={{ color: "balck", backgroundColor: "white" }}>
-            {clusterName}
-          </span> */}
-          <CSelectButtonM
+          <span style={{ color: "white" }}>{clusterName}</span>
+          {/* <CSelectButtonM
             className="none_transform"
             items={clusterNameActionList}
           >
             {clusterName}
-          </CSelectButtonM>
+          </CSelectButtonM> */}
         </div>
         <div className="date">
           {dayjs(new Date()).format("YYYY-MM-DD")}

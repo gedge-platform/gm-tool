@@ -395,7 +395,7 @@ const Detail = observer(() => {
               <p>No Pod Info</p>
             </LabelContainer>
           )}
-
+          <TableTitle>Service</TableTitle>
           {depServices.name === "" ? (
             <>
               <LabelContainer>
@@ -404,7 +404,6 @@ const Detail = observer(() => {
             </>
           ) : (
             <>
-              <TableTitle>Service</TableTitle>
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
                   <tr>

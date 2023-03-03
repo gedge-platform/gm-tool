@@ -6,6 +6,7 @@ import { observer } from "mobx-react";
 import { jobStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { object } from "react-dom-factories";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -60,7 +61,7 @@ const JobAdminDetail = observer(() => {
     containers,
   } = jobStore;
 
-  console.log(containers?.map((val) => val.resources.limits));
+  console.log(ownerReferences);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   // const containers = jobDetailData.containers;
@@ -146,7 +147,7 @@ const JobAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length !== 0 ? (
             containers.map((containers) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
@@ -288,7 +289,7 @@ const JobAdminDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels !== null ? (
+            {labels.length !== 0 ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -302,7 +303,7 @@ const JobAdminDetail = observer(() => {
           <br />
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations.length !== 0 ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -327,32 +328,38 @@ const JobAdminDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
           {involvesPodList ? (
-            involvesPodList.map((pod) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th style={{ width: "25%" }}>Name</th>
-                    <td>{pod?.name ? pod?.name : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Pod IP</th>
-                    <td>{pod?.podIP ? pod?.podIP : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Host IP</th>
-                    <td>{pod?.hostIP ? pod?.hostIP : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Node Name</th>
-                    <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Status</th>
-                    <td>{pod?.status ? pod?.status : "-"}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ))
+            involvesPodList.length !== 0 ? (
+              involvesPodList.map((pod) => (
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{pod?.name ? pod?.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Pod IP</th>
+                      <td>{pod?.podIP ? pod?.podIP : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Host IP</th>
+                      <td>{pod?.hostIP ? pod?.hostIP : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Node Name</th>
+                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Status</th>
+                      <td>{pod?.status ? pod?.status : "-"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Pod Info</p>
+              </LabelContainer>
+            )
           ) : (
             <LabelContainer>
               <p>No Pod Info</p>
@@ -362,7 +369,7 @@ const JobAdminDetail = observer(() => {
           <TableTitle>References</TableTitle>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {ownerReferences ? (
+              {ownerReferences.kind ? (
                 Object.entries(ownerReferences).map(([key, value]) => (
                   <tr>
                     <th style={{ width: "25%" }}>
