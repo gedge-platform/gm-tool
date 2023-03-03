@@ -37,6 +37,7 @@ const EdgeClusterListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
+    loadClusterDetail,
   } = clusterStore;
 
   const [columDefs] = useState([
@@ -95,6 +96,7 @@ const EdgeClusterListTab = observer(() => {
 
   const handleClick = (e) => {
     loadCluster(e.data.clusterName);
+    loadClusterDetail(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
 

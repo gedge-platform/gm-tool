@@ -16,8 +16,8 @@ const ClusterStatus = observer(() => {
   } = dashboardStore;
 
   useEffect(() => {
-    setVmStatusList();
-    loadCredentialName();
+    // setVmStatusList();
+    // loadCredentialName();
   }, []);
 
   // if (vmStatusList === undefined) {

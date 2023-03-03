@@ -8,6 +8,7 @@ class Service {
   totalPages = 1;
   resultList = {};
   viewList = [];
+  adminList = [];
   pServiceList = [];
   serviceList = [];
   serviceDetail = {
@@ -45,7 +46,11 @@ class Service {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
@@ -55,18 +60,22 @@ class Service {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
       }
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -104,13 +113,13 @@ class Service {
     });
   };
 
-  setPServiceList = list => {
+  setPServiceList = (list) => {
     runInAction(() => {
       this.pServiceList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pServiceList[n];
     });
@@ -121,83 +130,119 @@ class Service {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/services?user=${id}`)
-      .then(res => {
+      .then((res) => {
         runInAction(() => {
           // const list = listTmp.filter((item) => item.projectType === type);
 
           this.pServiceList = res.data.data;
           // this.serviceDetail = list[0];
-          this.totalElements = res.data.data === null ? 0 : res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
         this.convertList(this.pServiceList, this.setPServiceList);
       })
       .then(() => {
-        this.loadServiceDetail(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].project);
+        this.loadServiceDetail(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].project
+        );
+      });
+  };
+
+  loadAdminServiceList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/services?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.pServiceList = res.data.data;
+          this.adminList = this.pServiceList.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          this.serviceDetail = this.adminList[0];
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setPServiceList);
+      })
+      .then(() => {
+        this.loadServiceDetail(
+          this.adminList[0].name,
+          this.adminList[0].cluster,
+          this.adminList[0].project
+        );
       });
   };
 
   loadServiceDetail = async (name, cluster, project) => {
-    await axios.get(`${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`).then(({ data: { data, involvesData } }) => {
-      runInAction(() => {
-        this.serviceDetail = data;
-        this.portTemp = data.port;
-        this.serviceInvolvesData = involvesData;
-        this.involvesPods = involvesData.pods;
-        this.involvesWorkloads = involvesData.workloads;
+    await axios
+      .get(
+        `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`
+      )
+      .then(({ data: { data, involvesData } }) => {
+        runInAction(() => {
+          this.serviceDetail = data;
+          this.portTemp = data.port;
+          this.serviceInvolvesData = involvesData;
+          this.involvesPods = involvesData.pods;
+          this.involvesWorkloads = involvesData.workloads;
+        });
       });
-    });
   };
 
-  setServiceName = serviceName => {
+  setServiceName = (serviceName) => {
     runInAction(() => {
       this.serviceName = serviceName;
     });
   };
 
-  setAppName = appName => {
+  setAppName = (appName) => {
     runInAction(() => {
       this.appName = appName;
     });
   };
 
-  setProtocol = protocol => {
+  setProtocol = (protocol) => {
     runInAction(() => {
       this.protocol = protocol;
     });
   };
 
-  setPort = port => {
+  setPort = (port) => {
     runInAction(() => {
       this.port = port;
     });
   };
 
-  setTargetPort = targetPort => {
+  setTargetPort = (targetPort) => {
     runInAction(() => {
       this.targetPort = targetPort;
     });
   };
 
-  setClusterList = clusterList => {
+  setClusterList = (clusterList) => {
     runInAction(() => {
       this.cluster = clusterList;
     });
   };
 
-  setWorkspace = workspace => {
+  setWorkspace = (workspace) => {
     runInAction(() => {
       this.workspace = workspace;
     });
   };
 
-  setProject = project => {
+  setProject = (project) => {
     runInAction(() => {
       this.project = project;
     });
   };
-  setContent = content => {
+  setContent = (content) => {
     runInAction(() => {
       this.content = content;
     });
@@ -213,14 +258,17 @@ class Service {
     this.setProject("");
   };
 
-  postService = callback => {
+  postService = (callback) => {
     const YAML = require("yamljs");
     let count = 0;
     // console.log(this.cluster, this.workspace, this.project);
-    this.cluster.map(async item => {
+    this.cluster.map(async (item) => {
       await axios
-        .post(`${SERVER_URL}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`, YAML.parse(this.content))
-        .then(res => {
+        .post(
+          `${SERVER_URL}/services?cluster=${item}&workspace=${this.workspace}&project=${this.project}`,
+          YAML.parse(this.content)
+        )
+        .then((res) => {
           console.log(res);
           if (res.status === 200) {
             count++;
@@ -235,10 +283,10 @@ class Service {
   deleteService = async (serviceName, callback) => {
     axios
       .delete(`${SERVER_URL}/services/${serviceName}`)
-      .then(res => {
+      .then((res) => {
         if (res.status === 201) swalError("서비스가 삭제되었습니다.", callback);
       })
-      .catch(err => swalError("삭제에 실패하였습니다."));
+      .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }
 

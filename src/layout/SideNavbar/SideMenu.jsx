@@ -244,6 +244,22 @@ export const SideMenu = () => {
                     {Title.CloudZone}
                   </NavLink>
                 </li>
+                <CustomTreeItem nodeId="5" label={Title.AdminZone}>
+                  <li>
+                    <NavLink exact to="/adminZone" activeClassName="active">
+                      {Title.AdminZone}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      exact
+                      to="/adminMonitoring"
+                      activeClassName="active"
+                    >
+                      {Title.Monitoring}
+                    </NavLink>
+                  </li>
+                </CustomTreeItem>
               </CustomTreeItem>
               <CustomTreeItem
                 nodeId="5"
