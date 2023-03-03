@@ -9,6 +9,7 @@ class Workspace {
   workSpaceDetail = [];
   totalElements = 0;
   adminList = [];
+  adminList = [];
   events = [
     {
       kind: "",
@@ -160,23 +161,21 @@ class Workspace {
         runInAction(() => {
           this.adminList = [];
           this.workSpaceList = res.data.data;
-          console.log(this.workSpaceList);
           for (let i = 0; i < this.workSpaceList.length; i++) {
-            var test = [];
-            this.workSpaceList[i].selectCluster.map((x) => {
+            var test = []
+            this.workSpaceList[i].selectCluster
+            .map((x) => {
               test.push(x.clusterName);
-            });
-            test.indexOf("gm-cluster") < 0
-              ? ""
-              : this.adminList.push(this.workSpaceList[i]);
+            })
+            test.indexOf("gm-cluster") < 0 ? "" : this.adminList.push(this.workSpaceList[i]);
+            test.indexOf("gm-cluster") < 0 ? "" : this.adminList[this.adminList.length-1]["clusterName"] = test;
           }
-        });
+        })
       })
-      .then((res) => {
+      .then((res) =>{
         runInAction(() => {
-          this.selectClusterInfo = this.workSpaceList.map((data) =>
-            data.selectCluster.map((e) => e.clusterName)
-          );
+          this.selectClusterInfo = this.adminList
+
           // console.log(this.selectClusterInfo);
           this.totalElements = this.adminList.length;
           this.workSpaceDetail = this.adminList[0];
@@ -184,10 +183,11 @@ class Workspace {
       })
       .then(() => {
         this.convertList(this.adminList, this.setWorkSpaceList);
+        type ? null : this.loadWorkspaceDetail(this.adminList[0].workspaceName);
       });
-    // .then(() => {
-    //   type ? null : this.loadWorkspaceDetail(this.adminList[0].workspaceName);
-    // });
+      // .then(() => {
+        // type ? null : this.loadWorkspaceDetail(this.adminList.workspaceName);
+      // });
   };
 
   // 워크스페이스에서 클러스터 불러오면 된다
@@ -195,7 +195,7 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
-        console.log(this.workSpaceDetail);
+        console.log(this.workSpaceDetail)
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;
@@ -204,6 +204,7 @@ class Workspace {
         }
         this.detailInfo = res.data.projectList ? res.data.projectList : 0;
         this.selectClusterInfo = res.data.selectCluster;
+        console.log(this.selectClusterInfo)
         this.projectList = res.data.projectList ? res.data.projectList : 0;
         // await axios
         //   .get(`${SERVER_URL}/workspaces/${workspaceName}`)

@@ -11,6 +11,7 @@ class PlatformProject {
   ];
   totalElements = 0;
   adminList = [];
+  adminList = [];
   clusterList = [];
   platformProjectDetail = {};
   labels = {};
@@ -178,7 +179,7 @@ class PlatformProject {
         runInAction(() => {
           this.platformProjectList = res.data.data;
           this.platformDetail = res.data.data[0];
-          console.log(this.platformProjectList);
+          console.log(this.platformProjectList)
           this.adminList = this.platformProjectList.filter(
             (data) => data.clusterName === "gm-cluster"
           );

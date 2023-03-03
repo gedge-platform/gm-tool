@@ -9,6 +9,7 @@ class Project {
   projectDetail = {};
   resourceUsage = {};
   adminList = [];
+  adminList = [];
   labels = {};
   annotations = {};
   events = [
@@ -145,7 +146,7 @@ class Project {
           //   (item) => item.projectType === type
           // );
           this.projectList = res.data.data;
-          console.log(this.projectList);
+          console.log(this.projectList)
           this.totalElements = res.data.data.length;
         });
       })
@@ -169,15 +170,14 @@ class Project {
           //   (item) => item.projectType === type
           // );
           this.projectList = res.data.data;
-          console.log(this.projectList);
+          console.log(this.projectList)
           for (let i = 0; i < this.projectList.length; i++) {
             var test = [];
-            this.projectList[i].selectCluster.map((x) => {
+            this.projectList[i].selectCluster
+            .map((x) => {
               test.push(x.clusterName);
-            });
-            test.indexOf("gm-cluster") < 0
-              ? ""
-              : this.adminList.push(this.projectList[i]);
+            })
+            test.indexOf("gm-cluster") < 0 ? "" : this.adminList.push(this.projectList[i]);
           }
           console.log(this.projectList);
           this.totalElements = this.adminList.length;

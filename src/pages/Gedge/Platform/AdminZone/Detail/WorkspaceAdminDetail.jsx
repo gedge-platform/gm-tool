@@ -108,6 +108,7 @@ const WorkspceAdminDetail = observer(() => {
     events,
     changeProject,
     selectClusterInfo,
+    loadWorkspaceDetail,
   } = workspaceStore;
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -267,6 +268,10 @@ const WorkspceAdminDetail = observer(() => {
     setTabvalue(newValue);
   };
 
+  useEffect(() => {
+    //loadWorkspaceDetail(workSpaceDetail.workspaceName);
+  }, []);
+
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -280,8 +285,11 @@ const WorkspceAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
+              {console.log(workSpaceDetail)}
               {workSpaceDetail ? (
                 <>
+                  {console.log({workSpaceDetail})}
+                  {console.log({selectClusterInfo})}
                   <tr className="tb_workload_detail_th">
                     <th>Workspace Name</th>
                     <td>
@@ -326,6 +334,7 @@ const WorkspceAdminDetail = observer(() => {
           <tbody>
             <tr className="tb_workload_detail_th">
               <td colSpan={4}>
+                {console.log(dataUsage)}
                 {dataUsage ? (
                   <>
                     <table className="tb_data">

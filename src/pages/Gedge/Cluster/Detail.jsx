@@ -61,7 +61,6 @@ const Detail = observer((props) => {
       clusterName,
       clusterEndpoint,
       clusterCreator,
-      gpu,
       clusterType,
       created_at,
       events,
@@ -72,12 +71,16 @@ const Detail = observer((props) => {
         deployment_count,
         job_count,
         pod_count,
+        // gpu,
         service_count,
         volume_count,
         Statefulset_count,
         daemonset_count,
       },
     },
+    dataUsage,
+    gpu,
+    loadCluster,
   } = clusterStore;
   const nodesChk = nodes === null ? 0 : nodes;
 
@@ -136,11 +139,40 @@ const Detail = observer((props) => {
       </tr>
     ));
   };
+  const test = (gpu) => {
+    return (
+      gpu?.nodes
+      ? gpu.nodes.map((x) => {
+        if(x.type === "master"){
+        return(
+          <>
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody className="tb_data_detail">
+              <tr>
+                <th>clusterName</th>
+                <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
+                <th>node</th>
+                <td>{x.name ? x.name : "-"}</td>
+              </tr>
+              <tr>
+                <th>gpu</th>
+                <td>{gpu.gpu ? gpu.gpu : "-"}</td>
+                <th>container</th>
+                <td>{x.containerRuntimeVersion}</td>
+              </tr>
+            </tbody>
+            </table>
+            <br/>
+          </>
+        )}
+      }) : null)
+  }
 
   useEffect(() => {
     if (nodesChk.length >= 1) {
       labelByNode();
       annotationByNode();
+      loadCluster(clusterName);
     }
   }, [nodeNum]);
 
@@ -177,29 +209,64 @@ const Detail = observer((props) => {
           </table>
           <br />
 
-          <TableTitle>GPU List</TableTitle>
+          {/* <TableTitle>GPU List</TableTitle> */}
+          {console.log(gpu)}
+          {console.log(dataUsage)}
           {gpu ? (
             <>
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              {test(gpu)}
+              {/* <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_detail">
                   <tr>
-                    <th>container</th>
-                    <th>name</th>
-                    <th>node</th>
-                    <th>uuid</th>
-                    <th>vbios_version</th>
+                    <th>clusterName</th>
+                    <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
+                    <th>created_at</th>
+                    <td>{gpu.created_at ? gpu.created_at : "-"}</td>
                   </tr>
-                  {gpu.map(({ container, name, node, uuid, vbios_version }) => (
-                    <tr>
-                      <td>{container}</td>
-                      <td>{name}</td>
-                      <td>{node}</td>
-                      <td>{uuid}</td>
-                      <td>{vbios_version}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <th>gpu</th>
+                    <td>{gpu.gpu ? gpu.gpu : "-"}</td>
+                    <th>container</th>
+                    <td>
+                      {gpu?.nodes
+                        ? gpu.nodes.map((x) => x.type === "master" ? x.containerRuntimeVersion : "")
+                        : "-"}</td>
+                  </tr>
+                  <tr>
+                  </tr>
                 </tbody>
-              </table>
+              </table> */}
+              <TableTitle>Resource Usage</TableTitle>
+              <tbody>
+                <tr className="tb_workload_detail_th">
+                  <td colSpan={4}>
+                    {dataUsage ? (
+                      <>
+                        <table className="tb_data">
+                          <tbody>
+                            <tr>
+                              <th style={{ width: "307px" }}>CPU</th>
+                              <td style={{ width: "307px" }}>
+                                {dataUsage?.cpuUsage ? dataUsage?.cpuUsage.value : "-"}
+                              </td>
+                              <th style={{ width: "307px" }}>MEMORY</th>
+                              <td style={{ width: "307px" }}>
+                                {dataUsage?.memoryUsage
+                                  ? dataUsage?.memoryUsage.value
+                                  : "-"}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    ) : (
+                      <LabelContainer>
+                        <p>No Resource Usage Information</p>
+                      </LabelContainer>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
             </>
           ) : (
             <LabelContainer>
