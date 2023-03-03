@@ -11,6 +11,7 @@ class PlatformProject {
   ];
   totalElements = 0;
   adminList = [];
+  adminList = [];
   clusterList = [];
   platformProjectDetail = {};
   labels = {};

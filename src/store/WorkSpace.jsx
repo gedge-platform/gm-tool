@@ -9,6 +9,7 @@ class Workspace {
   workSpaceDetail = [];
   totalElements = 0;
   adminList = [];
+  adminList = [];
   events = [
     {
       kind: "",
@@ -118,6 +119,7 @@ class Workspace {
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.workSpaceList[n];
+      console.log(this.viewList);
     });
   };
 

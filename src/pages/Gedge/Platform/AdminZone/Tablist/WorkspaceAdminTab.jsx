@@ -84,7 +84,6 @@ const WorkspaceAdminTab = observer(() => {
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClick = async ({
     data: { workspaceName },
     colDef: { field },

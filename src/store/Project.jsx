@@ -9,6 +9,7 @@ class Project {
   projectDetail = {};
   resourceUsage = {};
   adminList = [];
+  adminList = [];
   labels = {};
   annotations = {};
   events = [

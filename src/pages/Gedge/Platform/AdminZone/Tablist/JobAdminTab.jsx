@@ -97,7 +97,7 @@ const JobAdminTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadAdminJobList}>
-            <CCreateButton>생성</CCreateButton>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

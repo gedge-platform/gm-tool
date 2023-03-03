@@ -95,7 +95,7 @@ const DeploymentAdminTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadAdminDeploymentList}>
-            <CCreateButton>생성</CCreateButton>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

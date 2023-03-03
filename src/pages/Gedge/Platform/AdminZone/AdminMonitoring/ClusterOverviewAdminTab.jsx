@@ -294,14 +294,15 @@ const ClusterOverviewAdminTab = observer(() => {
     return {
       name: item,
       onClick: () => {
-        setClusterName(item);
+        // setClusterName(item);
         calledMetrics();
       },
     };
   });
 
   useEffect(() => {
-    if (clusterName === "gm-cluster") {
+    setClusterName("gm-cluster");
+    if (clusterName === "") {
       loadClusterNames(calledMetrics);
     }
   }, []);
@@ -313,6 +314,9 @@ const ClusterOverviewAdminTab = observer(() => {
           <span style={{ marginRight: "10px", color: "white " }}>
             Select Cluster
           </span>
+          {/* <span style={{ color: "balck", backgroundColor: "white" }}>
+            {clusterName}
+          </span> */}
           <CSelectButtonM
             className="none_transform"
             items={clusterNameActionList}

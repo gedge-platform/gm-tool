@@ -109,6 +109,7 @@ const APIServerAdminTab = observer(() => {
   const ckeckedInterval = () => (play ? stopCalledMetrics() : null);
 
   useEffect(() => {
+    setClusterName("gm-cluster");
     calledMetrics();
   }, []);
 

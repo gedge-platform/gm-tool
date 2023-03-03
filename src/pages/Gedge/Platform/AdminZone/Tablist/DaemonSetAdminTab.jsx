@@ -83,7 +83,7 @@ const DaemonSetAdminTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadAdminDaemonSetList}>
-            <CCreateButton>생성</CCreateButton>
+            {/* <CCreateButton>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

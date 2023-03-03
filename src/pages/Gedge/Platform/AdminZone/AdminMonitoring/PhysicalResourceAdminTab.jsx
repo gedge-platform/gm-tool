@@ -113,6 +113,7 @@ const PsysicalResourceAdminTab = observer(() => {
 
   useEffect(() => {
     calledMetrics();
+    setClusterName("gm-cluster");
   }, []);
 
   return (

@@ -98,7 +98,7 @@ const PlatfromServiceAdminTab = observer(() => {
           // isSelect={true}
           // keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

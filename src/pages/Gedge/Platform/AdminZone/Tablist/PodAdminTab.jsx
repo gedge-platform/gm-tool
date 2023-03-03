@@ -107,7 +107,7 @@ const PodAdminTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadAdminPodList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

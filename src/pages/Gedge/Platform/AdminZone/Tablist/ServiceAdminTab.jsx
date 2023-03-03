@@ -97,7 +97,7 @@ const ServiceAdminTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadAdminServiceList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            {/* <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton> */}
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
