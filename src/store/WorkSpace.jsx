@@ -132,9 +132,11 @@ class Workspace {
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
+    console.log("id: ", id, "role: ", role);
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           this.workSpaceList = res.data.data;
           this.totalElements = res.data.data.length;

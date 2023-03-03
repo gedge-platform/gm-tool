@@ -39,7 +39,6 @@ const AgGrid = (props) => {
   );
 
   useEffect(() => {
-    // console.log("rowData is ", rowData);
     if (gridApi) {
       gridApi.sizeColumnsToFit();
       gridApi.showLoadingOverlay();

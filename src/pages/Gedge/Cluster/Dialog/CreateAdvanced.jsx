@@ -5,20 +5,20 @@ import FormControl from "@material-ui/core/FormControl";
 import { certificationStore } from "@/store";
 import { clusterStore } from "@/store";
 
-const CreateAdvanced = observer(props => {
+const CreateAdvanced = observer((props) => {
   var { provider } = props;
   const [reRun, setReRun] = useState(false);
 
   const { loadTypeCredentialList, credential } = certificationStore;
-  const { loadImageList, loadSpecList, vmImageList, vmSpecList, setVMBody } = clusterStore;
+  const { loadImageList, loadSpecList, vmImageList, vmSpecList, setVMBody } =
+    clusterStore;
 
-  const onChange = e => {
+  const onChange = (e) => {
     const { value, name } = e.target;
     setVMBody(name, value);
   };
 
   useEffect(() => {
-    console.log("provider is ", provider);
     loadTypeCredentialList(provider);
     loadImageList(provider);
     loadSpecList(provider);
@@ -56,7 +56,7 @@ const CreateAdvanced = observer(props => {
               <FormControl className="form_fullWidth">
                 <select name="config" onChange={onChange}>
                   <option value={""}>Select Credential</option>
-                  {credential.map(list => (
+                  {credential.map((list) => (
                     <option value={list.name}>{list.name}</option>
                   ))}
                 </select>
@@ -72,7 +72,7 @@ const CreateAdvanced = observer(props => {
               <FormControl className="form_fullWidth">
                 <select name="image" onChange={onChange}>
                   <option value={""}>Select Image</option>
-                  {vmImageList.map(list => (
+                  {vmImageList.map((list) => (
                     <option value={list.name}>{list.info}</option>
                   ))}
                 </select>
@@ -94,14 +94,14 @@ const CreateAdvanced = observer(props => {
                     <th>클럭</th>
                     <th>메모리(MB)</th>
                   </tr>
-                  {vmSpecList.map(list => (
+                  {vmSpecList.map((list) => (
                     <tr>
                       <td style={{ textAlign: "center" }}>
                         <input
                           type="radio"
                           // type="checkbox"
                           name="flavor"
-                          onChange={e => setVMBody("flavor", list.name)}
+                          onChange={(e) => setVMBody("flavor", list.name)}
                           // value={selectClusters}
                         />
                       </td>
@@ -121,7 +121,14 @@ const CreateAdvanced = observer(props => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Disk size" className="form_fullWidth" name="disk" onChange={onChange} value="50" />
+              <CTextField
+                type="text"
+                placeholder="Disk size"
+                className="form_fullWidth"
+                name="disk"
+                onChange={onChange}
+                value="50"
+              />
             </td>
           </tr>
         </tbody>

@@ -44,6 +44,7 @@ import { AdminZoneDashboard } from "./pages";
 import AdminZoneListTab from "./pages/Gedge/Platform/AdminZone/AdminZoneDashboard";
 import ClusterOverviewAdminTab from "./pages/Gedge/Platform/AdminZone/AdminMonitoring/ClusterOverviewAdminTab";
 import AdminMonitoring from "./pages/Gedge/Platform/AdminZone/AdminMonitoring/MonitoringAdmin";
+import TotalClusterResources from "./pages/Dashboard/DashboardCont/TotalClusterResources";
 
 export const App = () => {
   const navigate = useHistory();
