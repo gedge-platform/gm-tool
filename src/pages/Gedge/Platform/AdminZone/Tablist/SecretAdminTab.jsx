@@ -23,6 +23,7 @@ const SecretAdminListTab = observer(() => {
     totalElements,
     loadAdminsecretList,
     loadsecretTabList,
+    adminList,
 
     //Pagenation Variable
     currentPage,
@@ -93,7 +94,7 @@ const SecretAdminListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={adminList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
@@ -106,7 +107,7 @@ const SecretAdminListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <SecretAdminDetail secret={secretDetail} />
+        <SecretAdminDetail SecretAdminDetail={secretDetail} />
       </CReflexBox>
     </div>
   );

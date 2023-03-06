@@ -60,8 +60,6 @@ const Detail = observer(() => {
     containers,
   } = jobStore;
 
-  console.log(annotations);
-
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

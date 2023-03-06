@@ -177,15 +177,17 @@ const SecretDetail = observer(() => {
   // };
 
   const dataAccordion = () => {
-  
-
-    Object.entries(data).map(([keys, value]) => {
-     
-      secretTable.push(
-        <SeeMoreBtn name={secretTabList.name} keys={keys}value={value}/>
-       
-      );
-    });
+    data.length !== 0
+      ? Object.entries(data).map(([keys, value]) => {
+          secretTable.push(
+            <SeeMoreBtn name={secretTabList.name} keys={keys} value={value} />
+          );
+        })
+      : secretTable.push(
+          <LabelContainer>
+            <p>No Data Info</p>
+          </LabelContainer>
+        );
     return secretTable;
   };
 
@@ -201,24 +203,30 @@ const SecretDetail = observer(() => {
           <table className="tb_data">
             <tbody>
               {secretTabList ? (
-                <>
-                  <tr>
-                    <th style={{ width: "15%" }}>Name</th>
-                    <td>{secretTabList.name ? secretTabList.name : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Type</th>
-                    <td>{secretTabList.type ? secretTabList.type : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>
-                      {secretTabList.createAt
-                        ? dateFormatter(secretTabList.createAt)
-                        : "-"}
-                    </td>
-                  </tr>
-                </>
+                secretTabList.length !== 0 ? (
+                  <>
+                    <tr>
+                      <th style={{ width: "15%" }}>Name</th>
+                      <td>{secretTabList.name ? secretTabList.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Type</th>
+                      <td>{secretTabList.type ? secretTabList.type : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Created</th>
+                      <td>
+                        {secretTabList.createAt
+                          ? dateFormatter(secretTabList.createAt)
+                          : "-"}
+                      </td>
+                    </tr>
+                  </>
+                ) : (
+                  <LabelContainer>
+                    <p>No Detail Info</p>
+                  </LabelContainer>
+                )
               ) : (
                 <LabelContainer>
                   <p>No Detail Info</p>
@@ -238,12 +246,16 @@ const SecretDetail = observer(() => {
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
             {label ? (
-              Object.entries(label).map(([key, value]) => (
-                <Label>
-                  <span className="key">{key}</span>
-                  <span className="value">{value}</span>
-                </Label>
-              ))
+              label.length !== 0 ? (
+                Object.entries(label).map(([key, value]) => (
+                  <Label>
+                    <span className="key">{key}</span>
+                    <span className="value">{value}</span>
+                  </Label>
+                ))
+              ) : (
+                <p>No Labels Info</p>
+              )
             ) : (
               <p>No Labels Info</p>
             )}
@@ -252,16 +264,22 @@ const SecretDetail = observer(() => {
 
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody style={{ whiteSpace: "pre-line" }}>
-                {Object.entries(annotations).map(([key, value]) => (
-                  <tr>
-                    <th className="tb_workload_detail_labels_th">{key}</th>
-                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            annotations.length !== 0 ? (
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody style={{ whiteSpace: "pre-line" }}>
+                  {Object.entries(annotations).map(([key, value]) => (
+                    <tr>
+                      <th className="tb_workload_detail_labels_th">{key}</th>
+                      <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <LabelContainer>
+                <p>No Annotations Info</p>
+              </LabelContainer>
+            )
           ) : (
             <LabelContainer>
               <p>No Annotations Info</p>

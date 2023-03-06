@@ -17,6 +17,8 @@ import ConfigmapsListTab from "./Tablist/ConfigmapsAdminTab";
 import ServiceAccountAdminTab from "./Tablist/ServiceAccountAdminTab";
 import CreateUserAdminTab from "./Tablist/CreateUserAdminTab";
 import PlatfromServiceAdminTab from "./Tablist/PlatformServiceAdminTab";
+import SecretAdminDetail from "./Detail/SecretAdminDetail";
+import SecretAdminListTab from "./Tablist/SecretAdminTab";
 
 const AdminZoneDashboard = observer(() => {
   const currentPageTitle = Title.AdminZone;
@@ -78,7 +80,7 @@ const AdminZoneDashboard = observer(() => {
           <WorkspaceAdminTab />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={9}>
-          <ServiceAdminTab />
+          <SecretAdminListTab />
         </CTabPanel>
         <CTabPanel value={tabvalue} index={10}>
           <ConfigmapsListTab />

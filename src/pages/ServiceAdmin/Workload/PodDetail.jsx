@@ -65,8 +65,6 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  console.log(involvesData.workloadList);
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -381,10 +379,10 @@ const Detail = observer(() => {
                       : "-"}
                   </td>
                 </tr>
-                <br />
               </tbody>
             </table>
           )}
+          <br />
           <TableTitle>Service</TableTitle>
           {serviceList?.length === 0 ? (
             <LabelContainer>

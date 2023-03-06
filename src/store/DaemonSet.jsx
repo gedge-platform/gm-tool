@@ -193,7 +193,6 @@ class DaemonSet {
           } else {
             this.events = null;
           }
-          console.log(this.containers);
         });
       });
   };

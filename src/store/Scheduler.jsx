@@ -18,13 +18,13 @@ class Scheduler {
     makeAutoObservable(this);
   }
 
-  setYamlList = list => {
+  setYamlList = (list) => {
     runInAction(() => {
       this.yamlList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.yamlList[n];
     });
@@ -48,13 +48,13 @@ class Scheduler {
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -98,11 +98,11 @@ class Scheduler {
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/pods?user=${id}`)
-      .then(res => {
+      .then((res) => {
         runInAction(() => {
-          console.log(res);
           this.yamlList = res.data.data;
-          this.totalElements = res.data.data === null ? 0 : res.data.data.length;
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
         });
       })
       .then(() => {
@@ -120,10 +120,8 @@ class Scheduler {
         status: "CREATED",
         date: new Date(),
       })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(e => console.log(e.message));
+      .then((res) => {})
+      .catch((e) => console.log(e.message));
   };
 
   // deplotment에서 생성하면 이걸로 post
@@ -142,7 +140,12 @@ class Scheduler {
       .post(`http://101.79.1.173:8012/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
-          const popup = window.open("", "Gedge scheduler", `width=1552,height=900`, "fullscreen=yes");
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            `width=1552,height=900`,
+            "fullscreen=yes"
+          );
           popup.document.open().write(response.data);
           popup.document.close();
 
@@ -170,7 +173,12 @@ class Scheduler {
       .post(`http://101.79.4.15:32527/yaml2`, formData)
       .then(function (response) {
         if (response.status === 200) {
-          const popup = window.open("", "Gedge scheduler", `width=1552,height=900`, "fullscreen=yes");
+          const popup = window.open(
+            "",
+            "Gedge scheduler",
+            `width=1552,height=900`,
+            "fullscreen=yes"
+          );
           popup.document.open().write(response.data);
           popup.document.close();
 

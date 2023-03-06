@@ -301,7 +301,7 @@ const PodAdminDetail = observer(() => {
                 <table className="tb_data">
                   <tbody>
                     <tr>
-                      <th>containerID</th>
+                      <th style={{ width: "25%" }}>containerID</th>
                       <td>{status?.containerID ? status?.containerID : "-"}</td>
                     </tr>
                     <tr>

@@ -58,8 +58,6 @@ const Detail = observer(() => {
     setTabvalue(newValue);
   };
 
-  console.log(involvesWorkloads);
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -199,29 +197,35 @@ const Detail = observer(() => {
 
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads ? (
-            involvesWorkloads.map((workload) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody>
-                    <tr>
-                      <th style={{ width: "25%" }}>Name</th>
-                      <td>{workload?.name ? workload?.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Kind</th>
-                      <td>{workload?.kind ? workload?.kind : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Replica Name</th>
-                      <td>
-                        {workload?.replicaName ? workload?.replicaName : "-"}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
+            involvesWorkloads.length !== 0 ? (
+              involvesWorkloads.map((workload) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{workload?.name ? workload?.name : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Kind</th>
+                        <td>{workload?.kind ? workload?.kind : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Replica Name</th>
+                        <td>
+                          {workload?.replicaName ? workload?.replicaName : "-"}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Workloads Info</p>
+              </LabelContainer>
+            )
           ) : (
             <LabelContainer>
               <p>No Workloads Info</p>

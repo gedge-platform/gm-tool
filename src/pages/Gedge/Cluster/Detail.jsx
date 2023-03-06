@@ -7,12 +7,20 @@ import styled from "styled-components";
 import { dateFormatter, isValidJSON, nullCheck } from "@/utils/common-utils";
 import ReactJson from "react-json-view";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { CCreateButton, CDeleteButton } from "@/components/buttons";
+import EdgeZoneAddNode from "./Dialog/EdgeZoneAddNode";
 
-const TableTitle = styled.p`
+const TableTitle = styled.span`
+  flex: 1;
+  flex-direction: row;
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
   color: rgba(255, 255, 255, 0.8);
+`;
+
+const NodeButton = styled.span`
+  flex: 1;
 `;
 
 const LabelContainer = styled.div`
@@ -87,6 +95,7 @@ const Detail = observer((props) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const [nodeNum, setNodeNum] = useState(0);
+  const [AddNode, setAddNodeOpen] = useState(false);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -97,6 +106,18 @@ const Detail = observer((props) => {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleAddNodeOpen = () => {
+    setAddNodeOpen(true);
+  };
+
+  const handleAddNodeClose = () => {
+    setAddNodeOpen(false);
+  };
+
+  const reloadData = () => {
+    setReRun(true);
   };
 
   const nodeList = () => {
@@ -140,33 +161,34 @@ const Detail = observer((props) => {
     ));
   };
   const test = (gpu) => {
-    return (
-      gpu?.nodes
+    return gpu?.nodes
       ? gpu.nodes.map((x) => {
-        if(x.type === "master"){
-        return(
-          <>
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody className="tb_data_detail">
-              <tr>
-                <th>clusterName</th>
-                <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
-                <th>node</th>
-                <td>{x.name ? x.name : "-"}</td>
-              </tr>
-              <tr>
-                <th>gpu</th>
-                <td>{gpu.gpu ? gpu.gpu : "-"}</td>
-                <th>container</th>
-                <td>{x.containerRuntimeVersion}</td>
-              </tr>
-            </tbody>
-            </table>
-            <br/>
-          </>
-        )}
-      }) : null)
-  }
+          if (x.type === "master") {
+            return (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody className="tb_data_detail">
+                    <tr>
+                      <th>clusterName</th>
+                      <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
+                      <th>node</th>
+                      <td>{x.name ? x.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>gpu</th>
+                      <td>{gpu.gpu ? gpu.gpu : "-"}</td>
+                      <th>container</th>
+                      <td>{x.containerRuntimeVersion}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            );
+          }
+        })
+      : null;
+  };
 
   useEffect(() => {
     if (nodesChk.length >= 1) {
@@ -210,8 +232,6 @@ const Detail = observer((props) => {
           <br />
 
           {/* <TableTitle>GPU List</TableTitle> */}
-          {console.log(gpu)}
-          {console.log(dataUsage)}
           {gpu ? (
             <>
               {test(gpu)}
@@ -247,7 +267,9 @@ const Detail = observer((props) => {
                             <tr>
                               <th style={{ width: "307px" }}>CPU</th>
                               <td style={{ width: "307px" }}>
-                                {dataUsage?.cpuUsage ? dataUsage?.cpuUsage.value : "-"}
+                                {dataUsage?.cpuUsage
+                                  ? dataUsage?.cpuUsage.value
+                                  : "-"}
                               </td>
                               <th style={{ width: "307px" }}>MEMORY</th>
                               <td style={{ width: "307px" }}>
@@ -309,7 +331,18 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>Node List</TableTitle>
+          <TableTitle>Node List</TableTitle>&nbsp;&nbsp;&nbsp;&nbsp;
+          <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
+            Node 추가
+          </CCreateButton>
+          {/* <NodeButton onClick={handleAddNodeOpen}>Node 추가</NodeButton> */}
+          <EdgeZoneAddNode
+            open={AddNode}
+            onClose={handleAddNodeClose}
+            reloadFunc={reloadData}
+          />
+          <br />
+          <br />
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>

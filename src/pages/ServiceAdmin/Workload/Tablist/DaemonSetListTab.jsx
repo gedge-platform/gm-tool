@@ -64,7 +64,6 @@ const DaemonSetListTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
-    console.log("e is ", e.data.name);
     setDaemonSetName(e.data.name);
     loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
   };

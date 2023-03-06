@@ -150,7 +150,7 @@ const EdgeClusterListTab = observer(() => {
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
             &nbsp;
-            <CCreateButton onClick={handleAddNodeOpen}>Node 추가</CCreateButton>
+            {/* <CCreateButton onClick={handleAddNodeOpen}>Node 추가</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -176,11 +176,11 @@ const EdgeClusterListTab = observer(() => {
             onClose={handleCreateClose}
             reloadFunc={reloadData}
           />
-          <EdgeZoneAddNode
+          {/* <EdgeZoneAddNode
             open={AddNode}
             onClose={handleAddNodeClose}
             reloadFunc={reloadData}
-          />
+          /> */}
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
