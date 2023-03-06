@@ -58,7 +58,7 @@ const Detail = observer(() => {
     setTabvalue(newValue);
   };
 
-  console.log(involvesWorkloads);
+  console.log(involvesPods);
 
   const handleOpen = () => {
     setOpen(true);

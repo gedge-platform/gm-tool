@@ -118,7 +118,7 @@ const CronJobAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <CronJobAdminDetail cronJob={cronJobDetail} />
+        <CronJobAdminDetail CronJobAdminDetail={cronJobDetail} />
       </CReflexBox>
     </div>
   );

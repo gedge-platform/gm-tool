@@ -8,10 +8,10 @@ class Secret {
   secretDetail = {};
   adminList = [];
   totalElements = 0;
-  secretTabList = {};
-  data = {};
-  label = {};
-  annotations = {};
+  secretTabList = [];
+  data = [];
+  label = [];
+  annotations = [];
   events = [
     {
       kind: "",
@@ -159,17 +159,15 @@ class Secret {
           this.totalElements = this.adminList.length;
         });
       })
-      // then(() => this.convertList(defaultList, customFunc))
       .then(() => {
+        this.adminList.length === 0
+          ? this.secretTabList === null
+          : this.loadsecretTabList(
+              this.adminList[0].name,
+              this.adminList[0].clusterName,
+              this.adminList[0].namespace
+            );
         this.convertList(this.adminList, this.setSecretList);
-      })
-      // then(() => List Detail Change)
-      .then(() => {
-        this.loadsecretTabList(
-          this.adminList[0].name,
-          this.adminList[0].clusterName,
-          this.adminList[0].namespace
-        );
       });
   };
 
