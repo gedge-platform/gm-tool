@@ -4,6 +4,7 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 
 class ServiceAccount {
   serviceAccountList = [];
+  adminList = [];
   serviceAccountDetail = {
     name: "",
     namespace: "",
@@ -35,7 +36,11 @@ class ServiceAccount {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
+        this.loadServiceAccountTabList(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].namespace
+        );
       }
     });
   };
@@ -45,18 +50,22 @@ class ServiceAccount {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
         this.setViewList(this.currentPage - 1);
-        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
+        this.loadServiceAccountTabList(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].namespace
+        );
       }
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
@@ -95,13 +104,13 @@ class ServiceAccount {
     });
   };
 
-  setServiceAccountList = list => {
+  setServiceAccountList = (list) => {
     runInAction(() => {
       this.serviceAccountList = list;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.serviceAccountList[n];
     });
@@ -121,16 +130,49 @@ class ServiceAccount {
         this.convertList(this.serviceAccountList, this.setServiceAccountList);
       })
       .then(() => {
-        this.loadServiceAccountTabList(this.viewList[0].name, this.viewList[0].cluster, this.viewList[0].namespace);
+        this.loadServiceAccountTabList(
+          this.viewList[0].name,
+          this.viewList[0].cluster,
+          this.viewList[0].namespace
+        );
+      });
+  };
+
+  loadAdminServiceAccountList = async () => {
+    await axios
+      .get(`${SERVER_URL}/serviceaccounts`)
+      .then(({ data: { data } }) => {
+        runInAction(() => {
+          this.serviceAccountList = data;
+          this.adminList = this.serviceAccountList.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          this.serviceAccountDetail = this.adminList[0];
+          this.totalElements = this.adminList.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setServiceAccountList);
+      })
+      .then(() => {
+        this.loadServiceAccountTabList(
+          this.adminList[0].name,
+          this.adminList[0].cluster,
+          this.adminList[0].namespace
+        );
       });
   };
 
   loadServiceAccountTabList = async (name, cluster, namespace) => {
-    await axios.get(`${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`).then(res => {
-      runInAction(() => {
-        this.serviceAccountDetail = res.data.data;
+    await axios
+      .get(
+        `${SERVER_URL}/serviceaccounts/${name}?cluster=${cluster}&project=${namespace}`
+      )
+      .then((res) => {
+        runInAction(() => {
+          this.serviceAccountDetail = res.data.data;
+        });
       });
-    });
   };
 }
 

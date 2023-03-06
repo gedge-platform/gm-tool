@@ -14,7 +14,9 @@ import CreateCluster from "../Dialog/CreateCluster";
 import { Title } from "@/pages";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
+import EdgeZoneAddNode from "../Dialog/EdgeZoneAddNode";
 
+// 플랫폼 > 엣지존
 const EdgeClusterListTab = observer(() => {
   const currentPageTitle = Title.EdgeZone;
   const [Create, setCreateOpen] = useState(false);
@@ -22,6 +24,7 @@ const EdgeClusterListTab = observer(() => {
   const [tabvalue, setTabvalue] = useState(0);
   const [reRun, setReRun] = useState(false);
   const [clusterName, setClusterName] = useState("");
+  const [AddNode, setAddNodeOpen] = useState(false);
 
   const {
     setInitViewList,
@@ -31,12 +34,12 @@ const EdgeClusterListTab = observer(() => {
     totalElements,
     loadClusterList,
     loadCluster,
-
     currentPage,
     totalPages,
     viewList,
     goPrevPage,
     goNextPage,
+    loadClusterDetail,
   } = clusterStore;
 
   const [columDefs] = useState([
@@ -95,6 +98,7 @@ const EdgeClusterListTab = observer(() => {
 
   const handleClick = (e) => {
     loadCluster(e.data.clusterName);
+    loadClusterDetail(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
 
@@ -104,6 +108,14 @@ const EdgeClusterListTab = observer(() => {
 
   const handleCreateClose = () => {
     setCreateOpen(false);
+  };
+
+  const handleAddNodeOpen = () => {
+    setAddNodeOpen(true);
+  };
+
+  const handleAddNodeClose = () => {
+    setAddNodeOpen(false);
   };
 
   const handleDelete = () => {
@@ -137,6 +149,8 @@ const EdgeClusterListTab = observer(() => {
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
+            &nbsp;
+            <CCreateButton onClick={handleAddNodeOpen}>Node 추가</CCreateButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">
@@ -160,6 +174,11 @@ const EdgeClusterListTab = observer(() => {
             type="edge"
             open={Create}
             onClose={handleCreateClose}
+            reloadFunc={reloadData}
+          />
+          <EdgeZoneAddNode
+            open={AddNode}
+            onClose={handleAddNodeClose}
             reloadFunc={reloadData}
           />
         </PanelBox>

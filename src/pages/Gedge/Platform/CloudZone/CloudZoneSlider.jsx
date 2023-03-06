@@ -97,74 +97,114 @@ const CloudZoneSlider = observer(() => {
           <div className="SliderWrap">
             {vmStatus()}
             {/* <div className="SliderBox">
-                            <div className="iconBox azure">AZURE</div>
-                            <div className="contentsBox">
-                                <div className="countBox">
-                                    <div class="Count">10 <span>클러스터</span></div>
-                                    <div class="Count">10 <span>VM</span></div>
-                                </div>
-                                <div className="StatusList">
-                                    <ul>
-                                        <li className="run"><span className="tit">실행</span> <span>7</span></li>
-                                        <li className="stop"><span className="tit">중지</span> <span>2</span></li>
-                                        <li className="pause"><span className="tit">일시중지</span> <span>1</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+              <div className="iconBox azure">AZURE</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    10 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    10 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>7</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>2</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>1</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-                        <div className="SliderBox">
-                            <div className="iconBox azure">AZURE</div>
-                            <div className="contentsBox">
-                                <div className="countBox">
-                                    <div class="Count">10 <span>클러스터</span></div>
-                                    <div class="Count">10 <span>VM</span></div>
-                                </div>
-                                <div className="StatusList">
-                                    <ul>
-                                        <li className="run"><span className="tit">실행</span> <span>7</span></li>
-                                        <li className="stop"><span className="tit">중지</span> <span>2</span></li>
-                                        <li className="pause"><span className="tit">일시중지</span> <span>1</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+            <div className="SliderBox">
+              <div className="iconBox azure">AZURE</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    10 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    10 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>7</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>2</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>1</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-                        <div className="SliderBox">
-                            <div className="iconBox azure">AZURE</div>
-                            <div className="contentsBox">
-                                <div className="countBox">
-                                    <div class="Count">10 <span>클러스터</span></div>
-                                    <div class="Count">10 <span>VM</span></div>
-                                </div>
-                                <div className="StatusList">
-                                    <ul>
-                                        <li className="run"><span className="tit">실행</span> <span>7</span></li>
-                                        <li className="stop"><span className="tit">중지</span> <span>2</span></li>
-                                        <li className="pause"><span className="tit">일시중지</span> <span>1</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+            <div className="SliderBox">
+              <div className="iconBox azure">AZURE</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    10 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    10 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>7</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>2</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>1</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-                        <div className="SliderBox">
-                            <div className="iconBox google">GOOGLE</div>
-                            <div className="contentsBox">
-                                <div className="countBox">
-                                    <div class="Count">10 <span>클러스터</span></div>
-                                    <div class="Count">10 <span>VM</span></div>
-                                </div>
-                                <div className="StatusList">
-                                    <ul>
-                                        <li className="run"><span className="tit">실행</span> <span>7</span></li>
-                                        <li className="stop"><span className="tit">중지</span> <span>2</span></li>
-                                        <li className="pause"><span className="tit">일시중지</span> <span>1</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div> */}
+            <div className="SliderBox">
+              <div className="iconBox google">GOOGLE</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    10 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    10 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>7</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>2</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>1</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
-            {/* <div className="SliderBox">
+            <div className="SliderBox">
               <div className="iconBox aws">AWS</div>
               <div className="contentsBox">
                 <div className="countBox">

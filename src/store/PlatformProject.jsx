@@ -10,6 +10,8 @@ class PlatformProject {
     },
   ];
   totalElements = 0;
+  adminList = [];
+  adminList = [];
   clusterList = [];
   platformProjectDetail = {};
   labels = {};
@@ -153,6 +155,44 @@ class PlatformProject {
       })
       .then(() => {
         this.convertList(this.platformProjectList, this.setPlatformProjectList);
+      })
+      .then(() => {
+        this.loadPlatformProjectDetail(
+          this.viewList[0].projectName,
+          this.viewList[0].clusterName
+        );
+        // this.loadCluster(
+        //   this.viewList[0].projectName,
+        //   this.viewList[0].clusterName
+        // this.platformProjectList[0].projectName,
+        // this.platformProjectList[0].clusterName
+        // );
+      });
+  };
+
+  loadAdminPlatformProjectList = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/systemProjects?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.platformProjectList = res.data.data;
+          this.platformDetail = res.data.data[0];
+          console.log(this.platformProjectList)
+          this.adminList = this.platformProjectList.filter(
+            (data) => data.clusterName === "gm-cluster"
+          );
+          // const temp = new Set(
+          //   res.data.data.map((cluster) => cluster.clusterName)
+          // );
+          // this.clusterList = [...temp];
+          console.log(this.adminList);
+          this.totalElements = res.data.data.length;
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setPlatformProjectList);
       })
       .then(() => {
         this.loadPlatformProjectDetail(

@@ -86,6 +86,7 @@ class Cluster {
   ProviderName = "";
   vmImageList = [];
   vmSpecList = [];
+  dataUsage = [];
 
   vmBody = {
     name: "",
@@ -225,6 +226,7 @@ class Cluster {
         this.convertList(this.clusterList, this.setClusterList);
       })
       .then(() => {
+        console.log(this.viewList);
         this.loadCluster(this.viewList[0].clusterName);
         this.loadClusterDetail(this.viewList[0].clusterName);
       });
@@ -319,35 +321,40 @@ class Cluster {
   loadCluster = async clusterName => {
     await axios.get(`${SERVER_URL}/clusters/${clusterName}`).then(({ data: { data } }) => {
       runInAction(() => {
+        console.log(data)
         this.clusterDetail = data;
+        this.gpu = data;
         this.nodes = this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
       });
     });
+    console.log(this.clusterDetail)
     return this.clusterDetail;
   };
 
   loadClusterDetail = async clusterName => {
     await axios.get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`).then(({ data: { data } }) => {
       runInAction(() => {
-        this.clusterName = clusterName;
-        this.cloudDashboardDetail = data;
-        this.clusterInfo = data.ClusterInfo;
-        this.address = data.ClusterInfo.address;
-        this.nodeInfo = data.nodeInfo;
-        this.type = this.nodeInfo.map(val => val.type);
-        this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
-        this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
-        this.cpuUsage = data.cpuUsage;
-        this.cpuUtil = data.cpuUtil;
-        this.cpuTotal = data.cpuTotal;
-        this.memoryUsage = data.memoryUsage;
-        this.memoryUtil = data.memoryUtil;
-        this.memoryTotal = data.memoryTotal;
-        this.diskUsage = data.diskUsage;
-        this.diskUtil = data.diskUtil;
-        this.diskTotal = data.diskTotal;
-        this.resourceCnt = data.resourceCnt;
-        this.nodeRunning = data.nodeRunning;
+        console.log(clusterName)
+        this.dataUsage = data;
+        // this.clusterName = clusterName;
+        // this.cloudDashboardDetail = data;
+        // this.clusterInfo = data.ClusterInfo;
+        // this.address = data.ClusterInfo.address;
+        // this.nodeInfo = data.nodeInfo;
+        // this.type = this.nodeInfo.map(val => val.type);
+        // this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
+        // this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
+        // this.cpuUsage = data.cpuUsage;
+        // this.cpuUtil = data.cpuUtil;
+        // this.cpuTotal = data.cpuTotal;
+        // this.memoryUsage = data.memoryUsage;
+        // this.memoryUtil = data.memoryUtil;
+        // this.memoryTotal = data.memoryTotal;
+        // this.diskUsage = data.diskUsage;
+        // this.diskUtil = data.diskUtil;
+        // this.diskTotal = data.diskTotal;
+        // this.resourceCnt = data.resourceCnt;
+        // this.nodeRunning = data.nodeRunning;
       });
     });
   };

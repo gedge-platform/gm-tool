@@ -11,13 +11,14 @@ const ClusterKind = () => {
   const navigationNextRef = React.useRef(null);
 
   return (
-    <div className="ClusterKindWrap">
+    // <div className="cluster_slideResourWrap">
+    <div className="ClusterKindWrap" style={{ padding: "36px 0 0 63px" }}>
       <div ref={navigationPrevRef} className="btn_prev" />
       <div ref={navigationNextRef} className="btn_next" />
 
       <Swiper
         // install Swiper modules
-        spaceBetween={10}
+        spaceBetween={0}
         slidesPerView={3}
         navigation={{
           prevEl: navigationPrevRef.current,
@@ -65,6 +66,7 @@ const ClusterKind = () => {
         {/* <SwiperSlide><div className="slide"></div></SwiperSlide> */}
       </Swiper>
     </div>
+    // </div>
   );
 };
 export default ClusterKind;

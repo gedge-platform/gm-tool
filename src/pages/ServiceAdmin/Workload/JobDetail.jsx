@@ -60,6 +60,8 @@ const Detail = observer(() => {
     containers,
   } = jobStore;
 
+  console.log(annotations);
+
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -85,7 +87,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {jobDetailData ? (
+              {jobDetailData.length !== 0 ? (
                 <>
                   <tr>
                     <th>Name</th>
@@ -144,7 +146,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
+          {containers.length !== 0 ? (
             containers.map((containers) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
@@ -219,7 +221,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
+            {labels.length !== 0 ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -233,7 +235,7 @@ const Detail = observer(() => {
           <br />
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations.length !== 0 ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -257,7 +259,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPodList ? (
+          {involvesPodList.length !== 0 ? (
             involvesPodList.map((pod) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
@@ -291,24 +293,24 @@ const Detail = observer(() => {
           )}
           <br />
           <TableTitle>References</TableTitle>
-          {ownerReferences ? (
-            Object.entries(ownerReferences).map(([key, value]) => (
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {ownerReferences.kind ? (
+                Object.entries(ownerReferences).map(([key, value]) => (
                   <tr>
                     <th style={{ width: "25%" }}>
                       {key.charAt(0).toUpperCase() + key.slice(1)}
                     </th>
                     <td>{value}</td>
                   </tr>
-                </tbody>
-              </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Reference Info</p>
-            </LabelContainer>
-          )}
+                ))
+              ) : (
+                <LabelContainer>
+                  <p>No Reference Info</p>
+                </LabelContainer>
+              )}
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>

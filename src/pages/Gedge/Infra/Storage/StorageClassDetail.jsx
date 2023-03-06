@@ -71,6 +71,8 @@ const StorageClassDetail = observer(({}) => {
     scParameters,
   } = StorageClassStore;
 
+  console.log(scParameters);
+
   const metaTable = [];
   if (storageClass?.annotations) {
     Object.entries(storageClass?.annotations).map(([key, value]) => {
@@ -202,7 +204,7 @@ const StorageClassDetail = observer(({}) => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {scParameters ? (
+          {scParameters !== "" ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(scParameters).map(([key, value]) => (
@@ -220,7 +222,7 @@ const StorageClassDetail = observer(({}) => {
           )}
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
+      {/* <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
@@ -231,7 +233,7 @@ const StorageClassDetail = observer(({}) => {
             </tbody>
           </table>
         </div>
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });
