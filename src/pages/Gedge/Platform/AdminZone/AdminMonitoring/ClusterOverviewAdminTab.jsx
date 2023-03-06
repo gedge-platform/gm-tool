@@ -58,7 +58,7 @@ const ClusterOverviewAdminTab = observer(() => {
   const [name, setName] = useState("");
 
   const {
-    clusterName,
+    // clusterName,
     clusterNames,
     loadClusterNames,
     loadCoCPU,
@@ -72,7 +72,7 @@ const ClusterOverviewAdminTab = observer(() => {
     setClusterName,
   } = monitoringStore;
 
-  // const clusterName = "gm-cluster";
+  const clusterName = "gm-cluster";
 
   const calledMetrics = () => {
     loadCoCPU(
