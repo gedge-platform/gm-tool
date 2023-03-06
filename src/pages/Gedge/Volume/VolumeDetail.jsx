@@ -63,7 +63,6 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
 
   const { pVolume, events, annotations, annotationsTmp } = volumeStore;
 
-  console.log(annotationsTmp);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -132,7 +131,6 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       );
     });
   }
-  console.log(metaTable);
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>

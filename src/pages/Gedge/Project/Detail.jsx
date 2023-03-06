@@ -118,7 +118,6 @@ const Detail = observer(() => {
     goPrevEvent,
     goNextEvent,
   } = projectStore;
-  console.log(resourceUsage);
 
   // const { projectDetail :{selectCluster, resources:{deployment_count}} } = projectStore;
   const [open, setOpen] = useState(false);

@@ -52,7 +52,6 @@ const ServiceAdminDetail = observer(() => {
   const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
     serviceStore;
 
-  console.log(involvesPods);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -199,29 +198,35 @@ const ServiceAdminDetail = observer(() => {
 
           <TableTitle>Workload</TableTitle>
           {involvesWorkloads ? (
-            involvesWorkloads.map((workload) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody>
-                    <tr>
-                      <th style={{ width: "25%" }}>Name</th>
-                      <td>{workload?.name ? workload?.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Kind</th>
-                      <td>{workload?.kind ? workload?.kind : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Replica Name</th>
-                      <td>
-                        {workload?.replicaName ? workload?.replicaName : "-"}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
+            involvesWorkloads.length !== 0 ? (
+              involvesWorkloads.map((workload) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{workload?.name ? workload?.name : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Kind</th>
+                        <td>{workload?.kind ? workload?.kind : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Replica Name</th>
+                        <td>
+                          {workload?.replicaName ? workload?.replicaName : "-"}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Workloads Info</p>
+              </LabelContainer>
+            )
           ) : (
             <LabelContainer>
               <p>No Workloads Info</p>

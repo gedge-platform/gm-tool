@@ -134,7 +134,6 @@ class CronJob {
           res.data.data === null
             ? (this.totalElements = 0)
             : (this.totalElements = res.data.data.length);
-          console.log(this.cronJobList);
         });
       })
       .then(() => {
@@ -162,7 +161,6 @@ class CronJob {
           );
           // this.cronJobDetail = this.adminList[0];
           this.totalElements = this.adminList.length;
-          console.log(this.adminList);
         });
       })
       .then(() => {
