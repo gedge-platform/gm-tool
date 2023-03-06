@@ -305,7 +305,7 @@ const ClusterOverviewAdminTab = observer(() => {
   setClusterName("gm-cluster");
 
   useEffect(() => {
-    if (clusterName === "") {
+    if (clusterName === "gm-cluster") {
       loadClusterNames(calledMetrics);
     }
   }, []);
