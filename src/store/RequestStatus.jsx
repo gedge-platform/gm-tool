@@ -44,19 +44,19 @@ class RequestStatus {
     });
   };
 
-  setCurrentPage = n => {
+  setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = n => {
+  setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
     });
   };
 
-  setViewList = n => {
+  setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.requestList[n];
     });
@@ -95,7 +95,7 @@ class RequestStatus {
     });
   };
 
-  setRequestList = list => {
+  setRequestList = (list) => {
     runInAction(() => {
       this.requestList = list;
     });
@@ -108,7 +108,6 @@ class RequestStatus {
         runInAction(() => {
           this.requestList = data;
           this.totalElements = data.length;
-          console.log(this.requestList);
         });
       })
       .then(() => {

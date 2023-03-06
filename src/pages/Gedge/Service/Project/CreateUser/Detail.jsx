@@ -135,8 +135,6 @@ const CreateUserDetail = observer(() => {
     },
   ]);
 
-  console.log(detailInfo);
-
   const eventsTable = () => {
     return (
       <EventWrap className="event-wrap">

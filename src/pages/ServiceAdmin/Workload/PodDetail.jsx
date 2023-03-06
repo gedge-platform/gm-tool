@@ -65,8 +65,6 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  console.log(involvesData.workloadList);
-
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };

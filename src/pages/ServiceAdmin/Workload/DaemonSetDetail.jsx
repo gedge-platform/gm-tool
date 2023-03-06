@@ -60,7 +60,6 @@ const Detail = observer(() => {
     containers,
   } = daemonSetStore;
 
-  console.log(containers);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

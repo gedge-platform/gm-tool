@@ -60,8 +60,6 @@ const Detail = observer(() => {
     containers,
   } = jobStore;
 
-  console.log(ownerReferences);
-
   // console.log(containers?.map((val) => val.resources.limits));
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

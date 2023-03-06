@@ -35,7 +35,7 @@ class Service {
 
   serviceInvolvesData = {};
   involvesPods = [];
-  involvesWorkloads = [{ name: "", kind: "", replicaName: "" }];
+  involvesWorkloads = [];
 
   constructor() {
     makeAutoObservable(this);

@@ -62,8 +62,6 @@ const PodAdminDetail = observer(() => {
     workloadList,
   } = podStore;
 
-  // console.log(workloadList);
-
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

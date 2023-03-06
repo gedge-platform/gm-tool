@@ -68,8 +68,6 @@ const StatefulSetDetail = observer(() => {
     // },
   } = statefulSetStore;
 
-  console.log(containers);
-
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

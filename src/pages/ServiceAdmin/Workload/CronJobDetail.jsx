@@ -61,8 +61,6 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
-  console.log(cronJobDetail);
-
   // const containers = cronJobDetail.containers;
 
   const handleTabChange = (event, newValue) => {

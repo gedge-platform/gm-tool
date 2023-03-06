@@ -71,8 +71,6 @@ const StorageClassDetail = observer(({}) => {
     scParameters,
   } = StorageClassStore;
 
-  console.log(scParameters);
-
   const metaTable = [];
   if (storageClass?.annotations) {
     Object.entries(storageClass?.annotations).map(([key, value]) => {
