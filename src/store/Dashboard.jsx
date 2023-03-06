@@ -460,6 +460,7 @@ class Dashboard {
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
+    console.log("loadEdgeZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>

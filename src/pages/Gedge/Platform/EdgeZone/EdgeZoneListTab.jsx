@@ -105,12 +105,7 @@ const EdgeZoneListTab = observer(() => {
     <Layout currentPageTitle={currentPageTitle}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-          // reloadFunc={() => loadClusterList("edge")}
-          // isSearch={true}
-          // isSelect={true}
-          // keywordList={["이름"]}
-          >
+          <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           </CommActionBar>
 

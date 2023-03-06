@@ -161,36 +161,41 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPods === null ? (
+          {involvesPods ? (
+            involvesPods.length !== 0 ? (
+              involvesPods.map((pod) => (
+                <>
+                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                    <tbody>
+                      <tr>
+                        <th style={{ width: "25%" }}>Name</th>
+                        <td>{pod?.name ? pod?.name : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>IP</th>
+                        <td>{pod?.ip ? pod?.ip : "-"}</td>
+                      </tr>
+                      <tr>
+                        <th>Node Name</th>
+                        <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <br />
+                </>
+              ))
+            ) : (
+              <LabelContainer>
+                <p>No Pods Info</p>
+              </LabelContainer>
+            )
+          ) : (
             <LabelContainer>
               <p>No Pods Info</p>
             </LabelContainer>
-          ) : (
-            involvesPods.map((pod) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody>
-                    <tr>
-                      <th style={{ width: "25%" }}>Name</th>
-                      <td>{pod?.name ? pod?.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>IP</th>
-                      <td>{pod?.ip ? pod?.ip : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Node Name</th>
-                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
           )}
-          <br />
           <TableTitle>Workload</TableTitle>
-          {involvesWorkloads !== null ? (
+          {involvesWorkloads ? (
             involvesWorkloads.map((workload) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -223,27 +228,33 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp.map((port) => (
-            <>
-              <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                <tbody>
-                  <tr>
-                    <th>Name</th>
-                    <td>{port?.name ? port?.name : "-"}</td>
-                    <th>Port</th>
-                    <td>{port?.port ? port?.port : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Protocol</th>
-                    <td>{port?.protocol ? port?.protocol : "-"}</td>
-                    <th>TargetPort</th>
-                    <td>{port?.targetPort ? port?.targetPort : "-"}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <br />
-            </>
-          ))}
+          {portTemp.length !== 0 ? (
+            portTemp.map((port) => (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th>Name</th>
+                      <td>{port?.name ? port?.name : "-"}</td>
+                      <th>Port</th>
+                      <td>{port?.port ? port?.port : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Protocol</th>
+                      <td>{port?.protocol ? port?.protocol : "-"}</td>
+                      <th>TargetPort</th>
+                      <td>{port?.targetPort ? port?.targetPort : "-"}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Port Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

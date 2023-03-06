@@ -18,6 +18,7 @@ export { default as PlatformUser } from "./Gedge/PlatformUser/PlatformUser";
 export { default as EdgeZoneDashboard } from "./Gedge/Platform/EdgeZone/EdgeZoneDashboard";
 export { default as CloudZone } from "./Gedge/Cluster/CloudZone";
 export { default as CloudZoneDashboard } from "./Gedge/Platform/CloudZone/CloudZoneDashboard";
+export { default as AdminZoneDashboard } from "./Gedge/Platform/AdminZone/AdminZoneDashboard";
 export { default as Loadbalancer } from "./Gedge/Infra/Network/Loadbalancer/Loadbalancer";
 export { default as Topology } from "./Gedge/Infra/Network/Topology/Topology";
 export { default as Storage } from "./Gedge/Infra/Storage/Storage";
@@ -60,6 +61,7 @@ const Title = {
   Workload: "워크로드",
   EdgeZone: "엣지존",
   CloudZone: "클라우드존",
+  AdminZone: "관리존",
   Loadbalancer: "로드밸런서",
   Topology: "토폴로지",
   NetWork: "네트워크",

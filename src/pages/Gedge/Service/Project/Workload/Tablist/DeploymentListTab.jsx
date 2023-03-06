@@ -88,6 +88,7 @@ const DeploymentListTab = observer(() => {
   useEffect(() => {
     loadDeploymentList();
   }, []);
+
   const handleCreateOpen = () => {
     setWorkspace("");
     setOpen(true);
