@@ -1973,7 +1973,7 @@ const globalStyles = createGlobalStyle`
         position: relative;
         /* position: absolute; */
         margin-left: 13px;
-          .TotalClusterResourcesContTxt {
+          .totalClusterResourcesContTxt {
           width: 100%;
             ul {
               width: 100%; 

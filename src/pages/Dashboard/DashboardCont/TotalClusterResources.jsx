@@ -108,11 +108,12 @@ const TotalClusterResources = observer(() => {
 
   return (
     <div
-      className="TotalClusterResourcesWrap"
+      className="totalClusterResourcesWrap"
       style={{
         display: "flex",
       }}
     >
+      <div className="storageCircleBoxTitle">Row Capacity</div>
       <div
         className="chart"
         style={{
@@ -125,7 +126,7 @@ const TotalClusterResources = observer(() => {
           label={["avail", "used"]}
           value={[Math.round(availCpu), Math.round(usageTotalCpu)]}
         />
-        <div className="TotalClusterResourcesContTxt">
+        <div className="totalClusterResourcesContTxt">
           <ul>
             <li className="used">
               <span className="tit">Used</span> <span>1 GiB</span>
@@ -154,7 +155,7 @@ const TotalClusterResources = observer(() => {
           label={["avail", "used"]}
           value={[Math.round(availMem), Math.round(usageTotalMem)]}
         />
-        <div className="TotalClusterResourcesContTxt">
+        <div className="totalClusterResourcesContTxt">
           <ul>
             <li className="used">
               <span className="tit">Used</span> <span>1 GiB</span>
@@ -183,7 +184,7 @@ const TotalClusterResources = observer(() => {
           label={["avail", "used"]}
           value={[Math.round(availDisk), Math.round(usageTotalDisk)]}
         />
-        <div className="TotalClusterResourcesContTxt">
+        <div className="totalClusterResourcesContTxt">
           <ul>
             <li className="used">
               <span className="tit">Used</span> <span>1 GiB</span>
