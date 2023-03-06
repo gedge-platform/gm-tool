@@ -381,10 +381,10 @@ const Detail = observer(() => {
                       : "-"}
                   </td>
                 </tr>
-                <br />
               </tbody>
             </table>
           )}
+          <br />
           <TableTitle>Service</TableTitle>
           {serviceList?.length === 0 ? (
             <LabelContainer>

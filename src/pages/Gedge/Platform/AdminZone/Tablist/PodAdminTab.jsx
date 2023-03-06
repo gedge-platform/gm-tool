@@ -90,9 +90,9 @@ const PodAdminTab = observer(() => {
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
     const data = e.data.status;
-    if (data === "Failed") {
-      return;
-    }
+    // if (data === "Failed") {
+    //   return;
+    // }
     loadPodDetail(e.data.name, e.data.cluster, e.data.project);
   };
 

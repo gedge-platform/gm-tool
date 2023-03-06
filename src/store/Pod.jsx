@@ -234,6 +234,7 @@ class Pod {
           // } else {
           //   this.serviceList = null;
           // }
+          console.log(this.workloadList);
 
           this.label = data.label;
           this.annotations = data.annotations;
