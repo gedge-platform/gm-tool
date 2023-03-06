@@ -131,12 +131,12 @@ const WorkspaceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateWorkSpace
+          {/* <CreateWorkSpace
             reloadFunc={loadWorkSpaceList}
             type={"user"}
             open={open}
             onClose={handleClose}
-          />
+          /> */}
         </PanelBox>
         <Detail workSpace={workSpaceDetail} />
       </CReflexBox>

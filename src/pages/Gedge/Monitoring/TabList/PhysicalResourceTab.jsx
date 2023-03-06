@@ -28,6 +28,7 @@ const PsysicalResource = observer(() => {
     interval,
     setMetricsLastTime,
     setMetricsInterval,
+    loadClusterNames,
     setClusterName,
     loadAllMetrics,
     loadRealAllMetrics,
@@ -90,7 +91,12 @@ const PsysicalResource = observer(() => {
   const ckeckedInterval = () => (play ? stopCalledMetrics() : null);
 
   useEffect(() => {
-    calledMetrics();
+    // calledMetrics();
+    loadClusterNames(calledMetrics);
+    if (clusterNameActionList.length > 0) {
+      setClusterName(clusterNameActionList[0]["name"]);
+      
+    }
   }, []);
 
   return (

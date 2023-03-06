@@ -70,16 +70,16 @@ const ServiceAdminDashboard = observer(() => {
     statefulsetMetrics,
   } = serviceAdminDashboardStore;
 
-  console.log("projectList", projectList);
+  // console.log("projectList", projectList);
 
   const { lastTime, interval } = monitoringStore;
   const [resetTest, setResetTest] = useState("");
 
   useEffect(() => {
     loadWorkspaceName();
-    loadServiceAdminDashboard(setWorkspaceName);
-    loadProjectName();
-    serviceAdminMonitoring();
+    // loadServiceAdminDashboard(setWorkspaceName);
+    // loadProjectName();
+    // serviceAdminMonitoring();
   }, []);
 
   const currentPageTitle = Title.ServiceAdminDashboard;

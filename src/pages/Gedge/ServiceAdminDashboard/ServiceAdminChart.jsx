@@ -113,7 +113,7 @@ const ServiceAdminChart = observer((props) => {
   };
 
   useEffect(() => {
-    loadProjectName();
+    // loadProjectName();
   }, []);
 
   return (
