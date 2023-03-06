@@ -1982,7 +1982,7 @@ const globalStyles = createGlobalStyle`
               border-bottom-right-radius: 8px;
               li {
                 width: 100%;
-                height: 40px;
+                height: 30px;
                 border-bottom: 1px solid #11162a;
                 display: flex;
                 justify-content: space-between;
@@ -1995,7 +1995,7 @@ const globalStyles = createGlobalStyle`
                   width: 7px;
                   height: 7px;
                   position: absolute;
-                  top: 17px;
+                  top: 11px;
                   left: 20px;
                 }
                 &:last-of-type {
