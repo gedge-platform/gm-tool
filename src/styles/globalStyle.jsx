@@ -1973,6 +1973,29 @@ const globalStyles = createGlobalStyle`
         position: relative;
         /* position: absolute; */
         margin-left: 13px;
+        .stotalClusterResourcesCircleBox {
+        width: calc(100% / 3);
+        /* background: #1d243c; */
+        border: 1px solid #11162a;
+        border-radius: 8px;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .totalClusterResourcesBoxTitle {
+          width: 100%;
+          height: 38px;
+          padding: 0 18px;
+          display: flex;
+          align-items: center;
+          border-top-right-radius: 8px;
+          border-top-left-radius: 8px;
+          border-bottom: 1px solid #141a30;
+          background: #25304b;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
+        }
           .totalClusterResourcesContTxt {
           width: 100%;
             ul {
@@ -2097,7 +2120,7 @@ const globalStyles = createGlobalStyle`
               }
             }
           }
-   
+        }
         }
         
       }
