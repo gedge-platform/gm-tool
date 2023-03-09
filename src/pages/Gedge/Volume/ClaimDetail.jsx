@@ -111,25 +111,25 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
               <tr>
                 <th>Claim Name</th>
                 <td>{pvClaim.name ? pvClaim?.name : "-"}</td>
-                <th>capacity</th>
+                <th>Capacity</th>
                 <td>{pvClaim?.capacity ? pvClaim?.capacity : "-"}</td>
               </tr>
               <tr>
-                <th>namespace</th>
+                <th>Namespace</th>
                 <td>{pvClaim?.namespace ? pvClaim?.namespace : "-"}</td>
-                <th>accessMode</th>
+                <th>AccessMode</th>
                 <td>{pvClaim?.accessMode ? pvClaim?.accessMode : "-"}</td>
               </tr>
               <tr>
-                <th>status</th>
+                <th>Status</th>
                 <td>{pvClaim?.status ? pvClaim?.status : "-"}</td>
-                <th>volume Name</th>
+                <th>Volume Name</th>
                 <td>{pvClaim?.volume ? pvClaim?.volume : "-"}</td>
               </tr>
               <tr>
-                <th>cluster Name</th>
+                <th>Cluster Name</th>
                 <td>{pvClaim?.clusterName ? pvClaim?.clusterName : "-"}</td>
-                <th>storageClass</th>
+                <th>StorageClass</th>
                 <td>{pvClaim?.storageClass ? pvClaim?.storageClass : "-"}</td>
               </tr>
             </tbody>
@@ -167,7 +167,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
           <table className="tb_data">
             <tbody>
               <tr>
-                <th className="tb_volume_detail_th">value</th>
+                <th className="tb_volume_detail_th">Value</th>
                 <td>{pvClaim?.finalizers}</td>
               </tr>
             </tbody>

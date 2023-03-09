@@ -244,20 +244,56 @@ export const SideMenu = () => {
                     {Title.CloudZone}
                   </NavLink>
                 </li>
+                <CustomTreeItem
+                  nodeId="5"
+                  label={Title.AdminZone}
+                  to="/adminZone"
+                >
+                  <li>
+                    <NavLink
+                      exact
+                      to="/adminZone"
+                      nodeId="6"
+                      activeClassName="active"
+                    >
+                      {Title.AdminZone}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      exact
+                      to="/adminMonitoring"
+                      nodeId="7"
+                      activeClassName="active"
+                    >
+                      {Title.Monitoring}
+                    </NavLink>
+                  </li>
+                </CustomTreeItem>
               </CustomTreeItem>
               <CustomTreeItem
-                nodeId="5"
+                nodeId="8"
                 label={Title.Infra}
                 onNodeFocus={handleClick}
               >
-                <CustomTreeItem nodeId="6" label={Title.NetWork}>
+                <CustomTreeItem nodeId="9" label={Title.NetWork}>
                   <li>
-                    <NavLink exact to="/loadbalancer" activeClassName="active">
+                    <NavLink
+                      exact
+                      to="/loadbalancer"
+                      nodeId="10"
+                      activeClassName="active"
+                    >
                       {Title.Loadbalancer}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink exact to="/topology" activeClassName="active">
+                    <NavLink
+                      exact
+                      to="/topology"
+                      nodeId="11"
+                      activeClassName="active"
+                    >
                       {Title.Topology}
                     </NavLink>
                   </li>
@@ -267,40 +303,56 @@ export const SideMenu = () => {
                     {Title.Storage}
                   </NavLink>
                 </li> */}
-                <CustomTreeItem nodeId="9" label={Title.Storage}>
+                <CustomTreeItem nodeId="12" label={Title.Storage}>
                   <li>
                     <NavLink
                       exact
                       to="/storageDashboard"
+                      nodeId="13"
                       activeClassName="active"
                     >
                       {Title.StorageDashboard}
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink exact to="/storage" activeClassName="active">
+                    <NavLink
+                      exact
+                      to="/storage"
+                      nodeId="14"
+                      activeClassName="active"
+                    >
                       {Title.Storage}
                     </NavLink>
                   </li>
                 </CustomTreeItem>
               </CustomTreeItem>
               <CustomTreeItem
-                nodeId="12"
+                nodeId="15"
                 label={Title.Service}
                 onNodeFocus={handleClick}
               >
                 <li>
-                  <NavLink exact to="/workSpace" activeClassName="active">
+                  <NavLink
+                    exact
+                    to="/workSpace"
+                    nodeId="16"
+                    activeClassName="active"
+                  >
                     {Title.WorkSpace}
                   </NavLink>
                 </li>
                 <CustomTreeItem
-                  nodeId="14"
+                  nodeId="17"
                   label={Title.Project}
                   onNodeFocus={handleClick}
                 >
                   <li>
-                    <NavLink exact to="/userProject" activeClassName="active">
+                    <NavLink
+                      exact
+                      to="/userProject"
+                      nodeId="18"
+                      activeClassName="active"
+                    >
                       {Title.CreateUser}
                     </NavLink>
                   </li>
@@ -343,6 +395,11 @@ export const SideMenu = () => {
               <li>
                 <NavLink to="/certification" activeClassName="active">
                   {Title.Certification}
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/volumes" activeClassName="active">
+                  {Title.Volume}
                 </NavLink>
               </li>
             </TreeView>

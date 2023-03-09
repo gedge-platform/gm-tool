@@ -68,6 +68,7 @@ const WorkspaceListTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
+    console.log(e.data.workspaceName);
     setWorkspaceName(e.data.workspaceName);
     loadWorkspaceDetail(e.data.workspaceName);
   };

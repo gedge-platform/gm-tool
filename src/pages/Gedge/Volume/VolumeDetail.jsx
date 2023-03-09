@@ -63,6 +63,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
 
   const { pVolume, events, annotations, annotationsTmp } = volumeStore;
 
+  console.log(annotationsTmp);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -131,6 +132,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       );
     });
   }
+  console.log(metaTable);
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -142,126 +144,121 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="panelCont">
-          <table className="tb_data">
-            <tbody className="tb_data_detail">
-              {pVolume ? (
-                <>
+          {pVolume ? (
+            pVolume.length !== 0 ? (
+              <table className="tb_data">
+                <tbody className="tb_data_detail">
                   <tr>
-                    <th>name</th>
+                    <th>Name</th>
                     <td>{pVolume.name ? pVolume.name : "-"}</td>
-                    <th>capacity</th>
+                    <th>Capacity</th>
                     <td>{pVolume.capacity ? pVolume.capacity : "-"}</td>
                   </tr>
                   <tr>
-                    <th>accessMode</th>
+                    <th>AccessMode</th>
                     <td>{pVolume.accessMode ? pVolume.accessMode : "-"}</td>
-                    <th>reclaimPolicy</th>
+                    <th>ReclaimPolicy</th>
                     <td>
                       {pVolume.reclaimPolicy ? pVolume.reclaimPolicy : "-"}
                     </td>
                   </tr>
                   <tr>
-                    <th>status</th>
+                    <th>Status</th>
                     <td>{pVolume.status ? pVolume.status : "-"}</td>
-                    <th>claim</th>
+                    <th>Claim</th>
                     <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
                   </tr>
                   <tr>
-                    <th>cluster</th>
+                    <th>Cluster</th>
                     <td>{pVolume.cluster ? pVolume.cluster : "-"}</td>
-                    <th>storageClass</th>
+                    <th>StorageClass</th>
                     <td>{pVolume.storageClass ? pVolume.storageClass : "-"}</td>
                   </tr>
                   <tr>
-                    <th>volumeMode</th>
+                    <th>VolumeMode</th>
                     <td>{pVolume.volumeMode ? pVolume.volumeMode : "-"}</td>
-                    <th>created</th>
+                    <th>Created</th>
                     <td>
                       {pVolume.createAt
                         ? dateFormatter(pVolume?.createAt)
                         : "-"}
                     </td>
                   </tr>
-                </>
-              ) : (
-                <>
-                  <tr>
-                    <th>name</th>
-                    <td>-</td>
-                    <th>capacity</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>accessMode</th>
-                    <td>-</td>
-                    <th>reclaimPolicy</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>status</th>
-                    <td>-</td>
-                    <th>claim</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>cluster</th>
-                    <td>-</td>
-                    <th>storageClass</th>
-                    <td>-</td>
-                  </tr>
-                  <tr>
-                    <th>volumeMode</th>
-                    <td>-</td>
-                    <th>created</th>
-                    <td>-</td>
-                  </tr>
-                </>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            ) : (
+              <LabelContainer>
+                <p>No Detail Info</p>
+              </LabelContainer>
+            )
+          ) : (
+            <LabelContainer>
+              <p>No Datail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="panelCont">
-          <table className="tb_data">
-            <tbody className="tb_data_detail">
-              <tr>
-                <th className="tb_volume_detail_th">name</th>
-                <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
-                <th className="tb_volume_detail_th">namespace</th>
-                <td>
-                  {pVolume?.claim?.namespace ? pVolume?.claim?.namespace : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>kind</th>
-                <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
-                <th>apiVersion</th>
-                <td>
-                  {pVolume?.claim?.apiVersion
-                    ? pVolume?.claim?.apiVersion
-                    : "-"}
-                </td>
-              </tr>
-              <tr>
-                <th>resourceVersion</th>
-                <td>
-                  {pVolume?.claim?.resourceVersion
-                    ? pVolume?.claim?.resourceVersion
-                    : "-"}
-                </td>
-                <th>uid</th>
-                <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
-              </tr>
-            </tbody>
-          </table>
+          {pVolume ? (
+            pVolume.length !== 0 ? (
+              <table className="tb_data">
+                <tbody className="tb_data_detail">
+                  <tr>
+                    <th className="tb_volume_detail_th">Name</th>
+                    <td>{pVolume?.claim?.name ? pVolume?.claim?.name : "-"}</td>
+                    <th className="tb_volume_detail_th">Namespace</th>
+                    <td>
+                      {pVolume?.claim?.namespace
+                        ? pVolume?.claim?.namespace
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Kind</th>
+                    <td>{pVolume?.claim?.kind ? pVolume?.claim?.kind : "-"}</td>
+                    <th>ApiVersion</th>
+                    <td>
+                      {pVolume?.claim?.apiVersion
+                        ? pVolume?.claim?.apiVersion
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>ResourceVersion</th>
+                    <td>
+                      {pVolume?.claim?.resourceVersion
+                        ? pVolume?.claim?.resourceVersion
+                        : "-"}
+                    </td>
+                    <th>Uid</th>
+                    <td>{pVolume?.claim?.uid ? pVolume?.claim?.uid : "-"}</td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <LabelContainer>
+                <p>No Claim Info</p>
+              </LabelContainer>
+            )
+          ) : (
+            <LabelContainer>
+              <p>No Claim Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="panelCont">
-          <table className="tb_data">
-            <tbody>{metaTable}</tbody>
-          </table>
+          {metaTable.length !== 0 ? (
+            <table className="tb_data">
+              <tbody>{metaTable}</tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotation Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>

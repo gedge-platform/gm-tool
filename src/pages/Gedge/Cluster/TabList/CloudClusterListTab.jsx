@@ -32,6 +32,7 @@ const CloudClusterListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
+    loadClusterDetail,
   } = clusterStore;
 
   const [columDefs] = useState([
@@ -78,6 +79,7 @@ const CloudClusterListTab = observer(() => {
 
   const handleClick = (e) => {
     loadCluster(e.data.clusterName);
+    loadClusterDetail(e.data.clusterName);
     setClusterName(e.data.clusterName);
   };
 

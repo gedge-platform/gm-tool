@@ -8,6 +8,8 @@ class Workspace {
   workSpaceList = [];
   workSpaceDetail = [];
   totalElements = 0;
+  adminList = [];
+  adminList = [];
   events = [
     {
       kind: "",
@@ -117,6 +119,7 @@ class Workspace {
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.workSpaceList[n];
+      console.log(this.viewList);
     });
   };
 
@@ -129,9 +132,11 @@ class Workspace {
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
+    console.log("id: ", id, "role: ", role);
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           this.workSpaceList = res.data.data;
           this.totalElements = res.data.data.length;
@@ -149,11 +154,50 @@ class Workspace {
       });
   };
 
+  loadAdminWorkSpaceList = async (type = false) => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${SERVER_URL}/workspaces?user=${id}`)
+      .then((res) => {
+        runInAction(() => {
+          this.adminList = [];
+          this.workSpaceList = res.data.data;
+          for (let i = 0; i < this.workSpaceList.length; i++) {
+            var test = []
+            this.workSpaceList[i].selectCluster
+            .map((x) => {
+              test.push(x.clusterName);
+            })
+            test.indexOf("gm-cluster") < 0 ? "" : this.adminList.push(this.workSpaceList[i]);
+            test.indexOf("gm-cluster") < 0 ? "" : this.adminList[this.adminList.length-1]["clusterName"] = test;
+          }
+        })
+      })
+      .then((res) =>{
+        runInAction(() => {
+          this.selectClusterInfo = this.adminList
+
+          // console.log(this.selectClusterInfo);
+          this.totalElements = this.adminList.length;
+          this.workSpaceDetail = this.adminList[0];
+        });
+      })
+      .then(() => {
+        this.convertList(this.adminList, this.setWorkSpaceList);
+        type ? null : this.loadWorkspaceDetail(this.adminList[0].workspaceName);
+      });
+      // .then(() => {
+        // type ? null : this.loadWorkspaceDetail(this.adminList.workspaceName);
+      // });
+  };
+
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
+        console.log(this.workSpaceDetail)
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;
@@ -162,6 +206,7 @@ class Workspace {
         }
         this.detailInfo = res.data.projectList ? res.data.projectList : 0;
         this.selectClusterInfo = res.data.selectCluster;
+        console.log(this.selectClusterInfo)
         this.projectList = res.data.projectList ? res.data.projectList : 0;
         // await axios
         //   .get(`${SERVER_URL}/workspaces/${workspaceName}`)

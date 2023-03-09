@@ -6,7 +6,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
-  pVolume = {};
+  pVolume = [];
   viewList = [];
   currentPage = 1;
   totalPages = 1;
@@ -18,6 +18,7 @@ class Volume {
   scYamlFile = "";
   scParameters = {};
   scLables = {};
+  Claim = [];
   scAnnotations = {};
   getYamlFile = "";
   resultList = {};
@@ -223,12 +224,8 @@ class Volume {
         this.convertList(this.pVolumesList, this.setPVolumesList);
       })
       .then(() => {
-        this.totalElements === 0
-          ? ((this.pVolume = null),
-            (this.pVolumeYamlFile = null),
-            (this.pVolumeMetadata = null),
-            (this.annotations = null),
-            (this.events = null))
+        this.pVolumesList[0].length === 0
+          ? this.pVolume === null
           : this.loadPVolume(this.viewList[0].name, this.viewList[0].cluster);
       });
   };

@@ -40,6 +40,11 @@ import ServiceAdminDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAd
 import ServiceAdminMapDashboard from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminMapDashboard";
 import { Redirect } from "react-router-dom";
 import ServiceAdminChart from "./pages/Gedge/ServiceAdminDashboard/ServiceAdminChart";
+import { AdminZoneDashboard } from "./pages";
+import AdminZoneListTab from "./pages/Gedge/Platform/AdminZone/AdminZoneDashboard";
+import ClusterOverviewAdminTab from "./pages/Gedge/Platform/AdminZone/AdminMonitoring/ClusterOverviewAdminTab";
+import AdminMonitoring from "./pages/Gedge/Platform/AdminZone/AdminMonitoring/MonitoringAdmin";
+import TotalClusterResources from "./pages/Dashboard/DashboardCont/TotalClusterResources";
 
 export const App = () => {
   const navigate = useHistory();
@@ -88,12 +93,14 @@ export const App = () => {
           <AuthRoute path="/certification" component={Certification} />
           <AuthRoute path="/platformUser" component={PlatformUser} />
           <AuthRoute path="/edgeZone" component={EdgeClusterListTab} />
+          <AuthRoute path="/adminZone" component={AdminZoneDashboard} />
           <AuthRoute path="/cloudZone" component={CloudZone} />
           <AuthRoute path="/platformDashboard" component={PlatformDashboard} />
           <AuthRoute path="/topology" component={NotFound} />
           <AuthRoute path="/loadbalancer" component={NotFound} />
           <AuthRoute path="/storage" component={Storage} />
           <AuthRoute path="/workload" component={Workload} />
+          <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
           <AuthRoute path="/template" component={NotFound} />

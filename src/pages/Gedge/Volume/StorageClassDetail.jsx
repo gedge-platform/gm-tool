@@ -63,7 +63,8 @@ const StorageClassDetail = observer(({}) => {
     setTabvalue(newValue);
   };
 
-  const { storageClass, events, annotations, label } = StorageClassStore;
+  const { storageClass, events, annotations, label, scParameters } =
+    StorageClassStore;
 
   const metaTable = [];
   if (storageClass?.annotations) {
@@ -182,10 +183,30 @@ const StorageClassDetail = observer(({}) => {
           <br />
         </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={2}>
+      {/* <CTabPanel value={tabvalue} index={2}>
         <EventAccordion events={events} />
+      </CTabPanel> */}
+      <CTabPanel value={tabvalue} index={2}>
+        <div className="tb_container">
+          {scParameters !== "" ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody style={{ whiteSpace: "pre-line" }}>
+                {Object.entries(scParameters).map(([key, value]) => (
+                  <tr>
+                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <td style={{ whiteSpace: "pre-line" }}>{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No parameters Info</p>
+            </LabelContainer>
+          )}
+        </div>
       </CTabPanel>
-      <CTabPanel value={tabvalue} index={3}>
+      {/* <CTabPanel value={tabvalue} index={3}>
         <div className="panelCont">
           <table className="tb_data">
             <tbody>
@@ -196,7 +217,7 @@ const StorageClassDetail = observer(({}) => {
             </tbody>
           </table>
         </div>
-      </CTabPanel>
+      </CTabPanel> */}
     </PanelBox>
   );
 });
