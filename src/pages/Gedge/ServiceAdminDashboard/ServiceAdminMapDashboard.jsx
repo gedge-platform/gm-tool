@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import L from "leaflet";
 import { observer } from "mobx-react";
 import styled from "styled-components";
 import Layout from "@/layout";
 import { Title } from "@/pages";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
+import { SERVER_URL } from "../../../config";
 
 const LeafletContainer = styled.div`
   width: 600px;
@@ -16,102 +18,57 @@ const ServiceAdminMapDashboard = observer(() => {
   const currentPageTitle = "Pod 대시보드";
   const mapRef = useRef();
 
-  useEffect(() => {
+  useEffect(async () => {
+    const result = await axios(`${SERVER_URL}/totalDashboard`);
+    const markerInfos = result.data.data.edgeInfo;
+    
     mapRef.current = L.map("serviceadminmap", mapParams);
 
-    const ilsanPod = L.marker([37.6637621, 126.7689594], {
-      icon: CustomIcon("red"),
-    }).addTo(mapRef.current);
+    const statusCircle = (status) => {
+      if (status === "success"){
+        return "run"
+      }else if (status === "failed"){
+        return "stop"
+      }
+    }
 
-    const ilsanPod2 = L.marker([37.6641716, 126.7686815], {
-      icon: CustomIcon("blue"),
-    }).addTo(mapRef.current);
-
-    const americaPod1 = L.marker([40.09341, -82.75018], {
-      icon: CustomIcon("red"),
-    }).addTo(mapRef.current);
-
-    ilsanPod.bindPopup(
-      `
-                  <div class="leaflet-popup-title">
-                  경기도 고양시 일산동구 중앙로 1333
-                    </div>
-                  <div class="leaflet-popup-table">
-                    <table>
-                      <tr>
-                        <th>Name</th>
-                        <td>pod/inference2-7766c7b784-glptd</td>
-                      </tr>
-                      <tr>
-                        <th>Status</th>
-                        <td>Running</td>
-                      </tr>
-                      <tr>
-                        <th>IP</th>
-                        <td>10.244.8.100</td>
-                      </tr>
-                      <tr>
-                        <th>Node</th>
-                        <td>gedgew01</td>
-                      </tr>
-                    </table>
-                  </div>
-                `
-    );
-    ilsanPod2.bindPopup(
-      `
-      <div class="leaflet-popup-title">
-      경기도 고양시 일산동구 중앙로 1333
+    const marker = markerInfos.map((info, i) => {
+      L.marker([info.point.y, info.point.x], { icon: CustomIcon("blue")})
+      .addTo(mapRef.current)
+      .bindPopup(`
+        <div class="leaflet-popup-title">
+          ${info.address}
         </div>
-      <div class="leaflet-popup-table">
-        <table>
-          <tr>
-            <th>Name</th>
-            <td>pod/postprocess2-8b65c487b-ttdvv</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>Running</td>
-          </tr>
-          <tr>
-            <th>IP</th>
-            <td>10.244.8.103</td>
-          </tr>
-          <tr>
-            <th>Node</th>
-            <td>gedgew01</td>
-          </tr>
-        </table>
-      </div>
-                `
-    );
-    americaPod1.bindPopup(
-      `
-      <div class="leaflet-popup-title">
-      2570 Beech Rd NW, Johnstown, OH 43031 미국
+        <div class="leaflet-popup-table">
+          <table>
+            <tr>
+              <th>Name</th>
+              <td>${info.clusterName}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>
+                <div class="box ${statusCircle(info.status)}">
+                  <span class="tit">${info.status}</span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>IP</th>
+              <td>${info.clusterEndpoint}</td>
+            </tr>
+            <tr>
+              <th rowSpan=${info.node_status.length+1}>Node</th>
+            </tr>
+            ${info.node_status.map((node)=>
+              `<tr>
+                <td>${node.name}</td>
+              </tr>`
+            ).join('')}
+          </table>
         </div>
-      <div class="leaflet-popup-table">
-        <table>
-          <tr>
-            <th>Name</th>
-            <td>preprocess2-5b786958f6-dsdpj</td>
-          </tr>
-          <tr>
-            <th>Status</th>
-            <td>Running</td>
-          </tr>
-          <tr>
-            <th>IP</th>
-            <td>10.244.0.5</td>
-          </tr>
-          <tr>
-            <th>Node</th>
-            <td>aws-edge-1</td>
-          </tr>
-        </table>
-      </div>
-                `
-    );
+      `)
+    })
   }, []);
 
   const MAP_TILE = L.tileLayer(
@@ -154,7 +111,7 @@ const ServiceAdminMapDashboard = observer(() => {
         {" "}
         <div
           id="serviceadminmap"
-          style={{ height: "100%", width: "100%", pointerEvents: "none" }}
+          style={{ height: "100%", width: "100%" }}
         ></div>
       </>
     </Layout>
