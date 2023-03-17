@@ -115,7 +115,7 @@ class Job {
       this.resultList = [];
 
       apiList === null
-        ? (cntCheck = false)
+        ? "(cntCheck = false)"
         : Object.entries(apiList).map(([_, value]) => {
             cntCheck = true;
             tempList.push(toJS(value));

@@ -28,8 +28,8 @@ const TotalClusterResources = observer(() => {
   const totalDiskTB = totalDisk / 1024;
 
   const availCpuTB = availCpu / 1024;
-  const availMemTB = totalMem - usageTotalMem;
-  const availDiskTB = totalDisk - usageTotalDisk;
+  const availMemTB = availMem / 1024;
+  const availDiskTB = availDisk / 1024;
 
   const usageTotalCpuTB = usageTotalCpu / 1024;
   const usageTotalMemTB = usageTotalMem / 1024;
@@ -75,21 +75,21 @@ const TotalClusterResources = observer(() => {
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[Math.round(availCpu), Math.round(usageTotalCpu)]}
+            value={[availCpuTB, usageTotalCpuTB]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{Math.round(usageTotalCpu)} GiB</span>
+                <span>{usageTotalCpuTB.toFixed(2)} TB</span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{Math.round(availCpu)} GiB</span>
+                <span>{availCpuTB.toFixed(2)} TB</span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{Math.round(totalCpu)} GiB</span>
+                <span>{totalCpuTB.toFixed(2)} TB</span>
               </li>
               <li className="none"></li>
             </ul>
@@ -110,21 +110,21 @@ const TotalClusterResources = observer(() => {
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[Math.round(availMem), Math.round(usageTotalMem)]}
+            value={[availMemTB, usageTotalMemTB]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{Math.round(usageTotalMem)} GiB</span>
+                <span>{usageTotalMemTB.toFixed(2)} TB</span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{Math.round(availMem)} GiB</span>
+                <span>{availMemTB.toFixed(2)} TB</span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{Math.round(totalMem)} GiB</span>
+                <span>{totalMemTB.toFixed(2)} TB</span>
               </li>
               <li className="none"></li>
             </ul>
@@ -145,21 +145,21 @@ const TotalClusterResources = observer(() => {
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[Math.round(availDisk), Math.round(usageTotalDisk)]}
+            value={[Math.round(availDiskTB), Math.round(usageTotalDiskTB)]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{Math.round(usageTotalDisk)} GiB</span>
+                <span>{usageTotalDiskTB.toFixed(2)} TB</span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{Math.round(availDisk)} GiB</span>
+                <span>{availDiskTB.toFixed(2)} TB</span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{Math.round(totalDisk)} GiB</span>
+                <span>{totalDiskTB.toFixed(2)} TB</span>
               </li>
               <li className="none"></li>
             </ul>
