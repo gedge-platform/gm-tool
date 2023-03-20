@@ -30,7 +30,8 @@ class Claim {
       eventTime: "",
     },
   ];
-  label = {};
+  labels = [];
+  annotations = [];
   claimName = "";
   project = "";
   clusterName = "";
@@ -41,10 +42,22 @@ class Claim {
   volumeCapacity = "";
   content = ""; //초기화를 잘 합시다2
 
-  labelInput = {
-    labelKey: "",
-    labelValue: "",
-  };
+  labelInput = [];
+  labelKey = "";
+  labelValue = "";
+
+  labelInputKey = "";
+  labelInputValue = "";
+
+  annotationInput = [];
+  annotationKey = "";
+  annotationValue = "";
+
+  // labelInput = [
+  //   {
+  //     [this.labelKey]: this.labelValue,
+  //   },
+  // ];
 
   setLabelInput = (value) => {
     runInAction(() => {
@@ -59,26 +72,35 @@ class Claim {
   };
 
   inputLabelKey = "";
+  // setInputLabelKey = (name, value) => {
+  //   runInAction(() => {
+  //     this.labelInput = [name], value;
+  //   });
+  // };
   setInputLabelKey = (value) => {
     runInAction(() => {
-      this.inputLabelKey = value;
+      this.labelKey = value;
     });
   };
 
-  inputLabelValue = "";
   setInputLabelValue = (value) => {
     runInAction(() => {
-      this.inputLabelValue = value;
+      this.labelValue = value;
     });
   };
 
-  annotations = [
-    {
-      id: 0,
-      key: "",
-      value: "",
-    },
-  ];
+  setLabels = (labels) => {
+    runInAction(() => {
+      this.labels = labels;
+    });
+  };
+
+  // inputLabelValue = "";
+  // setInputLabelValue = (value) => {
+  //   runInAction(() => {
+  //     this.inputLabelValue = value;
+  //   });
+  // };
 
   setAnnotations = (value) => {
     runInAction(() => {
@@ -86,17 +108,23 @@ class Claim {
     });
   };
 
-  inputAnnotationsKey = "";
-  setInputAnnotationsKey = (value) => {
+  // inputAnnotationsKey = "";
+  setInputAnnotationKey = (value) => {
     runInAction(() => {
-      this.inputAnnotationsKey = value;
+      this.annotationKey = value;
     });
   };
 
-  inputAnnotationsValue = "";
-  setInputAnnotationsValue = (value) => {
+  // inputAnnotationsValue = "";
+  setInputAnnotationValue = (value) => {
     runInAction(() => {
-      this.inputAnnotationsValue = value;
+      this.annotationValue = value;
+    });
+  };
+
+  setAnnotationInput = (value) => {
+    runInAction(() => {
+      this.annotationInput = value;
     });
   };
 

@@ -252,6 +252,7 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res.data.data);
           this.deploymentList = res.data.data;
           this.deploymentDetail = res.data.data[0];
           this.totalElements =

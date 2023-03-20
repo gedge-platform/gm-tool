@@ -12,6 +12,7 @@ import Detail from "../DaemonSetDetail";
 import { daemonSetStore } from "@/store";
 
 const DaemonSetListTab = observer(() => {
+  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -70,6 +71,10 @@ const DaemonSetListTab = observer(() => {
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
     loadDaemonSetDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
+  const handleCreateOpen = () => {
+    setOpen(true);
   };
 
   const history = useHistory();

@@ -1913,7 +1913,7 @@ const globalStyles = createGlobalStyle`
     justify-content: space-between;
     background: #202842;
     .ClusterSummary {
-      width: calc(20% - 10px);
+      width: calc(20% - 60px);
       height: 132px;
       padding: 25px 0 25px 140px;
       background: #171e33;
@@ -1925,6 +1925,9 @@ const globalStyles = createGlobalStyle`
       }
       &.Core {
         background: url(../images/dashboard/status_core_icon.png) no-repeat 15px center #00cba4;
+      }
+      &.Test {
+        background: url(../images/dashboard/status_core_icon.png) no-repeat 15px center #efabca;
       }
       &.Edge {
         background: url(../images/dashboard/status_edge_icon.png) no-repeat 15px center #00beea;

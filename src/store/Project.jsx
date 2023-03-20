@@ -9,7 +9,6 @@ class Project {
   projectDetail = {};
   resourceUsage = {};
   adminList = [];
-  adminList = [];
   labels = {};
   annotations = {};
   events = [
@@ -145,6 +144,7 @@ class Project {
           // const list = res.data.data.filter(
           //   (item) => item.projectType === type
           // );
+          console.log(res.data.data);
           this.projectList = res.data.data;
           this.totalElements = res.data.data.length;
         });

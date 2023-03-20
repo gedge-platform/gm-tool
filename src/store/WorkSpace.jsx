@@ -136,8 +136,13 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data.data;
-          this.totalElements = res.data != null ? res.data.data.length : 0;
-          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
+          // this.totalElements = res.data != null ? res.data.data.length : 0;
+          // this.workspace = this.workSpaceList.map((item) => item.workspaceName);
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
+          this.workspace = this.workSpaceList
+            ? this.workSpaceList.map((item) => item.workspaceName)
+            : null;
         });
       })
       .then(() => {
