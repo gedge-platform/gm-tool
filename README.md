@@ -50,7 +50,7 @@ Gedge Management Dashboard \
 
 2. Platform Admin
 
-![image](https://user-images.githubusercontent.com/78454597/226242173-9d0ed621-c0d8-4e94-97ef-380c7b9538a7.png)
+![gm-cluster01](https://user-images.githubusercontent.com/78454597/226242878-f862306a-c403-4b70-b6b7-832836b327bf.png)
 
 - 통합 대시보드
   - 클라우드의 전반적인 내용을 요약
