@@ -139,7 +139,7 @@ const Detail = observer(() => {
                     </td>
                     <th>Strategy</th>
                     <td style={{ whiteSpace: "pre-line" }}>
-                      {strategyTable ? strategyTable : "-"}
+                      {strategy ? strategyTable : "-"}
                     </td>
                   </tr>
                   <tr>
