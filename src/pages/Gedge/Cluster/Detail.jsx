@@ -10,11 +10,17 @@ import EventAccordion from "@/components/detail/EventAccordion";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import EdgeZoneAddNode from "./Dialog/EdgeZoneAddNode";
 
-const TableTitle = styled.p`
+const TableTitle = styled.span`
+  flex: 1;
+  flex-direction: row;
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
   color: rgba(255, 255, 255, 0.8);
+`;
+
+const NodeButton = styled.span`
+  flex: 1;
 `;
 
 const LabelContainer = styled.div`
@@ -203,13 +209,6 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container">
-          <CCreateButton onClick={handleAddNodeOpen}>Node 추가</CCreateButton>
-          <EdgeZoneAddNode
-            open={AddNode}
-            onClose={handleAddNodeClose}
-            reloadFunc={reloadData}
-          />
-
           <table className="tb_data">
             {/* <tbody className="tb_data_detail">
               <tr>
@@ -332,7 +331,18 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">
-          <TableTitle>Node List</TableTitle>
+          <TableTitle>Node List</TableTitle>&nbsp;&nbsp;&nbsp;&nbsp;
+          <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
+            Node 추가
+          </CCreateButton>
+          {/* <NodeButton onClick={handleAddNodeOpen}>Node 추가</NodeButton> */}
+          <EdgeZoneAddNode
+            open={AddNode}
+            onClose={handleAddNodeClose}
+            reloadFunc={reloadData}
+          />
+          <br />
+          <br />
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
               <tr>

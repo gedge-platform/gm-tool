@@ -226,7 +226,7 @@ const CreateClaim = observer((props) => {
               >
                 이전
               </Button>
-              <ButtonNext onClick={() => onClickStepTwo()}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
             </div>
           </div>
         </>

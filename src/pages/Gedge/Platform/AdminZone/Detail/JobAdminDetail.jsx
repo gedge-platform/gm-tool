@@ -61,7 +61,6 @@ const JobAdminDetail = observer(() => {
     containers,
   } = jobStore;
 
-  console.log(ownerReferences);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   // const containers = jobDetailData.containers;
