@@ -137,9 +137,13 @@ class Workspace {
       .then((res) => {
         console.log(res);
         runInAction(() => {
+          console.log(this.workSpaceList);
           this.workSpaceList = res.data.data;
-          this.totalElements = res.data.data.length;
-          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
+          this.workspace = this.workSpaceList
+            ? this.workSpaceList.map((item) => item.workspaceName)
+            : null;
         });
       })
       .then(() => {
