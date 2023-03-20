@@ -2138,7 +2138,7 @@ const globalStyles = createGlobalStyle`
         width: 204px;
         height: 204px;
         padding-top: 140px;
-        margin-left: 5px;
+        margin-left: 11px;
         /* margin-right: 0px; */
         border: 8px solid #2b334e;
         border-radius: 100%;
