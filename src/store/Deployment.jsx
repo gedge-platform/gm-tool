@@ -9,7 +9,7 @@ class Deployment {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   adminViewList = [];
   pDeploymentList = [];
   adminList = [];
@@ -120,11 +120,18 @@ class Deployment {
     makeAutoObservable(this);
   }
 
+  // viewList 초기화
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+    })
+  }
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadDeploymentDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -138,7 +145,7 @@ class Deployment {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadDeploymentDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -148,102 +155,14 @@ class Deployment {
     });
   };
 
-  setCurrentPage = (n) => {
+  // deploymentList를 페이지에 맞게 잘라서 viewList에 할당
+  paginationList = () => {
     runInAction(() => {
-      this.currentPage = n;
-    });
-  };
-
-  setTotalPages = (n) => {
-    runInAction(() => {
-      this.totalPages = n;
-    });
-  };
-
-  adminConvertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      if (this.deploymentList !== null) {
+        this.viewList =  this.deploymentList.slice((this.currentPage-1)*10, this.currentPage*10);
       }
-
-      this.setTotalPages(totalCnt);
-      this.setCurrentPage(1);
-      setFunc(this.resultList);
-      this.setViewList(0);
-      // this.setAdminDeploymentList(0);
-    });
-  };
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
-      }
-
-      this.setTotalPages(totalCnt);
-      this.setCurrentPage(1);
-      setFunc(this.resultList);
-      this.setViewList(0);
-    });
-  };
-
-  setPDeploymentList = (list) => {
-    runInAction(() => {
-      this.pDeploymentList = list;
-    });
-  };
-
-  setAdminDeploymentList = (list) => {
-    runInAction(() => {
-      this.adminList = list;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.pDeploymentList[n];
-    });
-  };
+    })
+  }
 
   loadDeploymentList = async () => {
     let { id, role } = getItem("user");
@@ -252,14 +171,19 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.deploymentList = res.data.data;
-          this.deploymentDetail = res.data.data[0];
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          // data를 deploymentList에 넣고 총 페이지와 개수 입력
+          if (res.data.data !== null) {
+            this.deploymentList = res.data.data;
+            this.deploymentDetail = res.data.data[0];
+            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalElements = res.data.data.length;
+          } else {
+            this.deploymentList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.deploymentList, this.setPDeploymentList);
+        this.paginationList();
       });
     this.loadDeploymentDetail(
       this.deploymentList[0].name,
@@ -275,21 +199,22 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.deploymentList = res.data.data;
-          this.adminList = this.deploymentList.filter(
-            (data) => data.cluster === "gm-cluster"
+          this.adminList = res.data.data;
+          this.deploymentList = this.adminList.filter(
+            (data) => data.cluster === "mec(ilsan)"
           );
-          this.deploymentDetail = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          this.deploymentDetail = this.deploymentList[0];
+          this.totalPages = Math.ceil(this.deploymentList.length/10); 
+          this.totalElements = this.deploymentList.length;
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setPDeploymentList);
+        this.paginationList();
       });
     this.loadDeploymentDetail(
-      this.adminList[0].name,
-      this.adminList[0].cluster,
-      this.adminList[0].project
+      this.deploymentList[0].name,
+      this.deploymentList[0].cluster,
+      this.deploymentList[0].project
     );
   };
 

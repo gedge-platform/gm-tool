@@ -10,7 +10,7 @@ import {
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class StorageClass {
-  viewList = [];
+  viewList = null;
   adminList = [];
   currentPage = 1;
   totalPages = 1;
@@ -95,6 +95,12 @@ class StorageClass {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+    })
   }
 
   setContent = (content) => {
@@ -253,6 +259,12 @@ class StorageClass {
       this.selectClusters = value;
     });
   };
+
+  paginationList = () => {
+    runInAction(() => {
+
+    })
+  }
 
   loadStorageClassYaml = async (name, clusterName, kind) => {
     await axios

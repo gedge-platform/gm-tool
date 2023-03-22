@@ -26,6 +26,7 @@ const DaemonSetAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = daemonSetStore;
@@ -76,6 +77,9 @@ const DaemonSetAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminDaemonSetList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

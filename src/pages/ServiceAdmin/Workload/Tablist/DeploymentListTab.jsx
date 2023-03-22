@@ -27,6 +27,7 @@ const DeploymentListTab = observer(() => {
     setWorkspace,
     currentPage,
     totalPages,
+    initViewList,
     viewList,
     goPrevPage,
     goNextPage,
@@ -108,6 +109,7 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

@@ -14,7 +14,17 @@ const SchedulerListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
 
-  const { loadYamlList, yamlList, totalElements, currentPage, totalPages, goPrevPage, goNextPage, viewList } = schedulerStore;
+  const { 
+    loadYamlList, 
+    yamlList, 
+    totalElements, 
+    currentPage, 
+    totalPages, 
+    goPrevPage, 
+    goNextPage,
+    viewList, 
+    initViewList,
+  } = schedulerStore;
 
   const [columDefs] = useState([
     {
@@ -84,6 +94,7 @@ const SchedulerListTab = observer(() => {
     loadYamlList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

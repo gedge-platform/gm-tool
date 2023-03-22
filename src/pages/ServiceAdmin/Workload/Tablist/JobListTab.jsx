@@ -18,6 +18,7 @@ const JobListTab = observer(() => {
 
   const {
     viewList,
+    initViewList,
     jobList,
     jobDetail,
     totalElements,
@@ -113,6 +114,7 @@ const JobListTab = observer(() => {
     loadJobList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 
