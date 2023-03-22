@@ -88,7 +88,10 @@ class Service {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-      Object.entries(apiList).map(([_, value]) => {
+
+      apiList === null ?
+      "-"
+      : Object.entries(apiList).map(([_, value]) => {
         cntCheck = true;
         tempList.push(toJS(value));
         cnt = cnt + 1;
@@ -128,12 +131,12 @@ class Service {
   loadServiceList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
+    console.log(id)
     await axios
       .get(`${SERVER_URL}/services?user=${id}`)
       .then((res) => {
         runInAction(() => {
           // const list = listTmp.filter((item) => item.projectType === type);
-
           this.pServiceList = res.data.data;
           // this.serviceDetail = list[0];
           this.totalElements =
@@ -144,7 +147,9 @@ class Service {
         this.convertList(this.pServiceList, this.setPServiceList);
       })
       .then(() => {
-        this.loadServiceDetail(
+        this.pServiceList.length === 0
+        ? this.serviceDetail === null
+        : this.loadServiceDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
           this.viewList[0].project

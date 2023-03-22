@@ -28,6 +28,7 @@ const JobAdminTab = observer(() => {
     totalPages,
     goPrevPage,
     goNextPage,
+    cntCheck,
   } = jobStore;
 
   const [columDefs] = useState([
@@ -108,6 +109,7 @@ const JobAdminTab = observer(() => {
                   rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
+                  cntCheck={cntCheck}
                   totalElements={totalElements}
                   totalPages={totalPages}
                   currentPage={currentPage}

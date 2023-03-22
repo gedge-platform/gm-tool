@@ -8,9 +8,9 @@ class Job {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   adminList = [];
-  pJobList = [];
+  pjobList = [];
   jobList = [];
   containers = [];
   jobDetailData = [];
@@ -46,7 +46,7 @@ class Job {
   involvesPodList = [];
   ownerReferences = [];
 
-  totalElements = 0;
+  totalElements = null;
   labels = [];
   annotations = [];
   events = [
@@ -61,6 +61,8 @@ class Job {
       eventTime: "",
     },
   ];
+
+  cntCheck = true;
 
   constructor() {
     makeAutoObservable(this);
@@ -111,17 +113,17 @@ class Job {
       let cnt = 1;
       let totalCnt = 0;
       let tempList = [];
-      let cntCheck = true;
       this.resultList = [];
 
+      console.log(apiList)
       apiList === null
-        ? (cntCheck = false)
+        ? (this.cntCheck = false)
         : Object.entries(apiList).map(([_, value]) => {
-            cntCheck = true;
+            this.cntCheck = true;
             tempList.push(toJS(value));
             cnt = cnt + 1;
             if (cnt > 10) {
-              cntCheck = false;
+              this.cntCheck = false;
               cnt = 1;
               this.resultList[totalCnt] = tempList;
               totalCnt = totalCnt + 1;
@@ -129,11 +131,12 @@ class Job {
             }
           });
 
-      if (cntCheck) {
+      if (this.cntCheck) {
         this.resultList[totalCnt] = tempList;
         totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
       }
 
+      console.log(this.cntCheck)
       this.setTotalPages(totalCnt);
       this.setCurrentPage(1);
       setFunc(this.resultList);
@@ -143,13 +146,16 @@ class Job {
 
   setJobList = (list) => {
     runInAction(() => {
-      this.jobList = list;
+      console.log(list)
+      this.pjobList = list;
     });
   };
 
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.jobList[n];
+      console.log(this.pjobList[n])
+      this.viewList = this.pjobList[n];
+      console.log(this.viewList);
     });
   };
 
@@ -160,21 +166,23 @@ class Job {
       .get(`${SERVER_URL}/jobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res.data.data)
           this.jobList = res.data.data;
           res.data.data === null
             ? (this.totalElements = 0)
             : (this.totalElements = res.data.data.length);
+          console.log(this.jobList)
         });
       })
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
-        this.jobList.length === 0
-          ? this.jobDetailData === null
-          : this.loadJobDetail(
-              this.jobList[0][0].name,
-              this.jobList[0][0].cluster,
-              this.jobList[0][0].project
-            );
+        // this.jobList.length === 0
+        //   ? this.jobDetailData === null
+        //   : this.loadJobDetail(
+        //       this.jobList[0][0].name,
+        //       this.jobList[0][0].cluster,
+        //       this.jobList[0][0].project
+        //     );
       });
     // this.totalElements === 0
     //   ? ((this.containers = null),
@@ -205,11 +213,11 @@ class Job {
       .then(() => {
         this.convertList(this.adminList, this.setJobList);
       });
-    this.loadJobDetail(
-      this.jobList[0][0].name,
-      this.jobList[0][0].cluster,
-      this.jobList[0][0].project
-    );
+    // this.loadJobDetail(
+    //   this.jobList[0][0].name,
+    //   this.jobList[0][0].cluster,
+    //   this.jobList[0][0].project
+    // );
   };
 
   loadJobDetail = async (name, cluster, project) => {

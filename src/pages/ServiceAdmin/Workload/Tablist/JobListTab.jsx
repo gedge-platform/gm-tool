@@ -28,6 +28,7 @@ const JobListTab = observer(() => {
     totalPages,
     goPrevPage,
     goNextPage,
+    cntCheck,
   } = jobStore;
 
   const [columDefs] = useState([
@@ -132,10 +133,10 @@ const JobListTab = observer(() => {
           </CommActionBar>
           <div className="tabPanelContainer">
             <div className="grid-height2">
-              {console.log(viewList)}
               <AgGrid
                 onCellClicked={handleClick}
                 rowData={viewList}
+                cntCheck={cntCheck}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

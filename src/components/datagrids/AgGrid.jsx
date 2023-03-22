@@ -25,26 +25,28 @@ const AgGrid = (props) => {
     goNextPage,
     setDetail,
     isBottom,
+    cntCheck,
   } = props;
 
   const [gridApi, setGridApi] = useState(null);
-  const [setGridColumnApi] = useState(null);
+  const [gridColumnApi, setGridColumnApi] = useState(null);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
-    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>'
+    '<span class="ag-overlay-loading-center">No Data</span>'
   );
 
   const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState(
-    '<span class="ag-overlay-loading-center">No Data</span>'
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>'
   );
 
   useEffect(() => {
     if (gridApi) {
-      gridApi.sizeColumnsToFit();
-      gridApi.showLoadingOverlay();
-      gridApi.hideOverlay();
+      if(rowData && rowData.length > 0){
+        // gridApi.sizeColumnsToFit();  
+        gridApi.hideOverlay();
+      }
     }
-  }, [rowData]);
+  }, [rowData, gridApi]);
 
   const onGridReady = (params) => {
     setGridApi(params.api);
@@ -82,6 +84,51 @@ const AgGrid = (props) => {
     filter: true,
   };
 
+  const onSetAgGrid = (status) => {
+    if(status === false){
+      return(      
+        <AgGridReact
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onFirstDataRendered={onFirstDataRendered}
+          onGridSizeChanged={onGridSizeChanged}
+          overlayNoRowsTemplate={overlayNoRowsTemplate}
+          overlayLoadingTemplate={overlayNoRowsTemplate}
+          rowData={rowData}
+          columnDefs={columnDefs}
+          autoWidth={autoWidth}
+          pagination={pagination}
+          paginationPageSize={rowPerPage}
+          cacheBlockSize={rowPerPage}
+          suppressPaginationPanel={true}
+          onCellClicked={onCellClicked}
+          onSelectionChanged={onSelectionChanged}
+        />
+      )
+    }
+    else {
+      return(      
+        <AgGridReact
+          defaultColDef={defaultColDef}
+          onGridReady={onGridReady}
+          onFirstDataRendered={onFirstDataRendered}
+          onGridSizeChanged={onGridSizeChanged}
+          overlayNoRowsTemplate={overlayLoadingTemplate}
+          overlayLoadingTemplate={overlayLoadingTemplate}
+          rowData={rowData}
+          columnDefs={columnDefs}
+          autoWidth={autoWidth}
+          pagination={pagination}
+          paginationPageSize={rowPerPage}
+          cacheBlockSize={rowPerPage}
+          suppressPaginationPanel={true}
+          onCellClicked={onCellClicked}
+          onSelectionChanged={onSelectionChanged}
+        />
+      )
+    }
+  }
+
   const onSelectionChanged = ({ api }) => {
     const tempArr = api.getSelectedRows();
     setDetail(tempArr[0].id);
@@ -93,23 +140,7 @@ const AgGrid = (props) => {
       className="grid-wrapper ag-theme-alpine"
       // style={{ height: 410 }}
     >
-      <AgGridReact
-        defaultColDef={defaultColDef}
-        onGridReady={onGridReady}
-        onFirstDataRendered={onFirstDataRendered}
-        onGridSizeChanged={onGridSizeChanged}
-        overlayNoRowsTemplate={overlayNoRowsTemplate}
-        overlayLoadingTemplate={overlayLoadingTemplate}
-        rowData={rowData}
-        columnDefs={columnDefs}
-        autoWidth={autoWidth}
-        pagination={pagination}
-        paginationPageSize={rowPerPage}
-        cacheBlockSize={rowPerPage}
-        suppressPaginationPanel={true}
-        onCellClicked={onCellClicked}
-        onSelectionChanged={onSelectionChanged}
-      />
+      {onSetAgGrid(cntCheck)}
       <div
         id="pagination"
         style={

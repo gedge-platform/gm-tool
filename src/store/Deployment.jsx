@@ -275,10 +275,10 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log("res데이터 : ", res.data.data);
           this.deploymentList = res.data.data;
-          this.adminList = this.deploymentList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
+          this.adminList = this.deploymentList
+          console.log("필터링 데이터 : ", this.adminList);
           this.deploymentDetail = this.adminList[0];
           this.totalElements = this.adminList.length;
         });
@@ -294,6 +294,7 @@ class Deployment {
   };
 
   loadDeploymentDetail = async (name, cluster, project) => {
+    console.log(name);
     await axios
       .get(
         `${SERVER_URL}/deployments/${name}?cluster=${cluster}&project=${project}`

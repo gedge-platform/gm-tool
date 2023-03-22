@@ -7,7 +7,7 @@ class CronJob {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   adminList = [];
   adminList = [];
   pCronjobList = [];
@@ -45,11 +45,6 @@ class CronJob {
           this.viewList[0].cluster,
           this.viewList[0].project
         );
-        this.loadCronJobDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
       }
     });
   };
@@ -64,23 +59,16 @@ class CronJob {
           this.viewList[0].cluster,
           this.viewList[0].project
         );
-        this.loadCronJobDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
       }
     });
   };
 
-  setCurrentPage = (n) => {
   setCurrentPage = (n) => {
     runInAction(() => {
       this.currentPage = n;
     });
   };
 
-  setTotalPages = (n) => {
   setTotalPages = (n) => {
     runInAction(() => {
       this.totalPages = n;
@@ -96,7 +84,7 @@ class CronJob {
       this.resultList = {};
 
       apiList === null
-        ? "-"
+        ? (cntCheck = false)
         : Object.entries(apiList).map(([_, value]) => {
             cntCheck = true;
             tempList.push(toJS(value));
@@ -123,13 +111,11 @@ class CronJob {
   };
 
   setPCronjobList = (list) => {
-  setPCronjobList = (list) => {
     runInAction(() => {
       this.pCronjobList = list;
     });
   };
 
-  setViewList = (n) => {
   setViewList = (n) => {
     runInAction(() => {
       this.viewList = this.pCronjobList[n];
@@ -142,14 +128,10 @@ class CronJob {
     await axios
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
       .then((res) => {
-      .then((res) => {
         runInAction(() => {
           // const list = data.filter((item) => item.projectType === type);
           this.cronJobList = res.data.data;
           // this.cronJobDetail = list[0];
-          res.data.data === null
-            ? (this.totalElements = 0)
-            : (this.totalElements = res.data.data.length);
           res.data.data === null
             ? (this.totalElements = 0)
             : (this.totalElements = res.data.data.length);
@@ -164,18 +146,6 @@ class CronJob {
         //     // this.cronJobDetail = list[0];
         //     this.totalElements = list.length;
       });
-    this.cronJobList === null
-      ? ((this.containers = null),
-        (this.label = null),
-        (this.cronJobDetail = null),
-        (this.annotations = null),
-        (this.cronjobInvolvesJobs = null),
-        (this.events = null))
-      : this.loadCronJobDetail(
-          this.cronJobList[0].name,
-          this.cronJobList[0].cluster,
-          this.cronJobList[0].project
-        );
   };
 
   loadAdminCronJobList = async () => {
@@ -196,39 +166,9 @@ class CronJob {
       .then(() => {
         this.convertList(this.adminList, this.setPCronjobList);
       });
-    this.cronJobList === null
-      ? ((this.containers = null),
-        (this.label = null),
-        (this.cronJobDetail = null),
-        (this.annotations = null),
-        (this.cronjobInvolvesJobs = null),
-        (this.events = null))
-      : this.loadCronJobDetail(
-          this.adminList[0].name,
-          this.adminList[0].cluster,
-          this.adminList[0].project
-        );
   };
 
   loadCronJobDetail = async (name, cluster, project) => {
-    await axios
-      .get(
-        `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
-      )
-      .then(({ data: { data, involvesData } }) => {
-        runInAction(() => {
-          this.cronJobDetail = data;
-          this.containers = data.containers;
-          this.label = data.label;
-          this.annotations = data.annotations;
-          this.cronjobInvolvesJobs = involvesData.jobs;
-          if (data.events !== null) {
-            this.events = data.events;
-          } else {
-            this.events = null;
-          }
-        });
-      });
     await axios
       .get(
         `${SERVER_URL}/cronjobs/${name}?cluster=${cluster}&project=${project}`
@@ -255,11 +195,7 @@ class CronJob {
       .then((res) => {
         if (res.status === 201)
           swalError("CronJob이 삭제되었습니다.", callback);
-      .then((res) => {
-        if (res.status === 201)
-          swalError("CronJob이 삭제되었습니다.", callback);
       })
-      .catch((err) => swalError("삭제에 실패하였습니다."));
       .catch((err) => swalError("삭제에 실패하였습니다."));
   };
 }

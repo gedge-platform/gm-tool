@@ -129,6 +129,8 @@ const CronJobListTab = observer(() => {
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
+          {console.log("##########크론잡 뷰리스트##########")}
+          {console.log(viewList)}
           <div className="tabPanelContainer">
             <div className="grid-height2">
               <AgGrid
