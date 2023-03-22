@@ -113,7 +113,7 @@ class CronJob {
         runInAction(() => {
           this.adminList = res.data.data;
           this.cronJobList = this.adminList.filter(
-            (data) => data.cluster === "mec(ilsan)"
+            (data) => data.cluster === "gm-cluster"
           );
           this.cronJobDetail = this.cronJobList[0];
           this.totalPages = Math.ceil(this.cronJobList.length/10); 

@@ -171,7 +171,7 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          // data를 deploymentList에 넣고 총 페이지와 개수 입력
+          // 응답 data를 deploymentList에 넣고 총 페이지와 개수 입력
           if (res.data.data !== null) {
             this.deploymentList = res.data.data;
             this.deploymentDetail = res.data.data[0];
@@ -201,7 +201,7 @@ class Deployment {
         runInAction(() => {
           this.adminList = res.data.data;
           this.deploymentList = this.adminList.filter(
-            (data) => data.cluster === "mec(ilsan)"
+            (data) => data.cluster === "gm-cluster"
           );
           this.deploymentDetail = this.deploymentList[0];
           this.totalPages = Math.ceil(this.deploymentList.length/10); 

@@ -109,6 +109,7 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
     return () => {
       setReRun(false);
+      // 다른 탭으로 이동 시 viewList 초기화
       initViewList();
     };
   }, [reRun]);

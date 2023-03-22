@@ -116,7 +116,7 @@ class DaemonSet {
         runInAction(() => {
           this.adminList = res.data.data;
           this.daemonSetList = this.adminList.filter(
-            (data) => data.cluster === "mec(ilsan)"
+            (data) => data.cluster === "gm-cluster"
           );
           this.daemonSetDetail = this.daemonSetList[0];
           this.totalPages = Math.ceil(this.daemonSetList.length/10); 
