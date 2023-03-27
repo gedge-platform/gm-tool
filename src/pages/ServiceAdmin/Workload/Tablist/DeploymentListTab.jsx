@@ -16,6 +16,8 @@ const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [deploymentName, setDeploymentName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
 
   const {
     deploymentList,
@@ -77,8 +79,10 @@ const DeploymentListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setDeploymentName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
@@ -95,7 +99,9 @@ const DeploymentListTab = observer(() => {
     if (deploymentName === "") {
       swalError("Deployment를 선택해주세요!");
     } else {
-      swalUpdate(deploymentName + "를 삭제하시겠습니까?", () => deleteDeployment(deploymentName, reloadData));
+      swalUpdate(deploymentName + "를 삭제하시겠습니까?", () =>
+        deleteDeployment(deploymentName, clusterName, projectName, reloadData)
+      );
     }
     setDeploymentName("");
   };
@@ -140,7 +146,11 @@ const DeploymentListTab = observer(() => {
               />
             </div>
           </div>
-          <CreateDeployment open={open} onClose={handleClose} reloadFunc={reloadData} />
+          <CreateDeployment
+            open={open}
+            onClose={handleClose}
+            reloadFunc={reloadData}
+          />
         </PanelBox>
         <Detail />
       </CReflexBox>

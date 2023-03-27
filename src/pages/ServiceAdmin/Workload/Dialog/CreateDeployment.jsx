@@ -122,9 +122,9 @@ const CreateDeployment = observer((props) => {
     metadata: {
       name: volumeName,
       namespace: project,
-      labels: {
-        app: "",
-      },
+      // labels: {
+      //   app: "",
+      // },
     },
     spec: {
       storageClassName: selectStorageClass,

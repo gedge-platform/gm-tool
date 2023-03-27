@@ -154,7 +154,7 @@ const ServiceAdminMapDashboard = observer(() => {
         {" "}
         <div
           id="serviceadminmap"
-          style={{ height: "100%", width: "100%", pointerEvents: "none" }}
+          style={{ height: "100%", width: "100%" }}
         ></div>
       </>
     </Layout>
