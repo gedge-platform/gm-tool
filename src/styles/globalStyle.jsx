@@ -1939,7 +1939,7 @@ const globalStyles = createGlobalStyle`
         background: url(../images/dashboard/status_project_icon.png) no-repeat 15px center #4343ed;
       }
       .ClusterCountTitle {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
       }
       .ClusterCount {

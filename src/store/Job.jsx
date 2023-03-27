@@ -115,7 +115,7 @@ class Job {
       this.resultList = [];
 
       apiList === null
-        ? "(cntCheck = false)"
+        ? (cntCheck = false)
         : Object.entries(apiList).map(([_, value]) => {
             cntCheck = true;
             tempList.push(toJS(value));
@@ -161,6 +161,7 @@ class Job {
       .then((res) => {
         runInAction(() => {
           this.jobList = res.data.data;
+
           res.data.data === null
             ? (this.totalElements = 0)
             : (this.totalElements = res.data.data.length);
@@ -168,6 +169,7 @@ class Job {
       })
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
+        console.log(this.jobList);
         this.jobList.length === 0
           ? this.jobDetailData === null
           : this.loadJobDetail(
@@ -176,6 +178,32 @@ class Job {
               this.jobList[0][0].project
             );
       });
+
+    // loadJobList = async () => {
+    //   let { id, role } = getItem("user");
+    //   role === "SA" ? (id = id) : (id = "");
+    //   await axios
+    //     .get(`${SERVER_URL}/jobs?user=${id}`)
+    //     .then((res) => {
+    //       runInAction(() => {
+    //         this.jobList =
+    //           res.data.data === null ? res.data.data === 0 : res.data.data; // null값 들어와서 예외 처리함
+    //         res.data.data === null
+    //           ? (this.totalElements = 0)
+    //           : (this.totalElements = res.data.data.length); // otalElements 0으로 들어옴
+    //       });
+    //     })
+    //     .then(() => {
+    //       this.convertList(this.jobList, this.setJobList);
+    //     })
+    //     .then(() => {
+    //       this.loadJobDetail(
+    //         this.viewList[0].name === undefined ? "" : this.viewList[0].name,
+    //         this.viewList[0].cluster,
+    //         this.viewList[0].project
+    //       );
+    //     });
+
     // this.totalElements === 0
     //   ? ((this.containers = null),
     //     (this.jobDetailData = null),

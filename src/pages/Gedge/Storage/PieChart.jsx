@@ -30,6 +30,7 @@ const PieChart = observer((props) => {
         horizontal: true,
         barHeight: "60%",
         borderRadius: 5, // Here is the issue ...
+
         donut: {
           size: "60%",
           background: "transparent",
@@ -39,6 +40,7 @@ const PieChart = observer((props) => {
             borderRadius: 25,
             name: {
               show: true,
+
               fontSize: "20px",
               color: "#fff",
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -69,14 +71,34 @@ const PieChart = observer((props) => {
               showAlways: false,
               borderRadius: 25,
               label: "Total",
-              fontSize: "22px",
+              fontSize: "20px",
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 600,
               color: "#fff",
               formatter: function (w) {
-                return w.globals.seriesTotals.reduce((a, b) => {
-                  return Math.round(a + b);
-                }, 0);
+                const a = parseFloat(w.globals.seriesTotals[0]);
+                const b = parseFloat(w.globals.seriesTotals[1]);
+                const seriesTotal = a + b;
+
+                if (isNaN(seriesTotal)) {
+                  return "N/A"; // 숫자가 아닌 경우에 대한 처리
+                }
+
+                if (seriesTotal > 1023) {
+                  return (seriesTotal / 1024).toFixed(2) + "TB";
+                } else {
+                  return seriesTotal.toFixed(2) + "GB";
+                }
+                // const seriesTotal = parseFloat(w.globals.seriesTotals);
+                // return seriesTotal.reduce((a, b) => {
+                //   if (a + b > 1024) {
+                //     console.log(a + b);
+                //     return (a + b).toFixed(2) + "GB";
+                //   } else {
+                //     console.log(a + b);
+                //     return ((a + b) / 1024).toFixed(2) + "TB";
+                //   }
+                // }, 0);
               },
             },
           },

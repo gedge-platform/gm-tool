@@ -104,7 +104,7 @@ class StatefulSet {
       this.resultList = {};
 
       apiList === null
-        ? "-"
+        ? (cntCheck = false)
         : Object.entries(apiList).map(([_, value]) => {
             cntCheck = true;
             tempList.push(toJS(value));
