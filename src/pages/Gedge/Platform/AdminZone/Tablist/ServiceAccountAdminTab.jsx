@@ -26,6 +26,7 @@ const ServiceAccountAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = serviceAccountStore;
@@ -73,6 +74,9 @@ const ServiceAccountAdminTab = observer(() => {
 
   useLayoutEffect(() => {
     loadAdminServiceAccountList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

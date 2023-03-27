@@ -15,8 +15,7 @@ const SchedulerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
 
   const { 
-    loadYamlList, 
-    yamlList, 
+    loadYamlList,
     totalElements, 
     currentPage, 
     totalPages, 

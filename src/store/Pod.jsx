@@ -90,6 +90,14 @@ class Pod {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
+    })
+  }
+
+  initViewYList = () => {
+    runInAction(() => {
+      this.viewYList = null;
+      this.currentYPage = 1;
     })
   }
 
@@ -148,6 +156,10 @@ class Pod {
       })
       .then(() => {
         this.paginationList();
+      })
+      .catch(() => {
+        this.podList = [];
+        this.paginationList();
       });
     this.loadPodDetail(
       this.viewList[0].name,
@@ -167,12 +179,20 @@ class Pod {
           this.podList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.podDetail = this.podList[0];
-          this.totalPages = Math.ceil(this.podList.length/10); 
-          this.totalElements = this.podList.length;
+          if (this.podList.length !== 0) {
+            this.podDetail = this.podList[0];
+            this.totalPages = Math.ceil(this.podList.length/10); 
+            this.totalElements = this.podList.length;
+          } else {
+            this.podList = [];
+          }
         });
       })
       .then(() => {
+        this.paginationList();
+      })
+      .catch(() => {
+        this.podList = [];
         this.paginationList();
       });
     this.loadPodDetail(

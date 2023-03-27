@@ -25,17 +25,24 @@ class ServiceAccount {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
   }
 
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadServiceAccountTabList(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -49,7 +56,7 @@ class ServiceAccount {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadServiceAccountTabList(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -116,6 +123,14 @@ class ServiceAccount {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.serviceAccountList !== null) {
+        this.viewList =  this.serviceAccountList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
+
   loadServiceAccountList = async () => {
     await axios
       .get(`${SERVER_URL}/serviceaccounts`)
@@ -143,23 +158,32 @@ class ServiceAccount {
       .get(`${SERVER_URL}/serviceaccounts`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.serviceAccountList = data;
-          this.adminList = this.serviceAccountList.filter(
+          this.adminList = data;
+          this.serviceAccountList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.serviceAccountDetail = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          if (this.serviceAccountList.length !== 0) {
+            this.serviceAccountDetail = this.serviceAccountList[0];
+            this.totalElements = this.serviceAccountList.length;
+            this.totalPages = Math.ceil(this.serviceAccountList.length/10); 
+          } else {
+            this.serviceAccountList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setServiceAccountList);
+        this.paginationList();
       })
       .then(() => {
         this.loadServiceAccountTabList(
-          this.adminList[0].name,
-          this.adminList[0].cluster,
-          this.adminList[0].namespace
+          this.serviceAccountList[0].name,
+          this.serviceAccountList[0].cluster,
+          this.serviceAccountList[0].namespace
         );
+      })
+      .catch(() => {
+        this.serviceAccountList = [];
+        this.paginationList();
       });
   };
 

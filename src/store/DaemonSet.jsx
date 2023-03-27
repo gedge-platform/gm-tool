@@ -39,6 +39,7 @@ class DaemonSet {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -104,6 +105,10 @@ class DaemonSet {
               this.daemonSetList[0].cluster,
               this.daemonSetList[0].project
             );
+      })
+      .catch(() => {
+        this.daemonSetList = [];
+        this.paginationList();
       });
   };
 
@@ -118,9 +123,13 @@ class DaemonSet {
           this.daemonSetList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.daemonSetDetail = this.daemonSetList[0];
-          this.totalPages = Math.ceil(this.daemonSetList.length/10); 
-          this.totalElements = this.daemonSetList.length;
+          if (this.daemonSetList.length !== 0) {
+            this.daemonSetDetail = this.daemonSetList[0];
+            this.totalPages = Math.ceil(this.daemonSetList.length/10); 
+            this.totalElements = this.daemonSetList.length;
+          } else {
+            this.daemonSetList = [];
+          }
         });
       })
       .then(() => {
@@ -132,6 +141,10 @@ class DaemonSet {
               this.daemonSetList[0].cluster,
               this.daemonSetList[0].project
             );
+      })
+      .catch(() => {
+        this.daemonSetList = [];
+        this.paginationList();
       });
   };
 

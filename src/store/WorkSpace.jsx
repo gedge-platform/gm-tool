@@ -31,7 +31,7 @@ class Workspace {
   selectClusterInfo = [];
   workspace = [];
 
-  viewList = [];
+  viewList = null;
   currentPage = 1;
   totalPages = 1;
 
@@ -39,11 +39,18 @@ class Workspace {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
+  }
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadWorkspaceDetail(this.viewList[0].workspaceName);
       }
     });
@@ -53,7 +60,7 @@ class Workspace {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadWorkspaceDetail(this.viewList[0].workspaceName);
       }
     });
@@ -128,6 +135,14 @@ class Workspace {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.workSpaceList !== null) {
+        this.viewList =  this.workSpaceList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
+
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -135,7 +150,6 @@ class Workspace {
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           this.workSpaceList = res.data.data;
           this.totalElements = res.data.data.length;
@@ -150,49 +164,42 @@ class Workspace {
       // });
       .then(() => {
         type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      })
+      .catch(() => {
+        this.workSpaceList = [];
+        this.paginationList();
       });
   };
 
-  loadAdminWorkSpaceList = async (type = false) => {
+  loadAdminWorkSpaceList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = [];
-          this.workSpaceList = res.data.data;
-          for (let i = 0; i < this.workSpaceList.length; i++) {
-            var test = [];
-            this.workSpaceList[i].selectCluster.map((x) => {
-              test.push(x.clusterName);
-            });
-            test.indexOf("gm-cluster") < 0
-              ? ""
-              : this.adminList.push(this.workSpaceList[i]);
-            test.indexOf("gm-cluster") < 0
-              ? ""
-              : (this.adminList[this.adminList.length - 1]["clusterName"] =
-                  test);
+          this.adminList = res.data.data;
+          this.workSpaceList = this.adminList.filter(
+            (workspace) => workspace.selectCluster.some(cluster => cluster.clusterName === "gm-cluster")
+          );
+          if (this.workSpaceList.length !== 0) {
+            this.totalPages = Math.ceil(this.workSpaceList.length/10);
+            this.totalElements = this.workSpaceList.length;
+            this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+          } else {
+            this.workSpaceList = [];
           }
         });
       })
       .then((res) => {
         runInAction(() => {
-          this.selectClusterInfo = this.adminList;
-
-          // console.log(this.selectClusterInfo);
-          this.totalElements = this.adminList.length;
-          this.workSpaceDetail = this.adminList[0];
+          this.paginationList();
         });
       })
-      .then(() => {
-        this.convertList(this.adminList, this.setWorkSpaceList);
-        type ? null : this.loadWorkspaceDetail(this.adminList[0].workspaceName);
+      .catch(() => {
+        this.workSpaceList = [];
+        this.paginationList();
       });
-    // .then(() => {
-    // type ? null : this.loadWorkspaceDetail(this.adminList.workspaceName);
-    // });
   };
 
   // 워크스페이스에서 클러스터 불러오면 된다
@@ -200,7 +207,6 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
-        console.log(this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;

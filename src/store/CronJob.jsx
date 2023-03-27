@@ -37,6 +37,7 @@ class CronJob {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -81,7 +82,6 @@ class CronJob {
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-
           if (res.data.data !== null) {
             this.cronJobList = res.data.data;
             this.cronJobDetail = res.data.data[0];
@@ -101,6 +101,10 @@ class CronJob {
               this.cronJobList[0].cluster,
               this.cronJobList[0].project
             );
+      })
+      .catch(() => {
+        this.cronJobList = [];
+        this.paginationList();
       });
   };
 
@@ -115,9 +119,13 @@ class CronJob {
           this.cronJobList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.cronJobDetail = this.cronJobList[0];
-          this.totalPages = Math.ceil(this.cronJobList.length/10); 
-          this.totalElements = this.cronJobList.length;
+          if (this.cronJobList.length !== 0) {
+            this.cronJobDetail = this.cronJobList[0];
+            this.totalPages = Math.ceil(this.cronJobList.length/10);
+            this.totalElements = this.cronJobList.length;
+          } else {
+            this.cronJobList = [];
+          }
         });
       })
       .then(() => {
@@ -129,6 +137,10 @@ class CronJob {
               this.cronJobList[0].cluster,
               this.cronJobList[0].project
           );
+      })
+      .catch(() => {
+        this.cronJobList = [];
+        this.paginationList();
       });
   };
 

@@ -29,10 +29,17 @@ class Secret {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
   }
 
   //Pagenation Default Function
@@ -40,7 +47,7 @@ class Secret {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadsecretTabList(
           this.viewList[0].name,
           this.viewList[0].clusterName,
@@ -54,7 +61,7 @@ class Secret {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadsecretTabList(
           this.viewList[0].name,
           this.viewList[0].clusterName,
@@ -122,6 +129,14 @@ class Secret {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.secretList !== null) {
+        this.viewList =  this.secretList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
+
   loadsecretList = async () => {
     await axios
       .get(`${SERVER_URL}/secrets`)
@@ -143,31 +158,40 @@ class Secret {
           this.viewList[0].clusterName,
           this.viewList[0].namespace
         );
-      });
+      })
   };
 
   loadAdminsecretList = async () => {
     await axios
       .get(`${SERVER_URL}/secrets`)
-      .then(({ data: { data } }) => {
+      .then(( res ) => {
         runInAction(() => {
-          this.secretList = data;
-          this.adminList = this.secretList.filter(
-            (data) => data.cluster === "gm-cluster"
+          this.adminList = res.data.data;
+          this.secretList = this.adminList.filter(
+            (data) => data.clusterName === "gm-cluster"
           );
-          this.secretDetail = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          if (this.secretList.length !== 0) {
+            this.secretDetail = this.secretList[0];
+            this.totalElements = this.secretList.length;
+            this.totalPages = Math.ceil(this.secretList.length/10); 
+          } else {
+            this.secretList = [];
+          }
         });
       })
       .then(() => {
+        this.paginationList();
         this.adminList.length === 0
           ? this.secretTabList === null
           : this.loadsecretTabList(
-              this.adminList[0].name,
-              this.adminList[0].clusterName,
-              this.adminList[0].namespace
+              this.secretList[0].name,
+              this.secretList[0].clusterName,
+              this.secretList[0].namespace
             );
-        this.convertList(this.adminList, this.setSecretList);
+      })
+      .catch(() => {
+        this.secretList = [];
+        this.paginationList();
       });
   };
 

@@ -44,6 +44,7 @@ class Service {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -104,13 +105,15 @@ class Service {
       .then(() => {
         this.paginationList();
       })
-      .then(() => {
-        this.loadServiceDetail(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].project
-        );
+      .catch(() => {
+        this.serviceList = [];
+        this.paginationList();
       });
+      this.loadServiceDetail(
+        this.viewList[0].name,
+        this.viewList[0].cluster,
+        this.viewList[0].project
+      );
   };
 
   loadAdminServiceList = async () => {
@@ -120,26 +123,31 @@ class Service {
       .get(`${SERVER_URL}/services?user=${id}`)
       .then((res) => {
         runInAction(() => {
-
           this.adminList = res.data.data;
           this.serviceList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.serviceDetail = this.serviceList[0];
-          this.totalPages = Math.ceil(this.serviceList.length/10); 
-          this.totalElements = this.serviceList.length;
+          if (this.serviceList.length !== 0) {
+            this.serviceDetail = this.serviceList[0];
+            this.totalPages = Math.ceil(this.serviceList.length/10); 
+            this.totalElements = this.serviceList.length;
+          } else {
+            this.serviceList = [];
+          }
         });
       })
       .then(() => {
         this.paginationList();
       })
-      .then(() => {
-        this.loadServiceDetail(
-          this.serviceList[0].name,
-          this.serviceList[0].cluster,
-          this.serviceList[0].project
-        );
+      .catch(() => {
+        this.serviceList = [];
+        this.paginationList();
       });
+      this.loadServiceDetail(
+        this.serviceList[0].name,
+        this.serviceList[0].cluster,
+        this.serviceList[0].project
+      );
   };
 
   loadServiceDetail = async (name, cluster, project) => {

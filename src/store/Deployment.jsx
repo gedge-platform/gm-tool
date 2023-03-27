@@ -120,10 +120,11 @@ class Deployment {
     makeAutoObservable(this);
   }
 
-  // viewList 초기화
+  // viewList, 현재 페이지 초기화
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -184,6 +185,10 @@ class Deployment {
       })
       .then(() => {
         this.paginationList();
+      })
+      .catch(() => {
+        this.deploymentList = [];
+        this.paginationList();
       });
     this.loadDeploymentDetail(
       this.deploymentList[0].name,
@@ -203,12 +208,20 @@ class Deployment {
           this.deploymentList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.deploymentDetail = this.deploymentList[0];
-          this.totalPages = Math.ceil(this.deploymentList.length/10); 
-          this.totalElements = this.deploymentList.length;
+          if (this.deploymentList.length !== 0) {
+            this.deploymentDetail = this.deploymentList[0];
+            this.totalPages = Math.ceil(this.deploymentList.length/10); 
+            this.totalElements = this.deploymentList.length;
+          } else {
+            this.deploymentList = [];
+          }
         });
       })
       .then(() => {
+        this.paginationList();
+      })
+      .catch((err) => {
+        this.requestList = [];
         this.paginationList();
       });
     this.loadDeploymentDetail(

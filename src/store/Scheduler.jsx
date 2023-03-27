@@ -21,6 +21,7 @@ class Scheduler {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 

@@ -58,6 +58,7 @@ class StatefulSet {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -116,6 +117,10 @@ class StatefulSet {
       })
       .then(() => {
         this.paginationList();
+      })
+      .catch(() => {
+        this.statefulSetList = [];
+        this.paginationList();
       });
       this.statefulSetList === null
       ? ((this.statefulSetDetail = null),
@@ -139,12 +144,20 @@ class StatefulSet {
           this.statefulSetList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.statefulSetDetail = this.statefulSetList[0];
-          this.totalPages = Math.ceil(this.statefulSetList.length/10); 
-          this.totalElements = this.statefulSetList.length;
+          if (this.statefulSetList.length !== 0) {
+            this.statefulSetDetail = this.statefulSetList[0];
+            this.totalPages = Math.ceil(this.statefulSetList.length/10); 
+            this.totalElements = this.statefulSetList.length;
+          } else {
+            this.statefulSetList = [];
+          }
         });
       })
       .then(() => {
+        this.paginationList();
+      })
+      .catch(() => {
+        this.statefulSetList = [];
         this.paginationList();
       });
     this.statefulSetList === null

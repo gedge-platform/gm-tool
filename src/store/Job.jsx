@@ -69,6 +69,7 @@ class Job {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     })
   }
 
@@ -116,7 +117,7 @@ class Job {
           if (res.data.data !== null) {
             this.jobList = res.data.data;
             this.jobDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length/10);
             this.totalElements = res.data.data.length;
           } else {
             this.jobList = [];
@@ -142,12 +143,13 @@ class Job {
       .get(`${SERVER_URL}/jobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          if (res.data.data !== null){
-            this.adminList = res.data.data;
-            this.jobList = this.adminList.filter(
-              (data) => data.cluster === "gm-cluster"
-            );
+          this.adminList = res.data.data;
+          this.jobList = this.adminList.filter(
+            (data) => data.cluster === "gm-cluster"
+          );
+          if (this.jobList.length !== 0) {
             this.jobDetailData = this.jobList[0];
+            this.totalPages = Math.ceil(this.jobList.length/10);
             this.totalElements = this.jobList.length;
           } else {
             this.jobList = [];
@@ -158,9 +160,9 @@ class Job {
         this.paginationList();
       });
     this.loadJobDetail(
-      this.jobList[0][0].name,
-      this.jobList[0][0].cluster,
-      this.jobList[0][0].project
+      this.jobList[0].name,
+      this.jobList[0].cluster,
+      this.jobList[0].project
     );
   };
 
