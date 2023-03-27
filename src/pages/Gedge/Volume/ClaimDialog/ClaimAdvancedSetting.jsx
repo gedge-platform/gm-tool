@@ -100,40 +100,48 @@ const ClaimAdvancedSetting = observer(() => {
   // const [labels, setLabels] = useState([]);
   const [annotations, setAnnotations] = useState([]);
 
-  const addLabels = (e) => {
-    e.preventDefault();
-    if (labelKey == "") {
-      alert("값을 입력하세요.");
-      return;
-    }
-    if (labelValue == "") {
-      alert("값을 입력하세요.");
-      return;
-    }
-    // setLabels(newLabelList);
-    // const labelInputKey = "";
-    // const labelInputvalue = "";
-
-    setLabelInput(labelInput.concat(newLabelList));
-    // labelInput = { ...labelInput, newLabelList };
-    setLabelInput({
-      labelKey: "",
-      labelValue: "",
-    });
-    console.log(labelInput);
-    // render() {
-    //   return (
-    //     <tr>
-    //           <th>Labels</th>
-    //           <td style={{ width: "300px", padding: "8px" }}>{k}</td>
-    //           <td style={{ width: "300px", padding: "8px" }}>{v}</td>
-    //           <td>
-    //             <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
-    //           </td>
-    //         </tr>
-    //   );
-    // }
+  const addRow = () => {
+    const table = document.getElementById("labeltable");
+    const newRow = table.insertRow();
+    const newCell1 = newRow.insertCell(0);
+    const newCell2 = newRow.insertCell(1);
+    newCell1.innerText = "label";
   };
+
+  // const addLabels = (e) => {
+  //   e.preventDefault();
+  //   if (labelKey == "") {
+  //     alert("값을 입력하세요.");
+  //     return;
+  //   }
+  //   if (labelValue == "") {
+  //     alert("값을 입력하세요.");
+  //     return;
+  //   }
+  //   // setLabels(newLabelList);
+  //   // const labelInputKey = "";
+  //   // const labelInputvalue = "";
+
+  //   setLabelInput(labelInput.concat(newLabelList));
+  //   // labelInput = { ...labelInput, newLabelList };
+  //   setLabelInput({
+  //     labelKey: "",
+  //     labelValue: "",
+  //   });
+  //   console.log(labelInput);
+  //   // render() {
+  //   //   return (
+  //   //     <tr>
+  //   //           <th>Labels</th>
+  //   //           <td style={{ width: "300px", padding: "8px" }}>{k}</td>
+  //   //           <td style={{ width: "300px", padding: "8px" }}>{v}</td>
+  //   //           <td>
+  //   //             <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
+  //   //           </td>
+  //   //         </tr>
+  //   //   );
+  //   // }
+  // };
 
   // const labelsList = labels.reduce(
   //   (obj, item) => Object.assign(obj, { [item.labelKey]: item.labelValue }),
@@ -195,7 +203,7 @@ const ClaimAdvancedSetting = observer(() => {
           </div>
         </div>
       </div>
-      <table className="tb_data_new tb_write">
+      <table id="labelTable" className="tb_data_new tb_write">
         <tbody>
           <tr>
             <th>Labels</th>
@@ -220,7 +228,7 @@ const ClaimAdvancedSetting = observer(() => {
               />
             </td>
             <td>
-              <Button onClick={addLabels}>+</Button>
+              <Button onClick={addRow}>+</Button>
             </td>
           </tr>
           {/* {Object.entries(labelInput).map((k, v) => (

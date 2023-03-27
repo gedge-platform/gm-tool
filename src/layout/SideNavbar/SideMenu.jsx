@@ -214,32 +214,16 @@ export const SideMenu = () => {
                 label={Title.Platform}
                 onNodeFocus={handleClick}
               >
-                <CustomTreeItem
-                  nodeId="2"
-                  label={Title.Dashboard}
-                  onNodeFocus={handleClick}
-                >
-                  <li>
-                    <NavLink
-                      nodeId="3"
-                      // exact
-                      to="/platformDashboard"
-                      activeClassName="active"
-                    >
-                      {Title.Dashboard}
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/adminMonitoring"
-                      nodeId="4"
-                      activeClassName="active"
-                    >
-                      {Title.Monitoring}
-                    </NavLink>
-                  </li>
-                </CustomTreeItem>
+                <li>
+                  <NavLink
+                    nodeId="3"
+                    // exact
+                    to="/platformDashboard"
+                    activeClassName="active"
+                  >
+                    {Title.Dashboard}
+                  </NavLink>
+                </li>
 
                 <li>
                   <NavLink
