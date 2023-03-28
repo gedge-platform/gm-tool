@@ -119,6 +119,7 @@ class Monitoring {
         array.push(clusterMetric);
       });
     });
+    console.log(array);
     return array;
   };
 
