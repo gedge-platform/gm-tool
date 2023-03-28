@@ -10,7 +10,7 @@ import {
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 class StorageClass {
-  viewList = [];
+  viewList = null;
   adminList = [];
   currentPage = 1;
   totalPages = 1;
@@ -42,7 +42,6 @@ class StorageClass {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
   storageClassName = "";
   storageClassNameData = [];
   selectStorageClass = "";
@@ -97,6 +96,13 @@ class StorageClass {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    });
+  };
+
   setContent = (content) => {
     runInAction(() => {
       this.content = content;
@@ -107,7 +113,7 @@ class StorageClass {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       }
     });
@@ -117,68 +123,9 @@ class StorageClass {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
       }
-    });
-  };
-
-  setCurrentPage = (n) => {
-    runInAction(() => {
-      this.currentPage = n;
-    });
-  };
-
-  setTotalPages = (n) => {
-    runInAction(() => {
-      this.totalPages = n;
-    });
-  };
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      apiList === null
-        ? (cntCheck = false)
-        : Object.entries(apiList).map(([_, value]) => {
-            cntCheck = true;
-            tempList.push(toJS(value));
-            cnt = cnt + 1;
-            if (cnt > 10) {
-              cntCheck = false;
-              cnt = 1;
-              this.resultList[totalCnt] = tempList;
-              totalCnt = totalCnt + 1;
-              tempList = [];
-            }
-          });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
-      }
-
-      this.setTotalPages(totalCnt);
-      this.setCurrentPage(1);
-      setFunc(this.resultList);
-      this.setViewList(0);
-    });
-  };
-
-  setStorageClasses = (list) => {
-    runInAction(() => {
-      this.storageClasses = list;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.storageClasses[n];
     });
   };
 
@@ -254,6 +201,17 @@ class StorageClass {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.storageClasses !== null) {
+        this.viewList = this.storageClasses.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
+      }
+    });
+  };
+
   loadStorageClassYaml = async (name, clusterName, kind) => {
     await axios
       .get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&kind=${kind}`)
@@ -272,20 +230,26 @@ class StorageClass {
       .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
-          this.storageClasses = res.data.data;
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          console.log(res.data.data);
+          if (res.data.data !== null) {
+            this.storageClasses = res.data.data;
+            this.totalPages = Math.ceil(res.data.data.length / 10);
+            this.totalElements = res.data.data.length;
+          } else {
+            this.storageClasses = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.storageClasses, this.setStorageClasses);
+        this.paginationList();
       })
       .then(() => {
         this.loadStorageClass(this.viewList[0].name, this.viewList[0].cluster);
+      })
+      .catch(() => {
+        this.storageClasses = [];
+        this.paginationList();
       });
-    // .then(() => {
-    //   this.loadStorageClassName(this.viewList[0].cluster);
-    // });
   };
 
   loadAdminStorageClasses = async () => {
@@ -295,22 +259,30 @@ class StorageClass {
       .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
-          this.storageClasses = res.data.data;
-          this.adminList = this.storageClasses.filter(
+          this.adminList = res.data.data;
+          this.storageClasses = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.storageClass = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          if (this.storageClasses.length !== 0) {
+            this.storageClass = this.storageClasses[0];
+            this.totalPages = Math.ceil(this.storageClasses.length / 10);
+            this.totalElements = this.storageClasses.length;
+          } else {
+            this.storageClasses = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setStorageClasses);
+        this.paginationList();
       })
       .then(() => {
         this.loadStorageClass(
-          this.adminList[0].name,
-          this.adminList[0].cluster
-        );
+          this.storageClasses[0].name,
+          this.storageClasses[0].cluster
+        ).catch(() => {
+          this.storageClasses = [];
+          this.paginationList();
+        });
       });
   };
 

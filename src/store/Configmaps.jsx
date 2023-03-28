@@ -17,17 +17,24 @@ class Configmaps {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
   }
 
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadconfigmapsTabList(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -41,7 +48,7 @@ class Configmaps {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadconfigmapsTabList(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -110,6 +117,14 @@ class Configmaps {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.configmapsList !== null) {
+        this.viewList =  this.configmapsList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
+
   loadconfigmapsList = async () => {
     await axios
       .get(`${SERVER_URL}/configmaps`)
@@ -118,6 +133,7 @@ class Configmaps {
           this.configmapsList = data;
           this.configmapsDetail = data[0];
           this.totalElements = data.length;
+          
         });
       })
       .then(() => {
@@ -137,23 +153,32 @@ class Configmaps {
       .get(`${SERVER_URL}/configmaps`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.configmapsList = data;
-          this.adminList = this.configmapsList.filter(
+          this.adminList = data;
+          this.configmapsList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.configmapsDetail = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          if (this.configmapsList.length !== 0) {
+            this.configmapsDetail = this.configmapsList[0];
+            this.totalElements = this.configmapsList.length;
+            this.totalPages = Math.ceil(this.configmapsList.length/10); 
+          } else {
+            this.configmapsList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setConfigmapsList);
+        this.paginationList();
       })
       .then(() => {
         this.loadconfigmapsTabList(
-          this.adminList[0].name,
-          this.adminList[0].cluster,
-          this.adminList[0].namespace
+          this.configmapsList[0].name,
+          this.configmapsList[0].cluster,
+          this.configmapsList[0].namespace
         );
+      })
+      .catch(() => {
+        this.configmapsList = [];
+        this.paginationList();
       });
   };
 

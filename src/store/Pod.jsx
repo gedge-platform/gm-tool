@@ -13,7 +13,7 @@ class Pod {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   pPodList = [];
   podList = [];
   yamlListInPod = [];
@@ -87,11 +87,25 @@ class Pod {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    });
+  };
+
+  initViewYList = () => {
+    runInAction(() => {
+      this.viewYList = null;
+      this.currentYPage = 1;
+    });
+  };
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadPodDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -105,7 +119,7 @@ class Pod {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadPodDetail(
           this.viewList[0].name,
           this.viewList[0].cluster,
@@ -115,63 +129,14 @@ class Pod {
     });
   };
 
-  setCurrentPage = (n) => {
+  paginationList = () => {
     runInAction(() => {
-      this.currentPage = n;
-    });
-  };
-
-  setTotalPages = (n) => {
-    runInAction(() => {
-      this.totalPages = n;
-      this.totalYPages = n;
-    });
-  };
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      apiList === null
-        ? (cntCheck = false)
-        : Object.entries(apiList).map(([_, value]) => {
-            cntCheck = true;
-            tempList.push(toJS(value));
-            cnt = cnt + 1;
-            if (cnt > 10) {
-              cntCheck = false;
-              cnt = 1;
-              this.resultList[totalCnt] = tempList;
-              totalCnt = totalCnt + 1;
-              tempList = [];
-            }
-          });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      if (this.podList !== null) {
+        this.viewList = this.podList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-
-      this.setTotalPages(totalCnt);
-      this.setCurrentPage(1);
-      setFunc(this.resultList);
-      this.setViewList(0);
-    });
-  };
-
-  setPPodList = (list) => {
-    runInAction(() => {
-      this.PodList = list;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.PodList[n];
     });
   };
 
@@ -182,14 +147,22 @@ class Pod {
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.podList = res.data.data;
-          this.podDetail = this.podList[0];
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          if (res.data.data !== null) {
+            this.podList = res.data.data;
+            this.podDetail = res.data.data[0];
+            this.totalPages = Math.ceil(res.data.data.length / 10);
+            this.totalElements = res.data.data.length;
+          } else {
+            this.podList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.podList, this.setPPodList);
+        this.paginationList();
+      })
+      .catch(() => {
+        this.podList = [];
+        this.paginationList();
       });
     this.loadPodDetail(
       this.viewList[0].name,
@@ -205,21 +178,30 @@ class Pod {
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.podList = res.data.data;
-          this.adminList = this.podList.filter(
+          this.adminList = res.data.data;
+          this.podList = this.adminList.filter(
             (data) => data.cluster === "gm-cluster"
           );
-          this.podDetail = this.adminList[0];
-          this.totalElements = this.adminList.length;
+          if (this.podList.length !== 0) {
+            this.podDetail = this.podList[0];
+            this.totalPages = Math.ceil(this.podList.length / 10);
+            this.totalElements = this.podList.length;
+          } else {
+            this.podList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setPPodList);
+        this.paginationList();
+      })
+      .catch(() => {
+        this.podList = [];
+        this.paginationList();
       });
     this.loadPodDetail(
-      this.adminList[0].name,
-      this.adminList[0].cluster,
-      this.adminList[0].project
+      this.podList[0].name,
+      this.podList[0].cluster,
+      this.podList[0].project
     );
   };
 

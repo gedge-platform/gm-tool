@@ -26,6 +26,7 @@ const ConfigmapsListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = configmapsStore;
@@ -73,6 +74,9 @@ const ConfigmapsListTab = observer(() => {
 
   useLayoutEffect(() => {
     loadAdminconfigmapsList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

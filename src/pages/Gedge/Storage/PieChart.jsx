@@ -89,16 +89,6 @@ const PieChart = observer((props) => {
                 } else {
                   return seriesTotal.toFixed(2) + "GB";
                 }
-                // const seriesTotal = parseFloat(w.globals.seriesTotals);
-                // return seriesTotal.reduce((a, b) => {
-                //   if (a + b > 1024) {
-                //     console.log(a + b);
-                //     return (a + b).toFixed(2) + "GB";
-                //   } else {
-                //     console.log(a + b);
-                //     return ((a + b) / 1024).toFixed(2) + "TB";
-                //   }
-                // }, 0);
               },
             },
           },

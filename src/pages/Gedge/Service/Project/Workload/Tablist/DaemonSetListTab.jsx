@@ -27,6 +27,7 @@ const DaemonSetListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = daemonSetStore;
@@ -81,6 +82,9 @@ const DaemonSetListTab = observer(() => {
 
   useEffect(() => {
     loadDaemonSetList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

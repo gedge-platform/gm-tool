@@ -48,17 +48,24 @@ class PlatformProject {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    });
+  };
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadPlatformProjectDetail(
           this.viewList[0].projectName,
           this.viewList[0].clusterName
@@ -71,7 +78,7 @@ class PlatformProject {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadPlatformProjectDetail(
           this.viewList[0].projectName,
           this.viewList[0].clusterName
@@ -138,6 +145,18 @@ class PlatformProject {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      console.log(toJS(this.platformProjectList));
+      if (this.platformProjectList !== null) {
+        this.viewList = this.platformProjectList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
+      }
+    });
+  };
+
   loadPlatformProjectList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -145,17 +164,18 @@ class PlatformProject {
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.platformProjectList = res.data.data;
-          this.platformDetail = res.data.data[0];
-          // const temp = new Set(
-          //   res.data.data.map((cluster) => cluster.clusterName)
-          // );
-          // this.clusterList = [...temp];
-          this.totalElements = res.data.data.length;
+          if (res.data.data !== null) {
+            this.platformProjectList = res.data.data;
+            this.platformDetail = res.data.data[0];
+            this.totalPages = Math.ceil(res.data.data.length / 10);
+            this.totalElements = res.data.data.length;
+          } else {
+            this.platformProjectList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.platformProjectList, this.setPlatformProjectList);
+        this.paginationList();
       })
       .then(() => {
         this.loadPlatformProjectDetail(
@@ -178,27 +198,26 @@ class PlatformProject {
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.platformProjectList = res.data.data;
-          this.platformDetail = res.data.data[0];
-          console.log(this.platformProjectList);
-          this.adminList = this.platformProjectList.filter(
+          this.adminList = res.data.data;
+          this.platformProjectList = this.adminList.filter(
             (data) => data.clusterName === "gm-cluster"
           );
-          // const temp = new Set(
-          //   res.data.data.map((cluster) => cluster.clusterName)
-          // );
-          // this.clusterList = [...temp];
-          console.log(this.adminList);
-          this.totalElements = res.data.data.length;
+          if (this.platformProjectList.length !== 0) {
+            this.platformDetail = this.platformProjectList[0];
+            this.totalElements = this.platformProjectList.length;
+            this.totalPages = Math.ceil(this.platformProjectList.length / 10);
+          } else {
+            this.platformProjectList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setPlatformProjectList);
+        this.paginationList();
       })
       .then(() => {
         this.loadPlatformProjectDetail(
-          this.viewList[0].projectName,
-          this.viewList[0].clusterName
+          this.platformProjectList[0].projectName,
+          this.platformProjectList[0].clusterName
         );
         // this.loadCluster(
         //   this.viewList[0].projectName,
@@ -206,6 +225,10 @@ class PlatformProject {
         // this.platformProjectList[0].projectName,
         // this.platformProjectList[0].clusterName
         // );
+      })
+      .catch((err) => {
+        this.platformProjectList = [];
+        this.paginationList();
       });
   };
 

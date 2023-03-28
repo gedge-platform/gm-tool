@@ -45,7 +45,7 @@ class Project {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
 
   currentEvent = 1;
   totalEvents = 1;
@@ -55,6 +55,13 @@ class Project {
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
   }
 
   goPrevPage = () => {
@@ -136,6 +143,14 @@ class Project {
     });
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.projectList !== null) {
+        this.viewList =  this.projectList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
+
   loadProjectList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -166,30 +181,29 @@ class Project {
       .get(`${SERVER_URL}/userProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = [];
-          // const list = res.data.data.filter(
-          //   (item) => item.projectType === type
-          // );
-          this.projectList = res.data.data;
-          for (let i = 0; i < this.projectList.length; i++) {
-            var test = [];
-            this.projectList[i].selectCluster.map((x) => {
-              test.push(x.clusterName);
-            });
-            test.indexOf("gm-cluster") < 0
-              ? ""
-              : this.adminList.push(this.projectList[i]);
+          this.adminList = res.data.data;
+          this.projectList = this.adminList.filter(
+            (project) => project.selectCluster.some(cluster => cluster.clusterName === "gm-cluster")
+          );
+          if (this.projectList.length !== 0) {
+            this.totalPages = Math.ceil(this.projectList.length/10);
+            this.totalElements = this.projectList.length;
+          } else {
+            this.projectList = [];
           }
-          this.totalElements = this.adminList.length;
         });
       })
       .then(() => {
-        this.convertList(this.adminList, this.setProjectList);
+        this.paginationList();
       })
       .then(() => {
         this.loadProjectDetail(
-          this.adminList[0] ? this.adminList[0].projectName : null
+          this.projectList[0] ? this.adminList[0].projectName : null
         );
+      })
+      .catch(() => {
+        this.projectList = [];
+        this.paginationList();
       });
   };
 

@@ -11,22 +11,17 @@ class Scheduler {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   yamlList = [];
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  setYamlList = (list) => {
+  initViewList = () => {
     runInAction(() => {
-      this.yamlList = list;
-    });
-  };
-
-  setViewList = (n) => {
-    runInAction(() => {
-      this.viewList = this.yamlList[n];
+      this.viewList = null;
+      this.currentPage = 1;
     });
   };
 
@@ -34,7 +29,7 @@ class Scheduler {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
       }
     });
   };
@@ -43,55 +38,19 @@ class Scheduler {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
       }
     });
   };
 
-  setCurrentPage = (n) => {
+  paginationList = () => {
     runInAction(() => {
-      this.currentPage = n;
-    });
-  };
-
-  setTotalPages = (n) => {
-    runInAction(() => {
-      this.totalPages = n;
-    });
-  };
-
-  convertList = (apiList, setFunc) => {
-    runInAction(() => {
-      let cnt = 1;
-      let totalCnt = 0;
-      let tempList = [];
-      let cntCheck = true;
-      this.resultList = {};
-
-      apiList === null
-        ? (cntCheck = false)
-        : Object.entries(apiList).map(([_, value]) => {
-            cntCheck = true;
-            tempList.push(toJS(value));
-            cnt = cnt + 1;
-            if (cnt > 20) {
-              cntCheck = false;
-              cnt = 1;
-              this.resultList[totalCnt] = tempList;
-              totalCnt = totalCnt + 1;
-              tempList = [];
-            }
-          });
-
-      if (cntCheck) {
-        this.resultList[totalCnt] = tempList;
-        totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+      if (this.yamlList !== null) {
+        this.viewList = this.yamlList.slice(
+          (this.currentPage - 1) * 20,
+          this.currentPage * 20
+        );
       }
-
-      this.setTotalPages(totalCnt);
-      this.setCurrentPage(1);
-      setFunc(this.resultList);
-      this.setViewList(0);
     });
   };
 
@@ -102,13 +61,18 @@ class Scheduler {
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.yamlList = res.data.data;
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          if (res.data.data !== null) {
+            this.yamlList = res.data.data;
+            this.yamlDetail = res.data.data[0];
+            this.totalPages = Math.ceil(res.data.data.length / 20);
+            this.totalElements = res.data.data.length;
+          } else {
+            this.yamlList = [];
+          }
         });
       })
       .then(() => {
-        this.convertList(this.yamlList, this.setYamlList);
+        this.paginationList();
       });
   };
 
@@ -138,7 +102,6 @@ class Scheduler {
     formData.append("clusters", JSON.stringify(clusters));
 
     axios
-      // .post(`http://101.79.4.15:32527/yaml`, formData)
       .post(`http://101.79.1.173:8012/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {

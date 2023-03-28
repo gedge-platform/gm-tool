@@ -24,6 +24,7 @@ const ServiceAdminTab = observer(() => {
     loadAdminServiceList,
     pServiceList,
     viewList,
+    initViewList,
     serviceList,
     serviceDetail,
     totalElements,
@@ -90,6 +91,9 @@ const ServiceAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminServiceList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -30,11 +30,12 @@ const AgGrid = (props) => {
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
 
-  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState(
-    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>'
-  );
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
     '<span class="ag-overlay-loading-center">No Data</span>'
+  );
+
+  const [overlayLoadingTemplate, setOverlayLoadingTemplate] = useState(
+    '<span style="padding: 10px; border: 2px solid #444; background: lightgoldenrodyellow;">Data Loading...</span>'
   );
 
   useEffect(() => {

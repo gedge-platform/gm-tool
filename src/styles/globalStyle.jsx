@@ -1791,7 +1791,6 @@ const globalStyles = createGlobalStyle`
 
     .leaflet-popup-content {
       width: 235px;
-      height: 180px;
       margin: 0;
       padding: 0;
       .leaflet-popup-title {

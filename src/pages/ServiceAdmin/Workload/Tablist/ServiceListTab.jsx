@@ -19,6 +19,7 @@ const ServiceListTab = observer(() => {
   const {
     pServiceList,
     viewList,
+    initViewList,
     serviceList,
     serviceDetail,
     totalElements,
@@ -102,6 +103,7 @@ const ServiceListTab = observer(() => {
     loadServiceList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

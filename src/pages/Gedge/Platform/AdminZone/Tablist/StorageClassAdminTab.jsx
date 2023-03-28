@@ -31,6 +31,7 @@ const StorageClassAdminTab = observer(() => {
     goNextPage,
     loadStorageClass,
     viewList,
+    initViewList,
     getYamlFile,
     loadStorageClassYaml,
     storageclass,
@@ -121,6 +122,9 @@ const StorageClassAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminStorageClasses();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -31,6 +31,7 @@ const PodAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
     viewList,
+    initViewList,
   } = podStore;
   const [columDefs] = useState([
     {
@@ -100,6 +101,9 @@ const PodAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminPodList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
