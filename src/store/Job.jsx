@@ -168,6 +168,7 @@ class Job {
       })
       .then(() => {
         this.convertList(this.jobList, this.setJobList);
+        console.log(this.jobList);
         this.jobList.length === 0
           ? this.jobDetailData === null
           : this.loadJobDetail(
