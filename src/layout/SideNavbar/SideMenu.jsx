@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import theme from "@/styles/theme";
 import { NavScrollbar } from "@/components/scrollbars";
@@ -214,19 +214,36 @@ export const SideMenu = () => {
                 label={Title.Platform}
                 onNodeFocus={handleClick}
               >
+                <CustomTreeItem
+                  nodeId="2"
+                  label={Title.Dashboard}
+                  onNodeFocus={handleClick}
+                >
+                  <li>
+                    <NavLink
+                      nodeId="3"
+                      // exact
+                      to="/platformDashboard"
+                      activeClassName="active"
+                    >
+                      {Title.Dashboard}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      exact
+                      to="/adminMonitoring"
+                      nodeId="4"
+                      activeClassName="active"
+                    >
+                      {Title.Monitoring}
+                    </NavLink>
+                  </li>
+                </CustomTreeItem>
+
                 <li>
                   <NavLink
-                    nodeId="2"
-                    exact
-                    to="/platformDashboard"
-                    activeClassName="active"
-                  >
-                    {Title.Dashboard}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    nodeId="3"
+                    nodeId="5"
                     exact
                     to="/edgeZone"
                     activeClassName="active"
@@ -236,7 +253,7 @@ export const SideMenu = () => {
                 </li>
                 <li>
                   <NavLink
-                    nodeId="4"
+                    nodeId="6"
                     exact
                     to="/cloudZone"
                     activeClassName="active"
@@ -244,32 +261,17 @@ export const SideMenu = () => {
                     {Title.CloudZone}
                   </NavLink>
                 </li>
-                <CustomTreeItem
-                  nodeId="5"
-                  label={Title.AdminZone}
-                  to="/adminZone"
-                >
-                  <li>
-                    <NavLink
-                      exact
-                      to="/adminZone"
-                      nodeId="6"
-                      activeClassName="active"
-                    >
-                      {Title.AdminZone}
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/adminMonitoring"
-                      nodeId="7"
-                      activeClassName="active"
-                    >
-                      {Title.Monitoring}
-                    </NavLink>
-                  </li>
-                </CustomTreeItem>
+
+                <li>
+                  <NavLink
+                    exact
+                    to="/adminZone"
+                    nodeId="7"
+                    activeClassName="active"
+                  >
+                    {Title.AdminZone}
+                  </NavLink>
+                </li>
               </CustomTreeItem>
               <CustomTreeItem
                 nodeId="8"
@@ -325,6 +327,11 @@ export const SideMenu = () => {
                     </NavLink>
                   </li>
                 </CustomTreeItem>
+                <li>
+                  <NavLink to="/volumes" activeClassName="active">
+                    {Title.Volume}
+                  </NavLink>
+                </li>
               </CustomTreeItem>
               <CustomTreeItem
                 nodeId="15"
@@ -395,11 +402,6 @@ export const SideMenu = () => {
               <li>
                 <NavLink to="/certification" activeClassName="active">
                   {Title.Certification}
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/volumes" activeClassName="active">
-                  {Title.Volume}
                 </NavLink>
               </li>
             </TreeView>

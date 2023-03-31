@@ -7,20 +7,21 @@ const PieChart = observer((props) => {
   const options = {
     labels: label,
     chart: {
-      type: 'donut',
+      type: "donut",
     },
-    responsive: [{
-      breakpoint: 480,
-      options: {
-        chart: {
-          width: "100%"
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: "100%",
+          },
+          legend: {
+            position: "bottom",
+          },
         },
-        legend: {
-          position: 'bottom',
-
-        }
-      }
-    }],
+      },
+    ],
     legend: {
       show: false,
     },
@@ -47,7 +48,7 @@ const PieChart = observer((props) => {
               borderRadius: 100,
               formatter: function (val) {
                 return val;
-              }
+              },
             },
             value: {
               show: true,
@@ -61,7 +62,7 @@ const PieChart = observer((props) => {
               offsetY: 12,
               formatter: function (val) {
                 return val;
-              }
+              },
             },
             total: {
               show: total,
@@ -74,27 +75,21 @@ const PieChart = observer((props) => {
               color: "#fff",
               formatter: function (w) {
                 return w.globals.seriesTotals.reduce((a, b) => {
-                  return a + b;
+                  return Math.round(a + b);
                 }, 0);
-              }
-            }
-          }
-        }
-      }
+              },
+            },
+          },
+        },
+      },
     },
   };
-  const series = value
+  const series = value;
 
   return (
-    < div className="donut" >
-      <Chart
-        options={options}
-        series={series}
-        type="donut"
-        width="100%"
-      />
-    </div >)
-    ;
-
+    <div className="donut">
+      <Chart options={options} series={series} type="donut" width="100%" />
+    </div>
+  );
 });
 export default PieChart;

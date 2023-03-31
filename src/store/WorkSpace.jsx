@@ -131,15 +131,18 @@ class Workspace {
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
-    console.log("id: ", id, "role: ", role);
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           this.workSpaceList = res.data.data;
-          this.totalElements = res.data.data.length;
-          this.workspace = this.workSpaceList.map((item) => item.workspaceName);
+          // this.totalElements = res.data != null ? res.data.data.length : 0;
+          // this.workspace = this.workSpaceList.map((item) => item.workspaceName);
+          this.totalElements =
+            res.data.data === null ? 0 : res.data.data.length;
+          this.workspace = this.workSpaceList
+            ? this.workSpaceList.map((item) => item.workspaceName)
+            : null;
         });
       })
       .then(() => {
@@ -200,7 +203,7 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
-        console.log(this.workSpaceDetail);
+        // console.log(this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;
@@ -209,7 +212,6 @@ class Workspace {
         }
         this.detailInfo = res.data.projectList ? res.data.projectList : 0;
         this.selectClusterInfo = res.data.selectCluster;
-        console.log(this.selectClusterInfo);
         this.projectList = res.data.projectList ? res.data.projectList : 0;
         // await axios
         //   .get(`${SERVER_URL}/workspaces/${workspaceName}`)
@@ -240,8 +242,8 @@ class Workspace {
       workspaceName,
       workspaceDescription,
       clusterName: selectCluster,
-      MemberName: getItem("user").id,
-      // workspaceCreator: getItem("user"),
+      memberName: getItem("user").id,
+      // workspaceCreator: getItem("user").id,
     };
     // const body2 = {
     //   workspaceName,
@@ -257,6 +259,8 @@ class Workspace {
     axios
       .post(`${SERVER_URL}/workspaces`, body)
       .then((res) => {
+        console.log("res", res);
+        console.log("body", body);
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
         }

@@ -43,11 +43,16 @@ const CreateUser = observer(() => {
       filter: true,
     },
     {
+      headerName: "사용자 이름",
+      field: "memberName",
+      filter: true,
+    },
+    {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map(item => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
       },
     },
     {
@@ -92,7 +97,9 @@ const CreateUser = observer(() => {
 
   const handleClick = ({ data: { projectName }, colDef: { field } }) => {
     if (field === "delete") {
-      swalUpdate("삭제하시겠습니까?", () => deleteProject(projectName, loadProjectList));
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteProject(projectName, loadProjectList)
+      );
       return;
     }
     loadProjectDetail(projectName);
@@ -132,7 +139,12 @@ const CreateUser = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateProject reloadFunc={() => loadProjectList()} type={"user"} open={open} onClose={handleClose} />
+          <CreateProject
+            reloadFunc={() => loadProjectList()}
+            type={"user"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <CreateUserDetail project={projectDetail} />
       </CReflexBox>

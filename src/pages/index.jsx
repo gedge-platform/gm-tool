@@ -68,7 +68,7 @@ const Title = {
   Storage: "스토리지클래스",
   StorageDashboard: "Ceph 대시보드",
   Project: "프로젝트",
-  CreateUser: "사용자 생성",
+  CreateUser: "사용자별 생성",
   PlatformControl: "플랫폼 관리",
   Template: "템플릿",
 

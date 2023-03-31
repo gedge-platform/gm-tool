@@ -252,6 +252,7 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res.data.data);
           this.deploymentList = res.data.data;
           this.deploymentDetail = res.data.data[0];
           this.totalElements =
@@ -452,10 +453,18 @@ class Deployment {
       });
   };
 
-  deleteDeployment = async (deploymentName, callback) => {
+  deleteDeployment = async (
+    deploymentName,
+    clusterName,
+    projectName,
+    callback
+  ) => {
     axios
-      .delete(`${SERVER_URL}/deployments/${deploymentName}`)
+      .delete(
+        `${SERVER_URL}/deployments/${deploymentName}?cluster=${clusterName}&project=${projectName} `
+      )
       .then((res) => {
+        console.log("delete res: ", res);
         if (res.status === 201)
           swalError("Deployment가 삭제되었습니다.", callback);
       })

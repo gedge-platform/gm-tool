@@ -134,16 +134,13 @@ class Monitoring {
       .then(() => callback());
   };
   loadClusterNameList = async () => {
-    await axios
-      .get(`${SERVER_URL}/clusters`)
-      .then((res) => {
-        runInAction(() => {
-          this.clusterNames = res.data.data?.map((item) => item.clusterName);
-          // this.clusterName = this.clusterNames[0];
-        });
-      })
+    await axios.get(`${SERVER_URL}/clusters`).then((res) => {
+      runInAction(() => {
+        this.clusterNames = res.data.data?.map((item) => item.clusterName);
+        // this.clusterName = this.clusterNames[0];
+      });
+    });
   };
-
 
   loadCoCPU = async (target, start, end, step, metricFilter, ...options) => {
     await axios

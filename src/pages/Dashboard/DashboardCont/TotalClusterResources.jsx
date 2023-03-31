@@ -27,6 +27,14 @@ const TotalClusterResources = observer(() => {
   const totalMemTB = totalMem / 1024;
   const totalDiskTB = totalDisk / 1024;
 
+  const availCpuTB = availCpu / 1024;
+  const availMemTB = availMem / 1024;
+  const availDiskTB = availDisk / 1024;
+
+  const usageTotalCpuTB = usageTotalCpu / 1024;
+  const usageTotalMemTB = usageTotalMem / 1024;
+  const usageTotalDiskTB = usageTotalDisk / 1024;
+
   const cpuTemp = (usageTotalCpu / totalCpu) * 100;
   const clusterTotalCpu = cpuTemp.toFixed(2);
 
@@ -35,65 +43,6 @@ const TotalClusterResources = observer(() => {
 
   const diskTemp = (usageTotalDisk / totalDisk) * 100;
   const clusterTotalDisk = diskTemp.toFixed(2);
-
-  const TotalClusterResourcesBarChart = {
-    series: [
-      {
-        data: [
-          {
-            x: "Total CPU(/ " + totalCpuTB,
-            y: clusterTotalCpu,
-          },
-          {
-            x: "Total Memory",
-            y: clusterTotalMem,
-          },
-          {
-            x: "Total Disk",
-            y: clusterTotalDisk,
-          },
-        ],
-      },
-    ],
-    // series: [
-    //   {
-    //     data: [clusterTotalCpu, clusterTotalMem, clusterTotalDisk],
-    //   },
-    // ],
-    options: {
-      chart: {
-        type: "bar",
-        height: 350,
-        foreColor: "#fff",
-        stacked: true,
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 4,
-          horizontal: true,
-          distributed: true, // bar color 다르게 해줌
-          barHeight: "45%",
-        },
-      },
-      dataLabels: {
-        enabled: true,
-      },
-      yaxis: {
-        show: true,
-        showAlways: true,
-        showForNullSeries: true,
-        seriesName: undefined,
-        logarithmic: false,
-        logBase: 10,
-        tickAmount: 4,
-        min: 0,
-        max: 100,
-      },
-      tooltip: {
-        // 상세 박스
-      },
-    },
-  };
 
   useEffect(() => {
     loadDashboardCnt();
@@ -113,91 +62,108 @@ const TotalClusterResources = observer(() => {
         display: "flex",
       }}
     >
-      <div className="storageCircleBoxTitle">Row Capacity</div>
-      <div
-        className="chart"
-        style={{
-          marginTop: "10px",
-          width: "300px",
-        }}
-      >
-        <PieChart
-          total={true}
-          label={["avail", "used"]}
-          value={[Math.round(availCpu), Math.round(usageTotalCpu)]}
-        />
-        <div className="totalClusterResourcesContTxt">
-          <ul>
-            <li className="used">
-              <span className="tit">Used</span> <span>1 GiB</span>
-            </li>
-            <li className="avail">
-              <span className="tit">Avail</span> <span>1 GiB</span>
-            </li>
-            <li className="total">
-              {" "}
-              <span className="tit">Total</span> <span>1 GiB</span>
-            </li>
-            <li className="none"></li>
-          </ul>
+      <div className="stotalClusterResourcesCircleBox">
+        <div className="totalClusterResourcesBoxTitle">Total CPU</div>
+        <div
+          className="chart"
+          style={{
+            marginTop: "10px",
+            marginLeft: "20px",
+            width: "200px",
+          }}
+        >
+          <PieChart
+            total={true}
+            label={["avail", "used"]}
+            value={[availCpuTB, usageTotalCpuTB]}
+          />
+          <div className="totalClusterResourcesContTxt">
+            <ul>
+              <li className="used">
+                <span className="tit">Used</span>
+                <span>{usageTotalCpuTB.toFixed(2)} TB</span>
+              </li>
+              <li className="avail">
+                <span className="tit">Avail</span>
+                <span>{availCpuTB.toFixed(2)} TB</span>
+              </li>
+              <li className="total">
+                <span className="tit">Total</span>
+                <span>{totalCpuTB.toFixed(2)} TB</span>
+              </li>
+              <li className="none"></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div
-        className="chart"
-        style={{
-          marginTop: "10px",
-          width: "300px",
-        }}
-      >
-        <PieChart
-          total={true}
-          label={["avail", "used"]}
-          value={[Math.round(availMem), Math.round(usageTotalMem)]}
-        />
-        <div className="totalClusterResourcesContTxt">
-          <ul>
-            <li className="used">
-              <span className="tit">Used</span> <span>1 GiB</span>
-            </li>
-            <li className="avail">
-              <span className="tit">Avail</span> <span>1 GiB</span>
-            </li>
-            <li className="total">
-              {" "}
-              <span className="tit">Total</span> <span>1 GiB</span>
-            </li>
-            <li className="none"></li>
-          </ul>
+      <div className="stotalClusterResourcesCircleBox">
+        <div className="totalClusterResourcesBoxTitle">Total Memory</div>
+        <div
+          className="chart"
+          style={{
+            marginTop: "10px",
+            marginLeft: "20px",
+            width: "200px",
+          }}
+        >
+          <PieChart
+            total={true}
+            label={["avail", "used"]}
+            value={[availMemTB, usageTotalMemTB]}
+          />
+          <div className="totalClusterResourcesContTxt">
+            <ul>
+              <li className="used">
+                <span className="tit">Used</span>
+                <span>{usageTotalMemTB.toFixed(2)} TB</span>
+              </li>
+              <li className="avail">
+                <span className="tit">Avail</span>
+                <span>{availMemTB.toFixed(2)} TB</span>
+              </li>
+              <li className="total">
+                <span className="tit">Total</span>
+                <span>{totalMemTB.toFixed(2)} TB</span>
+              </li>
+              <li className="none"></li>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div
-        className="chart"
-        style={{
-          marginTop: "10px",
-          width: "300px",
-        }}
-      >
-        <PieChart
-          total={true}
-          label={["avail", "used"]}
-          value={[Math.round(availDisk), Math.round(usageTotalDisk)]}
-        />
-        <div className="totalClusterResourcesContTxt">
-          <ul>
-            <li className="used">
-              <span className="tit">Used</span> <span>1 GiB</span>
-            </li>
-            <li className="avail">
-              <span className="tit">Avail</span> <span>1 GiB</span>
-            </li>
-            <li className="total">
-              {" "}
-              <span className="tit">Total</span> <span>1 GiB</span>
-            </li>
-            <li className="none"></li>
-          </ul>
+      <div className="stotalClusterResourcesCircleBox">
+        <div className="totalClusterResourcesBoxTitle">Total Disk</div>
+        <div
+          className="chart"
+          style={{
+            marginTop: "10px",
+            marginLeft: "20px",
+            width: "200px",
+          }}
+        >
+          <PieChart
+            total={true}
+            label={["avail", "used"]}
+            value={[Math.round(availDiskTB), Math.round(usageTotalDiskTB)]}
+          />
+          <div className="totalClusterResourcesContTxt">
+            <ul>
+              <li className="used">
+                <span className="tit">Used</span>
+                <span>{usageTotalDiskTB.toFixed(2)} TB</span>
+              </li>
+              <li className="avail">
+                <span className="tit">Avail</span>
+                <span>{availDiskTB.toFixed(2)} TB</span>
+              </li>
+              <li className="total">
+                <span className="tit">Total</span>
+                <span>{totalDiskTB.toFixed(2)} TB</span>
+              </li>
+              <li className="none"></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

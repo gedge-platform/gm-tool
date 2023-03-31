@@ -153,7 +153,7 @@ class Dashboard {
   usageTotalMem = "";
   usageTotalDisk = "";
 
-  mapZoom = 1;
+  mapZoom = 6;
   setMapZoom = (value) => {
     runInAction(() => {
       this.mapZoom = value;
@@ -452,7 +452,7 @@ class Dashboard {
       runInAction(() => {
         this.edgeType = data.filter((item) => item.clusterType === "edge");
         this.clusterNameList = this.edgeType.map((item) => item.clusterName);
-
+        console.log(this.clusterNameList);
         this.totalElements = data.length;
       });
     });
@@ -460,13 +460,13 @@ class Dashboard {
   };
 
   loadEdgeZoneDetailDashboard = async (clusterName) => {
-    console.log("loadEdgeZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) =>
         runInAction(() => {
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
+          // console.log(this.nodeInfo);
           this.type = this.nodeInfo.map((val) => val.type);
           this.master = this.type.reduce(
             (cnt, element) => cnt + ("master" === element),
@@ -511,7 +511,6 @@ class Dashboard {
   };
 
   loadCloudZoneDetailDashboard = async (cloudName) => {
-    console.log("loadCloudZoneDetailDashboard");
     await axios
       .get(`${SERVER_URL}/cloudDashboard?cluster=${cloudName}`)
       .then(({ data: { data } }) =>
