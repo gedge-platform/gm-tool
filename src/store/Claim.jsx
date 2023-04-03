@@ -53,12 +53,6 @@ class Claim {
   annotationKey = "";
   annotationValue = "";
 
-  // labelInput = [
-  //   {
-  //     [this.labelKey]: this.labelValue,
-  //   },
-  // ];
-
   setLabelInput = (value) => {
     runInAction(() => {
       this.labelInput = value;

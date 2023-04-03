@@ -31,7 +31,7 @@ class Workspace {
   selectClusterInfo = [];
   workspace = [];
 
-  viewList = null;
+  viewList = [];
   currentPage = 1;
   totalPages = 1;
 
@@ -156,24 +156,21 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data.data;
-          // this.totalElements = res.data != null ? res.data.data.length : 0;
-          // this.workspace = this.workSpaceList.map((item) => item.workspaceName);
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          this.totalPages = Math.ceil(this.workSpaceList.length / 10);
+          this.totalElements = this.workSpaceList.length;
+          this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
           this.workspace = this.workSpaceList
             ? this.workSpaceList.map((item) => item.workspaceName)
             : null;
         });
       })
       .then(() => {
-        this.convertList(this.workSpaceList, this.setWorkSpaceList);
+        // this.convertList(this.workSpaceList, this.setWorkSpaceList);
+        this.paginationList();
       })
       // .then(() => {
-      //   this.loadWorkspaceDetail(this.viewList[0].workspaceName);
-      // });
-      .then(() => {
-        type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
-      })
+      //   type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      // })
       .catch(() => {
         this.workSpaceList = [];
         this.paginationList();
@@ -218,6 +215,7 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
+        // console.log(this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;

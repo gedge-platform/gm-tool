@@ -27,8 +27,8 @@ class Configmaps {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -120,24 +120,27 @@ class Configmaps {
   paginationList = () => {
     runInAction(() => {
       if (this.configmapsList !== null) {
-        this.viewList =  this.configmapsList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.configmapsList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadconfigmapsList = async () => {
     await axios
       .get(`${SERVER_URL}/configmaps`)
-      .then(({ data: { data } }) => {
+      .then((res) => {
         runInAction(() => {
-          this.configmapsList = data;
-          this.configmapsDetail = data[0];
-          this.totalElements = data.length;
-          
+          this.configmapsList = res.data.data;
+          this.configmapsDetail = this.configmapsList[0];
+          this.totalElements = this.configmapsList.length;
+          this.totalPages = Math.ceil(this.configmapsList.length / 10);
         });
       })
       .then(() => {
-        this.convertList(this.configmapsList, this.setConfigmapsList);
+        this.paginationList();
       })
       .then(() => {
         this.loadconfigmapsTabList(
@@ -160,7 +163,7 @@ class Configmaps {
           if (this.configmapsList.length !== 0) {
             this.configmapsDetail = this.configmapsList[0];
             this.totalElements = this.configmapsList.length;
-            this.totalPages = Math.ceil(this.configmapsList.length/10); 
+            this.totalPages = Math.ceil(this.configmapsList.length / 10);
           } else {
             this.configmapsList = [];
           }
