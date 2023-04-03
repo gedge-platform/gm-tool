@@ -388,8 +388,7 @@ const globalStyles = createGlobalStyle`
     }
   }
 
-  .paper_main, .paper_detail {
-    
+  .paper_main, .paper_detail { 
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -500,7 +499,10 @@ const globalStyles = createGlobalStyle`
 
     }
   }
-
+  . -container {
+    width: 100%;
+    height: 102%;
+  }
   .reflex-container>.reflex-element {
     overflow: hidden;
   }
