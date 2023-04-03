@@ -388,8 +388,7 @@ const globalStyles = createGlobalStyle`
     }
   }
 
-  .paper_main, .paper_detail {
-    
+  .paper_main, .paper_detail { 
     ${PanelBox} {
       height: 100%;
       display: flex;
@@ -500,7 +499,10 @@ const globalStyles = createGlobalStyle`
 
     }
   }
-
+  . -container {
+    width: 100%;
+    height: 102%;
+  }
   .reflex-container>.reflex-element {
     overflow: hidden;
   }
@@ -1791,7 +1793,6 @@ const globalStyles = createGlobalStyle`
 
     .leaflet-popup-content {
       width: 235px;
-      height: 180px;
       margin: 0;
       padding: 0;
       .leaflet-popup-title {
@@ -1939,7 +1940,7 @@ const globalStyles = createGlobalStyle`
         background: url(../images/dashboard/status_project_icon.png) no-repeat 15px center #4343ed;
       }
       .ClusterCountTitle {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
       }
       .ClusterCount {

@@ -26,6 +26,7 @@ const StatefulSetAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = statefulSetStore;
@@ -73,6 +74,9 @@ const StatefulSetAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminStatefulSetList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

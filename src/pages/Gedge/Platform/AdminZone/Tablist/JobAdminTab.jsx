@@ -28,6 +28,7 @@ const JobAdminTab = observer(() => {
     totalPages,
     goPrevPage,
     goNextPage,
+    initViewList,
   } = jobStore;
 
   const [columDefs] = useState([
@@ -90,6 +91,9 @@ const JobAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminJobList();
+    return() => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -17,6 +17,7 @@ const CronJobListTab = observer(() => {
 
   const {
     viewList,
+    initViewList,
     cronJobList,
     cronJobDetail,
     totalElements,
@@ -112,6 +113,7 @@ const CronJobListTab = observer(() => {
     loadCronJobList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

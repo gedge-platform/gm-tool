@@ -25,6 +25,7 @@ const StatefulSetListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = statefulSetStore;
@@ -95,6 +96,7 @@ const StatefulSetListTab = observer(() => {
     loadStatefulSetList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

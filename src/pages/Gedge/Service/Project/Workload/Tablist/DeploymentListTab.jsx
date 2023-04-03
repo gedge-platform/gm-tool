@@ -29,6 +29,7 @@ const DeploymentListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = deploymentStore;
@@ -87,6 +88,9 @@ const DeploymentListTab = observer(() => {
 
   useEffect(() => {
     loadDeploymentList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   const handleCreateOpen = () => {

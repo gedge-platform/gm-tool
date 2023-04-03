@@ -142,15 +142,6 @@ const CreateClaim = observer((props) => {
     setWorkspace("");
     setProject("");
     setSelectStorageClass("");
-    // setInputLabelKey("");
-    // setInputLabelValue("");
-    // setLabels([
-    //   {
-    //     id: 0,
-    //     key: "",
-    //     value: "",
-    //   },
-    // ]);
   };
 
   const onClickStepTwo = () => {

@@ -23,6 +23,7 @@ const RequestStatusTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = requestStatusStore;
@@ -92,6 +93,9 @@ const RequestStatusTab = observer(() => {
 
   useEffect(() => {
     loadRequestList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

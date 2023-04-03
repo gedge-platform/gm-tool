@@ -25,6 +25,7 @@ const DaemonSetListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = daemonSetStore;
@@ -95,6 +96,7 @@ const DaemonSetListTab = observer(() => {
     loadDaemonSetList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

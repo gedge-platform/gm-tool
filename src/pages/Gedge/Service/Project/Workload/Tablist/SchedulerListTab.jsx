@@ -8,7 +8,7 @@ import { CCreateButton, CSelectButton } from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import { podStore } from "@/store";
+import { schedulerStore } from "@/store";
 import CreateScheduler from "../Dialog/CreateScheduler";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 
@@ -20,17 +20,15 @@ const SchedulerListTab = observer(() => {
   };
 
   const {
-    podList,
-    podDetail,
-    totalYElements,
-    loadPodList,
-    loadPodDetail,
-    currentYPage,
-    totalYPages,
-    viewYList,
+    totalElements,
+    loadYamlList,
+    currentPage,
+    totalPages,
+    viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
-  } = podStore;
+  } = schedulerStore;
   const [columDefs] = useState([
     {
       headerName: "파드 이름",
@@ -94,14 +92,17 @@ const SchedulerListTab = observer(() => {
   const history = useHistory();
 
   useEffect(() => {
-    loadPodList();
+    loadYamlList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadPodList}>
+          <CommActionBar reloadFunc={loadYamlList}>
             <CCreateButton onClick={handleCreateOpen}>Load YAML</CCreateButton>
           </CommActionBar>
 
@@ -110,12 +111,12 @@ const SchedulerListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewYList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
-                  totalElements={totalYElements}
-                  totalPages={totalYPages}
-                  currentPage={currentYPage}
+                  totalElements={totalElements}
+                  totalPages={totalPages}
+                  currentPage={currentPage}
                   goNextPage={goNextPage}
                   goPrevPage={goPrevPage}
                 />
@@ -125,7 +126,7 @@ const SchedulerListTab = observer(() => {
           <CreateScheduler
             open={open}
             onClose={handleClose}
-            reloadFunc={loadPodList}
+            reloadFunc={loadYamlList}
           />
         </PanelBox>
       </CReflexBox>

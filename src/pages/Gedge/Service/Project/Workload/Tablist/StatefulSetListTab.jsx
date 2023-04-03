@@ -26,6 +26,7 @@ const StatefulSetListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = statefulSetStore;
@@ -73,6 +74,9 @@ const StatefulSetListTab = observer(() => {
 
   useEffect(() => {
     loadStatefulSetList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

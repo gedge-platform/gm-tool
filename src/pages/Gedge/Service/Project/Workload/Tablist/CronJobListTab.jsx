@@ -19,6 +19,7 @@ const CronJobListTab = observer(() => {
 
   const {
     viewList,
+    initViewList,
     cronJobList,
     cronJobDetail,
     totalElements,
@@ -90,6 +91,9 @@ const CronJobListTab = observer(() => {
 
   useEffect(() => {
     loadCronJobList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
