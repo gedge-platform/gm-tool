@@ -147,10 +147,6 @@ const EdgeClusterListTab = observer(() => {
         <PanelBox>
           <CommActionBar>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
-            &nbsp;&nbsp;
-            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
-            &nbsp;
-            {/* <CCreateButton onClick={handleAddNodeOpen}>Node 추가</CCreateButton> */}
           </CommActionBar>
 
           <div className="tabPanelContainer">

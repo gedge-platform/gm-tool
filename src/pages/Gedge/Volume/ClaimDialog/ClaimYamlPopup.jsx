@@ -7,7 +7,7 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
 const ClaimYamlPopup = observer(() => {
-  const { content, claimName } = claimStore;
+  const { content, claimName, labelInput } = claimStore;
 
   return (
     <>
