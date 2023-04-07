@@ -81,7 +81,7 @@ class Cluster {
   currentPage = 1;
   totalPages = 1;
   resultList = {};
-  viewList = [];
+  viewList = null;
   clusterListInWorkspace = [];
   ProviderName = "";
   vmImageList = [];
@@ -99,11 +99,18 @@ class Cluster {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    })
+  }
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadCluster(this.viewList[0].clusterName);
       }
     });
@@ -113,7 +120,7 @@ class Cluster {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadCluster(this.viewList[0].clusterName);
       }
     });
@@ -176,12 +183,6 @@ class Cluster {
     });
   };
 
-  setInitViewList = n => {
-    runInAction(() => {
-      this.viewList = [];
-    });
-  };
-
   setVMBody = (type, value) => {
     runInAction(() => {
       if (type === "name") {
@@ -203,30 +204,32 @@ class Cluster {
     });
   };
 
-  setInitViewList = n => {
+  paginationList = () => {
     runInAction(() => {
-      this.viewList = [];
-    });
-  };
+      if (this.clusterList !== null) {
+        this.viewList =  this.clusterList.slice((this.currentPage-1)*10, this.currentPage*10);
+      }
+    })
+  }
 
   loadClusterList = async type => {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
-        console.log("data", data);
         runInAction(() => {
+          console.log(data)
           this.clusterListInWorkspace = data;
           const list = type === "" ? data : data.filter(item => item.clusterType === type);
           this.clusterList = list;
           this.clusterNameList = list.map(item => item.clusterName);
-          this.totalElements = list.length;
+          this.totalElements = this.clusterList.length;
+          this.totalPages = Math.ceil(this.clusterList.length/10);
         });
       })
       .then(() => {
-        this.convertList(this.clusterList, this.setClusterList);
+        this.paginationList();
       })
       .then(() => {
-        console.log(this.viewList);
         this.loadCluster(this.viewList[0].clusterName);
         this.loadClusterDetail(this.viewList[0].clusterName);
       });
@@ -241,11 +244,12 @@ class Cluster {
           const list = data;
           this.clusterList = list;
           this.clusterNameList = list.map(item => item.IId.NameId);
-          this.totalElements = list.length;
+          this.totalElements = this.clusterList.length;
+          this.totalPages = Math.ceil(this.clusterList.length/10);
         });
       })
       .then(() => {
-        this.convertList(this.clusterList, this.setClusterList);
+        this.paginationList();
       });
   };
 
