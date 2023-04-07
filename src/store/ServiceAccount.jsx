@@ -35,8 +35,8 @@ class ServiceAccount {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -86,18 +86,20 @@ class ServiceAccount {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? (cntCheck = false)
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -126,23 +128,27 @@ class ServiceAccount {
   paginationList = () => {
     runInAction(() => {
       if (this.serviceAccountList !== null) {
-        this.viewList =  this.serviceAccountList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.serviceAccountList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadServiceAccountList = async () => {
     await axios
       .get(`${SERVER_URL}/serviceaccounts`)
-      .then(({ data: { data } }) => {
+      .then((res) => {
         runInAction(() => {
-          this.serviceAccountList = data;
-          this.serviceAccountDetail = data[0];
-          this.totalElements = data.length;
+          this.serviceAccountList = res.data.data;
+          this.serviceAccountDetail = this.serviceAccountList[0];
+          this.totalElements = this.serviceAccountList.length;
+          this.totalPages = Math.ceil(this.serviceAccountList.length / 10);
         });
       })
       .then(() => {
-        this.convertList(this.serviceAccountList, this.setServiceAccountList);
+        this.paginationList();
       })
       .then(() => {
         this.loadServiceAccountTabList(
@@ -165,7 +171,7 @@ class ServiceAccount {
           if (this.serviceAccountList.length !== 0) {
             this.serviceAccountDetail = this.serviceAccountList[0];
             this.totalElements = this.serviceAccountList.length;
-            this.totalPages = Math.ceil(this.serviceAccountList.length/10); 
+            this.totalPages = Math.ceil(this.serviceAccountList.length / 10);
           } else {
             this.serviceAccountList = [];
           }

@@ -91,15 +91,15 @@ class Pod {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   initViewYList = () => {
     runInAction(() => {
       this.viewYList = null;
       this.currentYPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -132,10 +132,13 @@ class Pod {
   paginationList = () => {
     runInAction(() => {
       if (this.podList !== null) {
-        this.viewList =  this.podList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.podList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadPodList = async () => {
     let { id, role } = getItem("user");
@@ -147,7 +150,7 @@ class Pod {
           if (res.data.data !== null) {
             this.podList = res.data.data;
             this.podDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.podList = [];
@@ -181,7 +184,7 @@ class Pod {
           );
           if (this.podList.length !== 0) {
             this.podDetail = this.podList[0];
-            this.totalPages = Math.ceil(this.podList.length/10); 
+            this.totalPages = Math.ceil(this.podList.length / 10);
             this.totalElements = this.podList.length;
           } else {
             this.podList = [];

@@ -38,8 +38,8 @@ class CronJob {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -69,11 +69,72 @@ class CronJob {
     });
   };
 
+  // setCurrentPage = (n) => {
+  //   runInAction(() => {
+  //     this.currentPage = n;
+  //   });
+  // };
+
+  // setTotalPages = (n) => {
+  //   runInAction(() => {
+  //     this.totalPages = n;
+  //   });
+  // };
+
+  // convertList = (apiList, setFunc) => {
+  //   runInAction(() => {
+  //     let cnt = 1;
+  //     let totalCnt = 0;
+  //     let tempList = [];
+  //     let cntCheck = true;
+  //     this.resultList = {};
+
+  //     apiList === null
+  //       ? (cntCheck = false)
+  //       : Object.entries(apiList).map(([_, value]) => {
+  //           cntCheck = true;
+  //           tempList.push(toJS(value));
+  //           cnt = cnt + 1;
+  //           if (cnt > 10) {
+  //             cntCheck = false;
+  //             cnt = 1;
+  //             this.resultList[totalCnt] = tempList;
+  //             totalCnt = totalCnt + 1;
+  //             tempList = [];
+  //           }
+  //         });
+
+  //     if (cntCheck) {
+  //       this.resultList[totalCnt] = tempList;
+  //       totalCnt = totalCnt === 0 ? 1 : totalCnt + 1;
+  //     }
+
+  //     this.setTotalPages(totalCnt);
+  //     this.setCurrentPage(1);
+  //     setFunc(this.resultList);
+  //     this.setViewList(0);
+  //   });
+  // };
+
+  // setPCronjobList = (list) => {
+  //   runInAction(() => {
+  //     this.pCronjobList = list;
+  //   });
+  // };
+
+  // setViewList = (n) => {
+  //   runInAction(() => {
+  //     this.viewList = this.pCronjobList[n];
+  //   });
+  // };
   paginationList = () => {
     if (this.cronJobList !== null) {
-      this.viewList =  this.cronJobList.slice((this.currentPage-1)*10, this.currentPage*10);
+      this.viewList = this.cronJobList.slice(
+        (this.currentPage - 1) * 10,
+        this.currentPage * 10
+      );
     }
-  }
+  };
 
   loadCronJobList = async () => {
     let { id, role } = getItem("user");
@@ -85,7 +146,7 @@ class CronJob {
           if (res.data.data !== null) {
             this.cronJobList = res.data.data;
             this.cronJobDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.cronJobList = [];
@@ -121,7 +182,7 @@ class CronJob {
           );
           if (this.cronJobList.length !== 0) {
             this.cronJobDetail = this.cronJobList[0];
-            this.totalPages = Math.ceil(this.cronJobList.length/10);
+            this.totalPages = Math.ceil(this.cronJobList.length / 10);
             this.totalElements = this.cronJobList.length;
           } else {
             this.cronJobList = [];
@@ -136,7 +197,7 @@ class CronJob {
               this.cronJobList[0].name,
               this.cronJobList[0].cluster,
               this.cronJobList[0].project
-          );
+            );
       })
       .catch(() => {
         this.cronJobList = [];

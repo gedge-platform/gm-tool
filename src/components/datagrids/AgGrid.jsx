@@ -40,6 +40,7 @@ const AgGrid = (props) => {
 
   useEffect(() => {
     if (gridApi) {
+      console.log(gridApi);
       gridApi.sizeColumnsToFit();
       gridApi.showLoadingOverlay();
       gridApi.hideOverlay();
@@ -98,8 +99,8 @@ const AgGrid = (props) => {
         onGridReady={onGridReady}
         onFirstDataRendered={onFirstDataRendered}
         onGridSizeChanged={onGridSizeChanged}
-        overlayNoRowsTemplate={overlayNoRowsTemplate}
         overlayLoadingTemplate={overlayLoadingTemplate}
+        overlayNoRowsTemplate={overlayNoRowsTemplate}
         rowData={rowData}
         columnDefs={columnDefs}
         autoWidth={autoWidth}

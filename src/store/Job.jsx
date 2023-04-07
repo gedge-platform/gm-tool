@@ -70,8 +70,8 @@ class Job {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -103,9 +103,12 @@ class Job {
 
   paginationList = () => {
     if (this.jobList !== null) {
-      this.viewList =  this.jobList.slice((this.currentPage-1)*10, this.currentPage*10);
+      this.viewList = this.jobList.slice(
+        (this.currentPage - 1) * 10,
+        this.currentPage * 10
+      );
     }
-  }
+  };
 
   loadJobList = async () => {
     let { id, role } = getItem("user");
@@ -117,7 +120,7 @@ class Job {
           if (res.data.data !== null) {
             this.jobList = res.data.data;
             this.jobDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10);
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.jobList = [];
@@ -149,7 +152,7 @@ class Job {
           );
           if (this.jobList.length !== 0) {
             this.jobDetailData = this.jobList[0];
-            this.totalPages = Math.ceil(this.jobList.length/10);
+            this.totalPages = Math.ceil(this.jobList.length / 10);
             this.totalElements = this.jobList.length;
           } else {
             this.jobList = [];

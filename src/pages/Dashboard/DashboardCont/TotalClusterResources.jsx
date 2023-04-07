@@ -23,10 +23,6 @@ const TotalClusterResources = observer(() => {
   const availMem = totalMem - usageTotalMem;
   const availDisk = totalDisk - usageTotalDisk;
 
-  const totalCpuTB = totalCpu / 1024;
-  const totalMemTB = totalMem / 1024;
-  const totalDiskTB = totalDisk / 1024;
-
   const availCpuTB = availCpu / 1024;
   const availMemTB = availMem / 1024;
   const availDiskTB = availDisk / 1024;
@@ -35,14 +31,13 @@ const TotalClusterResources = observer(() => {
   const usageTotalMemTB = usageTotalMem / 1024;
   const usageTotalDiskTB = usageTotalDisk / 1024;
 
-  const cpuTemp = (usageTotalCpu / totalCpu) * 100;
-  const clusterTotalCpu = cpuTemp.toFixed(2);
-
-  const memTemp = (usageTotalMem / totalMem) * 100;
-  const clusterTotalMem = memTemp.toFixed(2);
-
-  const diskTemp = (usageTotalDisk / totalDisk) * 100;
-  const clusterTotalDisk = diskTemp.toFixed(2);
+  const formatStorageSize = (size) => {
+    if (size < 1024) {
+      return size + "GB";
+    } else {
+      return (size / 1024).toFixed(2) + "TB";
+    }
+  };
 
   useEffect(() => {
     loadDashboardCnt();
@@ -67,29 +62,29 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "10px",
+            marginTop: "1px",
             marginLeft: "20px",
-            width: "200px",
+            width: "210px",
           }}
         >
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[availCpuTB, usageTotalCpuTB]}
+            value={[availCpu, usageTotalCpu]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{usageTotalCpuTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(usageTotalCpu)} </span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{availCpuTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(availCpu)} </span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{totalCpuTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(totalCpu)}</span>
               </li>
               <li className="none"></li>
             </ul>
@@ -102,29 +97,29 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "10px",
+            marginTop: "1px",
             marginLeft: "20px",
-            width: "200px",
+            width: "210px",
           }}
         >
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[availMemTB, usageTotalMemTB]}
+            value={[availMem, usageTotalMem]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{usageTotalMemTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(usageTotalMem)}</span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{availMemTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(availMem)}</span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{totalMemTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(totalMem)}</span>
               </li>
               <li className="none"></li>
             </ul>
@@ -137,29 +132,29 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "10px",
+            marginTop: "1px",
             marginLeft: "20px",
-            width: "200px",
+            width: "210px",
           }}
         >
           <PieChart
             total={true}
             label={["avail", "used"]}
-            value={[Math.round(availDiskTB), Math.round(usageTotalDiskTB)]}
+            value={[availDisk, usageTotalDisk]}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
               <li className="used">
                 <span className="tit">Used</span>
-                <span>{usageTotalDiskTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(usageTotalDisk)}</span>
               </li>
               <li className="avail">
                 <span className="tit">Avail</span>
-                <span>{availDiskTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(availDisk)}</span>
               </li>
               <li className="total">
                 <span className="tit">Total</span>
-                <span>{totalDiskTB.toFixed(2)} TB</span>
+                <span>{formatStorageSize(totalDisk)}</span>
               </li>
               <li className="none"></li>
             </ul>

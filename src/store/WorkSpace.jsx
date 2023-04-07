@@ -31,7 +31,7 @@ class Workspace {
   selectClusterInfo = [];
   workspace = [];
 
-  viewList = null;
+  viewList = [];
   currentPage = 1;
   totalPages = 1;
 
@@ -43,8 +43,8 @@ class Workspace {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -86,18 +86,20 @@ class Workspace {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? (cntCheck = false)
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -138,10 +140,13 @@ class Workspace {
   paginationList = () => {
     runInAction(() => {
       if (this.workSpaceList !== null) {
-        this.viewList =  this.workSpaceList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.workSpaceList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
@@ -151,24 +156,21 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data.data;
-          // this.totalElements = res.data != null ? res.data.data.length : 0;
-          // this.workspace = this.workSpaceList.map((item) => item.workspaceName);
-          this.totalElements =
-            res.data.data === null ? 0 : res.data.data.length;
+          this.totalPages = Math.ceil(this.workSpaceList.length / 10);
+          this.totalElements = this.workSpaceList.length;
+          this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
           this.workspace = this.workSpaceList
             ? this.workSpaceList.map((item) => item.workspaceName)
             : null;
         });
       })
       .then(() => {
-        this.convertList(this.workSpaceList, this.setWorkSpaceList);
+        // this.convertList(this.workSpaceList, this.setWorkSpaceList);
+        this.paginationList();
       })
       // .then(() => {
-      //   this.loadWorkspaceDetail(this.viewList[0].workspaceName);
-      // });
-      .then(() => {
-        type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
-      })
+      //   type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
+      // })
       .catch(() => {
         this.workSpaceList = [];
         this.paginationList();
@@ -183,11 +185,13 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.adminList = res.data.data;
-          this.workSpaceList = this.adminList.filter(
-            (workspace) => workspace.selectCluster.some(cluster => cluster.clusterName === "gm-cluster")
+          this.workSpaceList = this.adminList.filter((workspace) =>
+            workspace.selectCluster.some(
+              (cluster) => cluster.clusterName === "gm-cluster"
+            )
           );
           if (this.workSpaceList.length !== 0) {
-            this.totalPages = Math.ceil(this.workSpaceList.length/10);
+            this.totalPages = Math.ceil(this.workSpaceList.length / 10);
             this.totalElements = this.workSpaceList.length;
             this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
           } else {

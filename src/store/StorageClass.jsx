@@ -100,8 +100,8 @@ class StorageClass {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   setContent = (content) => {
     runInAction(() => {
@@ -204,10 +204,13 @@ class StorageClass {
   paginationList = () => {
     runInAction(() => {
       if (this.storageClasses !== null) {
-        this.viewList =  this.storageClasses.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.storageClasses.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadStorageClassYaml = async (name, clusterName, kind) => {
     await axios
@@ -227,10 +230,10 @@ class StorageClass {
       .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
-          console.log(res.data.data)
+          console.log(res.data.data);
           if (res.data.data !== null) {
             this.storageClasses = res.data.data;
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.storageClasses = [];
@@ -262,7 +265,7 @@ class StorageClass {
           );
           if (this.storageClasses.length !== 0) {
             this.storageClass = this.storageClasses[0];
-            this.totalPages = Math.ceil(this.storageClasses.length/10); 
+            this.totalPages = Math.ceil(this.storageClasses.length / 10);
             this.totalElements = this.storageClasses.length;
           } else {
             this.storageClasses = [];
@@ -276,8 +279,7 @@ class StorageClass {
         this.loadStorageClass(
           this.storageClasses[0].name,
           this.storageClasses[0].cluster
-        )
-        .catch(() => {
+        ).catch(() => {
           this.storageClasses = [];
           this.paginationList();
         });

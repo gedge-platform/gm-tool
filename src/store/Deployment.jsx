@@ -125,8 +125,8 @@ class Deployment {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -160,10 +160,13 @@ class Deployment {
   paginationList = () => {
     runInAction(() => {
       if (this.deploymentList !== null) {
-        this.viewList =  this.deploymentList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.deploymentList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadDeploymentList = async () => {
     let { id, role } = getItem("user");
@@ -176,7 +179,7 @@ class Deployment {
           if (res.data.data !== null) {
             this.deploymentList = res.data.data;
             this.deploymentDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.deploymentList = [];
@@ -210,7 +213,7 @@ class Deployment {
           );
           if (this.deploymentList.length !== 0) {
             this.deploymentDetail = this.deploymentList[0];
-            this.totalPages = Math.ceil(this.deploymentList.length/10); 
+            this.totalPages = Math.ceil(this.deploymentList.length / 10);
             this.totalElements = this.deploymentList.length;
           } else {
             this.deploymentList = [];

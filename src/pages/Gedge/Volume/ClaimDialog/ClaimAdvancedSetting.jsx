@@ -87,6 +87,9 @@ const ClaimAdvancedSetting = observer(() => {
         setInputAnnotationValue(value);
         break;
     }
+  };
+
+  useEffect(() => {
     setLabelInput({
       // ...labelInput, // 기존의 labelInput 객체를 복사한 뒤
       // [name]: value, // name 키를 가진 값을 value로 설정
@@ -95,17 +98,34 @@ const ClaimAdvancedSetting = observer(() => {
     setAnnotationInput({
       [annotationKey]: annotationValue,
     });
-  };
+  }, [labelKey, labelValue, annotationKey, annotationValue]);
 
   // const [labels, setLabels] = useState([]);
   const [annotations, setAnnotations] = useState([]);
 
   const addRow = () => {
-    const table = document.getElementById("labeltable");
-    const newRow = table.insertRow();
-    const newCell1 = newRow.insertCell(0);
-    const newCell2 = newRow.insertCell(1);
-    newCell1.innerText = "label";
+    if (labelKey == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+    if (labelValue == "") {
+      alert("값을 입력하세요.");
+      return;
+    }
+
+    const newLabelsList = [
+      {
+        // [labelKey]: labelValue,
+        labelKey,
+        labelValue,
+      },
+    ];
+
+    setLabels(labels.concat(newLabelsList));
+    setLabelInput({
+      labelKey: "",
+      labelValue: "",
+    });
   };
 
   // const addLabels = (e) => {
@@ -164,18 +184,18 @@ const ClaimAdvancedSetting = observer(() => {
       return;
     }
 
-    // const newAnnotationsList = [
-    //   {
-    //     annotationKey,
-    //     annotationValue,
-    //   },
-    // ];
+    const newAnnotationsList = [
+      {
+        annotationKey,
+        annotationValue,
+      },
+    ];
 
-    // setAnnotations(annotations.concat(newAnnotationsList));
-    // setAnnotationInput({
-    //   annotationKey: "",
-    //   annotationValue: "",
-    // });
+    setAnnotations(annotations.concat(newAnnotationsList));
+    setAnnotationInput({
+      annotationKey: "",
+      annotationValue: "",
+    });
 
     // labels[inputLabelKey] = inputLabelValue;
   };
@@ -231,16 +251,20 @@ const ClaimAdvancedSetting = observer(() => {
               <Button onClick={addRow}>+</Button>
             </td>
           </tr>
-          {/* {Object.entries(labelInput).map((k, v) => (
+          {labels.map((item) => (
             <tr>
               <th>Labels</th>
-              <td style={{ width: "300px", padding: "8px" }}>{k}</td>
-              <td style={{ width: "300px", padding: "8px" }}>{v}</td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelValue}
+              </td>
               <td>
                 <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
               </td>
             </tr>
-          ))} */}
+          ))}
 
           <tr>
             <th>Annotations</th>
@@ -268,9 +292,9 @@ const ClaimAdvancedSetting = observer(() => {
               <Button onClick={addAnnotations}>+</Button>
             </td>
           </tr>
-          {/* {annotations.map((item) => (
+          {annotations.map((item) => (
             <tr>
-              <th>Labels</th>
+              <th>Annotations</th>
               <td style={{ width: "300px", padding: "8px" }}>
                 {item.annotationKey}
               </td>
@@ -283,7 +307,7 @@ const ClaimAdvancedSetting = observer(() => {
                 </Button>
               </td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </table>
       <CreateClaim labelsList={labelInput} />

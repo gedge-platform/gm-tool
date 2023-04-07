@@ -45,8 +45,8 @@ class Service {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -79,10 +79,13 @@ class Service {
   paginationList = () => {
     runInAction(() => {
       if (this.serviceList !== null) {
-        this.viewList =  this.serviceList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.serviceList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadServiceList = async () => {
     let { id, role } = getItem("user");
@@ -91,11 +94,10 @@ class Service {
       .get(`${SERVER_URL}/services?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log(res.data.data)
           if (res.data.data !== null) {
             this.serviceList = res.data.data;
             this.serviceDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.serviceList = [];
@@ -109,11 +111,11 @@ class Service {
         this.serviceList = [];
         this.paginationList();
       });
-      this.loadServiceDetail(
-        this.viewList[0].name,
-        this.viewList[0].cluster,
-        this.viewList[0].project
-      );
+    this.loadServiceDetail(
+      this.viewList[0].name,
+      this.viewList[0].cluster,
+      this.viewList[0].project
+    );
   };
 
   loadAdminServiceList = async () => {
@@ -129,7 +131,7 @@ class Service {
           );
           if (this.serviceList.length !== 0) {
             this.serviceDetail = this.serviceList[0];
-            this.totalPages = Math.ceil(this.serviceList.length/10); 
+            this.totalPages = Math.ceil(this.serviceList.length / 10);
             this.totalElements = this.serviceList.length;
           } else {
             this.serviceList = [];
@@ -143,11 +145,11 @@ class Service {
         this.serviceList = [];
         this.paginationList();
       });
-      this.loadServiceDetail(
-        this.serviceList[0].name,
-        this.serviceList[0].cluster,
-        this.serviceList[0].project
-      );
+    this.loadServiceDetail(
+      this.serviceList[0].name,
+      this.serviceList[0].cluster,
+      this.serviceList[0].project
+    );
   };
 
   loadServiceDetail = async (name, cluster, project) => {

@@ -59,8 +59,8 @@ class StatefulSet {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -89,14 +89,17 @@ class StatefulSet {
       }
     });
   };
-  
+
   paginationList = () => {
     runInAction(() => {
       if (this.statefulSetList !== null) {
-        this.viewList =  this.statefulSetList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.statefulSetList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadStatefulSetList = async () => {
     let { id, role } = getItem("user");
@@ -108,7 +111,7 @@ class StatefulSet {
           if (res.data.data !== null) {
             this.statefulSetList = res.data.data;
             this.statefulSetDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.statefulSetList = [];
@@ -122,7 +125,7 @@ class StatefulSet {
         this.statefulSetList = [];
         this.paginationList();
       });
-      this.statefulSetList === null
+    this.statefulSetList === null
       ? ((this.statefulSetDetail = null),
         (this.label = null),
         (this.annotations = null))
@@ -146,7 +149,7 @@ class StatefulSet {
           );
           if (this.statefulSetList.length !== 0) {
             this.statefulSetDetail = this.statefulSetList[0];
-            this.totalPages = Math.ceil(this.statefulSetList.length/10); 
+            this.totalPages = Math.ceil(this.statefulSetList.length / 10);
             this.totalElements = this.statefulSetList.length;
           } else {
             this.statefulSetList = [];

@@ -19,8 +19,8 @@ class RequestStatus {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -53,10 +53,13 @@ class RequestStatus {
   paginationList = () => {
     runInAction(() => {
       if (this.requestList !== null) {
-        this.viewList =  this.requestList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.requestList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadRequestList = async () => {
     await axios
@@ -65,7 +68,7 @@ class RequestStatus {
         runInAction(() => {
           if (res.data.data !== null) {
             this.requestList = res.data.data;
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.requestList = [];
@@ -75,10 +78,10 @@ class RequestStatus {
       .then(() => {
         this.paginationList();
       })
-      .catch(error => {
+      .catch((error) => {
         this.requestList = [];
         this.paginationList();
-      })
+      });
   };
 }
 

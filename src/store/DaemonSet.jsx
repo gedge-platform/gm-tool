@@ -40,8 +40,8 @@ class DaemonSet {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -74,10 +74,13 @@ class DaemonSet {
   paginationList = () => {
     runInAction(() => {
       if (this.daemonSetList !== null) {
-        this.viewList =  this.daemonSetList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.daemonSetList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadDaemonSetList = async () => {
     let { id, role } = getItem("user");
@@ -89,12 +92,12 @@ class DaemonSet {
           if (res.data.data !== null) {
             this.daemonSetList = res.data.data;
             this.daemonSetDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.daemonSetList = [];
           }
-        })
+        });
       })
       .then(() => {
         this.paginationList();
@@ -125,7 +128,7 @@ class DaemonSet {
           );
           if (this.daemonSetList.length !== 0) {
             this.daemonSetDetail = this.daemonSetList[0];
-            this.totalPages = Math.ceil(this.daemonSetList.length/10); 
+            this.totalPages = Math.ceil(this.daemonSetList.length / 10);
             this.totalElements = this.daemonSetList.length;
           } else {
             this.daemonSetList = [];

@@ -58,8 +58,8 @@ class PlatformProject {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -106,19 +106,20 @@ class PlatformProject {
       let tempList = [];
       let cntCheck = true;
       this.resultList = {};
-
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? (cntCheck = false)
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -146,12 +147,15 @@ class PlatformProject {
 
   paginationList = () => {
     runInAction(() => {
-      console.log(toJS(this.platformProjectList))
+      console.log(toJS(this.platformProjectList));
       if (this.platformProjectList !== null) {
-        this.viewList =  this.platformProjectList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.platformProjectList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadPlatformProjectList = async () => {
     let { id, role } = getItem("user");
@@ -163,7 +167,7 @@ class PlatformProject {
           if (res.data.data !== null) {
             this.platformProjectList = res.data.data;
             this.platformDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/10); 
+            this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.platformProjectList = [];
@@ -201,7 +205,7 @@ class PlatformProject {
           if (this.platformProjectList.length !== 0) {
             this.platformDetail = this.platformProjectList[0];
             this.totalElements = this.platformProjectList.length;
-            this.totalPages = Math.ceil(this.platformProjectList.length/10); 
+            this.totalPages = Math.ceil(this.platformProjectList.length / 10);
           } else {
             this.platformProjectList = [];
           }
@@ -225,7 +229,7 @@ class PlatformProject {
       .catch((err) => {
         this.platformProjectList = [];
         this.paginationList();
-      })
+      });
   };
 
   loadPlatformProjectDetail = async (projectName, clusterName) => {

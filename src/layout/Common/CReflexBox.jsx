@@ -27,7 +27,7 @@ const CReflexBox = observer((props) => {
         </ReflexElement>
         <ReflexSplitter />
 
-        <ReflexElement minSize={100} className="paper_detail">
+        <ReflexElement minSize={190} className="paper_detail">
           {children[1]}
         </ReflexElement>
       </ReflexContainer>

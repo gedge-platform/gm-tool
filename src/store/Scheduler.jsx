@@ -22,8 +22,8 @@ class Scheduler {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -46,10 +46,13 @@ class Scheduler {
   paginationList = () => {
     runInAction(() => {
       if (this.yamlList !== null) {
-        this.viewList =  this.yamlList.slice((this.currentPage-1)*20, this.currentPage*20);
+        this.viewList = this.yamlList.slice(
+          (this.currentPage - 1) * 20,
+          this.currentPage * 20
+        );
       }
-    })
-  }
+    });
+  };
 
   loadYamlList = async () => {
     let { id, role } = getItem("user");
@@ -61,7 +64,7 @@ class Scheduler {
           if (res.data.data !== null) {
             this.yamlList = res.data.data;
             this.yamlDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length/20); 
+            this.totalPages = Math.ceil(res.data.data.length / 20);
             this.totalElements = res.data.data.length;
           } else {
             this.yamlList = [];
@@ -99,7 +102,6 @@ class Scheduler {
     formData.append("clusters", JSON.stringify(clusters));
 
     axios
-      // .post(`http://101.79.4.15:32527/yaml`, formData)
       .post(`http://101.79.1.173:8012/yaml`, formData)
       .then(function (response) {
         if (response.status === 200) {
