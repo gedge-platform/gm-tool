@@ -81,57 +81,51 @@ const CronJobAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {cronJobDetail ? (
-                cronJobDetail.length !== 0 ? (
-                  <>
-                    <tr>
-                      <th className="tb_workload_detail_th">Name</th>
-                      <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
-                      <th className="tb_workload_detail_th">Cluster</th>
-                      <td>
-                        {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Project</th>
-                      <td>
-                        {cronJobDetail.project ? cronJobDetail.project : "-"}
-                      </td>
-                      <th>Schedule</th>
-                      <td>
-                        {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Concurrency Policy</th>
-                      <td>
-                        {cronJobDetail.concurrencyPolicy
-                          ? cronJobDetail.concurrencyPolicy
-                          : "-"}
-                      </td>
-                      <th>Successful Jobs History Limit</th>
-                      <td>
-                        {cronJobDetail.successfulJobsHistoryLimit
-                          ? cronJobDetail.successfulJobsHistoryLimit
-                          : "-"}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td>
-                        {cronJobDetail.creationTimestamp
-                          ? dateFormatter(cronJobDetail.creationTimestamp)
-                          : "-"}
-                      </td>
-                      <th></th>
-                      <td></td>
-                    </tr>
-                  </>
-                ) : (
-                  <LabelContainer>
-                    <p>No Datail Info</p>
-                  </LabelContainer>
-                )
+              {cronJobDetail.length !== 0 ? (
+                <>
+                  <tr>
+                    <th className="tb_workload_detail_th">Name</th>
+                    <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                    <th className="tb_workload_detail_th">Cluster</th>
+                    <td>
+                      {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Project</th>
+                    <td>
+                      {cronJobDetail.project ? cronJobDetail.project : "-"}
+                    </td>
+                    <th>Schedule</th>
+                    <td>
+                      {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Concurrency Policy</th>
+                    <td>
+                      {cronJobDetail.concurrencyPolicy
+                        ? cronJobDetail.concurrencyPolicy
+                        : "-"}
+                    </td>
+                    <th>Successful Jobs History Limit</th>
+                    <td>
+                      {cronJobDetail.successfulJobsHistoryLimit
+                        ? cronJobDetail.successfulJobsHistoryLimit
+                        : "-"}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Created</th>
+                    <td>
+                      {cronJobDetail.creationTimestamp
+                        ? dateFormatter(cronJobDetail.creationTimestamp)
+                        : "-"}
+                    </td>
+                    <th></th>
+                    <td></td>
+                  </tr>
+                </>
               ) : (
                 <LabelContainer>
                   <p>No Datail Info</p>
