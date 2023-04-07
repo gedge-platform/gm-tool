@@ -16,7 +16,17 @@ const CloudVMListTab = observer(() => {
   const [vmName, setVMName] = useState("");
   const [config, setConfig] = useState("");
 
-  const { setInitViewList, deleteVM, loadVMList, currentPage, totalPages, viewList, goPrevPage, goNextPage, totalElements } = clusterStore;
+  const { 
+    deleteVM, 
+    loadVMList, 
+    currentPage, 
+    totalPages, 
+    viewList, 
+    initViewList,
+    goPrevPage, 
+    goNextPage, 
+    totalElements 
+  } = clusterStore;
 
   const [columDefs] = useState([
     {
@@ -117,10 +127,10 @@ const CloudVMListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
-    setInitViewList();
     loadVMList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 
