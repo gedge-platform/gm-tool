@@ -53,6 +53,29 @@ class Claim {
   annotationKey = "";
   annotationValue = "";
 
+  setTemplate = (template) => {
+    runInAction(() => {
+      delete template.metadata.labels[""];
+      delete template.metadata.annotations[""];
+    });
+  };
+
+  setTemplateLabel = () => {
+    runInAction(() => {
+      this.labels.map((data) => {
+        this.labelInput[data.labelKey] = data.labelValue;
+      });
+    });
+  };
+
+  setTemplateAnnotation = () => {
+    runInAction(() => {
+      this.annotations.map((data) => {
+        this.annotationInput[data.annotationKey] = data.annotationValue;
+      });
+    });
+  };
+
   setLabelInput = (value) => {
     runInAction(() => {
       this.labelInput = value;
@@ -65,12 +88,19 @@ class Claim {
     });
   };
 
+  setClearLA = () => {
+    runInAction(() => {
+      this.labelKey = "";
+      this.labelValue = "";
+      this.annotationKey = "";
+      this.annotationValue = "";
+      this.labels = [];
+      this.annotations = [];
+    });
+  };
+
   inputLabelKey = "";
-  // setInputLabelKey = (name, value) => {
-  //   runInAction(() => {
-  //     this.labelInput = [name], value;
-  //   });
-  // };
+
   setInputLabelKey = (value) => {
     runInAction(() => {
       this.labelKey = value;
@@ -83,33 +113,18 @@ class Claim {
     });
   };
 
-  setLabels = (labels) => {
-    runInAction(() => {
-      this.labels = labels;
-    });
-  };
-
-  // inputLabelValue = "";
-  // setInputLabelValue = (value) => {
-  //   runInAction(() => {
-  //     this.inputLabelValue = value;
-  //   });
-  // };
-
   setAnnotations = (value) => {
     runInAction(() => {
       this.annotations = value;
     });
   };
 
-  // inputAnnotationsKey = "";
   setInputAnnotationKey = (value) => {
     runInAction(() => {
       this.annotationKey = value;
     });
   };
 
-  // inputAnnotationsValue = "";
   setInputAnnotationValue = (value) => {
     runInAction(() => {
       this.annotationValue = value;
@@ -275,7 +290,6 @@ class Claim {
 
   clearAll = () => {
     runInAction(() => {
-      // this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
       this.projectList = "";

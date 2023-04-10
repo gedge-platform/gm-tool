@@ -5,17 +5,28 @@ import { claimStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import YAML from "yamljs";
+import { isEmpty } from "lodash-es";
 
 const ClaimYamlPopup = observer(() => {
-  const { content, claimName, labelInput, setContent, labels } = claimStore;
+  const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
+    claimStore;
 
   useEffect(() => {
+    setTemplateAnnotation();
+    setTemplateLabel();
     if (content) {
       var obj_content = YAML.parse(content);
-      if (obj_content.metadata.annotations === ': ""') {
+      if (
+        obj_content.metadata.annotations === ': ""' ||
+        isEmpty(obj_content.metadata.annotations)
+      ) {
         delete obj_content.metadata.annotations;
       }
-      if (obj_content.metadata.labels === ': ""') {
+      if (
+        obj_content.metadata.labels === ': ""' ||
+        isEmpty(obj_content.metadata.labels)
+      ) {
         delete obj_content.metadata.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
