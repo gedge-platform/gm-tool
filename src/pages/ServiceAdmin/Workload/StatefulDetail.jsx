@@ -67,7 +67,9 @@ const StatefulSetDetail = observer(() => {
     status,
     // },
   } = statefulSetStore;
-  console.log(statefulSetDetail);
+  console.log("label: ", label);
+  console.log("annotations: ", annotations);
+  console.log("statefulSetDetail.name: ", statefulSetDetail.name);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -312,7 +314,7 @@ const StatefulSetDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {label != null ? (
+            {statefulSetDetail.name !== "" ? (
               Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -324,7 +326,7 @@ const StatefulSetDetail = observer(() => {
             )}
           </LabelContainer>
           <TableTitle>Annotations</TableTitle>
-          {annotations != null ? (
+          {statefulSetDetail.name !== "" ? (
             Object.entries(annotations).map(([key, value]) => (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody style={{ whiteSpace: "pre-line" }}>
