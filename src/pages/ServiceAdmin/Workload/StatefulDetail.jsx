@@ -67,6 +67,9 @@ const StatefulSetDetail = observer(() => {
     status,
     // },
   } = statefulSetStore;
+  console.log("label: ", label);
+  console.log("annotations: ", annotations);
+  console.log("statefulSetDetail.name: ", statefulSetDetail.name);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -92,10 +95,10 @@ const StatefulSetDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody className="tb_data_detail">
-              {statefulSetDetail ? (
-                <>
+          {statefulSetDetail.length !== 0 ? (
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody className="tb_data_detail">
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
                     <td>
@@ -122,14 +125,14 @@ const StatefulSetDetail = observer(() => {
                         : "-"}
                     </td>
                   </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
@@ -311,7 +314,7 @@ const StatefulSetDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {label != null ? (
+            {statefulSetDetail.name !== "" ? (
               Object.entries(label).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -323,10 +326,10 @@ const StatefulSetDetail = observer(() => {
             )}
           </LabelContainer>
           <TableTitle>Annotations</TableTitle>
-          {annotations != null ? (
-            <table className="tb_data" style={{ tableLayout: "fixed" }}>
-              <tbody style={{ whiteSpace: "pre-line" }}>
-                {Object.entries(annotations).map(([key, value]) => (
+          {statefulSetDetail.name !== "" ? (
+            Object.entries(annotations).map(([key, value]) => (
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody style={{ whiteSpace: "pre-line" }}>
                   <tr>
                     <th style={{ width: "20%" }}>{key}</th>
                     <td>
@@ -342,9 +345,9 @@ const StatefulSetDetail = observer(() => {
                       )}
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            ))
           ) : (
             <LabelContainer>
               <p>No Annotations Info</p>

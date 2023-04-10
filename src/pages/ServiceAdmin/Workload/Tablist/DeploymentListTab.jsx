@@ -20,8 +20,6 @@ const DeploymentListTab = observer(() => {
   const [projectName, setProjectName] = useState("");
 
   const {
-    deploymentList,
-    deploymentDetail,
     totalElements,
     loadDeploymentList,
     loadDeploymentDetail,

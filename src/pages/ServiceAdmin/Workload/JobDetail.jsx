@@ -83,10 +83,10 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {jobDetailData.length !== 0 ? (
-                <>
+          {jobDetailData.length !== 0 ? (
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
                   <tr>
                     <th>Name</th>
                     <td>{jobDetailData.name ? jobDetailData.name : "-"}</td>
@@ -131,14 +131,14 @@ const Detail = observer(() => {
                         : "-"}
                     </td>
                   </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
@@ -291,24 +291,25 @@ const Detail = observer(() => {
           )}
           <br />
           <TableTitle>References</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {ownerReferences.kind ? (
-                Object.entries(ownerReferences).map(([key, value]) => (
+
+          {ownerReferences.kind ? (
+            Object.entries(ownerReferences).map(([key, value]) => (
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
                   <tr>
                     <th style={{ width: "25%" }}>
                       {key.charAt(0).toUpperCase() + key.slice(1)}
                     </th>
                     <td>{value}</td>
                   </tr>
-                ))
-              ) : (
-                <LabelContainer>
-                  <p>No Reference Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            ))
+          ) : (
+            <LabelContainer>
+              <p>No Reference Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>
