@@ -6,6 +6,7 @@ import { AgGridReact } from "@ag-grid-community/react";
 import "@ag-grid-community/core/dist/styles/ag-grid.css";
 import "@ag-grid-community/core/dist/styles/ag-theme-balham-dark.css";
 import "@/styles/ag-custom.scss";
+import { swalError } from "@/utils/swal-utils";
 
 ModuleRegistry.register(ClientSideRowModelModule);
 
@@ -40,7 +41,6 @@ const AgGrid = (props) => {
 
   useEffect(() => {
     if (gridApi) {
-      console.log(gridApi);
       gridApi.sizeColumnsToFit();
       gridApi.showLoadingOverlay();
       gridApi.hideOverlay();
@@ -133,14 +133,33 @@ const AgGrid = (props) => {
             ""
           ) : (
             <div className="btn-wrap">
-              <button type="button" className="btn_comm" onClick={goPrevPage}>
+              <button
+                type="button"
+                className="btn_comm"
+                onClick={() => {
+                  if (currentPage === 1) {
+                    swalError("첫 페이지입니다");
+                  } else {
+                    goPrevPage();
+                  }
+                }}
+              >
                 <span className="btnLabel_icon hover prev">Prev</span>
               </button>
               <span className="page-num">
                 {currentPage} of {totalPages}
               </span>
               <button type="button" className="btn_comm">
-                <span className="btnLabel_icon hover next" onClick={goNextPage}>
+                <span
+                  className="btnLabel_icon hover next"
+                  onClick={() => {
+                    if (currentPage === totalPages) {
+                      swalError("마지막 페이지입니다");
+                    } else {
+                      goNextPage();
+                    }
+                  }}
+                >
                   Next
                 </span>
               </button>
