@@ -3,12 +3,14 @@ import Chart from "react-apexcharts";
 import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
-  const { total, label, value } = props;
+  const { total, label, value, customOptions } = props;
+  console.log(customOptions);
   const options = {
     labels: label,
     chart: {
       type: "donut",
     },
+    ...customOptions,
     responsive: [
       {
         breakpoint: 480,
@@ -30,7 +32,6 @@ const PieChart = observer((props) => {
         horizontal: true,
         barHeight: "60%",
         borderRadius: 5, // Here is the issue ...
-
         donut: {
           size: "60%",
           background: "transparent",

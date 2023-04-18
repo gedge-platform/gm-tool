@@ -21,6 +21,10 @@ const LabelContainer = styled.div`
   padding: 12px;
   border-radius: 4px;
   background-color: #2f3855;
+
+  p {
+    color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Label = styled.span`
@@ -54,6 +58,8 @@ const CronJobAdminDetail = observer(() => {
     events,
     cronjobInvolvesJobs,
   } = cronJobStore;
+
+  console.log("cronjobdetail", cronJobDetail.length);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -79,60 +85,66 @@ const CronJobAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {cronJobDetail.length !== 0 ? (
-                <>
-                  <tr>
-                    <th className="tb_workload_detail_th">Name</th>
-                    <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
-                    <th className="tb_workload_detail_th">Cluster</th>
-                    <td>
-                      {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>
-                      {cronJobDetail.project ? cronJobDetail.project : "-"}
-                    </td>
-                    <th>Schedule</th>
-                    <td>
-                      {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Concurrency Policy</th>
-                    <td>
-                      {cronJobDetail.concurrencyPolicy
-                        ? cronJobDetail.concurrencyPolicy
-                        : "-"}
-                    </td>
-                    <th>Successful Jobs History Limit</th>
-                    <td>
-                      {cronJobDetail.successfulJobsHistoryLimit
-                        ? cronJobDetail.successfulJobsHistoryLimit
-                        : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>
-                      {cronJobDetail.creationTimestamp
-                        ? dateFormatter(cronJobDetail.creationTimestamp)
-                        : "-"}
-                    </td>
-                    <th></th>
-                    <td></td>
-                  </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Datail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+          {cronJobDetail ? (
+            cronJobDetail.length !== 0 ? (
+              <>
+                <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                  <tbody>
+                    <tr>
+                      <th className="tb_workload_detail_th">Name</th>
+                      <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                      <th className="tb_workload_detail_th">Cluster</th>
+                      <td>
+                        {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Project</th>
+                      <td>
+                        {cronJobDetail.project ? cronJobDetail.project : "-"}
+                      </td>
+                      <th>Schedule</th>
+                      <td>
+                        {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Concurrency Policy</th>
+                      <td>
+                        {cronJobDetail.concurrencyPolicy
+                          ? cronJobDetail.concurrencyPolicy
+                          : "-"}
+                      </td>
+                      <th>Successful Jobs History Limit</th>
+                      <td>
+                        {cronJobDetail.successfulJobsHistoryLimit
+                          ? cronJobDetail.successfulJobsHistoryLimit
+                          : "-"}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Created</th>
+                      <td>
+                        {cronJobDetail.creationTimestamp
+                          ? dateFormatter(cronJobDetail.creationTimestamp)
+                          : "-"}
+                      </td>
+                      <th></th>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            ) : (
+              <LabelContainer>
+                <p>No Datail Info</p>
+              </LabelContainer>
+            )
+          ) : (
+            <LabelContainer>
+              <p>No Datail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
