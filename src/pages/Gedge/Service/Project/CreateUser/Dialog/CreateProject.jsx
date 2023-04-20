@@ -218,7 +218,7 @@ const CreateProject = observer(props => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={" "}>Select Workspace</option>
-                  {viewList.map(workspace => (
+                  {viewList?.map(workspace => (
                     <option value={workspace.workspaceName}>{workspace.workspaceName}</option>
                   ))}
                 </select>

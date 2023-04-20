@@ -19,6 +19,7 @@ const JobListTab = observer(() => {
 
   const {
     viewList,
+    initViewList,
     jobList,
     jobDetail,
     totalElements,
@@ -90,6 +91,9 @@ const JobListTab = observer(() => {
 
   useEffect(() => {
     loadJobList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -27,6 +27,7 @@ const DeploymentAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
     totalElements,
@@ -86,6 +87,9 @@ const DeploymentAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminDeploymentList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

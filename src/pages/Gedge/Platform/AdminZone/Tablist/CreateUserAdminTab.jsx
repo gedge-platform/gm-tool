@@ -32,6 +32,7 @@ const CreateUserAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = projectStore;
@@ -101,7 +102,10 @@ const CreateUserAdminTab = observer(() => {
   };
 
   useEffect(() => {
-    loadAdminProjectList("user");
+    loadAdminProjectList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
@@ -134,12 +138,12 @@ const CreateUserAdminTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateProject
-            reloadFunc={() => loadProjectList()}
+          {/* <CreateProject
+            reloadFunc={loadAdminProjectList}
             type={"user"}
             open={open}
             onClose={handleClose}
-          />
+          /> */}
         </PanelBox>
         <CreateAdminUserDetail project={projectDetail} />
       </CReflexBox>

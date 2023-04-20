@@ -85,10 +85,10 @@ const Detail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {daemonSetDetail.length !== 0 ? (
-                <>
+          {daemonSetDetail.length !== 0 ? (
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
                     <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
@@ -109,14 +109,14 @@ const Detail = observer(() => {
                         : "-"}
                     </td>
                   </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
@@ -322,10 +322,11 @@ const Detail = observer(() => {
             </LabelContainer>
           )}
           <TableTitle>Service</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody className="tb_workload_pod_detail">
-              {services.name ? (
-                <>
+
+          {services.name ? (
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody className="tb_workload_pod_detail">
                   <tr>
                     <th>Name</th>
                     <td>{services ? services.name : "-"}</td>
@@ -359,14 +360,14 @@ const Detail = observer(() => {
                       </table>
                     </td>
                   </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Service Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <LabelContainer>
+              <p>No Service Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

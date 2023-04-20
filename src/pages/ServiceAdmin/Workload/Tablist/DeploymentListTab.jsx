@@ -20,8 +20,6 @@ const DeploymentListTab = observer(() => {
   const [projectName, setProjectName] = useState("");
 
   const {
-    deploymentList,
-    deploymentDetail,
     totalElements,
     loadDeploymentList,
     loadDeploymentDetail,
@@ -29,6 +27,7 @@ const DeploymentListTab = observer(() => {
     setWorkspace,
     currentPage,
     totalPages,
+    initViewList,
     viewList,
     goPrevPage,
     goNextPage,
@@ -114,6 +113,8 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
     return () => {
       setReRun(false);
+      // 다른 탭으로 이동 시 viewList 초기화
+      initViewList();
     };
   }, [reRun]);
 

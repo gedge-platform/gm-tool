@@ -58,18 +58,25 @@ const CreateClaim = observer((props) => {
     clusterName,
     setAccessMode,
     labelsKey,
+    labelKey,
+    labelValue,
     setLabelsKey,
     labelsValue,
     setLabelsValue,
     setLabelsView,
     inputLabelKey,
     inputLabelValue,
-    // labels,
+    labels,
+    annotations,
     labelInput,
     annotationInput,
+    annotationKey,
+    annotationValue,
     setLabels,
     setInputLabelKey,
     setInputLabelValue,
+    setTemplate,
+    setClearLA,
   } = claimStore;
 
   const { workspace, setWorkspace } = deploymentStore;
@@ -142,22 +149,48 @@ const CreateClaim = observer((props) => {
     setWorkspace("");
     setProject("");
     setSelectStorageClass("");
-    // setInputLabelKey("");
-    // setInputLabelValue("");
-    // setLabels([
-    //   {
-    //     id: 0,
-    //     key: "",
-    //     value: "",
-    //   },
-    // ]);
+    setClearLA();
   };
 
   const onClickStepTwo = () => {
-    setStepValue(3);
+    const LabelKeyArr = [];
+    const AnnotationKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
+    if (labelKey === "" && labelValue !== "") {
+      swalError("LabelKey 값을 입력해주세요");
+      return;
+    }
+    if (annotationKey === "" && annotationValue !== "") {
+      swalError("AnnotationKey 값을 입력해주세요");
+      return;
+    }
+    if (
+      LabelKeyArr.indexOf(labelKey) < 0 &&
+      AnnotationKeyArr.indexOf(annotationKey) < 0
+    ) {
+      setStepValue(3);
+    } else {
+      if (
+        LabelKeyArr.indexOf(labelKey) >= 0 &&
+        AnnotationKeyArr.indexOf(annotationKey) >= 0
+      ) {
+        swalError("AnnotationKey와 LabelKey값이 중복입니다.");
+        return;
+      }
+      if (LabelKeyArr.indexOf(labelKey) >= 0) {
+        swalError("LabelKey값이 중복입니다.");
+        return;
+      }
+      if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
+        swalError("AnnotationKey값이 중복입니다.");
+        return;
+      }
+    }
   };
 
   const handlePreStepValue = () => {
+    setClearLA();
     setWorkspace("");
     setProject("");
   };
@@ -170,10 +203,17 @@ const CreateClaim = observer((props) => {
     // setSelectClusters();
   };
 
+  const onClickBackStepTwo = () => {
+    setClearLA();
+    setStepValue(2);
+  };
+
   useEffect(() => {
     if (stepValue === 3) {
+      setTemplate(template);
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
+      // setClearLA();
     }
   }, [stepValue]);
 
@@ -251,7 +291,7 @@ const CreateClaim = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => setStepValue(2)}>이전</Button>
+              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
               <ButtonNext onClick={() => CreateVolume()}>
                 Schedule Apply
               </ButtonNext>
