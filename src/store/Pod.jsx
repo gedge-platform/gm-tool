@@ -82,6 +82,7 @@ class Pod {
   involvesData = [];
   workloadList = [];
   serviceList = [];
+  labelList = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -100,6 +101,22 @@ class Pod {
       this.currentYPage = 1;
     });
   };
+
+  initLabelList = () => {
+    this.labelList = [];
+  }
+
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+
+  deleteLabelList = (key) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter(label => label.key !== key);
+    })
+  }
 
   goPrevPage = () => {
     runInAction(() => {
