@@ -84,6 +84,32 @@ class Pod {
   serviceList = [];
   labelList = [];
 
+  ports = [];
+
+  initPorts = () => {
+    runInAction(() => {
+      this.ports = [];
+    })
+  }
+
+  addPort = (index) => {
+    runInAction(() => {
+
+    })
+  }
+
+  removePort = (index) => {
+    runInAction(() => {
+
+    })
+  }
+
+  changePort = (index, input) => {
+    runInAction(() => {
+      
+    })
+  }
+
   constructor() {
     makeAutoObservable(this);
   }

@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import { podStore, projectStore, schedulerStore } from "@/store";
-import PodBasicInformation from "./PodBasicInformation";
-import PodSettings from "./PodSettings";
-import PodYaml from "./PodYaml";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import { CDialogNew } from "@/components/dialogs";
 import { randomString } from "@/utils/common-utils";
+import PodAddContainer from "./PodAddContainer";
 
 const Button = styled.button`
   background-color: #fff;
@@ -31,6 +29,7 @@ const ButtonNext = styled.button`
 
 const CreatePod = observer(props => {
   const { open } = props;
+  const [ open2, setOpen2 ] = useState(false);
   const [stepValue, setStepValue] = useState(1);
 
   const { setProjectListinWorkspace } = projectStore;
@@ -58,6 +57,10 @@ const CreatePod = observer(props => {
     initLabelList();
   };
 
+  const handleClose2 = () => {
+    setOpen2(false);
+  }
+
   const onChange = e => {
     setInput({
       ...input,
@@ -79,9 +82,14 @@ const CreatePod = observer(props => {
     setInput({key: "", value: ""})
   }
 
+  const openTargetCluster = () => {
+    setOpen2(true);
+  }
+
   const CreatePodComponent = () => {
     return (
       <>
+        <PodAddContainer open={open2} onClose={handleClose2}></PodAddContainer>
         <table className="tb_data_new tb_write">
           <tbody>
             <tr>
@@ -204,8 +212,12 @@ const CreatePod = observer(props => {
               <th>
                 Target Clusters <span className="requried">*</span>
               </th>
-              <td>
-                <Button>TargetCluster Setting</Button>
+              <td colSpan="3">
+                <FormControl className="form_fullWidth">
+                  <select name="targetCluster" onChange={onChange}>
+                    <option value={""}>Select Target Cluster</option>
+                  </select>
+                </FormControl>
               </td>
             </tr>
             <tr>
@@ -237,7 +249,7 @@ const CreatePod = observer(props => {
                 Container <span className="requried">*</span>
               </th>
               <td>
-                <Button>+ Add Container</Button>
+                <Button onClick={openTargetCluster}>+ Add Container</Button>
               </td>
             </tr>
           </tbody>
