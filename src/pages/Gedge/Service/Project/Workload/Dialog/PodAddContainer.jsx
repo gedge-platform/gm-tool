@@ -27,6 +27,7 @@ const ButtonNext = styled.button`
 const ButtonAddHost = styled.button`
   background-color: #fff;
   border: 1px solid black;
+  height: 30px;
   color: black;
   border-radius: 4px;
 `;
@@ -35,6 +36,8 @@ const PodAddContainer = observer(props => {
   const { open } = props;
   const [ ports, setPorts ] = useState([]);
   const [ variables, setVariables ] = useState([]);
+  const [ isAddHost, setIsAddHost ] = useState(false);
+
 
 
   const handleClose = () => {
@@ -60,6 +63,13 @@ const PodAddContainer = observer(props => {
       ...ports,
       {serviceType: "", name: "", privateContainerPort: "", protocol: ""}
     ])
+  }
+
+  const addHost = (index) => {
+    ports[index].publicHostPort = "";
+    setPorts([
+      ...ports
+    ]);
   }
   
   const removePort = (removeIndex) => {
@@ -93,6 +103,104 @@ const PodAddContainer = observer(props => {
     console.log(ports);
     console.log(variables);
   }
+
+  const HostComponent = (index) => {
+    if (ports[index].serviceType === "NodePort" || ports[index].serviceType === "LoadBalancer") {
+      return(
+        <td><CTextField type="text" placeholder="Listening Port" className="form_fullWidth" name="listeningPort" onChange={() => onChangePort(event, index)} value={ports[index].listeningPort}/></td>
+      )
+    } else if (ports[index].publicHostPort !== undefined) {
+      return (
+        <td style={{display: "flex"}}>
+          <CTextField style={{paddingRight: "3px"}} type="text" placeholder="Public Host Port" className="form_fullWidth" name="publicHostPort" onChange={() => onChangePort(event, index)} value={ports[index].publicHostPort}/>
+          <CTextField type="text" placeholder="Host IP" className="form_fullWidth" name="hostIP" onChange={() => onChangePort(event, index)} value={ports[index].hostIP}/>
+        </td>
+      )
+    } else {
+      return <td><ButtonAddHost onClick={() => addHost(index)}>Add Host</ButtonAddHost></td>
+    }
+  }
+
+  const ValueComponent = (index) => {
+    switch (variables[index].type) {
+      case "KeyValuePair":
+        return(
+          <td>
+            <CTextField type="text" placeholder="Value" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+          </td>
+        )
+      case "Resource":
+        return(
+          <td style={{ display: "flex", padding:"1px" }}>
+            <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Key 선택</option>
+              </select>
+            </FormControl>
+          </td>
+        )
+      case "ConfigMapKey":
+        return(
+          <td style={{ display: "flex", padding: "1px" }}>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 0px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>ConfigMap 선택</option>
+              </select>
+            </FormControl>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Key 선택</option>
+              </select>
+            </FormControl>
+          </td>
+        )
+      case "SecretKey":
+        return(
+          <td style={{ display: "flex", padding: "1px" }}>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Secret 선택</option>
+              </select>
+            </FormControl>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Key 선택</option>
+              </select>
+            </FormControl>
+          </td>
+        )
+      case "PodField":
+        return(
+          <td>
+            <CTextField tpe="text" placeholder="Key (e.g. metadata.labels['<KEY>'])" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+          </td>
+        )
+      case "Secret":
+        return(
+          <td>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Secret 선택</option>
+              </select>
+            </FormControl>
+          </td>
+        )
+      case "ConfigMap":
+        return(
+          <td>
+            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
+              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                <option value={""}>Key 선택</option>
+              </select>
+            </FormControl>
+          </td>
+        )
+      default:
+        return(<td></td>)
+    }
+  }
+  
 
   const AddContainerComponent = () => {
     return(
@@ -140,39 +248,46 @@ const PodAddContainer = observer(props => {
                       <th>Private Container Port</th>
                       <th>Protocol</th>
                       <th>Host</th>
+
                     </tr>
                     {ports.map((port, index) => (
                       <tr style={{ lineHeight: "35px" }}>
-                        <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                          <select name="serviceType" onChange={() => onChangePort(event, index)}>
-                            <option value={""}>Do not create a service</option>
-                            <option value={"ClusterIP"}>Cluster IP</option>
-                            <option value={"NodePort"}>Node Port</option>
-                            <option value={"LoadBalancer"}>Load Balancer</option>
-                          </select>
-                        </FormControl>
+                        <td>
+                          <FormControl className="form_fullWidth" style={{padding: "1px"}}>
+                            <select name="serviceType" value={ports[index].serviceType} onChange={() => onChangePort(event, index)}>
+                              <option value={""}>Do not create a service</option>
+                              <option value={"ClusterIP"}>Cluster IP</option>
+                              <option value={"NodePort"}>Node Port</option>
+                              <option value={"LoadBalancer"}>Load Balancer</option>
+                            </select>
+                          </FormControl>
+                        </td>
                         <td><CTextField type="text" placeholder="Name" className="form_fullWidth" name="name" onChange={() => onChangePort(event, index)} value={ports[index].name}/></td>
                         <td><CTextField type="text" placeholder="Private Container Port" className="form_fullWidth" name="privateContainerPort" onChange={() => onChangePort(event, index)} value={ports[index].privateContainerPort}/></td>
-                        <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                          <select name="protocol" onChange={() => onChangePort(event, index)}>
-                            <option value={"TCP"}>TCP</option>
-                            <option value={"UDP"}>UDP</option>
-                          </select>
-                        </FormControl>
-                        <td><ButtonAddHost>Add Host</ButtonAddHost></td>
-                        <Button style={{
-                          border: "none",
-                          height: "28px",
-                          width: "30px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          letterSpacing: "normal",
-                          color: "#36435c",
-                          backgroundColor: "#eff4f9",
-                          padding: "0 0 0 0",
-                          margin: "2px",
-                          borderRadius: "0"
-                        }} onClick={() => removePort(index)}>-</Button>
+                        <td>
+                          <FormControl className="form_fullWidth" style={{padding: "1px"}}>
+                            <select name="protocol" value={ports[index].protocol} onChange={() => onChangePort(event, index)}>
+                              <option value={"TCP"}>TCP</option>
+                              <option value={"UDP"}>UDP</option>
+                            </select>
+                          </FormControl>
+                        </td>
+                        {HostComponent(index)}
+                        <td>
+                          <Button style={{
+                            border: "none",
+                            height: "28px",
+                            width: "30px",
+                            fontSize: "20px",
+                            fontWeight: 600,
+                            letterSpacing: "normal",
+                            color: "#36435c",
+                            backgroundColor: "#eff4f9",
+                            padding: "0 0",
+                            margin: "2px",
+                            borderRadius: "0"
+                          }} onClick={() => removePort(index)}>-</Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -222,29 +337,36 @@ const PodAddContainer = observer(props => {
                     </tr>
                     {variables.map((variable, index) => (
                       <tr style={{ lineHeight: "35px" }}>
-                        <FormControl className="form_fullWidth">
-                          <select name="type" onChange={() => onChangeVariable(event, index)}>
-                            <option value={"KeyValuePair"}>Key/Value Pair</option>
-                            <option value={"Resource"}>Resource</option>
-                            <option value={"ConfigMapKey"}>ConfigMap Key</option>
-                            <option value={"SecretKey"}>Secret Key</option>
-                          </select>
-                        </FormControl>
+                        <td>
+                          <FormControl className="form_fullWidth">
+                            <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                              <option value={"KeyValuePair"}>Key/Value Pair</option>
+                              <option value={"Resource"}>Resource</option>
+                              <option value={"ConfigMapKey"}>ConfigMap Key</option>
+                              <option value={"SecretKey"}>Secret Key</option>
+                              <option value={"PodField"}>Pod Field</option>
+                              <option value={"Secret"}>Secret</option>
+                              <option value={"ConfigMap"}>ConfigMap</option>
+                            </select>
+                          </FormControl>
+                        </td>
                         <td><CTextField type="text" placeholder="Variable Name" className="form_fullWidth" name="variableName" onChange={() => onChangeVariable(event, index)} value={variables[index].variableName}/></td>
-                        <td><CTextField type="text" placeholder="Value" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/></td>
-                        <Button style={{
-                          border: "none",
-                          height: "28px",
-                          width: "30px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          letterSpacing: "normal",
-                          color: "#36435c",
-                          backgroundColor: "#eff4f9",
-                          padding: "0px 0px",
-                          margin: "4px 2px",
-                          borderRadius: "0"
-                        }} onClick={() => removeVariable(index)}>-</Button>
+                        {ValueComponent(index)}
+                        <td>
+                          <Button style={{
+                            border: "none",
+                            height: "28px",
+                            width: "30px",
+                            fontSize: "20px",
+                            fontWeight: 600,
+                            letterSpacing: "normal",
+                            color: "#36435c",
+                            backgroundColor: "#eff4f9",
+                            padding: "0 0",
+                            margin: "2px",
+                            borderRadius: "0"
+                          }} onClick={() => removeVariable(index)}>-</Button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
