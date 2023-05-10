@@ -52,7 +52,7 @@ const UserDetail = observer((props) => {
                       <td>
                         {user.created_at ? dateFormatter(user.created_at) : "-"}
                       </td>
-                      <th>Last Longin</th>
+                      <th>Last Login</th>
                       <td>
                         {user.logined_at ? dateFormatter(user.logined_at) : "-"}
                       </td>
