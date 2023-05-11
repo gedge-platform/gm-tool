@@ -409,7 +409,7 @@ const PodAddContainer = observer(props => {
                   CPU Reservation
                 </th>
                 <td >
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="CPU Reservation" className="form_fullWidth" name="CPUReservation" onChange={onChange}/>
                 </td>
               </tr>
               <tr>
@@ -417,7 +417,7 @@ const PodAddContainer = observer(props => {
                   Memory Reservation
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Memory Reservation" className="form_fullWidth" name="memoryReservation" onChange={onChange}/>
                 </td>
               </tr>
               <tr>
@@ -425,7 +425,7 @@ const PodAddContainer = observer(props => {
                   CPU Limit
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="CPU Limit" className="form_fullWidth" name="CPULimit" onChange={onChange}/>
                 </td>
               </tr>
               <tr>
@@ -433,7 +433,7 @@ const PodAddContainer = observer(props => {
                   Memory Limit
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Memory Limit" className="form_fullWidth" name="memoryLimit" onChange={onChange}/>
                 </td>
               </tr>
               <tr>
@@ -441,7 +441,7 @@ const PodAddContainer = observer(props => {
                   NVIDIA GPU Limit/Reservation
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="NVIDIA GPU Limit/Reservation" className="form_fullWidth" name="NVIDIAGPU" onChange={onChange}/>
                 </td>
               </tr>
             </tbody>
