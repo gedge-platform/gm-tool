@@ -55,6 +55,7 @@ const CreatePod = observer(props => {
   const handleClose = () => {
     props.onClose && props.onClose();
     initLabelList();
+    setInput({key: "", value: ""}); 
   };
 
   const handleClose2 = () => {
