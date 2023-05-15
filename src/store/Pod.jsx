@@ -82,6 +82,53 @@ class Pod {
   involvesData = [];
   workloadList = [];
   serviceList = [];
+  labelList = [];
+
+  ports = [];
+
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initPorts = () => {
+    runInAction(() => {
+      this.ports = [];
+    })
+  }
+
+  addPort = (index) => {
+    runInAction(() => {
+
+    })
+  }
+
+  removePort = (index) => {
+    runInAction(() => {
+
+    })
+  }
+
+  changePort = (index, input) => {
+    runInAction(() => {
+      
+    })
+  }
 
   constructor() {
     makeAutoObservable(this);
