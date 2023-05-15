@@ -83,25 +83,24 @@ class Pod {
   workloadList = [];
   serviceList = [];
   labelList = [];
-  labels = [];
 
   ports = [];
 
-  initLabels = () => {
+  initLabelList = () => {
     runInAction(() => {
-      this.labels = [];
+      this.labelList = [];
     })
   }
 
-  addLabels = (key, value) => {
+  addLabelList = (key, value) => {
     runInAction(() => {
-      this.labels.push({key: key, value: value});
+      this.labelList.push({key: key, value: value});
     })
   }
 
-  removeLabels = (removeIndex) => {
+  removeLabelList = (removeIndex) => {
     runInAction(() => {
-      this.labels = this.labels.filter((_, index) =>
+      this.labelList = this.labelList.filter((_, index) =>
         removeIndex !== index
       )
     })

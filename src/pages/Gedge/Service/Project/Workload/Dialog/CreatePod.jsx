@@ -45,16 +45,16 @@ const CreatePod = observer(props => {
     content, 
     clearAll, 
     setContent,
-    labels,
-    initLabels,
-    addLabels,
-    removeLabels
+    labelList,
+    initLabelList,
+    addLabelList,
+    removeLabelList
   } = podStore;
   const [ input, setInput ] = useState({key: "", value: ""});
 
   const handleClose = () => {
     props.onClose && props.onClose();
-    initLabels();
+    initLabelList();
   };
 
   const handleClose2 = () => {
@@ -79,7 +79,7 @@ const CreatePod = observer(props => {
 
   const addLabel = () => {
     if (input.key !== "" && input.value !== "") {
-      addLabels(input.key, input.value);
+      addLabelList(input.key, input.value);
       setInput({key: "", value: ""})
     }
   }
@@ -103,11 +103,11 @@ const CreatePod = observer(props => {
               </td>
             </tr>
             <tr>
-              <th rowSpan={labels.length+2}>
+              <th rowSpan={labelList.length+2}>
                 Labels <span className="requried">*</span>
               </th>
             </tr>
-            {labels.map((label, index)=>(
+            {labelList.map((label, index)=>(
               <tr>
                 <td style={{paddingLeft: "5px"}}>
                   {label.key}
@@ -128,7 +128,7 @@ const CreatePod = observer(props => {
                   padding: "0 0 0 0",
                   margin: "2px",
                   borderRadius: "0"
-                }} onClick={() => removeLabels(index)}>-</Button>
+                }} onClick={() => removeLabelList(index)}>-</Button>
               </tr>
             ))}
             <tr>
