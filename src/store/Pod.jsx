@@ -83,8 +83,29 @@ class Pod {
   workloadList = [];
   serviceList = [];
   labelList = [];
+  labels = [];
 
   ports = [];
+
+  initLabels = () => {
+    runInAction(() => {
+      this.labels = [];
+    })
+  }
+
+  addLabels = (key, value) => {
+    runInAction(() => {
+      this.labels.push({key: key, value: value});
+    })
+  }
+
+  removeLabels = (removeIndex) => {
+    runInAction(() => {
+      this.labels = this.labels.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
 
   initPorts = () => {
     runInAction(() => {
@@ -127,22 +148,6 @@ class Pod {
       this.currentYPage = 1;
     });
   };
-
-  initLabelList = () => {
-    this.labelList = [];
-  }
-
-  addLabelList = (key, value) => {
-    runInAction(() => {
-      this.labelList.push({key: key, value: value});
-    })
-  }
-
-  deleteLabelList = (key) => {
-    runInAction(() => {
-      this.labelList = this.labelList.filter(label => label.key !== key);
-    })
-  }
 
   goPrevPage = () => {
     runInAction(() => {
