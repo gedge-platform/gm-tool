@@ -103,8 +103,8 @@ class Cluster {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -209,26 +209,31 @@ class Cluster {
   paginationList = () => {
     runInAction(() => {
       if (this.clusterList !== null) {
-        this.viewList =  this.clusterList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.clusterList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadClusterList = async (type) => {
     await axios
       .get(`${SERVER_URL}/clusters`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(data)
           this.clusterListInWorkspace = data;
           const list =
             type === ""
               ? data
               : data.filter((item) => item.clusterType === type);
           this.clusterList = list;
-          this.clusterNameList = list.map(item => item.clusterName);
+          // this.clusterList = list.filter(
+          //   (name) => name.clusterName !== "gm-cluster"
+          // );
+          this.clusterNameList = list.map((item) => item.clusterName);
           this.totalElements = this.clusterList.length;
-          this.totalPages = Math.ceil(this.clusterList.length/10);
+          this.totalPages = Math.ceil(this.clusterList.length / 10);
         });
       })
       .then(() => {
@@ -248,9 +253,9 @@ class Cluster {
           console.log("vmlist", data);
           const list = data;
           this.clusterList = list;
-          this.clusterNameList = list.map(item => item.IId.NameId);
+          this.clusterNameList = list.map((item) => item.IId.NameId);
           this.totalElements = this.clusterList.length;
-          this.totalPages = Math.ceil(this.clusterList.length/10);
+          this.totalPages = Math.ceil(this.clusterList.length / 10);
         });
       })
       .then(() => {
@@ -338,14 +343,12 @@ class Cluster {
       .get(`${SERVER_URL}/clusters/${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(data);
           this.clusterDetail = data;
           this.gpu = data;
           this.nodes =
             this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
         });
       });
-    console.log(this.clusterDetail);
     return this.clusterDetail;
   };
 
@@ -354,7 +357,6 @@ class Cluster {
       .get(`${SERVER_URL}/cloudDashboard?cluster=${clusterName}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(clusterName);
           this.dataUsage = data;
           // this.clusterName = clusterName;
           // this.cloudDashboardDetail = data;

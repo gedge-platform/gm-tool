@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
@@ -118,7 +118,6 @@ const WorkspaceDetail = observer(() => {
   const clusterResourceTable = () => {
     return (
       <>
-        {/* <ClusterTitle>{workSpaceDetail.workspaceName}</ClusterTitle> */}
         <table className="tb_data">
           <tbody className="tb_workload_detail_th">
             <tr>
@@ -146,8 +145,6 @@ const WorkspaceDetail = observer(() => {
         <>
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody className="project_table">
-              {/* <tr>
-                  <> */}
               <tr>
                 <th> Name</th>
                 <td>{project?.projectName}</td>
@@ -168,8 +165,6 @@ const WorkspaceDetail = observer(() => {
                   {project?.projectCreator ? project?.projectCreator : "-"}
                 </td>
               </tr>
-              {/* </>
-              </tr> */}
             </tbody>
           </table>
           <br />
@@ -185,7 +180,6 @@ const WorkspaceDetail = observer(() => {
   const resourcesTable = () => {
     return (
       <>
-        {/* <ClusterTitle>{workSpaceDetail.workspaceName}</ClusterTitle> */}
         <table className="tb_data" style={{ tableLayout: "fixed" }}>
           <tbody>
             {workSpaceDetail.resource ? (
@@ -248,7 +242,7 @@ const WorkspaceDetail = observer(() => {
                     <th>Workspace Name</th>
                     <td>
                       {workSpaceDetail.workspaceName
-                        ? workSpaceDetail.workspaceName
+                        ? workSpaceDetail.workspaceName.split("-")[0]
                         : "-"}
                     </td>
                     <th>Description</th>
