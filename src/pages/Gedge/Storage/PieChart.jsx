@@ -3,14 +3,14 @@ import Chart from "react-apexcharts";
 import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
-  const { total, label, value, customOptions } = props;
-  console.log(customOptions);
+  const { total, label, value, customOption } = props;
+
   const options = {
     labels: label,
     chart: {
       type: "donut",
     },
-    ...customOptions,
+    ...customOption,
     responsive: [
       {
         breakpoint: 480,

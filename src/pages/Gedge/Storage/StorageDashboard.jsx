@@ -147,7 +147,7 @@ const StorageDashboard = observer(() => {
           <div className="storageCircleBoxWrap">
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Row Capacity</div>
-              <div className="storageCircleBoxCont">
+              <div style={{margin: "10px auto", width: "360px"}}>
                 <PieChart
                   total={true}
                   label={["avail", "used"]}
@@ -183,7 +183,7 @@ const StorageDashboard = observer(() => {
 
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">OSD</div>
-              <div className="storageCircleBoxCont">
+              <div style={{margin: "10px auto", width: "360px"}}>
                 <PieChart
                   total={false}
                   label={["in", "out", "up", "down"]}
@@ -223,7 +223,7 @@ const StorageDashboard = observer(() => {
             </div>
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">PG Status</div>
-              <div className="storageCircleBoxCont">
+              <div style={{margin: "10px auto", width: "360px"}}>
                 <PieChart
                   total={false}
                   label={["active", "clean"]}
@@ -255,7 +255,7 @@ const StorageDashboard = observer(() => {
             </div>
             <div className="storageCircleBox">
               <div className="storageCircleBoxTitle">Objects</div>
-              <div className="storageCircleBoxCont">
+              <div style={{margin: "10px auto", width: "360px"}}>
                 <PieChart
                   total={true}
                   label={["healthy", "misplaced", "degraded", "unfound"]}
