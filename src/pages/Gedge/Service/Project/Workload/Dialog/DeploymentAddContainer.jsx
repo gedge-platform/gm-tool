@@ -7,7 +7,6 @@ import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { useState } from "react";
 import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
-import podStore from "../../../../../../store/Pod";
 
 const Button = styled.button`
   background-color: #fff;
@@ -36,14 +35,8 @@ const ButtonAddHost = styled.button`
   border-radius: 4px;
 `;
 
-const PodAddContainer = observer(props => {
-  const { 
-    podInfo,
-    initContainer,
-    addContainer,
-    removeContainer
-  } = podStore;
-  const { open, containerIndex } = props;
+const DeploymentAddContainer = observer(props => {
+  const { open } = props;
   const [ tabvalue, setTabvalue ] = useState(0);
   const [ ports, setPorts ] = useState([]);
   const [ variables, setVariables ] = useState([]);
@@ -111,7 +104,7 @@ const PodAddContainer = observer(props => {
     ))
   }
 
-  const addContainers = () => {
+  const addContainer = () => {
     console.log(ports);
     console.log(variables);
   }
@@ -250,7 +243,7 @@ const PodAddContainer = observer(props => {
               </tr>
               <tr>
                 <th rowSpan={"2"}>
-                  Ports <span className="requried">*</span>
+                  Port <span className="requried">*</span>
                 </th>
                 <td>
                   <table className="tb_data_new">
@@ -338,7 +331,7 @@ const PodAddContainer = observer(props => {
               </tr>
               <tr>
                 <th rowSpan={2}>
-                  Variables <span className="requried">*</span>
+                  Add Variables <span className="requried">*</span>
                 </th>
                 <td>
                   <table className="tb_data_new">
@@ -402,7 +395,7 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            <ButtonNext onClick={addContainer}>추가</ButtonNext>
           </div>
         </>
       )
@@ -462,7 +455,7 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            <ButtonNext onClick={addContainer}>추가</ButtonNext>
           </div>
         </>
       )
@@ -494,7 +487,7 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            <ButtonNext onClick={addContainer}>추가</ButtonNext>
           </div>
         </>
       )
@@ -514,4 +507,4 @@ const PodAddContainer = observer(props => {
   )
 })
 
-export default PodAddContainer;
+export default DeploymentAddContainer;

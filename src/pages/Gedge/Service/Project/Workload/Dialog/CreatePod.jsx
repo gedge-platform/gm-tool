@@ -45,6 +45,7 @@ const CreatePod = observer(props => {
     content, 
     clearAll, 
     setContent,
+    podInfo,
     labelList,
     initLabelList,
     addLabelList,
@@ -92,7 +93,7 @@ const CreatePod = observer(props => {
   const CreatePodComponent = () => {
     return (
       <>
-        <PodAddContainer open={open2} onClose={handleClose2}></PodAddContainer>
+        <PodAddContainer containerIndex={-1} open={open2} onClose={handleClose2}></PodAddContainer>
         <table className="tb_data_new tb_write">
           <tbody>
             <tr>
@@ -249,9 +250,14 @@ const CreatePod = observer(props => {
             </tr>
             <tr>
               <th>
-                Container <span className="requried">*</span>
+                Containers <span className="requried">*</span>
               </th>
               <td>
+                {
+                  podInfo.containers.map((_, index) => (
+                    <Button onClick={openTargetCluster}>+ Add Container</Button>
+                  ))
+                }
                 <Button onClick={openTargetCluster}>+ Add Container</Button>
               </td>
             </tr>

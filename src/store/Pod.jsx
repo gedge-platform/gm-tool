@@ -82,25 +82,105 @@ class Pod {
   involvesData = [];
   workloadList = [];
   serviceList = [];
-  labelList = [];
 
-  ports = [];
+  labelList = [];
+  containerList = [];
+  portList = [];
+  variableList = [];
+
+
+  podInfo = {
+    podName: "",
+    labels: [
+      // {
+      //   key: "",
+      //   value: ""
+      // }
+    ],
+    pullSecrets: "",
+    volume: {
+      name: "",
+      nfsServer: "",
+      nfsPath: ""
+    },
+    priority: "",
+    targetClusters: "",
+    sourceNode: "",
+    containers: [
+      // {
+      //   general: {
+      //     containerName: "",
+      //     containerImage: "",
+      //     pullPolicy: "",
+      //     ports: [
+      //       {
+      //         serviceType: "",
+      //         name: "",
+      //         privateContainerPort: "",
+      //         protocol: "",
+      //         host: {
+
+      //         }
+      //       },
+      //     ],
+      //     command: "",
+      //     arguments: "",
+      //     workingDir: "",
+      //     variables: [
+      //       {
+      //         type: "",
+      //         variableName: "",
+      //         value: {
+
+      //         }
+      //       }
+      //     ]
+      //   },
+      //   resource: {
+      //     cpuReservation: "",
+      //     memoryReservation: "",
+      //     cpuLimit: "",
+      //     memoryLimit: "",
+      //     nvidiaGPULimitReservation: ""
+      //   },
+      //   storage: {
+      //     volume: ""
+      //   }
+      // },
+    ]
+  }
 
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
     })
   }
-
   addLabelList = (key, value) => {
     runInAction(() => {
       this.labelList.push({key: key, value: value});
     })
   }
-
   removeLabelList = (removeIndex) => {
     runInAction(() => {
       this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initContainer = () => {
+    runInAction(() => {
+      this.podInfo.containers = [];
+    })
+  }
+  addContainer = (container) => {
+    runInAction(() => {
+      this.podInfo.containers.push(container);
+    })
+  }
+  removeContainer = (removeIndex) => {
+    runInAction(() => {
+      this.podInfo.containers = this.podInfo.containers.filter((_, index) => 
         removeIndex !== index
       )
     })
@@ -111,14 +191,12 @@ class Pod {
       this.ports = [];
     })
   }
-
-  addPort = (index) => {
+  addPort = (containerIndex) => {
     runInAction(() => {
-
+      
     })
   }
-
-  removePort = (index) => {
+  removePort = (containerIndex) => {
     runInAction(() => {
 
     })

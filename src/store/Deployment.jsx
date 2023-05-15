@@ -116,6 +116,29 @@ class Deployment {
   content = "";
   contentVolume = "";
 
+  podName = "";
+  labelList = [];
+
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
   constructor() {
     makeAutoObservable(this);
   }
