@@ -86,6 +86,26 @@ class Pod {
 
   ports = [];
 
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
   initPorts = () => {
     runInAction(() => {
       this.ports = [];
@@ -127,22 +147,6 @@ class Pod {
       this.currentYPage = 1;
     });
   };
-
-  initLabelList = () => {
-    this.labelList = [];
-  }
-
-  addLabelList = (key, value) => {
-    runInAction(() => {
-      this.labelList.push({key: key, value: value});
-    })
-  }
-
-  deleteLabelList = (key) => {
-    runInAction(() => {
-      this.labelList = this.labelList.filter(label => label.key !== key);
-    })
-  }
 
   goPrevPage = () => {
     runInAction(() => {

@@ -48,9 +48,9 @@ const CreatePod = observer(props => {
     labelList,
     initLabelList,
     addLabelList,
-    deleteLabelList
+    removeLabelList
   } = podStore;
-  const [ input, setInput ] = useState({});
+  const [ input, setInput ] = useState({key: "", value: ""});
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -78,8 +78,10 @@ const CreatePod = observer(props => {
   };
 
   const addLabel = () => {
-    addLabelList(input.key, input.value);
-    setInput({key: "", value: ""})
+    if (input.key !== "" && input.value !== "") {
+      addLabelList(input.key, input.value);
+      setInput({key: "", value: ""})
+    }
   }
 
   const openTargetCluster = () => {
@@ -105,7 +107,7 @@ const CreatePod = observer(props => {
                 Labels <span className="requried">*</span>
               </th>
             </tr>
-            {labelList.map((label)=>(
+            {labelList.map((label, index)=>(
               <tr>
                 <td style={{paddingLeft: "5px"}}>
                   {label.key}
@@ -126,7 +128,7 @@ const CreatePod = observer(props => {
                   padding: "0 0 0 0",
                   margin: "2px",
                   borderRadius: "0"
-                }} onClick={() => deleteLabelList(label.key)}>-</Button>
+                }} onClick={() => removeLabelList(index)}>-</Button>
               </tr>
             ))}
             <tr>
