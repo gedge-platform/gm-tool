@@ -53,11 +53,28 @@ class Claim {
   annotationKey = "";
   annotationValue = "";
 
-  // labelInput = [
-  //   {
-  //     [this.labelKey]: this.labelValue,
-  //   },
-  // ];
+  setTemplate = (template) => {
+    runInAction(() => {
+      delete template.metadata.labels[""];
+      delete template.metadata.annotations[""];
+    });
+  };
+
+  setTemplateLabel = () => {
+    runInAction(() => {
+      this.labels.map((data) => {
+        this.labelInput[data.labelKey] = data.labelValue;
+      });
+    });
+  };
+
+  setTemplateAnnotation = () => {
+    runInAction(() => {
+      this.annotations.map((data) => {
+        this.annotationInput[data.annotationKey] = data.annotationValue;
+      });
+    });
+  };
 
   setLabelInput = (value) => {
     runInAction(() => {
@@ -71,12 +88,19 @@ class Claim {
     });
   };
 
+  setClearLA = () => {
+    runInAction(() => {
+      this.labelKey = "";
+      this.labelValue = "";
+      this.annotationKey = "";
+      this.annotationValue = "";
+      this.labels = [];
+      this.annotations = [];
+    });
+  };
+
   inputLabelKey = "";
-  // setInputLabelKey = (name, value) => {
-  //   runInAction(() => {
-  //     this.labelInput = [name], value;
-  //   });
-  // };
+
   setInputLabelKey = (value) => {
     runInAction(() => {
       this.labelKey = value;
@@ -89,33 +113,18 @@ class Claim {
     });
   };
 
-  setLabels = (labels) => {
-    runInAction(() => {
-      this.labels = labels;
-    });
-  };
-
-  // inputLabelValue = "";
-  // setInputLabelValue = (value) => {
-  //   runInAction(() => {
-  //     this.inputLabelValue = value;
-  //   });
-  // };
-
   setAnnotations = (value) => {
     runInAction(() => {
       this.annotations = value;
     });
   };
 
-  // inputAnnotationsKey = "";
   setInputAnnotationKey = (value) => {
     runInAction(() => {
       this.annotationKey = value;
     });
   };
 
-  // inputAnnotationsValue = "";
   setInputAnnotationValue = (value) => {
     runInAction(() => {
       this.annotationValue = value;
@@ -180,18 +189,20 @@ class Claim {
       let cntCheck = true;
       this.resultList = {};
 
-      Object.entries(apiList).map(([_, value]) => {
-        cntCheck = true;
-        tempList.push(toJS(value));
-        cnt = cnt + 1;
-        if (cnt > 10) {
-          cntCheck = false;
-          cnt = 1;
-          this.resultList[totalCnt] = tempList;
-          totalCnt = totalCnt + 1;
-          tempList = [];
-        }
-      });
+      apiList === null
+        ? (cntCheck = false)
+        : Object.entries(apiList).map(([_, value]) => {
+            cntCheck = true;
+            tempList.push(toJS(value));
+            cnt = cnt + 1;
+            if (cnt > 10) {
+              cntCheck = false;
+              cnt = 1;
+              this.resultList[totalCnt] = tempList;
+              totalCnt = totalCnt + 1;
+              tempList = [];
+            }
+          });
 
       if (cntCheck) {
         this.resultList[totalCnt] = tempList;
@@ -279,7 +290,6 @@ class Claim {
 
   clearAll = () => {
     runInAction(() => {
-      // this.volumeName = "";
       this.content = "";
       this.volumeCapacity = 0;
       this.projectList = "";

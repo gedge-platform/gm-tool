@@ -22,6 +22,7 @@ const ServiceListTab = observer(() => {
   const {
     pServiceList,
     viewList,
+    initViewList,
     serviceList,
     serviceDetail,
     totalElements,
@@ -89,6 +90,9 @@ const ServiceListTab = observer(() => {
 
   useEffect(() => {
     loadServiceList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -30,6 +30,7 @@ const PodListTab = observer(() => {
     goPrevPage,
     goNextPage,
     viewList,
+    initViewList,
   } = podStore;
 
   const [columDefs] = useState([
@@ -115,6 +116,7 @@ const PodListTab = observer(() => {
     loadPodList();
     return () => {
       setReRun(false);
+      initViewList();
     };
   }, [reRun]);
 

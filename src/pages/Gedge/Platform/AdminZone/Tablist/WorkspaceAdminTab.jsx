@@ -28,6 +28,7 @@ const WorkspaceAdminTab = observer(() => {
     loadWorkspaceDetail,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
     currentPage,
@@ -102,6 +103,9 @@ const WorkspaceAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminWorkSpaceList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

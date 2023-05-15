@@ -29,6 +29,7 @@ const SecretAdminListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
   } = secretStore;
@@ -82,6 +83,9 @@ const SecretAdminListTab = observer(() => {
   //Pagenation useEffect -> useLayoutEffect
   useLayoutEffect(() => {
     loadAdminsecretList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
@@ -94,7 +98,7 @@ const SecretAdminListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={adminList}
+                  rowData={viewList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

@@ -1,26 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { CTextField } from "@/components/textfields";
 import { observer } from "mobx-react";
 import { claimStore } from "@/store";
-import { makeAutoObservable, runInAction, toJS } from "mobx";
 import CreateClaim from "./CreateClaim";
-import { render } from "react-dom";
+import { swalError } from "../../../../utils/swal-utils";
 
-const HeaderContainer = styled.div`
-  width: 320px;
-  padding: 8px;
-  border-radius: 4px;
-  background-color: #eff4f9;
-  text-align: center;
-  margin-bottom: 20px;
-`;
-const ButtonBox = styled.div`
-  margin-top: 15px;
-  display: flex;
-  width: 100%;
-  justify-content: space-around;
-`;
 const Button = styled.button`
   border: none;
   height: 28px;
@@ -54,22 +39,15 @@ const ClaimAdvancedSetting = observer(() => {
     labelInputValue,
     annotationKey,
     annotationValue,
-    annotationInput,
     setAnnotationInput,
     setLabelInput,
     labels,
+    annotations,
     setLabels,
+    setAnnotations,
   } = claimStore;
 
-  // const [labelInput, setLabelInput] = useState({ [labelKey]: labelValue });
   const newLabelList = [{ [labelInputKey]: labelInputValue }];
-  // const { labelKey, labelValue } = labelInput;
-
-  // const [annotationInput, setAnnotationInput] = useState({
-  //   annotationKey: "",
-  //   annotationValue: "",
-  // });
-  // const { annotationKey, annotationValue } = annotationInput;
 
   const handleChange = (e) => {
     const { value, name } = e.target;
@@ -87,104 +65,84 @@ const ClaimAdvancedSetting = observer(() => {
         setInputAnnotationValue(value);
         break;
     }
+  };
+
+  useEffect(() => {
     setLabelInput({
-      // ...labelInput, // 기존의 labelInput 객체를 복사한 뒤
-      // [name]: value, // name 키를 가진 값을 value로 설정
+      // ...labelInput, : 기존의 labelInput 객체를 복사한 뒤
+      // [name]: value, : name 키를 가진 값을 value로 설정
       [labelKey]: labelValue,
     });
     setAnnotationInput({
       [annotationKey]: annotationValue,
     });
-  };
-
-  // const [labels, setLabels] = useState([]);
-  const [annotations, setAnnotations] = useState([]);
+  }, [labelKey, labelValue, annotationKey, annotationValue]);
 
   const addRow = () => {
-    const table = document.getElementById("labeltable");
-    const newRow = table.insertRow();
-    const newCell1 = newRow.insertCell(0);
-    const newCell2 = newRow.insertCell(1);
-    newCell1.innerText = "label";
+    if (labelKey == "") {
+      swalError("LabelKey 값을 입력해주세요");
+      return;
+    }
+
+    const LabelKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+
+    if (LabelKeyArr.indexOf(labelKey) >= 0) {
+      swalError("LabelKey 값이 중복입니다.");
+      return;
+    }
+
+    const newLabelsList = [
+      {
+        labelKey,
+        labelValue,
+      },
+    ];
+
+    setLabels(labels.concat(newLabelsList));
+    setLabelInput({
+      labelKey: "",
+      labelValue: "",
+    });
+
+    setInputLabelKey("");
+    setInputLabelValue("");
   };
 
-  // const addLabels = (e) => {
-  //   e.preventDefault();
-  //   if (labelKey == "") {
-  //     alert("값을 입력하세요.");
-  //     return;
-  //   }
-  //   if (labelValue == "") {
-  //     alert("값을 입력하세요.");
-  //     return;
-  //   }
-  //   // setLabels(newLabelList);
-  //   // const labelInputKey = "";
-  //   // const labelInputvalue = "";
-
-  //   setLabelInput(labelInput.concat(newLabelList));
-  //   // labelInput = { ...labelInput, newLabelList };
-  //   setLabelInput({
-  //     labelKey: "",
-  //     labelValue: "",
-  //   });
-  //   console.log(labelInput);
-  //   // render() {
-  //   //   return (
-  //   //     <tr>
-  //   //           <th>Labels</th>
-  //   //           <td style={{ width: "300px", padding: "8px" }}>{k}</td>
-  //   //           <td style={{ width: "300px", padding: "8px" }}>{v}</td>
-  //   //           <td>
-  //   //             <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
-  //   //           </td>
-  //   //         </tr>
-  //   //   );
-  //   // }
-  // };
-
-  // const labelsList = labels.reduce(
-  //   (obj, item) => Object.assign(obj, { [item.labelKey]: item.labelValue }),
-  //   {}
-  // );
-  // console.log("step 2", labelsList); //{1: '2'}
-
   const deleteLabels = (labelKey) => {
-    // if (labels.length == 1) return;
     setLabels(labels.filter((item) => item.labelKey !== labelKey));
   };
 
   const addAnnotations = () => {
     if (annotationKey == "") {
-      alert("값을 입력하세요.");
-      return;
-    }
-    if (annotationValue == "") {
-      alert("값을 입력하세요.");
+      swalError("AnnotationKey 값을 입력해주세요");
       return;
     }
 
-    // const newAnnotationsList = [
-    //   {
-    //     annotationKey,
-    //     annotationValue,
-    //   },
-    // ];
+    const AnnotationKeyArr = [];
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
 
-    // setAnnotations(annotations.concat(newAnnotationsList));
-    // setAnnotationInput({
-    //   annotationKey: "",
-    //   annotationValue: "",
-    // });
+    if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
+      swalError("AnnotationKey 값이 중복입니다.");
+      return;
+    }
 
-    // labels[inputLabelKey] = inputLabelValue;
+    const newAnnotationsList = [
+      {
+        annotationKey,
+        annotationValue,
+      },
+    ];
+
+    setAnnotations(annotations.concat(newAnnotationsList));
+    setAnnotationInput({
+      annotationKey: "",
+      annotationValue: "",
+    });
+
+    setInputAnnotationKey("");
+    setInputAnnotationValue("");
   };
-
-  // const deleteAnnotations = (annotationKey) => {
-  //   setAnnotations(
-  //     annotations.filter((item) => item.annotationKey !== annotationKey)
-  //   );
-  // };
 
   return (
     <>
@@ -231,16 +189,20 @@ const ClaimAdvancedSetting = observer(() => {
               <Button onClick={addRow}>+</Button>
             </td>
           </tr>
-          {/* {Object.entries(labelInput).map((k, v) => (
+          {labels.map((item) => (
             <tr>
               <th>Labels</th>
-              <td style={{ width: "300px", padding: "8px" }}>{k}</td>
-              <td style={{ width: "300px", padding: "8px" }}>{v}</td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.labelValue}
+              </td>
               <td>
                 <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
               </td>
             </tr>
-          ))} */}
+          ))}
 
           <tr>
             <th>Annotations</th>
@@ -268,9 +230,9 @@ const ClaimAdvancedSetting = observer(() => {
               <Button onClick={addAnnotations}>+</Button>
             </td>
           </tr>
-          {/* {annotations.map((item) => (
+          {annotations.map((item) => (
             <tr>
-              <th>Labels</th>
+              <th>Annotations</th>
               <td style={{ width: "300px", padding: "8px" }}>
                 {item.annotationKey}
               </td>
@@ -283,7 +245,7 @@ const ClaimAdvancedSetting = observer(() => {
                 </Button>
               </td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </table>
       <CreateClaim labelsList={labelInput} />

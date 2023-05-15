@@ -32,6 +32,7 @@ const PodListTab = observer(() => {
     goPrevPage,
     goNextPage,
     viewList,
+    initViewList,
   } = podStore;
   const [columDefs] = useState([
     {
@@ -101,6 +102,9 @@ const PodListTab = observer(() => {
 
   useEffect(() => {
     loadPodList();
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (

@@ -30,6 +30,7 @@ const PlatfromServiceAdminTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    initViewList,
     goPrevPage,
     goNextPage,
     loadPlatformProjectDetail,
@@ -86,6 +87,9 @@ const PlatfromServiceAdminTab = observer(() => {
 
   useLayoutEffect(() => {
     loadAdminPlatformProjectList("system");
+    return () => {
+      initViewList();
+    }
   }, []);
 
   return (
