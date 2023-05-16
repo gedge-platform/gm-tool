@@ -178,6 +178,11 @@ class Pod {
       this.podInfo.containers.push(container);
     })
   }
+  editContainer = (editIndex, container) => {
+    runInAction(() => {
+      this.podInfo.containers[editIndex] = container;
+    })
+  }
   removeContainer = (removeIndex) => {
     runInAction(() => {
       this.podInfo.containers = this.podInfo.containers.filter((_, index) => 

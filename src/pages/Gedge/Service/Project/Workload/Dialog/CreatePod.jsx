@@ -48,14 +48,17 @@ const CreatePod = observer(props => {
     podInfo,
     labelList,
     initLabelList,
+    initContainer,
     addLabelList,
     removeLabelList
   } = podStore;
   const [ input, setInput ] = useState({key: "", value: ""});
+  const [ containerIndex, setContainerIndex ] = useState(-1);
 
   const handleClose = () => {
     props.onClose && props.onClose();
     initLabelList();
+    initContainer();
     setInput({key: "", value: ""}); 
   };
 
@@ -86,14 +89,15 @@ const CreatePod = observer(props => {
     }
   }
 
-  const openTargetCluster = () => {
+  const openTargetCluster = (index) => {
     setOpen2(true);
+    setContainerIndex(index);
   }
 
   const CreatePodComponent = () => {
     return (
       <>
-        <PodAddContainer containerIndex={-1} open={open2} onClose={handleClose2}></PodAddContainer>
+        <PodAddContainer containerIndex={containerIndex} open={open2} onClose={handleClose2}></PodAddContainer>
         <table className="tb_data_new tb_write">
           <tbody>
             <tr>
@@ -254,11 +258,11 @@ const CreatePod = observer(props => {
               </th>
               <td>
                 {
-                  podInfo.containers.map((_, index) => (
-                    <Button onClick={openTargetCluster}>+ Add Container</Button>
+                  podInfo.containers.map((container, index) => (
+                    <Button onClick={() => openTargetCluster(index)}>{container.containerName}</Button>
                   ))
                 }
-                <Button onClick={openTargetCluster}>+ Add Container</Button>
+                <Button onClick={() => openTargetCluster(-1)}>+ Add Container</Button>
               </td>
             </tr>
           </tbody>

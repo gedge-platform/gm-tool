@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
-import { deploymentStore, projectStore, schedulerStore, volumeStore, StorageClassStore } from "@/store";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
 import {
