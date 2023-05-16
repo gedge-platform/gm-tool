@@ -150,6 +150,12 @@ class Pod {
     ]
   }
 
+  setPodInfo = (key, value) => {
+    runInAction(() => {
+      this.podInfo[key] = value;
+    })
+  }
+
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
@@ -173,7 +179,7 @@ class Pod {
       this.podInfo.containers = [];
     })
   }
-  addContainer = (container) => {
+  addContainer = async (container) => {
     runInAction(() => {
       this.podInfo.containers.push(container);
     })
