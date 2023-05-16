@@ -51,13 +51,8 @@ const Label = styled.span`
 
 const ConfigmapsDetail = observer(() => {
   const { configmapsTabList } = configmapsStore;
-
-  const dataTable = [];
   const metadata = configmapsTabList.data;
-
-  const annotationsTable = [];
   const annotations = configmapsTabList.annotations;
-
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -71,15 +66,6 @@ const ConfigmapsDetail = observer(() => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // Object.entries(metadata).map(([key, value]) => {
-  //   dataTable.push(
-  //     <tr>
-  //       <th style={{ width: "15%" }}>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
@@ -126,16 +112,20 @@ const ConfigmapsDetail = observer(() => {
           <br />
           <TableTitle>Data</TableTitle>
           {metadata ? (
-            <table className="tb_data">
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody
                 className="tb_data_detail"
                 style={{ whiteSpace: "pre-line" }}
               >
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
-                    <th style={{ width: "5%" }}>{key}</th>
+                    <th>{key}</th>
                     <td
-                      style={{ wordBreak: "break-all", wordWrap: "break-word" }}
+                      style={{
+                        width: "94%",
+                        wordBreak: "break-all",
+                        wordWrap: "break-word",
+                      }}
                     >
                       {value}
                     </td>
@@ -148,30 +138,23 @@ const ConfigmapsDetail = observer(() => {
               <p>No Data Info</p>
             </LabelContainer>
           )}
-          {/* <table className="tb_data">
-            <tbody>
-              {dataTable ? (
-                dataTable
-              ) : (
-                <LabelContainer>
-                  <p>No Data Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table> */}
           <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container" style={{ width: "95%" }}>
           <TableTitle>Annotations</TableTitle>
-          {/* {annotationsTable.length > 0 ? ( */}
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
                   <tr>
-                    <th className="tb_workload_detail_labels_th">{key}</th>
+                    <th
+                      className="tb_workload_detail_labels_th"
+                      style={{ width: "16%" }}
+                    >
+                      {key}
+                    </th>
                     <td>
                       {isValidJSON(value) ? (
                         <ReactJson

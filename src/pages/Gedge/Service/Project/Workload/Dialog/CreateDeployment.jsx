@@ -6,6 +6,17 @@ import DeploymentPodSettins from "./DeploymentPodSettins";
 import { deploymentStore, projectStore, schedulerStore, volumeStore, StorageClassStore } from "@/store";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
+import {
+  deploymentStore,
+  projectStore,
+  schedulerStore,
+  volumeStore,
+  StorageClassStore,
+} from "@/store";
+import DeploymentYaml from "./DeploymentYaml";
+import DeploymentPopup from "./DeploymentPopup";
+import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
+import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
 import { swalError } from "@/utils/swal-utils";
 import { CDialogNew } from "@/components/dialogs";
 import DeploymentAddContainer from "./DeploymentAddContainer";
@@ -29,7 +40,7 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateDeployment = observer(props => {
+const CreateDeployment = observer((props) => {
   const { open } = props;
   const [ open2, setOpen2 ] = useState(false);
   const [stepValue, setStepValue] = useState(1);
@@ -58,7 +69,15 @@ const CreateDeployment = observer(props => {
     removeLabelList
   } = deploymentStore;
 
-  const { setVolumeName, setAccessMode, setVolumeCapacity, volumeCapacity, volumeName, selectClusters, accessMode } = volumeStore;
+  const {
+    setVolumeName,
+    setAccessMode,
+    setVolumeCapacity,
+    volumeCapacity,
+    volumeName,
+    selectClusters,
+    accessMode,
+  } = volumeStore;
 
   const { setStorageClass, selectStorageClass } = StorageClassStore;
 
@@ -420,7 +439,15 @@ const CreateDeployment = observer(props => {
   }
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Deployment"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create Deployment"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {createDeploymentComponent()}
     </CDialogNew>
   );

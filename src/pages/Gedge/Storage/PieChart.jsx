@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 
 const PieChart = observer((props) => {
   const { total, label, value, customOption } = props;
-  
+
   const options = {
     labels: label,
     chart: {
@@ -32,7 +32,6 @@ const PieChart = observer((props) => {
         horizontal: true,
         barHeight: "60%",
         borderRadius: 5, // Here is the issue ...
-
         donut: {
           size: "60%",
           background: "transparent",

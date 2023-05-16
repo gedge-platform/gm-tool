@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import styled from "styled-components";
 import { CTextField } from "@/components/textfields";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { swalError } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -23,6 +25,13 @@ const ButtonNext = styled.button`
 
 const EdgeZoneAddNode = observer((props) => {
   const { open } = props;
+  const textRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    setCopied(true);
+    swalError("클립보드에 복사되었습니다");
+  };
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -40,6 +49,21 @@ const EdgeZoneAddNode = observer((props) => {
       modules={["custom"]}
     >
       <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>Master Node</th>
+            <td>
+              <select className="selectNode" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <CopyToClipboard text="여기에 글 쓰면 복사됨" onCopy={handleCopy}>
+          <button>Copy</button>
+        </CopyToClipboard>
+      </div>
+      {/* <table className="tb_data_new tb_write">
         <tbody>
           <tr>
             <th>Node Name</th>
@@ -102,7 +126,7 @@ const EdgeZoneAddNode = observer((props) => {
             </td>
           </tr>
         </tbody>
-      </table>
+      </table> */}
       <div
         style={{
           display: "flex",
