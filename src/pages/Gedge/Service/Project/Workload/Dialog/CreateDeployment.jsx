@@ -18,6 +18,7 @@ import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
 import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
 import { swalError } from "@/utils/swal-utils";
 import { CDialogNew } from "@/components/dialogs";
+import { toJS } from "mobx";
 import DeploymentAddContainer from "./DeploymentAddContainer";
 
 const Button = styled.button`
@@ -38,6 +39,36 @@ const ButtonNext = styled.button`
   border-radius: 4px;
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
+
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 3px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em; 
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, .1)
+  }
+
+  &:before, &:after {
+    position: absolute;
+    top: 15%; left: calc(50% - .0625em);
+    width: .125em; height: 70%;
+    border-radius: .125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: ''
+  }
+
+  &:after { transform: rotate(-45deg); }
+`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
@@ -65,7 +96,11 @@ const CreateDeployment = observer((props) => {
     labelList,
     initLabelList,
     addLabelList,
-    removeLabelList
+    removeLabelList,
+    deploymentInfo,
+    setDeploymentInfo,
+    initContainer,
+    removeContainer
   } = deploymentStore;
 
   const {
@@ -84,6 +119,7 @@ const CreateDeployment = observer((props) => {
   const { postWorkload, postScheduler } = schedulerStore;
 
   const [ input, setInput ] = useState({key: "", value: ""});
+  const [ containerIndex, setContainerIndex ] = useState(1);
 
   const template = {
     apiVersion: "apps/v1",
@@ -146,20 +182,32 @@ const CreateDeployment = observer((props) => {
     },
   };
 
+  const onChangeInput = e => {
+    setInput({
+      ...input,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const onChange = e => {
+    setDeploymentInfo(e.target.name, e.target.value);
+  };
+
   const handleClose = () => {
     props.onClose && props.onClose();
     initLabelList();
+    initContainer();
     setInput({key: "", value: ""});
   };
 
-  const openTargetCluster = () => {
-    setOpen2(true);
+  const handleClose2 = () => {
+    setOpen2(false);
   }
 
-  const handlePreStepValue = () => {
-    setWorkspace();
-    setProject();
-  };
+  const openTargetCluster = (index) => {
+    setOpen2(true);
+    setContainerIndex(index);
+  }
 
   // const createDeployment = () => {
   //   postDeployment(handleClose);
@@ -203,33 +251,25 @@ const CreateDeployment = observer((props) => {
   // };
 
   const createDeployment = () => {
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
-    handleClose();
-    props.reloadFunc && props.reloadFunc();
-  };
-
-  // useEffect는 component가 rendeing될 때마다 특정 작업을 실행할 수 있도록하는 Hook
-  // 클래스형 컴포넌트에서 사용할 수 있었던 생명주기 메소드를 함수형 컴포넌트에서도 사용할 수 있게 됨
-
-  useEffect(() => {
-    if (stepValue === 4) {
-      const YAML = require("json-to-pretty-yaml");
-      setContentVolume(YAML.stringify(templatePVC));
-    }
-  }, [stepValue]);
-
-  useEffect(() => {
-    if (stepValue === 5) {
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
-    }
-  }, [stepValue]);
-
-  const onChange = e => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value
-    })
+    console.log(toJS({
+      deploymentName: deploymentInfo.podName,
+      labels : toJS(labelList),
+      replicas: deploymentInfo.replicas,
+      pullSecret: deploymentInfo.pullSecret,
+      volume: {
+        volumeName: deploymentInfo.volumeName,
+        nfsServer: deploymentInfo.nfsServer,
+        nfsPath: deploymentInfo.nfsPath
+      },
+      priority: deploymentInfo.priority,
+      targetCluster: deploymentInfo.targetCluster,
+      sourceCluster: deploymentInfo.sourceCluster,
+      sourceNode: deploymentInfo.sourceNode,
+      containers: toJS(deploymentInfo.containers)
+    }))
+    // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    // handleClose();
+    // props.reloadFunc && props.reloadFunc();
   };
 
   const addLabel = () => {
@@ -239,201 +279,214 @@ const CreateDeployment = observer((props) => {
     }
   }
 
-  const createDeploymentComponent = () => {
+  const removeContainers = (e, index) => {
+    e.stopPropagation();
+    removeContainer(index);
+  }
+
+  const CreateDeploymentComponent = () => {
     return(
       <>
-        <DeploymentAddContainer open={open2} onClose={handleClose}></DeploymentAddContainer>
-        <table className="tb_data_new tb_write">
-          <tbody>
+      <DeploymentAddContainer containerIndex={containerIndex} open={open2} onClose={handleClose2}></DeploymentAddContainer>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>
+              Deployment Name <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField type="text" placeholder="Deployment Name" className="form_fullWidth" name="deploymentName" onChange={onChange} value={deploymentName} />
+            </td>
+          </tr>
+          <tr>
+            <th rowSpan={labelList.length+2}>
+              Labels <span className="requried">*</span>
+            </th>
+          </tr>
+          {labelList.map((label, index)=>(
             <tr>
-              <th>
-                Pod Name <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField type="text" placeholder="Pod Name" className="form_fullWidth" name="podName" onChange={onChange} value={podName} />
+              <td style={{paddingLeft: "5px"}}>
+                {label.key}
               </td>
+              <td style={{paddingLeft: "5px"}}>
+                {label.value}
+              </td>
+              <Button style={{
+                border: "none",
+                height: "28px",
+                width: "30px",
+                fontSize: "20px",
+                fontWeight: 600,
+                lineHeight: 1,
+                letterSpacing: "normal",
+                color: "#36435c",
+                backgroundColor: "#eff4f9",
+                padding: "0 0 0 0",
+                margin: "2px",
+                borderRadius: "0"
+              }} onClick={() => removeLabelList(index)}>-</Button>
             </tr>
-            <tr>
-              <th rowSpan={labelList.length+2}>
-                Labels <span className="requried">*</span>
-              </th>
-            </tr>
-            {labelList.map((label, index)=>(
-              <tr>
-                <td style={{paddingLeft: "5px"}}>
-                  {label.key}
-                </td>
-                <td style={{paddingLeft: "5px"}}>
-                  {label.value}
-                </td>
-                <Button style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  margin: "2px",
-                  borderRadius: "0"
-                }} onClick={() => removeLabelList(index)}>-</Button>
-              </tr>
-            ))}
-            <tr>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Key"
-                  className="form_fullWidth"
-                  name="key"
-                  onChange={onChange}
-                  value={input.key}
-                />
-              </td>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Value"
-                  className="form_fullWidth"
-                  name="value"
-                  onChange={onChange}
-                  value={input.value}
-                />
-              </td>
-              <td>
-                <Button style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  borderRadius: "0"
-                }} onClick={addLabel}>+</Button>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Replicas <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField type="text" placeholder="Pod Name" className="form_fullWidth" name="podName" onChange={onChange} value={podName} />
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Pull Secrets <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecrets" onChange={onChange} value={podName} />
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Volume
-              </th>
-              <td colSpan="3">
-                <table className="tb_data_new">
-                  <tbody className="tb_data_nodeInfo">
-                    <tr>
-                      <th>Name</th>
-                      <th>NFS Server</th>
-                      <th>NFS Path</th>
-                    </tr>
-                    <tr>
-                      <td><CTextField type="text" placeholder="Volume Name" className="form_fullWidth" name="volumeName" onChange={onChange} value={podName} /></td>
-                      <td><CTextField type="text" placeholder="NFS Server" className="form_fullWidth" name="NFSServer" onChange={onChange} value={podName} /></td>
-                      <td><CTextField type="text" placeholder="NFS Path" className="form_fullWidth" name="NFSPath" onChange={onChange} value={podName} /></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <th style={{width: "30%"}}>
-                Priority <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="priority" onChange={onChange}>
-                    <option value={""}>Select Priority</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Target Clusters <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="targetCluster" onChange={onChange}>
-                    <option value={""}>Select Target Cluster</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Source Cluster <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="sourceCluster" onChange={onChange}>
-                    <option value={""}>Select Source Cluster</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Source Node <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="sourceNode" onChange={onChange}>
-                    <option value={""}>Select Source Node</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Container <span className="requried">*</span>
-              </th>
-              <td>
-                <Button onClick={openTargetCluster}>+ Add Container</Button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          ))}
+          <tr>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Key"
+                className="form_fullWidth"
+                name="key"
+                onChange={onChangeInput}
+                value={input.key}
+              />
+            </td>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Value"
+                className="form_fullWidth"
+                name="value"
+                onChange={onChangeInput}
+                value={input.value}
+              />
+            </td>
+            <td>
+              <Button style={{
+                border: "none",
+                height: "28px",
+                width: "30px",
+                fontSize: "20px",
+                fontWeight: 600,
+                lineHeight: 1,
+                letterSpacing: "normal",
+                color: "#36435c",
+                backgroundColor: "#eff4f9",
+                padding: "0 0 0 0",
+                borderRadius: "0"
+              }} onClick={addLabel}>+</Button>
+            </td>
+          </tr>
 
+          <tr>
+            <th>
+              Replicas <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField type="text" placeholder="Replicas" className="form_fullWidth" name="replicas" onChange={onChange} value={podName} />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Pull Secret <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecret" onChange={onChange} value={podName} />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Volume
+            </th>
+            <td colSpan="3">
+              <table className="tb_data_new">
+                <tbody className="tb_data_nodeInfo">
+                  <tr>
+                    <th>Name</th>
+                    <th>NFS Server</th>
+                    <th>NFS Path</th>
+                  </tr>
+                  <tr>
+                    <td><CTextField type="text" placeholder="Volume Name" className="form_fullWidth" name="volumeName" onChange={onChange} value={podName} /></td>
+                    <td><CTextField type="text" placeholder="NFS Server" className="form_fullWidth" name="nfsServer" onChange={onChange} value={podName} /></td>
+                    <td><CTextField type="text" placeholder="NFS Path" className="form_fullWidth" name="nfsPath" onChange={onChange} value={podName} /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <th style={{width: "30%"}}>
+              Priority <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="priority" onChange={onChange}>
+                  <option value={""}>Select Priority</option>
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Target Clusters <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="targetCluster" onChange={onChange}>
+                  <option value={""}>Select Target Cluster</option>
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Source Cluster <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="sourceCluster" onChange={onChange}>
+                  <option value={""}>Select Source Cluster</option>
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Source Node <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="sourceNode" onChange={onChange}>
+                  <option value={""}>Select Source Node</option>
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Containers <span className="requried">*</span>
+            </th>
+            <td>
+              <Button style={{marginBottom: "2px"}} onClick={() => openTargetCluster(-1)}>+ Add Container</Button>
+              <div>
+                {
+                  deploymentInfo.containers.map((container, index) => (
+                    <Button style={{marginTop: "2px", marginBottom: "2px"}} onClick={() => openTargetCluster(index)}>{container.containerName}<DeleteButton onClick={(e) => removeContainers(e, index)}>x</DeleteButton></Button>
+                  ))
+                }
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "32px",
+        }}
+      >
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "32px",
+            width: "300px",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              width: "300px",
-              justifyContent: "center",
-            }}
-          >
-            <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={createDeployment}>생성</ButtonNext>
-          </div>
+          <Button onClick={handleClose}>취소</Button>
+          <ButtonNext onClick={createDeployment}>생성</ButtonNext>
         </div>
-      </>
+      </div>
+    </>
     )
   }
 
@@ -447,7 +500,7 @@ const CreateDeployment = observer((props) => {
       bottomArea={false}
       modules={["custom"]}
     >
-      {createDeploymentComponent()}
+      {CreateDeploymentComponent()}
     </CDialogNew>
   );
 });

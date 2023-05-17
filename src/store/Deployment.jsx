@@ -119,6 +119,28 @@ class Deployment {
   podName = "";
   labelList = [];
 
+  deploymentInfo = {
+    DeploymentName: "",
+    labels: [],
+    replicas: "",
+    pullSecrets: "",
+    volume: {
+      name: "",
+      nfsServer: "",
+      nfsPath: ""
+    },
+    priority: "",
+    targetClusters: "",
+    sourceNode: "",
+    containers: []
+  }
+
+  setDeploymentInfo = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo[key] = value;
+    })
+  }
+
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
@@ -139,6 +161,29 @@ class Deployment {
     })
   }
 
+  initContainer = () => {
+    runInAction(() => {
+      this.deploymentInfo.containers = [];
+    })
+  }
+  addContainer = async (container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers.push(container);
+    })
+  }
+  editContainer = (editIndex, container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers[editIndex] = container;
+    })
+  }
+  removeContainer = (removeIndex) => {
+    runInAction(() => {
+      this.deploymentInfo.containers = this.deploymentInfo.containers.filter((_, index) => 
+        removeIndex !== index
+      )
+    })
+  }
+  
   constructor() {
     makeAutoObservable(this);
   }

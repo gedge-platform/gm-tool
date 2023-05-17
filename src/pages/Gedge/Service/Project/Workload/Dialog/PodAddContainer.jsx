@@ -93,7 +93,6 @@ const PodAddContainer = observer(props => {
   }
   
   const removePort = (removeIndex) => {
-    console.log(containerInfo.ports.filter((_, index) => removeIndex !== index));
     containerInfo.ports = containerInfo.ports.filter((_, index) => removeIndex !== index)
     setContainerInfo({
       ...containerInfo,
@@ -123,7 +122,6 @@ const PodAddContainer = observer(props => {
     setContainerInfo({
       ...containerInfo,
     });
-    console.log(containerInfo)
   }
 
   const addContainers = () => {
@@ -555,7 +553,6 @@ const PodAddContainer = observer(props => {
         </>
       )
     }
-
   }
 
   return(
