@@ -116,6 +116,74 @@ class Deployment {
   content = "";
   contentVolume = "";
 
+  podName = "";
+  labelList = [];
+
+  deploymentInfo = {
+    DeploymentName: "",
+    labels: [],
+    replicas: "",
+    pullSecrets: "",
+    volume: {
+      name: "",
+      nfsServer: "",
+      nfsPath: ""
+    },
+    priority: "",
+    targetClusters: "",
+    sourceNode: "",
+    containers: []
+  }
+
+  setDeploymentInfo = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo[key] = value;
+    })
+  }
+
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initContainer = () => {
+    runInAction(() => {
+      this.deploymentInfo.containers = [];
+    })
+  }
+  addContainer = async (container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers.push(container);
+    })
+  }
+  editContainer = (editIndex, container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers[editIndex] = container;
+    })
+  }
+  removeContainer = (removeIndex) => {
+    runInAction(() => {
+      this.deploymentInfo.containers = this.deploymentInfo.containers.filter((_, index) => 
+        removeIndex !== index
+      )
+    })
+  }
+  
   constructor() {
     makeAutoObservable(this);
   }

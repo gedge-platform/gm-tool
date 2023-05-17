@@ -5,8 +5,10 @@ import Tabs from "@material-ui/core/Tabs";
 import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
+import podStore from "../../../../../../store/Pod";
+import { cloneDeep } from "lodash-es";
 
 const Button = styled.button`
   background-color: #fff;
@@ -36,10 +38,15 @@ const ButtonAddHost = styled.button`
 `;
 
 const PodAddContainer = observer(props => {
-  const { open } = props;
+  const { 
+    podInfo,
+    initContainer,
+    addContainer,
+    editContainer,
+  } = podStore;
+  const { open, containerIndex } = props;
   const [ tabvalue, setTabvalue ] = useState(0);
-  const [ ports, setPorts ] = useState([]);
-  const [ variables, setVariables ] = useState([]);
+  const [ containerInfo, setContainerInfo ] = useState();
 
   const handleTabChange = (_, value) => {
     setTabvalue(value);
@@ -47,78 +54,123 @@ const PodAddContainer = observer(props => {
 
   const handleClose = () => {
     props.onClose && props.onClose();
-    setPorts([]);
-    setVariables([]);
   }
 
   const onChange = (e) => {
-
+    setContainerInfo({
+      ...containerInfo,
+      [e.target.name]: e.target.value
+    })
   }
 
   const onChangePort = (e, index) => {
-    const temp = {...ports[index], [e.target.name]: e.target.value}
-    ports[index] = temp;
-    setPorts([
-      ...ports
-    ])
+    const temp = {...containerInfo.ports[index], [e.target.name]: e.target.value}
+    containerInfo.ports[index] = temp;
+    setContainerInfo({
+      ...containerInfo,
+      ports: [
+        ...containerInfo.ports,
+      ]
+    })
   }
 
   const addPort = () => {
-    setPorts([
-      ...ports,
-      {serviceType: "", name: "", privateContainerPort: "", protocol: ""}
-    ])
+    setContainerInfo({
+      ...containerInfo,
+      ports: [
+        ...containerInfo.ports,
+        {serviceType: "", name: "", privateContainerPort: "", protocol: ""}
+      ]
+    })
   }
 
   const addHost = (index) => {
-    ports[index].publicHostPort = "";
-    setPorts([
-      ...ports
-    ]);
+    containerInfo.ports[index].publicHostPort = "";
+    containerInfo.ports[index].hostIP = "";
+    setContainerInfo({
+      ...containerInfo
+    })
   }
   
   const removePort = (removeIndex) => {
-    setPorts(ports.filter((_, index) => 
-      removeIndex !== index
-    ))
+    containerInfo.ports = containerInfo.ports.filter((_, index) => removeIndex !== index)
+    setContainerInfo({
+      ...containerInfo,
+    });
   }
 
   const onChangeVariable = (e, index) => {
-    const temp = {...variables[index], [e.target.name]: e.target.value}
-    variables[index] = temp;
-    setVariables([
-      ...variables
-    ])
+    const temp = {...containerInfo.variables[index], [e.target.name]: e.target.value}
+    containerInfo.variables[index] = temp;
+    setContainerInfo({
+      ...containerInfo,
+    })
   }
 
   const addVariable = () => {
-    setVariables([
-      ...variables,
-      {type: "KeyValuePair", variableName: "", value: ""}
-    ])
+    setContainerInfo({
+      ...containerInfo,
+      variables: [
+        ...containerInfo.variables,
+        {type: "KeyValuePair", variableName: "", value: ""}
+      ]
+    })
   }
 
   const removeVariable = (removeIndex) => {
-    setVariables(variables.filter((_, index) => 
-      removeIndex !== index
-    ))
+    containerInfo.variables = containerInfo.variables.filter((_, index) => removeIndex !== index)
+    setContainerInfo({
+      ...containerInfo,
+    });
   }
 
-  const addContainer = () => {
-    console.log(ports);
-    console.log(variables);
+  const addContainers = () => {
+    const temp = {...containerInfo};
+    props.onClose && props.onClose();
+    addContainer(temp);
   }
+
+  const editContainers = () => {
+    const temp = {...containerInfo};
+    props.onClose && props.onClose();
+    editContainer(containerIndex, temp);
+  }
+
+  useEffect(() => {
+    if (containerIndex === -1) {
+      setContainerInfo({
+        containerName: "",
+        containerImage: "",
+        pullPolicy: "",
+        ports: [],
+        command: "",
+        arguments: "",
+        workingDir: "",
+        variables: [],
+        cpuReservation: "",
+        memoryReservation: "",
+        cpuLimit: "",
+        memoryLimit: "",
+        NVIDIAGPU: "",
+        volume: ""
+      })
+    } else {
+      const clonedData = cloneDeep(podInfo.containers[containerIndex]);
+      setContainerInfo(clonedData);
+    }
+  }, [open])
+
 
   const HostComponent = (index) => {
-    if (ports[index].serviceType === "NodePort" || ports[index].serviceType === "LoadBalancer") {
+    if (containerInfo.ports[index].serviceType === "NodePort" || containerInfo.ports[index].serviceType === "LoadBalancer") {
       return(
-        <td><CTextField type="text" placeholder="Listening Port" className="form_fullWidth" name="listeningPort" onChange={() => onChangePort(event, index)} value={ports[index].listeningPort}/></td>
+        <td><CTextField type="text" placeholder="Listening Port" className="form_fullWidth" name="listeningPort" onChange={() => onChangePort(event, index)} value={containerInfo.ports[index].listeningPort}/></td>
       )
-    } else if (ports[index].publicHostPort !== undefined) {
+    } else if (containerInfo.ports[index].publicHostPort !== undefined) {
       return (
         <td style={{display: "flex"}}>
-          <CTextField style={{paddingRight: "3px"}} type="text" placeholder="Public Host Port" className="form_fullWidth" name="publicHostPort" onChange={() => onChangePort(event, index)} value={ports[index].publicHostPort}/>
-          <CTextField type="text" placeholder="Host IP" className="form_fullWidth" name="hostIP" onChange={() => onChangePort(event, index)} value={ports[index].hostIP}/>
+          <CTextField style={{paddingRight: "3px"}} type="text" placeholder="Public Host Port" className="form_fullWidth" name="publicHostPort" onChange={() => onChangePort(event, index)} value={containerInfo.ports[index].publicHostPort}/>
+          <CTextField type="text" placeholder="Host IP" className="form_fullWidth" name="hostIP" onChange={() => onChangePort(event, index)} value={containerInfo.ports[index].hostIP}/>
         </td>
       )
     } else {
@@ -127,19 +179,19 @@ const PodAddContainer = observer(props => {
   }
 
   const ValueComponent = (index) => {
-    switch (variables[index].type) {
+    switch (containerInfo.variables[index].type) {
       case "KeyValuePair":
         return(
           <td>
-            <CTextField type="text" placeholder="Value" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+            <CTextField type="text" placeholder="Value" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
           </td>
         )
       case "Resource":
         return(
           <td style={{ display: "flex", padding:"1px" }}>
-            <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+            <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
@@ -149,12 +201,12 @@ const PodAddContainer = observer(props => {
         return(
           <td style={{ display: "flex", padding: "1px" }}>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 0px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>ConfigMap 선택</option>
               </select>
             </FormControl>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
@@ -164,12 +216,12 @@ const PodAddContainer = observer(props => {
         return(
           <td style={{ display: "flex", padding: "1px" }}>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Secret 선택</option>
               </select>
             </FormControl>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
@@ -178,14 +230,14 @@ const PodAddContainer = observer(props => {
       case "PodField":
         return(
           <td>
-            <CTextField tpe="text" placeholder="Key (e.g. metadata.labels['<KEY>'])" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={variables[index].value}/>
+            <CTextField tpe="text" placeholder="Key (e.g. metadata.labels['<KEY>'])" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
           </td>
         )
       case "Secret":
         return(
           <td>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Secret 선택</option>
               </select>
             </FormControl>
@@ -195,7 +247,7 @@ const PodAddContainer = observer(props => {
         return(
           <td>
             <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
@@ -218,7 +270,7 @@ const PodAddContainer = observer(props => {
                   Container Name <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="containerName" onChange={onChange} value={containerInfo?.containerName}/>
                 </td>
               </tr>
               <tr>
@@ -226,7 +278,7 @@ const PodAddContainer = observer(props => {
                   Container Image <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField type="text" placeholder="Container Image" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Container Image" className="form_fullWidth" name="containerImage" onChange={onChange} value={containerInfo?.containerImage}/>
                 </td>
               </tr>
               <tr>
@@ -236,14 +288,14 @@ const PodAddContainer = observer(props => {
                 <td colSpan="3">
                   <FormControl className="form_fullWidth">
                     <select name="pullpolicy" onChange={onChange}>
-                      <option value={""}>Select Pull Policy</option>
+                      <option value={"selectpullpolicy"}>Select Pull Policy</option>
                     </select>
                   </FormControl>
                 </td>
               </tr>
               <tr>
                 <th rowSpan={"2"}>
-                  Port <span className="requried">*</span>
+                  Ports <span className="requried">*</span>
                 </th>
                 <td>
                   <table className="tb_data_new">
@@ -256,11 +308,11 @@ const PodAddContainer = observer(props => {
                         <th>Host</th>
   
                       </tr>
-                      {ports.map((port, index) => (
+                      {containerInfo?.ports?.map((port, index) => (
                         <tr style={{ lineHeight: "35px" }}>
                           <td>
                             <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                              <select name="serviceType" value={ports[index].serviceType} onChange={() => onChangePort(event, index)}>
+                              <select name="serviceType" value={port.serviceType} onChange={() => onChangePort(event, index)}>
                                 <option value={""}>Do not create a service</option>
                                 <option value={"ClusterIP"}>Cluster IP</option>
                                 <option value={"NodePort"}>Node Port</option>
@@ -268,11 +320,11 @@ const PodAddContainer = observer(props => {
                               </select>
                             </FormControl>
                           </td>
-                          <td><CTextField type="text" placeholder="Name" className="form_fullWidth" name="name" onChange={() => onChangePort(event, index)} value={ports[index].name}/></td>
-                          <td><CTextField type="text" placeholder="Private Container Port" className="form_fullWidth" name="privateContainerPort" onChange={() => onChangePort(event, index)} value={ports[index].privateContainerPort}/></td>
+                          <td><CTextField type="text" placeholder="Name" className="form_fullWidth" name="name" onChange={() => onChangePort(event, index)} value={port.name}/></td>
+                          <td><CTextField type="text" placeholder="Private Container Port" className="form_fullWidth" name="privateContainerPort" onChange={() => onChangePort(event, index)} value={port.privateContainerPort}/></td>
                           <td>
                             <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                              <select name="protocol" value={ports[index].protocol} onChange={() => onChangePort(event, index)}>
+                              <select name="protocol" value={port.protocol} onChange={() => onChangePort(event, index)}>
                                 <option value={"TCP"}>TCP</option>
                                 <option value={"UDP"}>UDP</option>
                               </select>
@@ -310,7 +362,7 @@ const PodAddContainer = observer(props => {
                   Command <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField type="text" placeholder="Command" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Command" className="form_fullWidth" name="command" onChange={onChange} value={containerInfo?.command}/>
                 </td>
               </tr>
               <tr>
@@ -318,7 +370,7 @@ const PodAddContainer = observer(props => {
                   Arguments <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField type="text" placeholder="Arguments" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Arguments" className="form_fullWidth" name="arguments" onChange={onChange} value={containerInfo?.arguments}/>
                 </td>
               </tr>
               <tr>
@@ -326,12 +378,12 @@ const PodAddContainer = observer(props => {
                   WorkingDir <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField type="text" placeholder="WorkingDir" className="form_fullWidth" name="podName" onChange={onChange}/>
+                  <CTextField type="text" placeholder="WorkingDir" className="form_fullWidth" name="workingDir" onChange={onChange} value={containerInfo?.workingDir}/>
                 </td>
               </tr>
               <tr>
                 <th rowSpan={2}>
-                  Add Variables <span className="requried">*</span>
+                  Variables <span className="requried">*</span>
                 </th>
                 <td>
                   <table className="tb_data_new">
@@ -341,11 +393,11 @@ const PodAddContainer = observer(props => {
                         <th>Variable Name</th>
                         <th>Value</th>
                       </tr>
-                      {variables.map((variable, index) => (
+                      {containerInfo?.variables?.map((variable, index) => (
                         <tr style={{ lineHeight: "35px" }}>
                           <td>
                             <FormControl className="form_fullWidth">
-                              <select name="type" value={variables[index].type} onChange={() => onChangeVariable(event, index)}>
+                              <select name="type" value={variable.type} onChange={() => onChangeVariable(event, index)}>
                                 <option value={"KeyValuePair"}>Key/Value Pair</option>
                                 <option value={"Resource"}>Resource</option>
                                 <option value={"ConfigMapKey"}>ConfigMap Key</option>
@@ -356,7 +408,7 @@ const PodAddContainer = observer(props => {
                               </select>
                             </FormControl>
                           </td>
-                          <td><CTextField type="text" placeholder="Variable Name" className="form_fullWidth" name="variableName" onChange={() => onChangeVariable(event, index)} value={variables[index].variableName}/></td>
+                          <td><CTextField type="text" placeholder="Variable Name" className="form_fullWidth" name="variableName" onChange={() => onChangeVariable(event, index)} value={variable.variableName}/></td>
                           {ValueComponent(index)}
                           <td>
                             <Button style={{
@@ -395,7 +447,10 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainer}>추가</ButtonNext>
+            {containerIndex === -1? 
+            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
+            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
+            }
           </div>
         </>
       )
@@ -409,7 +464,7 @@ const PodAddContainer = observer(props => {
                   CPU Reservation
                 </th>
                 <td >
-                  <CTextField type="text" placeholder="CPU Reservation" className="form_fullWidth" name="CPUReservation" onChange={onChange}/>
+                  <CTextField type="text" placeholder="CPU Reservation" className="form_fullWidth" name="cpuReservation" onChange={onChange} value={containerInfo?.cpuReservation}/>
                 </td>
               </tr>
               <tr>
@@ -417,7 +472,7 @@ const PodAddContainer = observer(props => {
                   Memory Reservation
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Memory Reservation" className="form_fullWidth" name="memoryReservation" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Memory Reservation" className="form_fullWidth" name="memoryReservation" onChange={onChange} value={containerInfo?.memoryReservation}/>
                 </td>
               </tr>
               <tr>
@@ -425,7 +480,7 @@ const PodAddContainer = observer(props => {
                   CPU Limit
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="CPU Limit" className="form_fullWidth" name="CPULimit" onChange={onChange}/>
+                  <CTextField type="text" placeholder="CPU Limit" className="form_fullWidth" name="cpuLimit" onChange={onChange} value={containerInfo?.cpuLimit}/>
                 </td>
               </tr>
               <tr>
@@ -433,7 +488,7 @@ const PodAddContainer = observer(props => {
                   Memory Limit
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="Memory Limit" className="form_fullWidth" name="memoryLimit" onChange={onChange}/>
+                  <CTextField type="text" placeholder="Memory Limit" className="form_fullWidth" name="memoryLimit" onChange={onChange} value={containerInfo?.memoryLimit}/>
                 </td>
               </tr>
               <tr>
@@ -441,7 +496,7 @@ const PodAddContainer = observer(props => {
                   NVIDIA GPU Limit/Reservation
                 </th>
                 <td>
-                  <CTextField type="text" placeholder="NVIDIA GPU Limit/Reservation" className="form_fullWidth" name="NVIDIAGPU" onChange={onChange}/>
+                  <CTextField type="text" placeholder="NVIDIA GPU Limit/Reservation" className="form_fullWidth" name="NVIDIAGPU" onChange={onChange} value={containerInfo?.NVIDIAGPU}/>
                 </td>
               </tr>
             </tbody>
@@ -455,7 +510,10 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainer}>추가</ButtonNext>
+            {containerIndex === -1? 
+            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
+            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
+            }
           </div>
         </>
       )
@@ -470,8 +528,8 @@ const PodAddContainer = observer(props => {
                 </th>
                 <td>
                   <FormControl className="form_fullWidth">
-                    <select name="type" value={""} onChange={() => onChangeVariable(event, index)}>
-                      <option value={"KeyValuePair"}>Select Volume</option>
+                    <select name="type" value={containerInfo.volume} onChange={() => onChangeVariable(event, index)}>
+                      <option value={"selectVolume"}>Select Volume</option>
                     </select>
                   </FormControl>
                 </td>
@@ -487,12 +545,14 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={addContainer}>추가</ButtonNext>
+            {containerIndex === -1? 
+            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
+            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
+            }
           </div>
         </>
       )
     }
-
   }
 
   return(
