@@ -28,6 +28,36 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 3px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em; 
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, .1)
+  }
+
+  &:before, &:after {
+    position: absolute;
+    top: 15%; left: calc(50% - .0625em);
+    width: .125em; height: 70%;
+    border-radius: .125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: ''
+  }
+
+  &:after { transform: rotate(-45deg); }
+`
+
 const CreatePod = observer(props => {
   const { open } = props;
   const [ open2, setOpen2 ] = useState(false);
@@ -52,7 +82,8 @@ const CreatePod = observer(props => {
     initLabelList,
     initContainer,
     addLabelList,
-    removeLabelList
+    removeLabelList,
+    removeContainer
   } = podStore;
   const [ input, setInput ] = useState({key: "", value: ""});
   const [ containerIndex, setContainerIndex ] = useState(-1);
@@ -113,6 +144,11 @@ const CreatePod = observer(props => {
   const openTargetCluster = (index) => {
     setOpen2(true);
     setContainerIndex(index);
+  }
+
+  const removeContainers = (e, index) => {
+    e.stopPropagation();
+    removeContainer(index);
   }
 
   const CreatePodComponent = () => {
@@ -278,12 +314,14 @@ const CreatePod = observer(props => {
                 Containers <span className="requried">*</span>
               </th>
               <td>
-                {
-                  podInfo.containers.map((container, index) => (
-                    <Button onClick={() => openTargetCluster(index)}>{container.containerName}</Button>
-                  ))
-                }
-                <Button onClick={() => openTargetCluster(-1)}>+ Add Container</Button>
+                <Button style={{marginBottom: "2px"}} onClick={() => openTargetCluster(-1)}>+ Add Container</Button>
+                <div>
+                  {
+                    podInfo.containers.map((container, index) => (
+                      <Button style={{marginTop: "2px", marginBottom: "2px"}} onClick={() => openTargetCluster(index)}>{container.containerName}<DeleteButton onClick={(e) => removeContainers(e, index)}>x</DeleteButton></Button>
+                    ))
+                  }
+                </div>
               </td>
             </tr>
           </tbody>

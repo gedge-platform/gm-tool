@@ -43,7 +43,6 @@ const PodAddContainer = observer(props => {
     initContainer,
     addContainer,
     editContainer,
-    removeContainer,
   } = podStore;
   const { open, containerIndex } = props;
   const [ tabvalue, setTabvalue ] = useState(0);
