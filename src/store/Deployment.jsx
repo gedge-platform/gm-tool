@@ -123,13 +123,14 @@ class Deployment {
     DeploymentName: "",
     labels: [],
     replicas: "",
-    pullSecrets: "",
-    volume: {
-      name: "",
-      nfsServer: "",
-      nfsPath: ""
+    volume: "",
+    priority: {
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+        //data: {}
+      }
     },
-    priority: "",
     targetClusters: "",
     sourceNode: "",
     containers: []

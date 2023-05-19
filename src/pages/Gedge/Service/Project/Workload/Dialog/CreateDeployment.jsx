@@ -120,6 +120,13 @@ const CreateDeployment = observer((props) => {
 
   const [ input, setInput ] = useState({key: "", value: ""});
   const [ containerIndex, setContainerIndex ] = useState(1);
+  const [ priority, setPriority ] = useState({
+    name: "GLowLatencyPriority",
+    options: {
+      type: "fromNode",
+      //data: {}
+    }
+  });
 
   const template = {
     apiVersion: "apps/v1",
@@ -193,6 +200,10 @@ const CreateDeployment = observer((props) => {
     setDeploymentInfo(e.target.name, e.target.value);
   };
 
+  const onSecondDepthChange = e => {
+    
+  }
+
   const handleClose = () => {
     props.onClose && props.onClose();
     initLabelList();
@@ -209,9 +220,6 @@ const CreateDeployment = observer((props) => {
     setContainerIndex(index);
   }
 
-  // const createDeployment = () => {
-  //   postDeployment(handleClose);
-  // };
   // const createDeployment = () => {
   //   const requestId = `${deploymentName}-${randomString()}`;
 
@@ -255,12 +263,7 @@ const CreateDeployment = observer((props) => {
       deploymentName: deploymentInfo.podName,
       labels : toJS(labelList),
       replicas: deploymentInfo.replicas,
-      pullSecret: deploymentInfo.pullSecret,
-      volume: {
-        volumeName: deploymentInfo.volumeName,
-        nfsServer: deploymentInfo.nfsServer,
-        nfsPath: deploymentInfo.nfsPath
-      },
+      volume: deploymentInfo.volume,
       priority: deploymentInfo.priority,
       targetCluster: deploymentInfo.targetCluster,
       sourceCluster: deploymentInfo.sourceCluster,
@@ -282,6 +285,209 @@ const CreateDeployment = observer((props) => {
   const removeContainers = (e, index) => {
     e.stopPropagation();
     removeContainer(index);
+  }
+
+  const PriorityComponent = () => {
+    const onChangePriority = (e) => {
+      if (e.target.value === "GLowLatencyPriority") {
+        setPriority({
+          name: e.target.value,
+          options: {
+            type: "fromNode",
+            //data: {}
+          }
+        })
+      } else if(e.target.value === "GMostRequestPriority") {
+        setPriority({
+          name: e.target.value,
+          options: {
+            type: "default",
+            //data: {}
+          }
+        })
+      } else if (e.target.value === "GSelectedClusterPriority") {
+        setPriority({
+          name: e.target.value,
+          options: {
+            type: "cluster",
+            //data: {}
+          }
+        })
+      } else {
+        setPriority({
+          name: e.target.value,
+          options: {
+            type: "",
+            //data: {}
+          }
+        })
+      }
+      console.log(priority)
+    }
+
+    const onChangeFrom = (e) => {
+      setPriority({
+        ...priority,
+        options: {
+          type: e.target.value
+        }
+      })
+    }
+
+    const onChangeSource = (e) => {
+
+    }
+    const onChangeName = (e) => {
+
+    }
+    const onChangeType = (e) => {
+      setPriority({
+        ...priority,
+        options: {
+          type: e.target.value
+        }
+      })
+    }
+    
+    const SelectedPriorityComponent = () => {
+      switch (priority.name) {
+        case "GLowLatencyPriority":
+          return(<>
+              <FormControl className="form_fullWidth" style={{ paddingTop: "4px"}}>
+                <select name="type" value={priority.options.type} onChange={onChangeFrom}>
+                  <option value={"fromNode"} >from node</option>
+                  <option value={"fromPod"}>from pod</option>
+                </select>
+              </FormControl>
+              {
+                priority.options.type === "fromNode" ?
+                (<div style={{ paddingTop: "4px" }}>
+                  <FormControl style={{ width: "50%" }}>
+                    <select name="sourceCluster" onChange={onChangeSource}>
+                      <option value={""}>Select Source Cluster</option>
+                    </select>
+                  </FormControl>
+                  <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                    <select name="sourceNode" onChange={onChangeSource}>
+                      <option value={""}>Select Source Node</option>
+                    </select>
+                  </FormControl>
+                </div>)
+                :(<>
+                  <table className="tb_data_new" style={{ marginTop: "4px"}}>
+                    <tbody className="tb_data_nodeInfo">
+                      <tr>
+                        <th>Workspace Name</th>
+                        <th>Project Name</th>
+                        <th>Pod Name</th>
+                      </tr>
+                      <tr>
+                        <td>
+                          <CTextField type="text" placeholder="Workspace Name" className="form_fullWidth" name="workspaceName" onChange={onChangeName}/>
+                        </td>
+                        <td>
+                          <CTextField type="text" placeholder="Project Name" className="form_fullWidth" name="projectName" onChange={onChange}/>
+                        </td>
+                        <td>
+                          <CTextField type="text" placeholder="Pod Name" className="form_fullWidth" name="podName" onChange={onChange}/>
+                        </td>
+                      </tr>
+                      </tbody>
+                  </table>
+                </>)
+              }
+          </>)
+        case "GMostRequestPriority":
+          return(<>
+            <FormControl style={{ paddingTop: "4px" }}>
+              <select name="type" value={priority.options.type} onChange={onChangeType}>
+                <option value={"default"}>Default</option>
+                <option value={"gpu"}>GPU</option>
+                <option value={"cpu"}>CPU</option>
+                <option value={"memory"}>MEMORY</option>
+              </select>
+            </FormControl>
+          </>)
+        case "GSelectedClusterPriority":
+          return(<>
+            <FormControl className="form_fullWidth" style={{ paddingTop: "4px"}}>
+              <select name="type" value={priority.options.type} onChange={onChangeType}>
+                <option value={"cluster"} >Cluster</option>
+                <option value={"node"}>Node</option>
+              </select>
+            </FormControl>
+            {priority.options.type === "cluster"?
+            (<>
+              <FormControl className="form_fullWidth" style={{ paddingTop: "4px"}}>
+                <select name="cluster" onChange={onChangeType}>
+                  <option value={""} >Select Cluster</option>
+                </select>
+              </FormControl>
+            </>)
+            :(<div style={{ paddingTop: "4px" }}>
+              <FormControl style={{ width: "50%" }}>
+                <select name="sourceCluster"  onChange={onChangeSource}>
+                  <option value={""}>Select Cluster</option>
+                </select>
+              </FormControl>
+              <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                <select name="sourceNode" onChange={onChangeSource}>
+                  <option value={""}>Select Node</option>
+                </select>
+              </FormControl>
+            </div>)}
+          </>)
+        case "GSetClusterPriority":
+          return(<>
+            <table className="tb_data_new" style={{ marginTop: "4px"}}>
+              <tbody className="tb_data_nodeInfo">
+                <tr>
+                  <th>User Name</th>
+                  <th>Workspace Name</th>
+                  <th>Project Name</th>
+                </tr>
+                <tr>
+                  <td>
+                    <CTextField type="text" placeholder="User Name" className="form_fullWidth" name="userName" onChange={onChangeName}/>
+                  </td>
+                  <td>
+                    <CTextField type="text" placeholder="Workspace Name" className="form_fullWidth" name="workspaceName" onChange={onChange}/>
+                  </td>
+                  <td>
+                    <CTextField type="text" placeholder="Project Name" className="form_fullWidth" name="projectName" onChange={onChange}/>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <FormControl className="form_fullWidth" style={{ paddingTop: "2px"}}>
+                <select name="clusters" onChange={onChangeSource}>
+                  <option value={""}>Set Clusters</option>
+                </select>
+              </FormControl>
+          </>)
+        default:
+          break;
+      }
+    }
+
+    return(
+      <tr>
+        <th style={{width: "30%"}}>
+          Priority <span className="requried">*</span>
+        </th>
+        <td colSpan="3">
+          <FormControl className="form_fullWidth">
+            <select name="priority" onChange={onChangePriority}>
+              <option value={"GLowLatencyPriority"} >GLowLatencyPriority</option>
+              <option value={"GMostRequestPriority"}>GMostRequestPriority</option>
+              <option value={"GSelectedClusterPriority"}>GSelectedClusterPriority</option>
+              <option value={"GSetClusterPriority"}>GSetClusterPriority</option>
+            </select>
+          </FormControl>
+          {SelectedPriorityComponent()}
+        </td>
+      </tr>
+    )
   }
 
   const CreateDeploymentComponent = () => {
@@ -375,45 +581,17 @@ const CreateDeployment = observer((props) => {
           </tr>
           <tr>
             <th>
-              Pull Secret <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecret" onChange={onChange} value={podName} />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Volume
-            </th>
-            <td colSpan="3">
-              <table className="tb_data_new">
-                <tbody className="tb_data_nodeInfo">
-                  <tr>
-                    <th>Name</th>
-                    <th>NFS Server</th>
-                    <th>NFS Path</th>
-                  </tr>
-                  <tr>
-                    <td><CTextField type="text" placeholder="Volume Name" className="form_fullWidth" name="volumeName" onChange={onChange} value={podName} /></td>
-                    <td><CTextField type="text" placeholder="NFS Server" className="form_fullWidth" name="nfsServer" onChange={onChange} value={podName} /></td>
-                    <td><CTextField type="text" placeholder="NFS Path" className="form_fullWidth" name="nfsPath" onChange={onChange} value={podName} /></td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <th style={{width: "30%"}}>
-              Priority <span className="requried">*</span>
+              Volume <span className="requried">*</span>
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="priority" onChange={onChange}>
-                  <option value={""}>Select Priority</option>
+                <select name="volume" onChange={onChange}>
+                  <option value={""}>Select Persistent Volume Claim</option>
                 </select>
               </FormControl>
             </td>
           </tr>
+          {PriorityComponent()}
           <tr>
             <th>
               Target Clusters <span className="requried">*</span>
@@ -422,30 +600,6 @@ const CreateDeployment = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="targetCluster" onChange={onChange}>
                   <option value={""}>Select Target Cluster</option>
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Source Cluster <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select name="sourceCluster" onChange={onChange}>
-                  <option value={""}>Select Source Cluster</option>
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Source Node <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select name="sourceNode" onChange={onChange}>
-                  <option value={""}>Select Source Node</option>
                 </select>
               </FormControl>
             </td>

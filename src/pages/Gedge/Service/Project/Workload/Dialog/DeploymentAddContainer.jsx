@@ -45,8 +45,6 @@ const DeploymentAddContainer = observer(props => {
   } = deploymentStore;
   const { open, containerIndex } = props;
   const [ tabvalue, setTabvalue ] = useState(0);
-  const [ ports, setPorts ] = useState([]);
-  const [ variables, setVariables ] = useState([]);
   const [ containerInfo, setContainerInfo ] = useState();
 
   const handleTabChange = (_, value) => {
@@ -280,6 +278,14 @@ const DeploymentAddContainer = observer(props => {
                   <CTextField type="text" placeholder="Container Image" className="form_fullWidth" name="containerImage" onChange={onChange} value={containerInfo?.containerImage}/>
                 </td>
               </tr>
+							<tr>
+								<th>
+									Pull Secret <span className="requried">*</span>
+								</th>
+								<td colSpan="3">
+									<CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecret" onChange={onChange} value={containerInfo?.pullSecret} />
+								</td>
+							</tr>
               <tr>
                 <th>
                   Pull Policy <span className="requried">*</span>
@@ -442,7 +448,7 @@ const DeploymentAddContainer = observer(props => {
               display: "flex",
               width: "300px",
               justifyContent: "center",
-              marginTop: "32px",
+              marginTop: "30px",
             }}
           >
             <Button onClick={handleClose}>취소</Button>
