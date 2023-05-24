@@ -375,12 +375,6 @@ const CreateDeployment = observer((props) => {
       })
     }
 
-    const onChangeSource = (e) => {
-
-    }
-    const onChangeName = (e) => {
-
-    }
     const onChangeType = (e) => {
       setPriority({
         ...priority,
