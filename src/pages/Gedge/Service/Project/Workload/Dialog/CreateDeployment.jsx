@@ -69,6 +69,22 @@ const DeleteButton = styled.button`
 
   &:after { transform: rotate(-45deg); }
 `
+const Table = styled.table`
+  
+  tbody {
+    display: block;
+    height: 170px;
+    overflow: auto;
+  }
+  thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  thead {
+    width: calc( 100% - 1em )
+  }
+`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
@@ -77,14 +93,11 @@ const CreateDeployment = observer((props) => {
   const [size, setSize] = useState("md");
 
   const {
-    deploymentName,
     podReplicas,
     containerName,
     containerImage,
     containerPort,
     project,
-    workspace,
-    setWorkspace,
     setContent,
     clearAll,
     setProject,
@@ -93,13 +106,21 @@ const CreateDeployment = observer((props) => {
     postDeploymentPVC,
     setContentVolume,
     podName,
+    workspaceList,
+    projectList,
+    loadProjectList,
     labelList,
     initLabelList,
     addLabelList,
     removeLabelList,
+    annotationList,
+    initAnnotationList,
+    addAnnotationList,
+    removeAnnotationList,
+    pvcList,
     deploymentInfo,
+    initDeploymentInfo,
     setDeploymentInfo,
-    initContainer,
     removeContainer
   } = deploymentStore;
 
@@ -118,8 +139,10 @@ const CreateDeployment = observer((props) => {
   const { setProjectListinWorkspace } = projectStore;
   const { postWorkload, postScheduler } = schedulerStore;
 
-  const [ input, setInput ] = useState({key: "", value: ""});
+  const [ label, setLabel ] = useState({key: "", value: ""});
+  const [ annotation, setAnnotation ] = useState({key: "", value: ""})
   const [ containerIndex, setContainerIndex ] = useState(1);
+  const [ projectDisable, setProjectDisable ] = useState(true);
   const [ priority, setPriority ] = useState({
     name: "GLowLatencyPriority",
     options: {
@@ -128,70 +151,76 @@ const CreateDeployment = observer((props) => {
     }
   });
 
-  const template = {
-    apiVersion: "apps/v1",
-    kind: "Deployment",
-    metadata: {
-      name: deploymentName,
-      namespace: project,
-      labels: {
-        app: deploymentName,
-      },
-    },
-    spec: {
-      replicas: podReplicas,
-      selector: {
-        matchLabels: {
-          app: deploymentName,
-        },
-      },
-      template: {
-        metadata: {
-          labels: {
-            app: deploymentName,
-          },
-        },
-        spec: {
-          containers: [
-            {
-              image: containerImage,
-              name: containerName,
-              ports: [
-                {
-                  containerPort: Number(containerPort),
-                },
-              ],
-            },
-          ],
-        },
-      },
-    },
-  };
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: deploymentName,
+  //     namespace: project,
+  //     labels: {
+  //       app: deploymentName,
+  //     },
+  //   },
+  //   spec: {
+  //     replicas: podReplicas,
+  //     selector: {
+  //       matchLabels: {
+  //         app: deploymentName,
+  //       },
+  //     },
+  //     template: {
+  //       metadata: {
+  //         labels: {
+  //           app: deploymentName,
+  //         },
+  //       },
+  //       spec: {
+  //         containers: [
+  //           {
+  //             image: containerImage,
+  //             name: containerName,
+  //             ports: [
+  //               {
+  //                 containerPort: Number(containerPort),
+  //               },
+  //             ],
+  //           },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // };
 
-  const templatePVC = {
-    apiVersion: "v1",
-    kind: "PersistentVolumeClaim",
-    metadata: {
-      name: volumeName,
-      namespace: project,
-      labels: {
-        app: "",
-      },
-    },
-    spec: {
-      storageClassName: selectStorageClass,
-      accessModes: [accessMode],
-      resources: {
-        requests: {
-          storage: Number(volumeCapacity) + "Gi",
-        },
-      },
-    },
-  };
+  // const templatePVC = {
+  //   apiVersion: "v1",
+  //   kind: "PersistentVolumeClaim",
+  //   metadata: {
+  //     name: volumeName,
+  //     namespace: project,
+  //     labels: {
+  //       app: "",
+  //     },
+  //   },
+  //   spec: {
+  //     storageClassName: selectStorageClass,
+  //     accessModes: [accessMode],
+  //     resources: {
+  //       requests: {
+  //         storage: Number(volumeCapacity) + "Gi",
+  //       },
+  //     },
+  //   },
+  // };
 
-  const onChangeInput = e => {
-    setInput({
-      ...input,
+  const onChangeLabel = e => {
+    setLabel({
+      ...label,
+      [e.target.name]: e.target.value
+    })
+  }
+  const onChangeAnnotation = e => {
+    setAnnotation({
+      ...annotation,
       [e.target.name]: e.target.value
     })
   }
@@ -199,16 +228,20 @@ const CreateDeployment = observer((props) => {
   const onChange = e => {
     setDeploymentInfo(e.target.name, e.target.value);
   };
-
-  const onSecondDepthChange = e => {
-    
+  const onChangeWorkspace = (e) => {
+    setDeploymentInfo(e.target.name, e.target.value);
+    setProjectDisable(false);
+    loadProjectList(e.target.value);
   }
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    initDeploymentInfo();
     initLabelList();
-    initContainer();
-    setInput({key: "", value: ""});
+    initAnnotationList();
+    setLabel({key: "", value: ""});
+    setAnnotation({key: "", value: ""});
+    setProjectDisable(true);
   };
 
   const handleClose2 = () => {
@@ -260,25 +293,34 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     console.log(toJS({
-      deploymentName: deploymentInfo.podName,
+      deploymentName: deploymentInfo.deploymentName,
+      workspace: deploymentInfo.workspace,
+      project: deploymentInfo.project,
       labels : toJS(labelList),
+      annotation: toJS(annotationList),
       replicas: deploymentInfo.replicas,
       volume: deploymentInfo.volume,
-      priority: deploymentInfo.priority,
+      priority: priority,
       targetCluster: deploymentInfo.targetCluster,
-      sourceCluster: deploymentInfo.sourceCluster,
-      sourceNode: deploymentInfo.sourceNode,
       containers: toJS(deploymentInfo.containers)
     }))
+    //setProjectDisable(true);
+
     // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
     // handleClose();
     // props.reloadFunc && props.reloadFunc();
   };
 
   const addLabel = () => {
-    if (input.key !== "" && input.value !== "") {
-      addLabelList(input.key, input.value);
-      setInput({key: "", value: ""});
+    if (label.key !== "" && label.value !== "") {
+      addLabelList(label.key, label.value);
+      setLabel({key: "", value: ""});
+    }
+  }
+  const addAnnotation = () => {
+    if (annotation.key !== "" && annotation.value !== "") {
+      addAnnotationList(annotation.key, annotation.value);
+      setAnnotation({key: "", value: ""});
     }
   }
 
@@ -322,7 +364,6 @@ const CreateDeployment = observer((props) => {
           }
         })
       }
-      console.log(priority)
     }
 
     const onChangeFrom = (e) => {
@@ -491,6 +532,10 @@ const CreateDeployment = observer((props) => {
   }
 
   const CreateDeploymentComponent = () => {
+    const checkPVC = () => {
+
+    }
+
     return(
       <>
       <DeploymentAddContainer containerIndex={containerIndex} open={open2} onClose={handleClose2}></DeploymentAddContainer>
@@ -501,36 +546,68 @@ const CreateDeployment = observer((props) => {
               Deployment Name <span className="requried">*</span>
             </th>
             <td colSpan="3">
-              <CTextField type="text" placeholder="Deployment Name" className="form_fullWidth" name="deploymentName" onChange={onChange} value={deploymentName} />
+              <CTextField type="text" placeholder="Deployment Name" className="form_fullWidth" name="deploymentName" onChange={onChange} value={deploymentInfo.deploymentName} />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="workspace" onChange={onChangeWorkspace}>
+                  <option value={""} selected disabled hidden>Select Workspace</option>
+                  {workspaceList.map(workspace => (
+                    <option value={workspace.name}>{workspace.name}</option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select disabled={projectDisable} name="project" onChange={onChange}>
+                  <option value={""} selected hidden disabled>Select Project</option>
+                  {projectList.map(project => (
+                    <option value={project.name}>{project.name}</option>
+                  ))}
+                </select>
+              </FormControl>
             </td>
           </tr>
           <tr>
             <th rowSpan={labelList.length+2}>
-              Labels <span className="requried">*</span>
+              Labels
             </th>
           </tr>
           {labelList.map((label, index)=>(
             <tr>
-              <td style={{paddingLeft: "5px"}}>
+              <td style={{ paddingLeft: "5px" }}>
                 {label.key}
               </td>
-              <td style={{paddingLeft: "5px"}}>
+              <td style={{ paddingLeft: "5px" }}>
                 {label.value}
               </td>
-              <Button style={{
-                border: "none",
-                height: "28px",
-                width: "30px",
-                fontSize: "20px",
-                fontWeight: 600,
-                lineHeight: 1,
-                letterSpacing: "normal",
-                color: "#36435c",
-                backgroundColor: "#eff4f9",
-                padding: "0 0 0 0",
-                margin: "2px",
-                borderRadius: "0"
-              }} onClick={() => removeLabelList(index)}>-</Button>
+              <td>
+                <Button style={{
+                  border: "none",
+                  height: "28px",
+                  width: "30px",
+                  fontSize: "20px",
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  letterSpacing: "normal",
+                  color: "#36435c",
+                  backgroundColor: "#eff4f9",
+                  padding: "0 0 0 0",
+                  margin: "2px",
+                  borderRadius: "0"
+                }} onClick={() => removeLabelList(index)}>-</Button>
+              </td>
             </tr>
           ))}
           <tr>
@@ -540,8 +617,8 @@ const CreateDeployment = observer((props) => {
                 placeholder="Key"
                 className="form_fullWidth"
                 name="key"
-                onChange={onChangeInput}
-                value={input.key}
+                onChange={onChangeLabel}
+                value={label.key}
               />
             </td>
             <td>
@@ -550,8 +627,8 @@ const CreateDeployment = observer((props) => {
                 placeholder="Value"
                 className="form_fullWidth"
                 name="value"
-                onChange={onChangeInput}
-                value={input.value}
+                onChange={onChangeLabel}
+                value={label.value}
               />
             </td>
             <td>
@@ -570,13 +647,80 @@ const CreateDeployment = observer((props) => {
               }} onClick={addLabel}>+</Button>
             </td>
           </tr>
-
+          <tr>
+            <th rowSpan={annotationList.length+2}>
+              Annotations
+            </th>
+          </tr>
+          {annotationList.map((annotation, index)=>(
+            <tr>
+              <td style={{paddingLeft: "5px"}}>
+                {annotation.key}
+              </td>
+              <td style={{paddingLeft: "5px"}}>
+                {annotation.value}
+              </td>
+              <td>
+                <Button style={{
+                  border: "none",
+                  height: "28px",
+                  width: "30px",
+                  fontSize: "20px",
+                  fontWeight: 600,
+                  lineHeight: 1,
+                  letterSpacing: "normal",
+                  color: "#36435c",
+                  backgroundColor: "#eff4f9",
+                  padding: "0 0 0 0",
+                  margin: "2px",
+                  borderRadius: "0"
+                }} onClick={() => removeAnnotationList(index)}>-</Button>
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Key"
+                className="form_fullWidth"
+                name="key"
+                onChange={onChangeAnnotation}
+                value={annotation.key}
+              />
+            </td>
+            <td>
+              <CTextField
+                type="text"
+                placeholder="Value"
+                className="form_fullWidth"
+                name="value"
+                onChange={onChangeAnnotation}
+                value={annotation.value}
+              />
+            </td>
+            <td>
+              <Button style={{
+                border: "none",
+                height: "28px",
+                width: "30px",
+                fontSize: "20px",
+                fontWeight: 600,
+                lineHeight: 1,
+                letterSpacing: "normal",
+                color: "#36435c",
+                backgroundColor: "#eff4f9",
+                padding: "0 0 0 0",
+                borderRadius: "0"
+              }} onClick={addAnnotation}>+</Button>
+            </td>
+          </tr>
           <tr>
             <th>
               Replicas <span className="requried">*</span>
             </th>
             <td colSpan="3">
-              <CTextField type="text" placeholder="Replicas" className="form_fullWidth" name="replicas" onChange={onChange} value={podName} />
+              <CTextField type="number" placeholder="Replicas" className="form_fullWidth" name="replicas" onChange={onChange} value={deploymentInfo.replicas} />
             </td>
           </tr>
           <tr>
@@ -584,11 +728,33 @@ const CreateDeployment = observer((props) => {
               Volume <span className="requried">*</span>
             </th>
             <td colSpan="3">
-              <FormControl className="form_fullWidth">
+              {/* <FormControl className="form_fullWidth">
                 <select name="volume" onChange={onChange}>
                   <option value={""}>Select Persistent Volume Claim</option>
                 </select>
-              </FormControl>
+              </FormControl> */}
+              <Table className="tb_data_new">
+                <thead> 
+                  <tr>
+                    <th style={{ textAlign: "center", width: "7%"  }}></th>
+                    <th style={{ textAlign: "center" }}>이름</th>
+                    <th style={{ textAlign: "center" }}>네임스페이스</th>
+                    <th style={{ textAlign: "center" }}>클러스터</th>
+                  </tr>
+                </thead>
+                <tbody className="tb_data_nodeInfo">
+                  {pvcList.map((pvc) => (
+                    <tr>
+                      <td style={{ textAlign: "center", width: "7%" }}>
+                        <input type="checkbox" name="clusterCheck" onChange={checkPVC} />
+                      </td>
+                      <td>{pvc.name}</td>
+                      <td>{pvc.namespace}</td>
+                      <td>{pvc.cluster}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </td>
           </tr>
           {PriorityComponent()}
