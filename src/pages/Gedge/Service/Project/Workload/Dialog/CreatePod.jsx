@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import { podStore, projectStore, schedulerStore } from "@/store";
 import FormControl from "@material-ui/core/FormControl";
@@ -27,6 +28,36 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 3px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em; 
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, .1)
+  }
+
+  &:before, &:after {
+    position: absolute;
+    top: 15%; left: calc(50% - .0625em);
+    width: .125em; height: 70%;
+    border-radius: .125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: ''
+  }
+
+  &:after { transform: rotate(-45deg); }
+`
+
 const CreatePod = observer(props => {
   const { open } = props;
   const [ open2, setOpen2 ] = useState(false);
@@ -45,37 +76,62 @@ const CreatePod = observer(props => {
     content, 
     clearAll, 
     setContent,
+    podInfo,
+    setPodInfo,
     labelList,
     initLabelList,
+    initContainer,
     addLabelList,
-    removeLabelList
+    removeLabelList,
+    removeContainer
   } = podStore;
   const [ input, setInput ] = useState({key: "", value: ""});
+  const [ containerIndex, setContainerIndex ] = useState(-1);
 
   const handleClose = () => {
     props.onClose && props.onClose();
     initLabelList();
-    setInput({key: "", value: ""}); 
+    initContainer();
+    setInput({key: "", value: ""});
   };
 
   const handleClose2 = () => {
     setOpen2(false);
   }
 
-  const onChange = e => {
+  const onChangeInput = e => {
     setInput({
       ...input,
       [e.target.name]: e.target.value
     })
+  }
+
+  const onChange = e => {
+    setPodInfo(e.target.name, e.target.value);
   };
 
   const createPod = () => {
-    console.log(input)
+    console.log(toJS({
+      podName: podInfo.podName,
+      labels : toJS(labelList),
+      pullSecret: podInfo.pullSecret,
+      volume: {
+        volumeName: podInfo.volumeName,
+        nfsServer: podInfo.nfsServer,
+        nfsPath: podInfo.nfsPath
+      },
+      priority: podInfo.priority,
+      targetCluster: podInfo.targetCluster,
+      sourceCluster: podInfo.sourceCluster,
+      sourceNode: podInfo.sourceNode,
+      containers: toJS(podInfo.containers)
+    }))
     // const requestId = `${podName}-${randomString()}`;
 
     // postWorkload(requestId, workspace, project, "Pod");
     // postScheduler(requestId, content, handleClose);
     // props.reloadFunc && props.reloadFunc();
+
   };
 
   const addLabel = () => {
@@ -85,14 +141,20 @@ const CreatePod = observer(props => {
     }
   }
 
-  const openTargetCluster = () => {
+  const openTargetCluster = (index) => {
     setOpen2(true);
+    setContainerIndex(index);
+  }
+
+  const removeContainers = (e, index) => {
+    e.stopPropagation();
+    removeContainer(index);
   }
 
   const CreatePodComponent = () => {
     return (
       <>
-        <PodAddContainer open={open2} onClose={handleClose2}></PodAddContainer>
+        <PodAddContainer containerIndex={containerIndex} open={open2} onClose={handleClose2}></PodAddContainer>
         <table className="tb_data_new tb_write">
           <tbody>
             <tr>
@@ -139,7 +201,7 @@ const CreatePod = observer(props => {
                   placeholder="Key"
                   className="form_fullWidth"
                   name="key"
-                  onChange={onChange}
+                  onChange={onChangeInput}
                   value={input.key}
                 />
               </td>
@@ -149,7 +211,7 @@ const CreatePod = observer(props => {
                   placeholder="Value"
                   className="form_fullWidth"
                   name="value"
-                  onChange={onChange}
+                  onChange={onChangeInput}
                   value={input.value}
                 />
               </td>
@@ -172,10 +234,10 @@ const CreatePod = observer(props => {
 
             <tr>
               <th>
-                Pull Secrets <span className="requried">*</span>
+                Pull Secret <span className="requried">*</span>
               </th>
               <td colSpan="3">
-                <CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecrets" onChange={onChange} value={podName} />
+                <CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecret" onChange={onChange} value={podName} />
               </td>
             </tr>
             <tr>
@@ -192,8 +254,8 @@ const CreatePod = observer(props => {
                     </tr>
                     <tr>
                       <td><CTextField type="text" placeholder="Volume Name" className="form_fullWidth" name="volumeName" onChange={onChange} value={podName} /></td>
-                      <td><CTextField type="text" placeholder="NFS Server" className="form_fullWidth" name="NFSServer" onChange={onChange} value={podName} /></td>
-                      <td><CTextField type="text" placeholder="NFS Path" className="form_fullWidth" name="NFSPath" onChange={onChange} value={podName} /></td>
+                      <td><CTextField type="text" placeholder="NFS Server" className="form_fullWidth" name="nfsServer" onChange={onChange} value={podName} /></td>
+                      <td><CTextField type="text" placeholder="NFS Path" className="form_fullWidth" name="nfsPath" onChange={onChange} value={podName} /></td>
                     </tr>
                   </tbody>
                 </table>
@@ -249,10 +311,17 @@ const CreatePod = observer(props => {
             </tr>
             <tr>
               <th>
-                Container <span className="requried">*</span>
+                Containers <span className="requried">*</span>
               </th>
               <td>
-                <Button onClick={openTargetCluster}>+ Add Container</Button>
+                <Button style={{marginBottom: "2px"}} onClick={() => openTargetCluster(-1)}>+ Add Container</Button>
+                <div>
+                  {
+                    podInfo.containers.map((container, index) => (
+                      <Button style={{marginTop: "2px", marginBottom: "2px"}} onClick={() => openTargetCluster(index)}>{container.containerName}<DeleteButton onClick={(e) => removeContainers(e, index)}>x</DeleteButton></Button>
+                    ))
+                  }
+                </div>
               </td>
             </tr>
           </tbody>

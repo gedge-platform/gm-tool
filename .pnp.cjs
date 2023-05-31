@@ -68,6 +68,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-ace", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:9.5.0"],\
             ["react-apexcharts", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:1.4.0"],\
             ["react-chartjs-2", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:3.3.0"],\
+            ["react-copy-to-clipboard", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:5.1.0"],\
             ["react-custom-scrollbars-2", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:4.5.0"],\
             ["react-datepicker", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:4.10.0"],\
             ["react-daum-postcode", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:3.1.1"],\
@@ -4539,6 +4540,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-ace", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:9.5.0"],\
             ["react-apexcharts", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:1.4.0"],\
             ["react-chartjs-2", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:3.3.0"],\
+            ["react-copy-to-clipboard", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:5.1.0"],\
             ["react-custom-scrollbars-2", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:4.5.0"],\
             ["react-datepicker", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:4.10.0"],\
             ["react-daum-postcode", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:3.1.1"],\
@@ -5111,6 +5113,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/convert-source-map-npm-1.9.0-e294555f4b-dc55a1f28d.zip/node_modules/convert-source-map/",\
           "packageDependencies": [\
             ["convert-source-map", "npm:1.9.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["copy-to-clipboard", [\
+        ["npm:3.3.3", {\
+          "packageLocation": "./.yarn/cache/copy-to-clipboard-npm-3.3.3-6964e6cfad-e0a325e39b.zip/node_modules/copy-to-clipboard/",\
+          "packageDependencies": [\
+            ["copy-to-clipboard", "npm:3.3.3"],\
+            ["toggle-selection", "npm:1.0.6"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8084,6 +8096,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["react-copy-to-clipboard", [\
+        ["npm:5.1.0", {\
+          "packageLocation": "./.yarn/cache/react-copy-to-clipboard-npm-5.1.0-de9742f2bc-f00a4551b9.zip/node_modules/react-copy-to-clipboard/",\
+          "packageDependencies": [\
+            ["react-copy-to-clipboard", "npm:5.1.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:5.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/react-copy-to-clipboard-virtual-89b74756e3/0/cache/react-copy-to-clipboard-npm-5.1.0-de9742f2bc-f00a4551b9.zip/node_modules/react-copy-to-clipboard/",\
+          "packageDependencies": [\
+            ["react-copy-to-clipboard", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:5.1.0"],\
+            ["@types/react", null],\
+            ["copy-to-clipboard", "npm:3.3.3"],\
+            ["prop-types", "npm:15.8.1"],\
+            ["react", "npm:17.0.2"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["react-custom-scrollbars-2", [\
         ["npm:4.5.0", {\
           "packageLocation": "./.yarn/cache/react-custom-scrollbars-2-npm-4.5.0-420f40d266-b264629c0b.zip/node_modules/react-custom-scrollbars-2/",\
@@ -9433,6 +9469,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["to-space-case", "npm:1.0.0"],\
             ["to-no-case", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["toggle-selection", [\
+        ["npm:1.0.6", {\
+          "packageLocation": "./.yarn/cache/toggle-selection-npm-1.0.6-c506b73005-a90dc80ed1.zip/node_modules/toggle-selection/",\
+          "packageDependencies": [\
+            ["toggle-selection", "npm:1.0.6"]\
           ],\
           "linkType": "HARD"\
         }]\

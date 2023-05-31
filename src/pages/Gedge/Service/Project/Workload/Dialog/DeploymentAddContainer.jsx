@@ -7,7 +7,7 @@ import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
-import podStore from "../../../../../../store/Pod";
+import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 
 const Button = styled.button`
@@ -37,15 +37,16 @@ const ButtonAddHost = styled.button`
   border-radius: 4px;
 `;
 
-const PodAddContainer = observer(props => {
-  const { 
-    podInfo,
-    initContainer,
+const DeploymentAddContainer = observer(props => {
+  const {
     addContainer,
     editContainer,
-  } = podStore;
+    deploymentInfo
+  } = deploymentStore;
   const { open, containerIndex } = props;
   const [ tabvalue, setTabvalue ] = useState(0);
+  const [ ports, setPorts ] = useState([]);
+  const [ variables, setVariables ] = useState([]);
   const [ containerInfo, setContainerInfo ] = useState();
 
   const handleTabChange = (_, value) => {
@@ -155,11 +156,10 @@ const PodAddContainer = observer(props => {
         volume: ""
       })
     } else {
-      const clonedData = cloneDeep(podInfo.containers[containerIndex]);
+      const clonedData = cloneDeep(deploymentInfo.containers[containerIndex]);
       setContainerInfo(clonedData);
     }
   }, [open])
-
 
   const HostComponent = (index) => {
     if (containerInfo.ports[index].serviceType === "NodePort" || containerInfo.ports[index].serviceType === "LoadBalancer") {
@@ -258,7 +258,6 @@ const PodAddContainer = observer(props => {
     }
   }
   
-
   const AddContainerComponent = () => {
     if (tabvalue === 0) {
       return(
@@ -567,4 +566,4 @@ const PodAddContainer = observer(props => {
   )
 })
 
-export default PodAddContainer;
+export default DeploymentAddContainer;
