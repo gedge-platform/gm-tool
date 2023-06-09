@@ -11,9 +11,11 @@ import Detail from "../Detail";
 import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import CreateHPA from "../Dialog/CreateHPA";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [open2, setOpen2 ] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -98,8 +100,16 @@ const DeploymentListTab = observer(() => {
     setOpen(true);
   };
 
+  const handleHPAOpen = () => {
+    setOpen2(true);
+  }
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
   };
 
   return (
@@ -108,6 +118,7 @@ const DeploymentListTab = observer(() => {
         <PanelBox>
           <CommActionBar reloadFunc={loadDeploymentList}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton style={{marginLeft: "5px"}} onClick={handleHPAOpen}>HPA 생성</CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
@@ -129,6 +140,11 @@ const DeploymentListTab = observer(() => {
           <CreateDeployment
             open={open}
             onClose={handleClose}
+            reloadFunc={loadDeploymentList}
+          />
+          <CreateHPA
+            open={open2}
+            onClose={handleClose2}
             reloadFunc={loadDeploymentList}
           />
         </PanelBox>
