@@ -116,6 +116,204 @@ class Deployment {
   content = "";
   contentVolume = "";
 
+  podName = "";
+
+  workspaceList = [
+    {name: "workspace1"}
+  ];
+  projectList = [];
+  labelList = [];
+  annotationList = [];
+
+  deploymentInfo = {
+    deploymentName: "",
+    workspace: "",
+    project: "",
+    labels: [],
+    annotations: [],
+    replicas: 1,
+    volume: [],
+    priority: {
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+        //data: {}
+      }
+    },
+    targetClusters: "",
+    containers: []
+  }
+
+  pvcList = [
+    {
+      name: "pvc1",
+      namespace: "ns1",
+      cluster: "agwaw"
+    },
+    {
+      name: "pvc2",
+      namespace: "ns1",
+      cluster: "agwaf"
+    },
+    {
+      name: "pvc3",
+      namespace: "ns2",
+      cluster: "asdgw"
+    },
+    {
+      name: "pvc4",
+      namespace: "ns1",
+      cluster: "agwaf"
+    },
+    {
+      name: "pvc5",
+      namespace: "ns1",
+      cluster: "agwaf"
+    },
+    {
+      name: "pvc6",
+      namespace: "ns1",
+      cluster: "agwaf"
+    },
+    {
+      name: "pvc7",
+      namespace: "ns1",
+      cluster: "agwaf"
+    },
+    {
+      name: "pvc8",
+      namespace: "ns1",
+      cluster: "agwaf"
+    }
+  ];
+  volumeList = [];
+
+  loadProjectList = (workspace) => {
+    runInAction(() => {
+      this.projectList = [
+        {
+          name: "project1"
+        },
+        {
+          name: "project2"
+        },
+        {
+          name: "project3"
+        },
+        {
+          name: "project4"
+        }
+      ]
+    })
+  }
+
+  loadVolumeList = (pvcName) => {
+    runInAction(() => {
+      this.volumeList = [
+        {
+          name: "volume1"
+        },
+        {
+          name: "volume2"
+        },
+        {
+          name: "volume3"
+        },
+        {
+          name: "volume4"
+        }
+      ];
+    })
+  }
+
+  setDeploymentInfo = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo[key] = value;
+    })
+  }
+
+  initDeploymentInfo = () => {
+    runInAction(() => {
+      this.deploymentInfo = {
+        deploymentName: "",
+        workspace: "",
+        project: "",
+        labels: [],
+        annotations: [],
+        replicas: 1,
+        volume: [],
+        priority: {
+          name: "GLowLatencyPriority",
+          options: {
+            type: "fromNode",
+            //data: {}
+          }
+        },
+        targetClusters: "",
+        containers: []
+      }
+    })
+  }
+
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initAnnotationList = () => {
+    runInAction(() => {
+      this.annotationList = [];
+    })
+  }
+  addAnnotationList = (key, value) => {
+    runInAction(() => {
+      this.annotationList.push({key: key, value: value});
+    })
+  }
+  removeAnnotationList = (removeIndex) => {
+    runInAction(() => {
+      this.annotationList = this.annotationList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initContainer = () => {
+    runInAction(() => {
+      this.deploymentInfo.containers = [];
+    })
+  }
+  addContainer = async (container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers.push(container);
+    })
+  }
+  editContainer = (editIndex, container) => {
+    runInAction(() => {
+      this.deploymentInfo.containers[editIndex] = container;
+    })
+  }
+  removeContainer = (removeIndex) => {
+    runInAction(() => {
+      this.deploymentInfo.containers = this.deploymentInfo.containers.filter((_, index) => 
+        removeIndex !== index
+      )
+    })
+  }
+  
   constructor() {
     makeAutoObservable(this);
   }

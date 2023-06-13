@@ -88,93 +88,7 @@ const SecretDetail = observer(() => {
     setOpen(false);
   };
 
-  // const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 스위치
-  // const textLimit = useRef(170); // 글자수 제한 선언
-  // const commenter = useMemo(() => {
-  //   // 조건에 따라 게시글을 보여주는 함수
-  //   const shortReview = comment.slice(0, textLimit.current); // 원본에서 글자 수만큼 잘라서 짧은 버전 준비
-  //   if (comment.length > textLimit.current) {
-  //     // 원본이 길면
-  //     if (isShowMore) {
-  //       // 더보기가 true이면
-  //       return comment; // 원본을 return
-  //     }
-  //     return shortReview; // 더보기가 false이면 짧은 버전을 리턴
-  //   }
-  //   return comment; //원본이 길지 않으면 comment를 return
-  // }, [isShowMore]); // isShowMore의 상태가 바뀔 때마다 호출
-
-  // const accordion = () => {
-  //   {
-  //     Object.entries(data).map(([keys, value]) => {
-  //       secretTable.push(
-  //         <div>
-  //           <Accordion>
-  //             <AccordionSummary
-  //               expandIcon={
-  //                 <ExpandMoreRounded
-  //                   sx={{
-  //                     backgroundColor: "#2f3855",
-  //                     color: "rgba(255,255,255,0.7)",
-  //                   }}
-  //                 />
-  //               }
-  //               aria-controls="ProjectEvent-content"
-  //               id="ProjectEvent-header"
-  //               sx={{ backgroundColor: "#2f3855" }}
-  //             >
-  //               <Typography
-  //                 sx={{
-  //                   width: "15%",
-  //                   fontSize: 13,
-  //                   color: "rgba(255,255,255,0.7)",
-  //                   backgroundColor: "#2f3855",
-  //                 }}
-  //               >
-  //                 {keys}
-  //               </Typography>
-
-  //               <Typography
-  //                 sx={{
-  //                   fontSize: 13,
-  //                   color: "rgba(255,255,255,0.7)",
-  //                   backgroundColor: "#2f3855",
-  //                 }}
-  //               >
-  //                 {value.length < 150 ? value : value.substr(0, 150)}
-  //               </Typography>
-  //             </AccordionSummary>
-  //             <AccordionDetails sx={{ backgroundColor: "#2f3855" }}>
-  //               <Typography
-  //                 sx={{
-  //                   fontSize: 13,
-  //                   color: "rgba(255,255,255,0.7)",
-  //                   backgroundColor: "#2f3855",
-  //                 }}
-  //               >
-  //                 <table className="tb_data">
-  //                   <tbody className="tb_data_detail">
-  //                     <tr>
-  //                       <td
-  //                         style={{
-  //                           wordBreak: "break-all",
-  //                           wordWrap: "break-word",
-  //                         }}
-  //                       >
-  //                         {value}
-  //                       </td>
-  //                     </tr>
-  //                   </tbody>
-  //                 </table>
-  //               </Typography>
-  //             </AccordionDetails>
-  //           </Accordion>
-  //         </div>
-  //       );
-  //     });
-  //   }
-  //   return secretTable;
-  // };
+  console.log("secretTabList : ", secretTabList);
 
   const dataAccordion = () => {
     data.length !== 0
@@ -206,7 +120,7 @@ const SecretDetail = observer(() => {
                 secretTabList.length !== 0 ? (
                   <>
                     <tr>
-                      <th style={{ width: "15%" }}>Name</th>
+                      <th className="tb_workload_detail_labels_th">Name</th>
                       <td>{secretTabList.name ? secretTabList.name : "-"}</td>
                     </tr>
                     <tr>

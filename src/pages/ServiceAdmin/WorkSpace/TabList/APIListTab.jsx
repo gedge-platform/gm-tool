@@ -17,7 +17,6 @@ const WorkspaceListTab = observer(() => {
   const [workspaceName, setWorkspaceName] = useState("");
 
   const {
-    workSpaceList,
     loadWorkSpaceList,
     totalElements,
     deleteWorkspace,
@@ -35,6 +34,9 @@ const WorkspaceListTab = observer(() => {
       headerName: "이름",
       field: "workspaceName",
       filter: true,
+      cellRenderer: function ({ data: { workspaceName } }) {
+        return `<span>${workspaceName.split("-")[0]}</span>`;
+      },
     },
     {
       headerName: "설명",
@@ -43,14 +45,14 @@ const WorkspaceListTab = observer(() => {
     },
     {
       headerName: "클러스터",
-      field: "memberName",
+      field: "clusterName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
         return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
       },
     },
     {
-      headerName: "CREATOR",
+      headerName: "생성자",
       field: "memberName",
       filter: true,
     },
@@ -68,7 +70,6 @@ const WorkspaceListTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
-    console.log("workspaceName", e.data.workspaceName);
     setWorkspaceName(e.data.workspaceName);
     loadWorkspaceDetail(e.data.workspaceName);
   };

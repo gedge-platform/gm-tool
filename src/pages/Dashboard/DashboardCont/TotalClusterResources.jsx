@@ -71,9 +71,7 @@ const TotalClusterResources = observer(() => {
             total={true}
             label={["avail", "used"]}
             value={[availCpu, usageTotalCpu]}
-            customOption={
-              {stroke: {show: false}}
-            }
+            customOption={{ stroke: { show: false } }}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
@@ -109,9 +107,7 @@ const TotalClusterResources = observer(() => {
             total={true}
             label={["avail", "used"]}
             value={[availMem, usageTotalMem]}
-            customOption={
-              {stroke: {show: false}}
-            }
+            customOption={{ stroke: { show: false } }}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>
@@ -147,9 +143,7 @@ const TotalClusterResources = observer(() => {
             total={true}
             label={["avail", "used"]}
             value={[availDisk, usageTotalDisk]}
-            customOption={
-              {stroke: {show: false}}
-            }
+            customOption={{ stroke: { show: false } }}
           />
           <div className="totalClusterResourcesContTxt">
             <ul>

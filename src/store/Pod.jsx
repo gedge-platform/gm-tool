@@ -83,6 +83,142 @@ class Pod {
   workloadList = [];
   serviceList = [];
 
+  labelList = [];
+  containerList = [];
+  portList = [];
+  variableList = [];
+
+
+  podInfo = {
+    podName: "",
+    labels: [
+      // {
+      //   key: "",
+      //   value: ""
+      // }
+    ],
+    pullSecrets: "",
+    volume: {
+      name: "",
+      nfsServer: "",
+      nfsPath: ""
+    },
+    priority: "",
+    targetClusters: "",
+    sourceNode: "",
+    containers: [
+      // {
+      //   general: {
+      //     containerName: "",
+      //     containerImage: "",
+      //     pullPolicy: "",
+      //     ports: [
+      //       {
+      //         serviceType: "",
+      //         name: "",
+      //         privateContainerPort: "",
+      //         protocol: "",
+      //         host: {
+
+      //         }
+      //       },
+      //     ],
+      //     command: "",
+      //     arguments: "",
+      //     workingDir: "",
+      //     variables: [
+      //       {
+      //         type: "",
+      //         variableName: "",
+      //         value: {
+
+      //         }
+      //       }
+      //     ]
+      //   },
+      //   resource: {
+      //     cpuReservation: "",
+      //     memoryReservation: "",
+      //     cpuLimit: "",
+      //     memoryLimit: "",
+      //     nvidiaGPULimitReservation: ""
+      //   },
+      //   storage: {
+      //     volume: ""
+      //   }
+      // },
+    ]
+  }
+
+  setPodInfo = (key, value) => {
+    runInAction(() => {
+      this.podInfo[key] = value;
+    })
+  }
+
+  initLabelList = () => {
+    runInAction(() => {
+      this.labelList = [];
+    })
+  }
+  addLabelList = (key, value) => {
+    runInAction(() => {
+      this.labelList.push({key: key, value: value});
+    })
+  }
+  removeLabelList = (removeIndex) => {
+    runInAction(() => {
+      this.labelList = this.labelList.filter((_, index) =>
+        removeIndex !== index
+      )
+    })
+  }
+
+  initContainer = () => {
+    runInAction(() => {
+      this.podInfo.containers = [];
+    })
+  }
+  addContainer = async (container) => {
+    runInAction(() => {
+      this.podInfo.containers.push(container);
+    })
+  }
+  editContainer = (editIndex, container) => {
+    runInAction(() => {
+      this.podInfo.containers[editIndex] = container;
+    })
+  }
+  removeContainer = (removeIndex) => {
+    runInAction(() => {
+      this.podInfo.containers = this.podInfo.containers.filter((_, index) => 
+        removeIndex !== index
+      )
+    })
+  }
+
+  initPorts = () => {
+    runInAction(() => {
+      this.ports = [];
+    })
+  }
+  addPort = (containerIndex) => {
+    runInAction(() => {
+      
+    })
+  }
+  removePort = (containerIndex) => {
+    runInAction(() => {
+
+    })
+  }
+
+  changePort = (index, input) => {
+    runInAction(() => {
+      
+    })
+  }
+
   constructor() {
     makeAutoObservable(this);
   }

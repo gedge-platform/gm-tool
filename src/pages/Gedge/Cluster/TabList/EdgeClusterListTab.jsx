@@ -30,7 +30,6 @@ const EdgeClusterListTab = observer(() => {
     initViewList,
     deleteCluster,
     clusterDetail,
-    clusterList,
     totalElements,
     loadClusterList,
     loadCluster,
@@ -43,16 +42,6 @@ const EdgeClusterListTab = observer(() => {
   } = clusterStore;
 
   const [columDefs] = useState([
-    // {
-    //     headerName: "",
-    //     field: "check",
-    //     minWidth: 53,
-    //     maxWidth: 53,
-    //     filter: false,
-    //     headerCheckboxSelection: true,
-    //     headerCheckboxSelectionFilteredOnly: true,
-    //     checkboxSelection: true,
-    // },
     {
       headerName: "이름",
       field: "clusterName",
@@ -150,7 +139,6 @@ const EdgeClusterListTab = observer(() => {
           </CommActionBar>
 
           <div className="tabPanelContainer">
-            {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
               <AgGrid
                 rowData={viewList}
@@ -172,11 +160,6 @@ const EdgeClusterListTab = observer(() => {
             onClose={handleCreateClose}
             reloadFunc={reloadData}
           />
-          {/* <EdgeZoneAddNode
-            open={AddNode}
-            onClose={handleAddNodeClose}
-            reloadFunc={reloadData}
-          /> */}
         </PanelBox>
         <Detail cluster={clusterDetail} />
       </CReflexBox>
