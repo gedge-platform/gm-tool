@@ -4,7 +4,7 @@ import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import FormControl from "@material-ui/core/FormControl";
 import { useState } from "react";
-import deploymentStore from "../../../../../../store/Deployment";
+import hpaStore from "../../../../store/HPA";
 
 const Button = styled.button`
   background-color: #fff;
@@ -31,7 +31,7 @@ const CreateHPA = observer((props) => {
 		hpaProjectList,
 		hpaClusterList,
 		hpaDeploymentList
-  } = deploymentStore;
+  } = hpaStore;
   const { open } = props;
 	const [ isCpuDisabled, setIsCpuDisabled ] = useState(true);
 	const [ isMemoryDisabled, setIsMemoryDisabled ] = useState(true);

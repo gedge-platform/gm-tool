@@ -326,7 +326,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
 							<tr>
 								<th>
-									Pull Secret <span className="requried">*</span>
+									Pull Secret
 								</th>
 								<td colSpan="3">
 									<CTextField type="text" placeholder="Pull Secrets" className="form_fullWidth" name="pullSecret" onChange={onChange} value={containerInfo?.pullSecret} />
@@ -334,7 +334,7 @@ const DeploymentAddContainer = observer(props => {
 							</tr>
               <tr>
                 <th>
-                  Pull Policy <span className="requried">*</span>
+                  Pull Policy
                 </th>
                 <td colSpan="3">
                   <FormControl className="form_fullWidth">
@@ -349,7 +349,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
               <tr>
                 <th rowSpan={"2"}>
-                  Ports <span className="requried">*</span>
+                  Ports
                 </th>
                 <td>
                   <table className="tb_data_new">
@@ -412,7 +412,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
               <tr>
                 <th>
-                  Command <span className="requried">*</span>
+                  Command
                 </th>
                 <td colSpan="3">
                   <CTextField type="text" placeholder="e.g. /bin/sh" className="form_fullWidth" name="command" onChange={onChange} value={containerInfo?.command}/>
@@ -420,7 +420,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
               <tr>
                 <th>
-                  Arguments <span className="requried">*</span>
+                  Arguments
                 </th>
                 <td colSpan="3">
                   <CTextField type="text" placeholder="e.g. /usr/sbin/httpd -f httpd.conf" className="form_fullWidth" name="arguments" onChange={onChange} value={containerInfo?.arguments}/>
@@ -428,7 +428,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
               <tr>
                 <th>
-                  WorkingDir <span className="requried">*</span>
+                  WorkingDir
                 </th>
                 <td colSpan="3">
                   <CTextField type="text" placeholder="e.g. /myapp" className="form_fullWidth" name="workingDir" onChange={onChange} value={containerInfo?.workingDir}/>
@@ -436,7 +436,7 @@ const DeploymentAddContainer = observer(props => {
               </tr>
               <tr>
                 <th rowSpan={2}>
-                  Variables <span className="requried">*</span>
+                  Variables
                 </th>
                 <td>
                   <table className="tb_data_new">
