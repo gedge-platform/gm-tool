@@ -11,6 +11,7 @@ import StatefulSetListTab from "./Tablist/StatefulSetListTab";
 import DaemonSetListTab from "./Tablist/DaemonSetListTab";
 import RequestStatusTab from "./Tablist/RequestStatusTab";
 import SchedulerListTab from "./Tablist/SchedulerListTab";
+import HPAListTab from "./Tablist/HPAListTab";
 
 const Workload = () => {
   const currentPageTitle = Title.Workload;
@@ -33,6 +34,7 @@ const Workload = () => {
         <CTab label="DaemonSet" />
         <CTab label="Load YAML" />
         <CTab label="Request Status" />
+        <CTab label="HPA" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
@@ -61,6 +63,9 @@ const Workload = () => {
         </CTabPanel>
         <CTabPanel value={tabvalue} index={8}>
           <RequestStatusTab />
+        </CTabPanel>
+        <CTabPanel value={tabvalue} index={9}>
+          <HPAListTab />
         </CTabPanel>
       </div>
     </Layout>

@@ -3361,6 +3361,9 @@ const globalStyles = createGlobalStyle`
           }
       }
     }
+input:disabled {
+  background: #F0F0F0;
+}
 `;
 
 export default globalStyles;
