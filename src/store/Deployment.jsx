@@ -188,6 +188,63 @@ class Deployment {
   ];
   volumeList = [];
 
+  hpaWorkspaceList = [
+    {
+      name: "workspace1"
+    },
+    {
+      name: "workspace2"
+    },
+    {
+      name: "workspace3"
+    },
+    {
+      name: "workspace4"
+    }
+  ];
+  hpaProjectList = [
+    {
+      name: "project1"
+    },
+    {
+      name: "project2"
+    },
+    {
+      name: "project3"
+    },
+    {
+      name: "project4"
+    }
+  ];
+  hpaClusterList = [
+    {
+      name: "cluster1"
+    },
+    {
+      name: "cluster2"
+    },
+    {
+      name: "cluster3"
+    },
+    {
+      name: "cluster4"
+    }
+  ];
+  hpaDeploymentList = [
+    {
+      name: "deployment1"
+    },
+    {
+      name: "deployment2"
+    },
+    {
+      name: "deployment3"
+    },
+    {
+      name: "deployment4"
+    }
+  ];
+
   loadProjectList = (workspace) => {
     runInAction(() => {
       this.projectList = [
