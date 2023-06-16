@@ -35,6 +35,26 @@ class Workspace {
   currentPage = 1;
   totalPages = 1;
 
+  check = false;
+  workspaceName = "";
+  workspaceDescription = "";
+
+  setCheck = () => {
+    this.check = true;
+  };
+
+  setWorkspaceName = (value) => {
+    runInAction(() => {
+      this.workspaceName = value;
+    });
+  };
+
+  setWorkspaceDescription = (value) => {
+    runInAction(() => {
+      this.workspaceDescription = value;
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -259,17 +279,7 @@ class Workspace {
       memberName: getItem("user").id,
       // workspaceCreator: getItem("user").id,
     };
-    // const body2 = {
-    //   workspaceName,
-    //   workspaceDescription,
-    //   memberName: getItem("user"),
-    //   clusterName: selectCluster,
-    // };
-    // axios
-    //   .post(`${SERVER_URL}/workspaces`, body2)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.error(err));
-    // return
+
     axios
       .post(`${SERVER_URL}/workspaces`, body)
       .then((res) => {
