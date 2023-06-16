@@ -117,73 +117,258 @@ class Deployment {
   contentVolume = "";
 
   podName = "";
+
+  workspaceList = [];
+  projectList = [];
   labelList = [];
+  annotationList = [];
 
   deploymentInfo = {
-    DeploymentName: "",
+    deploymentName: "",
+    workspace: "",
+    project: "",
     labels: [],
-    replicas: "",
-    pullSecrets: "",
-    volume: {
-      name: "",
-      nfsServer: "",
-      nfsPath: ""
+    annotations: [],
+    replicas: 1,
+    volume: [],
+    priority: {
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+        //data: {}
+      },
     },
-    priority: "",
     targetClusters: "",
-    sourceNode: "",
-    containers: []
-  }
+    containers: [],
+  };
+
+  pvcList = [
+    {
+      name: "pvc1",
+      namespace: "ns1",
+      cluster: "agwaw",
+    },
+    {
+      name: "pvc2",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+    {
+      name: "pvc3",
+      namespace: "ns2",
+      cluster: "asdgw",
+    },
+    {
+      name: "pvc4",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+    {
+      name: "pvc5",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+    {
+      name: "pvc6",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+    {
+      name: "pvc7",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+    {
+      name: "pvc8",
+      namespace: "ns1",
+      cluster: "agwaf",
+    },
+  ];
+  volumeList = [];
+
+  hpaWorkspaceList = [
+    {
+      name: "workspace1",
+    },
+    {
+      name: "workspace2",
+    },
+    {
+      name: "workspace3",
+    },
+    {
+      name: "workspace4",
+    },
+  ];
+  hpaProjectList = [
+    {
+      name: "project1",
+    },
+    {
+      name: "project2",
+    },
+    {
+      name: "project3",
+    },
+    {
+      name: "project4",
+    },
+  ];
+  hpaClusterList = [
+    {
+      name: "cluster1",
+    },
+    {
+      name: "cluster2",
+    },
+    {
+      name: "cluster3",
+    },
+    {
+      name: "cluster4",
+    },
+  ];
+  hpaDeploymentList = [
+    {
+      name: "deployment1",
+    },
+    {
+      name: "deployment2",
+    },
+    {
+      name: "deployment3",
+    },
+    {
+      name: "deployment4",
+    },
+  ];
+
+  loadProjectList = (workspace) => {
+    runInAction(() => {
+      this.projectList = [
+        {
+          name: "project1",
+        },
+        {
+          name: "project2",
+        },
+        {
+          name: "project3",
+        },
+        {
+          name: "project4",
+        },
+      ];
+    });
+  };
+
+  loadVolumeList = (pvcName) => {
+    runInAction(() => {
+      this.volumeList = [
+        {
+          name: "volume1",
+        },
+        {
+          name: "volume2",
+        },
+        {
+          name: "volume3",
+        },
+        {
+          name: "volume4",
+        },
+      ];
+    });
+  };
 
   setDeploymentInfo = (key, value) => {
     runInAction(() => {
       this.deploymentInfo[key] = value;
-    })
-  }
+    });
+  };
+
+  initDeploymentInfo = () => {
+    runInAction(() => {
+      this.deploymentInfo = {
+        deploymentName: "",
+        workspace: "",
+        project: "",
+        labels: [],
+        annotations: [],
+        replicas: 1,
+        volume: [],
+        priority: {
+          name: "GLowLatencyPriority",
+          options: {
+            type: "fromNode",
+            //data: {}
+          },
+        },
+        targetClusters: "",
+        containers: [],
+      };
+    });
+  };
 
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
-    })
-  }
-
+    });
+  };
   addLabelList = (key, value) => {
     runInAction(() => {
-      this.labelList.push({key: key, value: value});
-    })
-  }
-
+      this.labelList.push({ key: key, value: value });
+    });
+  };
   removeLabelList = (removeIndex) => {
     runInAction(() => {
-      this.labelList = this.labelList.filter((_, index) =>
-        removeIndex !== index
-      )
-    })
-  }
+      this.labelList = this.labelList.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
+
+  initAnnotationList = () => {
+    runInAction(() => {
+      this.annotationList = [];
+    });
+  };
+  addAnnotationList = (key, value) => {
+    runInAction(() => {
+      this.annotationList.push({ key: key, value: value });
+    });
+  };
+  removeAnnotationList = (removeIndex) => {
+    runInAction(() => {
+      this.annotationList = this.annotationList.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
 
   initContainer = () => {
     runInAction(() => {
       this.deploymentInfo.containers = [];
-    })
-  }
+    });
+  };
   addContainer = async (container) => {
     runInAction(() => {
       this.deploymentInfo.containers.push(container);
-    })
-  }
+    });
+  };
   editContainer = (editIndex, container) => {
     runInAction(() => {
       this.deploymentInfo.containers[editIndex] = container;
-    })
-  }
+    });
+  };
   removeContainer = (removeIndex) => {
     runInAction(() => {
-      this.deploymentInfo.containers = this.deploymentInfo.containers.filter((_, index) => 
-        removeIndex !== index
-      )
-    })
-  }
-  
+      this.deploymentInfo.containers = this.deploymentInfo.containers.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }

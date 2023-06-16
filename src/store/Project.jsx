@@ -61,8 +61,8 @@ class Project {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
-    })
-  }
+    });
+  };
 
   goPrevPage = () => {
     runInAction(() => {
@@ -146,10 +146,13 @@ class Project {
   paginationList = () => {
     runInAction(() => {
       if (this.projectList !== null) {
-        this.viewList =  this.projectList.slice((this.currentPage-1)*10, this.currentPage*10);
+        this.viewList = this.projectList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
-    })
-  }
+    });
+  };
 
   loadProjectList = async () => {
     let { id, role } = getItem("user");
@@ -182,11 +185,13 @@ class Project {
       .then((res) => {
         runInAction(() => {
           this.adminList = res.data.data;
-          this.projectList = this.adminList.filter(
-            (project) => project.selectCluster.some(cluster => cluster.clusterName === "gm-cluster")
+          this.projectList = this.adminList.filter((project) =>
+            project.selectCluster.some(
+              (cluster) => cluster.clusterName === "gm-cluster"
+            )
           );
           if (this.projectList.length !== 0) {
-            this.totalPages = Math.ceil(this.projectList.length/10);
+            this.totalPages = Math.ceil(this.projectList.length / 10);
             this.totalElements = this.projectList.length;
           } else {
             this.projectList = [];

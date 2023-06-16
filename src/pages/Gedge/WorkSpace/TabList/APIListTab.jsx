@@ -31,7 +31,7 @@ const WorkspaceListTab = observer(() => {
     currentPage,
   } = workspaceStore;
 
-  const [ ] = useState([
+  const [columnDefs] = useState([
     {
       headerName: "이름",
       field: "workspaceName",
@@ -39,7 +39,7 @@ const WorkspaceListTab = observer(() => {
       cellRenderer: function ({ data: { workspaceName } }) {
         return `<span>${workspaceName.split("-")[0]}</span>`;
       },
-    }, 
+    },
     {
       headerName: "설명",
       field: "workspaceDescription",
@@ -120,7 +120,7 @@ const WorkspaceListTab = observer(() => {
                 <AgGrid
                   onCellClicked={handleClick}
                   rowData={viewList}
-                  columnDefs={columDefs}
+                  columnDefs={columnDefs}
                   isBottom={false}
                   totalElements={totalElements}
                   totalPages={totalPages}
