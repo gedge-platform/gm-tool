@@ -16,9 +16,35 @@ class User {
   resultList = {};
   viewList = [];
 
+  memberId = "";
+  memberName = "";
+  password = "";
+  memberRole = "";
+  email = "";
+  contact = "";
+  memberDescription = "";
+
+  inputs = [
+    {
+      memberId: "",
+      memberName: "",
+      password: "",
+      memberRole: "",
+      email: "",
+      contact: "",
+      memberDescription: "",
+    },
+  ];
+
   constructor() {
     makeAutoObservable(this);
   }
+
+  setInputs = (inputs) => {
+    runInAction(() => {
+      this.inputs = inputs;
+    });
+  };
 
   setUser = (user) => {
     runInAction(() => {
