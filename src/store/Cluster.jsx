@@ -95,6 +95,13 @@ class Cluster {
     disk: "50",
   };
 
+  selectCluster = [];
+  setSelectCluster = (e) => {
+    runInAction(() => {
+      this.selectCluster = e;
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
