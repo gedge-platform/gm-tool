@@ -268,6 +268,7 @@ class Project {
         runInAction(() => {
           this.projectListinWorkspace = res.data.data;
         });
+        console.log(this.projectListinWorkspace);
       });
   };
 
