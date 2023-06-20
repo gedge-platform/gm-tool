@@ -363,6 +363,11 @@ export const SideMenu = () => {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink exact to="/faas" activeClassName="active">
+                    {Title.FaaS}
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink exact to="/template" activeClassName="active">
                     {Title.Template}
                   </NavLink>
