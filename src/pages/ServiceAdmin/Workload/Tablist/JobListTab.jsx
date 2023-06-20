@@ -118,6 +118,8 @@ const JobListTab = observer(() => {
     };
   }, [reRun]);
 
+  console.log("viewList : ", viewList);
+
   return (
     <>
       <CReflexBox>

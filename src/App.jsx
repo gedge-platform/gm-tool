@@ -28,6 +28,7 @@ import {
   // PlatformServiceListTab,
   PlatformProject,
   CloudZone,
+  FaaS,
 } from "@/pages";
 
 import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
@@ -100,6 +101,7 @@ export const App = () => {
           <AuthRoute path="/loadbalancer" component={NotFound} />
           <AuthRoute path="/storage" component={Storage} />
           <AuthRoute path="/workload" component={Workload} />
+          <AuthRoute path="/faas" component={FaaS} />
           <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
