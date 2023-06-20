@@ -23,6 +23,7 @@ import DeploymentAddContainer from "./DeploymentAddContainer";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
+import claimStore from "../../../../../../store/Claim";
 
 const Button = styled.button`
   background-color: #fff;
@@ -124,7 +125,6 @@ const CreateDeployment = observer((props) => {
     initAnnotationList,
     addAnnotationList,
     removeAnnotationList,
-    pvcList,
     deploymentInfo,
     initDeploymentInfo,
     setDeploymentInfo,
@@ -141,6 +141,13 @@ const CreateDeployment = observer((props) => {
     accessMode,
   } = volumeStore;
 
+  const {
+    loadPVClaims,
+    pvClaimListInDeployment,
+    checkPVCInDeployment,
+    setCheckPVCInDeployment,
+  } = claimStore;
+
   const { setStorageClass, selectStorageClass } = StorageClassStore;
   const { postWorkload, postScheduler } = schedulerStore;
   const { loadWorkSpaceList, workSpaceList } = workspaceStore;
@@ -156,6 +163,8 @@ const CreateDeployment = observer((props) => {
   const [annotation, setAnnotation] = useState({ key: "", value: "" });
   const [containerIndex, setContainerIndex] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
+  const [prioritytDisable, setPriorityDisable] = useState(true);
+  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
   const [priority, setPriority] = useState({
     name: "GLowLatencyPriority",
     options: {
@@ -244,6 +253,7 @@ const CreateDeployment = observer((props) => {
       setDeploymentInfo(name, value);
       setProjectDisable(false);
       loadProjectListInWorkspace(value);
+      // setPriorityDisable(false);
       loadClusterList();
     }
     // if (name == "cluster") {
@@ -257,24 +267,31 @@ const CreateDeployment = observer((props) => {
   };
 
   const onChangePod = async ({ target: { name, value } }) => {
-    if (name == "project") {
-      const projectNameTrmp = value;
-      console.log(projectNameTrmp);
+    let projectNameTemp = "";
+    let clusterNameTemp = "";
+
+    if (name === "project") {
+      setPriorityDisable(false);
+      projectNameTemp = value;
+      // setPrioritytDisable(false);
     }
-    if (name == "cluster") {
-      console.log(value);
-      podListInclusterAPI(value, projectNameTrmp);
-      console.log(value, projectNameTrmp);
+    if (name === "cluster") {
+      setPrioritytPodDisable(false);
+      clusterNameTemp = value;
+      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
     }
+    // if (name === "cluster" && projectNameTemp != "") {
+    //   console.log("cluster :", value);
+    //   clusterNameTemp = value;
+    //   await podListInclusterAPI(clusterNameTemp, projectNameTemp);
+    // }
   };
 
-  // const onChangeWorkspace = (e) => {
-  //   console.log(e.target.value);
-  //   setDeploymentInfo(e.target.name, e.target.value);
-  //   setProjectDisable(false);
-  //   loadProjectListInWorkspace(e.target.value);
-  //   console.log("onChangeWorkspace : ", e.target.value);
-  // };
+  const onChangeCheckPVC = ({ target: { value } }) => {
+    console.log(value);
+    setCheckPVCInDeployment(value);
+    console.log(checkPVCInDeployment);
+  };
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -284,8 +301,9 @@ const CreateDeployment = observer((props) => {
     setLabel({ key: "", value: "" });
     setAnnotation({ key: "", value: "" });
     setProjectDisable(true);
+    setPriorityDisable(true);
+    setPrioritytPodDisable(true);
   };
-
   const handleClose2 = () => {
     setOpen2(false);
   };
@@ -335,6 +353,7 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
+
     //setProjectDisable(true);
 
     // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
@@ -456,7 +475,7 @@ const CreateDeployment = observer((props) => {
                         <td colSpan="3">
                           <FormControl className="form_fullWidth">
                             <select
-                              disabled={projectDisable}
+                              disabled={prioritytDisable}
                               name="cluster"
                               onChange={onChangePod}
                             >
@@ -468,6 +487,29 @@ const CreateDeployment = observer((props) => {
                                   {cluster.clusterName}
                                 </option>
                               ))}
+                            </select>
+                          </FormControl>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan="3">
+                          <FormControl className="form_fullWidth">
+                            <select
+                              disabled={prioritytPodDisable}
+                              name="pod"
+                              onChange={onChangePod}
+                            >
+                              <option value={""} selected hidden disabled>
+                                Select Pod
+                              </option>
+
+                              {podListIncluster ? (
+                                podListIncluster.map((pod) => (
+                                  <option value={pod.name}>{pod.name}</option>
+                                ))
+                              ) : (
+                                <option value="">No Data</option>
+                              )}
                             </select>
                           </FormControl>
                         </td>
@@ -554,6 +596,11 @@ const CreateDeployment = observer((props) => {
                   >
                     <select name="cluster" onChange={onChangeType}>
                       <option value={""}>Select Cluster</option>
+                      {clusterListInWorkspace.map((cluster) => (
+                        <option value={cluster.clusterName}>
+                          {cluster.clusterName}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
                 </>
@@ -633,6 +680,10 @@ const CreateDeployment = observer((props) => {
       loadWorkSpaceList();
     }, []);
 
+    useEffect(() => {
+      loadPVClaims();
+    }, []);
+
     return (
       <tr>
         <th style={{ width: "30%" }}>
@@ -658,8 +709,6 @@ const CreateDeployment = observer((props) => {
   };
 
   const CreateDeploymentComponent = () => {
-    const checkPVC = () => {};
-
     return (
       <>
         <DeploymentAddContainer
@@ -889,33 +938,32 @@ const CreateDeployment = observer((props) => {
             <tr>
               <th>Volume</th>
               <td colSpan="3">
-                {/* <FormControl className="form_fullWidth">
-                <select name="volume" onChange={onChange}>
-                  <option value={""}>Select Persistent Volume Claim</option>
-                </select>
-              </FormControl> */}
                 <Table className="tb_data_new">
                   <thead>
                     <tr>
                       <th style={{ textAlign: "center", width: "7%" }}></th>
-                      <th style={{ textAlign: "center" }}>이름</th>
-                      <th style={{ textAlign: "center" }}>네임스페이스</th>
-                      <th style={{ textAlign: "center" }}>클러스터</th>
+                      <th style={{ textAlign: "center" }}>Name</th>
+                      <th style={{ textAlign: "center" }}>Namespace</th>
+                      <th style={{ textAlign: "center" }}>cluster</th>
                     </tr>
                   </thead>
-                  <tbody className="tb_data_nodeInfo">
-                    {pvcList.map((pvc) => (
+                  <tbody
+                    className="tb_data_nodeInfo"
+                    style={{ height: "105px" }}
+                  >
+                    {pvClaimListInDeployment.map((pvc) => (
                       <tr>
                         <td style={{ textAlign: "center", width: "7%" }}>
                           <input
                             type="radio"
                             name="clusterCheck"
-                            onChange={checkPVC}
+                            onChange={onChangeCheckPVC}
+                            value={pvc.name}
                           />
                         </td>
                         <td>{pvc.name}</td>
                         <td>{pvc.namespace}</td>
-                        <td>{pvc.cluster}</td>
+                        <td>{pvc.clusterName}</td>
                       </tr>
                     ))}
                   </tbody>

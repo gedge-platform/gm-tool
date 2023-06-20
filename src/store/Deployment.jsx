@@ -142,50 +142,6 @@ class Deployment {
     containers: [],
   };
 
-  pvcList = [
-    {
-      name: "pvc1",
-      namespace: "ns1",
-      cluster: "agwaw",
-    },
-    {
-      name: "pvc2",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-    {
-      name: "pvc3",
-      namespace: "ns2",
-      cluster: "asdgw",
-    },
-    {
-      name: "pvc4",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-    {
-      name: "pvc5",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-    {
-      name: "pvc6",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-    {
-      name: "pvc7",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-    {
-      name: "pvc8",
-      namespace: "ns1",
-      cluster: "agwaf",
-    },
-  ];
-  volumeList = [];
-
   hpaWorkspaceList = [
     {
       name: "workspace1",

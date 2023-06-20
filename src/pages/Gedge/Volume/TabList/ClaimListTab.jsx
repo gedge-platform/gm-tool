@@ -24,7 +24,6 @@ const ClaimListTab = observer(() => {
   const [claimName, setClaimName] = useState("");
   const [openYaml, setOpenYaml] = useState(false);
   const {
-    pvClaims,
     pvClaim,
     totalElements,
     pvClaimEvents,
@@ -34,7 +33,6 @@ const ClaimListTab = observer(() => {
     loadClaimYaml,
     deletePvClaim,
     getYamlFile,
-    // pvClaimEvents,
     loadPVClaims,
     loadPVClaim,
     currentPage,

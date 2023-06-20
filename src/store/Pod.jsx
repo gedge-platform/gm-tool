@@ -372,8 +372,7 @@ class Pod {
       .get(`${SERVER_URL}/pods?cluster=${clusterName}&project=${projectName}`)
       .then(({ data }) => {
         runInAction(() => {
-          console.log(data);
-          this.podListIncluster = data;
+          this.podListIncluster = data.data;
         });
       });
   };

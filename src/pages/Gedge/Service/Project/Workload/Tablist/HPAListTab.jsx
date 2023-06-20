@@ -2,28 +2,23 @@ import React, { useState, useEffect } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
-import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
-import Detail from "../JobDetail";
 import hpaStore from "../../../../../../store/HPA";
 
 const HPAListTab = observer(() => {
-	const {
-		viewList,
+  const {
+    viewList,
     totalElements,
     currentPage,
     totalPages,
     goPrevPage,
     goNextPage,
-	} = hpaStore;
+    hpaList,
+    loadHpaListAPI,
+  } = hpaStore;
 
-	const [ tabvalue, setTabvalue ] = useState(0);
-
-	const [columDefs] = useState([
+  const [columDefs] = useState([
     {
       headerName: "HPA 이름",
       field: "name",
@@ -60,40 +55,39 @@ const HPAListTab = observer(() => {
       headerName: "지속시간(초)",
       field: "duration",
       filter: true,
-    }
+    },
   ]);
 
-	const handleClick = () => {
+  const handleClick = () => {};
 
-	}
-	
-	return(
-		<div style={{ height: 900 }}>
+  useEffect(() => {
+    loadHpaListAPI();
+  }, []);
+
+  return (
+    <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
           <CommActionBar></CommActionBar>
           <div className="tabPanelContainer">
-            <CTabPanel value={tabvalue} index={0}>
-              <div className="grid-height2">
-                <AgGrid
-                  onCellClicked={handleClick}
-                  rowData={viewList}
-                  columnDefs={columDefs}
-                  isBottom={false}
-                  totalElements={totalElements}
-                  totalPages={totalPages}
-                  currentPage={currentPage}
-                  goNextPage={goNextPage}
-                  goPrevPage={goPrevPage}
-                />
-              </div>
-            </CTabPanel>
+            <div className="grid-height2">
+              <AgGrid
+                onCellClicked={handleClick}
+                rowData={viewList}
+                columnDefs={columDefs}
+                isBottom={false}
+                totalElements={totalElements}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                goNextPage={goNextPage}
+                goPrevPage={goPrevPage}
+              />
+            </div>
           </div>
         </PanelBox>
-        {/* <Detail pod={podDetail} /> */}
       </CReflexBox>
     </div>
-	)
-})
+  );
+});
 
 export default HPAListTab;
