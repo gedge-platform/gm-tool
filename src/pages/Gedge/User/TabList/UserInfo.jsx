@@ -25,7 +25,7 @@ const ButtonNext = styled.button`
 `;
 
 const UserInfo = observer((props) => {
-  const { postUser, inputs, setInputs } = userStore;
+  const { postUser, inputs, setInputs, inputsEdit, setInputsEdit } = userStore;
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -36,7 +36,7 @@ const UserInfo = observer((props) => {
       email: "",
       contact: "",
       memberDescription: "",
-      memberRole: "PA",
+      memberRole: "",
     });
   };
 

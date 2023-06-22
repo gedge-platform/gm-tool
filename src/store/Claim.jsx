@@ -330,7 +330,6 @@ class Claim {
         runInAction(() => {
           this.pvClaimList = res.data.data;
           this.pvClaimListInDeployment = res.data.data;
-          console.log("this.pvClaimList :", this.pvClaimListInDeployment);
           this.totalElements = res.data.data.length;
         });
       })

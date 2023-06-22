@@ -11,9 +11,12 @@ import dayjs from "dayjs";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateUser from "../Dialog/CreateUser";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
+import { CEditButton } from "../../../../components/buttons/CEditButton";
+import EditUser from "../Dialog/EditUser";
 
 const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [userName, setUserName] = useState("");
 
   const {
@@ -27,16 +30,14 @@ const UserListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
+    inputs,
+    setInputs,
+    inputsEdit,
+    setInputsEdit,
   } = userStore;
+  console.log("inputs :", inputs);
 
   const [columnDefs] = useState([
-    // {
-    //   headerName: "NO",
-    //   field: "memberNum",
-    //   filter: false,
-    //   minWidth: 80,
-    //   maxWidth: 80,
-    // },
     {
       headerName: "아이디",
       field: "memberId",
@@ -90,13 +91,24 @@ const UserListTab = observer(() => {
   const handleClick = (e) => {
     loadUserDetail(e.data.memberId);
     setUserName(e.data.memberId);
+    setInputsEdit(e.data);
+    console.log("e.data :", e.data);
   };
 
   const handleOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenEdit = (e) => {
+    setOpenEdit(true);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
   };
 
   const handleDelete = () => {
@@ -121,6 +133,8 @@ const UserListTab = observer(() => {
           <CommActionBar>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
+            <CEditButton onClick={handleOpenEdit}>수정</CEditButton>
+            &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="grid-height2">
@@ -139,6 +153,11 @@ const UserListTab = observer(() => {
           <CreateUser
             open={open}
             onClose={handleClose}
+            reloadFunc={loadUserList}
+          />
+          <EditUser
+            openEdit={openEdit}
+            onClose={handleCloseEdit}
             reloadFunc={loadUserList}
           />
         </PanelBox>

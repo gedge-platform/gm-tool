@@ -29,10 +29,22 @@ class User {
       memberId: "",
       memberName: "",
       password: "",
-      memberRole: "",
+      memberRole: "PA",
       email: "",
       contact: "",
       memberDescription: "",
+    },
+  ];
+
+  inputsEdit = [
+    {
+      memberId: "",
+      memberName: "",
+      password: "",
+      memberRole: "PA",
+      email: "",
+      contact: "",
+      enabled: "",
     },
   ];
 
@@ -43,6 +55,12 @@ class User {
   setInputs = (inputs) => {
     runInAction(() => {
       this.inputs = inputs;
+    });
+  };
+
+  setInputsEdit = (inputsEdit) => {
+    runInAction(() => {
+      this.inputsEdit = inputsEdit;
     });
   };
 
@@ -138,6 +156,7 @@ class User {
       .then((res) => {
         runInAction(() => {
           this.userList = res.data;
+          console.log(this.userList);
           this.totalElements = res.data.length;
           // this.userDetail = res.data.data[0];
         });
@@ -167,7 +186,6 @@ class User {
     await axios
       .post(`${SERVER_URL}/members`, body)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           if (res.status === 201) {
             swalError("사용자가 생성되었습니다.", callback);
