@@ -176,14 +176,14 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.workSpaceList = res.data.data;
-          console.log("workSpaceList : ", this.workSpaceList);
+          // console.log("workSpaceList : ", this.workSpaceList);
           this.totalPages = Math.ceil(this.workSpaceList.length / 10);
           this.totalElements = this.workSpaceList.length;
           this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
           this.workspace = this.workSpaceList
             ? this.workSpaceList.map((item) => item.workspaceName)
             : null;
-          console.log("workspace : ", this.workspace);
+          // console.log("workspace : ", this.workspace);
         });
       })
       .then(() => {
@@ -237,7 +237,7 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
-        // console.log(this.workSpaceDetail);
+        console.log("this.workSpaceDetail :", this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;

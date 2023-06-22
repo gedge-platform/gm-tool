@@ -9,7 +9,6 @@ class Claim {
   currentPage = 1;
   totalPages = 1;
   totalElements = 0;
-  pvClaims = [];
   pvClaim = {};
   pvClaimList = [];
   pvClaimYamlFile = "";
@@ -52,6 +51,14 @@ class Claim {
   annotationInput = [];
   annotationKey = "";
   annotationValue = "";
+  pvClaimListInDeployment = [];
+  checkPVCInDeployment = "";
+
+  setCheckPVCInDeployment = (value) => {
+    runInAction(() => {
+      this.checkPVCInDeployment = value;
+    });
+  };
 
   setTemplate = (template) => {
     runInAction(() => {
@@ -218,13 +225,13 @@ class Claim {
 
   setPvClaimList = (list) => {
     runInAction(() => {
-      this.pvClaims = list;
+      this.pvClaimList = list;
     });
   };
 
   setViewList = (n) => {
     runInAction(() => {
-      this.viewList = this.pvClaims[n];
+      this.viewList = this.pvClaimList[n];
     });
   };
 
@@ -321,12 +328,13 @@ class Claim {
       .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.pvClaims = res.data.data;
+          this.pvClaimList = res.data.data;
+          this.pvClaimListInDeployment = res.data.data;
           this.totalElements = res.data.data.length;
         });
       })
       .then(() => {
-        this.convertList(this.pvClaims, this.setPvClaimList);
+        this.convertList(this.pvClaimList, this.setPvClaimList);
       })
       .then(() => {
         this.loadPVClaim(

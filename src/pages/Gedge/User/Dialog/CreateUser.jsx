@@ -97,7 +97,7 @@ const CreateUser = observer((props) => {
 
   const createUser = async () => {
     const result = await postUser(inputs);
-    // handleClose();
+    handleClose();
     props.reloadFunc && props.reloadFunc();
   };
 
@@ -186,7 +186,7 @@ const CreateUser = observer((props) => {
       open={open}
       maxWidth="md"
       title={`Create Member`}
-      // onClose={handleClose}
+      onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}
     >

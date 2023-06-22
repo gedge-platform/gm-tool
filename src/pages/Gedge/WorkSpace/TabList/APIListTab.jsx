@@ -31,7 +31,7 @@ const WorkspaceListTab = observer(() => {
     currentPage,
   } = workspaceStore;
 
-  const [columDefs] = useState([
+  const [columnDefs] = useState([
     {
       headerName: "이름",
       field: "workspaceName",
@@ -120,7 +120,7 @@ const WorkspaceListTab = observer(() => {
                 <AgGrid
                   onCellClicked={handleClick}
                   rowData={viewList}
-                  columnDefs={columDefs}
+                  columnDefs={columnDefs}
                   isBottom={false}
                   totalElements={totalElements}
                   totalPages={totalPages}

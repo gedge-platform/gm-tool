@@ -88,7 +88,6 @@ class Pod {
   portList = [];
   variableList = [];
 
-
   podInfo = {
     podName: "",
     labels: [
@@ -101,7 +100,7 @@ class Pod {
     volume: {
       name: "",
       nfsServer: "",
-      nfsPath: ""
+      nfsPath: "",
     },
     priority: "",
     targetClusters: "",
@@ -119,7 +118,6 @@ class Pod {
       //         privateContainerPort: "",
       //         protocol: "",
       //         host: {
-
       //         }
       //       },
       //     ],
@@ -131,7 +129,6 @@ class Pod {
       //         type: "",
       //         variableName: "",
       //         value: {
-
       //         }
       //       }
       //     ]
@@ -147,77 +144,71 @@ class Pod {
       //     volume: ""
       //   }
       // },
-    ]
-  }
+    ],
+  };
 
   setPodInfo = (key, value) => {
     runInAction(() => {
       this.podInfo[key] = value;
-    })
-  }
+    });
+  };
 
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
-    })
-  }
+    });
+  };
   addLabelList = (key, value) => {
     runInAction(() => {
-      this.labelList.push({key: key, value: value});
-    })
-  }
+      this.labelList.push({ key: key, value: value });
+    });
+  };
   removeLabelList = (removeIndex) => {
     runInAction(() => {
-      this.labelList = this.labelList.filter((_, index) =>
-        removeIndex !== index
-      )
-    })
-  }
+      this.labelList = this.labelList.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
 
   initContainer = () => {
     runInAction(() => {
       this.podInfo.containers = [];
-    })
-  }
+    });
+  };
   addContainer = async (container) => {
     runInAction(() => {
       this.podInfo.containers.push(container);
-    })
-  }
+    });
+  };
   editContainer = (editIndex, container) => {
     runInAction(() => {
       this.podInfo.containers[editIndex] = container;
-    })
-  }
+    });
+  };
   removeContainer = (removeIndex) => {
     runInAction(() => {
-      this.podInfo.containers = this.podInfo.containers.filter((_, index) => 
-        removeIndex !== index
-      )
-    })
-  }
+      this.podInfo.containers = this.podInfo.containers.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
 
   initPorts = () => {
     runInAction(() => {
       this.ports = [];
-    })
-  }
+    });
+  };
   addPort = (containerIndex) => {
-    runInAction(() => {
-      
-    })
-  }
+    runInAction(() => {});
+  };
   removePort = (containerIndex) => {
-    runInAction(() => {
-
-    })
-  }
+    runInAction(() => {});
+  };
 
   changePort = (index, input) => {
-    runInAction(() => {
-      
-    })
-  }
+    runInAction(() => {});
+  };
 
   constructor() {
     makeAutoObservable(this);
@@ -365,6 +356,23 @@ class Pod {
           } else {
             this.events = null;
           }
+        });
+      });
+  };
+
+  podListIncluster = [];
+  setPodListIncluster = (podListIncluster) => {
+    runInAction(() => {
+      this.podListIncluster = podListIncluster;
+    });
+  };
+
+  podListInclusterAPI = async (clusterName, projectName) => {
+    await axios
+      .get(`${SERVER_URL}/pods?cluster=${clusterName}&project=${projectName}`)
+      .then(({ data }) => {
+        runInAction(() => {
+          this.podListIncluster = data.data;
         });
       });
   };
