@@ -301,28 +301,6 @@ const ClusterOverview = observer(() => {
       },
     };
   });
-  
-  
-  // const clusterNameActionList =()=>{  
-  //   let temp ={}
-  //   clusterNames.map((item) => {
-  //     temp= {
-  //     name: item,
-  //     onClick: () => {
-  //       setClusterName(item);
-  //       calledMetrics();
-  //     },
-  //   };
-  //   setClusterItem(...clusterItem, temp)
-  // })
-//   return clusterItem
-// };
-const checkSelect = ({ target: { checked } }, type) => {
-  if (checked) {
-    setSelectType(type);
-    monitoringSet(type)
-  } 
-};
 
   // const clusterNameActionList =()=>{
   //   let temp ={}
@@ -338,12 +316,12 @@ const checkSelect = ({ target: { checked } }, type) => {
   // })
   //   return clusterItem
   // };
-  // const checkSelect = ({ target: { checked } }, type) => {
-  //   if (checked) {
-  //     setSelectType(type);
-  //     monitoringSet(type);
-  //   }
-  // };
+  const checkSelect = ({ target: { checked } }, type) => {
+    if (checked) {
+      setSelectType(type);
+      monitoringSet(type);
+    }
+  };
 
   const monitoringSet = (type) => {
     if (type == "allCluster") {
@@ -363,6 +341,7 @@ const checkSelect = ({ target: { checked } }, type) => {
     loadClusterNameList();
     // loadClusterNames(calledMetrics);
     // if (clusterName === "") {
+
     // }
     // if (clusterNameActionList.length > 0){
     //   console.log("clusterNameActionList : ", clusterNameActionList )
@@ -379,6 +358,7 @@ const checkSelect = ({ target: { checked } }, type) => {
   //     clusterNameActionList.map((item)=>{
   //       setClusterItem([...clusterItem, item])
   //     })
+
   //   console.log("clusterItem : ", clusterItem )
   //   // }
   // }, []);
@@ -387,16 +367,6 @@ const checkSelect = ({ target: { checked } }, type) => {
     <PanelBoxM>
       <div className="panelTitBar panelTitBar_clear">
         <div className="tit">
-        <span style={{ marginRight: "10px", color: "white " }}>
-          <input
-            type="radio"
-              checked={selectType=="allCluster"}
-              name="selectType"
-              value="allCluster"
-             onChange={(e) => checkSelect(e, e.target.value)}
-           />
-            All Cluster
-          </span>
           <span style={{ marginRight: "10px", color: "white " }}>
             <input
               type="radio"
