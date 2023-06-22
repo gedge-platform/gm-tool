@@ -43,7 +43,7 @@ const CreateFunction = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={`Create Environment`}
+      title={`Create Function`}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}

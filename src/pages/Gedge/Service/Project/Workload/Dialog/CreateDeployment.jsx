@@ -150,7 +150,12 @@ const CreateDeployment = observer((props) => {
 
   const { setStorageClass, selectStorageClass } = StorageClassStore;
   const { postWorkload, postScheduler } = schedulerStore;
-  const { loadWorkSpaceList, workSpaceList } = workspaceStore;
+  const {
+    loadWorkSpaceList,
+    workSpaceList,
+    loadWorkspaceDetail,
+    selectClusterInfo,
+  } = workspaceStore;
   const {
     loadProjectListInWorkspace,
     setProjectListinWorkspace,
@@ -255,6 +260,7 @@ const CreateDeployment = observer((props) => {
       loadProjectListInWorkspace(value);
       // setPriorityDisable(false);
       loadClusterList();
+      loadWorkspaceDetail(value);
     }
     // if (name == "cluster") {
     //   console.log(value);
@@ -428,6 +434,7 @@ const CreateDeployment = observer((props) => {
     const onChangeSource = (e) => {};
     const onChangeName = (e) => {};
     const onChangeType = (e) => {
+      console.log("onChangeType :", e.target.value);
       setPriority({
         ...priority,
         options: {
@@ -596,7 +603,7 @@ const CreateDeployment = observer((props) => {
                   >
                     <select name="cluster" onChange={onChangeType}>
                       <option value={""}>Select Cluster</option>
-                      {clusterListInWorkspace.map((cluster) => (
+                      {selectClusterInfo.map((cluster) => (
                         <option value={cluster.clusterName}>
                           {cluster.clusterName}
                         </option>

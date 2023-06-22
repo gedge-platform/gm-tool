@@ -5,19 +5,19 @@ import { Button } from "@material-ui/core";
 const useStyles = makeStyles(() =>
   createStyles({
     "@global": {
-      ".btn_create": {
+      ".btn_edit": {
         textAlign: "center",
         minWidth: 120,
         height: 30,
         font: "inherit",
         color: `#fff`,
-        border: "1px solid #0189f2",
+        border: "1px solid #0BB8DB",
         borderRadius: "3px",
-        background: `#0189f2`,
+        background: `#0BB8DB`,
 
         "&:hover": {
-          backgroundColor: "#0189f2",
-          borderColor: "#0189f2",
+          backgroundColor: "#0BB8DB",
+          borderColor: "#0BB8DB",
         },
         "&.check .MuiButton-label::after": {
           backgroundImage: "url(../images/bullet/createBtn_check.png)",
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const CCreateButton = (props) => {
+const CEditButton = (props) => {
   const {
     children,
     type,
@@ -44,7 +44,7 @@ const CCreateButton = (props) => {
     <>
       <Button
         type={buttonEventType}
-        className={`btn_create ${icon}`}
+        className={`btn_edit ${icon}`}
         style={style}
         onClick={onClick}
         {...other}
@@ -55,4 +55,4 @@ const CCreateButton = (props) => {
   );
 };
 
-export { CCreateButton };
+export { CEditButton };

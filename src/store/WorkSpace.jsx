@@ -237,7 +237,7 @@ class Workspace {
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
-        // console.log(this.workSpaceDetail);
+        console.log("this.workSpaceDetail :", this.workSpaceDetail);
         this.dataUsage = this.workSpaceDetail.resourceUsage;
         if (res.data.events !== null) {
           this.events = this.workSpaceDetail.events;
