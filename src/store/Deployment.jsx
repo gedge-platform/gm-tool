@@ -471,6 +471,12 @@ class Deployment {
       });
   };
 
+  loadDeploymentInCluster = async (cluster) => {
+    await axios
+      .get(`${SERVER_URL}/deployments?cluster=${cluster}`)
+      .then((res) => runInAction(() => (this.deploymentList = res.data.data)));
+  };
+
   setWorkspace = (workspace) => {
     runInAction(() => {
       this.workspace = workspace;
