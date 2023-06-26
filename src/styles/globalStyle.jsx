@@ -560,7 +560,7 @@ const globalStyles = createGlobalStyle`
         border: 1px solid #eff1f3;
         background: #fafbfc;
         text-align: left;
-        color: ${theme.colors.defaultDark}
+        color: ${theme.colors.defaultDark};
       }
       td {
         border: 1px solid #f6f7f9;

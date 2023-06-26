@@ -75,44 +75,23 @@ const VolumeAdvancedSetting = observer(() => {
     }
   };
 
-  // let setInputLabelKey = async () => {
-  //   runInAction(() => {
-  //     inputLabelKey = "";
-  //   });
-  // };
-
-  // let setInputLabelValue = async () => {
-  //   runInAction(() => {
-  //     inputLabelValue = "";
-  //   });
-  // };
-
   const addLabels = () => {
-    // let inputLabelKey = "";
-    // let inputLabelValue = "";
     const newLabelsList = labels.concat({
       id: labelsNextId,
       key: inputLabelKey,
       value: inputLabelValue,
     });
     setLabelsNextId(labelsNextId + 1);
-    setLabels([...labels, newLabelsList]); // 이렇게 하면 통으로 삭제 됨
-    setInputLabelKey(inputLabelKey); // 왜 한 칸 걸러 초기화되는가...?
+    setLabels([...labels, newLabelsList]);
+    setInputLabelKey(inputLabelKey);
     setInputLabelValue(inputLabelValue);
   };
 
-  console.log(labels);
   const deleteLabels = (id) => {
     if (labels.length == 1) return;
     const deletedNewList = labels.filter((labels) => labels.id !== id);
     setLabels(deletedNewList);
   };
-
-  // const handleChangeAnnotations = (e) => {
-  //   const { value } = e.target;
-  //   setInputAnnotationsKey(value);
-  //   setInputAnnotationsValue(value);
-  // };
 
   const addAnnotations = () => {
     const newAnnotationsList = annotations.concat({
@@ -163,7 +142,6 @@ const VolumeAdvancedSetting = observer(() => {
                   className="form_fullWidth"
                   name="LabelsKey"
                   onChange={handleChange}
-                  // value={inputLabelKey}
                   value={item.key || ""}
                 />
               </td>
@@ -174,7 +152,6 @@ const VolumeAdvancedSetting = observer(() => {
                   className="form_fullWidth"
                   name="LabelsValue"
                   onChange={handleChange}
-                  // value={inputLabelValue}
                   value={item.value}
                 />
               </td>
@@ -196,7 +173,6 @@ const VolumeAdvancedSetting = observer(() => {
                   name="AnnotationsKey"
                   onChange={handleChange}
                   value={inputAnnotationsKey}
-                  // value={item.key}
                 />
               </td>
               <td>
@@ -207,7 +183,6 @@ const VolumeAdvancedSetting = observer(() => {
                   name="AnnotationsValue"
                   onChange={handleChange}
                   value={inputAnnotationsValue}
-                  // value={item.value}
                 />
               </td>
               <td colSpan={2}>

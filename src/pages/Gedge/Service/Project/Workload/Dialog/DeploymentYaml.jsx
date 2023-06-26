@@ -17,11 +17,7 @@ const DeploymentYaml = observer(() => {
           </div>
           <div className="arr"></div>
           <div className="step">
-            <span>Pod 설정</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
-            <span>Volume 설정</span>
+            <span>고급 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">
@@ -35,7 +31,7 @@ const DeploymentYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={value => {
+        onChange={(value) => {
           // setContent(value);
         }}
         fontSize={14}
