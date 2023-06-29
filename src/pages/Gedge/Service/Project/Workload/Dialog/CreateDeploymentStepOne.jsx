@@ -100,8 +100,8 @@ const CreateDeploymentStepOne = observer((props) => {
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
-  const [label, setLabel] = useState({ key: "", value: "" });
-  const [annotation, setAnnotation] = useState({ key: "", value: "" });
+  const [containerIndex, setContainerIndex] = useState(1);
+
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
   const [priority, setPriority] = useState({
@@ -190,280 +190,27 @@ const CreateDeploymentStepOne = observer((props) => {
     }
   };
 
-  const onChangeLabel = (e) => {
-    setLabel({
-      ...label,
-      [e.target.name]: e.target.value,
-    });
+  const openTargetCluster = (index) => {
+    setOpen2(true);
+    setContainerIndex(index);
   };
 
-  const addLabel = () => {
-    if (label.key !== "" && label.value !== "") {
-      addLabelList(label.key, label.value);
-      setLabel({ key: "", value: "" });
-    }
-  };
-
-  const onChangeAnnotation = (e) => {
-    setAnnotation({
-      ...annotation,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const addAnnotation = () => {
-    if (annotation.key !== "" && annotation.value !== "") {
-      addAnnotationList(annotation.key, annotation.value);
-      setAnnotation({ key: "", value: "" });
-    }
+  const handleClose2 = () => {
+    setOpen2(false);
   };
 
   const onChangeCheckPVC = ({ target: { value } }) => {
     setCheckPVCInDeployment(value);
   };
 
-  const SelectedPriorityComponent = () => {
-    switch (priority.name) {
-      case "GLowLatencyPriority":
-        return (
-          <>
-            <FormControl
-              className="form_fullWidth"
-              style={{ paddingTop: "4px" }}
-            >
-              <select
-                name="type"
-                value={priority.options.type}
-                onChange={onChangeFrom}
-              >
-                <option value={"fromNode"}>from node</option>
-                <option value={"fromPod"}>from pod</option>
-              </select>
-            </FormControl>
-            {priority.options.type === "fromNode" ? (
-              <div style={{ paddingTop: "4px" }}>
-                <FormControl style={{ width: "50%" }}>
-                  <select name="sourceCluster" onChange={onChangeSource}>
-                    <option value={""}>Select Source Cluster</option>
-                  </select>
-                </FormControl>
-                <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                  <select name="sourceNode" onChange={onChangeSource}>
-                    <option value={""}>Select Source Node</option>
-                  </select>
-                </FormControl>
-              </div>
-            ) : (
-              <>
-                <table className="tb_data_new" style={{ marginTop: "4px" }}>
-                  <tbody className="tb_data_nodeInfo">
-                    <tr>
-                      <td colSpan="3">
-                        <FormControl className="form_fullWidth">
-                          <select
-                            disabled={prioritytDisable}
-                            name="cluster"
-                            onChange={onChangePod}
-                          >
-                            <option value={""} selected hidden disabled>
-                              Select Cluster
-                            </option>
-                            {clusterListInWorkspace.map((cluster) => (
-                              <option value={cluster.clusterName}>
-                                {cluster.clusterName}
-                              </option>
-                            ))}
-                          </select>
-                        </FormControl>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colSpan="3">
-                        <FormControl className="form_fullWidth">
-                          <select
-                            disabled={prioritytPodDisable}
-                            name="pod"
-                            onChange={onChangePod}
-                          >
-                            <option value={""} selected hidden disabled>
-                              Select Pod
-                            </option>
-
-                            {podListIncluster ? (
-                              podListIncluster.map((pod) => (
-                                <option value={pod.name}>{pod.name}</option>
-                              ))
-                            ) : (
-                              <option value="">No Data</option>
-                            )}
-                          </select>
-                        </FormControl>
-                      </td>
-                    </tr>
-                  </tbody>
-                  {/* <tbody className="tb_data_nodeInfo">
-                    <tr>
-                      <th>Workspace Name</th>
-                      <th>Project Name</th>
-                      <th>Pod Name</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="Workspace Name"
-                          className="form_fullWidth"
-                          name="workspaceName"
-                          onChange={onChangeName}
-                        />
-                      </td>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="Project Name"
-                          className="form_fullWidth"
-                          name="projectName"
-                          onChange={onChange}
-                        />
-                      </td>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="Pod Name"
-                          className="form_fullWidth"
-                          name="podName"
-                          onChange={onChange}
-                        />
-                      </td>
-                    </tr>
-                  </tbody> */}
-                </table>
-              </>
-            )}
-          </>
-        );
-      case "GMostRequestPriority":
-        return (
-          <>
-            <FormControl style={{ paddingTop: "4px" }}>
-              <select
-                name="type"
-                value={priority.options.type}
-                onChange={onChangeType}
-              >
-                <option value={"cpu"}>CPU</option>
-                <option value={"gpu"}>GPU</option>
-                <option value={"memory"}>MEMORY</option>
-              </select>
-            </FormControl>
-          </>
-        );
-      case "GSelectedClusterPriority":
-        return (
-          <>
-            <FormControl
-              className="form_fullWidth"
-              style={{ paddingTop: "4px" }}
-            >
-              <select
-                name="type"
-                value={priority.options.type}
-                onChange={onChangeType}
-              >
-                <option value={"cluster"}>Cluster</option>
-                <option value={"node"}>Node</option>
-              </select>
-            </FormControl>
-            {priority.options.type === "cluster" ? (
-              <>
-                <FormControl
-                  className="form_fullWidth"
-                  style={{ paddingTop: "4px" }}
-                >
-                  <select name="cluster" onChange={onChangeType}>
-                    <option value={""}>Select Cluster</option>
-                    {selectClusterInfo.map((cluster) => (
-                      <option value={cluster.clusterName}>
-                        {cluster.clusterName}
-                      </option>
-                    ))}
-                  </select>
-                </FormControl>
-              </>
-            ) : (
-              <div style={{ paddingTop: "4px" }}>
-                <FormControl style={{ width: "50%" }}>
-                  <select name="sourceCluster" onChange={onChangeSource}>
-                    <option value={""}>Select Cluster</option>
-                  </select>
-                </FormControl>
-                <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                  <select name="sourceNode" onChange={onChangeSource}>
-                    <option value={""}>Select Node</option>
-                  </select>
-                </FormControl>
-              </div>
-            )}
-          </>
-        );
-      case "GSetClusterPriority":
-        return (
-          <>
-            <table className="tb_data_new" style={{ marginTop: "4px" }}>
-              <tbody className="tb_data_nodeInfo">
-                <tr>
-                  <th>User Name</th>
-                  <th>Workspace Name</th>
-                  <th>Project Name</th>
-                </tr>
-                <tr>
-                  <td>
-                    <CTextField
-                      type="text"
-                      placeholder="User Name"
-                      className="form_fullWidth"
-                      name="userName"
-                      onChange={onChangeName}
-                    />
-                  </td>
-                  <td>
-                    <CTextField
-                      type="text"
-                      placeholder="Workspace Name"
-                      className="form_fullWidth"
-                      name="workspaceName"
-                      onChange={onChange}
-                    />
-                  </td>
-                  <td>
-                    <CTextField
-                      type="text"
-                      placeholder="Project Name"
-                      className="form_fullWidth"
-                      name="projectName"
-                      onChange={onChange}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <FormControl
-              className="form_fullWidth"
-              style={{ paddingTop: "2px" }}
-            >
-              <select name="clusters" onChange={onChangeSource}>
-                <option value={""}>Set Clusters</option>
-              </select>
-            </FormControl>
-          </>
-        );
-      default:
-        break;
-    }
-  };
-
   return (
     <>
+      <DeploymentAddContainer
+        containerIndex={containerIndex}
+        open={open2}
+        onClose={handleClose2}
+      ></DeploymentAddContainer>
+
       <div className="step-container">
         <div className="signup-step">
           <div className="step current">
@@ -475,15 +222,18 @@ const CreateDeploymentStepOne = observer((props) => {
           </div>
           <div className="arr"></div>
           <div className="step">
+            <span>스케줄러</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
             <span>설정 검토</span>
           </div>
         </div>
       </div>
-
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: "200px" }}>
               Deployment Name <span className="requried">*</span>
             </th>
             <td colSpan="3">
@@ -543,151 +293,6 @@ const CreateDeploymentStepOne = observer((props) => {
           </tr>
 
           <tr>
-            <th rowSpan={labelList.length + 2}>Labels</th>
-          </tr>
-          {labelList.map((label, index) => (
-            <tr>
-              <td style={{ paddingLeft: "5px" }}>{label.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{label.value}</td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => removeLabelList(index)}
-                >
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
-          <tr>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Key"
-                className="form_fullWidth"
-                name="key"
-                onChange={onChangeLabel}
-                value={label.key}
-              />
-            </td>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Value"
-                className="form_fullWidth"
-                name="value"
-                onChange={onChangeLabel}
-                value={label.value}
-              />
-            </td>
-            <td>
-              <Button
-                style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  borderRadius: "0",
-                }}
-                onClick={addLabel}
-              >
-                +
-              </Button>
-            </td>
-          </tr>
-          <tr>
-            <th rowSpan={annotationList.length + 2}>Annotations</th>
-          </tr>
-          {annotationList.map((annotation, index) => (
-            <tr>
-              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => removeAnnotationList(index)}
-                >
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
-          <tr>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Key"
-                className="form_fullWidth"
-                name="key"
-                onChange={onChangeAnnotation}
-                value={annotation.key}
-              />
-            </td>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Value"
-                className="form_fullWidth"
-                name="value"
-                onChange={onChangeAnnotation}
-                value={annotation.value}
-              />
-            </td>
-            <td>
-              <Button
-                style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  borderRadius: "0",
-                }}
-                onClick={addAnnotation}
-              >
-                +
-              </Button>
-            </td>
-          </tr>
-
-          <tr>
             <th>
               Replicas <span className="requried">*</span>
             </th>
@@ -737,19 +342,29 @@ const CreateDeploymentStepOne = observer((props) => {
           </tr>
 
           <tr>
-            <th>Priority</th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                {/* <select name="workspace" onChange={onChangeWorkspace}> */}
-                <select name="priority" onChange={onChange}>
-                  <option value={""} selected disabled hidden>
-                    Select Prority
-                  </option>
-                  <option value="gLowLatencyPriority">
-                    GLowLatencyPriority
-                  </option>
-                </select>
-              </FormControl>
+            <th>
+              Containers <span className="requried">*</span>
+            </th>
+            <td>
+              <Button
+                style={{ marginBottom: "2px" }}
+                onClick={() => openTargetCluster(-1)}
+              >
+                + Add Container
+              </Button>
+              <div>
+                {deploymentInfo.containers.map((container, index) => (
+                  <Button
+                    style={{ marginTop: "2px", marginBottom: "2px" }}
+                    onClick={() => openTargetCluster(index)}
+                  >
+                    {container.containerName}
+                    <DeleteButton onClick={(e) => removeContainers(e, index)}>
+                      x
+                    </DeleteButton>
+                  </Button>
+                ))}
+              </div>
             </td>
           </tr>
         </tbody>

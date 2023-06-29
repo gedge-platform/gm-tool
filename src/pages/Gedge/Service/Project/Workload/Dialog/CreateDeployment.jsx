@@ -26,6 +26,7 @@ import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
 import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
+import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
 
 const Button = styled.button`
   background-color: #fff;
@@ -103,22 +104,6 @@ const CreateDeployment = observer((props) => {
   const [stepValue, setStepValue] = useState(1);
 
   const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
-    labelList,
     initLabelList,
     addLabelList,
     removeLabelList,
@@ -265,12 +250,16 @@ const CreateDeployment = observer((props) => {
     // props.reloadFunc && props.reloadFunc();
   };
 
-  const onClickStepOne = (e) => {
+  const onClickStepTwo = (e) => {
     setStepValue(2);
   };
 
-  const onClickStepTwo = (e) => {
+  const onClickStepThree = (e) => {
     setStepValue(3);
+  };
+
+  const onClickStepFour = () => {
+    setStepValue(4);
   };
 
   const onClickBackStepOne = () => {
@@ -279,6 +268,10 @@ const CreateDeployment = observer((props) => {
 
   const onClickBackStepTwo = () => {
     setStepValue(2);
+  };
+
+  const onClickBackStepThree = () => {
+    setStepValue(3);
   };
 
   useEffect(() => {
@@ -309,7 +302,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={(e) => onClickStepOne(e)}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -334,12 +327,36 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => onClickBackStepOne()}>이전</Button>
-              <ButtonNext onClick={() => onClickStepTwo()}>다음</ButtonNext>
+              <ButtonNext onClick={() => onClickStepThree()}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
     } else if (stepValue === 3) {
+      return (
+        <>
+          <CreateDeploymentStepThree />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+              <ButtonNext onClick={() => onClickStepFour()}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 4) {
       return (
         <>
           <DeploymentYaml />
@@ -357,7 +374,7 @@ const CreateDeployment = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+              <Button onClick={() => onClickBackStepThree()}>이전</Button>
               <ButtonNext onClick={() => CreateDeployment()}>
                 Create Deployment
               </ButtonNext>

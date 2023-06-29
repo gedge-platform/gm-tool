@@ -222,16 +222,32 @@ const CreateDeploymentStepTwo = observer((props) => {
     setCheckPVCInDeployment(value);
   };
 
+  const handleClose = () => {
+    props.onClose && props.onClose();
+    initDeploymentInfo();
+    initLabelList();
+    initAnnotationList();
+    setLabel({ key: "", value: "" });
+    setAnnotation({ key: "", value: "" });
+    setProjectDisable(true);
+    setPriorityDisable(true);
+    setPrioritytPodDisable(true);
+  };
+
   return (
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="step current">
+          <div className="step">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
-          <div className="step">
+          <div className="step current">
             <span>고급 설정</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>스케줄러</span>
           </div>
           <div className="arr"></div>
           <div className="step">
@@ -314,6 +330,7 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
+
           <tr>
             <th rowSpan={annotationList.length + 2}>Annotations</th>
           </tr>
@@ -384,22 +401,6 @@ const CreateDeploymentStepTwo = observer((props) => {
               >
                 +
               </Button>
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              Replicas <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                placeholder="Replicas"
-                className="form_fullWidth"
-                name="replicas"
-                onChange={onChange}
-                value={deploymentInfo.replicas}
-              />
             </td>
           </tr>
         </tbody>
