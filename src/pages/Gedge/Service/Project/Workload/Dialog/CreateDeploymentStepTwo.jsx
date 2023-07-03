@@ -232,36 +232,7 @@ const CreateDeploymentStepTwo = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th rowSpan={labelList.length + 2}>Labels</th>
-          </tr>
-          {labelList.map((label, index) => (
-            <tr>
-              <td style={{ paddingLeft: "5px" }}>{label.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{label.value}</td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => removeLabelList(index)}
-                >
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
-          <tr>
+            <th rowSpan={labelList.length + 1}>Labels</th>
             <td>
               <CTextField
                 type="text"
@@ -303,6 +274,34 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
+          {labelList.map((label, index) => (
+            <tr>
+              <td style={{ paddingLeft: "5px" }}>{label.key}</td>
+              <td style={{ paddingLeft: "5px" }}>{label.value}</td>
+              <td>
+                <Button
+                  style={{
+                    border: "none",
+                    height: "28px",
+                    width: "30px",
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    letterSpacing: "normal",
+                    color: "#36435c",
+                    backgroundColor: "#eff4f9",
+                    padding: "0 0 0 0",
+                    margin: "2px",
+                    borderRadius: "0",
+                  }}
+                  onClick={() => removeLabelList(index)}
+                >
+                  -
+                </Button>
+              </td>
+            </tr>
+          ))}
+          <tr></tr>
 
           <tr>
             <th rowSpan={annotationList.length + 2}>Annotations</th>
