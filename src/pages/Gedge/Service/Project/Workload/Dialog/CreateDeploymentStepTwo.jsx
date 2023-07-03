@@ -141,6 +141,7 @@ const CreateDeploymentStepTwo = observer((props) => {
     setDeploymentInfo,
     removeContainer,
   } = deploymentStore;
+  console.log("labelList : ", labelList);
 
   const {
     loadWorkSpaceList,
@@ -162,34 +163,6 @@ const CreateDeploymentStepTwo = observer((props) => {
     setCheckPVCInDeployment,
   } = claimStore;
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    if (name == "workspace") {
-      setDeploymentInfo(name, value);
-      setProjectDisable(false);
-      loadProjectListInWorkspace(value);
-      // setPriorityDisable(false);
-      loadClusterList();
-      loadWorkspaceDetail(value);
-    }
-  };
-
-  const onChangePod = async ({ target: { name, value } }) => {
-    let projectNameTemp = "";
-    let clusterNameTemp = "";
-
-    if (name === "project") {
-      setPriorityDisable(false);
-      projectNameTemp = value;
-      // setPrioritytDisable(false);
-    }
-    if (name === "cluster") {
-      setPrioritytPodDisable(false);
-      clusterNameTemp = value;
-      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
-    }
-  };
-
   const onChangeLabel = (e) => {
     setLabel({
       ...label,
@@ -198,6 +171,9 @@ const CreateDeploymentStepTwo = observer((props) => {
   };
 
   const addLabel = () => {
+    if (label.key === "" && label.value === "") {
+      swalError("값을 입력해주세요.");
+    }
     if (label.key !== "" && label.value !== "") {
       addLabelList(label.key, label.value);
       setLabel({ key: "", value: "" });
@@ -229,9 +205,6 @@ const CreateDeploymentStepTwo = observer((props) => {
     initAnnotationList();
     setLabel({ key: "", value: "" });
     setAnnotation({ key: "", value: "" });
-    setProjectDisable(true);
-    setPriorityDisable(true);
-    setPrioritytPodDisable(true);
   };
 
   return (
