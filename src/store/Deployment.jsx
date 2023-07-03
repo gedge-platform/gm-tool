@@ -127,10 +127,11 @@ class Deployment {
     deploymentName: "",
     workspace: "",
     project: "",
+    replicas: 1,
+    volume: "",
+    containers: [],
     labels: [],
     annotations: [],
-    replicas: 1,
-    volume: [],
     priority: {
       name: "GLowLatencyPriority",
       options: {
@@ -139,7 +140,6 @@ class Deployment {
       },
     },
     targetClusters: "",
-    containers: [],
   };
 
   hpaWorkspaceList = [
@@ -237,11 +237,25 @@ class Deployment {
     });
   };
 
-  setDeploymentInfo = (key, value) => {
+  setDeploymentInfo = (name, value) => {
     runInAction(() => {
-      this.deploymentInfo[key] = value;
+      this.deploymentInfo[name] = value;
     });
   };
+
+  addObjectInDeploymentInfo = (name, key, value) => {
+    runInAction(() => {
+      this.deploymentInfo[name].push({key: key, value: value});
+    })
+  }
+
+  removeObjectInDeploymentInfo = (name, removeIndex) => {
+    runInAction(() => {
+      this.deploymentInfo[name] = this.deploymentInfo[name].filter(
+        (_, index) => removeIndex !== index
+      )
+    })
+  }
 
   initDeploymentInfo = () => {
     runInAction(() => {

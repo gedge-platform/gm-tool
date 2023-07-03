@@ -242,6 +242,7 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
+    console.log(toJS(deploymentInfo));
 
     //setProjectDisable(true);
 
@@ -375,7 +376,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => onClickBackStepThree()}>이전</Button>
-              <ButtonNext onClick={() => CreateDeployment()}>
+              <ButtonNext onClick={createDeployment}>
                 Create Deployment
               </ButtonNext>
             </div>

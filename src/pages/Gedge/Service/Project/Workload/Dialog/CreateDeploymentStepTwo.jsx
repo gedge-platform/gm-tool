@@ -140,6 +140,8 @@ const CreateDeploymentStepTwo = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    addObjectInDeploymentInfo,
+    removeObjectInDeploymentInfo
   } = deploymentStore;
   console.log("labelList : ", labelList);
 
@@ -175,7 +177,7 @@ const CreateDeploymentStepTwo = observer((props) => {
       swalError("값을 입력해주세요.");
     }
     if (label.key !== "" && label.value !== "") {
-      addLabelList(label.key, label.value);
+      addObjectInDeploymentInfo("labels", label.key, label.value);
       setLabel({ key: "", value: "" });
     }
   };
@@ -189,7 +191,7 @@ const CreateDeploymentStepTwo = observer((props) => {
 
   const addAnnotation = () => {
     if (annotation.key !== "" && annotation.value !== "") {
-      addAnnotationList(annotation.key, annotation.value);
+      addObjectInDeploymentInfo("annotations", annotation.key, annotation.value);
       setAnnotation({ key: "", value: "" });
     }
   };
@@ -232,7 +234,7 @@ const CreateDeploymentStepTwo = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th rowSpan={labelList.length + 1}>Labels</th>
+            <th rowSpan={deploymentInfo.labels.length + 1}>Labels</th>
             <td>
               <CTextField
                 type="text"
@@ -274,7 +276,7 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
-          {labelList.map((label, index) => (
+          {deploymentInfo.labels.map((label, index) => (
             <tr>
               <td style={{ paddingLeft: "5px" }}>{label.key}</td>
               <td style={{ paddingLeft: "5px" }}>{label.value}</td>
@@ -294,46 +296,16 @@ const CreateDeploymentStepTwo = observer((props) => {
                     margin: "2px",
                     borderRadius: "0",
                   }}
-                  onClick={() => removeLabelList(index)}
+                  onClick={() => removeObjectInDeploymentInfo("labels", index)}
                 >
                   -
                 </Button>
               </td>
             </tr>
           ))}
-          <tr></tr>
 
           <tr>
-            <th rowSpan={annotationList.length + 2}>Annotations</th>
-          </tr>
-          {annotationList.map((annotation, index) => (
-            <tr>
-              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => removeAnnotationList(index)}
-                >
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
-          <tr>
+            <th rowSpan={deploymentInfo.annotations.length + 2}>Annotations</th>
             <td>
               <CTextField
                 type="text"
@@ -375,6 +347,33 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
+          {deploymentInfo.annotations.map((annotation, index) => (
+            <tr>
+              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
+              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
+              <td>
+                <Button
+                  style={{
+                    border: "none",
+                    height: "28px",
+                    width: "30px",
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    letterSpacing: "normal",
+                    color: "#36435c",
+                    backgroundColor: "#eff4f9",
+                    padding: "0 0 0 0",
+                    margin: "2px",
+                    borderRadius: "0",
+                  }}
+                  onClick={() => removeObjectInDeploymentInfo("annotations", index)}
+                >
+                  -
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

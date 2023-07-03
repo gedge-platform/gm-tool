@@ -6,7 +6,9 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
 const DeploymentYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
+  const { content, setContent, deploymentInfo } = deploymentStore;
+  const YAML = require("yamljs")
+  //YAML.parse(deploymentInfo);
 
   return (
     <>
