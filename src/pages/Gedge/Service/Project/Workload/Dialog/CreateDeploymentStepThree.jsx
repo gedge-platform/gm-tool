@@ -24,6 +24,7 @@ import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
+import DeploymentTargetClusters from "./DeploymentTargetClusters";
 
 const Button = styled.button`
   background-color: #fff;
@@ -95,8 +96,8 @@ const Table = styled.table`
   }
 `;
 
-const CreateDeploymentStepThree = observer((props) => {
-  const { open } = props;
+const CreateDeploymentStepThree = observer(() => {
+  const [ open, setOpen ] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
@@ -534,6 +535,11 @@ const CreateDeploymentStepThree = observer((props) => {
 
   return (
     <>
+      <DeploymentTargetClusters
+        open={open}
+        onClose={() => {}}
+      ></DeploymentTargetClusters>
+
       <div className="step-container">
         <div className="signup-step">
           <div className="step">
