@@ -103,6 +103,9 @@ const CreateDeployment = observer((props) => {
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
 
+  const { containerInfo } = DeploymentAddContainer;
+  console.log("containerInfo :", containerInfo);
+
   const {
     initLabelList,
     addLabelList,
@@ -118,6 +121,7 @@ const CreateDeployment = observer((props) => {
     setCreateDeploymentLabels,
     setCreateDeploymentAnnotaions,
     setPriority,
+    setContent,
   } = deploymentStore;
 
   const {
@@ -157,13 +161,6 @@ const CreateDeployment = observer((props) => {
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  // const [priority, setPriority] = useState({
-  //   name: "GLowLatencyPriority",
-  //   options: {
-  //     type: "fromNode",
-  //     //data: {}
-  //   },
-  // });
 
   // const template = {
   //   apiVersion: "apps/v1",
@@ -199,6 +196,46 @@ const CreateDeployment = observer((props) => {
   //               },
   //             ],
   //           },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // };
+
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: deploymentInfo.deploymentName,
+  //     namespace: deploymentInfo.project,
+  //     labels: {
+  //       app: deploymentInfo.deploymentName,
+  //     },
+  //   },
+  //   spec: {
+  //     replicas: deploymentInfo.replicas,
+  //     selector: {
+  //       matchLabels: {
+  //         app: deploymentInfo.deploymentName,
+  //       },
+  //     },
+  //     template: {
+  //       metadata: {
+  //         labels: {
+  //           app: deploymentInfo.deploymentName,
+  //         },
+  //       },
+  //       spec: {
+  //         containers: [
+  //           // {
+  //           //   image: containerImage,
+  //           //   name: containerName,
+  //           //   ports: [
+  //           //     {
+  //           //       containerPort: Number(containerPort),
+  //           //     },
+  //           //   ],
+  //           // },
   //         ],
   //       },
   //     },
@@ -250,6 +287,7 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
+    console.log(toJS(deploymentInfo));
 
     //setProjectDisable(true);
 
@@ -284,10 +322,10 @@ const CreateDeployment = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
-  }, []);
-
-  useEffect(() => {
     loadPVClaims();
+    // const YAML = require("json-to-pretty-yaml");
+    // setContent(YAML.stringify(template));
+    // }, [stepValue]);
   }, []);
 
   const CreateDeploymentComponent = () => {
@@ -383,7 +421,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => onClickBackStepThree()}>이전</Button>
-              <ButtonNext onClick={() => CreateDeployment()}>
+              <ButtonNext onClick={createDeployment}>
                 Create Deployment
               </ButtonNext>
             </div>

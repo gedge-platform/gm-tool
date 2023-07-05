@@ -99,7 +99,6 @@ const CreateDeploymentStepOne = observer((props) => {
   const { open } = props;
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
-  const [projectDisable, setProjectDisable] = useState(true);
   const [containerIndex, setContainerIndex] = useState(1);
 
   const [prioritytDisable, setPriorityDisable] = useState(true);
@@ -163,22 +162,21 @@ const CreateDeploymentStepOne = observer((props) => {
   } = claimStore;
 
   const onChange = (e) => {
-    const { name, value } = e.target;
-    if (name == "workspace") {
-      setDeploymentInfo(name, value);
-      setProjectDisable(false);
-      loadProjectListInWorkspace(value);
-      // setPriorityDisable(false);
-      loadClusterList();
-      loadWorkspaceDetail(value);
-    }
-  };
+    setDeploymentInfo(e.target.name, e.target.value);
+  }
+
+  const onChangeWorkspace = (e) => {
+    setDeploymentInfo(e.target.name, e.target.value);
+    loadProjectListInWorkspace(e.target.value);
+    loadWorkspaceDetail(e.target.value);
+  }
 
   const onChangePod = async ({ target: { name, value } }) => {
     let projectNameTemp = "";
     let clusterNameTemp = "";
 
     if (name === "project") {
+      setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
       // setPrioritytDisable(false);
@@ -201,7 +199,12 @@ const CreateDeploymentStepOne = observer((props) => {
 
   const onChangeCheckPVC = ({ target: { value } }) => {
     setCheckPVCInDeployment(value);
+    setDeploymentInfo("volume", value)
   };
+
+  useEffect(() => {
+    loadWorkSpaceList();
+  }, [])
 
   return (
     <>
@@ -254,7 +257,7 @@ const CreateDeploymentStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="workspace" onChange={onChange}>
+                <select name="workspace" onChange={onChangeWorkspace} value={deploymentInfo.workspace}>
                   <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
@@ -275,9 +278,10 @@ const CreateDeploymentStepOne = observer((props) => {
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={projectDisable}
+                  disabled={!deploymentInfo.workspace}
                   name="project"
                   onChange={onChangePod}
+                  value={deploymentInfo.project}
                 >
                   <option value={""} selected hidden disabled>
                     Select Project
@@ -326,6 +330,7 @@ const CreateDeploymentStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
+                          checked={deploymentInfo.volume === pvc.name}
                           name="clusterCheck"
                           onChange={onChangeCheckPVC}
                           value={pvc.name}
