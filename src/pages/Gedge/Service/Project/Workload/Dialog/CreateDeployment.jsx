@@ -115,6 +115,9 @@ const CreateDeployment = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    setCreateDeploymentLabels,
+    setCreateDeploymentAnnotaions,
+    setPriority,
   } = deploymentStore;
 
   const {
@@ -150,19 +153,17 @@ const CreateDeployment = observer((props) => {
   const { loadClusterList, clusterList, clusterListInWorkspace } = clusterStore;
   const { podListInclusterAPI, podListIncluster } = podStore;
 
-  const [label, setLabel] = useState({ key: "", value: "" });
-  const [annotation, setAnnotation] = useState({ key: "", value: "" });
   const [containerIndex, setContainerIndex] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
+  // const [priority, setPriority] = useState({
+  //   name: "GLowLatencyPriority",
+  //   options: {
+  //     type: "fromNode",
+  //     //data: {}
+  //   },
+  // });
 
   // const template = {
   //   apiVersion: "apps/v1",
@@ -227,14 +228,21 @@ const CreateDeployment = observer((props) => {
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    setStepValue(1);
     initDeploymentInfo();
     initLabelList();
     initAnnotationList();
-    setLabel({ key: "", value: "" });
-    setAnnotation({ key: "", value: "" });
+    setCreateDeploymentLabels({ key: "", value: "" });
+    setCreateDeploymentAnnotaions({ key: "", value: "" });
     setProjectDisable(true);
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
+    setPriority({
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+      },
+    });
   };
   const handleClose2 = () => {
     setOpen2(false);

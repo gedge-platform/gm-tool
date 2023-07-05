@@ -103,13 +103,6 @@ const CreateDeploymentStepThree = observer((props) => {
   const [containerIndex, setContainerIndex] = useState(1);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
 
   const {
     podReplicas,
@@ -139,7 +132,10 @@ const CreateDeploymentStepThree = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    priority,
+    setPriority,
   } = deploymentStore;
+  console.log("priority :", priority);
 
   const {
     loadWorkSpaceList,
@@ -251,13 +247,39 @@ const CreateDeploymentStepThree = observer((props) => {
     const onChangeSource = (e) => {};
     const onChangeName = (e) => {};
     const onChangeType = (e) => {
-      console.log("onChangeType :", e.target.value);
-      setPriority({
-        ...priority,
-        options: {
-          type: e.target.value,
-        },
-      });
+      const { name, value } = e.target;
+      if (name === "type") {
+        setPriority({
+          ...priority,
+          options: {
+            type: value,
+          },
+        });
+      } else if (name === "selectCluster") {
+        setPriority({
+          ...priority,
+          options: {
+            type: "cluster",
+            value: value,
+          },
+        });
+      } else if (name === "sourceCluster") {
+        setPriority({
+          ...priority,
+          options: {
+            type: "node",
+            value: value,
+          },
+        });
+      } else if (name === "sourceNode") {
+        setPriority({
+          ...priority,
+          options: {
+            type: "node",
+            value: value,
+          },
+        });
+      }
     };
 
     const SelectedPriorityComponent = () => {
@@ -299,7 +321,7 @@ const CreateDeploymentStepThree = observer((props) => {
                         <td colSpan="3">
                           <FormControl className="form_fullWidth">
                             <select
-                              disabled={prioritytDisable}
+                              //   disabled={prioritytDisable}
                               name="cluster"
                               onChange={onChangePod}
                             >
@@ -418,7 +440,7 @@ const CreateDeploymentStepThree = observer((props) => {
                     className="form_fullWidth"
                     style={{ paddingTop: "4px" }}
                   >
-                    <select name="cluster" onChange={onChangeType}>
+                    <select name="selectCluster" onChange={onChangeType}>
                       <option value={""}>Select Cluster</option>
                       {selectClusterInfo.map((cluster) => (
                         <option value={cluster.clusterName}>
@@ -431,12 +453,12 @@ const CreateDeploymentStepThree = observer((props) => {
               ) : (
                 <div style={{ paddingTop: "4px" }}>
                   <FormControl style={{ width: "50%" }}>
-                    <select name="sourceCluster" onChange={onChangeSource}>
+                    <select name="sourceCluster" onChange={onChangeType}>
                       <option value={""}>Select Cluster</option>
                     </select>
                   </FormControl>
                   <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                    <select name="sourceNode" onChange={onChangeSource}>
+                    <select name="sourceNode" onChange={onChangeType}>
                       <option value={""}>Select Node</option>
                     </select>
                   </FormControl>
@@ -506,6 +528,10 @@ const CreateDeploymentStepThree = observer((props) => {
 
     useEffect(() => {
       loadPVClaims();
+    }, []);
+
+    useEffect(() => {
+      loadClusterList();
     }, []);
 
     return (

@@ -266,11 +266,33 @@ class Deployment {
     });
   };
 
+  createDeploymentLabels = {
+    key: "",
+    value: "",
+  };
+  setCreateDeploymentLabels = (value) => {
+    runInAction(() => {
+      this.createDeploymentLabels = value;
+    });
+  };
+
+  createDeploymentAnnotaions = {
+    key: "",
+    value: "",
+  };
+
+  setCreateDeploymentAnnotaions = (value) => {
+    runInAction(() => {
+      this.createDeploymentAnnotaions = value;
+    });
+  };
+
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
     });
   };
+
   addLabelList = (key, value) => {
     runInAction(() => {
       this.labelList.push({ key: key, value: value });
@@ -322,6 +344,18 @@ class Deployment {
       this.deploymentInfo.containers = this.deploymentInfo.containers.filter(
         (_, index) => removeIndex !== index
       );
+    });
+  };
+
+  priority = {
+    name: "GLowLatencyPriority",
+    options: {
+      type: "fromNode",
+    },
+  };
+  setPriority = (value) => {
+    runInAction(() => {
+      this.priority = value;
     });
   };
 
