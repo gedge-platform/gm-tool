@@ -203,6 +203,10 @@ const CreateDeploymentStepThree = observer(() => {
     }
   };
 
+  const handleClose = () => {
+    setOpen2(false)
+  }
+
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
       if (e.target.value === "GLowLatencyPriority") {
@@ -536,8 +540,8 @@ const CreateDeploymentStepThree = observer(() => {
   return (
     <>
       <DeploymentTargetClusters
-        open={open}
-        onClose={() => {}}
+        open={open2}
+        onClose={handleClose}
       ></DeploymentTargetClusters>
 
       <div className="step-container">
