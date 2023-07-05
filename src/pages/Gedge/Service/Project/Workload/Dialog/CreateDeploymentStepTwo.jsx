@@ -140,7 +140,7 @@ const CreateDeploymentStepTwo = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th rowSpan={labelList.length + 1}>Labels</th>
+            <th rowSpan={deploymentInfo.labels.length + 1}>Labels</th>
             <td>
               <CTextField
                 type="text"
@@ -206,14 +206,13 @@ const CreateDeploymentStepTwo = observer((props) => {
                     margin: "2px",
                     borderRadius: "0",
                   }}
-                  onClick={() => removeLabelList(index)}
+                  onClick={() => removeObjectInDeploymentInfo("labels", index)}
                 >
                   -
                 </Button>
               </td>
             </tr>
           ))}
-          <tr></tr>
 
           <tr>
             <th rowSpan={annotationList.length + 2}>Annotations</th>
@@ -291,6 +290,35 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
+          {deploymentInfo.annotations.map((annotation, index) => (
+            <tr>
+              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
+              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
+              <td>
+                <Button
+                  style={{
+                    border: "none",
+                    height: "28px",
+                    width: "30px",
+                    fontSize: "20px",
+                    fontWeight: 600,
+                    lineHeight: 1,
+                    letterSpacing: "normal",
+                    color: "#36435c",
+                    backgroundColor: "#eff4f9",
+                    padding: "0 0 0 0",
+                    margin: "2px",
+                    borderRadius: "0",
+                  }}
+                  onClick={() =>
+                    removeObjectInDeploymentInfo("annotations", index)
+                  }
+                >
+                  -
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>
