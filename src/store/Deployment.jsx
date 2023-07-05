@@ -263,10 +263,11 @@ class Deployment {
         deploymentName: "",
         workspace: "",
         project: "",
+        replicas: 1,
+        volume: "",
+        containers: [],
         labels: [],
         annotations: [],
-        replicas: 1,
-        volume: [],
         priority: {
           name: "GLowLatencyPriority",
           options: {
@@ -275,7 +276,6 @@ class Deployment {
           },
         },
         targetClusters: "",
-        containers: [],
       };
     });
   };

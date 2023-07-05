@@ -115,6 +115,7 @@ const CreateDeployment = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    setContent
   } = deploymentStore;
 
   const {
@@ -163,46 +164,46 @@ const CreateDeployment = observer((props) => {
       //data: {}
     },
   });
-
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: deploymentName,
-  //     namespace: project,
-  //     labels: {
-  //       app: deploymentName,
-  //     },
-  //   },
-  //   spec: {
-  //     replicas: podReplicas,
-  //     selector: {
-  //       matchLabels: {
-  //         app: deploymentName,
-  //       },
-  //     },
-  //     template: {
-  //       metadata: {
-  //         labels: {
-  //           app: deploymentName,
-  //         },
-  //       },
-  //       spec: {
-  //         containers: [
-  //           {
-  //             image: containerImage,
-  //             name: containerName,
-  //             ports: [
-  //               {
-  //                 containerPort: Number(containerPort),
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   },
-  // };
+  
+  const template = {
+    apiVersion: "apps/v1",
+    kind: "Deployment",
+    metadata: {
+      name: deploymentInfo.deploymentName,
+      namespace: deploymentInfo.project,
+      labels: {
+        app: deploymentInfo.deploymentName,
+      },
+    },
+    spec: {
+      replicas: deploymentInfo.replicas,
+      selector: {
+        matchLabels: {
+          app: deploymentInfo.deploymentName,
+        },
+      },
+      template: {
+        metadata: {
+          labels: {
+            app: deploymentInfo.deploymentName,
+          },
+        },
+        spec: {
+          containers: [
+            // {
+            //   image: containerImage,
+            //   name: containerName,
+            //   ports: [
+            //     {
+            //       containerPort: Number(containerPort),
+            //     },
+            //   ],
+            // },
+          ],
+        },
+      },
+    },
+  };
 
   // const templatePVC = {
   //   apiVersion: "v1",
@@ -277,11 +278,11 @@ const CreateDeployment = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
-  }, []);
-
-  useEffect(() => {
     loadPVClaims();
-  }, []);
+    const YAML = require("json-to-pretty-yaml");
+    setContent(YAML.stringify(template));
+    
+  }, [stepValue]);
 
   const CreateDeploymentComponent = () => {
     if (stepValue === 1) {
