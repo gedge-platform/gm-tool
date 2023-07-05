@@ -26,6 +26,7 @@ import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
 import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
+import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
 
 const Button = styled.button`
   background-color: #fff;
@@ -102,23 +103,10 @@ const CreateDeployment = observer((props) => {
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
 
+  const { containerInfo } = DeploymentAddContainer;
+  console.log("containerInfo :", containerInfo);
+
   const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
-    labelList,
     initLabelList,
     addLabelList,
     removeLabelList,
@@ -130,6 +118,10 @@ const CreateDeployment = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    setCreateDeploymentLabels,
+    setCreateDeploymentAnnotaions,
+    setPriority,
+    setContent,
   } = deploymentStore;
 
   const {
@@ -165,19 +157,10 @@ const CreateDeployment = observer((props) => {
   const { loadClusterList, clusterList, clusterListInWorkspace } = clusterStore;
   const { podListInclusterAPI, podListIncluster } = podStore;
 
-  const [label, setLabel] = useState({ key: "", value: "" });
-  const [annotation, setAnnotation] = useState({ key: "", value: "" });
   const [containerIndex, setContainerIndex] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
 
   // const template = {
   //   apiVersion: "apps/v1",
@@ -219,6 +202,46 @@ const CreateDeployment = observer((props) => {
   //   },
   // };
 
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: deploymentInfo.deploymentName,
+  //     namespace: deploymentInfo.project,
+  //     labels: {
+  //       app: deploymentInfo.deploymentName,
+  //     },
+  //   },
+  //   spec: {
+  //     replicas: deploymentInfo.replicas,
+  //     selector: {
+  //       matchLabels: {
+  //         app: deploymentInfo.deploymentName,
+  //       },
+  //     },
+  //     template: {
+  //       metadata: {
+  //         labels: {
+  //           app: deploymentInfo.deploymentName,
+  //         },
+  //       },
+  //       spec: {
+  //         containers: [
+  //           // {
+  //           //   image: containerImage,
+  //           //   name: containerName,
+  //           //   ports: [
+  //           //     {
+  //           //       containerPort: Number(containerPort),
+  //           //     },
+  //           //   ],
+  //           // },
+  //         ],
+  //       },
+  //     },
+  //   },
+  // };
+
   // const templatePVC = {
   //   apiVersion: "v1",
   //   kind: "PersistentVolumeClaim",
@@ -242,14 +265,21 @@ const CreateDeployment = observer((props) => {
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    setStepValue(1);
     initDeploymentInfo();
     initLabelList();
     initAnnotationList();
-    setLabel({ key: "", value: "" });
-    setAnnotation({ key: "", value: "" });
+    setCreateDeploymentLabels({ key: "", value: "" });
+    setCreateDeploymentAnnotaions({ key: "", value: "" });
     setProjectDisable(true);
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
+    setPriority({
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+      },
+    });
   };
   const handleClose2 = () => {
     setOpen2(false);
@@ -257,6 +287,7 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
+    console.log(toJS(deploymentInfo));
 
     //setProjectDisable(true);
 
@@ -265,12 +296,16 @@ const CreateDeployment = observer((props) => {
     // props.reloadFunc && props.reloadFunc();
   };
 
-  const onClickStepOne = (e) => {
+  const onClickStepTwo = (e) => {
     setStepValue(2);
   };
 
-  const onClickStepTwo = (e) => {
+  const onClickStepThree = (e) => {
     setStepValue(3);
+  };
+
+  const onClickStepFour = () => {
+    setStepValue(4);
   };
 
   const onClickBackStepOne = () => {
@@ -281,12 +316,16 @@ const CreateDeployment = observer((props) => {
     setStepValue(2);
   };
 
-  useEffect(() => {
-    loadWorkSpaceList();
-  }, []);
+  const onClickBackStepThree = () => {
+    setStepValue(3);
+  };
 
   useEffect(() => {
+    loadWorkSpaceList();
     loadPVClaims();
+    // const YAML = require("json-to-pretty-yaml");
+    // setContent(YAML.stringify(template));
+    // }, [stepValue]);
   }, []);
 
   const CreateDeploymentComponent = () => {
@@ -309,7 +348,7 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={(e) => onClickStepOne(e)}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -334,12 +373,36 @@ const CreateDeployment = observer((props) => {
               }}
             >
               <Button onClick={() => onClickBackStepOne()}>이전</Button>
-              <ButtonNext onClick={() => onClickStepTwo()}>다음</ButtonNext>
+              <ButtonNext onClick={() => onClickStepThree()}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
     } else if (stepValue === 3) {
+      return (
+        <>
+          <CreateDeploymentStepThree />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+              <ButtonNext onClick={() => onClickStepFour()}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 4) {
       return (
         <>
           <DeploymentYaml />
@@ -357,8 +420,8 @@ const CreateDeployment = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
-              <ButtonNext onClick={() => CreateDeployment()}>
+              <Button onClick={() => onClickBackStepThree()}>이전</Button>
+              <ButtonNext onClick={createDeployment}>
                 Create Deployment
               </ButtonNext>
             </div>

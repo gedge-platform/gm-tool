@@ -127,10 +127,11 @@ class Deployment {
     deploymentName: "",
     workspace: "",
     project: "",
+    replicas: 1,
+    volume: "",
+    containers: [],
     labels: [],
     annotations: [],
-    replicas: 1,
-    volume: [],
     priority: {
       name: "GLowLatencyPriority",
       options: {
@@ -139,7 +140,6 @@ class Deployment {
       },
     },
     targetClusters: "",
-    containers: [],
   };
 
   hpaWorkspaceList = [
@@ -237,11 +237,25 @@ class Deployment {
     });
   };
 
-  setDeploymentInfo = (key, value) => {
+  setDeploymentInfo = (name, value) => {
     runInAction(() => {
-      this.deploymentInfo[key] = value;
+      this.deploymentInfo[name] = value;
     });
   };
+
+  addObjectInDeploymentInfo = (name, key, value) => {
+    runInAction(() => {
+      this.deploymentInfo[name].push({key: key, value: value});
+    })
+  }
+
+  removeObjectInDeploymentInfo = (name, removeIndex) => {
+    runInAction(() => {
+      this.deploymentInfo[name] = this.deploymentInfo[name].filter(
+        (_, index) => removeIndex !== index
+      )
+    })
+  }
 
   initDeploymentInfo = () => {
     runInAction(() => {
@@ -249,10 +263,11 @@ class Deployment {
         deploymentName: "",
         workspace: "",
         project: "",
+        replicas: 1,
+        volume: "",
+        containers: [],
         labels: [],
         annotations: [],
-        replicas: 1,
-        volume: [],
         priority: {
           name: "GLowLatencyPriority",
           options: {
@@ -261,8 +276,28 @@ class Deployment {
           },
         },
         targetClusters: "",
-        containers: [],
       };
+    });
+  };
+
+  createDeploymentLabels = {
+    key: "",
+    value: "",
+  };
+  setCreateDeploymentLabels = (value) => {
+    runInAction(() => {
+      this.createDeploymentLabels = value;
+    });
+  };
+
+  createDeploymentAnnotaions = {
+    key: "",
+    value: "",
+  };
+
+  setCreateDeploymentAnnotaions = (value) => {
+    runInAction(() => {
+      this.createDeploymentAnnotaions = value;
     });
   };
 
@@ -271,6 +306,7 @@ class Deployment {
       this.labelList = [];
     });
   };
+
   addLabelList = (key, value) => {
     runInAction(() => {
       this.labelList.push({ key: key, value: value });
@@ -322,6 +358,18 @@ class Deployment {
       this.deploymentInfo.containers = this.deploymentInfo.containers.filter(
         (_, index) => removeIndex !== index
       );
+    });
+  };
+
+  priority = {
+    name: "GLowLatencyPriority",
+    options: {
+      type: "fromNode",
+    },
+  };
+  setPriority = (value) => {
+    runInAction(() => {
+      this.priority = value;
     });
   };
 
