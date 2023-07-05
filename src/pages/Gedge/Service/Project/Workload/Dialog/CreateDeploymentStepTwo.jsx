@@ -1,26 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
 import DeploymentPodSettins from "./DeploymentPodSettins";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  schedulerStore,
-  volumeStore,
-  StorageClassStore,
-} from "@/store";
-import DeploymentYaml from "./DeploymentYaml";
-import DeploymentPopup from "./DeploymentPopup";
-import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
-import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
+import { deploymentStore } from "@/store";
 import { swalError } from "@/utils/swal-utils";
 import { CDialogNew } from "@/components/dialogs";
 import { toJS } from "mobx";
-import DeploymentAddContainer from "./DeploymentAddContainer";
-import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
@@ -44,40 +31,6 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const DeleteButton = styled.button`
-  margin: 0px 0px 0px 3px;
-  overflow: hidden;
-  position: relative;
-  border: none;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 50%;
-  background: transparent;
-  font: inherit;
-  text-indent: 100%;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(29, 161, 142, 0.1);
-  }
-
-  &:before,
-  &:after {
-    position: absolute;
-    top: 15%;
-    left: calc(50% - 0.0625em);
-    width: 0.125em;
-    height: 70%;
-    border-radius: 0.125em;
-    transform: rotate(45deg);
-    background: currentcolor;
-    content: "";
-  }
-
-  &:after {
-    transform: rotate(-45deg);
-  }
-`;
 const Table = styled.table`
   tbody {
     display: block;
@@ -99,35 +52,8 @@ const CreateDeploymentStepTwo = observer((props) => {
   const { open } = props;
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
-  const [projectDisable, setProjectDisable] = useState(true);
-  const [label, setLabel] = useState({ key: "", value: "" });
-  const [annotation, setAnnotation] = useState({ key: "", value: "" });
-  const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
 
   const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
     labelList,
     initLabelList,
     addLabelList,
@@ -140,71 +66,53 @@ const CreateDeploymentStepTwo = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    createDeploymentLabels,
+    setCreateDeploymentLabels,
+    createDeploymentAnnotaions,
+    setCreateDeploymentAnnotaions,
   } = deploymentStore;
-  console.log("labelList : ", labelList);
-
-  const {
-    loadWorkSpaceList,
-    workSpaceList,
-    loadWorkspaceDetail,
-    selectClusterInfo,
-  } = workspaceStore;
-
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-  } = projectStore;
-
-  const {
-    loadPVClaims,
-    pvClaimListInDeployment,
-    checkPVCInDeployment,
-    setCheckPVCInDeployment,
-  } = claimStore;
 
   const onChangeLabel = (e) => {
-    setLabel({
-      ...label,
+    setCreateDeploymentLabels({
+      ...createDeploymentLabels,
       [e.target.name]: e.target.value,
     });
   };
 
   const addLabel = () => {
-    if (label.key === "" && label.value === "") {
+    if (
+      createDeploymentLabels.key === "" &&
+      createDeploymentLabels.value === ""
+    ) {
       swalError("값을 입력해주세요.");
     }
-    if (label.key !== "" && label.value !== "") {
-      addLabelList(label.key, label.value);
-      setLabel({ key: "", value: "" });
+    if (
+      createDeploymentLabels.key !== "" &&
+      createDeploymentLabels.value !== ""
+    ) {
+      addLabelList(createDeploymentLabels.key, createDeploymentLabels.value);
+      setCreateDeploymentLabels({ key: "", value: "" });
     }
   };
 
   const onChangeAnnotation = (e) => {
-    setAnnotation({
-      ...annotation,
+    setCreateDeploymentAnnotaions({
+      ...createDeploymentAnnotaions,
       [e.target.name]: e.target.value,
     });
   };
 
   const addAnnotation = () => {
-    if (annotation.key !== "" && annotation.value !== "") {
-      addAnnotationList(annotation.key, annotation.value);
-      setAnnotation({ key: "", value: "" });
+    if (
+      createDeploymentAnnotaions.key !== "" &&
+      createDeploymentAnnotaions.value !== ""
+    ) {
+      addAnnotationList(
+        createDeploymentAnnotaions.key,
+        createDeploymentAnnotaions.value
+      );
+      setCreateDeploymentAnnotaions({ key: "", value: "" });
     }
-  };
-
-  const onChangeCheckPVC = ({ target: { value } }) => {
-    setCheckPVCInDeployment(value);
-  };
-
-  const handleClose = () => {
-    props.onClose && props.onClose();
-    initDeploymentInfo();
-    initLabelList();
-    initAnnotationList();
-    setLabel({ key: "", value: "" });
-    setAnnotation({ key: "", value: "" });
   };
 
   return (
@@ -240,7 +148,7 @@ const CreateDeploymentStepTwo = observer((props) => {
                 className="form_fullWidth"
                 name="key"
                 onChange={onChangeLabel}
-                value={label.key}
+                value={createDeploymentLabels.key}
               />
             </td>
             <td>
@@ -250,7 +158,7 @@ const CreateDeploymentStepTwo = observer((props) => {
                 className="form_fullWidth"
                 name="value"
                 onChange={onChangeLabel}
-                value={label.value}
+                value={createDeploymentLabels.value}
               />
             </td>
             <td>
@@ -274,10 +182,14 @@ const CreateDeploymentStepTwo = observer((props) => {
               </Button>
             </td>
           </tr>
-          {labelList.map((label, index) => (
+          {labelList.map((createDeploymentLabels, index) => (
             <tr>
-              <td style={{ paddingLeft: "5px" }}>{label.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{label.value}</td>
+              <td style={{ paddingLeft: "5px" }}>
+                {createDeploymentLabels.key}
+              </td>
+              <td style={{ paddingLeft: "5px" }}>
+                {createDeploymentLabels.value}
+              </td>
               <td>
                 <Button
                   style={{
@@ -306,10 +218,14 @@ const CreateDeploymentStepTwo = observer((props) => {
           <tr>
             <th rowSpan={annotationList.length + 2}>Annotations</th>
           </tr>
-          {annotationList.map((annotation, index) => (
+          {annotationList.map((createDeploymentAnnotaions, index) => (
             <tr>
-              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
+              <td style={{ paddingLeft: "5px" }}>
+                {createDeploymentAnnotaions.key}
+              </td>
+              <td style={{ paddingLeft: "5px" }}>
+                {createDeploymentAnnotaions.value}
+              </td>
               <td>
                 <Button
                   style={{
@@ -341,7 +257,7 @@ const CreateDeploymentStepTwo = observer((props) => {
                 className="form_fullWidth"
                 name="key"
                 onChange={onChangeAnnotation}
-                value={annotation.key}
+                value={createDeploymentAnnotaions.key}
               />
             </td>
             <td>
@@ -351,7 +267,7 @@ const CreateDeploymentStepTwo = observer((props) => {
                 className="form_fullWidth"
                 name="value"
                 onChange={onChangeAnnotation}
-                value={annotation.value}
+                value={createDeploymentAnnotaions.value}
               />
             </td>
             <td>
