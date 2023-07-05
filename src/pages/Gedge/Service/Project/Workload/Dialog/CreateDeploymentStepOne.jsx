@@ -483,7 +483,7 @@ const CreateDeploymentStepOne = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: "278.39px" }}>
               Deployment Name <span className="requried">*</span>
             </th>
             <td colSpan="3">

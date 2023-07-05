@@ -226,11 +226,11 @@ const CreateDeploymentStepTwo = observer((props) => {
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="step current">
+          <div className="step">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
-          <div className="step">
+          <div className="step current">
             <span>고급 설정</span>
           </div>
           <div className="arr"></div>

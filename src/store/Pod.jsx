@@ -84,6 +84,7 @@ class Pod {
   serviceList = [];
 
   labelList = [];
+  annotationList = [];
   containerList = [];
   portList = [];
   variableList = [];
@@ -96,6 +97,7 @@ class Pod {
       //   value: ""
       // }
     ],
+    annotations: [],
     pullSecrets: "",
     volume: {
       name: "",
@@ -166,6 +168,24 @@ class Pod {
   removeLabelList = (removeIndex) => {
     runInAction(() => {
       this.labelList = this.labelList.filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
+
+  initAnnotationList = () => {
+    runInAction(() => {
+      this.annotaionList = [];
+    });
+  };
+  addAnnotationList = (key, value) => {
+    runInAction(() => {
+      this.annotaionList.push({ key: key, value: value });
+    });
+  };
+  removeAnnotationList = (removeIndex) => {
+    runInAction(() => {
+      this.annotaionList = this.annotaionList.filter(
         (_, index) => removeIndex !== index
       );
     });
