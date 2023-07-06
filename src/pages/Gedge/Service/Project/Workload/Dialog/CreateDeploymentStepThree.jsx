@@ -140,6 +140,7 @@ const CreateDeploymentStepThree = observer(() => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    targetClusters
   } = deploymentStore;
 
   const {
@@ -598,7 +599,7 @@ const CreateDeploymentStepThree = observer(() => {
                 style={{ marginBottom: "2px" }}
                 onClick={() => openTargetCluster(-1)}
               >
-                + Target Clusters
+                {targetClusters.length === 0 ? "+ Target Clusters": JSON.stringify(targetClusters)}
               </Button>
               <div>
                 {/* {deploymentInfo.containers.map((container, index) => (

@@ -199,6 +199,29 @@ class Deployment {
     },
   ];
 
+  targetClusters = [];
+  unselectedClusters = [
+    "cluster0",
+    "cluster1",
+    "cluster2",
+    "cluster3",
+    "cluster4",
+    "cluster5",
+    "cluster6",
+  ];
+
+  setTargetClusters = (value) => {
+    runInAction(() => {
+      this.targetClusters = value;
+    })
+  }
+
+  setUnselectedClusters = (value) => {
+    runInAction(() => {
+      this.unselectedClusters = value;
+    })
+  }
+
   loadProjectList = (workspace) => {
     runInAction(() => {
       this.projectList = [
