@@ -25,6 +25,9 @@ import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
 import DeploymentTargetClusters from "./DeploymentTargetClusters";
+import axios from "axios";
+import { SERVER_URL } from "../../../../../../config";
+import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;
@@ -97,13 +100,16 @@ const Table = styled.table`
 `;
 
 const CreateDeploymentStepThree = observer(() => {
-  const [ open, setOpen ] = useState(false);
+  const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
   const [containerIndex, setContainerIndex] = useState(1);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+  const [nodeDisable, setNodeDisable] = useState(true);
+  const [nodes, setNodes] = useState([]);
+  const [nodeName, setNodeName] = useState("");
 
   const {
     podReplicas,
@@ -136,7 +142,6 @@ const CreateDeploymentStepThree = observer(() => {
     priority,
     setPriority,
   } = deploymentStore;
-  console.log("priority :", priority);
 
   const {
     loadWorkSpaceList,
@@ -158,7 +163,15 @@ const CreateDeploymentStepThree = observer(() => {
     setCheckPVCInDeployment,
   } = claimStore;
 
-  const { loadClusterList, clusterList, clusterListInWorkspace } = clusterStore;
+  const {
+    loadClusterList,
+    clusterList,
+    clusterListInWorkspace,
+    loadCluster,
+    // nodes,
+  } = clusterStore;
+  // console.log("nodes :", nodes);
+
   const { podListInclusterAPI, podListIncluster } = podStore;
 
   const onChange = (e) => {
@@ -200,8 +213,8 @@ const CreateDeploymentStepThree = observer(() => {
   };
 
   const handleClose = () => {
-    setOpen2(false)
-  }
+    setOpen2(false);
+  };
 
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
@@ -249,7 +262,22 @@ const CreateDeploymentStepThree = observer(() => {
       });
     };
 
-    const onChangeSource = (e) => {};
+    const onChangeSource = async (e) => {
+      const { name, value } = e.target;
+
+      if (name === "sourceCluster") {
+        setNodeDisable(false);
+        setNodeName(value);
+
+        await axios
+          .get(`${SERVER_URL}/clusters/${value}`)
+          .then(({ data: { data } }) => {
+            runInAction(() => {
+              setNodes(data.nodes);
+            });
+          });
+      }
+    };
     const onChangeName = (e) => {};
     const onChangeType = (e) => {
       const { name, value } = e.target;
@@ -309,12 +337,32 @@ const CreateDeploymentStepThree = observer(() => {
                 <div style={{ paddingTop: "4px" }}>
                   <FormControl style={{ width: "50%" }}>
                     <select name="sourceCluster" onChange={onChangeSource}>
-                      <option value={""}>Select Source Cluster</option>
+                      <option value={""} selected disabled hidden>
+                        Select Source Cluster
+                      </option>
+                      {clusterListInWorkspace.map((cluster) => (
+                        <option value={cluster.clusterName}>
+                          {cluster.clusterName}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
                   <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                    <select name="sourceNode" onChange={onChangeSource}>
-                      <option value={""}>Select Source Node</option>
+                    <select
+                      name="sourceNode"
+                      onChange={onChangeSource}
+                      disabled={nodeDisable}
+                    >
+                      <option value={""} selected disabled hidden>
+                        Select Source Node
+                      </option>
+                      {nodes !== null ? (
+                        nodes.map((node) => (
+                          <option value={node.name}>{node.name}</option>
+                        ))
+                      ) : (
+                        <option value={"noData"}>No Data</option>
+                      )}
                     </select>
                   </FormControl>
                 </div>
@@ -459,7 +507,14 @@ const CreateDeploymentStepThree = observer(() => {
                 <div style={{ paddingTop: "4px" }}>
                   <FormControl style={{ width: "50%" }}>
                     <select name="sourceCluster" onChange={onChangeType}>
-                      <option value={""}>Select Cluster</option>
+                      <option value={""} selected disabled hidden>
+                        Select Source Cluster
+                      </option>
+                      {clusterListInWorkspace.map((cluster) => (
+                        <option value={cluster.clusterName}>
+                          {cluster.clusterName}
+                        </option>
+                      ))}
                     </select>
                   </FormControl>
                   <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
@@ -537,6 +592,10 @@ const CreateDeploymentStepThree = observer(() => {
 
     useEffect(() => {
       loadClusterList();
+    }, []);
+
+    useEffect(() => {
+      loadCluster(nodeName);
     }, []);
 
     return (
