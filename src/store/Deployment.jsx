@@ -222,6 +222,16 @@ class Deployment {
     })
   }
 
+  loadClustersList = () => {
+    runInAction(() => {
+      const clusterList = [];
+      
+      [].map((cluster) => { // fetch한 clusterList 변환
+        clusterList.push(cluster.clusterName);
+      })
+    })
+  }
+
   loadProjectList = (workspace) => {
     runInAction(() => {
       this.projectList = [

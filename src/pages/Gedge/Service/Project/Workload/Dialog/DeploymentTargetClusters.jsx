@@ -181,13 +181,14 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
                           )}
                         </Draggable>
                       )}
+                      {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
               ))}
             </div>
             <div style={{ fontSize: "16px", marginTop: "20px", marginBottom: "10px" }}>Unselected Cluster List</div>
-            <Droppable droppableId="unselected" >
+            <Droppable droppableId="unselected">
               {(provided, snapshot) => (
                 <div ref={provided.innerRef} style={{ height: "150px", width: "23%", border: "1px dotted lightgrey", overflowY: "auto", padding: "8px" }}>
                   {unselected.map((item, index) => (
@@ -199,6 +200,7 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
                       )}
                     </Draggable>
                   ))}
+                  {provided.placeholder}
                 </div>
               )}
             </Droppable>

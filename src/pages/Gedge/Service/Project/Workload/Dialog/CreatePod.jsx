@@ -8,6 +8,9 @@ import { CTextField } from "@/components/textfields";
 import { CDialogNew } from "@/components/dialogs";
 import { randomString } from "@/utils/common-utils";
 import PodAddContainer from "./PodAddContainer";
+import CreatePodStepOne from "./CreatePodStepOne";
+import CreatePodStepTwo from "./CreatePodStepTwo";
+import CreatePodStepThree from "./CreatePodStepThree";
 
 const Button = styled.button`
   background-color: #fff;
@@ -65,74 +68,39 @@ const DeleteButton = styled.button`
 
 const CreatePod = observer((props) => {
   const { open } = props;
-  const [open2, setOpen2] = useState(false);
-  const [stepValue, setStepValue] = useState(1);
-
-  const { setProjectListinWorkspace } = projectStore;
-  const { postWorkload, postScheduler } = schedulerStore;
-
   const {
-    podName,
-    containerName,
-    containerImage,
-    containerPort,
-    workspace,
-    project,
-    content,
-    clearAll,
-    setContent,
     podInfo,
-    setPodInfo,
-    labelList,
-    initLabelList,
-    initContainer,
-    addLabelList,
-    removeLabelList,
-    removeContainer,
+    initPodInfo,
   } = podStore;
+
+  const [stepValue, setStepValue] = useState(1);
   const [input, setInput] = useState({ key: "", value: "" });
-  const [containerIndex, setContainerIndex] = useState(-1);
 
   const handleClose = () => {
     props.onClose && props.onClose();
-    initLabelList();
-    initContainer();
+    setStepValue(1);
     setInput({ key: "", value: "" });
   };
 
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const onChangeInput = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const onChange = (e) => {
-    setPodInfo(e.target.name, e.target.value);
-  };
-
   const createPod = () => {
-    console.log(
-      toJS({
-        podName: podInfo.podName,
-        labels: toJS(labelList),
-        pullSecret: podInfo.pullSecret,
-        volume: {
-          volumeName: podInfo.volumeName,
-          nfsServer: podInfo.nfsServer,
-          nfsPath: podInfo.nfsPath,
-        },
-        priority: podInfo.priority,
-        targetCluster: podInfo.targetCluster,
-        sourceCluster: podInfo.sourceCluster,
-        sourceNode: podInfo.sourceNode,
-        containers: toJS(podInfo.containers),
-      })
-    );
+    console.log(toJS(podInfo));
+    // console.log(
+    //   toJS({
+    //     podName: podInfo.podName,
+    //     labels: toJS(labelList),
+    //     pullSecret: podInfo.pullSecret,
+    //     volume: {
+    //       volumeName: podInfo.volumeName,
+    //       nfsServer: podInfo.nfsServer,
+    //       nfsPath: podInfo.nfsPath,
+    //     },
+    //     priority: podInfo.priority,
+    //     targetCluster: podInfo.targetCluster,
+    //     sourceCluster: podInfo.sourceCluster,
+    //     sourceNode: podInfo.sourceNode,
+    //     containers: toJS(podInfo.containers),
+    //   })
+    // );
     // const requestId = `${podName}-${randomString()}`;
 
     // postWorkload(requestId, workspace, project, "Pod");
@@ -140,279 +108,367 @@ const CreatePod = observer((props) => {
     // props.reloadFunc && props.reloadFunc();
   };
 
-  const addLabel = () => {
-    if (input.key !== "" && input.value !== "") {
-      addLabelList(input.key, input.value);
-      setInput({ key: "", value: "" });
+  useEffect(() => {
+    initPodInfo();
+    return () => {
+      initPodInfo();
+      
     }
-  };
-
-  const openTargetCluster = (index) => {
-    setOpen2(true);
-    setContainerIndex(index);
-  };
-
-  const removeContainers = (e, index) => {
-    e.stopPropagation();
-    removeContainer(index);
-  };
+  }, [])
 
   const CreatePodComponent = () => {
-    return (
-      <>
-        <PodAddContainer
-          containerIndex={containerIndex}
-          open={open2}
-          onClose={handleClose2}
-        ></PodAddContainer>
-        <table className="tb_data_new tb_write">
-          <tbody>
-            <tr>
-              <th>
-                Pod Name <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField
-                  type="text"
-                  placeholder="Pod Name"
-                  className="form_fullWidth"
-                  name="podName"
-                  onChange={onChange}
-                  value={podName}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th rowSpan={labelList.length + 2}>
-                Labels <span className="requried">*</span>
-              </th>
-            </tr>
-            {labelList.map((label, index) => (
-              <tr>
-                <td style={{ paddingLeft: "5px" }}>{label.key}</td>
-                <td style={{ paddingLeft: "5px" }}>{label.value}</td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => removeLabelList(index)}
-                >
-                  -
-                </Button>
-              </tr>
-            ))}
-            <tr>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Key"
-                  className="form_fullWidth"
-                  name="key"
-                  onChange={onChangeInput}
-                  value={input.key}
-                />
-              </td>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Value"
-                  className="form_fullWidth"
-                  name="value"
-                  onChange={onChangeInput}
-                  value={input.value}
-                />
-              </td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    borderRadius: "0",
-                  }}
-                  onClick={addLabel}
-                >
-                  +
-                </Button>
-              </td>
-            </tr>
-
-            <tr>
-              <th>
-                Pull Secret <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField
-                  type="text"
-                  placeholder="Pull Secrets"
-                  className="form_fullWidth"
-                  name="pullSecret"
-                  onChange={onChange}
-                  value={podName}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>Volume</th>
-              <td colSpan="3">
-                <table className="tb_data_new">
-                  <tbody className="tb_data_nodeInfo">
-                    <tr>
-                      <th>Name</th>
-                      <th>NFS Server</th>
-                      <th>NFS Path</th>
-                    </tr>
-                    <tr>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="Volume Name"
-                          className="form_fullWidth"
-                          name="volumeName"
-                          onChange={onChange}
-                          value={podName}
-                        />
-                      </td>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="NFS Server"
-                          className="form_fullWidth"
-                          name="nfsServer"
-                          onChange={onChange}
-                          value={podName}
-                        />
-                      </td>
-                      <td>
-                        <CTextField
-                          type="text"
-                          placeholder="NFS Path"
-                          className="form_fullWidth"
-                          name="nfsPath"
-                          onChange={onChange}
-                          value={podName}
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <th style={{ width: "30%" }}>
-                Priority <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="priority" onChange={onChange}>
-                    <option value={""}>Select Priority</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Target Clusters <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="targetCluster" onChange={onChange}>
-                    <option value={""}>Select Target Cluster</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Source Cluster <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="sourceCluster" onChange={onChange}>
-                    <option value={""}>Select Source Cluster</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Source Node <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select name="sourceNode" onChange={onChange}>
-                    <option value={""}>Select Source Node</option>
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
-            <tr>
-              <th>
-                Containers <span className="requried">*</span>
-              </th>
-              <td>
-                <Button
-                  style={{ marginBottom: "2px" }}
-                  onClick={() => openTargetCluster(-1)}
-                >
-                  + Add Container
-                </Button>
-                <div>
-                  {podInfo.containers.map((container, index) => (
-                    <Button
-                      style={{ marginTop: "2px", marginBottom: "2px" }}
-                      onClick={() => openTargetCluster(index)}
-                    >
-                      {container.containerName}
-                      <DeleteButton onClick={(e) => removeContainers(e, index)}>
-                        x
-                      </DeleteButton>
-                    </Button>
-                  ))}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginTop: "32px",
-          }}
-        >
+    if (stepValue === 1) {
+      return(
+        <>
+          <CreatePodStepOne />
           <div
             style={{
               display: "flex",
-              width: "300px",
-              justifyContent: "center",
+              justifyContent: "flex-end",
+              marginTop: "32px",
             }}
           >
-            <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={createPod}>생성</ButtonNext>
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={handleClose}>취소</Button>
+              <ButtonNext onClick={() => setStepValue(stepValue+1)}>다음</ButtonNext>
+            </div>
           </div>
-        </div>
-      </>
-    );
+        </>
+      )
+    } else if (stepValue === 2) {
+      return(
+        <>
+          <CreatePodStepTwo />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => setStepValue(stepValue-1)}>이전</Button>
+              <ButtonNext onClick={() => setStepValue(stepValue+1)}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      )
+    } else if (stepValue === 3) {
+      return(
+        <>
+          <CreatePodStepThree />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => setStepValue(stepValue-1)}>이전</Button>
+              <ButtonNext onClick={() => setStepValue(stepValue+1)}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      )
+    } else {
+      return(
+        <>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => setStepValue(stepValue-1)}>이전</Button>
+              <ButtonNext onClick={createPod}>확인</ButtonNext>
+            </div>
+          </div>
+        </>
+      )
+    }
+
+    // return (
+    //   <>
+    //     <PodAddContainer
+    //       containerIndex={containerIndex}
+    //       open={open2}
+    //       onClose={handleClose2}
+    //     ></PodAddContainer>
+    //     <table className="tb_data_new tb_write">
+    //       <tbody>
+    //         <tr>
+    //           <th>
+    //             Pod Name <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <CTextField
+    //               type="text"
+    //               placeholder="Pod Name"
+    //               className="form_fullWidth"
+    //               name="podName"
+    //               onChange={onChange}
+    //               value={podName}
+    //             />
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th rowSpan={labelList.length + 2}>
+    //             Labels <span className="requried">*</span>
+    //           </th>
+    //         </tr>
+    //         {labelList.map((label, index) => (
+    //           <tr>
+    //             <td style={{ paddingLeft: "5px" }}>{label.key}</td>
+    //             <td style={{ paddingLeft: "5px" }}>{label.value}</td>
+    //             <Button
+    //               style={{
+    //                 border: "none",
+    //                 height: "28px",
+    //                 width: "30px",
+    //                 fontSize: "20px",
+    //                 fontWeight: 600,
+    //                 lineHeight: 1,
+    //                 letterSpacing: "normal",
+    //                 color: "#36435c",
+    //                 backgroundColor: "#eff4f9",
+    //                 padding: "0 0 0 0",
+    //                 margin: "2px",
+    //                 borderRadius: "0",
+    //               }}
+    //               onClick={() => removeLabelList(index)}
+    //             >
+    //               -
+    //             </Button>
+    //           </tr>
+    //         ))}
+    //         <tr>
+    //           <td>
+    //             <CTextField
+    //               type="text"
+    //               placeholder="Key"
+    //               className="form_fullWidth"
+    //               name="key"
+    //               onChange={onChangeInput}
+    //               value={input.key}
+    //             />
+    //           </td>
+    //           <td>
+    //             <CTextField
+    //               type="text"
+    //               placeholder="Value"
+    //               className="form_fullWidth"
+    //               name="value"
+    //               onChange={onChangeInput}
+    //               value={input.value}
+    //             />
+    //           </td>
+    //           <td>
+    //             <Button
+    //               style={{
+    //                 border: "none",
+    //                 height: "28px",
+    //                 width: "30px",
+    //                 fontSize: "20px",
+    //                 fontWeight: 600,
+    //                 lineHeight: 1,
+    //                 letterSpacing: "normal",
+    //                 color: "#36435c",
+    //                 backgroundColor: "#eff4f9",
+    //                 padding: "0 0 0 0",
+    //                 borderRadius: "0",
+    //               }}
+    //               onClick={addLabel}
+    //             >
+    //               +
+    //             </Button>
+    //           </td>
+    //         </tr>
+
+    //         <tr>
+    //           <th>
+    //             Pull Secret <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <CTextField
+    //               type="text"
+    //               placeholder="Pull Secrets"
+    //               className="form_fullWidth"
+    //               name="pullSecret"
+    //               onChange={onChange}
+    //               value={podName}
+    //             />
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th>Volume</th>
+    //           <td colSpan="3">
+    //             <table className="tb_data_new">
+    //               <tbody className="tb_data_nodeInfo">
+    //                 <tr>
+    //                   <th>Name</th>
+    //                   <th>NFS Server</th>
+    //                   <th>NFS Path</th>
+    //                 </tr>
+    //                 <tr>
+    //                   <td>
+    //                     <CTextField
+    //                       type="text"
+    //                       placeholder="Volume Name"
+    //                       className="form_fullWidth"
+    //                       name="volumeName"
+    //                       onChange={onChange}
+    //                       value={podName}
+    //                     />
+    //                   </td>
+    //                   <td>
+    //                     <CTextField
+    //                       type="text"
+    //                       placeholder="NFS Server"
+    //                       className="form_fullWidth"
+    //                       name="nfsServer"
+    //                       onChange={onChange}
+    //                       value={podName}
+    //                     />
+    //                   </td>
+    //                   <td>
+    //                     <CTextField
+    //                       type="text"
+    //                       placeholder="NFS Path"
+    //                       className="form_fullWidth"
+    //                       name="nfsPath"
+    //                       onChange={onChange}
+    //                       value={podName}
+    //                     />
+    //                   </td>
+    //                 </tr>
+    //               </tbody>
+    //             </table>
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th style={{ width: "30%" }}>
+    //             Priority <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <FormControl className="form_fullWidth">
+    //               <select name="priority" onChange={onChange}>
+    //                 <option value={""}>Select Priority</option>
+    //               </select>
+    //             </FormControl>
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th>
+    //             Target Clusters <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <FormControl className="form_fullWidth">
+    //               <select name="targetCluster" onChange={onChange}>
+    //                 <option value={""}>Select Target Cluster</option>
+    //               </select>
+    //             </FormControl>
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th>
+    //             Source Cluster <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <FormControl className="form_fullWidth">
+    //               <select name="sourceCluster" onChange={onChange}>
+    //                 <option value={""}>Select Source Cluster</option>
+    //               </select>
+    //             </FormControl>
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th>
+    //             Source Node <span className="requried">*</span>
+    //           </th>
+    //           <td colSpan="3">
+    //             <FormControl className="form_fullWidth">
+    //               <select name="sourceNode" onChange={onChange}>
+    //                 <option value={""}>Select Source Node</option>
+    //               </select>
+    //             </FormControl>
+    //           </td>
+    //         </tr>
+    //         <tr>
+    //           <th>
+    //             Containers <span className="requried">*</span>
+    //           </th>
+    //           <td>
+    //             <Button
+    //               style={{ marginBottom: "2px" }}
+    //               onClick={() => openTargetCluster(-1)}
+    //             >
+    //               + Add Container
+    //             </Button>
+    //             <div>
+    //               {podInfo.containers.map((container, index) => (
+    //                 <Button
+    //                   style={{ marginTop: "2px", marginBottom: "2px" }}
+    //                   onClick={() => openTargetCluster(index)}
+    //                 >
+    //                   {container.containerName}
+    //                   <DeleteButton onClick={(e) => removeContainers(e, index)}>
+    //                     x
+    //                   </DeleteButton>
+    //                 </Button>
+    //               ))}
+    //             </div>
+    //           </td>
+    //         </tr>
+    //       </tbody>
+    //     </table>
+
+    //     <div
+    //       style={{
+    //         display: "flex",
+    //         justifyContent: "flex-end",
+    //         marginTop: "32px",
+    //       }}
+    //     >
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           width: "300px",
+    //           justifyContent: "center",
+    //         }}
+    //       >
+    //         <Button onClick={handleClose}>취소</Button>
+    //         <ButtonNext onClick={createPod}>생성</ButtonNext>
+    //       </div>
+    //     </div>
+    //   </>
+    // );
   };
 
   return (
