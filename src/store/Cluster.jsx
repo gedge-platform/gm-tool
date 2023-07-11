@@ -230,21 +230,15 @@ class Cluster {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.clusterListInWorkspace = data;
-          console.log(
-            "this.clusterListInWorkspace : ",
-            this.clusterListInWorkspace
-          );
           const list =
             type === ""
               ? data
               : data.filter((item) => item.clusterType === type);
           this.clusterList = list;
-          console.log("list : ", list);
           // this.clusterList = list.filter(
           //   (name) => name.clusterName !== "gm-cluster"
           // );
           this.clusterNameList = list.map((item) => item.clusterName);
-          console.log("this.clusterNameList : ", this.clusterNameList);
           this.totalElements = this.clusterList.length;
           this.totalPages = Math.ceil(this.clusterList.length / 10);
         });
@@ -253,7 +247,7 @@ class Cluster {
         this.paginationList();
       })
       .then(() => {
-        this.loadCluster(this.viewList[0].clusterNameList);
+        this.loadCluster(this.viewList[0].clusterName);
         this.loadClusterDetail(this.viewList[0].clusterName);
       });
   };
@@ -360,6 +354,7 @@ class Cluster {
           this.gpu = data;
           this.nodes =
             this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+          console.log("this.nodes :", this.nodes);
         });
       });
     return this.clusterDetail;
