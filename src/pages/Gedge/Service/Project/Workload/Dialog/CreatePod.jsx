@@ -11,6 +11,7 @@ import PodAddContainer from "./PodAddContainer";
 import CreatePodStepOne from "./CreatePodStepOne";
 import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
+import PodYaml from "./PodYaml";
 
 const Button = styled.button`
   background-color: #fff;
@@ -71,6 +72,7 @@ const CreatePod = observer((props) => {
   const {
     podInfo,
     initPodInfo,
+    initTargetClusters
   } = podStore;
 
   const [stepValue, setStepValue] = useState(1);
@@ -109,12 +111,11 @@ const CreatePod = observer((props) => {
   };
 
   useEffect(() => {
-    initPodInfo();
     return () => {
       initPodInfo();
-      
+      initTargetClusters();
     }
-  }, [])
+  }, [open])
 
   const CreatePodComponent = () => {
     if (stepValue === 1) {
@@ -192,6 +193,7 @@ const CreatePod = observer((props) => {
     } else {
       return(
         <>
+          <PodYaml />
           <div
             style={{
               display: "flex",

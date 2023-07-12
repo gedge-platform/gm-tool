@@ -115,7 +115,8 @@ const CreateDeployment = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
-    setContent
+    setContent,
+    initTargetClusters
   } = deploymentStore;
 
   const {
@@ -281,7 +282,9 @@ const CreateDeployment = observer((props) => {
     loadPVClaims();
     const YAML = require("json-to-pretty-yaml");
     setContent(YAML.stringify(template));
-    
+    return () => {
+      initTargetClusters();
+    }
   }, [stepValue]);
 
   const CreateDeploymentComponent = () => {

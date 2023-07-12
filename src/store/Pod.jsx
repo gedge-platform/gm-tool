@@ -88,6 +88,8 @@ class Pod {
   portList = [];
   variableList = [];
 
+  volumeList = [];
+
   podInfo = {
     podName: "",
     workspace: "",
@@ -104,15 +106,51 @@ class Pod {
 
     ],
     priority: {
-      name: "",
+      name: "GLowLatencyPriority",
       options: {
-
+        type: "fromNode"
       }
     },
     targetClusters: ""
   };
 
-  targetClusters = []
+  targetClusters = [];
+  unselectedClusters = [
+    "cluster0",
+    "cluster1",
+    "cluster2",
+    "cluster3",
+    "cluster4",
+    "cluster5",
+    "cluster6",
+  ];
+
+  initTargetClusters = () => {
+    runInAction(() => {
+      this.targetClusters = [];
+      this.unselectedClusters = [
+        "cluster0",
+        "cluster1",
+        "cluster2",
+        "cluster3",
+        "cluster4",
+        "cluster5",
+        "cluster6",
+      ];
+    })
+  }
+
+  setTargetClusters = (value) => {
+    runInAction(() => {
+      this.targetClusters = value;
+    })
+  }
+
+  setUnselectedClusters = (value) => {
+    runInAction(() => {
+      this.unselectedClusters = value;
+    })
+  }
 
   initPodInfo = () => {
     runInAction(() => {
@@ -132,9 +170,9 @@ class Pod {
     
         ],
         priority: {
-          name: "",
+          name: "GLowLatencyPriority",
           options: {
-    
+            type: "fromNode"
           }
         },
         targetClusters: ""
@@ -147,6 +185,12 @@ class Pod {
       this.podInfo[key] = value;
     });
   };
+
+  setPodInfoPriority = (key, value) => {
+    runInAction(() => {
+      this.podInfo.priority[key] = value;
+    })
+  }
 
   initLabelList = () => {
     runInAction(() => {
@@ -186,6 +230,25 @@ class Pod {
       this.podInfo.containers = this.podInfo.containers.filter(
         (_, index) => removeIndex !== index
       );
+    });
+  };
+
+  loadVolumeList = (pvcName) => {
+    runInAction(() => {
+      this.volumeList = [
+        {
+          name: "volume1",
+        },
+        {
+          name: "volume2",
+        },
+        {
+          name: "volume3",
+        },
+        {
+          name: "volume4",
+        },
+      ];
     });
   };
 

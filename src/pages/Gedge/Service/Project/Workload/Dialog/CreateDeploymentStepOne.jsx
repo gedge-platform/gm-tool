@@ -188,7 +188,7 @@ const CreateDeploymentStepOne = observer((props) => {
     }
   };
 
-  const openTargetCluster = (index) => {
+  const openAddContainer = (index) => {
     setOpen2(true);
     setContainerIndex(index);
   };
@@ -201,6 +201,11 @@ const CreateDeploymentStepOne = observer((props) => {
     setCheckPVCInDeployment(value);
     setDeploymentInfo("volume", value)
   };
+
+  const deleteContainer = (e, index) => {
+    e.stopPropagation();
+    removeContainer(index);
+  }
 
   useEffect(() => {
     loadWorkSpaceList();
@@ -353,7 +358,7 @@ const CreateDeploymentStepOne = observer((props) => {
             <td>
               <Button
                 style={{ marginBottom: "2px" }}
-                onClick={() => openTargetCluster(-1)}
+                onClick={() => openAddContainer(-1)}
               >
                 + Add Container
               </Button>
@@ -361,10 +366,10 @@ const CreateDeploymentStepOne = observer((props) => {
                 {deploymentInfo.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
-                    onClick={() => openTargetCluster(index)}
+                    onClick={() => openAddContainer(index)}
                   >
-                    {container.containerName}
-                    <DeleteButton onClick={(e) => removeContainers(e, index)}>
+                    {container?.containerName}
+                    <DeleteButton onClick={(e) => deleteContainer(e, index)}>
                       x
                     </DeleteButton>
                   </Button>

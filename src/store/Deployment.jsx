@@ -210,6 +210,21 @@ class Deployment {
     "cluster6",
   ];
 
+  initTargetClusters = () => {
+    runInAction(() => {
+      this.targetClusters = [];
+      this.unselectedClusters = [
+        "cluster0",
+        "cluster1",
+        "cluster2",
+        "cluster3",
+        "cluster4",
+        "cluster5",
+        "cluster6",
+      ];
+    })
+  }
+
   setTargetClusters = (value) => {
     runInAction(() => {
       this.targetClusters = value;
