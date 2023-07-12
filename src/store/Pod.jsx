@@ -90,62 +90,57 @@ class Pod {
 
   podInfo = {
     podName: "",
-    labels: [
-      // {
-      //   key: "",
-      //   value: ""
-      // }
-    ],
-    pullSecrets: "",
-    volume: {
-      name: "",
-      nfsServer: "",
-      nfsPath: "",
-    },
-    priority: "",
-    targetClusters: "",
-    sourceNode: "",
+    workspace: "",
+    project: "",
+    replicas: 1,
+    volume: "",
     containers: [
-      // {
-      //   general: {
-      //     containerName: "",
-      //     containerImage: "",
-      //     pullPolicy: "",
-      //     ports: [
-      //       {
-      //         serviceType: "",
-      //         name: "",
-      //         privateContainerPort: "",
-      //         protocol: "",
-      //         host: {
-      //         }
-      //       },
-      //     ],
-      //     command: "",
-      //     arguments: "",
-      //     workingDir: "",
-      //     variables: [
-      //       {
-      //         type: "",
-      //         variableName: "",
-      //         value: {
-      //         }
-      //       }
-      //     ]
-      //   },
-      //   resource: {
-      //     cpuReservation: "",
-      //     memoryReservation: "",
-      //     cpuLimit: "",
-      //     memoryLimit: "",
-      //     nvidiaGPULimitReservation: ""
-      //   },
-      //   storage: {
-      //     volume: ""
-      //   }
-      // },
+
     ],
+    labels: [
+
+    ],
+    annotations: [
+
+    ],
+    priority: {
+      name: "",
+      options: {
+
+      }
+    },
+    targetClusters: ""
   };
+
+  targetClusters = []
+
+  initPodInfo = () => {
+    runInAction(() => {
+      this.podInfo = {
+        podName: "",
+        workspace: "",
+        project: "",
+        replicas: 1,
+        volume: "",
+        containers: [
+    
+        ],
+        labels: [
+    
+        ],
+        annotations: [
+    
+        ],
+        priority: {
+          name: "",
+          options: {
+    
+          }
+        },
+        targetClusters: ""
+      };
+    })
+  }
 
   setPodInfo = (key, value) => {
     runInAction(() => {

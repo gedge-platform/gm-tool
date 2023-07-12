@@ -199,6 +199,40 @@ class Deployment {
     },
   ];
 
+  targetClusters = [];
+  unselectedClusters = [
+    "cluster0",
+    "cluster1",
+    "cluster2",
+    "cluster3",
+    "cluster4",
+    "cluster5",
+    "cluster6",
+  ];
+
+  setTargetClusters = (value) => {
+    runInAction(() => {
+      this.targetClusters = value;
+    });
+  };
+
+  setUnselectedClusters = (value) => {
+    runInAction(() => {
+      this.unselectedClusters = value;
+    });
+  };
+
+  loadClustersList = () => {
+    runInAction(() => {
+      const clusterList = [];
+
+      [].map((cluster) => {
+        // fetch한 clusterList 변환
+        clusterList.push(cluster.clusterName);
+      });
+    });
+  };
+
   loadProjectList = (workspace) => {
     runInAction(() => {
       this.projectList = [
@@ -245,17 +279,17 @@ class Deployment {
 
   addObjectInDeploymentInfo = (name, key, value) => {
     runInAction(() => {
-      this.deploymentInfo[name].push({key: key, value: value});
-    })
-  }
+      this.deploymentInfo[name].push({ key: key, value: value });
+    });
+  };
 
   removeObjectInDeploymentInfo = (name, removeIndex) => {
     runInAction(() => {
       this.deploymentInfo[name] = this.deploymentInfo[name].filter(
         (_, index) => removeIndex !== index
-      )
-    })
-  }
+      );
+    });
+  };
 
   initDeploymentInfo = () => {
     runInAction(() => {
@@ -370,6 +404,13 @@ class Deployment {
   setPriority = (value) => {
     runInAction(() => {
       this.priority = value;
+    });
+  };
+
+  priorityNodes = [];
+  setPriorityNodes = (value) => {
+    runInAction(() => {
+      this.priorityNodes = value;
     });
   };
 
