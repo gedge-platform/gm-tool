@@ -197,8 +197,11 @@ const CreateDeploymentStepOne = observer((props) => {
     setOpen2(false);
   };
 
-  const onChangeCheckPVC = ({ target: { value } }) => {
-    setCheckPVCInDeployment(value);
+  const onChangeCheckPVC = ({ target: { name, value } }) => {
+    console.log("value : ", value);
+    console.log("name : ", name);
+    setCheckPVCInDeployment(name, value);
+    setDeploymentInfo("pvcName", name);
     setDeploymentInfo("volume", value);
   };
 
@@ -326,6 +329,7 @@ const CreateDeploymentStepOne = observer((props) => {
                     <th style={{ textAlign: "center" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Namespace</th>
                     <th style={{ textAlign: "center" }}>cluster</th>
+                    <th style={{ textAlign: "center" }}>volume</th>
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
@@ -334,15 +338,16 @@ const CreateDeploymentStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
-                          checked={deploymentInfo.volume === pvc.name}
-                          name="clusterCheck"
+                          checked={deploymentInfo.pvcName === pvc.name}
+                          name={pvc.name}
                           onChange={onChangeCheckPVC}
-                          value={pvc.name}
+                          value={pvc.volume}
                         />
                       </td>
                       <td>{pvc.name}</td>
                       <td>{pvc.namespace}</td>
                       <td>{pvc.clusterName}</td>
+                      <td>{pvc.volume ? pvc.volume : ""}</td>
                     </tr>
                   ))}
                 </tbody>

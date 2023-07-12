@@ -27,6 +27,7 @@ import claimStore from "../../../../../../store/Claim";
 import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
 import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
+import { values } from "lodash-es";
 
 const Button = styled.button`
   background-color: #fff;
@@ -104,24 +105,25 @@ const CreateDeployment = observer((props) => {
   const [stepValue, setStepValue] = useState(1);
 
   const { containerInfo } = DeploymentAddContainer;
-  console.log("containerInfo :", containerInfo);
 
   const {
     initLabelList,
-    addLabelList,
-    removeLabelList,
     annotationList,
     initAnnotationList,
-    addAnnotationList,
-    removeAnnotationList,
     deploymentInfo,
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
-    setCreateDeploymentLabels,
-    setCreateDeploymentAnnotaions,
     setPriority,
     setContent,
+    setClearLA,
+    setTemplate,
+    labelsList,
+    labels,
+    annotations,
+    labelInput,
+    annotationInput,
+    postDeploymentGM,
   } = deploymentStore;
 
   const {
@@ -162,45 +164,95 @@ const CreateDeployment = observer((props) => {
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
 
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: deploymentName,
-  //     namespace: project,
-  //     labels: {
-  //       app: deploymentName,
-  //     },
-  //   },
-  //   spec: {
-  //     replicas: podReplicas,
-  //     selector: {
-  //       matchLabels: {
-  //         app: deploymentName,
-  //       },
-  //     },
-  //     template: {
-  //       metadata: {
-  //         labels: {
-  //           app: deploymentName,
-  //         },
-  //       },
-  //       spec: {
-  //         containers: [
-  //           {
-  //             image: containerImage,
-  //             name: containerName,
-  //             ports: [
-  //               {
-  //                 containerPort: Number(containerPort),
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   },
-  // };
+  const template = {
+    apiVersion: "apps/v1",
+    kind: "Deployment",
+    metadata: {
+      name: deploymentInfo.deploymentName,
+      annotations: annotationInput,
+      labels: labelInput,
+      namespace: "default",
+      // workspace: deploymentInfo.workspace,
+      // project: deploymentInfo.project,
+    },
+    spec: {
+      selector: {
+        matchLabels: labelInput,
+      },
+      replicas: deploymentInfo.replicas,
+      // selector: {
+      //   matchLabels: {
+      //     app: "",
+      //   },
+      // },
+      template: {
+        metadata: {
+          annotations: annotationInput,
+          labels: labelInput,
+        },
+        spec: {
+          imagePullSecert: deploymentInfo.containers?.map((e) => {
+            return { name: e.pullSecret };
+          }),
+          containers: deploymentInfo.containers?.map((e) => {
+            return {
+              name: e.containerName,
+              image: e.containerImage,
+              imagePullPolicy: e.pullPolicy,
+              command: e.command,
+              args: e.arguments,
+              resources: {
+                limits: {
+                  // cpu: e.cpuLimit,
+                  memory: e.memoryLimit + "Mi",
+                },
+                requests: {
+                  cpu: e.cpuReservation + "m",
+                  memory: e.memoryReservation + "Mi",
+                },
+              },
+              ports: e.ports.map((i) => {
+                return {
+                  name: i.name,
+                  containerPort: i.privateContainerPort,
+                  protocol: i.protocol,
+                };
+              }),
+              envForm: e.variables.map((i) => {
+                const item = i.type + "Ref";
+                return {
+                  [item]: {
+                    name: i.variableName,
+                    // value: i.value,
+                  },
+                };
+              }),
+              env: e.variables.map((i) => {
+                return {
+                  name: i.variableName,
+                  value: i.value,
+                };
+              }),
+              volumeMounts: e.volumes.map((i) => {
+                return {
+                  mountPath: i.subPathInVolume,
+                  name: i.name,
+                };
+              }),
+            };
+          }),
+        },
+      },
+      volumes: [
+        {
+          name: deploymentInfo.volume,
+          persistentVolumeClaim: deploymentInfo.pvcName,
+        },
+      ],
+    },
+  };
+  // console.log("containerInfo :", deploymentInfo);
+  // console.log("createDeploymentLabels : ", createDeploymentLabels);
 
   // const template = {
   //   apiVersion: "apps/v1",
@@ -267,10 +319,7 @@ const CreateDeployment = observer((props) => {
     props.onClose && props.onClose();
     setStepValue(1);
     initDeploymentInfo();
-    initLabelList();
-    initAnnotationList();
-    setCreateDeploymentLabels({ key: "", value: "" });
-    setCreateDeploymentAnnotaions({ key: "", value: "" });
+    setClearLA();
     setProjectDisable(true);
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
@@ -288,19 +337,25 @@ const CreateDeployment = observer((props) => {
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
     console.log(toJS(deploymentInfo));
+    // createDeployment(require("json-to-pretty-yaml").stringify(template));
 
     //setProjectDisable(true);
 
-    // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
     // handleClose();
     // props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {
+    setClearLA();
     setStepValue(2);
   };
 
   const onClickStepThree = (e) => {
+    const LabelKeyArr = [];
+    const AnnotationKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
     setStepValue(3);
   };
 
@@ -323,10 +378,13 @@ const CreateDeployment = observer((props) => {
   useEffect(() => {
     loadWorkSpaceList();
     loadPVClaims();
-    // const YAML = require("json-to-pretty-yaml");
-    // setContent(YAML.stringify(template));
+    if (stepValue === 4) {
+      setTemplate(template);
+      const YAML = require("json-to-pretty-yaml");
+      setContent(YAML.stringify(template));
+    }
     // }, [stepValue]);
-  }, []);
+  }, [stepValue]);
 
   const CreateDeploymentComponent = () => {
     if (stepValue === 1) {
@@ -405,7 +463,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml />
+          <DeploymentYaml labelsList={labelsList} />
           <div
             style={{
               display: "flex",
