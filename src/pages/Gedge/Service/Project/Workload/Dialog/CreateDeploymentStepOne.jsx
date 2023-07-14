@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
-import DeploymentPodSettins from "./DeploymentPodSettins";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  schedulerStore,
-  volumeStore,
-  StorageClassStore,
-} from "@/store";
-import DeploymentYaml from "./DeploymentYaml";
-import DeploymentPopup from "./DeploymentPopup";
-import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
-import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
-import { swalError } from "@/utils/swal-utils";
-import { CDialogNew } from "@/components/dialogs";
-import { toJS } from "mobx";
+import { deploymentStore, projectStore } from "@/store";
 import DeploymentAddContainer from "./DeploymentAddContainer";
 import workspaceStore from "../../../../../../store/WorkSpace";
-import clusterStore from "../../../../../../store/Cluster";
-import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
 
 const Button = styled.button`
@@ -32,7 +15,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -41,7 +23,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const DeleteButton = styled.button`
@@ -208,7 +189,7 @@ const CreateDeploymentStepOne = observer((props) => {
   const deleteContainer = (e, index) => {
     e.stopPropagation();
     removeContainer(index);
-  }
+  };
 
   useEffect(() => {
     loadWorkSpaceList();

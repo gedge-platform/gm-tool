@@ -92,22 +92,12 @@ const Table = styled.table`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
 
-  const { containerInfo } = DeploymentAddContainer;
-
   const {
-    initLabelList,
-    annotationList,
-    initAnnotationList,
     deploymentInfo,
     initDeploymentInfo,
-    setDeploymentInfo,
-    removeContainer,
-    setPriority,
     setContent,
-    initTargetClusters,
     setClearLA,
     setTemplate,
     labelsList,
@@ -116,50 +106,15 @@ const CreateDeployment = observer((props) => {
     labelInput,
     annotationInput,
     postDeploymentGM,
-    priority,
-    targetClusters,
   } = deploymentStore;
 
-  const {
-    setVolumeName,
-    setAccessMode,
-    setVolumeCapacity,
-    volumeCapacity,
-    volumeName,
-    selectClusters,
-    accessMode,
-  } = volumeStore;
+  const { loadPVClaims } = claimStore;
 
-  const {
-    loadPVClaims,
-    pvClaimListInDeployment,
-    checkPVCInDeployment,
-    setCheckPVCInDeployment,
-  } = claimStore;
+  const { loadWorkSpaceList } = workspaceStore;
 
-  const { setStorageClass, selectStorageClass } = StorageClassStore;
-  const { postWorkload, postScheduler } = schedulerStore;
-  const {
-    loadWorkSpaceList,
-    workSpaceList,
-    loadWorkspaceDetail,
-    selectClusterInfo,
-  } = workspaceStore;
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-  } = projectStore;
-  const { loadClusterList, clusterList, clusterListInWorkspace } = clusterStore;
-  const { podListInclusterAPI, podListIncluster } = podStore;
-
-  const [containerIndex, setContainerIndex] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-
-  // console.log(priority);
-  // console.log(deploymentInfo);
 
   const template = {
     apiVersion: "apps/v1",
@@ -169,19 +124,12 @@ const CreateDeployment = observer((props) => {
       annotations: annotationInput,
       labels: labelInput,
       namespace: "default",
-      // workspace: deploymentInfo.workspace,
-      // project: deploymentInfo.project,
     },
     spec: {
       selector: {
         matchLabels: labelInput,
       },
       replicas: deploymentInfo.replicas,
-      // selector: {
-      //   matchLabels: {
-      //     app: "",
-      //   },
-      // },
       template: {
         metadata: {
           annotations: annotationInput,
@@ -220,7 +168,6 @@ const CreateDeployment = observer((props) => {
                 return {
                   [item]: {
                     name: i.variableName,
-                    // value: i.value,
                   },
                 };
               }),
@@ -258,14 +205,11 @@ const CreateDeployment = observer((props) => {
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
   };
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
-    handleClose();
-    props.reloadFunc && props.reloadFunc();
+    // handleClose();
+    // props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {

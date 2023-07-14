@@ -75,7 +75,6 @@ const DeploymentAddContainer = observer((props) => {
       ...containerInfo,
       [e.target.name]: e.target.value,
     });
-    console.log(containerInfo);
   };
 
   const onChangePort = (e, index) => {

@@ -257,7 +257,6 @@ class Cluster {
       .get(`${SERVER_URL}/spider/vmList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("vmlist", data);
           const list = data;
           this.clusterList = list;
           this.clusterNameList = list.map((item) => item.IId.NameId);
@@ -275,16 +274,11 @@ class Cluster {
       .get(`${SERVER_URL}/spider/specList?provider=${provider}&type=image`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("vmImageList", data);
           const list = data;
           this.vmImageList = list;
-          // this.clusterNameList = list.map(item => item.IId.NameId);
           this.totalElements = list.length;
         });
       });
-    // .then(() => {
-    //   this.convertList(this.clusterList, this.setClusterList);
-    // });
   };
 
   loadSpecList = async (provider) => {
@@ -292,16 +286,11 @@ class Cluster {
       .get(`${SERVER_URL}/spider/specList?provider=${provider}&type=flavor`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("vmSpecList", data);
           const list = data;
           this.vmSpecList = list;
-          // this.clusterNameList = list.map(item => item.IId.NameId);
           this.totalElements = list.length;
         });
       });
-    // .then(() => {
-    //   this.convertList(this.clusterList, this.setClusterList);
-    // });
   };
 
   postVM = async (data, callback) => {
@@ -310,7 +299,6 @@ class Cluster {
         `${SERVER_URL}/spider/vm?name=${data.name}&config=${data.config}-config&image=${data.image}&flavor=${data.flavor}&disk=${data.disk}`
       )
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           if (res.status === 201) {
             Swal.close();
@@ -354,7 +342,6 @@ class Cluster {
           this.gpu = data;
           this.nodes =
             this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
-          console.log("this.nodes :", this.nodes);
         });
       });
     return this.clusterDetail;
@@ -366,25 +353,6 @@ class Cluster {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dataUsage = data;
-          // this.clusterName = clusterName;
-          // this.cloudDashboardDetail = data;
-          // this.clusterInfo = data.ClusterInfo;
-          // this.address = data.ClusterInfo.address;
-          // this.nodeInfo = data.nodeInfo;
-          // this.type = this.nodeInfo.map(val => val.type);
-          // this.master = this.type.reduce((cnt, element) => cnt + ("master" === element), 0);
-          // this.worker = this.type.reduce((cnt, element) => cnt + ("worker" === element), 0);
-          // this.cpuUsage = data.cpuUsage;
-          // this.cpuUtil = data.cpuUtil;
-          // this.cpuTotal = data.cpuTotal;
-          // this.memoryUsage = data.memoryUsage;
-          // this.memoryUtil = data.memoryUtil;
-          // this.memoryTotal = data.memoryTotal;
-          // this.diskUsage = data.diskUsage;
-          // this.diskUtil = data.diskUtil;
-          // this.diskTotal = data.diskTotal;
-          // this.resourceCnt = data.resourceCnt;
-          // this.nodeRunning = data.nodeRunning;
         });
       });
   };
@@ -396,6 +364,7 @@ class Cluster {
       .get(`${SERVER_URL}/clusters?id=${id}&project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
+
   loadClusterInWorkspace = async (workspace) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -429,11 +398,9 @@ class Cluster {
       ...data,
       enabled: true,
     };
-    // return
     await axios
       .post(`${SERVER_URL}/clusters`, body)
       .then((res) => {
-        console.log("## : ", res);
         runInAction(() => {
           if (res.status === 201) {
             swalError("클러스터를 추가하였습니다.", callback);
