@@ -70,8 +70,10 @@ class Deployment {
   strategy = {
     type: {},
   };
-  labels = {};
-  annotations = {};
+  // labels = {};
+  // annotations = {};
+  labels = [];
+  annotations = [];
 
   containersTemp = [
     {
@@ -123,19 +125,31 @@ class Deployment {
   labelList = [];
   annotationList = [];
 
+  labelInput = [];
+  labelKey = "";
+  labelValue = "";
+
+  labelInputKey = "";
+  labelInputValue = "";
+
+  annotationInput = [];
+  annotationKey = "";
+  annotationValue = "";
+
   deploymentInfo = {
     deploymentName: "",
     workspace: "",
     project: "",
     replicas: 1,
     volume: "",
+    pvcName: "",
     containers: [],
     labels: [],
     annotations: [],
     priority: {
       name: "GLowLatencyPriority",
       options: {
-        type: "fromNode",
+        type: "cluster",
         //data: {}
       },
     },
@@ -222,8 +236,8 @@ class Deployment {
         "cluster5",
         "cluster6",
       ];
-    })
-  }
+    });
+  };
 
   setTargetClusters = (value) => {
     runInAction(() => {
@@ -240,11 +254,93 @@ class Deployment {
   loadClustersList = () => {
     runInAction(() => {
       const clusterList = [];
+    });
+  };
 
-      [].map((cluster) => {
-        // fetch한 clusterList 변환
-        clusterList.push(cluster.clusterName);
+  setTemplate = (template) => {
+    runInAction(() => {
+      delete template.metadata.labels[""];
+      delete template.metadata.annotations[""];
+      delete template.spec.template.metadata.labels[""];
+      delete template.spec.template.metadata.annotations[""];
+      delete template.spec.selector.matchLabels[""];
+    });
+  };
+
+  setTemplateLabel = () => {
+    runInAction(() => {
+      this.labels.map((data) => {
+        this.labelInput[data.labelKey] = data.labelValue;
       });
+    });
+  };
+
+  setTemplateAnnotation = () => {
+    runInAction(() => {
+      this.annotations.map((data) => {
+        this.annotationInput[data.annotationKey] = data.annotationValue;
+      });
+    });
+  };
+
+  setLabelInput = (value) => {
+    runInAction(() => {
+      this.labelInput = value;
+    });
+  };
+
+  setLabels = (value) => {
+    runInAction(() => {
+      this.labels = value;
+    });
+  };
+
+  setClearLA = () => {
+    runInAction(() => {
+      this.labelKey = "";
+      this.labelValue = "";
+      this.annotationKey = "";
+      this.annotationValue = "";
+      this.labels = [];
+      this.annotations = [];
+    });
+  };
+
+  inputLabelKey = "";
+
+  setInputLabelKey = (value) => {
+    runInAction(() => {
+      this.labelKey = value;
+    });
+  };
+
+  setInputLabelValue = (value) => {
+    runInAction(() => {
+      this.labelValue = value;
+    });
+  };
+
+  setAnnotations = (value) => {
+    runInAction(() => {
+      this.annotations = value;
+    });
+  };
+
+  setInputAnnotationKey = (value) => {
+    runInAction(() => {
+      this.annotationKey = value;
+    });
+  };
+
+  setInputAnnotationValue = (value) => {
+    runInAction(() => {
+      this.annotationValue = value;
+    });
+  };
+
+  setAnnotationInput = (value) => {
+    runInAction(() => {
+      this.annotationInput = value;
     });
   };
 
@@ -329,61 +425,15 @@ class Deployment {
     });
   };
 
-  createDeploymentLabels = {
-    key: "",
-    value: "",
-  };
-  setCreateDeploymentLabels = (value) => {
-    runInAction(() => {
-      this.createDeploymentLabels = value;
-    });
-  };
-
-  createDeploymentAnnotaions = {
-    key: "",
-    value: "",
-  };
-
-  setCreateDeploymentAnnotaions = (value) => {
-    runInAction(() => {
-      this.createDeploymentAnnotaions = value;
-    });
-  };
-
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
     });
   };
 
-  addLabelList = (key, value) => {
-    runInAction(() => {
-      this.labelList.push({ key: key, value: value });
-    });
-  };
-  removeLabelList = (removeIndex) => {
-    runInAction(() => {
-      this.labelList = this.labelList.filter(
-        (_, index) => removeIndex !== index
-      );
-    });
-  };
-
   initAnnotationList = () => {
     runInAction(() => {
       this.annotationList = [];
-    });
-  };
-  addAnnotationList = (key, value) => {
-    runInAction(() => {
-      this.annotationList.push({ key: key, value: value });
-    });
-  };
-  removeAnnotationList = (removeIndex) => {
-    runInAction(() => {
-      this.annotationList = this.annotationList.filter(
-        (_, index) => removeIndex !== index
-      );
     });
   };
 
@@ -395,6 +445,7 @@ class Deployment {
   addContainer = async (container) => {
     runInAction(() => {
       this.deploymentInfo.containers.push(container);
+      console.log(this.deploymentInfo.containers);
     });
   };
   editContainer = (editIndex, container) => {
@@ -683,13 +734,14 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
-    const { selectClusters } = volumeStore;
-    const YAML = require("yamljs");
+    const body = this.content;
+    const options = encodeURI(JSON.stringify(this.priority.options));
+    const requestId = "requestId12";
 
     await axios
       .post(
-        `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
-        YAML.parse(this.content)
+        `http://101.79.1.138:8013/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+        body
       )
       .then((res) => {
         if (res.status === 201) {

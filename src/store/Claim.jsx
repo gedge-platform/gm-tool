@@ -53,10 +53,12 @@ class Claim {
   annotationValue = "";
   pvClaimListInDeployment = [];
   checkPVCInDeployment = "";
+  volumeName = "";
 
-  setCheckPVCInDeployment = (value) => {
+  setCheckPVCInDeployment = (pvcName, volume) => {
     runInAction(() => {
-      this.checkPVCInDeployment = value;
+      this.checkPVCInDeployment = pvcName;
+      this.volumeName = volume;
     });
   };
 

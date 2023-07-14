@@ -96,22 +96,16 @@ class Pod {
     project: "",
     replicas: 1,
     volume: "",
-    containers: [
-
-    ],
-    labels: [
-
-    ],
-    annotations: [
-
-    ],
+    containers: [],
+    labels: [],
+    annotations: [],
     priority: {
       name: "GLowLatencyPriority",
       options: {
-        type: "fromNode"
-      }
+        type: "fromNode",
+      },
     },
-    targetClusters: ""
+    targetClusters: "",
   };
 
   targetClusters = [];
@@ -137,20 +131,20 @@ class Pod {
         "cluster5",
         "cluster6",
       ];
-    })
-  }
+    });
+  };
 
   setTargetClusters = (value) => {
     runInAction(() => {
       this.targetClusters = value;
-    })
-  }
+    });
+  };
 
   setUnselectedClusters = (value) => {
     runInAction(() => {
       this.unselectedClusters = value;
-    })
-  }
+    });
+  };
 
   initPodInfo = () => {
     runInAction(() => {
@@ -160,25 +154,19 @@ class Pod {
         project: "",
         replicas: 1,
         volume: "",
-        containers: [
-    
-        ],
-        labels: [
-    
-        ],
-        annotations: [
-    
-        ],
+        containers: [],
+        labels: [],
+        annotations: [],
         priority: {
           name: "GLowLatencyPriority",
           options: {
-            type: "fromNode"
-          }
+            type: "fromNode",
+          },
         },
-        targetClusters: ""
+        targetClusters: "",
       };
-    })
-  }
+    });
+  };
 
   setPodInfo = (key, value) => {
     runInAction(() => {
@@ -189,8 +177,8 @@ class Pod {
   setPodInfoPriority = (key, value) => {
     runInAction(() => {
       this.podInfo.priority[key] = value;
-    })
-  }
+    });
+  };
 
   initLabelList = () => {
     runInAction(() => {

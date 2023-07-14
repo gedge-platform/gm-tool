@@ -145,6 +145,7 @@ const CreateDeploymentStepOne = observer((props) => {
     loadWorkSpaceList,
     workSpaceList,
     loadWorkspaceDetail,
+    workSpaceDetail,
     selectClusterInfo,
   } = workspaceStore;
 
@@ -163,13 +164,13 @@ const CreateDeploymentStepOne = observer((props) => {
 
   const onChange = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
-  }
+  };
 
   const onChangeWorkspace = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
     loadProjectListInWorkspace(e.target.value);
     loadWorkspaceDetail(e.target.value);
-  }
+  };
 
   const onChangePod = async ({ target: { name, value } }) => {
     let projectNameTemp = "";
@@ -179,7 +180,6 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
-      // setPrioritytDisable(false);
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);
@@ -197,9 +197,12 @@ const CreateDeploymentStepOne = observer((props) => {
     setOpen2(false);
   };
 
-  const onChangeCheckPVC = ({ target: { value } }) => {
-    setCheckPVCInDeployment(value);
-    setDeploymentInfo("volume", value)
+  const onChangeCheckPVC = ({ target: { name, value } }) => {
+    console.log("value : ", value);
+    console.log("name : ", name);
+    setCheckPVCInDeployment(name, value);
+    setDeploymentInfo("pvcName", name);
+    setDeploymentInfo("volume", value);
   };
 
   const deleteContainer = (e, index) => {
@@ -209,7 +212,7 @@ const CreateDeploymentStepOne = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -262,7 +265,11 @@ const CreateDeploymentStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="workspace" onChange={onChangeWorkspace} value={deploymentInfo.workspace}>
+                <select
+                  name="workspace"
+                  onChange={onChangeWorkspace}
+                  value={deploymentInfo.workspace}
+                >
                   <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
@@ -327,6 +334,7 @@ const CreateDeploymentStepOne = observer((props) => {
                     <th style={{ textAlign: "center" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Namespace</th>
                     <th style={{ textAlign: "center" }}>cluster</th>
+                    <th style={{ textAlign: "center" }}>volume</th>
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
@@ -335,15 +343,16 @@ const CreateDeploymentStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
-                          checked={deploymentInfo.volume === pvc.name}
-                          name="clusterCheck"
+                          checked={deploymentInfo.pvcName === pvc.name}
+                          name={pvc.name}
                           onChange={onChangeCheckPVC}
-                          value={pvc.name}
+                          value={pvc.volume}
                         />
                       </td>
                       <td>{pvc.name}</td>
                       <td>{pvc.namespace}</td>
                       <td>{pvc.clusterName}</td>
+                      <td>{pvc.volume ? pvc.volume : ""}</td>
                     </tr>
                   ))}
                 </tbody>

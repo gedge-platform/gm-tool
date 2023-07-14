@@ -5,7 +5,7 @@ import podStore from "../../../../../../store/Pod";
 const PodYaml = observer((props) => {
   const { content } = podStore;
 
-  return(
+  return (
     <>
       <div className="step-container">
         <div className="signup-step">
@@ -50,7 +50,7 @@ const PodYaml = observer((props) => {
         readOnly={true}
       />
     </>
-  )
-})
+  );
+});
 
 export default PodYaml;
