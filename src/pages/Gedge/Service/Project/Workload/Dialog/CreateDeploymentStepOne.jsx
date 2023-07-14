@@ -1,28 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
-import DeploymentPodSettins from "./DeploymentPodSettins";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  schedulerStore,
-  volumeStore,
-  StorageClassStore,
-} from "@/store";
-import DeploymentYaml from "./DeploymentYaml";
-import DeploymentPopup from "./DeploymentPopup";
-import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
-import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
-import { swalError } from "@/utils/swal-utils";
-import { CDialogNew } from "@/components/dialogs";
-import { toJS } from "mobx";
+import { deploymentStore, projectStore } from "@/store";
 import DeploymentAddContainer from "./DeploymentAddContainer";
 import workspaceStore from "../../../../../../store/WorkSpace";
-import clusterStore from "../../../../../../store/Cluster";
-import podStore from "../../../../../../store/Pod";
 import claimStore from "../../../../../../store/Claim";
 
 const Button = styled.button`
@@ -32,7 +15,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -41,7 +23,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const DeleteButton = styled.button`
@@ -145,6 +126,7 @@ const CreateDeploymentStepOne = observer((props) => {
     loadWorkSpaceList,
     workSpaceList,
     loadWorkspaceDetail,
+    workSpaceDetail,
     selectClusterInfo,
   } = workspaceStore;
 
@@ -163,13 +145,13 @@ const CreateDeploymentStepOne = observer((props) => {
 
   const onChange = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
-  }
+  };
 
   const onChangeWorkspace = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
     loadProjectListInWorkspace(e.target.value);
     loadWorkspaceDetail(e.target.value);
-  }
+  };
 
   const onChangePod = async ({ target: { name, value } }) => {
     let projectNameTemp = "";
@@ -179,7 +161,6 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
-      // setPrioritytDisable(false);
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);
@@ -188,7 +169,7 @@ const CreateDeploymentStepOne = observer((props) => {
     }
   };
 
-  const openTargetCluster = (index) => {
+  const openAddContainer = (index) => {
     setOpen2(true);
     setContainerIndex(index);
   };
@@ -197,14 +178,22 @@ const CreateDeploymentStepOne = observer((props) => {
     setOpen2(false);
   };
 
-  const onChangeCheckPVC = ({ target: { value } }) => {
-    setCheckPVCInDeployment(value);
-    setDeploymentInfo("volume", value)
+  const onChangeCheckPVC = ({ target: { name, value } }) => {
+    console.log("value : ", value);
+    console.log("name : ", name);
+    setCheckPVCInDeployment(name, value);
+    setDeploymentInfo("pvcName", name);
+    setDeploymentInfo("volume", value);
+  };
+
+  const deleteContainer = (e, index) => {
+    e.stopPropagation();
+    removeContainer(index);
   };
 
   useEffect(() => {
     loadWorkSpaceList();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -257,7 +246,11 @@ const CreateDeploymentStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="workspace" onChange={onChangeWorkspace} value={deploymentInfo.workspace}>
+                <select
+                  name="workspace"
+                  onChange={onChangeWorkspace}
+                  value={deploymentInfo.workspace}
+                >
                   <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
@@ -322,6 +315,7 @@ const CreateDeploymentStepOne = observer((props) => {
                     <th style={{ textAlign: "center" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Namespace</th>
                     <th style={{ textAlign: "center" }}>cluster</th>
+                    <th style={{ textAlign: "center" }}>volume</th>
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
@@ -330,15 +324,16 @@ const CreateDeploymentStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
-                          checked={deploymentInfo.volume === pvc.name}
-                          name="clusterCheck"
+                          checked={deploymentInfo.pvcName === pvc.name}
+                          name={pvc.name}
                           onChange={onChangeCheckPVC}
-                          value={pvc.name}
+                          value={pvc.volume}
                         />
                       </td>
                       <td>{pvc.name}</td>
                       <td>{pvc.namespace}</td>
                       <td>{pvc.clusterName}</td>
+                      <td>{pvc.volume ? pvc.volume : ""}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -353,7 +348,7 @@ const CreateDeploymentStepOne = observer((props) => {
             <td>
               <Button
                 style={{ marginBottom: "2px" }}
-                onClick={() => openTargetCluster(-1)}
+                onClick={() => openAddContainer(-1)}
               >
                 + Add Container
               </Button>
@@ -361,10 +356,10 @@ const CreateDeploymentStepOne = observer((props) => {
                 {deploymentInfo.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
-                    onClick={() => openTargetCluster(index)}
+                    onClick={() => openAddContainer(index)}
                   >
-                    {container.containerName}
-                    <DeleteButton onClick={(e) => removeContainers(e, index)}>
+                    {container?.containerName}
+                    <DeleteButton onClick={(e) => deleteContainer(e, index)}>
                       x
                     </DeleteButton>
                   </Button>

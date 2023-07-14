@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
-import DeploymentPodSettins from "./DeploymentPodSettins";
-import { CTextField } from "@/components/textfields";
-import FormControl from "@material-ui/core/FormControl";
 import {
   deploymentStore,
   projectStore,
@@ -14,11 +10,7 @@ import {
 } from "@/store";
 import DeploymentYaml from "./DeploymentYaml";
 import DeploymentPopup from "./DeploymentPopup";
-import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
-import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
-import { swalError } from "@/utils/swal-utils";
 import { CDialogNew } from "@/components/dialogs";
-import { toJS } from "mobx";
 import DeploymentAddContainer from "./DeploymentAddContainer";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
@@ -100,207 +92,136 @@ const Table = styled.table`
 
 const CreateDeployment = observer((props) => {
   const { open } = props;
-  const [open2, setOpen2] = useState(false);
   const [stepValue, setStepValue] = useState(1);
 
-  const { containerInfo } = DeploymentAddContainer;
-  console.log("containerInfo :", containerInfo);
-
   const {
-    initLabelList,
-    addLabelList,
-    removeLabelList,
-    annotationList,
-    initAnnotationList,
-    addAnnotationList,
-    removeAnnotationList,
     deploymentInfo,
     initDeploymentInfo,
-    setDeploymentInfo,
-    removeContainer,
-    setCreateDeploymentLabels,
-    setCreateDeploymentAnnotaions,
-    setPriority,
     setContent,
+    setClearLA,
+    setTemplate,
+    labelsList,
+    labels,
+    annotations,
+    labelInput,
+    annotationInput,
+    postDeploymentGM,
   } = deploymentStore;
 
-  const {
-    setVolumeName,
-    setAccessMode,
-    setVolumeCapacity,
-    volumeCapacity,
-    volumeName,
-    selectClusters,
-    accessMode,
-  } = volumeStore;
+  const { loadPVClaims } = claimStore;
 
-  const {
-    loadPVClaims,
-    pvClaimListInDeployment,
-    checkPVCInDeployment,
-    setCheckPVCInDeployment,
-  } = claimStore;
+  const { loadWorkSpaceList } = workspaceStore;
 
-  const { setStorageClass, selectStorageClass } = StorageClassStore;
-  const { postWorkload, postScheduler } = schedulerStore;
-  const {
-    loadWorkSpaceList,
-    workSpaceList,
-    loadWorkspaceDetail,
-    selectClusterInfo,
-  } = workspaceStore;
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-  } = projectStore;
-  const { loadClusterList, clusterList, clusterListInWorkspace } = clusterStore;
-  const { podListInclusterAPI, podListIncluster } = podStore;
-
-  const [containerIndex, setContainerIndex] = useState(1);
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
 
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: deploymentName,
-  //     namespace: project,
-  //     labels: {
-  //       app: deploymentName,
-  //     },
-  //   },
-  //   spec: {
-  //     replicas: podReplicas,
-  //     selector: {
-  //       matchLabels: {
-  //         app: deploymentName,
-  //       },
-  //     },
-  //     template: {
-  //       metadata: {
-  //         labels: {
-  //           app: deploymentName,
-  //         },
-  //       },
-  //       spec: {
-  //         containers: [
-  //           {
-  //             image: containerImage,
-  //             name: containerName,
-  //             ports: [
-  //               {
-  //                 containerPort: Number(containerPort),
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     },
-  //   },
-  // };
-
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: deploymentInfo.deploymentName,
-  //     namespace: deploymentInfo.project,
-  //     labels: {
-  //       app: deploymentInfo.deploymentName,
-  //     },
-  //   },
-  //   spec: {
-  //     replicas: deploymentInfo.replicas,
-  //     selector: {
-  //       matchLabels: {
-  //         app: deploymentInfo.deploymentName,
-  //       },
-  //     },
-  //     template: {
-  //       metadata: {
-  //         labels: {
-  //           app: deploymentInfo.deploymentName,
-  //         },
-  //       },
-  //       spec: {
-  //         containers: [
-  //           // {
-  //           //   image: containerImage,
-  //           //   name: containerName,
-  //           //   ports: [
-  //           //     {
-  //           //       containerPort: Number(containerPort),
-  //           //     },
-  //           //   ],
-  //           // },
-  //         ],
-  //       },
-  //     },
-  //   },
-  // };
-
-  // const templatePVC = {
-  //   apiVersion: "v1",
-  //   kind: "PersistentVolumeClaim",
-  //   metadata: {
-  //     name: volumeName,
-  //     namespace: project,
-  //     labels: {
-  //       app: "",
-  //     },
-  //   },
-  //   spec: {
-  //     storageClassName: selectStorageClass,
-  //     accessModes: [accessMode],
-  //     resources: {
-  //       requests: {
-  //         storage: Number(volumeCapacity) + "Gi",
-  //       },
-  //     },
-  //   },
-  // };
+  const template = {
+    apiVersion: "apps/v1",
+    kind: "Deployment",
+    metadata: {
+      name: deploymentInfo.deploymentName,
+      annotations: annotationInput,
+      labels: labelInput,
+      namespace: "default",
+    },
+    spec: {
+      selector: {
+        matchLabels: labelInput,
+      },
+      replicas: deploymentInfo.replicas,
+      template: {
+        metadata: {
+          annotations: annotationInput,
+          labels: labelInput,
+        },
+        spec: {
+          imagePullSecert: deploymentInfo.containers?.map((e) => {
+            return { name: e.pullSecret };
+          }),
+          containers: deploymentInfo.containers?.map((e) => {
+            return {
+              name: e.containerName,
+              image: e.containerImage,
+              imagePullPolicy: e.pullPolicy,
+              command: e.command,
+              args: e.arguments,
+              resources: {
+                limits: {
+                  // cpu: e.cpuLimit,
+                  memory: e.memoryLimit + "Mi",
+                },
+                requests: {
+                  cpu: e.cpuReservation + "m",
+                  memory: e.memoryReservation + "Mi",
+                },
+              },
+              ports: e.ports.map((i) => {
+                return {
+                  name: i.name,
+                  containerPort: i.privateContainerPort,
+                  protocol: i.protocol,
+                };
+              }),
+              envForm: e.variables.map((i) => {
+                const item = i.type + "Ref";
+                return {
+                  [item]: {
+                    name: i.variableName,
+                  },
+                };
+              }),
+              env: e.variables.map((i) => {
+                return {
+                  name: i.variableName,
+                  value: i.value,
+                };
+              }),
+              volumeMounts: e.volumes.map((i) => {
+                return {
+                  mountPath: i.subPathInVolume,
+                  name: i.name,
+                };
+              }),
+            };
+          }),
+        },
+      },
+      volumes: [
+        {
+          name: deploymentInfo.volume,
+          persistentVolumeClaim: deploymentInfo.pvcName,
+        },
+      ],
+    },
+  };
 
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
     initDeploymentInfo();
-    initLabelList();
-    initAnnotationList();
-    setCreateDeploymentLabels({ key: "", value: "" });
-    setCreateDeploymentAnnotaions({ key: "", value: "" });
+    setClearLA();
     setProjectDisable(true);
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
-    setPriority({
-      name: "GLowLatencyPriority",
-      options: {
-        type: "fromNode",
-      },
-    });
-  };
-  const handleClose2 = () => {
-    setOpen2(false);
   };
 
   const createDeployment = () => {
-    console.log("createDeployment YAML 필요");
-    console.log(toJS(deploymentInfo));
-
-    //setProjectDisable(true);
-
-    // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
     // handleClose();
     // props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {
+    setClearLA();
     setStepValue(2);
   };
 
   const onClickStepThree = (e) => {
+    const LabelKeyArr = [];
+    const AnnotationKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
     setStepValue(3);
   };
 
@@ -323,10 +244,13 @@ const CreateDeployment = observer((props) => {
   useEffect(() => {
     loadWorkSpaceList();
     loadPVClaims();
-    // const YAML = require("json-to-pretty-yaml");
-    // setContent(YAML.stringify(template));
-    // }, [stepValue]);
-  }, []);
+
+    if (stepValue === 4) {
+      setTemplate(template);
+      const YAML = require("json-to-pretty-yaml");
+      setContent(YAML.stringify(template));
+    }
+  }, [stepValue]);
 
   const CreateDeploymentComponent = () => {
     if (stepValue === 1) {
@@ -405,7 +329,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml />
+          <DeploymentYaml labelsList={labelsList} />
           <div
             style={{
               display: "flex",

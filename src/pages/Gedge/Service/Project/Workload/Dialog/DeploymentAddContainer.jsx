@@ -46,7 +46,7 @@ const DeploymentAddContainer = observer((props) => {
     volumeList,
     loadVolumeList,
   } = deploymentStore;
-  const { checkPVCInDeployment, setCheckPVCInDeployment } = claimStore;
+  const { volumeName, setCheckPVCInDeployment } = claimStore;
 
   const { open, containerIndex } = props;
   const [tabvalue, setTabvalue] = useState(0);
@@ -151,19 +151,20 @@ const DeploymentAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      props.onClose && props.onClose();
-      addContainer(temp);
-    }
+    // if (isContainerValid()) {
+    const temp = { ...containerInfo };
+    addContainer(temp);
+    console.log(temp);
+    props.onClose && props.onClose();
+    // }
   };
 
   const editContainers = () => {
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      props.onClose && props.onClose();
-      editContainer(containerIndex, temp);
-    }
+    // if (isContainerValid()) {
+    const temp = { ...containerInfo };
+    editContainer(containerIndex, temp);
+    props.onClose && props.onClose();
+    // }
   };
 
   const onChangeVolume = (e, index) => {
@@ -827,11 +828,7 @@ const DeploymentAddContainer = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Volume
                           </option>
-                          {
-                            <option value={checkPVCInDeployment}>
-                              {checkPVCInDeployment}
-                            </option>
-                          }
+                          {<option value={volumeName}>{volumeName}</option>}
                         </select>
                       </FormControl>
                       <CTextField
