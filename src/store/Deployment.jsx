@@ -149,7 +149,7 @@ class Deployment {
     priority: {
       name: "GLowLatencyPriority",
       options: {
-        type: "fromNode",
+        type: "cluster",
         //data: {}
       },
     },
@@ -212,6 +212,35 @@ class Deployment {
       name: "deployment4",
     },
   ];
+
+  targetClusters = [];
+  unselectedClusters = [
+    "cluster0",
+    "cluster1",
+    "cluster2",
+    "cluster3",
+    "cluster4",
+    "cluster5",
+    "cluster6",
+  ];
+
+  setTargetClusters = (value) => {
+    runInAction(() => {
+      this.targetClusters = value;
+    });
+  };
+
+  setUnselectedClusters = (value) => {
+    runInAction(() => {
+      this.unselectedClusters = value;
+    });
+  };
+
+  loadClustersList = () => {
+    runInAction(() => {
+      const clusterList = [];
+    });
+  };
 
   setTemplate = (template) => {
     runInAction(() => {
@@ -426,6 +455,13 @@ class Deployment {
   setPriority = (value) => {
     runInAction(() => {
       this.priority = value;
+    });
+  };
+
+  priorityNodes = [];
+  setPriorityNodes = (value) => {
+    runInAction(() => {
+      this.priorityNodes = value;
     });
   };
 
@@ -683,23 +719,14 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
-    console.log(this.priority);
+    console.log("priority: ", this.priority);
     const body = this.content;
-    const options = encodeURI(this.priority.options);
+    const options = encodeURI(JSON.stringify(this.priority.options));
+    console.log("options: ", options);
     const requestId = "requestId12";
     // const { selectClusters } = volumeStore;
     // const YAML = require("yamljs");
 
-    // await axios
-    //   .post(
-    //     `${SERVER_URL}/deployments?workspace=${this.workspace}&project=${this.project}&cluster=${selectClusters}`,
-    //     YAML.parse(this.content)
-    //   )
-    //   .then((res) => {
-    //     if (res.status === 201) {
-    //       swalError("Deployment가 생성되었습니다.", callback);
-    //     }
-    //   });
     await axios
       .post(
         `http://101.79.1.138:8013/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,

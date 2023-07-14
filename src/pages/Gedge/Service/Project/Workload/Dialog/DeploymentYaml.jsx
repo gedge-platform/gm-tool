@@ -28,7 +28,7 @@ const DeploymentYaml = observer(() => {
       ) {
         delete obj_content.metadata.labels;
         delete obj_content.spec.template.metadata.labels;
-        delete obj_content.spec.selector.matchLabels;
+        delete obj_content.metadata.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }

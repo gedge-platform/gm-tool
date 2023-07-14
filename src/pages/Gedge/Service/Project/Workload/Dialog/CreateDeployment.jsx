@@ -124,6 +124,8 @@ const CreateDeployment = observer((props) => {
     labelInput,
     annotationInput,
     postDeploymentGM,
+    priority,
+    targetClusters,
   } = deploymentStore;
 
   const {
@@ -163,6 +165,9 @@ const CreateDeployment = observer((props) => {
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+
+  // console.log(priority);
+  // console.log(deploymentInfo);
 
   const template = {
     apiVersion: "apps/v1",
@@ -323,12 +328,12 @@ const CreateDeployment = observer((props) => {
     setProjectDisable(true);
     setPriorityDisable(true);
     setPrioritytPodDisable(true);
-    setPriority({
-      name: "GLowLatencyPriority",
-      options: {
-        type: "fromNode",
-      },
-    });
+    // setPriority({
+    //   name: "GLowLatencyPriority",
+    //   options: {
+    //     type: "fromNode",
+    //   },
+    // });
   };
   const handleClose2 = () => {
     setOpen2(false);
@@ -337,6 +342,7 @@ const CreateDeployment = observer((props) => {
   const createDeployment = () => {
     console.log("createDeployment YAML 필요");
     console.log(toJS(deploymentInfo));
+    // priority.options.data.target_clusters = targetClusters;
     // createDeployment(require("json-to-pretty-yaml").stringify(template));
 
     //setProjectDisable(true);

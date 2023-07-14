@@ -145,6 +145,7 @@ const CreateDeploymentStepOne = observer((props) => {
     loadWorkSpaceList,
     workSpaceList,
     loadWorkspaceDetail,
+    workSpaceDetail,
     selectClusterInfo,
   } = workspaceStore;
 
@@ -179,7 +180,6 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
-      // setPrioritytDisable(false);
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);
