@@ -121,7 +121,9 @@ const CreateDeployment = observer((props) => {
     setCreateDeploymentLabels,
     setCreateDeploymentAnnotaions,
     setPriority,
+
     setContent,
+    initTargetClusters,
   } = deploymentStore;
 
   const {
@@ -325,6 +327,9 @@ const CreateDeployment = observer((props) => {
     loadPVClaims();
     // const YAML = require("json-to-pretty-yaml");
     // setContent(YAML.stringify(template));
+    // return () => {
+    //   initTargetClusters();
+    // };
     // }, [stepValue]);
   }, []);
 

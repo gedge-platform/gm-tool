@@ -390,13 +390,17 @@ class Cluster {
   };
 
   loadClusterInProject = async (project) => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/clusters?project=${project}`)
+      .get(`${SERVER_URL}/clusters?id=${id}&project=${project}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
   loadClusterInWorkspace = async (workspace) => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/clusters?workspace=${workspace}`)
+      .get(`${SERVER_URL}/clusters?id=${id}&workspace=${workspace}`)
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 

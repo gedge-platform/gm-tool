@@ -16,6 +16,41 @@ const Button = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 3px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, 0.1);
+  }
+
+  &:before,
+  &:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - 0.0625em);
+    width: 0.125em;
+    height: 70%;
+    border-radius: 0.125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: "";
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+`;
+
 const Table = styled.table`
   tbody {
     display: block;
@@ -49,7 +84,8 @@ const CreatePodStepOne = observer((props) => {
   } = projectStore;
 
   const {
-    pvClaimListInDeployment
+    pvClaimListInDeployment,
+    setCheckPVCInDeployment
   } = claimStore;
 
   const [ containerIndex, setContainerIndex ] = useState(1);
@@ -59,15 +95,19 @@ const CreatePodStepOne = observer((props) => {
     setPodInfo(e.target.name, e.target.value);
     if (e.target.name === "workspace") {
       loadProjectListInWorkspace(e.target.value);
+    } else if (e.target.name === "volume") {
+      setCheckPVCInDeployment(e.target.value);
     }
   }
 
-  const openTargetCluster = () => {
-
+  const openAddContainer = (containerIndex) => {
+    setContainerIndex(containerIndex);
+    setOpen(true);
   }
 
-  const removeContainers = () => {
-
+  const removeContainer = (e, removeIndex) => {
+    e.stopPropagation();
+    setPodInfo("containers", podInfo.containers.filter((_, index) => index !== removeIndex));
   }
 
   return(
@@ -216,7 +256,7 @@ const CreatePodStepOne = observer((props) => {
             <td>
               <Button
                 style={{ marginBottom: "2px" }}
-                onClick={() => setOpen(true)}
+                onClick={() => openAddContainer(-1)}
               >
                 + Add Container
               </Button>
@@ -224,10 +264,10 @@ const CreatePodStepOne = observer((props) => {
                 {podInfo.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
-                    onClick={() => openTargetCluster(index)}
+                    onClick={() => openAddContainer(index)}
                   >
                     {container.containerName}
-                    <DeleteButton onClick={(e) => removeContainers(e, index)}>
+                    <DeleteButton onClick={(e) => removeContainer(e, index)}>
                       x
                     </DeleteButton>
                   </Button>

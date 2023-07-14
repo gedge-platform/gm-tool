@@ -3,6 +3,7 @@ import podStore from "../../../../../../store/Pod";
 import { CTextField } from "@/components/textfields";
 import { useState } from "react";
 import styled from "styled-components";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -38,19 +39,27 @@ const CreatePodStepTwo = observer((props) => {
   }
 
   const addLabel = () => {
-    setPodInfo("labels", [
-      ...podInfo.labels,
-      label
-    ]);
-    setLabel({key: "", value: ""});
+    if (label.key === "" || label.value === "") {
+      swalError("값을 입력해주세요.");
+    } else {
+      setPodInfo("labels", [
+        ...podInfo.labels,
+        label
+      ]);
+      setLabel({key: "", value: ""});
+    }
   }
 
   const addAnnotation = () => {
-    setPodInfo("annotations", [
-      ...podInfo.annotations,
-      annotation
-    ]);
-    setAnnotation({key: "", value: ""});
+    if (annotation.key === "" || annotation.value === "") {
+      swalError("값을 입력해주세요");
+    } else {
+      setPodInfo("annotations", [
+        ...podInfo.annotations,
+        annotation
+      ]);
+      setAnnotation({key: "", value: ""});
+    }
   }
   
   const remove = (type, index) => {
