@@ -94,20 +94,11 @@ const PodAddContainer = observer(props => {
       ports: [
         ...containerInfo.ports,
         {
-          serviceType: "",
           name: "",
           privateContainerPort: "",
           protocol: "TCP",
         },
       ],
-    });
-  };
-
-  const addHost = (index) => {
-    containerInfo.ports[index].publicHostPort = "";
-    containerInfo.ports[index].hostIP = "";
-    setContainerInfo({
-      ...containerInfo,
     });
   };
 
@@ -218,51 +209,6 @@ const PodAddContainer = observer(props => {
       setContainerInfo(clonedData);
     }
   }, [open])
-
-
-  const HostComponent = (index) => {
-    if (
-      containerInfo.ports[index].serviceType === "NodePort" || 
-      containerInfo.ports[index].serviceType === "LoadBalancer"
-    ) {
-      return(
-        <td>
-          <CTextField 
-            type="text" 
-            placeholder="Listening Port" 
-            className="form_fullWidth" 
-            name="listeningPort" 
-            onChange={() => onChangePort(event, index)} 
-            value={containerInfo.ports[index].listeningPort}
-          />
-        </td>
-      )
-    } else if (containerInfo.ports[index].publicHostPort !== undefined) {
-      return (
-        <td style={{display: "flex"}}>
-          <CTextField 
-            style={{paddingRight: "3px"}} 
-            type="text" 
-            placeholder="Public Host Port" 
-            className="form_fullWidth" 
-            name="publicHostPort" 
-            onChange={() => onChangePort(event, index)} 
-            value={containerInfo.ports[index].publicHostPort}
-          />
-          <CTextField 
-            type="text" 
-            placeholder="Host IP" 
-            className="form_fullWidth" 
-            name="hostIP" 
-            onChange={() => onChangePort(event, index)} 
-            value={containerInfo.ports[index].hostIP}
-          />
-        </td>
-      )
-    } else {
-      return <td><ButtonAddHost onClick={() => addHost(index)}>Add Host</ButtonAddHost></td>
-    }
-  }
 
   const ValueComponent = (index) => {
     switch (containerInfo.variables[index].type) {
@@ -420,24 +366,13 @@ const PodAddContainer = observer(props => {
                   <table className="tb_data_new">
                     <tbody className="tb_data_nodeInfo">
                       <tr>
-                        <th>Service Type</th>
                         <th>Name</th>
                         <th>Private Container Port</th>
                         <th>Protocol</th>
-                        <th>Host</th>
+                        <th></th>
                       </tr>
                       {containerInfo?.ports?.map((port, index) => (
                         <tr style={{ lineHeight: "35px" }}>
-                          <td>
-                            <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                              <select name="serviceType" value={port.serviceType} onChange={() => onChangePort(event, index)}>
-                                <option value={""}>Do not create a service</option>
-                                <option value={"ClusterIP"}>Cluster IP</option>
-                                <option value={"NodePort"}>Node Port</option>
-                                <option value={"LoadBalancer"}>Load Balancer</option>
-                              </select>
-                            </FormControl>
-                          </td>
                           <td>
                             <CTextField 
                               type="text" 
@@ -466,7 +401,6 @@ const PodAddContainer = observer(props => {
                               </select>
                             </FormControl>
                           </td>
-                          {HostComponent(index)}
                           <td>
                             <Button 
                               style={{
