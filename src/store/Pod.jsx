@@ -88,68 +88,95 @@ class Pod {
   portList = [];
   variableList = [];
 
+  volumeList = [];
+
   podInfo = {
     podName: "",
-    labels: [
-      // {
-      //   key: "",
-      //   value: ""
-      // }
-    ],
-    pullSecrets: "",
-    volume: {
-      name: "",
-      nfsServer: "",
-      nfsPath: "",
+    workspace: "",
+    project: "",
+    replicas: 1,
+    volume: "",
+    containers: [],
+    labels: [],
+    annotations: [],
+    priority: {
+      name: "GLowLatencyPriority",
+      options: {
+        type: "fromNode",
+      },
     },
-    priority: "",
     targetClusters: "",
-    sourceNode: "",
-    containers: [
-      // {
-      //   general: {
-      //     containerName: "",
-      //     containerImage: "",
-      //     pullPolicy: "",
-      //     ports: [
-      //       {
-      //         serviceType: "",
-      //         name: "",
-      //         privateContainerPort: "",
-      //         protocol: "",
-      //         host: {
-      //         }
-      //       },
-      //     ],
-      //     command: "",
-      //     arguments: "",
-      //     workingDir: "",
-      //     variables: [
-      //       {
-      //         type: "",
-      //         variableName: "",
-      //         value: {
-      //         }
-      //       }
-      //     ]
-      //   },
-      //   resource: {
-      //     cpuReservation: "",
-      //     memoryReservation: "",
-      //     cpuLimit: "",
-      //     memoryLimit: "",
-      //     nvidiaGPULimitReservation: ""
-      //   },
-      //   storage: {
-      //     volume: ""
-      //   }
-      // },
-    ],
+  };
+
+  targetClusters = [];
+  unselectedClusters = [
+    "cluster0",
+    "cluster1",
+    "cluster2",
+    "cluster3",
+    "cluster4",
+    "cluster5",
+    "cluster6",
+  ];
+
+  initTargetClusters = () => {
+    runInAction(() => {
+      this.targetClusters = [];
+      this.unselectedClusters = [
+        "cluster0",
+        "cluster1",
+        "cluster2",
+        "cluster3",
+        "cluster4",
+        "cluster5",
+        "cluster6",
+      ];
+    });
+  };
+
+  setTargetClusters = (value) => {
+    runInAction(() => {
+      this.targetClusters = value;
+    });
+  };
+
+  setUnselectedClusters = (value) => {
+    runInAction(() => {
+      this.unselectedClusters = value;
+    });
+  };
+
+  initPodInfo = () => {
+    runInAction(() => {
+      this.podInfo = {
+        podName: "",
+        workspace: "",
+        project: "",
+        replicas: 1,
+        volume: "",
+        containers: [],
+        labels: [],
+        annotations: [],
+        priority: {
+          name: "GLowLatencyPriority",
+          options: {
+            type: "fromNode",
+          },
+        },
+        targetClusters: "",
+      };
+    });
   };
 
   setPodInfo = (key, value) => {
     runInAction(() => {
       this.podInfo[key] = value;
+    });
+  };
+
+  setPodInfoPriority = (key, value) => {
+    runInAction(() => {
+      this.podInfo.priority[key] = value;
     });
   };
 
@@ -191,6 +218,25 @@ class Pod {
       this.podInfo.containers = this.podInfo.containers.filter(
         (_, index) => removeIndex !== index
       );
+    });
+  };
+
+  loadVolumeList = (pvcName) => {
+    runInAction(() => {
+      this.volumeList = [
+        {
+          name: "volume1",
+        },
+        {
+          name: "volume2",
+        },
+        {
+          name: "volume3",
+        },
+        {
+          name: "volume4",
+        },
+      ];
     });
   };
 
