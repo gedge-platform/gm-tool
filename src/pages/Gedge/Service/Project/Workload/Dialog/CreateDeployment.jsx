@@ -19,6 +19,7 @@ import claimStore from "../../../../../../store/Claim";
 import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
 import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -107,6 +108,8 @@ const CreateDeployment = observer((props) => {
     annotationInput,
     postDeploymentGM,
   } = deploymentStore;
+
+  console.log("deploymentInfo :", deploymentInfo);
 
   const { loadPVClaims } = claimStore;
 
@@ -213,6 +216,28 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
+    console.log(deploymentInfo);
+    if (deploymentInfo.deploymentName === "") {
+      swalError("Deployment 이름을 입력해주세요");
+      return;
+    }
+    if (deploymentInfo.workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    // Replica는 기본 설정 1이라서 추가 안함
+    if (deploymentInfo.volume === "") {
+      swalError("Volume을 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.containers.length === 0) {
+      swalError("Container를 선택해주세요");
+      return;
+    }
     setClearLA();
     setStepValue(2);
   };
@@ -220,6 +245,7 @@ const CreateDeployment = observer((props) => {
   const onClickStepThree = (e) => {
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
+
     labels.map((data) => LabelKeyArr.push(data.labelKey));
     annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
     setStepValue(3);

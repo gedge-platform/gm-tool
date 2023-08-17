@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
-import Tabs from "@material-ui/core/Tabs";
 import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
@@ -10,6 +9,7 @@ import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import claimStore from "../../../../../../store/Claim";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -18,7 +18,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -27,7 +26,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonAddHost = styled.button`
@@ -39,14 +37,9 @@ const ButtonAddHost = styled.button`
 `;
 
 const DeploymentAddContainer = observer((props) => {
-  const {
-    addContainer,
-    editContainer,
-    deploymentInfo,
-    volumeList,
-    loadVolumeList,
-  } = deploymentStore;
-  const { volumeName, setCheckPVCInDeployment } = claimStore;
+  const { addContainer, editContainer, deploymentInfo, loadVolumeList } =
+    deploymentStore;
+  const { volumeName } = claimStore;
 
   const { open, containerIndex } = props;
   const [tabvalue, setTabvalue] = useState(0);
@@ -95,20 +88,11 @@ const DeploymentAddContainer = observer((props) => {
       ports: [
         ...containerInfo.ports,
         {
-          serviceType: "",
           name: "",
           privateContainerPort: "",
           protocol: "TCP",
         },
       ],
-    });
-  };
-
-  const addHost = (index) => {
-    containerInfo.ports[index].publicHostPort = "";
-    containerInfo.ports[index].hostIP = "";
-    setContainerInfo({
-      ...containerInfo,
     });
   };
 
@@ -151,20 +135,66 @@ const DeploymentAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    // if (isContainerValid()) {
+    // console.log("containerInfo : ", containerInfo);
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerImage === "") {
+    //   swalError("Container 이미지를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullSecret === "") {
+    //   swalError("Pull Secret을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullPolicy === "") {
+    //   swalError("Pull Policy를 선택해주세요");
+    //   return;
+    // }
+    // if (containerInfo.ports.length === 0) {
+    //   swalError("Port를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.command === "") {
+    //   swalError("Command를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.arguments === "") {
+    //   swalError("Arguments를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.variables.length === 0) {
+    //   swalError("Variable을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.cpuReservation === "") {
+    //   swalError("CPU Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.memoryReservation === "") {
+    //   swalError("Memory Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.volumes.length === 0) {
+    //   swalError("Volume을 입력해주세요");
+    //   return;
+    // }
+
     const temp = { ...containerInfo };
     addContainer(temp);
     console.log(temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const editContainers = () => {
-    // if (isContainerValid()) {
     const temp = { ...containerInfo };
     editContainer(containerIndex, temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const onChangeVolume = (e, index) => {
@@ -220,54 +250,6 @@ const DeploymentAddContainer = observer((props) => {
       setContainerInfo(clonedData);
     }
   }, [open]);
-
-  const HostComponent = (index) => {
-    if (
-      containerInfo.ports[index].serviceType === "NodePort" ||
-      containerInfo.ports[index].serviceType === "LoadBalancer"
-    ) {
-      return (
-        <td>
-          <CTextField
-            type="text"
-            placeholder="Listening Port"
-            className="form_fullWidth"
-            name="listeningPort"
-            onChange={() => onChangePort(event, index)}
-            value={containerInfo.ports[index].listeningPort}
-          />
-        </td>
-      );
-    } else if (containerInfo.ports[index].publicHostPort !== undefined) {
-      return (
-        <td style={{ display: "flex" }}>
-          <CTextField
-            style={{ paddingRight: "3px" }}
-            type="text"
-            placeholder="Public Host Port"
-            className="form_fullWidth"
-            name="publicHostPort"
-            onChange={() => onChangePort(event, index)}
-            value={containerInfo.ports[index].publicHostPort}
-          />
-          <CTextField
-            type="text"
-            placeholder="Host IP"
-            className="form_fullWidth"
-            name="hostIP"
-            onChange={() => onChangePort(event, index)}
-            value={containerInfo.ports[index].hostIP}
-          />
-        </td>
-      );
-    } else {
-      return (
-        <td>
-          <ButtonAddHost onClick={() => addHost(index)}>Add Host</ButtonAddHost>
-        </td>
-      );
-    }
-  };
 
   const ValueComponent = (index) => {
     switch (containerInfo.variables[index].type) {
@@ -495,35 +477,13 @@ const DeploymentAddContainer = observer((props) => {
                   <table className="tb_data_new">
                     <tbody className="tb_data_nodeInfo">
                       <tr>
-                        <th>Service Type</th>
                         <th>Name</th>
                         <th>Private Container Port</th>
                         <th>Protocol</th>
-                        <th>Host</th>
+                        <th></th>
                       </tr>
                       {containerInfo?.ports?.map((port, index) => (
                         <tr style={{ lineHeight: "35px" }}>
-                          <td>
-                            <FormControl
-                              className="form_fullWidth"
-                              style={{ padding: "1px" }}
-                            >
-                              <select
-                                name="serviceType"
-                                value={port.serviceType}
-                                onChange={() => onChangePort(event, index)}
-                              >
-                                <option value={""}>
-                                  Do not create a service
-                                </option>
-                                <option value={"ClusterIP"}>Cluster IP</option>
-                                <option value={"NodePort"}>Node Port</option>
-                                <option value={"LoadBalancer"}>
-                                  Load Balancer
-                                </option>
-                              </select>
-                            </FormControl>
-                          </td>
                           <td>
                             <CTextField
                               type="text"
@@ -559,7 +519,6 @@ const DeploymentAddContainer = observer((props) => {
                               </select>
                             </FormControl>
                           </td>
-                          {HostComponent(index)}
                           <td>
                             <Button
                               style={{
