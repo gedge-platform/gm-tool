@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class Pod {
   totalYElements = 0;
@@ -19,7 +20,6 @@ class Pod {
   yamlListInPod = [];
   podDetail = {};
   totalElements = 0;
-
   events = [
     {
       kind: "",
@@ -83,6 +83,18 @@ class Pod {
   serviceList = [];
 
   labelList = [];
+  annotationList = [];
+
+  labelInput = [];
+  labelKey = "";
+  labelValue = "";
+
+  labelInputKey = "";
+  labelInputValue = "";
+
+  annotationInput = [];
+  annotationKey = "";
+  annotationValue = "";
   containerList = [];
   portList = [];
   variableList = [];
@@ -212,6 +224,11 @@ class Pod {
     });
   };
 
+  setPriority = (value) => {
+    runInAction(() => {
+      this.priority = value;
+    });
+  };
   priorityNodes = [];
   setPriorityNodes = (value) => {
     runInAction(() => {
@@ -224,6 +241,13 @@ class Pod {
       this.labelList = [];
     });
   };
+
+  initAnnotationList = () => {
+    runInAction(() => {
+      this.annotationList = [];
+    });
+  };
+
   addLabelList = (key, value) => {
     runInAction(() => {
       this.labelList.push({ key: key, value: value });
@@ -234,6 +258,75 @@ class Pod {
       this.labelList = this.labelList.filter(
         (_, index) => removeIndex !== index
       );
+    });
+  };
+  setTemplateLabel = () => {
+    runInAction(() => {
+      this.labels.map((data) => {
+        this.labelInput[data.labelKey] = data.labelValue;
+      });
+    });
+  };
+  setLabelInput = (value) => {
+    runInAction(() => {
+      this.labelInput = value;
+    });
+  };
+  setAnnotationInput = (value) => {
+    runInAction(() => {
+      this.annotationInput = value;
+    });
+  };
+  setLabels = (value) => {
+    runInAction(() => {
+      this.labels = value;
+    });
+  };
+  setAnnotations = (value) => {
+    runInAction(() => {
+      this.annotations = value;
+    });
+  };
+  setTemplate = (template) => {
+    runInAction(() => {
+      delete template.metadata.labels[""];
+      delete template.metadata.annotations[""];
+      delete template.spec.template.metadata.labels[""];
+      delete template.spec.template.metadata.annotations[""];
+      delete template.spec.selector.matchLabels[""];
+    });
+  };
+  setClearLA = () => {
+    runInAction(() => {
+      this.labelKey = "";
+      this.labelValue = "";
+      this.annotationKey = "";
+      this.annotationValue = "";
+      this.labels = [];
+      this.annotations = [];
+    });
+  };
+  setInputLabelKey = (value) => {
+    runInAction(() => {
+      this.labelKey = value;
+    });
+  };
+
+  setInputLabelValue = (value) => {
+    runInAction(() => {
+      this.labelValue = value;
+    });
+  };
+
+  setInputAnnotationKey = (value) => {
+    runInAction(() => {
+      this.annotationKey = value;
+    });
+  };
+
+  setInputAnnotationValue = (value) => {
+    runInAction(() => {
+      this.annotationValue = value;
     });
   };
 
@@ -604,7 +697,28 @@ class Pod {
     });
   };
 
-  createPod = async () => {};
+  postPodGM = async (callback) => {
+    const body = this.content;
+    const options = encodeURI(JSON.stringify(this.priority.options));
+    const requestId = "requestId12";
+    console.log("body :", body);
+    console.log("options :", options);
+    console.log("requestId :", requestId);
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+        body
+      )
+      .then((res) => {
+        console.log("res :", res);
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.", callback);
+        } else {
+          swalError("Deployment 생성 실패", callback);
+        }
+      });
+  };
 
   deletePod = async (podName, callback) => {
     axios

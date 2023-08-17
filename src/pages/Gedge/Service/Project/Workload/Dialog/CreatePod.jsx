@@ -81,9 +81,9 @@ const CreatePod = observer((props) => {
     annotations,
     labelInput,
     annotationInput,
+    postPodGM,
   } = podStore;
   console.log("podInfo :", podInfo);
-  console.log("labelInput :", labelInput);
 
   const [stepValue, setStepValue] = useState(1);
 
@@ -203,7 +203,7 @@ const CreatePod = observer((props) => {
   };
 
   const createPod = () => {
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    postPodGM(require("json-to-pretty-yaml").stringify(template));
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };

@@ -73,9 +73,13 @@ const CreateDeploymentStepTwo = observer(() => {
     setLabelInput({
       [labelKey]: labelValue,
     });
+    console.log("labelKey : ", labelKey);
+    console.log("labelValue : ", labelValue);
     setAnnotationInput({
       [annotationKey]: annotationValue,
     });
+    console.log("annotationKey : ", annotationKey);
+    console.log("annotationValue : ", annotationValue);
   }, [labelKey, labelValue, annotationKey, annotationValue]);
 
   const addRow = () => {

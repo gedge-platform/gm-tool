@@ -387,6 +387,12 @@ class Deployment {
     });
   };
 
+  setDeploymentInfoPriority = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo.priority[key] = value;
+    });
+  };
+
   addObjectInDeploymentInfo = (name, key, value) => {
     runInAction(() => {
       this.deploymentInfo[name].push({ key: key, value: value });
@@ -744,6 +750,8 @@ class Deployment {
       .then((res) => {
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
+        } else {
+          swalError("Deployment 생성 실패", callback);
         }
       });
   };
