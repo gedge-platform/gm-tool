@@ -196,7 +196,7 @@ const CreateDeploymentStepThree = observer(() => {
 
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
-      console.log(e.target.value);
+      console.log(e);
       if (e.target.value === "GLowLatencyPriority") {
         if (type === "default") {
           setPriority({
@@ -246,6 +246,7 @@ const CreateDeploymentStepThree = observer(() => {
           },
         });
       } else if (e.target.value === "GSelectedClusterPriority") {
+        // setType("cluster");
         setPriority({
           name: e.target.value,
           options: {
@@ -307,7 +308,7 @@ const CreateDeploymentStepThree = observer(() => {
     };
     const onChangeType = (e) => {
       const { name, value } = e.target;
-
+      console.log(e.target);
       setType(value);
       if (name === "type") {
         setPriority({

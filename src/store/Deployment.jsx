@@ -751,7 +751,9 @@ class Deployment {
       )
       .then((res) => {
         if (res.status === 201) {
-          swalError("Deployment가 생성되었습니다.", callback);
+          swalError("Deployment가 생성되었습니다.");
+          console.log(options);
+          console.log(res);
         } else {
           swalError("Deployment 생성 실패", callback);
         }
