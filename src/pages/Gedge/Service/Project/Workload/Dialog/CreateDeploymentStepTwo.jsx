@@ -47,6 +47,8 @@ const CreateDeploymentStepTwo = observer(() => {
     setAnnotations,
   } = deploymentStore;
 
+  console.log("labels : ", labels);
+  console.log("annotations : ", annotations);
   const newLabelList = [{ [labelInputKey]: labelInputValue }];
 
   const handleChange = (e) => {
@@ -109,6 +111,12 @@ const CreateDeploymentStepTwo = observer(() => {
 
   const deleteLabels = (labelKey) => {
     setLabels(labels.filter((item) => item.labelKey !== labelKey));
+  };
+
+  const deleteAnnotations = (annotationKey) => {
+    setAnnotations(
+      annotations.filter((item) => item.annotationKey !== annotationKey)
+    );
   };
 
   const addAnnotations = () => {

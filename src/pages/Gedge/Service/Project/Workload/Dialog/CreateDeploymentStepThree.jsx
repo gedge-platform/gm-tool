@@ -133,32 +133,13 @@ const CreateDeploymentStepThree = observer(() => {
     workSpaceDetail,
   } = workspaceStore;
 
-  // console.log("clusteInPriorityrName : ", clusterNameInPriority);
-  // console.log("priority", priority);
-  // console.log("targetClusters: ", targetClusters);
-
   const { loadProjectListInWorkspace } = projectStore;
 
   const { loadPVClaims } = claimStore;
 
-  const { loadClusterList, clusterListInWorkspace, loadCluster } = clusterStore;
+  const { loadClusterList, loadCluster } = clusterStore;
 
-  const { podListInclusterAPI, podListIncluster } = podStore;
-
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    if (name == "workspace") {
-      setDeploymentInfo(name, value);
-      setProjectDisable(false);
-      loadProjectListInWorkspace(value);
-      loadClusterList();
-      loadWorkspaceDetail(value);
-    } else if (name === "workspaceName") {
-      priority.options.data.workspace_name === value;
-    } else if (name === "projectName") {
-      priority.options.data.project_name === value;
-    }
-  };
+  const { podListInclusterAPI } = podStore;
 
   const openTargetCluster = (index) => {
     setOpen2(true);
@@ -269,11 +250,14 @@ const CreateDeploymentStepThree = observer(() => {
     const onChangeName = (e) => {
       const { name, value } = e.target;
       if (name === "userName") {
-        priority.options.data.pod_name === value;
+        setUserName(value);
       } else if (name === "workspaceName") {
+        setWorkspaceName(value);
       } else if (name === "projectName") {
+        setProjectName(value);
       }
     };
+
     const onChangeType = (e) => {
       const { name, value } = e.target;
 
@@ -409,7 +393,7 @@ const CreateDeploymentStepThree = observer(() => {
                         placeholder="Workspace Name"
                         className="form_fullWidth"
                         name="workspaceName"
-                        onChange={onChange}
+                        onChange={onChangeName}
                       />
                     </td>
                     <td>
@@ -418,7 +402,7 @@ const CreateDeploymentStepThree = observer(() => {
                         placeholder="Project Name"
                         className="form_fullWidth"
                         name="projectName"
-                        onChange={onChange}
+                        onChange={onChangeName}
                       />
                     </td>
                   </tr>

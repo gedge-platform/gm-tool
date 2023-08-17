@@ -1,9 +1,38 @@
 import { observer } from "mobx-react";
 import AceEditor from "react-ace";
 import podStore from "../../../../../../store/Pod";
+import React, { useEffect } from "react";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/theme-monokai";
 
 const PodYaml = observer((props) => {
-  const { content } = podStore;
+  const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
+    podStore;
+
+  useEffect(() => {
+    setTemplateAnnotation();
+    setTemplateLabel();
+    if (content) {
+      var obj_content = YAML.parse(content);
+      console.log(obj_content);
+      if (
+        obj_content.metadata.annotations === ': ""' ||
+        isEmpty(obj_content.metadata.annotations)
+      ) {
+        delete obj_content.spec.template.metadata.annotations;
+        delete obj_content.metadata.annotations;
+      }
+      if (
+        obj_content.metadata.labels === ': ""' ||
+        isEmpty(obj_content.metadata.labels)
+      ) {
+        delete obj_content.metadata.labels;
+        delete obj_content.spec.template.metadata.labels;
+        delete obj_content.metadata.labels;
+      }
+      setContent(require("json-to-pretty-yaml").stringify(obj_content));
+    }
+  }, [content]);
 
   return (
     <>

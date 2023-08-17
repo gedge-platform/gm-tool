@@ -19,8 +19,7 @@ class Pod {
   yamlListInPod = [];
   podDetail = {};
   totalElements = 0;
-  label = {};
-  annotations = {};
+
   events = [
     {
       kind: "",
@@ -96,6 +95,7 @@ class Pod {
     project: "",
     replicas: 1,
     volume: "",
+    pvcName: "",
     containers: [],
     labels: [],
     annotations: [],
@@ -140,6 +140,17 @@ class Pod {
     });
   };
 
+  setClearLA = () => {
+    runInAction(() => {
+      this.labelKey = "";
+      this.labelValue = "";
+      this.annotationKey = "";
+      this.annotationValue = "";
+      this.labels = [];
+      this.annotations = [];
+    });
+  };
+
   setUnselectedClusters = (value) => {
     runInAction(() => {
       this.unselectedClusters = value;
@@ -168,15 +179,43 @@ class Pod {
     });
   };
 
-  setPodInfo = (key, value) => {
+  setPodInfo = (name, value) => {
     runInAction(() => {
-      this.podInfo[key] = value;
+      this.podInfo[name] = value;
     });
+  };
+
+  addObjectInPodInfo = (name, key, value) => {
+    runInAction(() => {
+      this.podInfo[name].push({ key: key, value: value });
+    });
+  };
+
+  removeObjectInPodInfo = (name, removeIndex) => {
+    runInAction(() => {
+      this.podInfo[name] = this.podInfo[name].filter(
+        (_, index) => removeIndex !== index
+      );
+    });
+  };
+
+  priority = {
+    name: "GLowLatencyPriority",
+    options: {
+      type: "fromNode",
+    },
   };
 
   setPodInfoPriority = (key, value) => {
     runInAction(() => {
       this.podInfo.priority[key] = value;
+    });
+  };
+
+  priorityNodes = [];
+  setPriorityNodes = (value) => {
+    runInAction(() => {
+      this.priorityNodes = value;
     });
   };
 
@@ -254,6 +293,98 @@ class Pod {
 
   changePort = (index, input) => {
     runInAction(() => {});
+  };
+
+  setInputLabelKey = (value) => {
+    runInAction(() => {
+      this.labelKey = value;
+    });
+  };
+
+  setInputLabelValue = (value) => {
+    runInAction(() => {
+      this.labelValue = value;
+    });
+  };
+
+  setInputAnnotationKey = (value) => {
+    runInAction(() => {
+      this.annotationKey = value;
+    });
+  };
+
+  setInputAnnotationValue = (value) => {
+    runInAction(() => {
+      this.annotationValue = value;
+    });
+  };
+
+  setAnnotationInput = (value) => {
+    runInAction(() => {
+      this.annotationInput = value;
+    });
+  };
+
+  setLabelInput = (value) => {
+    runInAction(() => {
+      this.labelInput = value;
+    });
+  };
+
+  setLabels = (value) => {
+    runInAction(() => {
+      this.labels = value;
+    });
+  };
+
+  setAnnotations = (value) => {
+    runInAction(() => {
+      this.annotations = value;
+    });
+  };
+
+  content = "";
+  setContent = (content) => {
+    runInAction(() => {
+      this.content = content;
+    });
+  };
+
+  labelInput = [];
+  labelKey = "";
+  labelValue = "";
+  labelInputKey = "";
+  labelInputValue = "";
+  annotationInput = [];
+  annotationKey = "";
+  annotationValue = "";
+  labels = [];
+  annotations = [];
+
+  setTemplate = (template) => {
+    runInAction(() => {
+      delete template.metadata.labels[""];
+      delete template.metadata.annotations[""];
+      delete template.spec.template.metadata.labels[""];
+      delete template.spec.template.metadata.annotations[""];
+      delete template.spec.selector.matchLabels[""];
+    });
+  };
+
+  setTemplateLabel = () => {
+    runInAction(() => {
+      this.labels.map((data) => {
+        this.labelInput[data.labelKey] = data.labelValue;
+      });
+    });
+  };
+
+  setTemplateAnnotation = () => {
+    runInAction(() => {
+      this.annotations.map((data) => {
+        this.annotationInput[data.annotationKey] = data.annotationValue;
+      });
+    });
   };
 
   constructor() {
@@ -387,14 +518,8 @@ class Pod {
           this.involvesData = involvesData;
           this.workloadList = involvesData.workloadList;
           this.serviceList = involvesData.serviceList;
-          // if (involvesData.serviceList !== null) {
-          // } else {
-          //   this.serviceList = null;
-          // }
-
           this.label = data.label;
           this.annotations = data.annotations;
-
           this.podContainers = data.Podcontainers;
           this.containerStatuses = data.containerStatuses;
           if (data.events !== null) {
@@ -423,9 +548,9 @@ class Pod {
       });
   };
 
-  setPodName = (podName) => {
+  setPodName = (name) => {
     runInAction(() => {
-      this.podName = podName;
+      this.podName = name;
     });
   };
 
@@ -472,10 +597,10 @@ class Pod {
 
   clearAll = () => {
     runInAction(() => {
-      this.setPodName("");
-      this.setContainerImage("");
-      this.setContainerName("");
-      this.setContainerPort(0);
+      this.PodName = "";
+      this.containerName = "";
+      this.containerImage = "";
+      this.containerPort = 0;
     });
   };
 

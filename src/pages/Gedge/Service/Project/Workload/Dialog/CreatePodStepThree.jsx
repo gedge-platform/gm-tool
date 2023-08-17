@@ -6,6 +6,7 @@ import styled from "styled-components";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import PodTargetClusters from "./PodTargetClusters";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -19,7 +20,8 @@ const Button = styled.button`
 
 const CreatePodStepThree = observer((props) => {
   const { clusterListInWorkspace } = clusterStore;
-  const { selectClusterInfo } = workspaceStore;
+  const { selectClusterInfo, workSpaceDetail } = workspaceStore;
+
   const {
     podInfo,
     setPodInfo,
@@ -27,10 +29,20 @@ const CreatePodStepThree = observer((props) => {
     targetClusters,
     podListIncluster,
   } = podStore;
+  console.log("podInfo : ", podInfo);
 
   const [open, setOpen] = useState(false);
+  const [nodeName, setNodeName] = useState("");
+  const [nodeDisable, setNodeDisable] = useState(true);
+  const [containerIndex, setContainerIndex] = useState(1);
+  const [prioritytDisable, setPriorityDisable] = useState(true);
+  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+  const [clusterNameInPriority, setClusterNameInPriority] = useState("");
+  console.log("nodeName :", nodeName);
 
-  const openTargetCluster = () => {};
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const onChangeName = (e) => {
     setPodInfo("priority", { name: e.target.value });
@@ -50,11 +62,30 @@ const CreatePodStepThree = observer((props) => {
     }
   };
 
-  const onChangeOption = (e) => {
+  const onChangeOption = async (e) => {
     setPodInfoPriority("options", {
       ...podInfo.priority.options,
       [e.target.name]: e.target.value,
     });
+
+    const { name, value } = e.target;
+    console.log(name, value);
+    // if (name === "sourceCluster") {
+    //   setNodeDisable(false);
+    //   setClusterNameInPriority(value);
+    //   // priority.options.data.selected_cluster = value;
+
+    //   await axios
+    //     .get(`${SERVER_URL}/clusters/${value}`)
+    //     .then(({ data: { data } }) => {
+    //       runInAction(() => {
+    //         setPriorityNodes(data.nodes);
+    //       });
+    //     });
+    // }
+    // if (name === "sourceNode") {
+    //   setNodeName(value);
+    // }
   };
 
   const PriorityComponent = () => {
@@ -80,11 +111,21 @@ const CreatePodStepThree = observer((props) => {
                 <FormControl style={{ width: "50%" }}>
                   <select name="sourceCluster" onChange={onChangeOption}>
                     <option value={""}>Select Source Cluster</option>
+                    {clusterListInWorkspace.map((cluster) => (
+                      <option value={cluster.clusterName}>
+                        {cluster.clusterName}
+                      </option>
+                    ))}
                   </select>
                 </FormControl>
                 <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
                   <select name="sourceNode" onChange={onChangeOption}>
                     <option value={""}>Select Source Node</option>
+                    {nodeName
+                      ? nodeName.map((node) => (
+                          <option value={node.name}>{node.name}</option>
+                        ))
+                      : "No Data"}
                   </select>
                 </FormControl>
               </div>
@@ -98,7 +139,7 @@ const CreatePodStepThree = observer((props) => {
                           <option value={""} selected hidden disabled>
                             Select Cluster
                           </option>
-                          {clusterListInWorkspace.map((cluster) => (
+                          {selectClusterInfo.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -182,6 +223,11 @@ const CreatePodStepThree = observer((props) => {
                 <FormControl style={{ width: "50%" }}>
                   <select name="sourceCluster" onChange={onChangeOption}>
                     <option value={""}>Select Cluster</option>
+                    {selectClusterInfo.map((cluster) => (
+                      <option value={cluster.clusterName}>
+                        {cluster.clusterName}
+                      </option>
+                    ))}
                   </select>
                 </FormControl>
                 <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
@@ -240,6 +286,11 @@ const CreatePodStepThree = observer((props) => {
             >
               <select name="cluster" onChange={onChangeOption}>
                 <option value={""}>Select Cluster</option>
+                {selectClusterInfo.map((cluster) => (
+                  <option value={cluster.clusterName}>
+                    {cluster.clusterName}
+                  </option>
+                ))}
               </select>
             </FormControl>
           </>
@@ -251,10 +302,7 @@ const CreatePodStepThree = observer((props) => {
 
   return (
     <>
-      <PodTargetClusters
-        open={open}
-        onClose={() => setOpen(false)}
-      ></PodTargetClusters>
+      <PodTargetClusters open={open} onClose={handleClose}></PodTargetClusters>
 
       <div className="step-container">
         <div className="signup-step">
