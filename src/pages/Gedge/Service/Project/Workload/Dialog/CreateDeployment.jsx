@@ -109,6 +109,8 @@ const CreateDeployment = observer((props) => {
     postDeploymentGM,
   } = deploymentStore;
 
+  console.log("deploymentInfo :", deploymentInfo);
+
   const { loadPVClaims } = claimStore;
 
   const { loadWorkSpaceList } = workspaceStore;

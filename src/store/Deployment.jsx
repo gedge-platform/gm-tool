@@ -70,8 +70,7 @@ class Deployment {
   strategy = {
     type: {},
   };
-  // labels = {};
-  // annotations = {};
+
   labels = [];
   annotations = [];
 
@@ -451,7 +450,6 @@ class Deployment {
   addContainer = async (container) => {
     runInAction(() => {
       this.deploymentInfo.containers.push(container);
-      console.log(this.deploymentInfo.containers);
     });
   };
   editContainer = (editIndex, container) => {
