@@ -10,6 +10,7 @@ import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import claimStore from "../../../../../../store/Claim";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -152,6 +153,59 @@ const DeploymentAddContainer = observer((props) => {
 
   const addContainers = () => {
     // if (isContainerValid()) {
+    console.log("containerInfo : ", containerInfo);
+    if (containerInfo.containerName === "") {
+      swalError("Container 이름을 입력해주세요");
+      return;
+    }
+    if (containerInfo.containerImage === "") {
+      swalError("Container 이미지를 입력해주세요");
+      return;
+    }
+    if (containerInfo.pullSecret === "") {
+      swalError("Pull Secret을 입력해주세요");
+      return;
+    }
+    if (containerInfo.pullPolicy === "") {
+      swalError("Pull Policy를 선택해주세요");
+      return;
+    }
+    if (containerInfo.ports.length === 0) {
+      swalError("Port를 입력해주세요");
+      return;
+    }
+    if (containerInfo.command === "") {
+      swalError("Command를 입력해주세요");
+      return;
+    }
+    if (containerInfo.arguments === "") {
+      swalError("Arguments를 입력해주세요");
+      return;
+    }
+    if (containerInfo.containerName === "") {
+      swalError("Container 이름을 입력해주세요");
+      return;
+    }
+    if (containerInfo.variables.length === 0) {
+      swalError("Variable을 입력해주세요");
+      return;
+    }
+    if (containerInfo.cpuReservation === "") {
+      swalError("CPU Request를 입력해주세요");
+      return;
+    }
+    if (containerInfo.memoryReservation === "") {
+      swalError("Memory Request를 입력해주세요");
+      return;
+    }
+    if (containerInfo.volumes.length === 0) {
+      swalError("Volume을 입력해주세요");
+      return;
+    }
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
     const temp = { ...containerInfo };
     addContainer(temp);
     console.log(temp);

@@ -1,9 +1,10 @@
 import { observer } from "mobx-react";
 import podStore from "../../../../../../store/Pod";
 import { CTextField } from "@/components/textfields";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { swalError } from "../../../../../../utils/swal-utils";
+import CreatePod from "./CreatePod";
 
 const Button = styled.button`
   background-color: #fff;
@@ -16,48 +17,158 @@ const Button = styled.button`
 `;
 
 const CreatePodStepTwo = observer((props) => {
-  const { podInfo, setPodInfo } = podStore;
+  const {
+    podInfo,
+    setPodInfo,
+    setAnnotationInput,
+    setLabelInput,
+    labelKey,
+    labelValue,
+    annotationKey,
+    annotationValue,
+    labels,
+    annotations,
+    setLabels,
+    setAnnotations,
+  } = podStore;
 
-  const [label, setLabel] = useState({ key: "", value: "" });
-  const [annotation, setAnnotation] = useState({ key: "", value: "" });
+  // const annotations = [];
+  console.log(annotations);
+  console.log(labels);
 
-  const onChangeLabel = (e) => {
-    setLabel({
-      ...label,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const [label, setLabel] = useState({ key: "", value: "" });
+  // const [annotation, setAnnotation] = useState({ key: "", value: "" });
 
-  const onChangeAnnotation = (e) => {
-    setAnnotation({
-      ...annotation,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const addLabel = () => {
-    if (label.key === "" || label.value === "") {
-      swalError("값을 입력해주세요.");
-    } else {
-      setPodInfo("labels", [...podInfo.labels, label]);
-      setLabel({ key: "", value: "" });
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    switch (name) {
+      case "labelKey":
+        setInputLabelKey(value);
+        break;
+      case "labelValue":
+        setInputLabelValue(value);
+        break;
+      case "annotationKey":
+        setInputAnnotationKey(value);
+        break;
+      case "annotationValue":
+        setInputAnnotationValue(value);
+        break;
     }
   };
 
-  const addAnnotation = () => {
-    if (annotation.key === "" || annotation.value === "") {
-      swalError("값을 입력해주세요");
-    } else {
-      setPodInfo("annotations", [...podInfo.annotations, annotation]);
-      setAnnotation({ key: "", value: "" });
+  // const onChangeLabel = (e) => {
+  //   setLabel({
+  //     ...label,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  // const onChangeAnnotation = (e) => {
+  //   setAnnotation({
+  //     ...annotation,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
+  // const addLabel = () => {
+  //   if (label.key === "" || label.value === "") {
+  //     swalError("값을 입력해주세요.");
+  //   } else {
+  //     setPodInfo("labels", [...podInfo.labels, label]);
+  //     setLabel({ key: "", value: "" });
+  //   }
+  // };
+
+  // const addAnnotation = () => {
+  //   if (annotation.key === "" || annotation.value === "") {
+  //     swalError("값을 입력해주세요");
+  //   } else {
+  //     setPodInfo("annotations", [...podInfo.annotations, annotation]);
+  //     setAnnotation({ key: "", value: "" });
+  //   }
+  // };
+
+  // const remove = (type, index) => {
+  //   setPodInfo(
+  //     type,
+  //     podInfo[type].filter((_, idx) => idx !== index)
+  //   );
+  // };
+
+  useEffect(() => {
+    setLabelInput({
+      [labelKey]: labelValue,
+    });
+    setAnnotationInput({
+      [annotationKey]: annotationValue,
+    });
+  }, [labelKey, labelValue, annotationKey, annotationValue]);
+
+  const addRow = () => {
+    if (labelKey == "") {
+      swalError("LabelKey 값을 입력해주세요");
+      return;
     }
+
+    const LabelKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+
+    if (LabelKeyArr.indexOf(labelKey) >= 0) {
+      swalError("LabelKey 값이 중복입니다.");
+      return;
+    }
+
+    const newLabelsList = [
+      {
+        labelKey,
+        labelValue,
+      },
+    ];
+
+    setLabels(labels.concat(newLabelsList));
+    setLabelInput({
+      labelKey: "",
+      labelValue: "",
+    });
+
+    setInputLabelKey("");
+    setInputLabelValue("");
   };
 
-  const remove = (type, index) => {
-    setPodInfo(
-      type,
-      podInfo[type].filter((_, idx) => idx !== index)
-    );
+  const deleteLabels = (labelKey) => {
+    setLabels(labels.filter((item) => item.labelKey !== labelKey));
+  };
+
+  const addAnnotations = () => {
+    if (annotationKey == "") {
+      swalError("AnnotationKey 값을 입력해주세요");
+      return;
+    }
+
+    const AnnotationKeyArr = [];
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
+
+    if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
+      swalError("AnnotationKey 값이 중복입니다.");
+      return;
+    }
+
+    const newAnnotationsList = [
+      {
+        annotationKey,
+        annotationValue,
+      },
+    ];
+
+    setAnnotations(annotations.concat(newAnnotationsList));
+    setAnnotationInput({
+      annotationKey: "",
+      annotationValue: "",
+    });
+
+    setInputAnnotationKey("");
+    setInputAnnotationValue("");
   };
 
   return (
@@ -82,18 +193,18 @@ const CreatePodStepTwo = observer((props) => {
         </div>
       </div>
 
-      <table className="tb_data_new tb_write">
+      <table id="labelTable" className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th rowSpan={podInfo.labels.length + 1}>Labels</th>
+            <th>Labels</th>
             <td>
               <CTextField
                 type="text"
                 placeholder="Key"
                 className="form_fullWidth"
-                name="key"
-                onChange={onChangeLabel}
-                value={label.key}
+                name="labelKey"
+                onChange={handleChange}
+                value={labelKey}
               />
             </td>
             <td>
@@ -101,70 +212,44 @@ const CreatePodStepTwo = observer((props) => {
                 type="text"
                 placeholder="Value"
                 className="form_fullWidth"
-                name="value"
-                onChange={onChangeLabel}
-                value={label.value}
+                name="labelValue"
+                onChange={handleChange}
+                value={labelValue}
               />
             </td>
             <td>
-              <Button
-                style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  borderRadius: "0",
-                }}
-                onClick={addLabel}
-              >
-                +
-              </Button>
+              <Button onClick={addRow}>+</Button>
             </td>
           </tr>
-          {podInfo.labels.map((label, index) => (
-            <tr>
-              <td style={{ paddingLeft: "5px" }}>{label.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{label.value}</td>
-              <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => remove("labels", index)}
-                >
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {labels
+            ? labels.map((item) => (
+                <tr>
+                  <th>Labels</th>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.labelKey}
+                  </td>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.labelValue}
+                  </td>
+                  <td>
+                    <Button onClick={() => deleteLabels(item.labelKey)}>
+                      -
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            : null}
 
           <tr>
-            <th rowSpan={podInfo.annotations.length + 2}>Annotations</th>
+            <th>Annotations</th>
             <td>
               <CTextField
                 type="text"
                 placeholder="Key"
                 className="form_fullWidth"
-                name="key"
-                onChange={onChangeAnnotation}
-                value={annotation.key}
+                name="annotationKey"
+                onChange={handleChange}
+                value={annotationKey}
               />
             </td>
             <td>
@@ -172,54 +257,26 @@ const CreatePodStepTwo = observer((props) => {
                 type="text"
                 placeholder="Value"
                 className="form_fullWidth"
-                name="value"
-                onChange={onChangeAnnotation}
-                value={annotation.value}
+                name="annotationValue"
+                onChange={handleChange}
+                value={annotationValue}
               />
             </td>
-            <td>
-              <Button
-                style={{
-                  border: "none",
-                  height: "28px",
-                  width: "30px",
-                  fontSize: "20px",
-                  fontWeight: 600,
-                  lineHeight: 1,
-                  letterSpacing: "normal",
-                  color: "#36435c",
-                  backgroundColor: "#eff4f9",
-                  padding: "0 0 0 0",
-                  borderRadius: "0",
-                }}
-                onClick={addAnnotation}
-              >
-                +
-              </Button>
+            <td colSpan={2}>
+              <Button onClick={addAnnotations}>+</Button>
             </td>
           </tr>
-          {podInfo.annotations.map((annotation, index) => (
+          {annotations.map((item) => (
             <tr>
-              <td style={{ paddingLeft: "5px" }}>{annotation.key}</td>
-              <td style={{ paddingLeft: "5px" }}>{annotation.value}</td>
+              <th>Annotations</th>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.annotationKey}
+              </td>
+              <td style={{ width: "300px", padding: "8px" }}>
+                {item.annotationValue}
+              </td>
               <td>
-                <Button
-                  style={{
-                    border: "none",
-                    height: "28px",
-                    width: "30px",
-                    fontSize: "20px",
-                    fontWeight: 600,
-                    lineHeight: 1,
-                    letterSpacing: "normal",
-                    color: "#36435c",
-                    backgroundColor: "#eff4f9",
-                    padding: "0 0 0 0",
-                    margin: "2px",
-                    borderRadius: "0",
-                  }}
-                  onClick={() => remove("annotations", index)}
-                >
+                <Button onClick={() => deleteAnnotations(item.annotationKey)}>
                   -
                 </Button>
               </td>
@@ -227,6 +284,7 @@ const CreatePodStepTwo = observer((props) => {
           ))}
         </tbody>
       </table>
+      <CreatePod />
     </>
   );
 });

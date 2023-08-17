@@ -69,17 +69,17 @@ const DeleteButton = styled.button`
 
 const CreatePod = observer((props) => {
   const { open } = props;
-  const { podInfo, initPodInfo, initTargetClusters, setContent } = podStore;
+  const { podInfo, initPodInfo, initTargetClusters, setContent, setClearLA } =
+    podStore;
 
   const [stepValue, setStepValue] = useState(1);
   const [input, setInput] = useState({ key: "", value: "" });
 
   const template = {
     apiVersion: "apps/v1",
-    kind: "pod",
+    kind: "Pod",
     metadata: {
-      name: "nginx",
-      annotations: "annotation",
+      name: podInfo.podName,
       labels: "label",
       namespace: "default",
     },
@@ -115,7 +115,10 @@ const CreatePod = observer((props) => {
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
-
+  const onClickStepTwo = (e) => {
+    setClearLA();
+    setStepValue(2);
+  };
   useEffect(() => {
     return () => {
       initPodInfo();
@@ -150,9 +153,7 @@ const CreatePod = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => setStepValue(stepValue + 1)}>
-                다음
-              </ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
