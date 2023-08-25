@@ -120,6 +120,12 @@ class Pod {
     targetClusters: "",
   };
 
+  selectedCluster = "";
+  setSelectedCluster = (value) => {
+    runInAction(() => {
+      this.selectedCluster = value;
+    });
+  };
   targetClusters = [];
   unselectedClusters = [
     "cluster0",
@@ -272,21 +278,7 @@ class Pod {
       this.labelInput = value;
     });
   };
-  setAnnotationInput = (value) => {
-    runInAction(() => {
-      this.annotationInput = value;
-    });
-  };
-  setLabels = (value) => {
-    runInAction(() => {
-      this.labels = value;
-    });
-  };
-  setAnnotations = (value) => {
-    runInAction(() => {
-      this.annotations = value;
-    });
-  };
+
   setTemplate = (template) => {
     runInAction(() => {
       delete template.metadata.labels[""];
@@ -304,29 +296,6 @@ class Pod {
       this.annotationValue = "";
       this.labels = [];
       this.annotations = [];
-    });
-  };
-  setInputLabelKey = (value) => {
-    runInAction(() => {
-      this.labelKey = value;
-    });
-  };
-
-  setInputLabelValue = (value) => {
-    runInAction(() => {
-      this.labelValue = value;
-    });
-  };
-
-  setInputAnnotationKey = (value) => {
-    runInAction(() => {
-      this.annotationKey = value;
-    });
-  };
-
-  setInputAnnotationValue = (value) => {
-    runInAction(() => {
-      this.annotationValue = value;
     });
   };
 
@@ -418,12 +387,6 @@ class Pod {
     });
   };
 
-  setLabelInput = (value) => {
-    runInAction(() => {
-      this.labelInput = value;
-    });
-  };
-
   setLabels = (value) => {
     runInAction(() => {
       this.labels = value;
@@ -443,11 +406,9 @@ class Pod {
     });
   };
 
-  labelInput = [];
   labelKey = "";
   labelValue = "";
-  labelInputKey = "";
-  labelInputValue = "";
+
   annotationInput = [];
   annotationKey = "";
   annotationValue = "";

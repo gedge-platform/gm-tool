@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import Swal from "sweetalert2";
 import { swalError, swalLoading } from "../utils/swal-utils";
+import { getItem } from "../utils/sessionStorageFn";
 
 class Cluster {
   clusterList = [];
@@ -365,12 +366,23 @@ class Cluster {
       .then((res) => runInAction(() => (this.clusters = res.data.data)));
   };
 
+  clustersInWorkspace = [];
+  setClustersInWorkspace = (clustersInWorkspace) => {
+    runInAction(() => {
+      this.clustersInWorkspace = clustersInWorkspace;
+    });
+  };
   loadClusterInWorkspace = async (workspace) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
     await axios
       .get(`${SERVER_URL}/clusters?id=${id}&workspace=${workspace}`)
-      .then((res) => runInAction(() => (this.clusters = res.data.data)));
+      .then((res) =>
+        runInAction(() => {
+          console.log("res :", res);
+          this.clustersInWorkspace = res.data.data;
+        })
+      );
   };
 
   setDetail = (num) => {
