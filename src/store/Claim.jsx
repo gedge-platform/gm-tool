@@ -62,6 +62,14 @@ class Claim {
     });
   };
 
+  checkPVCInPod = "";
+  setCheckPVCInPod = (pvcName, volume) => {
+    runInAction(() => {
+      this.checkPVCInDeployment = pvcName;
+      this.volumeName = volume;
+    });
+  };
+
   setTemplate = (template) => {
     runInAction(() => {
       delete template.metadata.labels[""];

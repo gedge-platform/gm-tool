@@ -70,8 +70,7 @@ class Deployment {
   strategy = {
     type: {},
   };
-  // labels = {};
-  // annotations = {};
+
   labels = [];
   annotations = [];
 
@@ -388,6 +387,12 @@ class Deployment {
     });
   };
 
+  setDeploymentInfoPriority = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo.priority[key] = value;
+    });
+  };
+
   addObjectInDeploymentInfo = (name, key, value) => {
     runInAction(() => {
       this.deploymentInfo[name].push({ key: key, value: value });
@@ -445,7 +450,6 @@ class Deployment {
   addContainer = async (container) => {
     runInAction(() => {
       this.deploymentInfo.containers.push(container);
-      console.log(this.deploymentInfo.containers);
     });
   };
   editContainer = (editIndex, container) => {
@@ -740,12 +744,14 @@ class Deployment {
 
     await axios
       .post(
-        `http://101.79.1.138:8013/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
         body
       )
       .then((res) => {
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
+        } else {
+          swalError("Deployment 생성 실패", callback);
         }
       });
   };
