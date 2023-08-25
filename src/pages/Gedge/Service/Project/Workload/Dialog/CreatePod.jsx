@@ -83,7 +83,6 @@ const CreatePod = observer((props) => {
     annotationInput,
     postPodGM,
   } = podStore;
-  console.log("podInfo :", podInfo);
 
   const [stepValue, setStepValue] = useState(1);
 
