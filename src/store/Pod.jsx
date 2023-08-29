@@ -425,14 +425,6 @@ class Pod {
     });
   };
 
-  setTemplateLabel = () => {
-    runInAction(() => {
-      this.labels.map((data) => {
-        this.labelInput[data.labelKey] = data.labelValue;
-      });
-    });
-  };
-
   setTemplateAnnotation = () => {
     runInAction(() => {
       this.annotations.map((data) => {

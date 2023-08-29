@@ -187,7 +187,6 @@ const DeploymentAddContainer = observer((props) => {
 
     const temp = { ...containerInfo };
     addContainer(temp);
-    console.log(temp);
     props.onClose && props.onClose();
   };
 
@@ -783,6 +782,7 @@ const DeploymentAddContainer = observer((props) => {
                           name="name"
                           onChange={(e) => onChangeVolume(e, index)}
                           value={volume.name}
+                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
                         >
                           <option value={""} selected disabled hidden>
                             Select Volume

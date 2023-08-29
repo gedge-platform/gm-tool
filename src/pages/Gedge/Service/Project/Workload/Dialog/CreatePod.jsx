@@ -12,6 +12,7 @@ import CreatePodStepOne from "./CreatePodStepOne";
 import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
 import PodYaml from "./PodYaml";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -173,6 +174,27 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
+    if (podInfo.podName === "") {
+      swalError("Pod 이름을 입력해주세요");
+      return;
+    }
+    if (podInfo.workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (podInfo.project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    // Replica는 기본 설정 1이라서 추가 안함
+    if (podInfo.volume === "") {
+      swalError("Volume을 선택해주세요");
+      return;
+    }
+    if (podInfo.containers.length === 0) {
+      swalError("Container를 선택해주세요");
+      return;
+    }
     setClearLA();
     setStepValue(2);
   };
