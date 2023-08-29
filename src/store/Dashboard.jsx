@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
 import { SERVER_URL, SPIDER } from "../config";
+// import { SERVER_URL } from "../config";
 
 class Dashboard {
   viewList = [];
@@ -57,13 +58,14 @@ class Dashboard {
   y = [];
   pointArr = [];
 
-  connectionconfig = [{
-    ConfigName: "",
-    ProviderName: "", 
-    DriverName: "",
-    CredentialName: "",
-    RegionName:" "
-  }
+  connectionconfig = [
+    {
+      ConfigName: "",
+      ProviderName: "",
+      DriverName: "",
+      CredentialName: "",
+      RegionName: " ",
+    },
   ];
   ConfigName = [];
   ProviderName = [];
@@ -244,26 +246,26 @@ class Dashboard {
   //     });
   // };
 
-  loadCredentialName = async () => {
-    await axios
-      .get(`${SERVER_URL}/spider/connectionconfig`)
-      .then((res) => {
-        runInAction(() => {
-          this.connectionconfig = res.data.connectionconfig;
-          this.ConfigNameList = this.connectionconfig ? this.connectionconfig.map((name) => name.ConfigName ) : "";
-          this.ProviderName = this.connectionconfig ? this.connectionconfig.map((provider) => provider.ProviderName ) : "";
-          this.ProviderName = this.connectionconfig ? this.connectionconfig.map((credentialName) => credentialName.CredentialName ) : "";
-        });
-      })
-      .then(() => {
-        for (let i = 0; i < this.ConfigNameList.length; i++) {
-          this.loadVMStatusCnt(this.ConfigNameList[i], this.ProviderName[i]);
-        }
-        // this.ConfigNameList.map((name) => this.loadVMCnt(name));
-        // this.loadVMCnt();
-        // this.ConfigNameList.map((val) => this.loadVMStatusCnt(val, val2));
-      });
-  };
+  // loadCredentialName = async () => {
+  //   await axios
+  //     .get(`${SERVER_URL}/spider/connectionconfig`)
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         this.connectionconfig = res.data.connectionconfig;
+  //         this.ConfigNameList = this.connectionconfig ? this.connectionconfig.map((name) => name.ConfigName ) : "";
+  //         this.ProviderName = this.connectionconfig ? this.connectionconfig.map((provider) => provider.ProviderName ) : "";
+  //         this.ProviderName = this.connectionconfig ? this.connectionconfig.map((credentialName) => credentialName.CredentialName ) : "";
+  //       });
+  //     })
+  //     .then(() => {
+  //       for (let i = 0; i < this.ConfigNameList.length; i++) {
+  //         this.loadVMStatusCnt(this.ConfigNameList[i], this.ProviderName[i]);
+  //       }
+  //       // this.ConfigNameList.map((name) => this.loadVMCnt(name));
+  //       // this.loadVMCnt();
+  //       // this.ConfigNameList.map((val) => this.loadVMStatusCnt(val, val2));
+  //     });
+  // };
 
   // loadVMStatusCnt = async () => {
   //   const urls = axios.get(
@@ -325,9 +327,7 @@ class Dashboard {
   // });
   // };
   loadVMCnt = async () => {
-    const urls = axios.get(
-      `${SPIDER}/spider/connectionconfig`
-    );
+    const urls = axios.get(`${SPIDER}/spider/connectionconfig`);
     const configResult = await Promise.all([urls]).then((res) => {
       return res;
     });
@@ -359,12 +359,9 @@ class Dashboard {
 
   loadVMStatusCnt = async (configName, providerName) => {
     axios
-      .post(
-        `${SERVER_URL}/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
-        {
-          ConnectionName: configName,
-        }
-      )
+      .post(`${SERVER_URL}/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`, {
+        ConnectionName: configName,
+      })
       .then((res) => {
         this.ProviderName = providerName;
         this.ConfigName = configName;

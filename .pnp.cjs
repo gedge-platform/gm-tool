@@ -547,18 +547,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:7.22.10", {\
-          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.22.10-2771d0ecab-524d41517e.zip/node_modules/@babel/runtime/",\
-          "packageDependencies": [\
-            ["@babel/runtime", "npm:7.22.10"],\
-            ["regenerator-runtime", "npm:0.14.0"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:7.22.5", {\
           "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.22.5-0a6711d04c-12a50b7de2.zip/node_modules/@babel/runtime/",\
           "packageDependencies": [\
             ["@babel/runtime", "npm:7.22.5"],\
+            ["regenerator-runtime", "npm:0.13.11"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:7.22.6", {\
+          "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.22.6-493f6b7ad0-e585338287.zip/node_modules/@babel/runtime/",\
+          "packageDependencies": [\
+            ["@babel/runtime", "npm:7.22.6"],\
             ["regenerator-runtime", "npm:0.13.11"]\
           ],\
           "linkType": "HARD"\
@@ -5032,7 +5032,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["autoprefixer", "npm:9.8.8"],\
             ["browserslist", "npm:4.21.5"],\
-            ["caniuse-lite", "npm:1.0.30001451"],\
+            ["caniuse-lite", "npm:1.0.30001517"],\
             ["normalize-range", "npm:0.1.2"],\
             ["num2fraction", "npm:1.2.2"],\
             ["picocolors", "npm:0.2.1"],\
@@ -5047,7 +5047,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["autoprefixer", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:10.4.13"],\
             ["@types/postcss", null],\
             ["browserslist", "npm:4.21.5"],\
-            ["caniuse-lite", "npm:1.0.30001451"],\
+            ["caniuse-lite", "npm:1.0.30001517"],\
             ["fraction.js", "npm:4.2.0"],\
             ["normalize-range", "npm:0.1.2"],\
             ["picocolors", "npm:1.0.0"],\
@@ -5180,8 +5180,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/browserslist-npm-4.21.5-e3b9e9d029-9755986b22.zip/node_modules/browserslist/",\
           "packageDependencies": [\
             ["browserslist", "npm:4.21.5"],\
-            ["caniuse-lite", "npm:1.0.30001451"],\
-            ["electron-to-chromium", "npm:1.4.289"],\
+            ["caniuse-lite", "npm:1.0.30001517"],\
+            ["electron-to-chromium", "npm:1.4.288"],\
             ["node-releases", "npm:2.0.10"],\
             ["update-browserslist-db", "virtual:e3b9e9d029ed690d72cbb29196ba0a23f15b398eeb926347678187be937db870a04cbf984eecc8e0ec9c290158a9cd8607d12f0188665abe039fa4a9051a22ac#npm:1.0.10"]\
           ],\
@@ -5234,10 +5234,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["caniuse-lite", [\
-        ["npm:1.0.30001451", {\
-          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001451-47fea7d7ec-48a06a7881.zip/node_modules/caniuse-lite/",\
+        ["npm:1.0.30001517", {\
+          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001517-43126c8553-e4e87436ae.zip/node_modules/caniuse-lite/",\
           "packageDependencies": [\
-            ["caniuse-lite", "npm:1.0.30001451"]\
+            ["caniuse-lite", "npm:1.0.30001517"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5832,10 +5832,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["electron-to-chromium", [\
-        ["npm:1.4.289", {\
-          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.4.289-cb06a30e73-1f67b7f247.zip/node_modules/electron-to-chromium/",\
+        ["npm:1.4.288", {\
+          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.4.288-0d6e8b8f28-312e1210f6.zip/node_modules/electron-to-chromium/",\
           "packageDependencies": [\
-            ["electron-to-chromium", "npm:1.4.289"]\
+            ["electron-to-chromium", "npm:1.4.288"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8064,7 +8064,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["postcss-preset-env", "npm:6.7.1"],\
             ["autoprefixer", "npm:9.8.8"],\
             ["browserslist", "npm:4.21.5"],\
-            ["caniuse-lite", "npm:1.0.30001451"],\
+            ["caniuse-lite", "npm:1.0.30001517"],\
             ["css-blank-pseudo", "npm:0.1.4"],\
             ["css-has-pseudo", "npm:0.10.0"],\
             ["css-prefers-color-scheme", "npm:3.1.1"],\
@@ -8390,7 +8390,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/react-beautiful-dnd-virtual-7d7076c47d/0/cache/react-beautiful-dnd-npm-13.1.1-ddc8adf565-5f90f7c0ab.zip/node_modules/react-beautiful-dnd/",\
           "packageDependencies": [\
             ["react-beautiful-dnd", "virtual:349e2503dcbae880be45eea0ca107064bf4dd1ed2b316027d3fb50b8bdd323bac9a24321670e8a4e7564b287e21b6d44c47e6d3c180a75697ce5a092c6dbb746#npm:13.1.1"],\
-            ["@babel/runtime", "npm:7.22.10"],\
+            ["@babel/runtime", "npm:7.22.6"],\
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["css-box-model", "npm:1.2.1"],\
@@ -8801,7 +8801,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/__virtual__/react-redux-virtual-5a660c0262/0/cache/react-redux-npm-7.2.9-612aa35519-369a2bdcf8.zip/node_modules/react-redux/",\
           "packageDependencies": [\
             ["react-redux", "virtual:7d7076c47d9100b117735f070ec04e0d5aedf2372cc7816465a0c31c8d7ff080d399bd32a31d35850f91e216bd4411f64d58563199cb9ea5d981dbe18c689951#npm:7.2.9"],\
-            ["@babel/runtime", "npm:7.22.10"],\
+            ["@babel/runtime", "npm:7.22.6"],\
             ["@types/react", null],\
             ["@types/react-dom", null],\
             ["@types/react-native", null],\
@@ -9202,7 +9202,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/redux-npm-4.2.1-e7e2cf2e37-f63b9060c3.zip/node_modules/redux/",\
           "packageDependencies": [\
             ["redux", "npm:4.2.1"],\
-            ["@babel/runtime", "npm:7.22.10"]\
+            ["@babel/runtime", "npm:7.22.6"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -9212,13 +9212,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.13.11-90bf536060-27481628d2.zip/node_modules/regenerator-runtime/",\
           "packageDependencies": [\
             ["regenerator-runtime", "npm:0.13.11"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:0.14.0", {\
-          "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.14.0-e060897cf7-1c977ad82a.zip/node_modules/regenerator-runtime/",\
-          "packageDependencies": [\
-            ["regenerator-runtime", "npm:0.14.0"]\
           ],\
           "linkType": "HARD"\
         }]\
