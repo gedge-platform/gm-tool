@@ -40,7 +40,6 @@ const CreateDeploymentStepThree = observer(() => {
 
   const {
     setDeploymentInfo,
-    removeContainer,
     priority,
     setPriority,
     targetClusters,
@@ -321,7 +320,7 @@ const CreateDeploymentStepThree = observer(() => {
                         <option value={""} selected disabled hidden>
                           Select Source Cluster
                         </option>
-                        {clusterListInWorkspace.map((cluster) => (
+                        {selectClusterInfo.map((cluster) => (
                           <option value={cluster.clusterName}>
                             {cluster.clusterName}
                           </option>
@@ -354,7 +353,7 @@ const CreateDeploymentStepThree = observer(() => {
                         <option value={""} selected disabled hidden>
                           Select Cluster
                         </option>
-                        {clusterListInWorkspace.map((cluster) => (
+                        {selectClusterInfo.map((cluster) => (
                           <option value={cluster.clusterName}>
                             {cluster.clusterName}
                           </option>
@@ -418,7 +417,7 @@ const CreateDeploymentStepThree = observer(() => {
                         <option value={""} selected disabled hidden>
                           Select Source Cluster
                         </option>
-                        {clusterListInWorkspace.map((cluster) => (
+                        {selectClusterInfo.map((cluster) => (
                           <option value={cluster.clusterName}>
                             {cluster.clusterName}
                           </option>
@@ -451,8 +450,10 @@ const CreateDeploymentStepThree = observer(() => {
                       style={{ paddingTop: "4px" }}
                     >
                       <select name="selectCluster" onChange={onChangeSource}>
-                        <option value={""}>Select Cluster</option>
-                        {clusterListInWorkspace.map((cluster) => (
+                        <option value={""} selected disabled hidden>
+                          Select Cluster
+                        </option>
+                        {selectClusterInfo.map((cluster) => (
                           <option value={cluster.clusterName}>
                             {cluster.clusterName}
                           </option>
@@ -510,8 +511,10 @@ const CreateDeploymentStepThree = observer(() => {
                 style={{ paddingTop: "2px" }}
               >
                 <select name="clusters" onChange={onChangeSource}>
-                  <option value={""}>Set Clusters</option>
-                  {clusterListInWorkspace.map((cluster) => (
+                  <option value={""} selected disabled hidden>
+                    Set Clusters
+                  </option>
+                  {selectClusterInfo.map((cluster) => (
                     <option value={cluster.clusterName}>
                       {cluster.clusterName}
                     </option>
@@ -539,6 +542,10 @@ const CreateDeploymentStepThree = observer(() => {
 
     useEffect(() => {
       loadCluster(nodeName);
+    }, []);
+
+    useEffect(() => {
+      loadWorkspaceDetail(deploymentInfo.workspace);
     }, []);
 
     return (
