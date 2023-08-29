@@ -96,7 +96,7 @@ const Storage = observer(() => {
   const handleOpen = e => {
     let fieldName = e.colDef.field;
     loadStorageClass(e.data.name, e.data.cluster);
-    loadStorageClassYaml(e.data.name, e.data.cluster, null, "storageclasses");
+    loadStorageClassYaml(e.data.name, e.data.cluster, "storageclasses");
     if (fieldName === "yaml") {
       handleOpenYaml();
     }
