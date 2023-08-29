@@ -74,6 +74,13 @@ class Deployment {
   labels = [];
   annotations = [];
 
+  selectedCluster = "";
+  setSelectedCluster = (value) => {
+    runInAction(() => {
+      this.selectedCluster = value;
+    });
+  };
+
   containersTemp = [
     {
       image: "",
@@ -741,6 +748,9 @@ class Deployment {
     const body = this.content;
     const options = encodeURI(JSON.stringify(this.priority.options));
     const requestId = "requestId12";
+    console.log("body :", body);
+    console.log("options :", options);
+    console.log("requestId :", requestId);
 
     await axios
       .post(
@@ -748,7 +758,7 @@ class Deployment {
         body
       )
       .then((res) => {
-        console.log();
+        console.log("res :", res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
           console.log(options);

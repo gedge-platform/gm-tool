@@ -93,8 +93,8 @@ const CreateClaim = observer((props) => {
     metadata: {
       name: claimName,
       namespace: project,
-      labels: labelInput,
-      annotations: annotationInput,
+      // labels: labelInput,
+      // annotations: annotationInput,
     },
     spec: {
       storageClassName: selectStorageClass,
