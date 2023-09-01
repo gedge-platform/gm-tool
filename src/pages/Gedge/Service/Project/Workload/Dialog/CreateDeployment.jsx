@@ -119,8 +119,6 @@ const CreateDeployment = observer((props) => {
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
 
-  console.log(deploymentInfo);
-
   const template = {
     apiVersion: "apps/v1",
     kind: "Deployment",
@@ -205,108 +203,6 @@ const CreateDeployment = observer((props) => {
     },
   };
 
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: deploymentInfo.deploymentName,
-  //     annotations: annotationInput,
-  //     labels: labelInput,
-  //     namespace: "default",
-  //   },
-  //   spec: {
-  //     selector: {
-  //       matchLabels: labelInput,
-  //     },
-  //     replicas: deploymentInfo.replicas,
-  //     template: {
-  //       metadata: {
-  //         annotations: annotationInput,
-  //         labels: labelInput,
-  //       },
-  //       spec: {
-  //         imagePullSecert: deploymentInfo.containers?.map((e) => {
-  //           return { name: e.pullSecret };
-  //         }),
-  //         containers: deploymentInfo.containers?.map((e) => {
-  //           return {
-  //             name: e.containerName,
-  //             image: e.containerImage,
-  //             imagePullPolicy: e.pullPolicy,
-  //             command: e.command.split(" "),
-  //             args: e.arguments.split(" "),
-  //             resources: {
-  //               limits: {
-  //                 // cpu: e.cpuLimit,
-  //                 memory: e.memoryLimit + "Mi",
-  //               },
-  //               requests: {
-  //                 cpu: e.cpuReservation + "m",
-  //                 memory: e.memoryReservation + "Mi",
-  //               },
-  //             },
-  //             ports: e.ports.map((i) => {
-  //               return {
-  //                 name: i.name,
-  //                 containerPort: parseInt(i.privateContainerPort),
-  //                 protocol: i.protocol,
-  //               };
-  //             }),
-  //             envForm: [
-  //               {
-  //                 configMapRef: { name: "env-configmap" },
-  //               },
-  //               { secretRef: { name: "env-secrets" } },
-  //             ],
-  //             volumeMounts: [
-  //               {
-  //                 mountPath: "/usr/share/nginx/html",
-  //                 name: "mp3-convert-pvc",
-  //               },
-  //             ],
-  //             env: [
-  //               {
-  //                 name: "test",
-  //                 value: "test",
-  //               },
-  //             ],
-
-  //             // envForm: e.variables.map((i) => {
-  //             //   const item = i.type + "Ref";
-  //             //   return {
-  //             //     [item]: {
-  //             //       name: i.variableName,
-  //             //     },
-  //             //   };
-  //             // }),
-  //             // env: e.variables.map((i) => {
-  //             //   return {
-  //             //     name: i.variableName,
-  //             //     value: i.value,
-  //             //   };
-  //             // }),
-  //             // volumeMounts: e.volumes.map((i) => {
-  //             //   return {
-  //             //     mountPath: i.subPathInVolume,
-  //             //     name: i.name,
-  //             //   };
-  //             // }),
-  //           };
-  //         }),
-  //       },
-  //     },
-  //     volumes: [
-  //       {
-  //         name: deploymentInfo.volume,
-  //         // name: "my-nginx-pv-storage",
-  //         persistentVolumeClaim: {
-  //           claimName: deploymentInfo.pvcName,
-  //         },
-  //       },
-  //     ],
-  //   },
-  // };
-
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
@@ -324,6 +220,11 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
+    const checkRegex = /^[a-z0-9]$/;
+    if (!checkRegex.deploymentInfo.deploymentName) {
+      swalError("영어소문자와 숫자만 입력해주세요.");
+      //   return;
+    }
     // if (deploymentInfo.deploymentName === "") {
     //   swalError("Deployment 이름을 입력해주세요");
     //   return;

@@ -92,56 +92,15 @@ const CreateDeploymentStepOne = observer((props) => {
     },
   });
 
-  const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
-    labelList,
-    initLabelList,
-    addLabelList,
-    removeLabelList,
-    annotationList,
-    initAnnotationList,
-    addAnnotationList,
-    removeAnnotationList,
-    deploymentInfo,
-    initDeploymentInfo,
-    setDeploymentInfo,
-    removeContainer,
-  } = deploymentStore;
+  const { deploymentInfo, setDeploymentInfo, removeContainer } =
+    deploymentStore;
 
-  const {
-    loadWorkSpaceList,
-    workSpaceList,
-    loadWorkspaceDetail,
-    workSpaceDetail,
-    selectClusterInfo,
-  } = workspaceStore;
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
+    workspaceStore;
 
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-  } = projectStore;
+  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
 
-  const {
-    loadPVClaims,
-    pvClaimListInDeployment,
-    checkPVCInDeployment,
-    setCheckPVCInDeployment,
-  } = claimStore;
+  const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
 
   const onChange = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
@@ -229,7 +188,7 @@ const CreateDeploymentStepOne = observer((props) => {
             <td colSpan="3">
               <CTextField
                 type="text"
-                placeholder="Deployment Name"
+                placeholder="Deployment Name(영어소문자, 숫자만 가능)"
                 className="form_fullWidth"
                 name="deploymentName"
                 onChange={onChange}
