@@ -70,10 +70,16 @@ class Deployment {
   strategy = {
     type: {},
   };
-  // labels = {};
-  // annotations = {};
+
   labels = [];
   annotations = [];
+
+  selectedCluster = "";
+  setSelectedCluster = (value) => {
+    runInAction(() => {
+      this.selectedCluster = value;
+    });
+  };
 
   containersTemp = [
     {
@@ -214,15 +220,16 @@ class Deployment {
   ];
 
   targetClusters = [];
-  unselectedClusters = [
-    "cluster0",
-    "cluster1",
-    "cluster2",
-    "cluster3",
-    "cluster4",
-    "cluster5",
-    "cluster6",
-  ];
+  // unselectedClusters = [
+  //   "cluster0",
+  //   "cluster1",
+  //   "cluster2",
+  //   "cluster3",
+  //   "cluster4",
+  //   "cluster5",
+  //   "cluster6",
+  // ];
+  unselectedClusters = [];
 
   initTargetClusters = () => {
     runInAction(() => {
@@ -388,6 +395,12 @@ class Deployment {
     });
   };
 
+  setDeploymentInfoPriority = (key, value) => {
+    runInAction(() => {
+      this.deploymentInfo.priority[key] = value;
+    });
+  };
+
   addObjectInDeploymentInfo = (name, key, value) => {
     runInAction(() => {
       this.deploymentInfo[name].push({ key: key, value: value });
@@ -445,7 +458,6 @@ class Deployment {
   addContainer = async (container) => {
     runInAction(() => {
       this.deploymentInfo.containers.push(container);
-      console.log(this.deploymentInfo.containers);
     });
   };
   editContainer = (editIndex, container) => {
@@ -737,15 +749,21 @@ class Deployment {
     const body = this.content;
     const options = encodeURI(JSON.stringify(this.priority.options));
     const requestId = "requestId12";
+    console.log("body :", body);
+    console.log("options :", this.priority.options);
+    console.log("requestId :", requestId);
 
     await axios
       .post(
-        `http://101.79.1.138:8013/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
         body
       )
       .then((res) => {
+        console.log("res :", res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.", callback);
+        } else {
+          swalError("Deployment 생성 실패", callback);
         }
       });
   };

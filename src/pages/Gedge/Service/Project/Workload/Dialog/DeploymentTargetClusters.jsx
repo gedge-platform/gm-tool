@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
+import platformProjectStore from "../../../../../../store/PlatformProject";
 
 const Button = styled.button`
   background-color: #fff;
@@ -45,7 +46,17 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     setUnselectedClusters,
     priority,
     setPriority,
+    deploymentInfo,
+    loadDeploymentList,
+    deploymentList,
   } = deploymentStore;
+
+  const { loadAdminPlatformProjectList, adminList } = platformProjectStore;
+
+  useEffect(() => {
+    loadAdminPlatformProjectList();
+  }, []);
+
   const [selectedClusters, setSelectedClusters] = useState([]);
   const [unselected, setUnselected] = useState([]);
 

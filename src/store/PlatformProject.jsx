@@ -165,6 +165,8 @@ class PlatformProject {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
+            console.log(res);
+            console.log(res.data.data);
             this.platformProjectList = res.data.data;
             this.platformDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);

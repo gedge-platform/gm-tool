@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
-import Tabs from "@material-ui/core/Tabs";
 import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
@@ -10,6 +9,7 @@ import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import claimStore from "../../../../../../store/Claim";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -18,7 +18,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -27,7 +26,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonAddHost = styled.button`
@@ -39,14 +37,9 @@ const ButtonAddHost = styled.button`
 `;
 
 const DeploymentAddContainer = observer((props) => {
-  const {
-    addContainer,
-    editContainer,
-    deploymentInfo,
-    volumeList,
-    loadVolumeList,
-  } = deploymentStore;
-  const { volumeName, setCheckPVCInDeployment } = claimStore;
+  const { addContainer, editContainer, deploymentInfo, loadVolumeList } =
+    deploymentStore;
+  const { volumeName } = claimStore;
 
   const { open, containerIndex } = props;
   const [tabvalue, setTabvalue] = useState(0);
@@ -142,20 +135,65 @@ const DeploymentAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    // if (isContainerValid()) {
+    // console.log("containerInfo : ", containerInfo);
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerImage === "") {
+    //   swalError("Container 이미지를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullSecret === "") {
+    //   swalError("Pull Secret을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullPolicy === "") {
+    //   swalError("Pull Policy를 선택해주세요");
+    //   return;
+    // }
+    // if (containerInfo.ports.length === 0) {
+    //   swalError("Port를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.command === "") {
+    //   swalError("Command를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.arguments === "") {
+    //   swalError("Arguments를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.variables.length === 0) {
+    //   swalError("Variable을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.cpuReservation === "") {
+    //   swalError("CPU Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.memoryReservation === "") {
+    //   swalError("Memory Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.volumes.length === 0) {
+    //   swalError("Volume을 입력해주세요");
+    //   return;
+    // }
+
     const temp = { ...containerInfo };
     addContainer(temp);
-    console.log(temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const editContainers = () => {
-    // if (isContainerValid()) {
     const temp = { ...containerInfo };
     editContainer(containerIndex, temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const onChangeVolume = (e, index) => {
@@ -734,7 +772,7 @@ const DeploymentAddContainer = observer((props) => {
             <tbody>
               <tr>
                 <th rowSpan={2} style={{ width: "15%" }}>
-                  Volume
+                  Volume <span className="requried">*</span>
                 </th>
                 <td>
                   {containerInfo.volumes.map((volume, index) => (
@@ -744,6 +782,7 @@ const DeploymentAddContainer = observer((props) => {
                           name="name"
                           onChange={(e) => onChangeVolume(e, index)}
                           value={volume.name}
+                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
                         >
                           <option value={""} selected disabled hidden>
                             Select Volume

@@ -78,7 +78,7 @@ const Detail = observer((props) => {
                     </tr>
                     <tr>
                       <th>KeyPair</th>
-                      <td colspan="3">{cert.KeyPair ? cert.KeyPair : "-"}</td>
+                      <td colSpan="3">{cert.KeyPair ? cert.KeyPair : "-"}</td>
                     </tr>
                   </>
                 ) : (

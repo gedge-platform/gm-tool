@@ -38,9 +38,9 @@ const ButtonAddHost = styled.button`
   border-radius: 4px;
 `;
 
-const PodAddContainer = observer(props => {
+const PodAddContainer = observer((props) => {
   const { checkPVCInDeployment } = claimStore;
-  const { 
+  const {
     podInfo,
     initContainer,
     addContainer,
@@ -48,8 +48,8 @@ const PodAddContainer = observer(props => {
     loadVolumeList,
   } = podStore;
   const { open, containerIndex } = props;
-  const [ tabvalue, setTabvalue ] = useState(0);
-  const [ containerInfo, setContainerInfo ] = useState();
+  const [tabvalue, setTabvalue] = useState(0);
+  const [containerInfo, setContainerInfo] = useState();
 
   const handleTabChange = (_, value) => {
     setTabvalue(value);
@@ -203,110 +203,180 @@ const PodAddContainer = observer(props => {
         memoryLimit: "",
         NVIDIAGPU: "",
         volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
-      })
+      });
     } else {
       const clonedData = cloneDeep(podInfo.containers[containerIndex]);
       setContainerInfo(clonedData);
     }
-  }, [open])
+  }, [open]);
 
   const ValueComponent = (index) => {
     switch (containerInfo.variables[index].type) {
       case "KeyValuePair":
-        return(
+        return (
           <td>
-            <CTextField type="text" placeholder="Value" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
+            <CTextField
+              type="text"
+              placeholder="Value"
+              className="form_fullWidth"
+              name="value"
+              onChange={() => onChangeVariable(event, index)}
+              value={containerInfo.variables[index].value}
+            />
           </td>
-        )
+        );
       case "Resource":
-        return(
-          <td style={{ display: "flex", padding:"1px" }}>
-            <CTextField type="text" placeholder="Container Name" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+        return (
+          <td style={{ display: "flex", padding: "1px" }}>
+            <CTextField
+              type="text"
+              placeholder="Container Name"
+              className="form_fullWidth"
+              name="value"
+              onChange={() => onChangeVariable(event, index)}
+              value={containerInfo.variables[index].value}
+            />
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
           </td>
-        )
+        );
       case "ConfigMapKey":
-        return(
+        return (
           <td style={{ display: "flex", padding: "1px" }}>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 0px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 0px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>ConfigMap 선택</option>
               </select>
             </FormControl>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
           </td>
-        )
+        );
       case "SecretKey":
-        return(
+        return (
           <td style={{ display: "flex", padding: "1px" }}>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Secret 선택</option>
               </select>
             </FormControl>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
           </td>
-        )
+        );
       case "PodField":
-        return(
+        return (
           <td>
-            <CTextField tpe="text" placeholder="Key (e.g. metadata.labels['<KEY>'])" className="form_fullWidth" name="value" onChange={() => onChangeVariable(event, index)} value={containerInfo.variables[index].value}/>
+            <CTextField
+              tpe="text"
+              placeholder="Key (e.g. metadata.labels['<KEY>'])"
+              className="form_fullWidth"
+              name="value"
+              onChange={() => onChangeVariable(event, index)}
+              value={containerInfo.variables[index].value}
+            />
           </td>
-        )
+        );
       case "Secret":
-        return(
+        return (
           <td>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Secret 선택</option>
               </select>
             </FormControl>
           </td>
-        )
+        );
       case "ConfigMap":
-        return(
+        return (
           <td>
-            <FormControl className="form_fullWidth" style={{ height: "inherit", padding: "0px 0px 0px 2px" }}>
-              <select name="type" value={containerInfo.variables[index].type} onChange={() => onChangeVariable(event, index)}>
+            <FormControl
+              className="form_fullWidth"
+              style={{ height: "inherit", padding: "0px 0px 0px 2px" }}
+            >
+              <select
+                name="type"
+                value={containerInfo.variables[index].type}
+                onChange={() => onChangeVariable(event, index)}
+              >
                 <option value={""}>Key 선택</option>
               </select>
             </FormControl>
           </td>
-        )
+        );
       default:
-        return(<td></td>)
+        return <td></td>;
     }
-  }
-  
+  };
+
   const AddContainerComponent = () => {
     if (tabvalue === 0) {
-      return(
+      return (
         <>
-          <table className="tb_data_new tb_write" >
+          <table className="tb_data_new tb_write">
             <tbody>
               <tr>
                 <th>
                   Container Name <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField 
-                    type="text" 
-                    placeholder="Container Name" 
-                    className="form_fullWidth" 
-                    name="containerName" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="text"
+                    placeholder="Container Name"
+                    className="form_fullWidth"
+                    name="containerName"
+                    onChange={onChange}
                     value={containerInfo?.containerName}
                   />
                 </td>
@@ -316,12 +386,12 @@ const PodAddContainer = observer(props => {
                   Container Image <span className="requried">*</span>
                 </th>
                 <td colSpan="3">
-                  <CTextField 
-                    type="text" 
-                    placeholder="Container Image" 
-                    className="form_fullWidth" 
-                    name="containerImage" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="text"
+                    placeholder="Container Image"
+                    className="form_fullWidth"
+                    name="containerImage"
+                    onChange={onChange}
                     value={containerInfo?.containerImage}
                   />
                 </td>
@@ -374,35 +444,42 @@ const PodAddContainer = observer(props => {
                       {containerInfo?.ports?.map((port, index) => (
                         <tr style={{ lineHeight: "35px" }}>
                           <td>
-                            <CTextField 
-                              type="text" 
-                              placeholder="Name" 
-                              className="form_fullWidth" 
-                              name="name" 
-                              onChange={() => onChangePort(event, index)} 
+                            <CTextField
+                              type="text"
+                              placeholder="Name"
+                              className="form_fullWidth"
+                              name="name"
+                              onChange={() => onChangePort(event, index)}
                               value={port.name}
                             />
                           </td>
                           <td>
-                            <CTextField 
-                              type="text" 
-                              placeholder="Private Container Port" 
-                              className="form_fullWidth" 
-                              name="privateContainerPort" 
-                              onChange={() => onChangePort(event, index)} 
+                            <CTextField
+                              type="text"
+                              placeholder="Private Container Port"
+                              className="form_fullWidth"
+                              name="privateContainerPort"
+                              onChange={() => onChangePort(event, index)}
                               value={port.privateContainerPort}
                             />
                           </td>
                           <td>
-                            <FormControl className="form_fullWidth" style={{padding: "1px"}}>
-                              <select name="protocol" value={port.protocol} onChange={() => onChangePort(event, index)}>
+                            <FormControl
+                              className="form_fullWidth"
+                              style={{ padding: "1px" }}
+                            >
+                              <select
+                                name="protocol"
+                                value={port.protocol}
+                                onChange={() => onChangePort(event, index)}
+                              >
                                 <option value={"TCP"}>TCP</option>
                                 <option value={"UDP"}>UDP</option>
                               </select>
                             </FormControl>
                           </td>
                           <td>
-                            <Button 
+                            <Button
                               style={{
                                 border: "none",
                                 height: "28px",
@@ -414,8 +491,8 @@ const PodAddContainer = observer(props => {
                                 backgroundColor: "#eff4f9",
                                 padding: "0 0",
                                 margin: "2px",
-                                borderRadius: "0"
-                              }} 
+                                borderRadius: "0",
+                              }}
                               onClick={() => removePort(index)}
                             >
                               -
@@ -435,12 +512,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>Command</th>
                 <td colSpan="3">
-                  <CTextField 
-                    type="text" 
-                    placeholder="e.g. /bin/sh" 
-                    className="form_fullWidth" 
-                    name="command" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="text"
+                    placeholder="e.g. /bin/sh"
+                    className="form_fullWidth"
+                    name="command"
+                    onChange={onChange}
                     value={containerInfo?.command}
                   />
                 </td>
@@ -448,12 +525,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>Arguments</th>
                 <td colSpan="3">
-                  <CTextField 
-                    type="text" 
-                    placeholder="e.g. /usr/sbin/httpd -f httpd.conf" 
-                    className="form_fullWidth" 
-                    name="arguments" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="text"
+                    placeholder="e.g. /usr/sbin/httpd -f httpd.conf"
+                    className="form_fullWidth"
+                    name="arguments"
+                    onChange={onChange}
                     value={containerInfo?.arguments}
                   />
                 </td>
@@ -461,12 +538,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>WorkingDir</th>
                 <td colSpan="3">
-                  <CTextField 
-                    type="text" 
-                    placeholder="e.g. /myapp" 
-                    className="form_fullWidth" 
-                    name="workingDir" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="text"
+                    placeholder="e.g. /myapp"
+                    className="form_fullWidth"
+                    name="workingDir"
+                    onChange={onChange}
                     value={containerInfo?.workingDir}
                   />
                 </td>
@@ -485,26 +562,32 @@ const PodAddContainer = observer(props => {
                         <tr style={{ lineHeight: "35px" }}>
                           <td>
                             <FormControl className="form_fullWidth">
-                              <select name="type" value={variable.type} onChange={() => onChangeVariable(event, index)}>
-                                <option value={"KeyValuePair"}>Key/Value Pair</option>
+                              <select
+                                name="type"
+                                value={variable.type}
+                                onChange={() => onChangeVariable(event, index)}
+                              >
+                                <option value={"KeyValuePair"}>
+                                  Key/Value Pair
+                                </option>
                                 <option value={"Secret"}>Secret</option>
                                 <option value={"ConfigMap"}>ConfigMap</option>
                               </select>
                             </FormControl>
                           </td>
                           <td>
-                            <CTextField 
-                              type="text" 
-                              placeholder="Variable Name" 
-                              className="form_fullWidth" 
-                              name="variableName" 
-                              onChange={() => onChangeVariable(event, index)} 
+                            <CTextField
+                              type="text"
+                              placeholder="Variable Name"
+                              className="form_fullWidth"
+                              name="variableName"
+                              onChange={() => onChangeVariable(event, index)}
                               value={variable.variableName}
                             />
                           </td>
                           {ValueComponent(index)}
                           <td>
-                            <Button 
+                            <Button
                               style={{
                                 border: "none",
                                 height: "28px",
@@ -516,8 +599,8 @@ const PodAddContainer = observer(props => {
                                 backgroundColor: "#eff4f9",
                                 padding: "0 0",
                                 margin: "2px",
-                                borderRadius: "0"
-                              }} 
+                                borderRadius: "0",
+                              }}
                               onClick={() => removeVariable(index)}
                             >
                               -
@@ -545,27 +628,28 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            {containerIndex === -1? 
-            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
-            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
-            }
+            {containerIndex === -1 ? (
+              <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            ) : (
+              <ButtonNext onClick={editContainers}>변경</ButtonNext>
+            )}
           </div>
         </>
-      )
+      );
     } else if (tabvalue === 1) {
-      return(
+      return (
         <>
           <table className="tb_data_new tb_write">
             <tbody>
               <tr>
                 <th>CPU Reservation</th>
-                <td >
-                  <CTextField 
-                    type="number" 
-                    placeholder="CPU Reservation" 
-                    className="form_fullWidth" 
-                    name="cpuReservation" 
-                    onChange={onChange} 
+                <td>
+                  <CTextField
+                    type="number"
+                    placeholder="CPU Reservation"
+                    className="form_fullWidth"
+                    name="cpuReservation"
+                    onChange={onChange}
                     value={containerInfo?.cpuReservation}
                   />
                 </td>
@@ -573,12 +657,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>Memory Reservation</th>
                 <td>
-                  <CTextField 
-                    type="number" 
-                    placeholder="Memory Reservation" 
-                    className="form_fullWidth" 
-                    name="memoryReservation" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="number"
+                    placeholder="Memory Reservation"
+                    className="form_fullWidth"
+                    name="memoryReservation"
+                    onChange={onChange}
                     value={containerInfo?.memoryReservation}
                   />
                 </td>
@@ -586,12 +670,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>CPU Limit</th>
                 <td>
-                  <CTextField 
-                    type="number" 
-                    placeholder="CPU Limit" 
-                    className="form_fullWidth" 
-                    name="cpuLimit" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="number"
+                    placeholder="CPU Limit"
+                    className="form_fullWidth"
+                    name="cpuLimit"
+                    onChange={onChange}
                     value={containerInfo?.cpuLimit}
                   />
                 </td>
@@ -599,12 +683,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>Memory Limit</th>
                 <td>
-                  <CTextField 
-                    type="number" 
-                    placeholder="Memory Limit" 
-                    className="form_fullWidth" 
-                    name="memoryLimit" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="number"
+                    placeholder="Memory Limit"
+                    className="form_fullWidth"
+                    name="memoryLimit"
+                    onChange={onChange}
                     value={containerInfo?.memoryLimit}
                   />
                 </td>
@@ -612,12 +696,12 @@ const PodAddContainer = observer(props => {
               <tr>
                 <th>NVIDIA GPU Limit/Reservation</th>
                 <td>
-                  <CTextField 
-                    type="number" 
-                    placeholder="NVIDIA GPU Limit/Reservation" 
-                    className="form_fullWidth" 
-                    name="NVIDIAGPU" 
-                    onChange={onChange} 
+                  <CTextField
+                    type="number"
+                    placeholder="NVIDIA GPU Limit/Reservation"
+                    className="form_fullWidth"
+                    name="NVIDIAGPU"
+                    onChange={onChange}
                     value={containerInfo?.NVIDIAGPU}
                   />
                 </td>
@@ -633,28 +717,30 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            {containerIndex === -1? 
-            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
-            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
-            }
+            {containerIndex === -1 ? (
+              <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            ) : (
+              <ButtonNext onClick={editContainers}>변경</ButtonNext>
+            )}
           </div>
         </>
-      )
+      );
     } else {
-      return(
+      return (
         <>
           <table className="tb_data_new tb_write">
             <tbody>
               <tr>
                 <th>Volume</th>
                 <td>
-                {containerInfo.volumes.map((volume, index) => (
+                  {containerInfo.volumes.map((volume, index) => (
                     <>
                       <FormControl>
                         <select
                           name="name"
                           onChange={(e) => onChangeVolume(e, index)}
                           value={volume.name}
+                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
                         >
                           <option value={""} selected disabled hidden>
                             Select Volume
@@ -684,6 +770,7 @@ const PodAddContainer = observer(props => {
                         onChange={() => onChangeVolume(event, index)}
                         value={volume.subPathInVolume}
                       />
+
                       <Button
                         style={{
                           border: "none",
@@ -719,18 +806,27 @@ const PodAddContainer = observer(props => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            {containerIndex === -1? 
-            (<ButtonNext onClick={addContainers}>추가</ButtonNext>)
-            :(<ButtonNext onClick={editContainers}>변경</ButtonNext>)
-            }
+            {containerIndex === -1 ? (
+              <ButtonNext onClick={addContainers}>추가</ButtonNext>
+            ) : (
+              <ButtonNext onClick={editContainers}>변경</ButtonNext>
+            )}
           </div>
         </>
-      )
+      );
     }
-  }
+  };
 
-  return(
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Add Container"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+  return (
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Add Container"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       <CSubTabs value={tabvalue} onChange={handleTabChange}>
         <CSubTab label="General"></CSubTab>
         <CSubTab label="Resource"></CSubTab>
@@ -738,7 +834,7 @@ const PodAddContainer = observer(props => {
       </CSubTabs>
       {AddContainerComponent()}
     </CDialogNew>
-  )
-})
+  );
+});
 
 export default PodAddContainer;

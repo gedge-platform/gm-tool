@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import DeploymentBasicInformation from "./DeploymentBasicInformation";
-import DeploymentPodSettins from "./DeploymentPodSettins";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  schedulerStore,
-  volumeStore,
-  StorageClassStore,
-} from "@/store";
-import DeploymentYaml from "./DeploymentYaml";
-import DeploymentPopup from "./DeploymentPopup";
-import DeploymentVolumeSetting from "./DeploymentVolumeSetting";
-import DeploymentVolumeYaml from "./DeploymentVolumeYaml";
-import { swalError } from "@/utils/swal-utils";
-import { CDialogNew } from "@/components/dialogs";
-import { toJS } from "mobx";
-import DeploymentAddContainer from "./DeploymentAddContainer";
+import { deploymentStore, projectStore } from "@/store";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
@@ -39,66 +23,6 @@ const Button = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const ButtonNext = styled.button`
-  background-color: #0f5ce9;
-  color: white;
-  border: none;
-  padding: 10px 35px;
-  border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
-`;
-
-const DeleteButton = styled.button`
-  margin: 0px 0px 0px 3px;
-  overflow: hidden;
-  position: relative;
-  border: none;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 50%;
-  background: transparent;
-  font: inherit;
-  text-indent: 100%;
-  cursor: pointer;
-
-  &:hover {
-    background: rgba(29, 161, 142, 0.1);
-  }
-
-  &:before,
-  &:after {
-    position: absolute;
-    top: 15%;
-    left: calc(50% - 0.0625em);
-    width: 0.125em;
-    height: 70%;
-    border-radius: 0.125em;
-    transform: rotate(45deg);
-    background: currentcolor;
-    content: "";
-  }
-
-  &:after {
-    transform: rotate(-45deg);
-  }
-`;
-const Table = styled.table`
-  tbody {
-    display: block;
-    height: 170px;
-    overflow: auto;
-  }
-  thead,
-  tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-  }
-  thead {
-    width: calc(100% - 1em);
-  }
-`;
-
 const CreateDeploymentStepThree = observer(() => {
   const [open2, setOpen2] = useState(false);
   const [projectDisable, setProjectDisable] = useState(true);
@@ -116,13 +40,14 @@ const CreateDeploymentStepThree = observer(() => {
 
   const {
     setDeploymentInfo,
-    removeContainer,
     priority,
     setPriority,
     targetClusters,
     priorityNodes,
     setPriorityNodes,
     deploymentInfo,
+    selectedCluster,
+    setSelectedCluster,
   } = deploymentStore;
 
   const {
@@ -133,15 +58,16 @@ const CreateDeploymentStepThree = observer(() => {
     workSpaceDetail,
   } = workspaceStore;
 
-  // console.log("clusteInPriorityrName : ", clusterNameInPriority);
-  // console.log("priority", priority);
-  // console.log("targetClusters: ", targetClusters);
-
   const { loadProjectListInWorkspace } = projectStore;
 
   const { loadPVClaims } = claimStore;
 
-  const { loadClusterList, clusterListInWorkspace, loadCluster } = clusterStore;
+  const {
+    loadClusterList,
+    clusterListInWorkspace,
+    loadCluster,
+    clusterDetail,
+  } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
@@ -168,6 +94,7 @@ const CreateDeploymentStepThree = observer(() => {
   const onChangePod = async ({ target: { name, value } }) => {
     let projectNameTemp = deploymentInfo.project;
     let clusterNameTemp = "";
+    setPrioritytPodDisable(false);
 
     if (name === "project") {
       setPriorityDisable(false);
@@ -184,6 +111,8 @@ const CreateDeploymentStepThree = observer(() => {
           target_clusters: "",
         },
       });
+    }
+    if (name === "sourceCluster") {
       clusterNameTemp = value;
 
       await podListInclusterAPI(clusterNameTemp, projectNameTemp);
@@ -201,6 +130,56 @@ const CreateDeploymentStepThree = observer(() => {
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
       if (e.target.value === "GLowLatencyPriority") {
+        if (type === "default") {
+          setPriority({
+            name: e.target.value,
+            options: {
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
+              type: "default",
+              data: {
+                selected_cluster: "innogrid-k8s-master",
+              },
+              // user_name: workSpaceDetail.memberName,
+              // workspace_name: deploymentInfo.workspace,
+              // workspace_uid: workSpaceDetail.objectId,
+              // project_name: deploymentInfo.project,
+              // type: "default",
+              // data: {
+              //   selected_cluster: selectedCluster,
+              //   source_node: "",
+              //   target_clusters: "",
+              // },
+            },
+          });
+        } else if (type === "fromPod") {
+          setPriority({
+            name: e.target.value,
+            options: {
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
+              type: "default",
+              data: {
+                selected_cluster: "innogrid-k8s-master",
+              },
+              // user_name: workSpaceDetail.memberName,
+              // workspace_name: workSpaceDetail.workspaceName,
+              // workspce_uid: workSpaceDetail.objectId,
+              // project_name: deploymentInfo.project,
+              // type: type,
+              // data: {
+              //   workspace_name: "",
+              //   project_name: "",
+              //   pod_name: "",
+              //   target_clusters: "",
+              // },
+            },
+          });
+        }
         setPriority({
           name: e.target.value,
           options: {
@@ -218,14 +197,22 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           name: e.target.value,
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else {
@@ -249,10 +236,15 @@ const CreateDeploymentStepThree = observer(() => {
 
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
+      // if (name === "selectCluster") {
+      priority.options.data.selected_cluster = "innogrid-k8s-master";
+      //   setSelectedCluster(value);
+      // }
       if (name === "sourceCluster") {
         setNodeDisable(false);
         setClusterNameInPriority(value);
-        priority.options.data.selected_cluster = value;
+        loadCluster(value);
+        priority.options.data.selected_cluster = "innogrid-k8s-master";
 
         await axios
           .get(`${SERVER_URL}/clusters/${value}`)
@@ -266,6 +258,7 @@ const CreateDeploymentStepThree = observer(() => {
         setNodeName(value);
       }
     };
+
     const onChangeName = (e) => {
       const { name, value } = e.target;
       if (name === "userName") {
@@ -283,28 +276,44 @@ const CreateDeploymentStepThree = observer(() => {
           ...priority,
 
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else if (name === "selectCluster") {
         setPriority({
           ...priority,
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else if (name === "sourceCluster") {
@@ -340,14 +349,77 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "4px" }}
               >
-                <select name="selectCluster" onChange={onChangeType}>
-                  <option value={""}>Select Cluster</option>
-                  {selectClusterInfo.map((cluster) => (
-                    <option value={cluster.clusterName}>
-                      {cluster.clusterName}
-                    </option>
-                  ))}
+                <select name="type" value={type} onChange={onChangeType}>
+                  <option value={"default"}>from node</option>
+                  <option value={"from_pod"}>from pod</option>
                 </select>
+                {type === "default" ? (
+                  <div style={{ paddingTop: "4px" }}>
+                    <FormControl style={{ width: "50%" }}>
+                      <select name="sourceCluster" onChange={onChangeSource}>
+                        <option value={""} selected disabled hidden>
+                          Select Source Cluster
+                        </option>
+                        {selectClusterInfo.map((cluster) => (
+                          <option value={cluster.clusterName}>
+                            {cluster.clusterName}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                      <select
+                        name="sourceNode"
+                        onChange={onChangeSource}
+                        disabled={nodeDisable}
+                      >
+                        <option value={""} selected disabled hidden>
+                          Select Source Node
+                        </option>
+                        {clusterDetail.nodes !== null ? (
+                          clusterDetail.nodes.map((node) => (
+                            <option value={node.name}>{node.name}</option>
+                          ))
+                        ) : (
+                          <option value={"noData"}>No Data</option>
+                        )}
+                      </select>
+                    </FormControl>
+                  </div>
+                ) : (
+                  <div style={{ paddingTop: "4px" }}>
+                    <FormControl style={{ width: "50%" }}>
+                      <select name="sourceCluster" onChange={onChangePod}>
+                        <option value={""} selected disabled hidden>
+                          Select Cluster
+                        </option>
+                        {selectClusterInfo.map((cluster) => (
+                          <option value={cluster.clusterName}>
+                            {cluster.clusterName}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                      <select
+                        name="pod"
+                        onChange={onChangePod}
+                        disabled={prioritytPodDisable}
+                      >
+                        <option value={""} selected disabled hidden>
+                          Select Pod
+                        </option>
+                        {podListIncluster !== null ? (
+                          podListIncluster.map((pod) => (
+                            <option value={pod.name}>{pod.name}</option>
+                          ))
+                        ) : (
+                          <option value={"noData"}>No Data</option>
+                        )}
+                      </select>
+                    </FormControl>
+                  </div>
+                )}
               </FormControl>
             </>
           );
@@ -358,7 +430,7 @@ const CreateDeploymentStepThree = observer(() => {
                 <select
                   name="type"
                   value={priority.options.type}
-                  onChange={onChangeType}
+                  onChange={onChangeFrom}
                 >
                   <option value={"cpu"}>CPU</option>
                   <option value={"gpu"}>GPU</option>
@@ -374,12 +446,62 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "4px" }}
               >
-                <select name="selectCluster" onChange={onChangeType}>
-                  <option value={""}>Select Cluster</option>
-                  <option value={"innogrid-k8s-master"}>
-                    innogrid-k8s-master
-                  </option>
+                <select name="type" value={type} onChange={onChangeType}>
+                  <option value={"cluster"}>Cluster</option>
+                  <option value={"node"}>Node</option>
                 </select>
+                {type === "node" ? (
+                  <div style={{ paddingTop: "4px" }}>
+                    <FormControl style={{ width: "50%" }}>
+                      <select name="sourceCluster" onChange={onChangeSource}>
+                        <option value={""} selected disabled hidden>
+                          Select Source Cluster
+                        </option>
+                        {selectClusterInfo.map((cluster) => (
+                          <option value={cluster.clusterName}>
+                            {cluster.clusterName}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                      <select
+                        name="sourceNode"
+                        onChange={onChangeSource}
+                        disabled={nodeDisable}
+                      >
+                        <option value={""} selected disabled hidden>
+                          Select Source Node
+                        </option>
+                        {priorityNodes !== null ? (
+                          priorityNodes.map((node) => (
+                            <option value={node.name}>{node.name}</option>
+                          ))
+                        ) : (
+                          <option value={"noData"}>No Data</option>
+                        )}
+                      </select>
+                    </FormControl>
+                  </div>
+                ) : (
+                  <>
+                    <FormControl
+                      className="form_fullWidth"
+                      style={{ paddingTop: "4px" }}
+                    >
+                      <select name="selectCluster" onChange={onChangeSource}>
+                        <option value={""} selected disabled hidden>
+                          Select Cluster
+                        </option>
+                        {selectClusterInfo.map((cluster) => (
+                          <option value={cluster.clusterName}>
+                            {cluster.clusterName}
+                          </option>
+                        ))}
+                      </select>
+                    </FormControl>
+                  </>
+                )}
               </FormControl>
             </>
           );
@@ -429,7 +551,14 @@ const CreateDeploymentStepThree = observer(() => {
                 style={{ paddingTop: "2px" }}
               >
                 <select name="clusters" onChange={onChangeSource}>
-                  <option value={""}>Set Clusters</option>
+                  <option value={""} selected disabled hidden>
+                    Set Clusters
+                  </option>
+                  {selectClusterInfo.map((cluster) => (
+                    <option value={cluster.clusterName}>
+                      {cluster.clusterName}
+                    </option>
+                  ))}
                 </select>
               </FormControl>
             </>
@@ -453,6 +582,10 @@ const CreateDeploymentStepThree = observer(() => {
 
     useEffect(() => {
       loadCluster(nodeName);
+    }, []);
+
+    useEffect(() => {
+      loadWorkspaceDetail(deploymentInfo.workspace);
     }, []);
 
     return (

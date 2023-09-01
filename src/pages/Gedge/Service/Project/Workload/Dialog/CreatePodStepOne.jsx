@@ -75,17 +75,18 @@ const CreatePodStepOne = observer((props) => {
 
   const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
 
-  const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
+  const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
 
   const [containerIndex, setContainerIndex] = useState(1);
   const [open, setOpen] = useState(false);
+  const [prioritytDisable, setPriorityDisable] = useState(true);
 
   const onChange = (e) => {
     setPodInfo(e.target.name, e.target.value);
     if (e.target.name === "workspace") {
       loadProjectListInWorkspace(e.target.value);
     } else if (e.target.name === "volume") {
-      setCheckPVCInDeployment(e.target.value);
+      setCheckPVCInPod(e.target.value);
     }
   };
 
@@ -100,6 +101,12 @@ const CreatePodStepOne = observer((props) => {
       "containers",
       podInfo.containers.filter((_, index) => index !== removeIndex)
     );
+  };
+
+  const onChangeCheckPVC = ({ target: { name, value } }) => {
+    setCheckPVCInPod(name, value);
+    setPodInfo("pvcName", name);
+    setPodInfo("volume", value);
   };
 
   return (
@@ -229,15 +236,16 @@ const CreatePodStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
-                          checked={podInfo.volume === pvc.name}
-                          name="volume"
-                          onChange={onChange}
-                          value={pvc.name}
+                          checked={podInfo.pvcName === pvc.name}
+                          name={pvc.name}
+                          onChange={onChangeCheckPVC}
+                          value={pvc.volume}
                         />
                       </td>
                       <td>{pvc.name}</td>
                       <td>{pvc.namespace}</td>
                       <td>{pvc.clusterName}</td>
+                      <td>{pvc.volume ? pvc.volume : ""}</td>
                     </tr>
                   ))}
                 </tbody>

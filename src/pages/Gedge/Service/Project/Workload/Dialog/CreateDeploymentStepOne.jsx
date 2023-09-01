@@ -179,8 +179,6 @@ const CreateDeploymentStepOne = observer((props) => {
   };
 
   const onChangeCheckPVC = ({ target: { name, value } }) => {
-    console.log("value : ", value);
-    console.log("name : ", name);
     setCheckPVCInDeployment(name, value);
     setDeploymentInfo("pvcName", name);
     setDeploymentInfo("volume", value);
@@ -306,7 +304,7 @@ const CreateDeploymentStepOne = observer((props) => {
           </tr>
 
           <tr>
-            <th>Volume</th>
+            <th>ClaimVolume</th>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>

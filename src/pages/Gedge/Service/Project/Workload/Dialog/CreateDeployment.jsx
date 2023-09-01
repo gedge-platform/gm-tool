@@ -19,6 +19,7 @@ import claimStore from "../../../../../../store/Claim";
 import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
 import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -136,7 +137,7 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecert: deploymentInfo.containers?.map((e) => {
+          imagePullSecret: deploymentInfo.containers?.map((e) => {
             return { name: e.pullSecret };
           }),
           containers: deploymentInfo.containers?.map((e) => {
@@ -144,13 +145,10 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command,
-              args: e.arguments,
+              command: e.command.split(" "),
+              args: e.arguments.split(" "),
               resources: {
-                limits: {
-                  // cpu: e.cpuLimit,
-                  memory: e.memoryLimit + "Mi",
-                },
+                limits: { memory: e.memoryLimit + "Mi" },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
@@ -159,42 +157,142 @@ const CreateDeployment = observer((props) => {
               ports: e.ports.map((i) => {
                 return {
                   name: i.name,
-                  containerPort: i.privateContainerPort,
+                  containerPort: parseInt(i.privateContainerPort),
                   protocol: i.protocol,
                 };
               }),
-              envForm: e.variables.map((i) => {
-                const item = i.type + "Ref";
-                return {
-                  [item]: {
-                    name: i.variableName,
-                  },
-                };
-              }),
-              env: e.variables.map((i) => {
-                return {
-                  name: i.variableName,
-                  value: i.value,
-                };
-              }),
+              envFrom: [
+                { configMapRef: { name: "env-configmap" } },
+                { secretRef: { name: "env-secrets" } },
+              ], //이건 내일
               volumeMounts: e.volumes.map((i) => {
                 return {
                   mountPath: i.subPathInVolume,
-                  name: i.name,
+                  name: deploymentInfo.pvcName,
                 };
               }),
+              env: [
+                {
+                  name: "test",
+                  value: "test",
+                },
+              ], //이건 내일
             };
           }),
+          volumes: [
+            {
+              name: deploymentInfo.pvcName,
+              persistentVolumeClaim: {
+                claimName: deploymentInfo.volume,
+              },
+            },
+          ],
         },
       },
-      volumes: [
-        {
-          name: deploymentInfo.volume,
-          persistentVolumeClaim: deploymentInfo.pvcName,
-        },
-      ],
     },
   };
+
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: deploymentInfo.deploymentName,
+  //     annotations: annotationInput,
+  //     labels: labelInput,
+  //     namespace: "default",
+  //   },
+  //   spec: {
+  //     selector: {
+  //       matchLabels: labelInput,
+  //     },
+  //     replicas: deploymentInfo.replicas,
+  //     template: {
+  //       metadata: {
+  //         annotations: annotationInput,
+  //         labels: labelInput,
+  //       },
+  //       spec: {
+  //         imagePullSecert: deploymentInfo.containers?.map((e) => {
+  //           return { name: e.pullSecret };
+  //         }),
+  //         containers: deploymentInfo.containers?.map((e) => {
+  //           return {
+  //             name: e.containerName,
+  //             image: e.containerImage,
+  //             imagePullPolicy: e.pullPolicy,
+  //             command: e.command.split(" "),
+  //             args: e.arguments.split(" "),
+  //             resources: {
+  //               limits: {
+  //                 // cpu: e.cpuLimit,
+  //                 memory: e.memoryLimit + "Mi",
+  //               },
+  //               requests: {
+  //                 cpu: e.cpuReservation + "m",
+  //                 memory: e.memoryReservation + "Mi",
+  //               },
+  //             },
+  //             ports: e.ports.map((i) => {
+  //               return {
+  //                 name: i.name,
+  //                 containerPort: parseInt(i.privateContainerPort),
+  //                 protocol: i.protocol,
+  //               };
+  //             }),
+  //             envForm: [
+  //               {
+  //                 configMapRef: { name: "env-configmap" },
+  //               },
+  //               { secretRef: { name: "env-secrets" } },
+  //             ],
+  //             volumeMounts: [
+  //               {
+  //                 mountPath: "/usr/share/nginx/html",
+  //                 name: "mp3-convert-pvc",
+  //               },
+  //             ],
+  //             env: [
+  //               {
+  //                 name: "test",
+  //                 value: "test",
+  //               },
+  //             ],
+
+  //             // envForm: e.variables.map((i) => {
+  //             //   const item = i.type + "Ref";
+  //             //   return {
+  //             //     [item]: {
+  //             //       name: i.variableName,
+  //             //     },
+  //             //   };
+  //             // }),
+  //             // env: e.variables.map((i) => {
+  //             //   return {
+  //             //     name: i.variableName,
+  //             //     value: i.value,
+  //             //   };
+  //             // }),
+  //             // volumeMounts: e.volumes.map((i) => {
+  //             //   return {
+  //             //     mountPath: i.subPathInVolume,
+  //             //     name: i.name,
+  //             //   };
+  //             // }),
+  //           };
+  //         }),
+  //       },
+  //     },
+  //     volumes: [
+  //       {
+  //         name: deploymentInfo.volume,
+  //         // name: "my-nginx-pv-storage",
+  //         persistentVolumeClaim: {
+  //           claimName: deploymentInfo.pvcName,
+  //         },
+  //       },
+  //     ],
+  //   },
+  // };
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -208,11 +306,32 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
-    // handleClose();
-    // props.reloadFunc && props.reloadFunc();
+    handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {
+    // if (deploymentInfo.deploymentName === "") {
+    //   swalError("Deployment 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (deploymentInfo.workspace === "") {
+    //   swalError("Workspace를 선택해주세요");
+    //   return;
+    // }
+    // if (deploymentInfo.project === "") {
+    //   swalError("Project를 선택해주세요");
+    //   return;
+    // }
+    // // Replica는 기본 설정 1이라서 추가 안함
+    // if (deploymentInfo.volume === "") {
+    //   swalError("Volume을 선택해주세요");
+    //   return;
+    // }
+    // if (deploymentInfo.containers.length === 0) {
+    //   swalError("Container를 선택해주세요");
+    //   return;
+    // }
     setClearLA();
     setStepValue(2);
   };
@@ -220,6 +339,7 @@ const CreateDeployment = observer((props) => {
   const onClickStepThree = (e) => {
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
+
     labels.map((data) => LabelKeyArr.push(data.labelKey));
     annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
     setStepValue(3);

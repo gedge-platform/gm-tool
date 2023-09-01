@@ -111,6 +111,12 @@ const CreateDeploymentStepTwo = observer(() => {
     setLabels(labels.filter((item) => item.labelKey !== labelKey));
   };
 
+  const deleteAnnotations = (annotationKey) => {
+    setAnnotations(
+      annotations.filter((item) => item.annotationKey !== annotationKey)
+    );
+  };
+
   const addAnnotations = () => {
     if (annotationKey == "") {
       swalError("AnnotationKey 값을 입력해주세요");
