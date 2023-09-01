@@ -171,10 +171,12 @@ class Workspace {
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
+    console.log("type: ", type);
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log("loadWorkSpaceList :", res);
           this.workSpaceList = res.data.data;
           this.totalPages = Math.ceil(this.workSpaceList.length / 10);
           this.totalElements = this.workSpaceList.length;
@@ -205,6 +207,7 @@ class Workspace {
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log("loadAdminWorkSpaceList :", res);
           this.adminList = res.data.data;
           this.workSpaceList = this.adminList.filter((workspace) =>
             workspace.selectCluster.some(

@@ -72,9 +72,12 @@ const CreateProject = observer((props) => {
     setSelectClusterInfo,
     loadWorkspaceDetail,
     viewList,
+    adminList,
+    loadAdminWorkSpaceList,
   } = workspaceStore;
+  console.log("adminList :", adminList);
+
   const { createProject } = projectStore;
-  console.log(selectClusterInfo);
 
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setProjectDescription] = useState("");
@@ -169,7 +172,8 @@ const CreateProject = observer((props) => {
   };
 
   useEffect(() => {
-    loadWorkSpaceList(true);
+    // loadWorkSpaceList(true);
+    loadAdminWorkSpaceList(true);
     setSelectClusterInfo([]);
   }, []);
 
@@ -257,7 +261,7 @@ const CreateProject = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={" "}>Select Workspace</option>
-                  {viewList?.map((workspace) => (
+                  {adminList?.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}
                     </option>

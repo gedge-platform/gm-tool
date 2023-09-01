@@ -772,7 +772,7 @@ const DeploymentAddContainer = observer((props) => {
             <tbody>
               <tr>
                 <th rowSpan={2} style={{ width: "15%" }}>
-                  Volume
+                  Volume <span className="requried">*</span>
                 </th>
                 <td>
                   {containerInfo.volumes.map((volume, index) => (
