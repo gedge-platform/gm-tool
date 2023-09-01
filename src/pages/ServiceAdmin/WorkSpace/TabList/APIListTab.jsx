@@ -27,6 +27,7 @@ const WorkspaceListTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
+    workSpaceList,
   } = workspaceStore;
 
   const [columDefs] = useState([
@@ -35,8 +36,11 @@ const WorkspaceListTab = observer(() => {
       field: "workspaceName",
       filter: true,
       cellRenderer: function ({ data: { workspaceName } }) {
-        return `<span>${workspaceName.split("-")[0]}</span>`;
+        return `<span>${workspaceName}</span>`;
       },
+      // cellRenderer: function ({ data: { workspaceName } }) {
+      //   return `<span>${workspaceName.split("-")[0]}</span>`;
+      // },
     },
     {
       headerName: "설명",

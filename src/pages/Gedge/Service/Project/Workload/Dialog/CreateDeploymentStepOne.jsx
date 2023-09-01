@@ -304,7 +304,7 @@ const CreateDeploymentStepOne = observer((props) => {
           </tr>
 
           <tr>
-            <th>Volume</th>
+            <th>ClaimVolume</th>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>

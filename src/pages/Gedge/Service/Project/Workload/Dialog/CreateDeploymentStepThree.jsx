@@ -136,16 +136,24 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: workSpaceDetail.memberName,
-              workspace_name: deploymentInfo.workspace,
-              // workspace_uid: workSpaceDetail.objectId,
-              project_name: deploymentInfo.project,
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
               type: "default",
               data: {
-                selected_cluster: selectedCluster,
-                // source_node: "",
-                // target_clusters: "",
+                selected_cluster: "innogrid-k8s-master",
               },
+              // user_name: workSpaceDetail.memberName,
+              // workspace_name: deploymentInfo.workspace,
+              // workspace_uid: workSpaceDetail.objectId,
+              // project_name: deploymentInfo.project,
+              // type: "default",
+              // data: {
+              //   selected_cluster: selectedCluster,
+              //   source_node: "",
+              //   target_clusters: "",
+              // },
             },
           });
         } else if (type === "fromPod") {
@@ -153,17 +161,25 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: workSpaceDetail.memberName,
-              workspace_name: workSpaceDetail.workspaceName,
-              // workspce_uid: workSpaceDetail.objectId,
-              project_name: deploymentInfo.project,
-              type: type,
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
+              type: "default",
               data: {
-                workspace_name: "",
-                project_name: "",
-                pod_name: "",
-                target_clusters: "",
+                selected_cluster: "innogrid-k8s-master",
               },
+              // user_name: workSpaceDetail.memberName,
+              // workspace_name: workSpaceDetail.workspaceName,
+              // workspce_uid: workSpaceDetail.objectId,
+              // project_name: deploymentInfo.project,
+              // type: type,
+              // data: {
+              //   workspace_name: "",
+              //   project_name: "",
+              //   pod_name: "",
+              //   target_clusters: "",
+              // },
             },
           });
         }
@@ -187,14 +203,22 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           name: e.target.value,
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            // workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else {
@@ -219,15 +243,15 @@ const CreateDeploymentStepThree = observer(() => {
 
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
-      if (name === "selectCluster") {
-        priority.options.data.selected_cluster = value;
-        setSelectedCluster(value);
-      }
+      // if (name === "selectCluster") {
+      priority.options.data.selected_cluster = "innogrid-k8s-master";
+      //   setSelectedCluster(value);
+      // }
       if (name === "sourceCluster") {
         setNodeDisable(false);
         setClusterNameInPriority(value);
         loadCluster(value);
-        // priority.options.data.selected_cluster = value;
+        priority.options.data.selected_cluster = "innogrid-k8s-master";
 
         await axios
           .get(`${SERVER_URL}/clusters/${value}`)
@@ -261,28 +285,44 @@ const CreateDeploymentStepThree = observer(() => {
           ...priority,
 
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
-              selected_cluster: selectedCluster,
+              selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else if (name === "selectCluster") {
         setPriority({
           ...priority,
           options: {
-            user_name: workSpaceDetail.memberName,
-            workspace_name: deploymentInfo.workspace,
-            // workspace_uid: workSpaceDetail.objectId,
-            project_name: deploymentInfo.project,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
-              selected_cluster: selectedCluster,
+              selected_cluster: "innogrid-k8s-master",
             },
+            // user_name: workSpaceDetail.memberName,
+            // workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            // project_name: deploymentInfo.project,
+            // type: "default",
+            // data: {
+            //   selected_cluster: selectedCluster,
+            // },
           },
         });
       } else if (name === "sourceCluster") {

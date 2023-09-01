@@ -35,6 +35,7 @@ const CreateUser = observer(() => {
     goPrevPage,
     goNextPage,
   } = projectStore;
+  console.log(projectList);
 
   const [columDefs] = useState([
     {

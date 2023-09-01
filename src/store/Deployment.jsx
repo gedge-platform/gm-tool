@@ -232,15 +232,16 @@ class Deployment {
   ];
 
   targetClusters = [];
-  unselectedClusters = [
-    "cluster0",
-    "cluster1",
-    "cluster2",
-    "cluster3",
-    "cluster4",
-    "cluster5",
-    "cluster6",
-  ];
+  // unselectedClusters = [
+  //   "cluster0",
+  //   "cluster1",
+  //   "cluster2",
+  //   "cluster3",
+  //   "cluster4",
+  //   "cluster5",
+  //   "cluster6",
+  // ];
+  unselectedClusters = [];
 
   initTargetClusters = () => {
     runInAction(() => {
@@ -771,7 +772,7 @@ class Deployment {
     const options = encodeURI(JSON.stringify(option));
     const requestId = "requestId12";
     console.log("body :", body);
-    console.log("options :", options);
+    console.log("options :", this.priority.options);
     console.log("requestId :", requestId);
 
     await axios
