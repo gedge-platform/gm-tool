@@ -1914,7 +1914,8 @@ const globalStyles = createGlobalStyle`
     justify-content: space-between;
     background: #202842;
     .ClusterSummary {
-      width: calc(20% - 60px);
+      width: calc(20% - 10px);
+      /* width: calc(20% - 60px); */
       height: 132px;
       padding: 25px 0 25px 140px;
       background: #171e33;
