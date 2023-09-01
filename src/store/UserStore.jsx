@@ -207,7 +207,7 @@ class User {
       })
       .catch((err) => false);
   };
-  updateUser = async (userName, data) => {
+  updateUserList = async (userName, data) => {
     const body = data;
     const { id } = getItem("user");
     console.log("userName : ", userName);
@@ -223,6 +223,18 @@ class User {
             return true;
           }
         });
+      })
+      .catch((err) => false);
+  };
+
+  updateUser = async (data) => {
+    const body = data;
+    const { id } = getItem("user");
+    // return
+    await axios
+      .put(`${SERVER_URL}/members/${id}`, body)
+      .then((res) => {
+        runInAction(() => {});
       })
       .catch((err) => false);
   };
