@@ -37,8 +37,16 @@ const ButtonAddHost = styled.button`
 `;
 
 const DeploymentAddContainer = observer((props) => {
-  const { addContainer, editContainer, deploymentInfo, loadVolumeList } =
-    deploymentStore;
+  const {
+    addContainer,
+    command,
+    setCommand,
+    editContainer,
+    deploymentInfo,
+    loadVolumeList,
+    keyValuePair,
+    secretConfigmap,
+  } = deploymentStore;
   const { volumeName } = claimStore;
 
   const { open, containerIndex } = props;
@@ -61,6 +69,11 @@ const DeploymentAddContainer = observer((props) => {
       }
     });
     return validFlag;
+  };
+
+  const splitCommand = (e) => {
+    const arr = e.target.value.split(" ");
+    console.log(arr);
   };
 
   const onChange = (e) => {
@@ -184,10 +197,18 @@ const DeploymentAddContainer = observer((props) => {
     //   swalError("Volume을 입력해주세요");
     //   return;
     // }
-
+    setCommand(command);
+    console.log(containerInfo);
+    containerInfo.variables.map((e) => {
+      if (e.type === "KeyValuePair") {
+        keyValuePair.push([e.variableName, e.value]);
+      } else {
+        secretConfigmap.push(e);
+      }
+    });
+    console.log(secretConfigmap);
     const temp = { ...containerInfo };
     addContainer(temp);
-    console.log(temp);
     props.onClose && props.onClose();
   };
 
@@ -234,7 +255,7 @@ const DeploymentAddContainer = observer((props) => {
         containerImage: "",
         pullPolicy: "",
         ports: [],
-        command: "",
+        command: [],
         arguments: "",
         workingDir: "",
         variables: [],
@@ -362,7 +383,7 @@ const DeploymentAddContainer = observer((props) => {
             />
           </td>
         );
-      case "Secret":
+      case "secret":
         return (
           <td>
             <FormControl
@@ -379,7 +400,7 @@ const DeploymentAddContainer = observer((props) => {
             </FormControl>
           </td>
         );
-      case "ConfigMap":
+      case "configMap":
         return (
           <td>
             <FormControl
@@ -611,8 +632,8 @@ const DeploymentAddContainer = observer((props) => {
                                 <option value={"KeyValuePair"}>
                                   Key/Value Pair
                                 </option>
-                                <option value={"Secret"}>Secret</option>
-                                <option value={"ConfigMap"}>ConfigMap</option>
+                                <option value={"secret"}>Secret</option>
+                                <option value={"configMap"}>ConfigMap</option>
                               </select>
                             </FormControl>
                           </td>
@@ -783,6 +804,7 @@ const DeploymentAddContainer = observer((props) => {
                           name="name"
                           onChange={(e) => onChangeVolume(e, index)}
                           value={volume.name}
+                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
                         >
                           <option value={""} selected disabled hidden>
                             Select Volume

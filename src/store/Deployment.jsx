@@ -74,6 +74,15 @@ class Deployment {
   labels = [];
   annotations = [];
 
+  command = [];
+
+  setCommand = (e) => {
+    runInAction(() => {
+      // command = e.split(" ");
+      console.log(e.value);
+    });
+  };
+
   selectedCluster = "";
   setSelectedCluster = (value) => {
     runInAction(() => {
@@ -125,6 +134,9 @@ class Deployment {
   contentVolume = "";
 
   podName = "";
+
+  keyValuePair = [];
+  secretConfigmap = [];
 
   workspaceList = [];
   projectList = [];
@@ -746,7 +758,17 @@ class Deployment {
 
   postDeploymentGM = async (callback) => {
     const body = this.content;
-    const options = encodeURI(JSON.stringify(this.priority.options));
+    const option = {
+      user_name: "user1",
+      workspace_name: "ws1",
+      workspace_uid: "649128e7fc34732e0eccfa6d",
+      project_name: "p1",
+      type: "default",
+      data: {
+        selected_cluster: "innogrid-k8s-master",
+      },
+    };
+    const options = encodeURI(JSON.stringify(option));
     const requestId = "requestId12";
     console.log("body :", body);
     console.log("options :", options);
@@ -754,7 +776,7 @@ class Deployment {
 
     await axios
       .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
         body
       )
       .then((res) => {

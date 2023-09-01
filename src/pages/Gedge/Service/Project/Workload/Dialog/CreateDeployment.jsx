@@ -107,6 +107,8 @@ const CreateDeployment = observer((props) => {
     labelInput,
     annotationInput,
     postDeploymentGM,
+    keyValuePair,
+    secretConfigmap,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
@@ -116,6 +118,8 @@ const CreateDeployment = observer((props) => {
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+
+  console.log(deploymentInfo);
 
   const template = {
     apiVersion: "apps/v1",
@@ -137,7 +141,7 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecert: deploymentInfo.containers?.map((e) => {
+          imagePullSecret: deploymentInfo.containers?.map((e) => {
             return { name: e.pullSecret };
           }),
           containers: deploymentInfo.containers?.map((e) => {
@@ -145,8 +149,8 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command,
-              args: e.arguments,
+              command: e.command?.split(" "),
+              args: e.arguments?.split(" "),
               resources: {
                 limits: {
                   // cpu: e.cpuLimit,
@@ -160,40 +164,47 @@ const CreateDeployment = observer((props) => {
               ports: e.ports.map((i) => {
                 return {
                   name: i.name,
-                  containerPort: i.privateContainerPort,
+                  containerPort: parseInt(i.privateContainerPort),
                   protocol: i.protocol,
                 };
               }),
-              envForm: e.variables.map((i) => {
+              envFrom: secretConfigmap.map((i) => {
+                // {
+                //   if (i.type === "secret") {
+                //     return { [i.type + "Ref"]: { name: i.variableName } };
+                //   } else if (i.type === "configMap") {
+                //     return { [i.type + "Ref"]: { name: i.variableName } };
+                //   }
+                // }
                 const item = i.type + "Ref";
                 return {
-                  [item]: {
-                    name: i.variableName,
-                  },
-                };
-              }),
-              env: e.variables.map((i) => {
-                return {
-                  name: i.variableName,
-                  value: i.value,
+                  [i.type + "Ref"]: { name: i.variableName },
                 };
               }),
               volumeMounts: e.volumes.map((i) => {
                 return {
                   mountPath: i.subPathInVolume,
-                  name: i.name,
+                  name: "my-nginx-pv-storage",
+                };
+              }),
+              env: keyValuePair.map((i) => {
+                return {
+                  name: i[0],
+                  value: i[1],
                 };
               }),
             };
           }),
+          volumes: [
+            {
+              name: "my-nginx-pv-storage",
+              persistentVolumeClaim: {
+                claimName: "my-nginx-pv-claim",
+              },
+            },
+          ],
         },
       },
-      volumes: [
-        {
-          name: deploymentInfo.volume,
-          persistentVolumeClaim: deploymentInfo.pvcName,
-        },
-      ],
     },
   };
 
@@ -214,27 +225,27 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
-    // if (deploymentInfo.deploymentName === "") {
-    //   swalError("Deployment 이름을 입력해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.workspace === "") {
-    //   swalError("Workspace를 선택해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.project === "") {
-    //   swalError("Project를 선택해주세요");
-    //   return;
-    // }
-    // // Replica는 기본 설정 1이라서 추가 안함
-    // if (deploymentInfo.volume === "") {
-    //   swalError("Volume을 선택해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.containers.length === 0) {
-    //   swalError("Container를 선택해주세요");
-    //   return;
-    // }
+    if (deploymentInfo.deploymentName === "") {
+      swalError("Deployment 이름을 입력해주세요");
+      return;
+    }
+    if (deploymentInfo.workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    // Replica는 기본 설정 1이라서 추가 안함
+    if (deploymentInfo.volume === "") {
+      swalError("Volume을 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.containers.length === 0) {
+      swalError("Container를 선택해주세요");
+      return;
+    }
     setClearLA();
     setStepValue(2);
   };

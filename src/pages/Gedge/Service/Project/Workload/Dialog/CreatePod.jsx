@@ -12,6 +12,7 @@ import CreatePodStepOne from "./CreatePodStepOne";
 import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
 import PodYaml from "./PodYaml";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -86,82 +87,122 @@ const CreatePod = observer((props) => {
 
   const [stepValue, setStepValue] = useState(1);
 
+  console.log(podInfo);
+
   const template = {
     apiVersion: "apps/v1",
     kind: "Pod",
     metadata: {
       name: podInfo.podName,
-      annotations: annotationInput,
+      // annotations: annotationInput,
       labels: labelInput,
-      namespace: "default",
     },
     spec: {
-      selector: {
-        matchLabels: labelInput,
-      },
-      template: {
-        metadata: {
-          annotations: annotationInput,
-          labels: labelInput,
-        },
-        spec: {
-          imagePullSecert: podInfo.containers?.map((e) => {
-            return { name: e.pullSecret };
-          }),
-          containers: podInfo.containers?.map((e) => {
+      restartPolicy: "Always",
+      terminationGracePeriodSeconds: 30,
+      containers: podInfo.containers?.map((e) => {
+        return {
+          name: e.containerName,
+          image: e.containerImage,
+          command: e.command?.split(" "),
+          args: e.arguments?.split(" "),
+          env: "내일하자",
+          ports: e.ports.map((i) => {
             return {
-              name: e.containerName,
-              image: e.containerImage,
-              imagePullPolicy: e.pullPolicy,
-              command: e.command,
-              args: e.arguments,
-              resources: {
-                limits: {
-                  // cpu: e.cpuLimit,
-                  memory: e.memoryLimit + "Mi",
-                },
-                requests: {
-                  cpu: e.cpuReservation + "m",
-                  memory: e.memoryReservation + "Mi",
-                },
-              },
-              ports: e.ports.map((i) => {
-                return {
-                  name: i.name,
-                  containerPort: i.privateContainerPort,
-                  protocol: i.protocol,
-                };
-              }),
-              envForm: e.variables.map((i) => {
-                const item = i.type + "Ref";
-                return {
-                  [item]: {
-                    name: i.variableName,
-                  },
-                };
-              }),
-              env: e.variables.map((i) => {
-                return {
-                  name: i.variableName,
-                  value: i.value,
-                };
-              }),
-              volumeMounts: e.volumes.map((i) => {
-                return {
-                  mountPath: i.subPathInVolume,
-                  name: i.name,
-                };
-              }),
+              containerPort: parseInt(i.privateContainerPort),
+              protocol: i.protocol,
             };
           }),
-        },
-      },
-      volumes: [
-        {
-          name: podInfo.volume,
-          persistentVolumeClaim: podInfo.pvcName,
-        },
-      ],
+          resources: {
+            requests: {
+              cpu: e.cpuReservation,
+              memory: memoryReservation,
+            },
+            limits: {
+              cpu: e.cpuLimit,
+              memory: e.memoryLimit,
+            },
+          },
+          volumeMounts: e.volumes.map((i) => {
+            return {
+              name: i.name,
+              mountPath: i.mountPoint,
+            };
+          }),
+        };
+      }),
+      volumes: e.volumes.map((i) => {
+        return {
+          name: i.name,
+          emptyDir: {},
+        };
+      }),
+      //   selector: {
+      //     matchLabels: labelInput,
+      //   },
+      //   template: {
+      //     metadata: {
+      //       annotations: annotationInput,
+      //       labels: labelInput,
+      //     },
+      //     spec: {
+      //       imagePullSecert: podInfo.containers?.map((e) => {
+      //         return { name: e.pullSecret };
+      //       }),
+      //       containers: podInfo.containers?.map((e) => {
+      //         return {
+      //           name: e.containerName,
+      //           image: e.containerImage,
+      //           imagePullPolicy: e.pullPolicy,
+      //           command: e.command,
+      //           args: e.arguments,
+      //           resources: {
+      //             limits: {
+      //               // cpu: e.cpuLimit,
+      //               memory: e.memoryLimit + "Mi",
+      //             },
+      //             requests: {
+      //               cpu: e.cpuReservation + "m",
+      //               memory: e.memoryReservation + "Mi",
+      //             },
+      //           },
+      //           ports: e.ports.map((i) => {
+      //             return {
+      //               name: i.name,
+      //               containerPort: i.privateContainerPort,
+      //               protocol: i.protocol,
+      //             };
+      //           }),
+      //           envForm: e.variables.map((i) => {
+      //             const item = i.type + "Ref";
+      //             return {
+      //               [item]: {
+      //                 name: i.variableName,
+      //               },
+      //             };
+      //           }),
+      //           env: e.variables.map((i) => {
+      //             return {
+      //               name: i.variableName,
+      //               value: i.value,
+      //             };
+      //           }),
+      //           volumeMounts: e.volumes.map((i) => {
+      //             return {
+      //               mountPath: i.subPathInVolume,
+      //               name: i.name,
+      //             };
+      //           }),
+      //         };
+      //       }),
+      //     },
+      //   },
+      //   volumes: [
+      //     {
+      //       name: podInfo.volume,
+      //       persistentVolumeClaim: podInfo.pvcName,
+      //     },
+      //   ],
     },
   };
 
@@ -173,6 +214,27 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
+    // if (podInfo.podName === "") {
+    //   swalError("Pod 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (podInfo.workspace === "") {
+    //   swalError("Workspace를 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.project === "") {
+    //   swalError("Project를 선택해주세요");
+    //   return;
+    // }
+    // // Replica는 기본 설정 1이라서 추가 안함
+    // if (podInfo.volume === "") {
+    //   swalError("Volume을 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.containers.length === 0) {
+    //   swalError("Container를 선택해주세요");
+    //   return;
+    // }
     setClearLA();
     setStepValue(2);
   };
