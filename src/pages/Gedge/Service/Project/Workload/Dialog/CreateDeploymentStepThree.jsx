@@ -130,6 +130,8 @@ const CreateDeploymentStepThree = observer(() => {
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
       if (e.target.value === "GLowLatencyPriority") {
+        setType("default");
+        console.log(type);
         if (type === "default") {
           setPriority({
             name: e.target.value,
@@ -155,6 +157,7 @@ const CreateDeploymentStepThree = observer(() => {
             },
           });
         } else if (type === "fromPod") {
+          console.log(type);
           setPriority({
             name: e.target.value,
             options: {
@@ -187,6 +190,7 @@ const CreateDeploymentStepThree = observer(() => {
           },
         });
       } else if (e.target.value === "GMostRequestPriority") {
+        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
@@ -194,6 +198,8 @@ const CreateDeploymentStepThree = observer(() => {
           },
         });
       } else if (e.target.value === "GSelectedClusterPriority") {
+        setType("cluster");
+        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
@@ -216,6 +222,7 @@ const CreateDeploymentStepThree = observer(() => {
           },
         });
       } else {
+        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
@@ -255,7 +262,9 @@ const CreateDeploymentStepThree = observer(() => {
           });
       }
       if (name === "sourceNode") {
-        setNodeName(value);
+        priority.options.data.selected_cluster = "innogrid-k8s-master";
+        setNodeName("innogrid-k8s-master");
+        console.log(priority);
       }
     };
 
@@ -269,7 +278,7 @@ const CreateDeploymentStepThree = observer(() => {
     };
     const onChangeType = (e) => {
       const { name, value } = e.target;
-
+      console.log(e.target);
       setType(value);
       if (name === "type") {
         setPriority({
@@ -319,9 +328,19 @@ const CreateDeploymentStepThree = observer(() => {
       } else if (name === "sourceCluster") {
         setPriority({
           ...priority,
+          // options: {
+          //   type: "node",
+          //   value: value,
+          // },
           options: {
-            type: "node",
-            value: value,
+            user_name: workSpaceDetail.memberName,
+            workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            project_name: deploymentInfo.project,
+            type: "default",
+            data: {
+              selected_cluster: "innogrid-k8s-master",
+            },
           },
         });
       } else if (name === "sourceNode") {

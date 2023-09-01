@@ -23,6 +23,7 @@ class User {
   email = "";
   contact = "";
   memberDescription = "";
+  userName = "";
 
   inputs = [
     {
@@ -35,7 +36,6 @@ class User {
       memberDescription: "",
     },
   ];
-
   inputsEdit = [
     {
       memberId: "",
@@ -51,6 +51,18 @@ class User {
   constructor() {
     makeAutoObservable(this);
   }
+
+  // checkUser = (name) => {
+  //   runInAction(() => {
+  //     this.userName = name;
+  //   });
+  // };
+
+  setUserName = (e) => {
+    runInAction(() => {
+      this.userName = e;
+    });
+  };
 
   setInputs = (inputs) => {
     runInAction(() => {
@@ -156,7 +168,7 @@ class User {
       .then((res) => {
         runInAction(() => {
           this.userList = res.data;
-          console.log(this.userList);
+          // console.log(this.userList);
           this.totalElements = res.data.length;
           // this.userDetail = res.data.data[0];
         });
@@ -195,14 +207,22 @@ class User {
       })
       .catch((err) => false);
   };
-  updateUser = async (data) => {
+  updateUser = async (userName, data) => {
     const body = data;
     const { id } = getItem("user");
+    console.log("userName : ", userName);
+    console.log("body", body);
     // return
     await axios
-      .put(`${SERVER_URL}/members/${id}`, body)
+      .put(`${SERVER_URL}/members/${userName}`, body)
       .then((res) => {
-        runInAction(() => {});
+        runInAction(() => {
+          console.log(res.status);
+          if (res.status === 200) {
+            swalError("사용자가 수정되었습니다.");
+            return true;
+          }
+        });
       })
       .catch((err) => false);
   };

@@ -109,12 +109,12 @@ class Pod {
     volume: "",
     pvcName: "",
     containers: [],
-    labels: [],
-    annotations: [],
+    labels: {},
+    annotations: {},
     priority: {
       name: "GLowLatencyPriority",
       options: {
-        type: "fromNode",
+        type: "from_node",
       },
     },
     targetClusters: "",
@@ -189,7 +189,7 @@ class Pod {
         priority: {
           name: "GLowLatencyPriority",
           options: {
-            type: "fromNode",
+            type: "from_node",
           },
         },
         targetClusters: "",
@@ -220,7 +220,7 @@ class Pod {
   priority = {
     name: "GLowLatencyPriority",
     options: {
-      type: "fromNode",
+      type: "from_node",
     },
   };
 
@@ -655,22 +655,22 @@ class Pod {
     const options = encodeURI(JSON.stringify(this.priority.options));
     const requestId = "requestId12";
     console.log("body :", body);
-    console.log("options :", options);
+    console.log("options :", JSON.stringify(this.priority.options));
     console.log("requestId :", requestId);
 
-    await axios
-      .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
-        body
-      )
-      .then((res) => {
-        console.log("res :", res);
-        if (res.status === 201) {
-          swalError("Pod가 생성되었습니다.", callback);
-        } else {
-          swalError("Deployment 생성 실패", callback);
-        }
-      });
+    // await axios
+    //   .post(
+    //     `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
+    //     body
+    //   )
+    //   .then((res) => {
+    //     console.log("res :", res);
+    //     if (res.status === 201) {
+    //       swalError("Pod가 생성되었습니다.", callback);
+    //     } else {
+    //       swalError("Deployment 생성 실패", callback);
+    //     }
+    //   });
   };
 
   deletePod = async (podName, callback) => {

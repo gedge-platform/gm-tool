@@ -29,28 +29,52 @@ const ButtonNext = styled.button`
 const EditUser = observer((props) => {
   const { openEdit } = props;
   const [stepValue, setStepValue] = useState(1);
-
-  const { inputsEdit, setInputsEdit } = userStore;
-  console.log("inputsEdit :", inputsEdit);
+  const [check, setCheck] = useState(false);
+  const { inputsEdit, setInputsEdit, userName, userList, updateUser } =
+    userStore;
+  // console.log("userList :", userList);
 
   const handleClose = () => {
     props.onClose && props.onClose();
-    setInputsEdit({
-      memberId: "",
-      memberName: "",
-      password: "",
-      email: "",
-      contact: "",
-      memberRole: "",
-      enabled: "",
-    });
+    // setInputsEdit({
+    //   memberId: "",
+    //   memberName: "",
+    //   password: "",
+    //   email: "",
+    //   contact: "",
+    //   memberRole: "",
+    //   enabled: "",
+    // });
   };
 
   const onChange = ({ target: { name, value } }) => {
-    setInputs({
-      ...inputs,
+    setInputsEdit({
+      ...inputsEdit,
       [name]: value,
     });
+  };
+
+  const checkID = async () => {
+    if (inputsEdit.password === "") {
+      swalError("비밀번호를 입력해주세요.");
+      return;
+    }
+    if (inputsEdit.memberName === "") {
+      swalError("이름을 입력해주세요.");
+      return;
+    }
+    if (inputsEdit.contact === "") {
+      swalError("연락처를 입력해주세요.");
+      return;
+    }
+    if (inputsEdit.memberName === "") {
+      swalError("이름을 입력해주세요.");
+      return;
+    }
+    console.log(props);
+    updateUser(inputsEdit.memberId, inputsEdit);
+    handleClose();
+    props.reloadFunc && props.reloadFunc();
   };
 
   const edit = async () => {
@@ -80,6 +104,7 @@ const EditUser = observer((props) => {
                   onChange={onChange}
                   value={inputsEdit.memberId}
                   readOnly={true}
+                  disabled={true}
                 />
               </td>
             </tr>
@@ -154,7 +179,7 @@ const EditUser = observer((props) => {
               <td style={{ width: "50%" }}>
                 <FormControl className="form_fullWidth">
                   <select name="memberEnabled" onChange={onChange}>
-                    {console.log("inputsEdit.enabled :", inputsEdit.enabled)}
+                    {/* {console.log("inputsEdit.enabled :", inputsEdit.enabled)} */}
                     {inputsEdit.enabled === true ? (
                       <>
                         <option value={"abled"}>승인</option>
@@ -210,7 +235,7 @@ const EditUser = observer((props) => {
             }}
           >
             <Button onClick={handleClose}>취소</Button>
-            <ButtonNext onClick={edit}>수정</ButtonNext>
+            <ButtonNext onClick={checkID}>수정</ButtonNext>
           </div>
         </div>
       </>

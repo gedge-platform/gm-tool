@@ -17,7 +17,7 @@ import EditUser from "../Dialog/EditUser";
 const UserListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
 
   const {
     deleteUser,
@@ -34,8 +34,10 @@ const UserListTab = observer(() => {
     setInputs,
     inputsEdit,
     setInputsEdit,
+    userName,
+    setUserName,
   } = userStore;
-  console.log("inputs :", inputs);
+  // console.log("inputs :", inputs);
 
   const [columnDefs] = useState([
     {
@@ -92,7 +94,7 @@ const UserListTab = observer(() => {
     loadUserDetail(e.data.memberId);
     setUserName(e.data.memberId);
     setInputsEdit(e.data);
-    console.log("e.data :", e.data);
+    // console.log("e.data :", e.data);
   };
 
   const handleOpen = () => {
@@ -104,6 +106,11 @@ const UserListTab = observer(() => {
   };
 
   const handleOpenEdit = (e) => {
+    if (userName === "") {
+      swalError("사용자를 선택해주세요!");
+      return;
+    }
+    // checkUser(userName);
     setOpenEdit(true);
   };
 

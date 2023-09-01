@@ -107,6 +107,8 @@ const CreateDeployment = observer((props) => {
     labelInput,
     annotationInput,
     postDeploymentGM,
+    keyValuePair,
+    secretConfigmap,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
@@ -116,6 +118,8 @@ const CreateDeployment = observer((props) => {
   const [projectDisable, setProjectDisable] = useState(true);
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+
+  console.log(deploymentInfo);
 
   const template = {
     apiVersion: "apps/v1",
@@ -161,22 +165,31 @@ const CreateDeployment = observer((props) => {
                   protocol: i.protocol,
                 };
               }),
-              envFrom: [
-                { configMapRef: { name: "env-configmap" } },
-                { secretRef: { name: "env-secrets" } },
-              ], //이건 내일
+              envFrom: secretConfigmap.map((i) => {
+                // {
+                //   if (i.type === "secret") {
+                //     return { [i.type + "Ref"]: { name: i.variableName } };
+                //   } else if (i.type === "configMap") {
+                //     return { [i.type + "Ref"]: { name: i.variableName } };
+                //   }
+                // }
+                const item = i.type + "Ref";
+                return {
+                  [i.type + "Ref"]: { name: i.variableName },
+                };
+              }),
+              env: keyValuePair.map((i) => {
+                return {
+                  name: i[0],
+                  value: i[1],
+                };
+              }),
               volumeMounts: e.volumes.map((i) => {
                 return {
                   mountPath: i.subPathInVolume,
                   name: deploymentInfo.pvcName,
                 };
               }),
-              env: [
-                {
-                  name: "test",
-                  value: "test",
-                },
-              ], //이건 내일
             };
           }),
           volumes: [
