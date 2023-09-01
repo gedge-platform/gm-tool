@@ -30,7 +30,7 @@ const EditUser = observer((props) => {
   const { openEdit } = props;
   const [stepValue, setStepValue] = useState(1);
   const [check, setCheck] = useState(false);
-  const { inputsEdit, setInputsEdit, userName, userList, updateUser } =
+  const { inputsEdit, setInputsEdit, userName, userList, updateUserList } =
     userStore;
   // console.log("userList :", userList);
 
@@ -72,7 +72,7 @@ const EditUser = observer((props) => {
       return;
     }
     console.log(props);
-    updateUser(inputsEdit.memberId, inputsEdit);
+    updateUserList(inputsEdit.memberId, inputsEdit);
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
