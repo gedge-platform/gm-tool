@@ -337,6 +337,7 @@ class Claim {
     await axios
       .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
+        console.log("res: ", res);
         runInAction(() => {
           this.pvClaimList = res.data.data;
           this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
@@ -344,14 +345,19 @@ class Claim {
         });
       })
       .then(() => {
-        this.convertList(this.pvClaimList, this.setPvClaimList);
+        console.log(("pvClaimList : ", this.pvClaimList));
+        if (this.pvClaimList !== null) {
+          this.convertList(this.pvClaimList, this.setPvClaimList);
+        }
       })
       .then(() => {
-        this.loadPVClaim(
-          this.viewList[0].name,
-          this.viewList[0].clusterName,
-          this.viewList[0].namespace
-        );
+        if (this.pvClaimList !== null) {
+          this.loadPVClaim(
+            this.viewList[0].name,
+            this.viewList[0].clusterName,
+            this.viewList[0].namespace
+          );
+        }
       });
   };
 
