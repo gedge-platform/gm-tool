@@ -19,7 +19,7 @@ const PodYaml = observer(() => {
         obj_content.metadata?.annotations === ': ""' ||
         isEmpty(obj_content?.metadata?.annotations)
       ) {
-        delete obj_content.spec.template.metadata?.annotations;
+        // delete obj_content.spec.template.metadata?.annotations;
         delete obj_content.metadata?.annotations;
       }
       if (
@@ -27,8 +27,7 @@ const PodYaml = observer(() => {
         isEmpty(obj_content.metadata.labels)
       ) {
         delete obj_content.metadata?.labels;
-        delete obj_content.spec.template.metadata?.labels;
-        delete obj_content.metadata?.labels;
+        // delete obj_content.spec.template.metadata?.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }

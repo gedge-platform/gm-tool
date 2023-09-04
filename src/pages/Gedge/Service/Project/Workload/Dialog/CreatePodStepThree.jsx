@@ -614,7 +614,7 @@ const CreatePodStepThree = observer((props) => {
 
   return (
     <>
-      <PodTargetClusters open={open} onClose={handleClose}></PodTargetClusters>
+      <PodTargetClusters open2={open} onClose={handleClose}></PodTargetClusters>
 
       <div className="step-container">
         <div className="signup-step">

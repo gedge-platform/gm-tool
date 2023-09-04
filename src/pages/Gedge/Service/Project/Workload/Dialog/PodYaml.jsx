@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import AceEditor from "react-ace";
-import podStore from "../../../../../../store/Pod";
+import { podStore } from "@/store";
 import React, { useEffect } from "react";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
@@ -19,7 +19,7 @@ const PodYaml = observer(() => {
         obj_content.metadata?.annotations === ': ""' ||
         isEmpty(obj_content.metadata?.annotations)
       ) {
-        delete obj_content.spec.template.metadata?.annotations;
+        // delete obj_content.spec.template.metadata?.annotations;
         delete obj_content.metadata?.annotations;
       }
       if (
@@ -27,8 +27,7 @@ const PodYaml = observer(() => {
         isEmpty(obj_content.metadata.labels)
       ) {
         delete obj_content.metadata?.labels;
-        delete obj_content.spec.template.metadata?.labels;
-        delete obj_content.metadata?.labels;
+        // delete obj_content.spec.template.metadata?.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }
@@ -61,9 +60,9 @@ const PodYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
-          // setContent(value);
-        }}
+        // onChange={(value) => {
+        // setContent(value);
+        // }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}
