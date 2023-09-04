@@ -75,7 +75,7 @@ const CreateProject = observer((props) => {
     adminList,
     loadAdminWorkSpaceList,
   } = workspaceStore;
-  console.log("adminList :", adminList);
+  console.log(selectClusterInfo);
 
   const { createProject } = projectStore;
 
@@ -102,21 +102,22 @@ const CreateProject = observer((props) => {
   };
 
   const onChange = async ({ target: { name, value } }) => {
-    if (name === "workspace") {
-      if (value === "") {
-        setSelectClusterInfo([]);
-        return;
-      }
-      setWorkspace(value);
-      await loadWorkspaceDetail(value);
-      setSelectClusters([...selectClusterInfo]);
-    } else if (name === "projectName") {
-      setProjectName(value);
-    } else if (name === "projectDescription") {
-      setProjectDescription(value);
-    }
+    // if (name === "workspace") {
+    //   if (value === "") {
+    //     setSelectClusterInfo([]);
+    //     return;
+    //   }
+    //   setWorkspace(value);
+    //   await loadWorkspaceDetail(value);
+    //   setSelectClusters([...selectClusterInfo]);
+    // } else if (name === "projectName") {
+    //   setProjectName(value);
+    // } else if (name === "projectDescription") {
+    //   setProjectDescription(value);
+    // }
+    if (name === "projectName") setProjectName(value);
+    else if (name === "projectDescription") setProjectDescription(value);
   };
-
   const checkCluster = ({ target: { checked } }, clusterName) => {
     if (checked) {
       setSelectClusters([...selectClusters, clusterName]);
@@ -126,6 +127,16 @@ const CreateProject = observer((props) => {
       );
     }
   };
+
+  // const checkCluster = ({ target: { checked } }, clusterName) => {
+  //   if (checked) {
+  //     setSelectClusters([...selectClusters, clusterName]);
+  //   } else {
+  //     setSelectClusters(
+  //       selectClusters.filter((cluster) => cluster !== clusterName)
+  //     );
+  //   }
+  // };
 
   const checkProjectName = async () => {
     const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -159,6 +170,7 @@ const CreateProject = observer((props) => {
       swalError("클러스터를 확인해주세요!");
       return;
     }
+
     createProject(
       projectName,
       projectDescription,
@@ -174,12 +186,12 @@ const CreateProject = observer((props) => {
   useEffect(() => {
     // loadWorkSpaceList(true);
     loadAdminWorkSpaceList(true);
-    setSelectClusterInfo([]);
+    // setSelectClusterInfo([]);
   }, []);
 
-  useEffect(() => {
-    setSelectClusters([...selectClusterInfo]);
-  }, [workspace]);
+  // useEffect(() => {
+  //   setSelectClusters([...selectClusterInfo]);
+  // }, [workspace]);
 
   return (
     <CDialogNew
@@ -260,7 +272,9 @@ const CreateProject = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={" "}>Select Workspace</option>
+                  <option value={" "} selected disabled hidden>
+                    Select Workspace
+                  </option>
                   {adminList?.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}

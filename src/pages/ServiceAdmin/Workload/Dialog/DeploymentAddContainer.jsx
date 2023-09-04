@@ -5,11 +5,10 @@ import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
-import deploymentStore from "../../../../../../store/Deployment";
+import { CSubTabs } from "@/components/tabs/CSubTabs";
+import { deploymentStore, claimStore } from "@/store";
 import { cloneDeep } from "lodash-es";
-import claimStore from "../../../../../../store/Claim";
-import { swalError } from "../../../../../../utils/swal-utils";
+import { swalError } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;

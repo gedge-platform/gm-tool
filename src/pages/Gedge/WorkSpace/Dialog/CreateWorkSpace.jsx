@@ -73,6 +73,12 @@ const CreateWorkSpace = observer((props) => {
     props.reloadFunc && props.reloadFunc();
   };
   const checkWorkspaceName = async () => {
+    const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+    if (!regType1.test(workspaceName)) {
+      swalError("사용할 수 없는 문자열이 포함되어 있습니다.");
+      setCheck(false);
+      return;
+    }
     const result = await duplicateCheck(workspaceName, "workspace");
 
     if (result) {
