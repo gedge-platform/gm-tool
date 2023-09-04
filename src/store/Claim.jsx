@@ -40,7 +40,7 @@ class Claim {
   accessMode = "";
   volumeCapacity = "";
   content = ""; //초기화를 잘 합시다2
-
+  labelList = [];
   labelInput = [];
   labelKey = "";
   labelValue = "";
@@ -339,7 +339,7 @@ class Claim {
       .then((res) => {
         runInAction(() => {
           this.pvClaimList = res.data.data;
-          this.pvClaimListInDeployment = res.data.data;
+          this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
           this.totalElements = res.data.data.length;
         });
       })

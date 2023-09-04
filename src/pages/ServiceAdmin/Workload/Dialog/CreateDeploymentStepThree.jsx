@@ -3,15 +3,18 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import { deploymentStore, projectStore } from "@/store";
-import workspaceStore from "../../../../../../store/WorkSpace";
-import clusterStore from "../../../../../../store/Cluster";
-import podStore from "../../../../../../store/Pod";
-import claimStore from "../../../../../../store/Claim";
+import {
+  deploymentStore,
+  projectStore,
+  workspaceStore,
+  clusterStore,
+  podStore,
+  claimStore,
+} from "@/store";
 import DeploymentTargetClusters from "./DeploymentTargetClusters";
 import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
 import { runInAction } from "mobx";
+import { SERVER_URL } from "@/config.jsx";
 
 const Button = styled.button`
   background-color: #fff;
@@ -136,14 +139,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "innogrid-k8s-master",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: deploymentInfo.workspace,
@@ -162,14 +164,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "innogrid-k8s-master",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: workSpaceDetail.workspaceName,
@@ -205,14 +206,13 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           name: e.target.value,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: "innogrid-k8s-master",
             },
             // user_name: workSpaceDetail.memberName,
             // workspace_name: deploymentInfo.workspace,
@@ -247,14 +247,14 @@ const CreateDeploymentStepThree = observer(() => {
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
       // if (name === "selectCluster") {
-      priority.options.data.selected_cluster = "onpremise(dongjak)";
+      priority.options.data.selected_cluster = "innogrid-k8s-master";
       //   setSelectedCluster(value);
       // }
       if (name === "sourceCluster") {
         setNodeDisable(false);
         setClusterNameInPriority(value);
         loadCluster(value);
-        priority.options.data.selected_cluster = "onpremise(dongjak)";
+        priority.options.data.selected_cluster = "innogrid-k8s-master";
 
         await axios
           .get(`${SERVER_URL}/clusters/${value}`)
@@ -265,8 +265,8 @@ const CreateDeploymentStepThree = observer(() => {
           });
       }
       if (name === "sourceNode") {
-        priority.options.data.selected_cluster = "onpremise(dongjak)";
-        setNodeName("onpremise(dongjak)");
+        priority.options.data.selected_cluster = "innogrid-k8s-master";
+        setNodeName("innogrid-k8s-master");
         console.log(priority);
       }
     };
@@ -288,14 +288,13 @@ const CreateDeploymentStepThree = observer(() => {
           ...priority,
 
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: "innogrid-k8s-master",
             },
             // user_name: workSpaceDetail.memberName,
             // workspace_name: deploymentInfo.workspace,
@@ -311,14 +310,13 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           ...priority,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: "innogrid-k8s-master",
             },
             // user_name: workSpaceDetail.memberName,
             // workspace_name: deploymentInfo.workspace,
@@ -338,14 +336,13 @@ const CreateDeploymentStepThree = observer(() => {
           //   value: value,
           // },
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: workSpaceDetail.memberName,
+            workspace_name: deploymentInfo.workspace,
+            // workspace_uid: workSpaceDetail.objectId,
+            project_name: deploymentInfo.project,
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: "innogrid-k8s-master",
             },
           },
         });

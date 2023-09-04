@@ -147,13 +147,16 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command.split(" "),
-              args: e.arguments.split(" "),
+              command: e.command.split(/[\s,]+/),
+              args: e.arguments.split(/[\s,]+/),
+              // command: e.command,
+              // args: e.arguments,
               resources: {
                 limits: { memory: e.memoryLimit + "Mi" },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
+                  "nvidia.com/gpu": "1",
                 },
               },
               ports: e.ports.map((i) => {
@@ -220,32 +223,32 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
-    const checkRegex = /^[a-z0-9]$/;
-    if (!checkRegex.deploymentInfo.deploymentName) {
+    const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+
+    if (deploymentInfo.deploymentName === "") {
+      swalError("Deployment 이름을 입력해주세요");
+      return;
+    } else if (!checkRegex.test(deploymentInfo.deploymentName)) {
       swalError("영어소문자와 숫자만 입력해주세요.");
-      //   return;
+      return;
     }
-    // if (deploymentInfo.deploymentName === "") {
-    //   swalError("Deployment 이름을 입력해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.workspace === "") {
-    //   swalError("Workspace를 선택해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.project === "") {
-    //   swalError("Project를 선택해주세요");
-    //   return;
-    // }
-    // // Replica는 기본 설정 1이라서 추가 안함
-    // if (deploymentInfo.volume === "") {
-    //   swalError("Volume을 선택해주세요");
-    //   return;
-    // }
-    // if (deploymentInfo.containers.length === 0) {
-    //   swalError("Container를 선택해주세요");
-    //   return;
-    // }
+    if (deploymentInfo.workspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.project === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    // Replica는 기본 설정 1이라서 추가 안함
+    if (deploymentInfo.volume === "") {
+      swalError("Volume을 선택해주세요");
+      return;
+    }
+    if (deploymentInfo.containers.length === 0) {
+      swalError("Container를 선택해주세요");
+      return;
+    }
     setClearLA();
     setStepValue(2);
   };

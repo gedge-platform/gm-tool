@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { CTextField } from "@/components/textfields";
 import { observer } from "mobx-react";
-import { claimStore } from "@/store";
-import CreateClaim from "./CreateClaim";
-import { swalError } from "../../../../utils/swal-utils";
+import { CTextField } from "@/components/textfields";
+import { swalError } from "@/utils/swal-utils";
+import CreateDeployment from "./CreateDeployment";
+import { deploymentStore } from "@/store";
 
 const Button = styled.button`
   border: none;
@@ -26,7 +26,7 @@ const Span = styled.span`
   background-color: #fff;
 `;
 
-const ClaimAdvancedSetting = observer(() => {
+const CreateDeploymentStepTwo = observer(() => {
   const {
     setInputLabelKey,
     setInputLabelValue,
@@ -45,7 +45,7 @@ const ClaimAdvancedSetting = observer(() => {
     annotations,
     setLabels,
     setAnnotations,
-  } = claimStore;
+  } = deploymentStore;
 
   const newLabelList = [{ [labelInputKey]: labelInputValue }];
 
@@ -69,8 +69,6 @@ const ClaimAdvancedSetting = observer(() => {
 
   useEffect(() => {
     setLabelInput({
-      // ...labelInput, : 기존의 labelInput 객체를 복사한 뒤
-      // [name]: value, : name 키를 가진 값을 value로 설정
       [labelKey]: labelValue,
     });
     setAnnotationInput({
@@ -163,10 +161,15 @@ const ClaimAdvancedSetting = observer(() => {
           </div>
           <div className="arr"></div>
           <div className="step">
+            <span>스케줄러</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
             <span>설정 검토</span>
           </div>
         </div>
       </div>
+
       <table id="labelTable" className="tb_data_new tb_write">
         <tbody>
           <tr>
@@ -258,9 +261,9 @@ const ClaimAdvancedSetting = observer(() => {
           ))}
         </tbody>
       </table>
-      <CreateClaim labelsList={labelInput} />
+      <CreateDeployment labelsList={labelInput} />
     </>
   );
 });
 
-export default ClaimAdvancedSetting;
+export default CreateDeploymentStepTwo;
