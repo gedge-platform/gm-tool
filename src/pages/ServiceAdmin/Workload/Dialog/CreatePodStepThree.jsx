@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import { deploymentStore, projectStore } from "@/store";
-import workspaceStore from "../../../../../../store/WorkSpace";
-import clusterStore from "../../../../../../store/Cluster";
-import podStore from "../../../../../../store/Pod";
-import claimStore from "../../../../../../store/Claim";
-import DeploymentTargetClusters from "./DeploymentTargetClusters";
+import { CTextField } from "@/components/textfields";
+import styled from "styled-components";
+import PodTargetClusters from "./PodTargetClusters";
+import { useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
+import { SERVER_URL } from "../../../../config";
+import podStore from "../../../../store/Pod";
+import claimStore from "../../../../store/Claim";
+import workspaceStore from "../../../../store/WorkSpace";
+import clusterStore from "../../../../store/Cluster";
+import projectStore from "../../../../store/Project";
 import { runInAction } from "mobx";
 
 const Button = styled.button`
@@ -23,40 +24,27 @@ const Button = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateDeploymentStepThree = observer(() => {
-  const [open2, setOpen2] = useState(false);
-  const [projectDisable, setProjectDisable] = useState(true);
-  const [containerIndex, setContainerIndex] = useState(1);
-  const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [nodeDisable, setNodeDisable] = useState(true);
-  const [nodeName, setNodeName] = useState("");
-  const [clusterNameInPriority, setClusterNameInPriority] = useState("");
-  const [podName, setPodName] = useState("");
-  const [type, setType] = useState("default");
-  const [userName, setUserName] = useState("");
-  const [workspaceName, setWorkspaceName] = useState("");
-  const [projectName, setProjectName] = useState("");
-
-  const {
-    setDeploymentInfo,
-    priority,
-    setPriority,
-    targetClusters,
-    priorityNodes,
-    setPriorityNodes,
-    deploymentInfo,
-    selectedCluster,
-    setSelectedCluster,
-  } = deploymentStore;
-
+const CreatePodStepThree = observer((props) => {
   const {
     loadWorkSpaceList,
     loadWorkspaceDetail,
     selectClusterInfo,
-    workSpaceList,
     workSpaceDetail,
   } = workspaceStore;
+
+  const {
+    priority,
+    setPriority,
+    podInfo,
+    setPodInfo,
+    targetClusters,
+    podListIncluster,
+    priorityNodes,
+    setPriorityNodes,
+    podListInclusterAPI,
+    selectedCluster,
+    setSelectedCluster,
+  } = podStore;
 
   const { loadProjectListInWorkspace } = projectStore;
 
@@ -64,17 +52,27 @@ const CreateDeploymentStepThree = observer(() => {
 
   const {
     loadClusterList,
-    clusterListInWorkspace,
     loadCluster,
+    loadClusterInWorkspace,
     clusterDetail,
   } = clusterStore;
 
-  const { podListInclusterAPI, podListIncluster } = podStore;
+  const [open, setOpen] = useState(false);
+  const [nodeName, setNodeName] = useState("");
+  const [nodeDisable, setNodeDisable] = useState(true);
+  const [containerIndex, setContainerIndex] = useState(1);
+  const [prioritytDisable, setPriorityDisable] = useState(true);
+  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+  const [clusterNameInPriority, setClusterNameInPriority] = useState("");
+  const [type, setType] = useState("from_node");
+  const [podName, setPodName] = useState("");
+  const [projectDisable, setProjectDisable] = useState(true);
 
   const onChange = (e) => {
     const { name, value } = e.target;
+
     if (name == "workspace") {
-      setDeploymentInfo(name, value);
+      setPodInfo(name, value);
       setProjectDisable(false);
       loadProjectListInWorkspace(value);
       loadClusterList();
@@ -87,15 +85,17 @@ const CreateDeploymentStepThree = observer(() => {
   };
 
   const openTargetCluster = (index) => {
-    setOpen2(true);
+    setOpen(true);
     setContainerIndex(index);
   };
 
-  const onChangePod = async ({ target: { name, value } }) => {
-    let projectNameTemp = deploymentInfo.project;
+  const onChangePod = async (e) => {
+    console.log("priority : ", priority);
+    const { name, value } = e.target;
+    let projectNameTemp = podInfo.project;
     let clusterNameTemp = "";
+    console.log("target : ", e.target);
     setPrioritytPodDisable(false);
-
     if (name === "project") {
       setPriorityDisable(false);
       projectNameTemp = value;
@@ -117,6 +117,14 @@ const CreateDeploymentStepThree = observer(() => {
 
       await podListInclusterAPI(clusterNameTemp, projectNameTemp);
     }
+    if (name === "selectCluster") {
+      console.log(value);
+      priority.options.data.selected_cluster = value;
+      clusterNameTemp = value;
+
+      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
+    }
+
     if (name === "pod") {
       setPodName(value);
       priority.options.data.pod_name = value;
@@ -124,75 +132,60 @@ const CreateDeploymentStepThree = observer(() => {
   };
 
   const handleClose = () => {
-    setOpen2(false);
+    setOpen(false);
   };
 
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
       if (e.target.value === "GLowLatencyPriority") {
-        setType("default");
-        console.log(type);
-        if (type === "default") {
+        if (type === "from_node") {
+          console.log(workSpaceDetail);
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-              type: "default",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: podInfo.workspace,
+              workspace_uid: workSpaceDetail.objectId,
+              project_name: podInfo.project,
+              type: type,
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                source_cluster: "",
+                source_node: "",
+                selected_cluster: "",
+                // selected_cluster: "innogrid-k8s-master",
+                // source_node: "",
+                // target_clusters: "",
               },
-              // user_name: workSpaceDetail.memberName,
-              // workspace_name: deploymentInfo.workspace,
-              // workspace_uid: workSpaceDetail.objectId,
-              // project_name: deploymentInfo.project,
-              // type: "default",
-              // data: {
-              //   selected_cluster: selectedCluster,
-              //   source_node: "",
-              //   target_clusters: "",
-              // },
             },
           });
-        } else if (type === "fromPod") {
-          console.log(type);
+        } else if (type === "from_pod") {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-              type: "default",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: workSpaceDetail.workspaceName,
+              workspce_uid: workSpaceDetail.objectId,
+              project_name: podInfo.project,
+              type: type,
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                select_cluster: "",
+                pod_name: "",
+                selected_cluster: "",
+                // selected_cluster: "innogrid-k8s-master",
+                // source_node: "",
+                // target_clusters: "",
               },
-              // user_name: workSpaceDetail.memberName,
-              // workspace_name: workSpaceDetail.workspaceName,
-              // workspce_uid: workSpaceDetail.objectId,
-              // project_name: deploymentInfo.project,
-              // type: type,
-              // data: {
-              //   workspace_name: "",
-              //   project_name: "",
-              //   pod_name: "",
-              //   target_clusters: "",
-              // },
             },
           });
+          setClusterNameInPriority("");
         }
         setPriority({
           name: e.target.value,
           options: {
-            type: "default",
+            type: "from_node",
           },
         });
       } else if (e.target.value === "GMostRequestPriority") {
-        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
@@ -200,32 +193,20 @@ const CreateDeploymentStepThree = observer(() => {
           },
         });
       } else if (e.target.value === "GSelectedClusterPriority") {
-        setType("cluster");
-        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: workSpaceDetail.memberName,
+            workspace_name: podInfo.workspace,
+            workspace_uid: workSpaceDetail.objectId,
+            project_name: podInfo.project,
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: selectedCluster,
             },
-            // user_name: workSpaceDetail.memberName,
-            // workspace_name: deploymentInfo.workspace,
-            // workspace_uid: workSpaceDetail.objectId,
-            // project_name: deploymentInfo.project,
-            // type: "default",
-            // data: {
-            //   selected_cluster: selectedCluster,
-            // },
           },
         });
       } else {
-        console.log(type);
         setPriority({
           name: e.target.value,
           options: {
@@ -236,38 +217,54 @@ const CreateDeploymentStepThree = observer(() => {
     };
 
     const onChangeFrom = (e) => {
+      const { name, value } = e.target;
       setPriority({
         ...priority,
         options: {
-          type: e.target.value,
+          type: value,
         },
       });
     };
 
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
-      // if (name === "selectCluster") {
-      priority.options.data.selected_cluster = "onpremise(dongjak)";
-      //   setSelectedCluster(value);
-      // }
+      console.log(value);
+      if (name === "selectCluster") {
+        // priority.options.data.selected_cluster = value;
+        setSelectedCluster(value);
+        console.log("priority : ", priority);
+      }
       if (name === "sourceCluster") {
+        console.log("priority : ", priority);
+        setPriority({
+          name: priority.name,
+          options: {
+            user_name: workSpaceDetail.memberName,
+            workspace_name: podInfo.workspace,
+            workspace_uid: workSpaceDetail.objectId,
+            project_name: podInfo.project,
+            type: type,
+            data: {
+              source_cluster: value,
+              source_node: "",
+              selected_cluster: "",
+            },
+          },
+        });
         setNodeDisable(false);
         setClusterNameInPriority(value);
         loadCluster(value);
-        priority.options.data.selected_cluster = "onpremise(dongjak)";
+        // priority.options.data.source_cluster = value;
 
-        await axios
-          .get(`${SERVER_URL}/clusters/${value}`)
-          .then(({ data: { data } }) => {
-            runInAction(() => {
-              setPriorityNodes(data.nodes);
-            });
+        await axios.get(`${SERVER_URL}/clusters/${value}`).then((res) => {
+          runInAction(() => {
+            setPriorityNodes(res.data.data.nodes);
           });
+        });
       }
       if (name === "sourceNode") {
-        priority.options.data.selected_cluster = "onpremise(dongjak)";
-        setNodeName("onpremise(dongjak)");
-        console.log(priority);
+        podListInclusterAPI(clusterNameInPriority, podInfo.project);
+        setNodeName(value);
       }
     };
 
@@ -279,74 +276,47 @@ const CreateDeploymentStepThree = observer(() => {
       } else if (name === "projectName") {
       }
     };
+
     const onChangeType = (e) => {
       const { name, value } = e.target;
-      console.log(e.target);
       setType(value);
+      console.log(priority);
+      console.log(e.target);
       if (name === "type") {
+        console.log("selectedCluster : ", selectedCluster);
         setPriority({
           ...priority,
-
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-            type: "default",
+            user_name: workSpaceDetail.memberName,
+            workspace_name: podInfo.workspace,
+            workspace_uid: workSpaceDetail.objectId,
+            project_name: podInfo.project,
+            type: value,
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              // selected_cluster: selectedCluster,
             },
-            // user_name: workSpaceDetail.memberName,
-            // workspace_name: deploymentInfo.workspace,
-            // workspace_uid: workSpaceDetail.objectId,
-            // project_name: deploymentInfo.project,
-            // type: "default",
-            // data: {
-            //   selected_cluster: selectedCluster,
-            // },
           },
         });
       } else if (name === "selectCluster") {
         setPriority({
           ...priority,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: workSpaceDetail.memberName,
+            workspace_name: podInfo.workspace,
+            workspace_uid: workSpaceDetail.objectId,
+            project_name: podInfo.project,
             type: "default",
             data: {
-              selected_cluster: "onpremise(dongjak)",
+              selected_cluster: selectedCluster,
             },
-            // user_name: workSpaceDetail.memberName,
-            // workspace_name: deploymentInfo.workspace,
-            // workspace_uid: workSpaceDetail.objectId,
-            // project_name: deploymentInfo.project,
-            // type: "default",
-            // data: {
-            //   selected_cluster: selectedCluster,
-            // },
           },
         });
       } else if (name === "sourceCluster") {
         setPriority({
           ...priority,
-          // options: {
-          //   type: "node",
-          //   value: value,
-          // },
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-            type: "default",
-            data: {
-              selected_cluster: "onpremise(dongjak)",
-            },
+            type: " from_node",
+            value: value,
           },
         });
       } else if (name === "sourceNode") {
@@ -366,6 +336,7 @@ const CreateDeploymentStepThree = observer(() => {
     };
 
     const SelectedPriorityComponent = () => {
+      console.log("priority : ", priority);
       switch (priority.name) {
         case "GLowLatencyPriority":
           return (
@@ -375,10 +346,10 @@ const CreateDeploymentStepThree = observer(() => {
                 style={{ paddingTop: "4px" }}
               >
                 <select name="type" value={type} onChange={onChangeType}>
-                  <option value={"default"}>from node</option>
+                  <option value={"from_node"}>from node</option>
                   <option value={"from_pod"}>from pod</option>
                 </select>
-                {type === "default" ? (
+                {type === "from_node" ? (
                   <div style={{ paddingTop: "4px" }}>
                     <FormControl style={{ width: "50%" }}>
                       <select name="sourceCluster" onChange={onChangeSource}>
@@ -414,7 +385,7 @@ const CreateDeploymentStepThree = observer(() => {
                 ) : (
                   <div style={{ paddingTop: "4px" }}>
                     <FormControl style={{ width: "50%" }}>
-                      <select name="sourceCluster" onChange={onChangePod}>
+                      <select name="selectCluster" onChange={onChangePod}>
                         <option value={""} selected disabled hidden>
                           Select Cluster
                         </option>
@@ -575,7 +546,7 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "2px" }}
               >
-                <select name="clusters" onChange={onChangeSource}>
+                {/* <select name="clusters" onChange={onChangeSource}>
                   <option value={""} selected disabled hidden>
                     Set Clusters
                   </option>
@@ -584,7 +555,7 @@ const CreateDeploymentStepThree = observer(() => {
                       {cluster.clusterName}
                     </option>
                   ))}
-                </select>
+                </select> */}
               </FormControl>
             </>
           );
@@ -602,7 +573,7 @@ const CreateDeploymentStepThree = observer(() => {
     }, []);
 
     useEffect(() => {
-      loadClusterList();
+      loadClusterInWorkspace(podInfo.workspace);
     }, []);
 
     useEffect(() => {
@@ -610,7 +581,11 @@ const CreateDeploymentStepThree = observer(() => {
     }, []);
 
     useEffect(() => {
-      loadWorkspaceDetail(deploymentInfo.workspace);
+      loadClusterList();
+    }, []);
+
+    useEffect(() => {
+      loadWorkspaceDetail(podInfo.workspace);
     }, []);
 
     return (
@@ -639,10 +614,7 @@ const CreateDeploymentStepThree = observer(() => {
 
   return (
     <>
-      <DeploymentTargetClusters
-        open={open2}
-        onClose={handleClose}
-      ></DeploymentTargetClusters>
+      <PodTargetClusters open2={open} onClose={handleClose}></PodTargetClusters>
 
       <div className="step-container">
         <div className="signup-step">
@@ -686,4 +658,5 @@ const CreateDeploymentStepThree = observer(() => {
     </>
   );
 });
-export default CreateDeploymentStepThree;
+
+export default CreatePodStepThree;

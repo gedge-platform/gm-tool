@@ -44,37 +44,23 @@ const CreateClaim = observer((props) => {
     setClaimName,
     accessMode,
     volumeCapacity,
-    setVolumeCapacity,
-    responseData,
-    setResponseData,
-    content,
     setContent,
     clearAll,
     createVolumeClaim,
     setProject,
     project,
     selectClusters,
-    setSelectClusters,
-    clusterName,
-    setAccessMode,
-    labelsKey,
-    labelKey,
-    labelValue,
-    setLabelsKey,
-    labelsValue,
-    setLabelsValue,
-    setLabelsView,
-    inputLabelKey,
-    inputLabelValue,
+    labelList,
     labels,
     annotations,
     labelInput,
     annotationInput,
+
+    labelKey,
+    labelValue,
+
     annotationKey,
     annotationValue,
-    setLabels,
-    setInputLabelKey,
-    setInputLabelValue,
     setTemplate,
     setClearLA,
   } = claimStore;
@@ -93,8 +79,8 @@ const CreateClaim = observer((props) => {
     metadata: {
       name: claimName,
       namespace: project,
-      // labels: labelInput,
-      // annotations: annotationInput,
+      labels: labelInput,
+      annotations: annotationInput,
     },
     spec: {
       storageClassName: selectStorageClass,
@@ -108,8 +94,12 @@ const CreateClaim = observer((props) => {
   };
 
   const onClickStepOne = (e) => {
+    const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     if (claimName === "") {
       swalError("Claim 이름을 입력해주세요");
+      return;
+    } else if (!checkRegex.test(claimName)) {
+      swalError("영어소문자와 숫자만 입력해주세요.");
       return;
     }
     if (workspace === "") {
@@ -152,41 +142,43 @@ const CreateClaim = observer((props) => {
     setClearLA();
   };
 
-  const onClickStepTwo = () => {
+  const onClickStepTwo = (e) => {
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
+
     labels.map((data) => LabelKeyArr.push(data.labelKey));
     annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
-    if (labelKey === "" && labelValue !== "") {
-      swalError("LabelKey 값을 입력해주세요");
-      return;
-    }
-    if (annotationKey === "" && annotationValue !== "") {
-      swalError("AnnotationKey 값을 입력해주세요");
-      return;
-    }
-    if (
-      LabelKeyArr.indexOf(labelKey) < 0 &&
-      AnnotationKeyArr.indexOf(annotationKey) < 0
-    ) {
-      setStepValue(3);
-    } else {
-      if (
-        LabelKeyArr.indexOf(labelKey) >= 0 &&
-        AnnotationKeyArr.indexOf(annotationKey) >= 0
-      ) {
-        swalError("AnnotationKey와 LabelKey값이 중복입니다.");
-        return;
-      }
-      if (LabelKeyArr.indexOf(labelKey) >= 0) {
-        swalError("LabelKey값이 중복입니다.");
-        return;
-      }
-      if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
-        swalError("AnnotationKey값이 중복입니다.");
-        return;
-      }
-    }
+    setStepValue(3);
+    // if (labelKey === "" && labelValue !== "") {
+    //   swalError("LabelKey 값을 입력해주세요");
+    //   return;
+    // }
+    // if (annotationKey === "" && annotationValue !== "") {
+    //   swalError("AnnotationKey 값을 입력해주세요");
+    //   return;
+    // }
+    // if (
+    //   LabelKeyArr.indexOf(labelKey) < 0 &&
+    //   AnnotationKeyArr.indexOf(annotationKey) < 0
+    // ) {
+    //   setStepValue(3);
+    // } else {
+    //   if (
+    //     LabelKeyArr.indexOf(labelKey) >= 0 &&
+    //     AnnotationKeyArr.indexOf(annotationKey) >= 0
+    //   ) {
+    //     swalError("AnnotationKey와 LabelKey값이 중복입니다.");
+    //     return;
+    //   }
+    //   if (LabelKeyArr.indexOf(labelKey) >= 0) {
+    //     swalError("LabelKey값이 중복입니다.");
+    //     return;
+    //   }
+    //   if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
+    //     swalError("AnnotationKey값이 중복입니다.");
+    //     return;
+    //   }
+    // }
   };
 
   const handlePreStepValue = () => {
@@ -213,7 +205,6 @@ const CreateClaim = observer((props) => {
       setTemplate(template);
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
-      // setClearLA();
     }
   }, [stepValue]);
 

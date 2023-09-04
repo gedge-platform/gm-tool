@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import { swalError } from "@/utils/swal-utils";
-import podStore from "../../../../../../store/Pod";
+import podStore from "../../../../store/Pod";
 import CreatePod from "./CreatePod";
 
 const Button = styled.button`

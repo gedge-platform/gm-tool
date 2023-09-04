@@ -113,6 +113,12 @@ const ClaimAdvancedSetting = observer(() => {
     setLabels(labels.filter((item) => item.labelKey !== labelKey));
   };
 
+  const deleteAnnotations = (annotationKey) => {
+    setAnnotations(
+      annotations.filter((item) => item.annotationKey !== annotationKey)
+    );
+  };
+
   const addAnnotations = () => {
     if (annotationKey == "") {
       swalError("AnnotationKey 값을 입력해주세요");
@@ -189,20 +195,24 @@ const ClaimAdvancedSetting = observer(() => {
               <Button onClick={addRow}>+</Button>
             </td>
           </tr>
-          {labels.map((item) => (
-            <tr>
-              <th>Labels</th>
-              <td style={{ width: "300px", padding: "8px" }}>
-                {item.labelKey}
-              </td>
-              <td style={{ width: "300px", padding: "8px" }}>
-                {item.labelValue}
-              </td>
-              <td>
-                <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
-              </td>
-            </tr>
-          ))}
+          {labels
+            ? labels.map((item) => (
+                <tr>
+                  <th>Labels</th>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.labelKey}
+                  </td>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.labelValue}
+                  </td>
+                  <td>
+                    <Button onClick={() => deleteLabels(item.labelKey)}>
+                      -
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            : null}
 
           <tr>
             <th>Annotations</th>
