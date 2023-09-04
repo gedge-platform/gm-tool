@@ -83,6 +83,8 @@ const CreatePod = observer((props) => {
     labelInput,
     annotationInput,
     postPodGM,
+    keyValuePair,
+    secretConfigmap,
   } = podStore;
 
   const [stepValue, setStepValue] = useState(1);
@@ -90,12 +92,12 @@ const CreatePod = observer((props) => {
   console.log(podInfo);
 
   const template = {
-    apiVersion: "apps/v1",
+    apiVersion: "v1",
     kind: "Pod",
     metadata: {
       name: podInfo.podName,
-      // annotations: annotationInput,
       labels: labelInput,
+      annotations: annotationInput,
     },
     spec: {
       restartPolicy: "Always",
@@ -106,7 +108,39 @@ const CreatePod = observer((props) => {
           image: e.containerImage,
           command: e.command?.split(" "),
           args: e.arguments?.split(" "),
-          env: "내일하자",
+          env: e.variables.map((i) => {
+            if (i.type === "KeyValuePair") {
+              return {
+                name: i.value,
+                value: i.variableName,
+              };
+            } else {
+              return {
+                name: i.type + "_key",
+                valueForm: {
+                  [i.type + "Ref"]: {
+                    name: i.variableName,
+                    key: i.type + "-key",
+                  },
+                },
+              };
+            }
+          }),
+          // env: keyValuePair.map((i) => {
+          //   return {
+          //     name: i[0],
+          //     value: i[1],
+          //   };
+          // }),
+          // valueForm: secretConfigmap.map((t) => {
+          //   const item = t.type + "Ref";
+          //   return {
+          //     [t.type + "Ref"]: {
+          //       name: t.variableName,
+          //       key: t.type + "-key",
+          //     },
+          //   };
+          // }),
           ports: e.ports.map((i) => {
             return {
               containerPort: parseInt(i.privateContainerPort),
@@ -116,94 +150,108 @@ const CreatePod = observer((props) => {
           resources: {
             requests: {
               cpu: e.cpuReservation,
-              memory: memoryReservation,
+              memory: e.memoryReservation,
             },
             limits: {
               cpu: e.cpuLimit,
               memory: e.memoryLimit,
+              "nvidia.com/gpu": "1",
             },
           },
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: i.name,
+          //     mountPath: i.mountPoint,
+          //   };
+          // }),
           volumeMounts: e.volumes.map((i) => {
             return {
-              name: i.name,
-              mountPath: i.mountPoint,
+              name: "data-volume",
+              mountPath: "/data",
             };
           }),
         };
       }),
-      volumes: e.volumes.map((i) => {
-        return {
-          name: i.name,
+      volumes: [
+        {
+          name: "data-volume",
           emptyDir: {},
-        };
-      }),
-      //   selector: {
-      //     matchLabels: labelInput,
-      //   },
-      //   template: {
-      //     metadata: {
-      //       annotations: annotationInput,
-      //       labels: labelInput,
-      //     },
-      //     spec: {
-      //       imagePullSecert: podInfo.containers?.map((e) => {
-      //         return { name: e.pullSecret };
-      //       }),
-      //       containers: podInfo.containers?.map((e) => {
-      //         return {
-      //           name: e.containerName,
-      //           image: e.containerImage,
-      //           imagePullPolicy: e.pullPolicy,
-      //           command: e.command,
-      //           args: e.arguments,
-      //           resources: {
-      //             limits: {
-      //               // cpu: e.cpuLimit,
-      //               memory: e.memoryLimit + "Mi",
-      //             },
-      //             requests: {
-      //               cpu: e.cpuReservation + "m",
-      //               memory: e.memoryReservation + "Mi",
-      //             },
-      //           },
-      //           ports: e.ports.map((i) => {
-      //             return {
-      //               name: i.name,
-      //               containerPort: i.privateContainerPort,
-      //               protocol: i.protocol,
-      //             };
-      //           }),
-      //           envForm: e.variables.map((i) => {
-      //             const item = i.type + "Ref";
-      //             return {
-      //               [item]: {
-      //                 name: i.variableName,
-      //               },
-      //             };
-      //           }),
-      //           env: e.variables.map((i) => {
-      //             return {
-      //               name: i.variableName,
-      //               value: i.value,
-      //             };
-      //           }),
-      //           volumeMounts: e.volumes.map((i) => {
-      //             return {
-      //               mountPath: i.subPathInVolume,
-      //               name: i.name,
-      //             };
-      //           }),
-      //         };
-      //       }),
-      //     },
-      //   },
-      //   volumes: [
-      //     {
-      //       name: podInfo.volume,
-      //       persistentVolumeClaim: podInfo.pvcName,
-      //     },
-      //   ],
+        },
+      ],
     },
+    // volumes: [
+    //   {
+    //     name: podInfo.volume,
+    //     emptyDir: {},
+    //   },
+    // ],
+
+    //   selector: {
+    //     matchLabels: labelInput,
+    //   },
+    //   template: {
+    //     metadata: {
+    //       annotations: annotationInput,
+    //       labels: labelInput,
+    //     },
+    //     spec: {
+    //       imagePullSecert: podInfo.containers?.map((e) => {
+    //         return { name: e.pullSecret };
+    //       }),
+    //       containers: podInfo.containers?.map((e) => {
+    //         return {
+    //           name: e.containerName,
+    //           image: e.containerImage,
+    //           imagePullPolicy: e.pullPolicy,
+    //           command: e.command,
+    //           args: e.arguments,
+    //           resources: {
+    //             limits: {
+    //               // cpu: e.cpuLimit,
+    //               memory: e.memoryLimit + "Mi",
+    //             },
+    //             requests: {
+    //               cpu: e.cpuReservation + "m",
+    //               memory: e.memoryReservation + "Mi",
+    //             },
+    //           },
+    //           ports: e.ports.map((i) => {
+    //             return {
+    //               name: i.name,
+    //               containerPort: i.privateContainerPort,
+    //               protocol: i.protocol,
+    //             };
+    //           }),
+    //           envForm: e.variables.map((i) => {
+    //             const item = i.type + "Ref";
+    //             return {
+    //               [item]: {
+    //                 name: i.variableName,
+    //               },
+    //             };
+    //           }),
+    //           env: e.variables.map((i) => {
+    //             return {
+    //               name: i.variableName,
+    //               value: i.value,
+    //             };
+    //           }),
+    //           volumeMounts: e.volumes.map((i) => {
+    //             return {
+    //               mountPath: i.subPathInVolume,
+    //               name: i.name,
+    //             };
+    //           }),
+    //         };
+    //       }),
+    //     },
+    //   },
+    //   volumes: [
+    //     {
+    //       name: podInfo.volume,
+    //       persistentVolumeClaim: podInfo.pvcName,
+    //     },
+    //   ],
   };
 
   const handleClose = () => {
@@ -352,7 +400,7 @@ const CreatePod = observer((props) => {
     } else {
       return (
         <>
-          <PodYaml />
+          <PodYaml labelsList={labelsList} />
           <div
             style={{
               display: "flex",

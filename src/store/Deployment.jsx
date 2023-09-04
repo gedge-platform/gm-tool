@@ -758,7 +758,9 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
+    console.log(this.priority);
     const body = this.content;
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const option = {
       user_name: "user1",
       workspace_name: "ws1",
@@ -766,11 +768,11 @@ class Deployment {
       project_name: "p1",
       type: "default",
       data: {
-        selected_cluster: "innogrid-k8s-master",
+        selected_cluster: "gs-cluster01",
       },
     };
     const options = encodeURI(JSON.stringify(option));
-    const requestId = "requestId12";
+    const requestId = "requestId" + randomNumber;
     console.log("body :", body);
     console.log("options :", this.priority.options);
     console.log("requestId :", requestId);
@@ -781,7 +783,7 @@ class Deployment {
         body
       )
       .then((res) => {
-        console.log("res :", res);
+        console.log("res :", res.data);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
           console.log(options);

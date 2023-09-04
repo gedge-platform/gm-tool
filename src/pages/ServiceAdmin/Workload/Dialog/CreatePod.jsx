@@ -7,6 +7,11 @@ import PodSettings from "./PodSettings";
 import PodYaml from "./PodYaml";
 import { CDialogNew } from "@/components/dialogs";
 import { randomString } from "@/utils/common-utils";
+import CreatePodStepOne from "./CreatePodStepOne";
+import CreatePodStepTwo from "./CreatePodStepTwo";
+import CreatePodStepThree from "./CreatePodStepThree";
+import claimStore from "../../../../store/Claim";
+import workspaceStore from "../../../../store/WorkSpace";
 
 const Button = styled.button`
   background-color: #fff;
@@ -27,64 +32,306 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreatePod = observer(props => {
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 3px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, 0.1);
+  }
+
+  &:before,
+  &:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - 0.0625em);
+    width: 0.125em;
+    height: 70%;
+    border-radius: 0.125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: "";
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+`;
+
+const CreatePod = observer((props) => {
   const { open } = props;
+  const {
+    podInfo,
+    initPodInfo,
+    initTargetClusters,
+    setContent,
+    setClearLA,
+    setTemplate,
+    labelsList,
+    labels,
+    annotations,
+    labelInput,
+    annotationInput,
+    postPodGM,
+    keyValuePair,
+    secretConfigmap,
+  } = podStore;
+
   const [stepValue, setStepValue] = useState(1);
 
-  const { setProjectListinWorkspace } = projectStore;
-  const { postWorkload, postScheduler } = schedulerStore;
+  const { loadPVClaims } = claimStore;
+  const { loadWorkSpaceList } = workspaceStore;
 
-  const { podName, containerName, containerImage, containerPort, workspace, project, content, clearAll, setContent } = podStore;
+  console.log(podInfo);
 
   const template = {
     apiVersion: "v1",
     kind: "Pod",
     metadata: {
-      name: podName,
-      namespace: project,
+      name: podInfo.podName,
+      labels: labelInput,
+      annotations: annotationInput,
     },
     spec: {
-      containers: [
-        {
-          name: containerName,
-          image: containerImage,
-          ports: [
-            {
-              containerPort: Number(containerPort),
+      restartPolicy: "Always",
+      terminationGracePeriodSeconds: 30,
+      containers: podInfo.containers?.map((e) => {
+        return {
+          name: e.containerName,
+          image: e.containerImage,
+          command: e.command?.split(" "),
+          args: e.arguments?.split(" "),
+          env: e.variables.map((i) => {
+            if (i.type === "KeyValuePair") {
+              return {
+                name: i.value,
+                value: i.variableName,
+              };
+            } else {
+              return {
+                name: i.type + "_key",
+                valueForm: {
+                  [i.type + "Ref"]: {
+                    name: i.variableName,
+                    key: i.type + "-key",
+                  },
+                },
+              };
+            }
+          }),
+          // env: keyValuePair.map((i) => {
+          //   return {
+          //     name: i[0],
+          //     value: i[1],
+          //   };
+          // }),
+          // valueForm: secretConfigmap.map((t) => {
+          //   const item = t.type + "Ref";
+          //   return {
+          //     [t.type + "Ref"]: {
+          //       name: t.variableName,
+          //       key: t.type + "-key",
+          //     },
+          //   };
+          // }),
+          ports: e.ports.map((i) => {
+            return {
+              containerPort: parseInt(i.privateContainerPort),
+              protocol: i.protocol,
+            };
+          }),
+          resources: {
+            requests: {
+              cpu: e.cpuReservation,
+              memory: e.memoryReservation,
             },
-          ],
+            limits: {
+              cpu: e.cpuLimit,
+              memory: e.memoryLimit,
+            },
+          },
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: i.name,
+          //     mountPath: i.mountPoint,
+          //   };
+          // }),
+          volumeMounts: e.volumes.map((i) => {
+            return {
+              name: "data-volume",
+              mountPath: "/data",
+            };
+          }),
+        };
+      }),
+      volumes: [
+        {
+          name: "data-volume",
+          emptyDir: {},
         },
       ],
     },
+    // volumes: [
+    //   {
+    //     name: podInfo.volume,
+    //     emptyDir: {},
+    //   },
+    // ],
+
+    //   selector: {
+    //     matchLabels: labelInput,
+    //   },
+    //   template: {
+    //     metadata: {
+    //       annotations: annotationInput,
+    //       labels: labelInput,
+    //     },
+    //     spec: {
+    //       imagePullSecert: podInfo.containers?.map((e) => {
+    //         return { name: e.pullSecret };
+    //       }),
+    //       containers: podInfo.containers?.map((e) => {
+    //         return {
+    //           name: e.containerName,
+    //           image: e.containerImage,
+    //           imagePullPolicy: e.pullPolicy,
+    //           command: e.command,
+    //           args: e.arguments,
+    //           resources: {
+    //             limits: {
+    //               // cpu: e.cpuLimit,
+    //               memory: e.memoryLimit + "Mi",
+    //             },
+    //             requests: {
+    //               cpu: e.cpuReservation + "m",
+    //               memory: e.memoryReservation + "Mi",
+    //             },
+    //           },
+    //           ports: e.ports.map((i) => {
+    //             return {
+    //               name: i.name,
+    //               containerPort: i.privateContainerPort,
+    //               protocol: i.protocol,
+    //             };
+    //           }),
+    //           envForm: e.variables.map((i) => {
+    //             const item = i.type + "Ref";
+    //             return {
+    //               [item]: {
+    //                 name: i.variableName,
+    //               },
+    //             };
+    //           }),
+    //           env: e.variables.map((i) => {
+    //             return {
+    //               name: i.variableName,
+    //               value: i.value,
+    //             };
+    //           }),
+    //           volumeMounts: e.volumes.map((i) => {
+    //             return {
+    //               mountPath: i.subPathInVolume,
+    //               name: i.name,
+    //             };
+    //           }),
+    //         };
+    //       }),
+    //     },
+    //   },
+    //   volumes: [
+    //     {
+    //       name: podInfo.volume,
+    //       persistentVolumeClaim: podInfo.pvcName,
+    //     },
+    //   ],
   };
 
   const handleClose = () => {
     props.onClose && props.onClose();
-    setProjectListinWorkspace();
     setStepValue(1);
-    clearAll();
+    setClearLA();
+    initPodInfo();
+  };
+
+  const onClickStepTwo = (e) => {
+    // if (podInfo.podName === "") {
+    //   swalError("Pod 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (podInfo.workspace === "") {
+    //   swalError("Workspace를 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.project === "") {
+    //   swalError("Project를 선택해주세요");
+    //   return;
+    // }
+    // // Replica는 기본 설정 1이라서 추가 안함
+    // if (podInfo.volume === "") {
+    //   swalError("Volume을 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.containers.length === 0) {
+    //   swalError("Container를 선택해주세요");
+    //   return;
+    // }
+    setClearLA();
+    setStepValue(2);
+  };
+
+  const onClickStepThree = (e) => {
+    const LabelKeyArr = [];
+    const AnnotationKeyArr = [];
+    labels.map((data) => LabelKeyArr.push(data.labelKey));
+    annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
+    setStepValue(3);
+  };
+
+  const onClickStepFour = () => {
+    setStepValue(4);
+  };
+
+  const onClickBackStepOne = () => {
+    setStepValue(1);
+  };
+
+  const onClickBackStepTwo = () => {
+    setStepValue(2);
+  };
+
+  const onClickBackStepThree = () => {
+    setStepValue(3);
   };
 
   const createPod = () => {
-    const requestId = `${podName}-${randomString()}`;
-
-    postWorkload(requestId, workspace, project, "Pod");
-    postScheduler(requestId, content, handleClose);
+    postPodGM(require("json-to-pretty-yaml").stringify(template));
+    handleClose();
     props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {
-    if (stepValue === 3) {
+    loadPVClaims();
+    loadWorkSpaceList();
+    if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
     }
   }, [stepValue]);
 
-  const stepOfComponent = () => {
+  const CreatePodComponent = () => {
     if (stepValue === 1) {
       return (
         <>
-          <PodBasicInformation />
+          <CreatePodStepOne />
           <div
             style={{
               display: "flex",
@@ -100,7 +347,7 @@ const CreatePod = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={() => setStepValue(2)}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -108,7 +355,7 @@ const CreatePod = observer(props => {
     } else if (stepValue === 2) {
       return (
         <>
-          <PodSettings />
+          <CreatePodStepTwo />
           <div
             style={{
               display: "flex",
@@ -123,8 +370,8 @@ const CreatePod = observer(props => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={() => setStepValue(3)}>다음</ButtonNext>
+              <Button onClick={() => onClickBackStepOne()}>이전</Button>
+              <ButtonNext onClick={() => onClickStepThree()}>다음</ButtonNext>
             </div>
           </div>
         </>
@@ -132,7 +379,7 @@ const CreatePod = observer(props => {
     } else if (stepValue === 3) {
       return (
         <>
-          <PodYaml />
+          <CreatePodStepThree />
           <div
             style={{
               display: "flex",
@@ -143,22 +390,54 @@ const CreatePod = observer(props => {
             <div
               style={{
                 display: "flex",
-                width: "300px",
+                width: "240px",
                 justifyContent: "center",
               }}
             >
-              <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createPod}>Schedule Apply</ButtonNext>
+              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+              <ButtonNext onClick={() => onClickStepFour()}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
-    } else return <>4</>;
+    } else {
+      return (
+        <>
+          <PodYaml labelsList={labelsList} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => onClickBackStepThree()}>이전</Button>
+              <ButtonNext onClick={createPod}>확인</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    }
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create Pod"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
-      {stepOfComponent()}
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create Pod"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
+      {CreatePodComponent()}
     </CDialogNew>
   );
 });

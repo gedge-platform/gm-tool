@@ -82,6 +82,9 @@ class Pod {
   workloadList = [];
   serviceList = [];
 
+  keyValuePair = [];
+  secretConfigmap = [];
+
   labelList = [];
   annotationList = [];
 
@@ -95,6 +98,7 @@ class Pod {
   annotationInput = [];
   annotationKey = "";
   annotationValue = "";
+
   containerList = [];
   portList = [];
   variableList = [];
@@ -155,17 +159,6 @@ class Pod {
   setTargetClusters = (value) => {
     runInAction(() => {
       this.targetClusters = value;
-    });
-  };
-
-  setClearLA = () => {
-    runInAction(() => {
-      this.labelKey = "";
-      this.labelValue = "";
-      this.annotationKey = "";
-      this.annotationValue = "";
-      this.labels = [];
-      this.annotations = [];
     });
   };
 
@@ -399,19 +392,9 @@ class Pod {
     });
   };
 
-  content = "";
-  setContent = (content) => {
-    runInAction(() => {
-      this.content = content;
-    });
-  };
-
   labelKey = "";
   labelValue = "";
 
-  annotationInput = [];
-  annotationKey = "";
-  annotationValue = "";
   labels = [];
   annotations = [];
 
@@ -431,6 +414,7 @@ class Pod {
         this.annotationInput[data.annotationKey] = data.annotationValue;
       });
     });
+    console.log(this.annotations);
   };
 
   constructor() {
@@ -651,26 +635,40 @@ class Pod {
   };
 
   postPodGM = async (callback) => {
+    console.log(this.priority);
     const body = this.content;
-    const options = encodeURI(JSON.stringify(this.priority.options));
-    const requestId = "requestId12";
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+    // const options = encodeURI(JSON.stringify(this.priority.options));
+    const option = {
+      user_name: "innogrid",
+      workspace_name: "scheduler_test",
+      workspace_uid: "63032defd74175d7b58babd2",
+      project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+      type: "default",
+      data: {
+        selected_cluster: "onpremise(dongjak)",
+      },
+    };
+    const requestId = "requestId" + randomNumber;
+    const options = encodeURI(JSON.stringify(option));
     console.log("body :", body);
-    console.log("options :", JSON.stringify(this.priority.options));
+    // console.log("options :", JSON.stringify(this.priority.options));
+    console.log("option : ", options);
     console.log("requestId :", requestId);
 
-    // await axios
-    //   .post(
-    //     `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=${this.priority.name}&options=${options}`,
-    //     body
-    //   )
-    //   .then((res) => {
-    //     console.log("res :", res);
-    //     if (res.status === 201) {
-    //       swalError("Pod가 생성되었습니다.", callback);
-    //     } else {
-    //       swalError("Deployment 생성 실패", callback);
-    //     }
-    //   });
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
+        body
+      )
+      .then((res) => {
+        console.log("res :", res.data);
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.", callback);
+        } else {
+          swalError("Pod 생성 실패", callback);
+        }
+      });
   };
 
   deletePod = async (podName, callback) => {
