@@ -641,9 +641,9 @@ class Pod {
     // const options = encodeURI(JSON.stringify(this.priority.options));
     const option = {
       user_name: "innogrid",
-      workspace_name: "scheduler_test",
-      workspace_uid: "63032defd74175d7b58babd2",
-      project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+      workspace_name: "test-scheduler",
+      workspace_uid: "64f69d43d77a89b959610b04",
+      project_name: "test-scheduler",
       type: "default",
       data: {
         selected_cluster: "onpremise(dongjak)",

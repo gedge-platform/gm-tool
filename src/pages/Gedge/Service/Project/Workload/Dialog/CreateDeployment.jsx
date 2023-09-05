@@ -119,6 +119,8 @@ const CreateDeployment = observer((props) => {
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
 
+  console.log(deploymentInfo);
+
   const template = {
     apiVersion: "apps/v1",
     kind: "Deployment",
@@ -147,8 +149,8 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command.split(/[\s,]+/),
-              args: e.arguments.split(/[\s,]+/),
+              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
+              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
               // command: e.command,
               // args: e.arguments,
               resources: {

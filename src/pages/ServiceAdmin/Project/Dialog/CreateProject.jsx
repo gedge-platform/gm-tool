@@ -107,7 +107,7 @@ const CreateProject = observer((props) => {
     //     setSelectClusterInfo([]);
     //     return;
     //   }
-    //   setWorkspace(value);
+    setWorkspace(value);
     //   await loadWorkspaceDetail(value);
     //   setSelectClusters([...selectClusterInfo]);
     // } else if (name === "projectName") {

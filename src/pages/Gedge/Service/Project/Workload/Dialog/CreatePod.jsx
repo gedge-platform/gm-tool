@@ -104,8 +104,8 @@ const CreatePod = observer((props) => {
         return {
           name: e.containerName,
           image: e.containerImage,
-          command: e.command?.split(" "),
-          args: e.arguments?.split(" "),
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
           env: e.variables.map((i) => {
             if (i.type === "KeyValuePair") {
               return {

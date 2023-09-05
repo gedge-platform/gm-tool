@@ -768,7 +768,7 @@ class Deployment {
       project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
       type: "default",
       data: {
-        selected_cluster: "gs-cluster01",
+        selected_cluster: "mec(ilsan)",
       },
     };
     const options = encodeURI(JSON.stringify(option));

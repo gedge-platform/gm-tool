@@ -153,11 +153,11 @@ const PodAddContainer = observer((props) => {
         console.log(secretConfigmap);
       }
     });
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      addContainer(temp);
-      props.onClose && props.onClose();
-    }
+    // if (isContainerValid()) {
+    const temp = { ...containerInfo };
+    addContainer(temp);
+    props.onClose && props.onClose();
+    // }
   };
 
   const editContainers = () => {

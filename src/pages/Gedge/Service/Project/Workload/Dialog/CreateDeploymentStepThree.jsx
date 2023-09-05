@@ -136,14 +136,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: deploymentInfo.workspace,
+              workspace_uid: workSpaceDetail.objectId,
+              project_name: deploymentInfo.project,
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: deploymentInfo.workspace,
@@ -162,14 +161,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: deploymentInfo.workspace,
+              workspace_uid: workSpaceDetail.objectId,
+              project_name: deploymentInfo.project,
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: workSpaceDetail.workspaceName,

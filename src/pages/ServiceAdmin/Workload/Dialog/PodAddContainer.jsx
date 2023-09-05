@@ -147,17 +147,15 @@ const PodAddContainer = observer((props) => {
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
         keyValuePair.push([e.variableName, e.value]);
-        console.log(keyValuePair);
       } else {
         secretConfigmap.push(e);
-        console.log(secretConfigmap);
       }
     });
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      addContainer(temp);
-      props.onClose && props.onClose();
-    }
+    // if (isContainerValid()) {
+    const temp = { ...containerInfo };
+    addContainer(temp);
+    props.onClose && props.onClose();
+    // }
   };
 
   const editContainers = () => {
