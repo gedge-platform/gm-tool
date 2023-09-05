@@ -64,14 +64,10 @@ const Circle = styled.div`
 
 const CreateProject = observer((props) => {
   const { open } = props;
-  const { clusters, setClusters, loadClusterInWorkspace } = clusterStore;
   const {
-    workSpaceList,
-    loadWorkSpaceList,
     selectClusterInfo,
     setSelectClusterInfo,
     loadWorkspaceDetail,
-    viewList,
     adminList,
     loadAdminWorkSpaceList,
   } = workspaceStore;
@@ -101,21 +97,24 @@ const CreateProject = observer((props) => {
   };
 
   const onChange = async ({ target: { name, value } }) => {
-    //   if (name === "workspace") {
-    //     if (value === "") {
-    //       setSelectClusterInfo([]);
-    //       return;
-    //     }
-    setWorkspace(value);
-    //     await loadWorkspaceDetail(value);
-    //     setSelectClusters([...selectClusterInfo]);
-    //   } else if (name === "projectName") {
-    //     setProjectName(value);
-    //   } else if (name === "projectDescription") {
-    //     setProjectDescription(value);
+    if (name === "workspace") {
+      setWorkspace(value);
+    }
+
+    // 수정중
+    // if (name === "workspace") {
+    //   if (value === "") {
+    //     setSelectClusterInfo([]);
+    //     return;
+    //   } else {
+    //     setWorkspace(value);
     //   }
+    //   await loadWorkspaceDetail(value);
+    //   setSelectClusters([...selectClusterInfo]);
+    // }
+
     if (name === "projectName") setProjectName(value);
-    else if (name === "projectDescription") setProjectDescription(value);
+    if (name === "projectDescription") setProjectDescription(value);
   };
   const checkCluster = ({ target: { checked } }, clusterName) => {
     if (checked) {
@@ -127,18 +126,9 @@ const CreateProject = observer((props) => {
     }
   };
 
-  // const checkCluster = ({ target: { checked } }, clusterName) => {
-  //   if (checked) {
-  //     setSelectClusters([...selectClusters, clusterName]);
-  //   } else {
-  //     setSelectClusters(
-  //       selectClusters.filter((cluster) => cluster !== clusterName)
-  //     );
-  //   }
-  // };
-
   const checkProjectName = async () => {
     const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+
     if (!regType1.test(projectName)) {
       swalError("사용할 수 없는 문자열이 포함되어 있습니다.");
       setCheck(false);
@@ -161,10 +151,12 @@ const CreateProject = observer((props) => {
       swalError("프로젝트 이름을 확인해주세요!");
       return;
     }
+
     if (workspace === "") {
       swalError("워크스페이스를 확인해주세요!");
       return;
     }
+
     if (selectClusters.length === 0) {
       swalError("클러스터를 확인해주세요!");
       return;
