@@ -69,11 +69,11 @@ const Table = styled.table`
 `;
 
 const CreatePodStepOne = observer((props) => {
-  const { podInfo, setPodInfo } = podStore;
+  const { podInfo, setPodInfo, initTargetClusters } = podStore;
 
   const { workSpaceList } = workspaceStore;
 
-  const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
+  const { projectListinWorkspace, loadProjectListInWorkspace, loadProjectDetail, selectClusterInfo } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
 
@@ -87,6 +87,11 @@ const CreatePodStepOne = observer((props) => {
       loadProjectListInWorkspace(e.target.value);
     } else if (e.target.name === "volume") {
       setCheckPVCInPod(e.target.value);
+    } else if (e.target.name === "project") {
+      loadProjectDetail(e.target.value);
+      initTargetClusters(
+        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      );
     }
   };
 
