@@ -232,15 +232,6 @@ class Deployment {
   ];
 
   targetClusters = [];
-  // unselectedClusters = [
-  //   "cluster0",
-  //   "cluster1",
-  //   "cluster2",
-  //   "cluster3",
-  //   "cluster4",
-  //   "cluster5",
-  //   "cluster6",
-  // ];
   unselectedClusters = [];
 
   initTargetClusters = (defaultUnselectedClusters) => {

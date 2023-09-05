@@ -35,7 +35,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const PodTargetClusters = observer(({ open2, onClose }) => {
+const PodTargetClusters = observer(({ open, onClose }) => {
   const {
     targetClusters,
     unselectedClusters,
@@ -170,7 +170,7 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
   return (
     <CDialogNew
       id="myDialog"
-      open={open2}
+      open={open}
       maxWidth="md"
       title={"Target Clusters"}
       onClose={onClose}

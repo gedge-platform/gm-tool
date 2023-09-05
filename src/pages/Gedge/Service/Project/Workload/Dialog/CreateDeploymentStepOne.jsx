@@ -131,6 +131,7 @@ const CreateDeploymentStepOne = observer((props) => {
     setProjectListinWorkspace,
     projectListinWorkspace,
     loadProjectDetail,
+    selectClusterInfo
   } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;

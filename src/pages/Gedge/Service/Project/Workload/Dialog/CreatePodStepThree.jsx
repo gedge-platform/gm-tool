@@ -87,6 +87,7 @@ const CreatePodStepThree = observer((props) => {
   const openTargetCluster = (index) => {
     setOpen(true);
     setContainerIndex(index);
+    console.log(open)
   };
 
   const onChangePod = async (e) => {
@@ -615,7 +616,6 @@ const CreatePodStepThree = observer((props) => {
   return (
     <>
       <PodTargetClusters open={open} onClose={handleClose}></PodTargetClusters>
-
       <div className="step-container">
         <div className="signup-step">
           <div className="step">
