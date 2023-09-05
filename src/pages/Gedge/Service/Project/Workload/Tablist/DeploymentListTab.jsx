@@ -11,6 +11,7 @@ import Detail from "../Detail";
 import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { filterParams } from "../../../../../../utils/common-utils";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -70,7 +71,7 @@ const DeploymentListTab = observer(() => {
       headerName: "생성일",
       field: "createAt",
       filter: "agDateColumnFilter",
-      filterParams: agDateColumnFilter(),
+      filterParams: filterParams,
       minWidth: 150,
       maxWidth: 200,
       cellRenderer: function (data) {
