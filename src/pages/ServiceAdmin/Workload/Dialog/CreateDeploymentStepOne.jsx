@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import { deploymentStore, projectStore } from "@/store";
+import {
+  deploymentStore,
+  projectStore,
+  workspaceStore,
+  claimStore,
+} from "@/store";
 import DeploymentAddContainer from "./DeploymentAddContainer";
-import workspaceStore from "../../../../../../store/WorkSpace";
-import claimStore from "../../../../../../store/Claim";
+import { center } from "react-dom-factories";
 
 const Button = styled.button`
   background-color: #fff;
@@ -92,48 +96,16 @@ const CreateDeploymentStepOne = observer((props) => {
     },
   });
 
-  const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
-    labelList,
-    initLabelList,
-    addLabelList,
-    removeLabelList,
-    annotationList,
-    initAnnotationList,
-    addAnnotationList,
-    removeAnnotationList,
-    deploymentInfo,
-    initDeploymentInfo,
-    setDeploymentInfo,
-    removeContainer,
-    initTargetClusters,
-  } = deploymentStore;
+  const { deploymentInfo, setDeploymentInfo, removeContainer } =
+    deploymentStore;
 
   const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
     workspaceStore;
 
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-    loadProjectDetail,
-  } = projectStore;
+  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
+  console.log(pvClaimListInDeployment);
 
   const onChange = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);
@@ -153,10 +125,6 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
-      loadProjectDetail(value);
-      initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
-      );
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);
@@ -313,23 +281,29 @@ const CreateDeploymentStepOne = observer((props) => {
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {pvClaimListInDeployment.map((pvc) => (
-                    <tr>
-                      <td style={{ textAlign: "center", width: "7%" }}>
-                        <input
-                          type="radio"
-                          checked={deploymentInfo.pvcName === pvc.name}
-                          name={pvc.name}
-                          onChange={onChangeCheckPVC}
-                          value={pvc.volume}
-                        />
-                      </td>
-                      <td>{pvc.name}</td>
-                      <td>{pvc.namespace}</td>
-                      <td>{pvc.clusterName}</td>
-                      <td>{pvc.volume ? pvc.volume : ""}</td>
-                    </tr>
-                  ))}
+                  {pvClaimListInDeployment ? (
+                    pvClaimListInDeployment.map((pvc) => (
+                      <tr>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            checked={deploymentInfo.pvcName === pvc.name}
+                            name={pvc.name}
+                            onChange={onChangeCheckPVC}
+                            value={pvc.volume}
+                          />
+                        </td>
+                        <td>{pvc.name}</td>
+                        <td>{pvc.namespace}</td>
+                        <td>{pvc.clusterName}</td>
+                        <td>{pvc.volume ? pvc.volume : ""}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: "center", padding: "43px 0" }}>
+                      <tr>No Data</tr>
+                    </div>
+                  )}
                 </tbody>
               </Table>
             </td>

@@ -1,15 +1,14 @@
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
-import Tabs from "@material-ui/core/Tabs";
 import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
-import podStore from "../../../../../../store/Pod";
+import { CSubTabs } from "@/components/tabs/CSubTabs";
+import { deploymentStore, claimStore } from "@/store";
 import { cloneDeep } from "lodash-es";
-import claimStore from "../../../../../../store/Claim";
+import { swalError } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -18,7 +17,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -27,7 +25,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonAddHost = styled.button`
@@ -38,17 +35,19 @@ const ButtonAddHost = styled.button`
   border-radius: 4px;
 `;
 
-const PodAddContainer = observer((props) => {
-  const { checkPVCInDeployment } = claimStore;
+const DeploymentAddContainer = observer((props) => {
   const {
-    podInfo,
-    initContainer,
     addContainer,
+    command,
+    setCommand,
     editContainer,
+    deploymentInfo,
     loadVolumeList,
     keyValuePair,
     secretConfigmap,
-  } = podStore;
+  } = deploymentStore;
+  const { volumeName } = claimStore;
+
   const { open, containerIndex } = props;
   const [tabvalue, setTabvalue] = useState(0);
   const [containerInfo, setContainerInfo] = useState();
@@ -69,6 +68,10 @@ const PodAddContainer = observer((props) => {
       }
     });
     return validFlag;
+  };
+
+  const splitCommand = (e) => {
+    const arr = e.target.value.split(" ");
   };
 
   const onChange = (e) => {
@@ -143,29 +146,72 @@ const PodAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    console.log(containerInfo);
+    // console.log("containerInfo : ", containerInfo);
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerImage === "") {
+    //   swalError("Container 이미지를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullSecret === "") {
+    //   swalError("Pull Secret을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.pullPolicy === "") {
+    //   swalError("Pull Policy를 선택해주세요");
+    //   return;
+    // }
+    // if (containerInfo.ports.length === 0) {
+    //   swalError("Port를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.command === "") {
+    //   swalError("Command를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.arguments === "") {
+    //   swalError("Arguments를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.containerName === "") {
+    //   swalError("Container 이름을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.variables.length === 0) {
+    //   swalError("Variable을 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.cpuReservation === "") {
+    //   swalError("CPU Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.memoryReservation === "") {
+    //   swalError("Memory Request를 입력해주세요");
+    //   return;
+    // }
+    // if (containerInfo.volumes.length === 0) {
+    //   swalError("Volume을 입력해주세요");
+    //   return;
+    // }
+    setCommand(command);
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
         keyValuePair.push([e.variableName, e.value]);
-        console.log(keyValuePair);
       } else {
         secretConfigmap.push(e);
-        console.log(secretConfigmap);
       }
     });
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      addContainer(temp);
-      props.onClose && props.onClose();
-    }
+    const temp = { ...containerInfo };
+    addContainer(temp);
+    props.onClose && props.onClose();
   };
 
   const editContainers = () => {
-    if (isContainerValid()) {
-      const temp = { ...containerInfo };
-      props.onClose && props.onClose();
-      editContainer(containerIndex, temp);
-    }
+    const temp = { ...containerInfo };
+    editContainer(containerIndex, temp);
+    props.onClose && props.onClose();
   };
 
   const onChangeVolume = (e, index) => {
@@ -205,8 +251,8 @@ const PodAddContainer = observer((props) => {
         containerImage: "",
         pullPolicy: "",
         ports: [],
-        command: "",
-        arguments: "",
+        command: [],
+        arguments: [],
         workingDir: "",
         variables: [],
         cpuReservation: "",
@@ -217,7 +263,7 @@ const PodAddContainer = observer((props) => {
         volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
       });
     } else {
-      const clonedData = cloneDeep(podInfo.containers[containerIndex]);
+      const clonedData = cloneDeep(deploymentInfo.containers[containerIndex]);
       setContainerInfo(clonedData);
     }
   }, [open]);
@@ -333,7 +379,7 @@ const PodAddContainer = observer((props) => {
             />
           </td>
         );
-      case "Secret":
+      case "secret":
         return (
           <td>
             <FormControl
@@ -350,7 +396,7 @@ const PodAddContainer = observer((props) => {
             </FormControl>
           </td>
         );
-      case "ConfigMap":
+      case "configMap":
         return (
           <td>
             <FormControl
@@ -530,7 +576,9 @@ const PodAddContainer = observer((props) => {
                     className="form_fullWidth"
                     name="command"
                     onChange={onChange}
-                    value={containerInfo?.command}
+                    value={
+                      containerInfo?.command ? containerInfo?.command : null
+                    }
                   />
                 </td>
               </tr>
@@ -582,8 +630,8 @@ const PodAddContainer = observer((props) => {
                                 <option value={"KeyValuePair"}>
                                   Key/Value Pair
                                 </option>
-                                <option value={"Secret"}>Secret</option>
-                                <option value={"ConfigMap"}>ConfigMap</option>
+                                <option value={"secret"}>Secret</option>
+                                <option value={"configMap"}>ConfigMap</option>
                               </select>
                             </FormControl>
                           </td>
@@ -636,7 +684,7 @@ const PodAddContainer = observer((props) => {
               display: "flex",
               width: "300px",
               justifyContent: "center",
-              marginTop: "32px",
+              marginTop: "30px",
             }}
           >
             <Button onClick={handleClose}>취소</Button>
@@ -654,7 +702,7 @@ const PodAddContainer = observer((props) => {
           <table className="tb_data_new tb_write">
             <tbody>
               <tr>
-                <th>CPU Reservation</th>
+                <th>CPU Request</th>
                 <td>
                   <CTextField
                     type="number"
@@ -667,7 +715,7 @@ const PodAddContainer = observer((props) => {
                 </td>
               </tr>
               <tr>
-                <th>Memory Reservation</th>
+                <th>Memory Request</th>
                 <td>
                   <CTextField
                     type="number"
@@ -706,7 +754,7 @@ const PodAddContainer = observer((props) => {
                 </td>
               </tr>
               <tr>
-                <th>NVIDIA GPU Limit/Reservation</th>
+                <th>NVIDIA GPU Limit/Request</th>
                 <td>
                   <CTextField
                     type="number"
@@ -743,7 +791,9 @@ const PodAddContainer = observer((props) => {
           <table className="tb_data_new tb_write">
             <tbody>
               <tr>
-                <th>Volume</th>
+                <th rowSpan={2} style={{ width: "15%" }}>
+                  Volume <span className="requried">*</span>
+                </th>
                 <td>
                   {containerInfo.volumes.map((volume, index) => (
                     <>
@@ -757,11 +807,7 @@ const PodAddContainer = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Volume
                           </option>
-                          {
-                            <option value={checkPVCInDeployment}>
-                              {checkPVCInDeployment}
-                            </option>
-                          }
+                          {<option value={volumeName}>{volumeName}</option>}
                         </select>
                       </FormControl>
                       <CTextField
@@ -782,7 +828,6 @@ const PodAddContainer = observer((props) => {
                         onChange={() => onChangeVolume(event, index)}
                         value={volume.subPathInVolume}
                       />
-
                       <Button
                         style={{
                           border: "none",
@@ -849,4 +894,4 @@ const PodAddContainer = observer((props) => {
   );
 });
 
-export default PodAddContainer;
+export default DeploymentAddContainer;

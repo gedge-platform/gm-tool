@@ -164,7 +164,9 @@ const ClaimBasicInformation = observer((props) => {
             <td style={{ width: "50%" }}>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={""}>Select Workspace</option>
+                  <option value={""} selected disabled hidden>
+                    Select Workspace
+                  </option>
                   {viewList.map((item) => (
                     <option value={item.workspaceName}>
                       {item.workspaceName}
@@ -187,7 +189,9 @@ const ClaimBasicInformation = observer((props) => {
                     name="project"
                     onChange={onChange}
                   >
-                    <option value={""}>Select Project</option>
+                    <option value={""} selected disabled hidden>
+                      Select Project
+                    </option>
                     {projectList.map((project) => (
                       <option value={project.projectName}>
                         {project.projectName}
@@ -258,7 +262,9 @@ const ClaimBasicInformation = observer((props) => {
                     name="selectStorageClass"
                     onChange={onChange}
                   >
-                    <option value={""}>Select StorageClass</option>
+                    <option value={""} selected disabled hidden>
+                      Select StorageClass
+                    </option>
                     {storageClassNameData
                       ? storageClassNameData.map((storageClass) => (
                           <option value={storageClass.name}>
@@ -281,7 +287,9 @@ const ClaimBasicInformation = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="accessMode" onChange={onChange}>
-                  <option value="Select Access Mode">Select Access Mode</option>
+                  <option value={""} selected disabled hidden>
+                    Select Access Mode
+                  </option>
                   <option value="ReadWriteOnce">ReadWriteOnce</option>
                   <option value="ReadOnlyMany">ReadOnlyMany</option>
                   <option value="ReadWriteMany">ReadWriteMany</option>

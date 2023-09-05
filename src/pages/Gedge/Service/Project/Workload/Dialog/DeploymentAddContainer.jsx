@@ -73,7 +73,6 @@ const DeploymentAddContainer = observer((props) => {
 
   const splitCommand = (e) => {
     const arr = e.target.value.split(" ");
-    console.log(arr);
   };
 
   const onChange = (e) => {
@@ -198,7 +197,6 @@ const DeploymentAddContainer = observer((props) => {
     //   return;
     // }
     setCommand(command);
-    console.log(containerInfo);
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
         keyValuePair.push([e.variableName, e.value]);
@@ -206,7 +204,6 @@ const DeploymentAddContainer = observer((props) => {
         secretConfigmap.push(e);
       }
     });
-    console.log(secretConfigmap);
     const temp = { ...containerInfo };
     addContainer(temp);
     props.onClose && props.onClose();
@@ -256,7 +253,7 @@ const DeploymentAddContainer = observer((props) => {
         pullPolicy: "",
         ports: [],
         command: [],
-        arguments: "",
+        arguments: [],
         workingDir: "",
         variables: [],
         cpuReservation: "",
@@ -580,7 +577,9 @@ const DeploymentAddContainer = observer((props) => {
                     className="form_fullWidth"
                     name="command"
                     onChange={onChange}
-                    value={containerInfo?.command}
+                    value={
+                      containerInfo?.command ? containerInfo?.command : null
+                    }
                   />
                 </td>
               </tr>

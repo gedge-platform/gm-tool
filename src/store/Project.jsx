@@ -313,15 +313,17 @@ class Project {
     callback
   ) => {
     const { id } = getItem("user");
+
     const body = {
       projectName: projectName,
       projectDescription,
       projectType,
-      clusterName: selectCluster,
+      clusterName: clusterName,
       workspaceName,
       memberName: id,
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
+    console.log("project body :", body);
 
     // // const body2 = {
     // //   projectName,

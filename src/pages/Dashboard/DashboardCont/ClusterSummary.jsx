@@ -28,10 +28,10 @@ const ClusterSummary = observer(() => {
         <div className="ClusterCount">{credentialCnt}</div>
       </div>
 
-      <div className="ClusterSummary Test">
+      {/* <div className="ClusterSummary Test">
         <div className="ClusterCountTitle">이동 엣지 개수</div>
         <div className="ClusterCount">{credentialCnt}</div>
-      </div>
+      </div> */}
 
       <div className="ClusterSummary Edge">
         <div className="ClusterCountTitle">엣지 개수</div>

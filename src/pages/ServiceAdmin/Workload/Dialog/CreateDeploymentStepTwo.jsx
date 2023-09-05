@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import { swalError } from "@/utils/swal-utils";
-import podStore from "../../../../../../store/Pod";
-import CreatePod from "./CreatePod";
+import CreateDeployment from "./CreateDeployment";
+import { deploymentStore } from "@/store";
 
 const Button = styled.button`
   border: none;
@@ -26,7 +26,7 @@ const Span = styled.span`
   background-color: #fff;
 `;
 
-const CreatePodStepTwo = observer(() => {
+const CreateDeploymentStepTwo = observer(() => {
   const {
     setInputLabelKey,
     setInputLabelValue,
@@ -37,7 +37,6 @@ const CreatePodStepTwo = observer(() => {
     labelInput,
     labelInputKey,
     labelInputValue,
-    annotationInput,
     annotationKey,
     annotationValue,
     setAnnotationInput,
@@ -46,7 +45,7 @@ const CreatePodStepTwo = observer(() => {
     annotations,
     setLabels,
     setAnnotations,
-  } = podStore;
+  } = deploymentStore;
 
   const newLabelList = [{ [labelInputKey]: labelInputValue }];
 
@@ -67,9 +66,6 @@ const CreatePodStepTwo = observer(() => {
         break;
     }
   };
-
-  console.log("labelInput : ", labelInput);
-  console.log("annotationInput : ", annotationInput);
 
   useEffect(() => {
     setLabelInput({
@@ -265,9 +261,9 @@ const CreatePodStepTwo = observer(() => {
           ))}
         </tbody>
       </table>
-      <CreatePod labelsList={labelInput} />
+      <CreateDeployment labelsList={labelInput} />
     </>
   );
 });
 
-export default CreatePodStepTwo;
+export default CreateDeploymentStepTwo;

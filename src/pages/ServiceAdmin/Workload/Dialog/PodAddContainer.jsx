@@ -2,14 +2,14 @@ import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
 import Tabs from "@material-ui/core/Tabs";
-import { CSubTab, CTab } from "@/components/tabs";
+import { CSubTabs } from "../../../../components/tabs/CSubTabs";
+import { CSubTab } from "../../../../components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { CSubTabs } from "../../../../../../components/tabs/CSubTabs";
-import podStore from "../../../../../../store/Pod";
+import podStore from "../../../../store/Pod";
 import { cloneDeep } from "lodash-es";
-import claimStore from "../../../../../../store/Claim";
+import claimStore from "../../../../store/Claim";
 
 const Button = styled.button`
   background-color: #fff;

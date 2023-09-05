@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import { deploymentStore, projectStore } from "@/store";
-import DeploymentAddContainer from "./DeploymentAddContainer";
-import workspaceStore from "../../../../../../store/WorkSpace";
-import claimStore from "../../../../../../store/Claim";
+import { projectStore, claimStore, podStore, workspaceStore } from "@/store";
+import styled from "styled-components";
+import PodAddContainer from "./PodAddContainer";
+import { useState } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -15,14 +13,7 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-`;
-
-const ButtonNext = styled.button`
-  background-color: #0f5ce9;
-  color: white;
-  border: none;
-  padding: 10px 35px;
-  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const DeleteButton = styled.button`
@@ -59,6 +50,7 @@ const DeleteButton = styled.button`
     transform: rotate(-45deg);
   }
 `;
+
 const Table = styled.table`
   tbody {
     display: block;
@@ -76,126 +68,54 @@ const Table = styled.table`
   }
 `;
 
-const CreateDeploymentStepOne = observer((props) => {
-  const { open } = props;
-  const [open2, setOpen2] = useState(false);
-  const [stepValue, setStepValue] = useState(1);
+const CreatePodStepOne = observer((props) => {
+  const { podInfo, setPodInfo } = podStore;
+
+  const { workSpaceList } = workspaceStore;
+
+  const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
+
+  const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
+
   const [containerIndex, setContainerIndex] = useState(1);
-
+  const [open, setOpen] = useState(false);
   const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
-
-  const {
-    podReplicas,
-    containerName,
-    containerImage,
-    containerPort,
-    project,
-    setContent,
-    clearAll,
-    setProject,
-    containerPortName,
-    postDeploymentGM,
-    postDeploymentPVC,
-    setContentVolume,
-    podName,
-    projectList,
-    loadProjectList,
-    labelList,
-    initLabelList,
-    addLabelList,
-    removeLabelList,
-    annotationList,
-    initAnnotationList,
-    addAnnotationList,
-    removeAnnotationList,
-    deploymentInfo,
-    initDeploymentInfo,
-    setDeploymentInfo,
-    removeContainer,
-    initTargetClusters,
-  } = deploymentStore;
-
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
-    workspaceStore;
-
-  const {
-    loadProjectListInWorkspace,
-    setProjectListinWorkspace,
-    projectListinWorkspace,
-    loadProjectDetail,
-  } = projectStore;
-
-  const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
 
   const onChange = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-  };
-
-  const onChangeWorkspace = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-    loadProjectListInWorkspace(e.target.value);
-    loadWorkspaceDetail(e.target.value);
-  };
-
-  const onChangePod = async ({ target: { name, value } }) => {
-    let projectNameTemp = "";
-    let clusterNameTemp = "";
-
-    if (name === "project") {
-      setDeploymentInfo(name, value);
-      setPriorityDisable(false);
-      projectNameTemp = value;
-      loadProjectDetail(value);
-      initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
-      );
-    }
-    if (name === "cluster") {
-      setPrioritytPodDisable(false);
-      clusterNameTemp = value;
-      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
+    setPodInfo(e.target.name, e.target.value);
+    if (e.target.name === "workspace") {
+      loadProjectListInWorkspace(e.target.value);
+    } else if (e.target.name === "volume") {
+      setCheckPVCInPod(e.target.value);
     }
   };
 
-  const openAddContainer = (index) => {
-    setOpen2(true);
-    setContainerIndex(index);
+  const openAddContainer = (containerIndex) => {
+    setContainerIndex(containerIndex);
+    setOpen(true);
   };
 
-  const handleClose2 = () => {
-    setOpen2(false);
+  const removeContainer = (e, removeIndex) => {
+    e.stopPropagation();
+    setPodInfo(
+      "containers",
+      podInfo.containers.filter((_, index) => index !== removeIndex)
+    );
   };
 
   const onChangeCheckPVC = ({ target: { name, value } }) => {
-    setCheckPVCInDeployment(name, value);
-    setDeploymentInfo("pvcName", name);
-    setDeploymentInfo("volume", value);
+    setCheckPVCInPod(name, value);
+    setPodInfo("pvcName", name);
+    setPodInfo("volume", value);
   };
-
-  const deleteContainer = (e, index) => {
-    e.stopPropagation();
-    removeContainer(index);
-  };
-
-  useEffect(() => {
-    loadWorkSpaceList();
-  }, []);
 
   return (
     <>
-      <DeploymentAddContainer
+      <PodAddContainer
         containerIndex={containerIndex}
-        open={open2}
-        onClose={handleClose2}
-      ></DeploymentAddContainer>
+        open={open}
+        onClose={() => setOpen(false)}
+      ></PodAddContainer>
 
       <div className="step-container">
         <div className="signup-step">
@@ -220,20 +140,19 @@ const CreateDeploymentStepOne = observer((props) => {
         <tbody>
           <tr>
             <th style={{ width: "200px" }}>
-              Deployment Name <span className="requried">*</span>
+              Pod Name <span className="requried">*</span>
             </th>
             <td colSpan="3">
               <CTextField
                 type="text"
-                placeholder="Deployment Name(영어소문자, 숫자만 가능)"
+                placeholder="Pod Name"
                 className="form_fullWidth"
-                name="deploymentName"
+                name="podName"
                 onChange={onChange}
-                value={deploymentInfo.deploymentName}
+                value={podInfo.podName}
               />
             </td>
           </tr>
-
           <tr>
             <th>
               Workspace <span className="requried">*</span>
@@ -242,8 +161,8 @@ const CreateDeploymentStepOne = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select
                   name="workspace"
-                  onChange={onChangeWorkspace}
-                  value={deploymentInfo.workspace}
+                  onChange={onChange}
+                  value={podInfo.workspace}
                 >
                   <option value={""} selected disabled hidden>
                     Select Workspace
@@ -265,10 +184,10 @@ const CreateDeploymentStepOne = observer((props) => {
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={!deploymentInfo.workspace}
+                  disabled={!podInfo.workspace}
                   name="project"
-                  onChange={onChangePod}
-                  value={deploymentInfo.project}
+                  onChange={onChange}
+                  value={podInfo.project}
                 >
                   <option value={""} selected hidden disabled>
                     Select Project
@@ -294,13 +213,13 @@ const CreateDeploymentStepOne = observer((props) => {
                 className="form_fullWidth"
                 name="replicas"
                 onChange={onChange}
-                value={deploymentInfo.replicas}
+                value={podInfo.replicas}
               />
             </td>
           </tr>
 
           <tr>
-            <th>ClaimVolume</th>
+            <th>Volume</th>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>
@@ -309,27 +228,28 @@ const CreateDeploymentStepOne = observer((props) => {
                     <th style={{ textAlign: "center" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Namespace</th>
                     <th style={{ textAlign: "center" }}>cluster</th>
-                    <th style={{ textAlign: "center" }}>volume</th>
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {pvClaimListInDeployment.map((pvc) => (
-                    <tr>
-                      <td style={{ textAlign: "center", width: "7%" }}>
-                        <input
-                          type="radio"
-                          checked={deploymentInfo.pvcName === pvc.name}
-                          name={pvc.name}
-                          onChange={onChangeCheckPVC}
-                          value={pvc.volume}
-                        />
-                      </td>
-                      <td>{pvc.name}</td>
-                      <td>{pvc.namespace}</td>
-                      <td>{pvc.clusterName}</td>
-                      <td>{pvc.volume ? pvc.volume : ""}</td>
-                    </tr>
-                  ))}
+                  {pvClaimListInDeployment
+                    ? pvClaimListInDeployment?.map((pvc) => (
+                        <tr>
+                          <td style={{ textAlign: "center", width: "7%" }}>
+                            <input
+                              type="radio"
+                              checked={podInfo.pvcName === pvc.name}
+                              name={pvc.name}
+                              onChange={onChangeCheckPVC}
+                              value={pvc.volume}
+                            />
+                          </td>
+                          <td>{pvc.name}</td>
+                          <td>{pvc.namespace}</td>
+                          <td>{pvc.clusterName}</td>
+                          <td>{pvc.volume ? pvc.volume : ""}</td>
+                        </tr>
+                      ))
+                    : "No Data"}
                 </tbody>
               </Table>
             </td>
@@ -347,13 +267,13 @@ const CreateDeploymentStepOne = observer((props) => {
                 + Add Container
               </Button>
               <div>
-                {deploymentInfo.containers.map((container, index) => (
+                {podInfo.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
                     onClick={() => openAddContainer(index)}
                   >
-                    {container?.containerName}
-                    <DeleteButton onClick={(e) => deleteContainer(e, index)}>
+                    {container.containerName}
+                    <DeleteButton onClick={(e) => removeContainer(e, index)}>
                       x
                     </DeleteButton>
                   </Button>
@@ -366,4 +286,5 @@ const CreateDeploymentStepOne = observer((props) => {
     </>
   );
 });
-export default CreateDeploymentStepOne;
+
+export default CreatePodStepOne;

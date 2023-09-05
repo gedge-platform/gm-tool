@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
-const PodYaml = observer((props) => {
+const PodYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
     podStore;
 
@@ -16,19 +16,18 @@ const PodYaml = observer((props) => {
       var obj_content = YAML.parse(content);
       console.log(obj_content);
       if (
-        obj_content.metadata.annotations === ': ""' ||
-        isEmpty(obj_content.metadata.annotations)
+        obj_content.metadata?.annotations === ': ""' ||
+        isEmpty(obj_content.metadata?.annotations)
       ) {
-        delete obj_content.spec.template.metadata.annotations;
-        delete obj_content.metadata.annotations;
+        // delete obj_content.spec.template.metadata?.annotations;
+        delete obj_content.metadata?.annotations;
       }
       if (
         obj_content.metadata.labels === ': ""' ||
         isEmpty(obj_content.metadata.labels)
       ) {
-        delete obj_content.metadata.labels;
-        delete obj_content.spec.template.metadata.labels;
-        delete obj_content.metadata.labels;
+        delete obj_content.metadata?.labels;
+        // delete obj_content.spec.template.metadata?.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }
