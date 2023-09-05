@@ -92,13 +92,25 @@ const CreateDeploymentStepOne = observer((props) => {
     },
   });
 
-  const { deploymentInfo, setDeploymentInfo, removeContainer } =
-    deploymentStore;
+  const {
+    deploymentInfo,
+    setDeploymentInfo,
+    removeContainer,
+    initTargetClusters,
+  } = deploymentStore;
 
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
-    workspaceStore;
+  const {
+    loadWorkSpaceList,
+    workSpaceList,
+    loadWorkspaceDetail,
+    selectClusterInfo,
+  } = workspaceStore;
 
-  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+  const {
+    loadProjectListInWorkspace,
+    projectListinWorkspace,
+    loadProjectDetail,
+  } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
 
@@ -120,6 +132,10 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
+      loadProjectDetail(value);
+      initTargetClusters(
+        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      );
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);

@@ -6,6 +6,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import podStore from "../../../../../../store/Pod";
+import platformProjectStore from "../../../../../../store/PlatformProject";
 
 const Button = styled.button`
   background-color: #fff;
@@ -35,13 +36,20 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const PodTargetClusters = observer(({ open2, onClose }) => {
+const PodTargetClusters = observer(({ open, onClose }) => {
   const {
     targetClusters,
     unselectedClusters,
     setTargetClusters,
     setUnselectedClusters,
+    priority,
   } = podStore;
+  const { loadAdminPlatformProjectList, adminList } = platformProjectStore;
+
+  useEffect(() => {
+    loadAdminPlatformProjectList();
+  }, []);
+
   const [selectedClusters, setSelectedClusters] = useState([]);
   const [unselected, setUnselected] = useState([]);
 
@@ -149,6 +157,11 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
   };
 
   const addLeveled = () => {
+    if (priority.name === "GSelectedClusterPriority") {
+      if (selectedClusters.length > 0) {
+        return;
+      }
+    }
     setSelectedClusters([...selectedClusters, null]);
   };
 
@@ -157,6 +170,7 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
   };
 
   const applyTargetClusters = () => {
+    console.log(targetClusters);
     setTargetClusters(selectedClusters.filter((element) => element !== null));
     setUnselectedClusters(unselected);
     onClose();
@@ -170,7 +184,7 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
   return (
     <CDialogNew
       id="myDialog"
-      open={open2}
+      open={open}
       maxWidth="md"
       title={"Target Clusters"}
       onClose={onClose}

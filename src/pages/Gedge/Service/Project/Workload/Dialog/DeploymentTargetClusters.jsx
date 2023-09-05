@@ -7,6 +7,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import platformProjectStore from "../../../../../../store/PlatformProject";
+import projectStore from "../../../../../../store/Project";
 
 const Button = styled.button`
   background-color: #fff;
@@ -50,6 +51,8 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     loadDeploymentList,
     deploymentList,
   } = deploymentStore;
+
+  const { selectClusterInfo } = projectStore;
 
   const { loadAdminPlatformProjectList, adminList } = platformProjectStore;
 
@@ -164,6 +167,11 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
   };
 
   const addLeveled = () => {
+    if (priority.name === "GSelectedClusterPriority") {
+      if (selectedClusters.length > 0) {
+        return;
+      }
+    }
     setSelectedClusters([...selectedClusters, null]);
   };
 
