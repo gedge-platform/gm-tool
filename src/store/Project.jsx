@@ -318,7 +318,7 @@ class Project {
       projectName: projectName,
       projectDescription,
       projectType,
-      clusterName: clusterName,
+      clusterName: selectCluster,
       workspaceName,
       memberName: id,
       istioCheck: istioCheck ? "enabled" : "disabled",

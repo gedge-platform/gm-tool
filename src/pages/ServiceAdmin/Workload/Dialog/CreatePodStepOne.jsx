@@ -145,7 +145,7 @@ const CreatePodStepOne = observer((props) => {
             <td colSpan="3">
               <CTextField
                 type="text"
-                placeholder="Pod Name"
+                placeholder="Pod Name(영어소문자, 숫자만 가능)"
                 className="form_fullWidth"
                 name="podName"
                 onChange={onChange}
@@ -202,7 +202,7 @@ const CreatePodStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
+          {/* <tr>
             <th>
               Replicas <span className="requried">*</span>
             </th>
@@ -216,10 +216,10 @@ const CreatePodStepOne = observer((props) => {
                 value={podInfo.replicas}
               />
             </td>
-          </tr>
+          </tr> */}
 
           <tr>
-            <th>Volume</th>
+            <th>ClaimVolume</th>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>
@@ -231,25 +231,29 @@ const CreatePodStepOne = observer((props) => {
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {pvClaimListInDeployment
-                    ? pvClaimListInDeployment?.map((pvc) => (
-                        <tr>
-                          <td style={{ textAlign: "center", width: "7%" }}>
-                            <input
-                              type="radio"
-                              checked={podInfo.pvcName === pvc.name}
-                              name={pvc.name}
-                              onChange={onChangeCheckPVC}
-                              value={pvc.volume}
-                            />
-                          </td>
-                          <td>{pvc.name}</td>
-                          <td>{pvc.namespace}</td>
-                          <td>{pvc.clusterName}</td>
-                          <td>{pvc.volume ? pvc.volume : ""}</td>
-                        </tr>
-                      ))
-                    : "No Data"}
+                  {pvClaimListInDeployment ? (
+                    pvClaimListInDeployment?.map((pvc) => (
+                      <tr>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            checked={podInfo.pvcName === pvc.name}
+                            name={pvc.name}
+                            onChange={onChangeCheckPVC}
+                            value={pvc.volume}
+                          />
+                        </td>
+                        <td>{pvc.name}</td>
+                        <td>{pvc.namespace}</td>
+                        <td>{pvc.clusterName}</td>
+                        <td>{pvc.volume ? pvc.volume : ""}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: "center", padding: "43px 0" }}>
+                      <tr>No Data</tr>
+                    </div>
+                  )}
                 </tbody>
               </Table>
             </td>
