@@ -105,7 +105,6 @@ const CreateDeploymentStepOne = observer((props) => {
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
-  console.log(pvClaimListInDeployment);
 
   const onChange = (e) => {
     setDeploymentInfo(e.target.name, e.target.value);

@@ -1,10 +1,13 @@
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
 import { projectStore, claimStore, podStore, workspaceStore } from "@/store";
 import styled from "styled-components";
 import PodAddContainer from "./PodAddContainer";
-import { useState } from "react";
+import { SERVER_URL } from "../../../../../../config";
+import { runInAction } from "mobx";
+import axios from "axios";
 
 const Button = styled.button`
   background-color: #fff;
@@ -69,11 +72,15 @@ const Table = styled.table`
 `;
 
 const CreatePodStepOne = observer((props) => {
-  const { podInfo, setPodInfo } = podStore;
+  const { podInfo, setPodInfo, initTargetClusters } = podStore;
 
   const { workSpaceList } = workspaceStore;
 
-  const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
+  const {
+    projectListinWorkspace,
+    loadProjectListInWorkspace,
+    selectClusterInfo,
+  } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
 
@@ -87,6 +94,28 @@ const CreatePodStepOne = observer((props) => {
       loadProjectListInWorkspace(e.target.value);
     } else if (e.target.name === "volume") {
       setCheckPVCInPod(e.target.value);
+    }
+    // else if (e.target.name === "project") {
+    //   loadProjectDetail(e.target.value);
+    //   initTargetClusters(
+    //     selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+    //   );
+    // }
+  };
+
+  const onChangeProject = async ({ target: { name, value } }) => {
+    if (name === "project") {
+      setPodInfo(name, value);
+
+      await axios.get(`${SERVER_URL}/userProjects/${value}`).then((res) => {
+        runInAction(() => {
+          initTargetClusters(
+            res.data.data.DetailInfo.map(
+              (clusterInfo) => clusterInfo.clusterName
+            )
+          );
+        });
+      });
     }
   };
 
@@ -186,7 +215,7 @@ const CreatePodStepOne = observer((props) => {
                 <select
                   disabled={!podInfo.workspace}
                   name="project"
-                  onChange={onChange}
+                  onChange={onChangeProject}
                   value={podInfo.project}
                 >
                   <option value={""} selected hidden disabled>

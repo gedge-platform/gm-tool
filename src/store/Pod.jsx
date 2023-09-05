@@ -131,28 +131,13 @@ class Pod {
     });
   };
   targetClusters = [];
-  unselectedClusters = [
-    "cluster0",
-    "cluster1",
-    "cluster2",
-    "cluster3",
-    "cluster4",
-    "cluster5",
-    "cluster6",
-  ];
+  unselectedClusters = [];
 
-  initTargetClusters = () => {
+  initTargetClusters = (defaultUnselectedClusters) => {
     runInAction(() => {
       this.targetClusters = [];
-      this.unselectedClusters = [
-        "cluster0",
-        "cluster1",
-        "cluster2",
-        "cluster3",
-        "cluster4",
-        "cluster5",
-        "cluster6",
-      ];
+      console.log(defaultUnselectedClusters);
+      this.unselectedClusters = defaultUnselectedClusters;
     });
   };
 

@@ -75,7 +75,6 @@ const CreateProject = observer((props) => {
     adminList,
     loadAdminWorkSpaceList,
   } = workspaceStore;
-  console.log(selectClusterInfo);
 
   const { createProject } = projectStore;
 
@@ -102,19 +101,19 @@ const CreateProject = observer((props) => {
   };
 
   const onChange = async ({ target: { name, value } }) => {
-    // if (name === "workspace") {
-    //   if (value === "") {
-    //     setSelectClusterInfo([]);
-    //     return;
+    //   if (name === "workspace") {
+    //     if (value === "") {
+    //       setSelectClusterInfo([]);
+    //       return;
+    //     }
+    setWorkspace(value);
+    //     await loadWorkspaceDetail(value);
+    //     setSelectClusters([...selectClusterInfo]);
+    //   } else if (name === "projectName") {
+    //     setProjectName(value);
+    //   } else if (name === "projectDescription") {
+    //     setProjectDescription(value);
     //   }
-    //   setWorkspace(value);
-    //   await loadWorkspaceDetail(value);
-    //   setSelectClusters([...selectClusterInfo]);
-    // } else if (name === "projectName") {
-    //   setProjectName(value);
-    // } else if (name === "projectDescription") {
-    //   setProjectDescription(value);
-    // }
     if (name === "projectName") setProjectName(value);
     else if (name === "projectDescription") setProjectDescription(value);
   };
