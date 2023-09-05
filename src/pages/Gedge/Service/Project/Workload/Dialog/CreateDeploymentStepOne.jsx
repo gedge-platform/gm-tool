@@ -120,6 +120,7 @@ const CreateDeploymentStepOne = observer((props) => {
     initDeploymentInfo,
     setDeploymentInfo,
     removeContainer,
+    initTargetClusters,
   } = deploymentStore;
 
   const {
@@ -134,6 +135,7 @@ const CreateDeploymentStepOne = observer((props) => {
     loadProjectListInWorkspace,
     setProjectListinWorkspace,
     projectListinWorkspace,
+    loadProjectDetail,
   } = projectStore;
 
   const {
@@ -161,6 +163,10 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeploymentInfo(name, value);
       setPriorityDisable(false);
       projectNameTemp = value;
+      loadProjectDetail(value);
+      initTargetClusters(
+        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      );
     }
     if (name === "cluster") {
       setPrioritytPodDisable(false);

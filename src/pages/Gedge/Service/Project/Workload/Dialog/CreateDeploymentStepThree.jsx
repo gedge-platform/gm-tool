@@ -278,9 +278,11 @@ const CreateDeploymentStepThree = observer(() => {
     };
     const onChangeType = (e) => {
       const { name, value } = e.target;
-      console.log(e.target);
+      console.log(priority);
       setType(value);
       if (name === "type") {
+        // GLowLatency에서 type이 from node일때 default, from pod일때 pod
+        // GSelectedClusterPriority에서 type이 cluster일때 defalut, node일때 node
         setPriority({
           ...priority,
 
@@ -289,7 +291,7 @@ const CreateDeploymentStepThree = observer(() => {
             workspace_name: "ws1",
             workspace_uid: "649128e7fc34732e0eccfa6d",
             project_name: "p1",
-            type: "default",
+            type: value,
             data: {
               selected_cluster: "innogrid-k8s-master",
             },
@@ -465,43 +467,32 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "4px" }}
               >
-                <select name="type" value={type} onChange={onChangeType}>
-                  <option value={"cluster"}>Cluster</option>
+                <select
+                  name="type"
+                  value={priority.type}
+                  onChange={onChangeType}
+                >
+                  <option value={"default"}>Cluster</option>
                   <option value={"node"}>Node</option>
                 </select>
                 {type === "node" ? (
-                  <div style={{ paddingTop: "4px" }}>
-                    <FormControl style={{ width: "50%" }}>
-                      <select name="sourceCluster" onChange={onChangeSource}>
-                        <option value={""} selected disabled hidden>
-                          Select Source Cluster
-                        </option>
-                        {selectClusterInfo.map((cluster) => (
-                          <option value={cluster.clusterName}>
-                            {cluster.clusterName}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                      <select
-                        name="sourceNode"
-                        onChange={onChangeSource}
-                        disabled={nodeDisable}
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Source Node
-                        </option>
-                        {priorityNodes !== null ? (
-                          priorityNodes.map((node) => (
-                            <option value={node.name}>{node.name}</option>
-                          ))
-                        ) : (
-                          <option value={"noData"}>No Data</option>
-                        )}
-                      </select>
-                    </FormControl>
-                  </div>
+                  <FormControl
+                    className="form_fullWidth"
+                    style={{ paddingTop: "4px" }}
+                  >
+                    <select name="sourceNode" onChange={onChangeSource}>
+                      <option value={""} selected disabled hidden>
+                        Select Source Node
+                      </option>
+                      {priorityNodes !== null ? (
+                        priorityNodes.map((node) => (
+                          <option value={node.name}>{node.name}</option>
+                        ))
+                      ) : (
+                        <option value={"noData"}>No Data</option>
+                      )}
+                    </select>
+                  </FormControl>
                 ) : (
                   <>
                     <FormControl

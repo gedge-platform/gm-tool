@@ -7,6 +7,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import platformProjectStore from "../../../../../../store/PlatformProject";
+import projectStore from "../../../../../../store/Project";
 
 const Button = styled.button`
   background-color: #fff;
@@ -51,11 +52,7 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     deploymentList,
   } = deploymentStore;
 
-  const { loadAdminPlatformProjectList, adminList } = platformProjectStore;
-
-  useEffect(() => {
-    loadAdminPlatformProjectList();
-  }, []);
+  const { selectClusterInfo } = projectStore;
 
   const [selectedClusters, setSelectedClusters] = useState([]);
   const [unselected, setUnselected] = useState([]);
@@ -65,93 +62,64 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
       // 추가
       if (selectedClusters[destination.droppableId] === null) {
         selectedClusters[destination.droppableId] = unselected[source.index];
-      } else if (
-        typeof selectedClusters[destination.droppableId] === "string"
-      ) {
-        selectedClusters[destination.droppableId] = Array.of(
-          selectedClusters[destination.droppableId],
-          unselected[source.index]
-        );
+      } else if (typeof selectedClusters[destination.droppableId] === "string") {
+        selectedClusters[destination.droppableId] = Array.of(selectedClusters[destination.droppableId], unselected[source.index]);
       } else {
-        selectedClusters[destination.droppableId].push(
-          unselected[source.index]
-        );
+        selectedClusters[destination.droppableId].push(unselected[source.index]);
       }
       setSelectedClusters([...selectedClusters]);
       //삭제
       setUnselected(unselected.filter((_, index) => index !== source.index));
-    } else if (destination.droppableId === "unselected") {
+    } else if(destination.droppableId === "unselected") {
       // 추가
       if (typeof selectedClusters[source.droppableId] === "string") {
         unselected.push(selectedClusters[source.droppableId]);
       } else {
-        unselected.push(selectedClusters[source.droppableId][source.index]);
-      }
+        unselected.push(selectedClusters[source.droppableId][source.index])
+      } 
       setUnselected([...unselected]);
       // 삭제
       if (typeof selectedClusters[source.droppableId] === "string") {
         selectedClusters[source.droppableId] = null;
       } else if (selectedClusters[source.droppableId].length === 2) {
-        selectedClusters[source.droppableId] = selectedClusters[
-          source.droppableId
-        ].filter((_, index) => index !== source.index)[0];
+        selectedClusters[source.droppableId] = selectedClusters[source.droppableId].filter((_, index) => index !== source.index)[0];
       } else {
-        selectedClusters[source.droppableId] = selectedClusters[
-          source.droppableId
-        ].filter((_, index) => index !== source.index);
+        selectedClusters[source.droppableId] = selectedClusters[source.droppableId].filter((_, index) => index !== source.index);
       }
       setSelectedClusters([...selectedClusters]);
     } else {
       // 추가
       if (selectedClusters[destination.droppableId] === null) {
         if (typeof selectedClusters[source.droppableId] === "string") {
-          selectedClusters[destination.droppableId] =
-            selectedClusters[source.droppableId];
+          selectedClusters[destination.droppableId] = selectedClusters[source.droppableId];
         } else {
-          selectedClusters[destination.droppableId] =
-            selectedClusters[source.droppableId][source.index];
+          selectedClusters[destination.droppableId] = selectedClusters[source.droppableId][source.index];
         }
-      } else if (
-        typeof selectedClusters[destination.droppableId] === "string"
-      ) {
+      } else if (typeof selectedClusters[destination.droppableId] === "string") {
         if (typeof selectedClusters[source.droppableId] === "string") {
-          selectedClusters[destination.droppableId] = [
-            selectedClusters[destination.droppableId],
-            selectedClusters[source.droppableId],
-          ];
+          selectedClusters[destination.droppableId] = [selectedClusters[destination.droppableId], selectedClusters[source.droppableId]];
         } else {
-          selectedClusters[destination.droppableId] = [
-            selectedClusters[destination.droppableId],
-            selectedClusters[source.droppableId][source.index],
-          ];
-        }
+          selectedClusters[destination.droppableId] = [selectedClusters[destination.droppableId], selectedClusters[source.droppableId][source.index]];
+        } 
       } else {
         if (typeof selectedClusters[source.droppableId] === "string") {
-          selectedClusters[destination.droppableId].push(
-            selectedClusters[source.droppableId]
-          );
+          selectedClusters[destination.droppableId].push(selectedClusters[source.droppableId]);
         } else {
-          selectedClusters[destination.droppableId].push(
-            selectedClusters[source.droppableId][source.index]
-          );
+          selectedClusters[destination.droppableId].push(selectedClusters[source.droppableId][source.index]);
         }
       }
       setSelectedClusters([...selectedClusters]);
       // 삭제
       if (typeof selectedClusters[source.droppableId] === "string") {
-        selectedClusters[source.droppableId] = null;
+        selectedClusters[source.droppableId] = null
       } else if (selectedClusters[source.droppableId].length === 2) {
-        selectedClusters[source.droppableId] = selectedClusters[
-          source.droppableId
-        ].filter((_, index) => index !== source.index)[0];
+        selectedClusters[source.droppableId] = selectedClusters[source.droppableId].filter((_, index) => index !== source.index)[0];
       } else {
-        selectedClusters[source.droppableId] = selectedClusters[
-          source.droppableId
-        ].filter((_, index) => index !== source.index);
+        selectedClusters[source.droppableId] = selectedClusters[source.droppableId].filter((_, index) => index !== source.index);
       }
       setSelectedClusters([...selectedClusters]);
     }
-  };
+  }
 
   const onDragEnd = ({ source, destination }) => {
     if (!destination) return;
@@ -164,6 +132,11 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
   };
 
   const addLeveled = () => {
+    if (priority.name === "GSelectedClusterPriority") {
+      if (selectedClusters.length > 0) {
+        return;
+      }
+    }
     setSelectedClusters([...selectedClusters, null]);
   };
 
@@ -175,11 +148,6 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     console.log(targetClusters);
     setTargetClusters(selectedClusters.filter((element) => element !== null));
     setUnselectedClusters(unselected);
-
-    // setPriority({
-    //   ...priority,
-    //   target_clusters: targetClusters,
-    // });
     onClose();
   };
 
