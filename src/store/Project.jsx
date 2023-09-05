@@ -218,7 +218,6 @@ class Project {
         .get(`${SERVER_URL}/userProjects/${projectName}`)
         .then(({ data: { data } }) => {
           runInAction(() => {
-            console.log(res);
             this.projectDetail = data;
             this.detailInfo = data.DetailInfo;
             this.workspace = data.workspace;
