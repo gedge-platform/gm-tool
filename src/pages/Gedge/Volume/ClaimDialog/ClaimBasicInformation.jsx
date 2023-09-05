@@ -45,8 +45,6 @@ const ClaimBasicInformation = observer((props) => {
     projectStore;
   const { setWorkspace } = deploymentStore;
 
-  // const {setSelectClusters} = volumeStore;
-
   const {
     setVolumeName,
     setClaimName,
@@ -236,7 +234,7 @@ const ClaimBasicInformation = observer((props) => {
                             </tr>
                           )
                         )
-                      : "no data"}
+                      : ""}
                   </tbody>
                 ) : (
                   <tbody className="tb_data_nodeInfo">

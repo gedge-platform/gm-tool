@@ -148,10 +148,12 @@ const CreateProject = observer((props) => {
       swalError("프로젝트 이름을 확인해주세요!");
       return;
     }
-    if (workspace) {
+
+    if (workspace === "") {
       swalError("워크스페이스를 확인해주세요!");
       return;
     }
+
     if (selectClusters.length === 0) {
       swalError("클러스터를 확인해주세요!");
       return;
