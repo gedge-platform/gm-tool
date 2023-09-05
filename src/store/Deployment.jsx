@@ -243,18 +243,10 @@ class Deployment {
   // ];
   unselectedClusters = [];
 
-  initTargetClusters = () => {
+  initTargetClusters = (defaultUnselectedClusters) => {
     runInAction(() => {
       this.targetClusters = [];
-      this.unselectedClusters = [
-        "cluster0",
-        "cluster1",
-        "cluster2",
-        "cluster3",
-        "cluster4",
-        "cluster5",
-        "cluster6",
-      ];
+      this.unselectedClusters = defaultUnselectedClusters;
     });
   };
 
@@ -441,7 +433,7 @@ class Deployment {
         priority: {
           name: "GLowLatencyPriority",
           options: {
-            type: "fromNode",
+            type: "default",
             //data: {}
           },
         },
@@ -768,7 +760,7 @@ class Deployment {
       project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
       type: "default",
       data: {
-        selected_cluster: "mec(ilsan)",
+        selected_cluster: "onpremise(dongjak)	",
       },
     };
     const options = encodeURI(JSON.stringify(option));

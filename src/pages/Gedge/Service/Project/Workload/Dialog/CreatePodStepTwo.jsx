@@ -68,9 +68,6 @@ const CreatePodStepTwo = observer(() => {
     }
   };
 
-  console.log("labelInput : ", labelInput);
-  console.log("annotationInput : ", annotationInput);
-
   useEffect(() => {
     setLabelInput({
       [labelKey]: labelValue,

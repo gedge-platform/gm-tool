@@ -149,36 +149,6 @@ const CreateClaim = observer((props) => {
     labels.map((data) => LabelKeyArr.push(data.labelKey));
     annotations.map((data) => AnnotationKeyArr.push(data.annotationKey));
     setStepValue(3);
-    // if (labelKey === "" && labelValue !== "") {
-    //   swalError("LabelKey 값을 입력해주세요");
-    //   return;
-    // }
-    // if (annotationKey === "" && annotationValue !== "") {
-    //   swalError("AnnotationKey 값을 입력해주세요");
-    //   return;
-    // }
-    // if (
-    //   LabelKeyArr.indexOf(labelKey) < 0 &&
-    //   AnnotationKeyArr.indexOf(annotationKey) < 0
-    // ) {
-    //   setStepValue(3);
-    // } else {
-    //   if (
-    //     LabelKeyArr.indexOf(labelKey) >= 0 &&
-    //     AnnotationKeyArr.indexOf(annotationKey) >= 0
-    //   ) {
-    //     swalError("AnnotationKey와 LabelKey값이 중복입니다.");
-    //     return;
-    //   }
-    //   if (LabelKeyArr.indexOf(labelKey) >= 0) {
-    //     swalError("LabelKey값이 중복입니다.");
-    //     return;
-    //   }
-    //   if (AnnotationKeyArr.indexOf(annotationKey) >= 0) {
-    //     swalError("AnnotationKey값이 중복입니다.");
-    //     return;
-    //   }
-    // }
   };
 
   const handlePreStepValue = () => {
@@ -188,11 +158,9 @@ const CreateClaim = observer((props) => {
   };
 
   const CreateVolume = () => {
-    // for문으로 복수의 클러스터이름 보내게
     createVolumeClaim(require("json-to-pretty-yaml").stringify(template));
     handleClose();
     props.reloadFunc && props.reloadFunc();
-    // setSelectClusters();
   };
 
   const onClickBackStepTwo = () => {

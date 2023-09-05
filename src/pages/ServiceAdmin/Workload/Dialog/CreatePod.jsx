@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { podStore, projectStore, schedulerStore } from "@/store";
+import {
+  podStore,
+  projectStore,
+  schedulerStore,
+  claimStore,
+  workspaceStore,
+} from "@/store";
 import PodBasicInformation from "./PodBasicInformation";
 import PodSettings from "./PodSettings";
 import PodYaml from "./PodYaml";
@@ -10,8 +16,7 @@ import { randomString } from "@/utils/common-utils";
 import CreatePodStepOne from "./CreatePodStepOne";
 import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
-import claimStore from "../../../../store/Claim";
-import workspaceStore from "../../../../store/WorkSpace";
+import { swalError } from "@/utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -82,16 +87,12 @@ const CreatePod = observer((props) => {
     labelInput,
     annotationInput,
     postPodGM,
-    keyValuePair,
-    secretConfigmap,
   } = podStore;
 
   const [stepValue, setStepValue] = useState(1);
 
   const { loadPVClaims } = claimStore;
   const { loadWorkSpaceList } = workspaceStore;
-
-  console.log(podInfo);
 
   const template = {
     apiVersion: "v1",
@@ -180,106 +181,33 @@ const CreatePod = observer((props) => {
         },
       ],
     },
-    // volumes: [
-    //   {
-    //     name: podInfo.volume,
-    //     emptyDir: {},
-    //   },
-    // ],
-
-    //   selector: {
-    //     matchLabels: labelInput,
-    //   },
-    //   template: {
-    //     metadata: {
-    //       annotations: annotationInput,
-    //       labels: labelInput,
-    //     },
-    //     spec: {
-    //       imagePullSecert: podInfo.containers?.map((e) => {
-    //         return { name: e.pullSecret };
-    //       }),
-    //       containers: podInfo.containers?.map((e) => {
-    //         return {
-    //           name: e.containerName,
-    //           image: e.containerImage,
-    //           imagePullPolicy: e.pullPolicy,
-    //           command: e.command,
-    //           args: e.arguments,
-    //           resources: {
-    //             limits: {
-    //               // cpu: e.cpuLimit,
-    //               memory: e.memoryLimit + "Mi",
-    //             },
-    //             requests: {
-    //               cpu: e.cpuReservation + "m",
-    //               memory: e.memoryReservation + "Mi",
-    //             },
-    //           },
-    //           ports: e.ports.map((i) => {
-    //             return {
-    //               name: i.name,
-    //               containerPort: i.privateContainerPort,
-    //               protocol: i.protocol,
-    //             };
-    //           }),
-    //           envForm: e.variables.map((i) => {
-    //             const item = i.type + "Ref";
-    //             return {
-    //               [item]: {
-    //                 name: i.variableName,
-    //               },
-    //             };
-    //           }),
-    //           env: e.variables.map((i) => {
-    //             return {
-    //               name: i.variableName,
-    //               value: i.value,
-    //             };
-    //           }),
-    //           volumeMounts: e.volumes.map((i) => {
-    //             return {
-    //               mountPath: i.subPathInVolume,
-    //               name: i.name,
-    //             };
-    //           }),
-    //         };
-    //       }),
-    //     },
-    //   },
-    //   volumes: [
-    //     {
-    //       name: podInfo.volume,
-    //       persistentVolumeClaim: podInfo.pvcName,
-    //     },
-    //   ],
   };
 
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
-    setClearLA();
     initPodInfo();
+    setClearLA();
   };
 
   const onClickStepTwo = (e) => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+
     if (podInfo.podName === "") {
       swalError("Pod 이름을 입력해주세요");
+      return;
+    } else if (!checkRegex.test(podInfo.podName)) {
+      swalError("영어소문자와 숫자만 입력해주세요.");
       return;
     }
     if (podInfo.workspace === "") {
       swalError("Workspace를 선택해주세요");
-      return;
-    } else if (!checkRegex.test(deploymentInfo.deploymentName)) {
-      swalError("영어소문자와 숫자만 입력해주세요.");
       return;
     }
     if (podInfo.project === "") {
       swalError("Project를 선택해주세요");
       return;
     }
-    // Replica는 기본 설정 1이라서 추가 안함
     if (podInfo.volume === "") {
       swalError("Volume을 선택해주세요");
       return;

@@ -90,11 +90,9 @@ const CreatePodStepThree = observer((props) => {
   };
 
   const onChangePod = async (e) => {
-    console.log("priority : ", priority);
     const { name, value } = e.target;
     let projectNameTemp = podInfo.project;
     let clusterNameTemp = "";
-    console.log("target : ", e.target);
     setPrioritytPodDisable(false);
     if (name === "project") {
       setPriorityDisable(false);
@@ -118,7 +116,6 @@ const CreatePodStepThree = observer((props) => {
       await podListInclusterAPI(clusterNameTemp, projectNameTemp);
     }
     if (name === "selectCluster") {
-      console.log(value);
       priority.options.data.selected_cluster = value;
       clusterNameTemp = value;
 
@@ -139,7 +136,6 @@ const CreatePodStepThree = observer((props) => {
     const onChangePriority = (e) => {
       if (e.target.value === "GLowLatencyPriority") {
         if (type === "from_node") {
-          console.log(workSpaceDetail);
           setPriority({
             name: e.target.value,
             options: {
@@ -228,14 +224,11 @@ const CreatePodStepThree = observer((props) => {
 
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
-      console.log(value);
       if (name === "selectCluster") {
         // priority.options.data.selected_cluster = value;
         setSelectedCluster(value);
-        console.log("priority : ", priority);
       }
       if (name === "sourceCluster") {
-        console.log("priority : ", priority);
         setPriority({
           name: priority.name,
           options: {
@@ -280,10 +273,7 @@ const CreatePodStepThree = observer((props) => {
     const onChangeType = (e) => {
       const { name, value } = e.target;
       setType(value);
-      console.log(priority);
-      console.log(e.target);
       if (name === "type") {
-        console.log("selectedCluster : ", selectedCluster);
         setPriority({
           ...priority,
           options: {
@@ -336,7 +326,6 @@ const CreatePodStepThree = observer((props) => {
     };
 
     const SelectedPriorityComponent = () => {
-      console.log("priority : ", priority);
       switch (priority.name) {
         case "GLowLatencyPriority":
           return (
@@ -614,7 +603,7 @@ const CreatePodStepThree = observer((props) => {
 
   return (
     <>
-      <PodTargetClusters open2={open} onClose={handleClose}></PodTargetClusters>
+      <PodTargetClusters open={open} onClose={handleClose}></PodTargetClusters>
 
       <div className="step-container">
         <div className="signup-step">

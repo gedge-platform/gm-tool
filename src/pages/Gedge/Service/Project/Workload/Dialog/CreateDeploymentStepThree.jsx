@@ -282,6 +282,8 @@ const CreateDeploymentStepThree = observer(() => {
       console.log(e.target);
       setType(value);
       if (name === "type") {
+        // GLowLatency에서 type이 from node일때 default, from pod일때 pod
+        // GSelectedClusterPriority에서 type이 cluster일때 defalut, node일때 node
         setPriority({
           ...priority,
 
@@ -291,7 +293,7 @@ const CreateDeploymentStepThree = observer(() => {
               "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
             workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
             project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-            type: "default",
+            type: value,
             data: {
               selected_cluster: "onpremise(dongjak)",
             },
@@ -469,8 +471,12 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "4px" }}
               >
-                <select name="type" value={type} onChange={onChangeType}>
-                  <option value={"cluster"}>Cluster</option>
+                <select
+                  name="type"
+                  value={priority.type}
+                  onChange={onChangeType}
+                >
+                  <option value={"default"}>Cluster</option>
                   <option value={"node"}>Node</option>
                 </select>
                 {type === "node" ? (

@@ -265,12 +265,11 @@ class Project {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
     await axios
-      .get(`${SERVER_URL}/userProjects?user${id}&=workspace=${workspaceName}`)
+      .get(`${SERVER_URL}/userProjects?user=${id}&workspace=${workspaceName}`)
       .then((res) => {
         runInAction(() => {
           this.projectListinWorkspace = res.data.data;
         });
-        console.log(this.projectListinWorkspace);
       });
   };
 

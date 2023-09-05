@@ -219,22 +219,24 @@ const ClaimBasicInformation = observer((props) => {
                       <th>타입</th>
                       <th>IP</th>
                     </tr>
-                    {selectClusterInfo.map(
-                      ({ clusterName, clusterType, clusterEndpoint }) => (
-                        <tr>
-                          <td style={{ textAlign: "center" }}>
-                            <input
-                              type="checkbox"
-                              name="selectClusters"
-                              onChange={(e) => checkCluster(e, clusterName)}
-                            />
-                          </td>
-                          <td>{clusterName}</td>
-                          <td>{clusterType}</td>
-                          <td>{clusterEndpoint}</td>
-                        </tr>
-                      )
-                    )}
+                    {selectClusterInfo
+                      ? selectClusterInfo.map(
+                          ({ clusterName, clusterType, clusterEndpoint }) => (
+                            <tr>
+                              <td style={{ textAlign: "center" }}>
+                                <input
+                                  type="checkbox"
+                                  name="selectClusters"
+                                  onChange={(e) => checkCluster(e, clusterName)}
+                                />
+                              </td>
+                              <td>{clusterName}</td>
+                              <td>{clusterType}</td>
+                              <td>{clusterEndpoint}</td>
+                            </tr>
+                          )
+                        )
+                      : "no data"}
                   </tbody>
                 ) : (
                   <tbody className="tb_data_nodeInfo">

@@ -97,7 +97,10 @@ const CreateProject = observer((props) => {
     setCheck(false);
   };
 
-  const onChange = async ({ target: { name, value } }) => {
+  const onChange = async (e) => {
+    const { name, value } = e.target;
+    console.log("workspace");
+    console.log("onChange :", name, value);
     if (name === "workspace") {
       if (value === "") {
         setSelectClusterInfo([]);
@@ -144,10 +147,11 @@ const CreateProject = observer((props) => {
 
   const postProject = () => {
     if (!check) {
-      swalError("프로젝트 이름을 확인해주세요!");
+      swalError("중복확인을 해주세요!");
       return;
     }
     if (workspace === "") {
+      console.log("workspace :", workspace);
       swalError("워크스페이스를 확인해주세요!");
       return;
     }
@@ -255,7 +259,7 @@ const CreateProject = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={" "}>Select Workspace</option>
+                  <option value={""}>Select Workspace</option>
                   {viewList?.map((workspace) => (
                     <option value={workspace.workspaceName}>
                       {workspace.workspaceName}

@@ -147,7 +147,6 @@ class PlatformProject {
 
   paginationList = () => {
     runInAction(() => {
-      console.log(toJS(this.platformProjectList));
       if (this.platformProjectList !== null) {
         this.viewList = this.platformProjectList.slice(
           (this.currentPage - 1) * 10,
