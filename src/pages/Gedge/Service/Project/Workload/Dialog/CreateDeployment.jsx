@@ -183,22 +183,22 @@ const CreateDeployment = observer((props) => {
                   value: i[1],
                 };
               }),
-              volumeMounts: e.volumes.map((i) => {
-                return {
-                  mountPath: i.subPathInVolume,
-                  name: deploymentInfo.pvcName,
-                };
-              }),
+              // volumeMounts: e.volumes.map((i) => {
+              //   return {
+              //     mountPath: i.subPathInVolume,
+              //     name: deploymentInfo.pvcName,
+              //   };
+              // }),
             };
           }),
-          volumes: [
-            {
-              name: deploymentInfo.pvcName,
-              persistentVolumeClaim: {
-                claimName: deploymentInfo.volume,
-              },
-            },
-          ],
+          // volumes: [
+          //   {
+          //     name: deploymentInfo.pvcName,
+          //     persistentVolumeClaim: {
+          //       claimName: deploymentInfo.volume,
+          //     },
+          //   },
+          // ],
         },
       },
     },
