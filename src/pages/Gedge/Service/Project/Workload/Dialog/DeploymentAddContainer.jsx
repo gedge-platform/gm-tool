@@ -71,10 +71,6 @@ const DeploymentAddContainer = observer((props) => {
     return validFlag;
   };
 
-  const splitCommand = (e) => {
-    const arr = e.target.value.split(" ");
-  };
-
   const onChange = (e) => {
     setContainerInfo({
       ...containerInfo,
@@ -215,34 +211,34 @@ const DeploymentAddContainer = observer((props) => {
     props.onClose && props.onClose();
   };
 
-  const onChangeVolume = (e, index) => {
-    containerInfo.volumes[index] = {
-      ...containerInfo.volumes[index],
-      [e.target.name]: e.target.value,
-    };
-    setContainerInfo({
-      ...containerInfo,
-    });
-  };
+  // const onChangeVolume = (e, index) => {
+  //   containerInfo.volumes[index] = {
+  //     ...containerInfo.volumes[index],
+  //     [e.target.name]: e.target.value,
+  //   };
+  //   setContainerInfo({
+  //     ...containerInfo,
+  //   });
+  // };
 
-  const addVolume = () => {
-    setContainerInfo({
-      ...containerInfo,
-      volumes: [
-        ...containerInfo.volumes,
-        { name: "", mountPoint: "", subPathInVolume: "" },
-      ],
-    });
-  };
+  // const addVolume = () => {
+  //   setContainerInfo({
+  //     ...containerInfo,
+  //     volumes: [
+  //       ...containerInfo.volumes,
+  //       { name: "", mountPoint: "", subPathInVolume: "" },
+  //     ],
+  //   });
+  // };
 
-  const removeVolume = (removeIndex) => {
-    containerInfo.volumes = containerInfo.volumes.filter(
-      (_, index) => removeIndex !== index
-    );
-    setContainerInfo({
-      ...containerInfo,
-    });
-  };
+  // const removeVolume = (removeIndex) => {
+  //   containerInfo.volumes = containerInfo.volumes.filter(
+  //     (_, index) => removeIndex !== index
+  //   );
+  //   setContainerInfo({
+  //     ...containerInfo,
+  //   });
+  // };
 
   useEffect(() => {
     loadVolumeList();
@@ -261,7 +257,7 @@ const DeploymentAddContainer = observer((props) => {
         cpuLimit: "",
         memoryLimit: "",
         NVIDIAGPU: "",
-        volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
+        // volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
       });
     } else {
       const clonedData = cloneDeep(deploymentInfo.containers[containerIndex]);
@@ -786,93 +782,94 @@ const DeploymentAddContainer = observer((props) => {
           </div>
         </>
       );
-    } else {
-      return (
-        <>
-          <table className="tb_data_new tb_write">
-            <tbody>
-              <tr>
-                <th rowSpan={2} style={{ width: "15%" }}>
-                  Volume <span className="requried">*</span>
-                </th>
-                <td>
-                  {containerInfo.volumes.map((volume, index) => (
-                    <>
-                      <FormControl>
-                        <select
-                          name="name"
-                          onChange={(e) => onChangeVolume(e, index)}
-                          value={volume.name}
-                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
-                        >
-                          <option value={""} selected disabled hidden>
-                            Select Volume
-                          </option>
-                          {<option value={volumeName}>{volumeName}</option>}
-                        </select>
-                      </FormControl>
-                      <CTextField
-                        style={{ width: "35%", padding: "0px 2px 2px 2px" }}
-                        type="text"
-                        placeholder="Mount Point"
-                        className="form_fullWidth"
-                        name="mountPoint"
-                        onChange={() => onChangeVolume(event, index)}
-                        value={volume.mountPoint}
-                      />
-                      <CTextField
-                        style={{ width: "35%", padding: "0px 2px 2px 0px" }}
-                        type="text"
-                        placeholder="Sub Path in Volume"
-                        className="form_fullWidth"
-                        name="subPathInVolume"
-                        onChange={() => onChangeVolume(event, index)}
-                        value={volume.subPathInVolume}
-                      />
-                      <Button
-                        style={{
-                          border: "none",
-                          height: "28px",
-                          width: "30px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          lineHeight: 1,
-                          letterSpacing: "normal",
-                          color: "#36435c",
-                          backgroundColor: "#eff4f9",
-                          padding: "0 0 0 0",
-                          margin: "2px",
-                          borderRadius: "0",
-                        }}
-                        onClick={() => removeVolume(index)}
-                      >
-                        -
-                      </Button>
-                    </>
-                  ))}
-                  <Button onClick={addVolume}>Add Volume</Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div
-            style={{
-              display: "flex",
-              width: "300px",
-              justifyContent: "center",
-              marginTop: "377px",
-            }}
-          >
-            <Button onClick={handleClose}>취소</Button>
-            {containerIndex === -1 ? (
-              <ButtonNext onClick={addContainers}>추가</ButtonNext>
-            ) : (
-              <ButtonNext onClick={editContainers}>변경</ButtonNext>
-            )}
-          </div>
-        </>
-      );
     }
+    // else {
+    //   return (
+    //     <>
+    //       <table className="tb_data_new tb_write">
+    //         <tbody>
+    //           <tr>
+    //             <th rowSpan={2} style={{ width: "15%" }}>
+    //               Volume <span className="requried">*</span>
+    //             </th>
+    //             <td>
+    //               {containerInfo.volumes.map((volume, index) => (
+    //                 <>
+    //                   <FormControl>
+    //                     <select
+    //                       name="name"
+    //                       onChange={(e) => onChangeVolume(e, index)}
+    //                       value={volume.name}
+    //                       style={{ width: "200px", padding: "0px 2px 2px 2px" }}
+    //                     >
+    //                       <option value={""} selected disabled hidden>
+    //                         Select Volume
+    //                       </option>
+    //                       {<option value={volumeName}>{volumeName}</option>}
+    //                     </select>
+    //                   </FormControl>
+    //                   <CTextField
+    //                     style={{ width: "35%", padding: "0px 2px 2px 2px" }}
+    //                     type="text"
+    //                     placeholder="Mount Point"
+    //                     className="form_fullWidth"
+    //                     name="mountPoint"
+    //                     onChange={() => onChangeVolume(event, index)}
+    //                     value={volume.mountPoint}
+    //                   />
+    //                   <CTextField
+    //                     style={{ width: "35%", padding: "0px 2px 2px 0px" }}
+    //                     type="text"
+    //                     placeholder="Sub Path in Volume"
+    //                     className="form_fullWidth"
+    //                     name="subPathInVolume"
+    //                     onChange={() => onChangeVolume(event, index)}
+    //                     value={volume.subPathInVolume}
+    //                   />
+    //                   <Button
+    //                     style={{
+    //                       border: "none",
+    //                       height: "28px",
+    //                       width: "30px",
+    //                       fontSize: "20px",
+    //                       fontWeight: 600,
+    //                       lineHeight: 1,
+    //                       letterSpacing: "normal",
+    //                       color: "#36435c",
+    //                       backgroundColor: "#eff4f9",
+    //                       padding: "0 0 0 0",
+    //                       margin: "2px",
+    //                       borderRadius: "0",
+    //                     }}
+    //                     onClick={() => removeVolume(index)}
+    //                   >
+    //                     -
+    //                   </Button>
+    //                 </>
+    //               ))}
+    //               <Button onClick={addVolume}>Add Volume</Button>
+    //             </td>
+    //           </tr>
+    //         </tbody>
+    //       </table>
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           width: "300px",
+    //           justifyContent: "center",
+    //           marginTop: "377px",
+    //         }}
+    //       >
+    //         <Button onClick={handleClose}>취소</Button>
+    //         {containerIndex === -1 ? (
+    //           <ButtonNext onClick={addContainers}>추가</ButtonNext>
+    //         ) : (
+    //           <ButtonNext onClick={editContainers}>변경</ButtonNext>
+    //         )}
+    //       </div>
+    //     </>
+    //   );
+    // }
   };
 
   return (
@@ -888,7 +885,7 @@ const DeploymentAddContainer = observer((props) => {
       <CSubTabs value={tabvalue} onChange={handleTabChange}>
         <CSubTab label="General"></CSubTab>
         <CSubTab label="Resource"></CSubTab>
-        <CSubTab label="Storage"></CSubTab>
+        {/* <CSubTab label="Storage"></CSubTab> */}
       </CSubTabs>
       {AddContainerComponent()}
     </CDialogNew>

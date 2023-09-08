@@ -136,11 +136,10 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
               type: "default",
               data: {
                 selected_cluster: "onpremise(dongjak)",
@@ -162,11 +161,10 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "softonet",
-              workspace_name:
-                "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-              workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-              project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+              user_name: "user1",
+              workspace_name: "ws1",
+              workspace_uid: "649128e7fc34732e0eccfa6d",
+              project_name: "p1",
               type: "default",
               data: {
                 selected_cluster: "onpremise(dongjak)",
@@ -205,11 +203,10 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           name: e.target.value,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "onpremise(dongjak)",
@@ -290,12 +287,11 @@ const CreateDeploymentStepThree = observer(() => {
           ...priority,
 
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-            type: value,
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
+            type: "default",
             data: {
               selected_cluster: "onpremise(dongjak)",
             },
@@ -313,11 +309,10 @@ const CreateDeploymentStepThree = observer(() => {
         setPriority({
           ...priority,
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "onpremise(dongjak)",
@@ -340,11 +335,10 @@ const CreateDeploymentStepThree = observer(() => {
           //   value: value,
           // },
           options: {
-            user_name: "softonet",
-            workspace_name:
-              "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-            workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-            project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+            user_name: "user1",
+            workspace_name: "ws1",
+            workspace_uid: "649128e7fc34732e0eccfa6d",
+            project_name: "p1",
             type: "default",
             data: {
               selected_cluster: "onpremise(dongjak)",

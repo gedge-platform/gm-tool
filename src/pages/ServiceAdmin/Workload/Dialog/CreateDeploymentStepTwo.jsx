@@ -243,22 +243,26 @@ const CreateDeploymentStepTwo = observer(() => {
               <Button onClick={addAnnotations}>+</Button>
             </td>
           </tr>
-          {annotations.map((item) => (
-            <tr>
-              <th>Annotations</th>
-              <td style={{ width: "300px", padding: "8px" }}>
-                {item.annotationKey}
-              </td>
-              <td style={{ width: "300px", padding: "8px" }}>
-                {item.annotationValue}
-              </td>
-              <td>
-                <Button onClick={() => deleteAnnotations(item.annotationKey)}>
-                  -
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {annotations
+            ? annotations.map((item) => (
+                <tr>
+                  <th>Annotations</th>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.annotationKey}
+                  </td>
+                  <td style={{ width: "300px", padding: "8px" }}>
+                    {item.annotationValue}
+                  </td>
+                  <td>
+                    <Button
+                      onClick={() => deleteAnnotations(item.annotationKey)}
+                    >
+                      -
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            : null}
         </tbody>
       </table>
       <CreateDeployment labelsList={labelInput} />

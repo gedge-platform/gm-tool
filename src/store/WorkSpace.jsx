@@ -171,7 +171,6 @@ class Workspace {
   loadWorkSpaceList = async (type = false) => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
-    console.log("type: ", type);
     await axios
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
@@ -184,16 +183,12 @@ class Workspace {
           this.workspace = this.workSpaceList
             ? this.workSpaceList.map((item) => item.workspaceName)
             : null;
-          // console.log("workspace : ", this.workspace);
         });
       })
       .then(() => {
         // this.convertList(this.workSpaceList, this.setWorkSpaceList);
         this.paginationList();
       })
-      // .then(() => {
-      //   type ? null : this.loadWorkspaceDetail(this.viewList[0].workspaceName);
-      // })
       .catch(() => {
         this.workSpaceList = [];
         this.paginationList();
@@ -207,7 +202,6 @@ class Workspace {
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log("loadAdminWorkSpaceList :", res);
           this.adminList = res.data.data;
           this.workSpaceList = this.adminList.filter((workspace) =>
             workspace.selectCluster.some(

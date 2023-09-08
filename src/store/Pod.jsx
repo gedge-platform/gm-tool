@@ -109,12 +109,11 @@ class Pod {
     podName: "",
     workspace: "",
     project: "",
-    replicas: 1,
     volume: "",
     pvcName: "",
     containers: [],
-    labels: {},
-    annotations: {},
+    labels: [],
+    annotations: [],
     priority: {
       name: "GLowLatencyPriority",
       options: {
@@ -136,7 +135,6 @@ class Pod {
   initTargetClusters = (defaultUnselectedClusters) => {
     runInAction(() => {
       this.targetClusters = [];
-      console.log(defaultUnselectedClusters);
       this.unselectedClusters = defaultUnselectedClusters;
     });
   };
@@ -159,7 +157,6 @@ class Pod {
         podName: "",
         workspace: "",
         project: "",
-        replicas: 1,
         volume: "",
         containers: [],
         labels: [],
@@ -261,9 +258,9 @@ class Pod {
     runInAction(() => {
       delete template.metadata.labels[""];
       delete template.metadata.annotations[""];
-      delete template.spec.template.metadata.labels[""];
-      delete template.spec.template.metadata.annotations[""];
-      delete template.spec.selector.matchLabels[""];
+      // delete template.spec.template.metadata.labels[""];
+      // delete template.spec.template.metadata.annotations[""];
+      // delete template.spec.selector.matchLabels[""];
     });
   };
   setClearLA = () => {

@@ -158,6 +158,7 @@ const CreatePod = observer((props) => {
             limits: {
               cpu: e.cpuLimit,
               memory: e.memoryLimit,
+              "nvidia.com/gpu": "1",
             },
           },
           // volumeMounts: e.volumes.map((i) => {
@@ -251,8 +252,8 @@ const CreatePod = observer((props) => {
   };
 
   useEffect(() => {
-    loadPVClaims();
-    loadWorkSpaceList();
+    // loadPVClaims();
+    // loadWorkSpaceList();
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));

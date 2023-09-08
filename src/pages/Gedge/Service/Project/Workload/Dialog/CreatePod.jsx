@@ -104,8 +104,8 @@ const CreatePod = observer((props) => {
         return {
           name: e.containerName,
           image: e.containerImage,
-          command: e.command?.split(" "),
-          args: e.arguments?.split(" "),
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
           env: e.variables.map((i) => {
             if (i.type === "KeyValuePair") {
               return {
@@ -177,79 +177,6 @@ const CreatePod = observer((props) => {
         },
       ],
     },
-    // volumes: [
-    //   {
-    //     name: podInfo.volume,
-    //     emptyDir: {},
-    //   },
-    // ],
-
-    //   selector: {
-    //     matchLabels: labelInput,
-    //   },
-    //   template: {
-    //     metadata: {
-    //       annotations: annotationInput,
-    //       labels: labelInput,
-    //     },
-    //     spec: {
-    //       imagePullSecert: podInfo.containers?.map((e) => {
-    //         return { name: e.pullSecret };
-    //       }),
-    //       containers: podInfo.containers?.map((e) => {
-    //         return {
-    //           name: e.containerName,
-    //           image: e.containerImage,
-    //           imagePullPolicy: e.pullPolicy,
-    //           command: e.command,
-    //           args: e.arguments,
-    //           resources: {
-    //             limits: {
-    //               // cpu: e.cpuLimit,
-    //               memory: e.memoryLimit + "Mi",
-    //             },
-    //             requests: {
-    //               cpu: e.cpuReservation + "m",
-    //               memory: e.memoryReservation + "Mi",
-    //             },
-    //           },
-    //           ports: e.ports.map((i) => {
-    //             return {
-    //               name: i.name,
-    //               containerPort: i.privateContainerPort,
-    //               protocol: i.protocol,
-    //             };
-    //           }),
-    //           envForm: e.variables.map((i) => {
-    //             const item = i.type + "Ref";
-    //             return {
-    //               [item]: {
-    //                 name: i.variableName,
-    //               },
-    //             };
-    //           }),
-    //           env: e.variables.map((i) => {
-    //             return {
-    //               name: i.variableName,
-    //               value: i.value,
-    //             };
-    //           }),
-    //           volumeMounts: e.volumes.map((i) => {
-    //             return {
-    //               mountPath: i.subPathInVolume,
-    //               name: i.name,
-    //             };
-    //           }),
-    //         };
-    //       }),
-    //     },
-    //   },
-    //   volumes: [
-    //     {
-    //       name: podInfo.volume,
-    //       persistentVolumeClaim: podInfo.pvcName,
-    //     },
-    //   ],
   };
 
   const handleClose = () => {

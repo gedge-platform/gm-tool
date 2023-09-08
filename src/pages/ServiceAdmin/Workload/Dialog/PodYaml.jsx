@@ -14,6 +14,7 @@ const PodYaml = observer(() => {
     setTemplateLabel();
     if (content) {
       var obj_content = YAML.parse(content);
+      console.log(obj_content);
       if (
         obj_content.metadata?.annotations === ': ""' ||
         isEmpty(obj_content?.metadata?.annotations)

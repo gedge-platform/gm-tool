@@ -1,12 +1,38 @@
 import { observer } from "mobx-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 
 const DeploymentYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
+  const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
+    deploymentStore;
+
+  useEffect(() => {
+    setTemplateAnnotation();
+    setTemplateLabel();
+    if (content) {
+      var obj_content = YAML.parse(content);
+      console.log(obj_content);
+      if (
+        obj_content.metadata.annotations === ': ""' ||
+        isEmpty(obj_content.metadata.annotations)
+      ) {
+        delete obj_content.spec.template.metadata.annotations;
+        delete obj_content.metadata.annotations;
+      }
+      if (
+        obj_content.metadata.labels === ': ""' ||
+        isEmpty(obj_content.metadata.labels)
+      ) {
+        delete obj_content.metadata.labels;
+        delete obj_content.spec.template.metadata.labels;
+        delete obj_content.metadata.labels;
+      }
+      setContent(require("json-to-pretty-yaml").stringify(obj_content));
+    }
+  }, [content]);
 
   return (
     <>
@@ -35,7 +61,7 @@ const DeploymentYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={value => {
+        onChange={(value) => {
           // setContent(value);
         }}
         fontSize={14}
