@@ -61,7 +61,6 @@ export var filterParams = {
   },
 
   browserDatePicker: true,
-
   suppressAndOrCondition: true,
 };
 
