@@ -232,15 +232,6 @@ class Deployment {
   ];
 
   targetClusters = [];
-  // unselectedClusters = [
-  //   "cluster0",
-  //   "cluster1",
-  //   "cluster2",
-  //   "cluster3",
-  //   "cluster4",
-  //   "cluster5",
-  //   "cluster6",
-  // ];
   unselectedClusters = [];
 
   initTargetClusters = (defaultUnselectedClusters) => {
@@ -259,6 +250,16 @@ class Deployment {
   setUnselectedClusters = (value) => {
     runInAction(() => {
       this.unselectedClusters = value;
+    });
+  };
+
+  resetTargetClusters = () => {
+    runInAction(() => {
+      this.unselectedClusters = [
+        ...this.unselectedClusters,
+        ...[].concat(...this.targetClusters)
+      ]
+      this.targetClusters = [];
     });
   };
 

@@ -162,15 +162,19 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     if (source.droppableId === destination.droppableId) {
       // 위치만 바꾸기
     } else {
-      move(source, destination);
+      if (priority.name === "GSelectedClusterPriority" || priority.name === "GSetClusterPriority") {
+        if (destination.droppableId === "unselected" || selectedClusters[destination.droppableId] === null || selectedClusters[destination.droppableId].length < 2) {
+          move(source, destination);
+        }
+      } else {
+        move(source, destination);
+      }
     }
   };
 
   const addLeveled = () => {
-    if (priority.name === "GSelectedClusterPriority") {
-      if (selectedClusters.length > 0) {
-        return;
-      }
+    if (priority.name === "GSelectedClusterPriority" && priority.options.type === "node" && selectedClusters.length > 0) {
+      return;
     }
     setSelectedClusters([...selectedClusters, null]);
   };

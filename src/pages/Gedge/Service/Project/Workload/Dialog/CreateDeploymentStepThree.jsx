@@ -48,6 +48,7 @@ const CreateDeploymentStepThree = observer(() => {
     deploymentInfo,
     selectedCluster,
     setSelectedCluster,
+    resetTargetClusters
   } = deploymentStore;
 
   const {
@@ -129,6 +130,7 @@ const CreateDeploymentStepThree = observer(() => {
 
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
+      resetTargetClusters();
       if (e.target.value === "GLowLatencyPriority") {
         setType("default");
         console.log(type);
@@ -284,6 +286,7 @@ const CreateDeploymentStepThree = observer(() => {
       console.log(e.target);
       setType(value);
       if (name === "type") {
+        resetTargetClusters();
         // GLowLatency에서 type이 from node일때 default, from pod일때 pod
         // GSelectedClusterPriority에서 type이 cluster일때 defalut, node일때 node
         setPriority({
