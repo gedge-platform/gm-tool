@@ -97,21 +97,21 @@ const CreateProject = observer((props) => {
   };
 
   const onChange = async ({ target: { name, value } }) => {
-    if (name === "workspace") {
-      setWorkspace(value);
-    }
+    // if (name === "workspace") {
+    //   setWorkspace(value);
+    // }
 
     // 수정중
-    // if (name === "workspace") {
-    //   if (value === "") {
-    //     setSelectClusterInfo([]);
-    //     return;
-    //   } else {
-    //     setWorkspace(value);
-    //   }
-    //   await loadWorkspaceDetail(value);
-    //   setSelectClusters([...selectClusterInfo]);
-    // }
+    if (name === "workspace") {
+      if (value === "") {
+        setSelectClusterInfo([]);
+        return;
+      } else {
+        setWorkspace(value);
+      }
+      await loadWorkspaceDetail(value);
+      setSelectClusters([...selectClusterInfo]);
+    }
 
     if (name === "projectName") setProjectName(value);
     if (name === "projectDescription") setProjectDescription(value);
