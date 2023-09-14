@@ -754,13 +754,13 @@ class Deployment {
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const option = {
-      user_name: "softonet",
-      workspace_name: "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-      workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-      project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
+      user_name: "user1",
+      workspace_name: "ws1",
+      workspace_uid: "649128e7fc34732e0eccfa6d",
+      project_name: "p1",
       type: "default",
       data: {
-        selected_cluster: "onpremise(dongjak)	",
+        selected_cluster: "onpremise(dongjak)",
       },
     };
     const options = encodeURI(JSON.stringify(option));

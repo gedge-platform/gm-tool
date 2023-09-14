@@ -9,17 +9,17 @@ const PodYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
     podStore;
 
+  console.log("content : ", content);
+
   useEffect(() => {
     setTemplateAnnotation();
     setTemplateLabel();
     if (content) {
       var obj_content = YAML.parse(content);
-      console.log(obj_content);
       if (
         obj_content.metadata?.annotations === ': ""' ||
         isEmpty(obj_content.metadata?.annotations)
       ) {
-        // delete obj_content.spec.template.metadata?.annotations;
         delete obj_content.metadata?.annotations;
       }
       if (
@@ -27,7 +27,6 @@ const PodYaml = observer(() => {
         isEmpty(obj_content.metadata.labels)
       ) {
         delete obj_content.metadata?.labels;
-        // delete obj_content.spec.template.metadata?.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }

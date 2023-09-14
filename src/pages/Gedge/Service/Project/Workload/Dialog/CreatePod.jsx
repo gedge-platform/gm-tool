@@ -162,20 +162,20 @@ const CreatePod = observer((props) => {
           //     mountPath: i.mountPoint,
           //   };
           // }),
-          volumeMounts: e.volumes.map((i) => {
-            return {
-              name: "data-volume",
-              mountPath: "/data",
-            };
-          }),
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: "data-volume",
+          //     mountPath: "/data",
+          //   };
+          // }),
         };
       }),
-      volumes: [
-        {
-          name: "data-volume",
-          emptyDir: {},
-        },
-      ],
+      // volumes: [
+      //   {
+      //     name: "data-volume",
+      //     emptyDir: {},
+      //   },
+      // ],
     },
     // volumes: [
     //   {
@@ -403,7 +403,7 @@ const CreatePod = observer((props) => {
     } else {
       return (
         <>
-          <PodYaml labelsList={labelsList} />
+          <PodYaml />
           <div
             style={{
               display: "flex",

@@ -246,6 +246,7 @@ class Pod {
   };
   setTemplateLabel = () => {
     runInAction(() => {
+      console.log("labels : ", this.labels);
       this.labels.map((data) => {
         this.labelInput[data.labelKey] = data.labelValue;
       });
@@ -257,15 +258,6 @@ class Pod {
     });
   };
 
-  setTemplate = (template) => {
-    runInAction(() => {
-      delete template.metadata.labels[""];
-      delete template.metadata.annotations[""];
-      delete template.spec.template.metadata.labels[""];
-      delete template.spec.template.metadata.annotations[""];
-      delete template.spec.selector.matchLabels[""];
-    });
-  };
   setClearLA = () => {
     runInAction(() => {
       this.labelKey = "";
@@ -387,9 +379,6 @@ class Pod {
     runInAction(() => {
       delete template.metadata.labels[""];
       delete template.metadata.annotations[""];
-      delete template.spec.template.metadata.labels[""];
-      delete template.spec.template.metadata.annotations[""];
-      delete template.spec.selector.matchLabels[""];
     });
   };
 
@@ -399,7 +388,6 @@ class Pod {
         this.annotationInput[data.annotationKey] = data.annotationValue;
       });
     });
-    console.log(this.annotations);
   };
 
   constructor() {
@@ -625,10 +613,10 @@ class Pod {
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     // const options = encodeURI(JSON.stringify(this.priority.options));
     const option = {
-      user_name: "innogrid",
-      workspace_name: "test-scheduler",
-      workspace_uid: "64f69d43d77a89b959610b04",
-      project_name: "test-scheduler",
+      user_name: "user1",
+      workspace_name: "ws1",
+      workspace_uid: "649128e7fc34732e0eccfa6d",
+      project_name: "p1",
       type: "default",
       data: {
         selected_cluster: "onpremise(dongjak)",
