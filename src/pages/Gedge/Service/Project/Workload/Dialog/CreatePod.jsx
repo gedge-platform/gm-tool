@@ -262,30 +262,30 @@ const CreatePod = observer((props) => {
   const onClickStepTwo = (e) => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
 
-    if (podInfo.podName === "") {
-      swalError("Pod 이름을 입력해주세요");
-      return;
-    } else if (!checkRegex.test(podInfo.podName)) {
-      swalError("영어소문자와 숫자만 입력해주세요.");
-      return;
-    }
-    if (podInfo.workspace === "") {
-      swalError("Workspace를 선택해주세요");
-      return;
-    }
-    if (podInfo.project === "") {
-      swalError("Project를 선택해주세요");
-      return;
-    }
-    // Replica는 기본 설정 1이라서 추가 안함
-    if (podInfo.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
-    if (podInfo.containers.length === 0) {
-      swalError("Container를 선택해주세요");
-      return;
-    }
+    // if (podInfo.podName === "") {
+    //   swalError("Pod 이름을 입력해주세요");
+    //   return;
+    // } else if (!checkRegex.test(podInfo.podName)) {
+    //   swalError("영어소문자와 숫자만 입력해주세요.");
+    //   return;
+    // }
+    // if (podInfo.workspace === "") {
+    //   swalError("Workspace를 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.project === "") {
+    //   swalError("Project를 선택해주세요");
+    //   return;
+    // }
+    // // Replica는 기본 설정 1이라서 추가 안함
+    // if (podInfo.volume === "") {
+    //   swalError("Volume을 선택해주세요");
+    //   return;
+    // }
+    // if (podInfo.containers.length === 0) {
+    //   swalError("Container를 선택해주세요");
+    //   return;
+    // }
     setClearLA();
     setStepValue(2);
   };

@@ -11,9 +11,11 @@ import Detail from "../Detail";
 import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import TamplateCreate from "./TamplateCreate";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [tamplateOpen, setTemplateOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -90,7 +92,7 @@ const DeploymentListTab = observer(() => {
     loadDeploymentList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   const handleCreateOpen = () => {
@@ -98,8 +100,13 @@ const DeploymentListTab = observer(() => {
     setOpen(true);
   };
 
+  const handleTamplateCreateOpen = () => {
+    setTemplateOpen(true);
+  };
+
   const handleClose = () => {
     setOpen(false);
+    setTemplateOpen(false);
   };
 
   return (
@@ -108,6 +115,9 @@ const DeploymentListTab = observer(() => {
         <PanelBox>
           <CommActionBar reloadFunc={loadDeploymentList}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton onClick={handleTamplateCreateOpen}>
+              템플릿
+            </CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
@@ -128,6 +138,11 @@ const DeploymentListTab = observer(() => {
           </div>
           <CreateDeployment
             open={open}
+            onClose={handleClose}
+            reloadFunc={loadDeploymentList}
+          />
+          <TamplateCreate
+            open={tamplateOpen}
             onClose={handleClose}
             reloadFunc={loadDeploymentList}
           />
