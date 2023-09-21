@@ -154,25 +154,55 @@ class Deployment {
   annotationKey = "";
   annotationValue = "";
 
-  deploymentInfo = {
+  deployment = {
     deploymentName: "",
     workspace: "",
     project: "",
     replicas: 1,
-    volume: "",
     pvcName: "",
+    volume: "",
     containers: [],
     labels: [],
     annotations: [],
     priority: {
       name: "GLowLatencyPriority",
-      options: {
-        type: "cluster",
-        //data: {}
-      },
+      mode: "default",
+      sourceCluster: "",
+      sourceNode: ""
     },
-    targetClusters: "",
+    targetClusters: ""
   };
+
+  setDeployment = (name, value) => {
+    this.deployment[name] = value;
+  }
+
+  setDeploymentPriority = (name, value) => {
+    this.deployment.priority[name] = value;
+  }
+
+  resetDeployment = () => {
+    runInAction(() => {
+      this.deployment = {
+        deploymentName: "",
+        workspace: "",
+        project: "",
+        replicas: 1,
+        pvcName: "",
+        volume: "",
+        containers: [],
+        labels: [],
+        annotations: [],
+        priority: {
+          name: "GLowLatencyPriority",
+          mode: "default",
+          sourceCluster: "",
+          sourceNode: ""
+        },
+        targetClusters: ""
+      };
+    })
+  }
 
   hpaWorkspaceList = [
     {
@@ -265,7 +295,7 @@ class Deployment {
 
   loadClustersList = () => {
     runInAction(() => {
-      const clusterList = [];
+      clusterList = [];
     });
   };
 
@@ -394,55 +424,6 @@ class Deployment {
     });
   };
 
-  setDeploymentInfo = (name, value) => {
-    runInAction(() => {
-      this.deploymentInfo[name] = value;
-    });
-  };
-
-  setDeploymentInfoPriority = (key, value) => {
-    runInAction(() => {
-      this.deploymentInfo.priority[key] = value;
-    });
-  };
-
-  addObjectInDeploymentInfo = (name, key, value) => {
-    runInAction(() => {
-      this.deploymentInfo[name].push({ key: key, value: value });
-    });
-  };
-
-  removeObjectInDeploymentInfo = (name, removeIndex) => {
-    runInAction(() => {
-      this.deploymentInfo[name] = this.deploymentInfo[name].filter(
-        (_, index) => removeIndex !== index
-      );
-    });
-  };
-
-  initDeploymentInfo = () => {
-    runInAction(() => {
-      this.deploymentInfo = {
-        deploymentName: "",
-        workspace: "",
-        project: "",
-        replicas: 1,
-        volume: "",
-        containers: [],
-        labels: [],
-        annotations: [],
-        priority: {
-          name: "GLowLatencyPriority",
-          options: {
-            type: "default",
-            //data: {}
-          },
-        },
-        targetClusters: "",
-      };
-    });
-  };
-
   initLabelList = () => {
     runInAction(() => {
       this.labelList = [];
@@ -457,36 +438,24 @@ class Deployment {
 
   initContainer = () => {
     runInAction(() => {
-      this.deploymentInfo.containers = [];
+      this.deployment.containers = [];
     });
   };
   addContainer = async (container) => {
     runInAction(() => {
-      this.deploymentInfo.containers.push(container);
+      this.deployment.containers.push(container);
     });
   };
   editContainer = (editIndex, container) => {
     runInAction(() => {
-      this.deploymentInfo.containers[editIndex] = container;
+      this.deployment.containers[editIndex] = container;
     });
   };
   removeContainer = (removeIndex) => {
     runInAction(() => {
-      this.deploymentInfo.containers = this.deploymentInfo.containers.filter(
+      this.deployment.containers = this.deployment.containers.filter(
         (_, index) => removeIndex !== index
       );
-    });
-  };
-
-  priority = {
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-    },
-  };
-  setPriority = (value) => {
-    runInAction(() => {
-      this.priority = value;
     });
   };
 
@@ -750,26 +719,87 @@ class Deployment {
     });
   };
 
-  postDeploymentGM = async (callback) => {
-    console.log(this.priority);
-    const body = this.content;
-    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    const option = {
-      user_name: "softonet",
-      workspace_name: "scheduler_test-8c906681-2341-4acc-8188-fd51d4eda125",
-      workspace_uid: "8c906681-2341-4acc-8188-fd51d4eda125",
-      project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-      type: "default",
-      data: {
-        selected_cluster: "onpremise(dongjak)	",
-      },
-    };
-    const options = encodeURI(JSON.stringify(option));
-    const requestId = "requestId" + randomNumber;
-    console.log("body :", body);
-    console.log("options :", this.priority.options);
-    console.log("requestId :", requestId);
+  getOptionsFromPriority = () => {
+    if (this.deployment.priority.name === "GLowLatencyPriority") {
+      if (this.deployment.priority.mode === "default") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          mode: "default",
+          parameters: {
+            source_cluster: this.deployment.priority.sourceCluster,
+            source_node: this.deployment.priority.sourceNode,
+            select_clusters: this.targetClusters
+          }
+        };
+      } else {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          mode: "from_pod",
+          parameters: {
+            source_cluster: this.deployment.priority.sourceCluster,
+            pod_name: this.deployment.priority.podName,
+            select_clusters: this.targetClusters
+          }
+        }
+      }
+    }
+    if (this.deployment.priority.name === "GMostRequestPriority") {
+      return {
+        user_name: JSON.parse(localStorage.getItem("user")).id,
+        workspace_name: this.deployment.workspace,
+        project_name: this.deployment.project,
+        mode: this.deployment.priority.mode,
+        parameters: {
+          select_clusters: this.targetClusters
+        }
+      }
+    }
+    if (this.deployment.priority.name === "GSelectedClusterPriority") {
+      if (this.deployment.priority.mode === "default") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          mode: this.deployment.priority.mode,
+          parameters: {
+            select_clusters: this.targetClusters
+          }
+        }
+      } else {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          mode: this.deployment.priority.mode,
+          parameters: {
+            select_cluster: this.targetClusters[0],
+            select_node: this.deployment.priority.sourceNode
+          }
+        }
+      }
+    }
+    if (this.deployment.priority.name === "GSetClusterPriority") {
+      return {
+        user_name: JSON.parse(localStorage.getItem("user")).id,
+        workspace_name: this.deployment.workspace,
+        project_name: this.deployment.project,
+        parameters: {
+          select_clusters: this.targetClusters[0]
+        }
+      }
+    }
+  }
 
+  postDeploymentGM = async (callback) => {
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+    console.log("requestId :", randomNumber);
+    console.log("priority:", this.deployment.priority.name);
+    console.log("options:", toJS(this.getOptionsFromPriority()));
+    console.log("body :", this.content);
     await axios
       .post(
         `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
