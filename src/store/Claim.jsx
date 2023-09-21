@@ -337,7 +337,6 @@ class Claim {
     await axios
       .get(`${SERVER_URL}/pvcs?user=${id}`)
       .then((res) => {
-        console.log("res: ", res);
         runInAction(() => {
           this.pvClaimList = res.data.data;
           this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
@@ -345,7 +344,6 @@ class Claim {
         });
       })
       .then(() => {
-        console.log(("pvClaimList : ", this.pvClaimList));
         if (this.pvClaimList !== null) {
           this.convertList(this.pvClaimList, this.setPvClaimList);
         }

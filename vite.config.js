@@ -32,9 +32,6 @@ export default ({ mode }) => {
       commonjsOptions: {
         transformMixedEsModules: true,
       },
-      rollupOptions: {
-        external: ['/src/index.jsx']
-      },
     },
     plugins: [
       react({

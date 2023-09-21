@@ -45,14 +45,8 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     unselectedClusters,
     setTargetClusters,
     setUnselectedClusters,
-    priority,
-    setPriority,
-    deploymentInfo,
-    loadDeploymentList,
-    deploymentList,
+    deployment,
   } = deploymentStore;
-
-  const { selectClusterInfo } = projectStore;
 
   const { loadAdminPlatformProjectList, adminList } = platformProjectStore;
 
@@ -162,15 +156,19 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     if (source.droppableId === destination.droppableId) {
       // 위치만 바꾸기
     } else {
-      move(source, destination);
+      if (deployment.priority.name === "GSelectedClusterPriority") {
+        if (destination.droppableId === "unselected" || selectedClusters[destination.droppableId] === null || selectedClusters[destination.droppableId].length < 2) {
+          move(source, destination);
+        }
+      } else {
+        move(source, destination);
+      }
     }
   };
 
   const addLeveled = () => {
-    if (priority.name === "GSelectedClusterPriority") {
-      if (selectedClusters.length > 0) {
-        return;
-      }
+    if (deployment.priority.name === "GSelectedClusterPriority" && deployment.priority.mode === "node" && selectedClusters.length > 0 || deployment.priority.name === "GSetClusterPriority" && selectedClusters.length > 0) {
+      return;
     }
     setSelectedClusters([...selectedClusters, null]);
   };
@@ -180,7 +178,6 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
   };
 
   const applyTargetClusters = () => {
-    console.log(targetClusters);
     setTargetClusters(selectedClusters.filter((element) => element !== null));
     setUnselectedClusters(unselected);
 
@@ -193,7 +190,7 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
 
   useEffect(() => {
     setSelectedClusters(cloneDeep(targetClusters));
-    setUnselected(cloneDeep(unselectedClusters));
+    setUnselected(unselectedClusters);
   }, [open]);
 
   return (
