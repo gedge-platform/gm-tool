@@ -15,8 +15,8 @@ import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;
-  border: 1px solid black;
-  color: black;
+  border: 1px solid ${props => props.disabled? '#d5d5d5': 'black'};
+  color: ${props => props.disabled? '#d5d5d5': 'black'};
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
@@ -385,11 +385,11 @@ const CreateDeploymentStepThree = observer(() => {
             <td>
               <Button
                 style={{ marginBottom: "2px" }}
+                disabled={deployment.priority.name === "GSelectedClusterPriority" && deployment.priority.mode === "node"}
                 onClick={() => openTargetClusters(-1)}
               >
                 {showTargetClusters()}
               </Button>
-              <div></div>
             </td>
           </tr>
         </tbody>
