@@ -115,7 +115,7 @@ const CreateDeploymentStepThree = observer(() => {
               name: "GLowLatencyPriority",
               mode: "from_pod",
               sourceCluster: "",
-              pod: ""
+              podName: ""
             })
           }
         }
