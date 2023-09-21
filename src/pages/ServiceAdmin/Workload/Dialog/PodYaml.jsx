@@ -8,6 +8,7 @@ import { podStore } from "@/store";
 const PodYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
     podStore;
+  console.log("content : ", content);
 
   useEffect(() => {
     setTemplateAnnotation();
@@ -19,15 +20,13 @@ const PodYaml = observer(() => {
         obj_content.metadata?.annotations === ': ""' ||
         isEmpty(obj_content?.metadata?.annotations)
       ) {
-        // delete obj_content.spec.template.metadata?.annotations;
         delete obj_content.metadata?.annotations;
       }
       if (
-        obj_content.metadata.labels === ': ""' ||
-        isEmpty(obj_content.metadata.labels)
+        obj_content.metadata?.labels === ': ""' ||
+        isEmpty(obj_content.metadata?.labels)
       ) {
         delete obj_content.metadata?.labels;
-        // delete obj_content.spec.template.metadata?.labels;
       }
       setContent(require("json-to-pretty-yaml").stringify(obj_content));
     }

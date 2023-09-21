@@ -187,8 +187,8 @@ const CreatePod = observer((props) => {
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
-    initPodInfo();
     setClearLA();
+    initPodInfo();
   };
 
   const onClickStepTwo = (e) => {

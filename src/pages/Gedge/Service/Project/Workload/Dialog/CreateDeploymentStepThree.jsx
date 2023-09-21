@@ -136,13 +136,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "user1",
-              workspace_name: "ws1",
-              workspace_uid: "649128e7fc34732e0eccfa6d",
-              project_name: "p1",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: deploymentInfo.workspace,
+              workspace_uid: workSpaceDetail.objectId,
+              project_name: deploymentInfo.project,
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: deploymentInfo.workspace,
@@ -161,13 +161,13 @@ const CreateDeploymentStepThree = observer(() => {
           setPriority({
             name: e.target.value,
             options: {
-              user_name: "user1",
-              workspace_name: "ws1",
-              workspace_uid: "649128e7fc34732e0eccfa6d",
-              project_name: "p1",
+              user_name: workSpaceDetail.memberName,
+              workspace_name: deploymentInfo.workspace,
+              workspace_uid: workSpaceDetail.objectId,
+              project_name: deploymentInfo.project,
               type: "default",
               data: {
-                selected_cluster: "onpremise(dongjak)",
+                selected_cluster: "",
               },
               // user_name: workSpaceDetail.memberName,
               // workspace_name: workSpaceDetail.workspaceName,

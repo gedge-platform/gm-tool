@@ -119,6 +119,8 @@ const CreateDeployment = observer((props) => {
   const [prioritytDisable, setPriorityDisable] = useState(true);
   const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
 
+  console.log(deploymentInfo);
+
   const template = {
     apiVersion: "apps/v1",
     kind: "Deployment",
@@ -147,10 +149,12 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
               resources: {
-                limits: { memory: e.memoryLimit + "Mi" },
+                limits: {
+                  memory: e.memoryLimit + "Mi",
+                },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
@@ -364,7 +368,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml labelsList={labelsList} />
+          <DeploymentYaml />
           <div
             style={{
               display: "flex",
