@@ -100,6 +100,9 @@ const CreateDeployment = observer((props) => {
     secretConfigmap,
   } = deploymentStore;
 
+  console.log("annotationInput :", annotationInput);
+  console.log("labelInput :", labelInput);
+
   const { loadPVClaims } = claimStore;
 
   const { loadWorkSpaceList } = workspaceStore;

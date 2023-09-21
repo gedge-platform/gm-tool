@@ -9,13 +9,16 @@ export const agDateColumnFilter = () => {
   return {
     comparator: function (filterLocalDateAtMidnight, cellValue) {
       const dateAsString = cellValue;
+
       if (dateAsString == null) return -1;
       const dateParts = dateAsString.split("/");
+
       const cellDate = new Date(
         Number(dateParts[0]),
         Number(dateParts[1]) - 1,
         Number(dateParts[2])
       );
+
       if (filterLocalDateAtMidnight.getTime() === cellDate.getTime()) {
         return 0;
       }
@@ -34,8 +37,10 @@ export const agDateColumnFilter = () => {
 export var filterParams = {
   comparator: (filterLocalDateAtMidnight, cellValue) => {
     if (cellValue === null) return -1;
-    const filterLocalDateAtMidnightAsString = dayjs(new Date(filterLocalDateAtMidnight)).format("YYYY-MM-DD");
-    const cellValueAsString = cellValue.split('T')[0];
+    const filterLocalDateAtMidnightAsString = dayjs(
+      new Date(filterLocalDateAtMidnight)
+    ).format("YYYY-MM-DD");
+    const cellValueAsString = cellValue.split("T")[0];
     if (cellValueAsString === filterLocalDateAtMidnightAsString) {
       return 0;
     }
@@ -49,7 +54,7 @@ export var filterParams = {
   },
   browserDatePicker: true,
   suppressAndOrCondition: true,
-}
+};
 
 export const Toastify = (message) => {
   toast.info(message);
@@ -102,7 +107,7 @@ export const duplicateCheck = async (name, type) => {
     .then((res) => {
       if (res.status === 200) {
         return true;
-      }else{
+      } else {
         return false;
       }
     })

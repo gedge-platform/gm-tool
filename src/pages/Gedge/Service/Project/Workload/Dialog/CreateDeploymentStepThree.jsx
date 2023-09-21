@@ -15,8 +15,8 @@ import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;
-  border: 1px solid ${props => props.disabled? '#d5d5d5': 'black'};
-  color: ${props => props.disabled? '#d5d5d5': 'black'};
+  border: 1px solid ${(props) => (props.disabled ? "#d5d5d5" : "black")};
+  color: ${(props) => (props.disabled ? "#d5d5d5" : "black")};
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
@@ -35,17 +35,11 @@ const CreateDeploymentStepThree = observer(() => {
     setDeploymentPriority,
   } = deploymentStore;
 
-  const {
-    selectClusterInfo,
-  } = workspaceStore;
+  const { selectClusterInfo } = workspaceStore;
 
-  const {
-    loadCluster,
-    clusterDetail,
-  } = clusterStore;
+  const { loadCluster, clusterDetail } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;
-
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -60,14 +54,13 @@ const CreateDeploymentStepThree = observer(() => {
       return JSON.stringify(targetClusters[0]);
     }
     return JSON.stringify(targetClusters);
-  }
+  };
 
   const handleClose = () => {
     setOpen2(false);
   };
 
   const PriorityComponent = () => {
-
     const handlePriority = (e) => {
       if (e.target.name === "name") {
         resetTargetClusters();
@@ -76,29 +69,29 @@ const CreateDeploymentStepThree = observer(() => {
             name: "GLowLatencyPriority",
             mode: "default",
             sourceCluster: "",
-            sourceNode: ""
-          })
+            sourceNode: "",
+          });
         }
         if (e.target.value === "GMostRequestPriority") {
           setDeployment("priority", {
             name: "GMostRequestPriority",
-            mode: "cpu"
-          })
+            mode: "cpu",
+          });
         }
         if (e.target.value === "GSelectedClusterPriority") {
           setDeployment("priority", {
             name: e.target.value,
             mode: "default",
-            sourceCluster: ""
-          })
+            sourceCluster: "",
+          });
         }
         if (e.target.value === "GSetClusterPriority") {
           setDeployment("priority", {
             name: e.target.value,
-          })
+          });
         }
       }
-      
+
       if (e.target.name === "mode") {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
@@ -107,39 +100,39 @@ const CreateDeploymentStepThree = observer(() => {
               name: "GLowLatencyPriority",
               mode: "default",
               sourceCluster: "",
-              sourceNode: ""
-            })
+              sourceNode: "",
+            });
           }
           if (e.target.value === "from_pod") {
             setDeployment("priority", {
               name: "GLowLatencyPriority",
               mode: "from_pod",
               sourceCluster: "",
-              podName: ""
-            })
+              podName: "",
+            });
           }
         }
         if (deployment.priority.name === "GMostRequestPriority") {
           setDeployment("priority", {
             name: "GMostRequestPriority",
-            mode: e.target.value
-          })
+            mode: e.target.value,
+          });
         }
         if (deployment.priority.name === "GSelectedClusterPriority") {
           if (e.target.value === "default") {
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "default",
-              selectCluster: ""
-            })
+              selectCluster: "",
+            });
           }
           if (e.target.value === "node") {
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "node",
               sourceCluster: "",
-              sourceNode: ""
-            })
+              sourceNode: "",
+            });
           }
         }
       }
@@ -167,7 +160,7 @@ const CreateDeploymentStepThree = observer(() => {
       if (e.target.name === "podName") {
         setDeploymentPriority("podName", e.target.value);
       }
-    }
+    };
 
     const SelectedPriorityComponent = () => {
       switch (deployment.priority.name) {
@@ -178,14 +171,22 @@ const CreateDeploymentStepThree = observer(() => {
                 className="form_fullWidth"
                 style={{ paddingTop: "4px" }}
               >
-                <select name="mode" value={deployment.priority.mode} onChange={handlePriority}>
+                <select
+                  name="mode"
+                  value={deployment.priority.mode}
+                  onChange={handlePriority}
+                >
                   <option value={"default"}>from node</option>
                   <option value={"from_pod"}>from pod</option>
                 </select>
                 {deployment.priority.mode === "default" ? (
                   <div style={{ paddingTop: "4px" }}>
                     <FormControl style={{ width: "50%" }}>
-                      <select name="sourceCluster" value={deployment.priority.sourceCluster} onChange={handlePriority}>
+                      <select
+                        name="sourceCluster"
+                        value={deployment.priority.sourceCluster}
+                        onChange={handlePriority}
+                      >
                         <option value={""} selected disabled hidden>
                           Select Source Cluster
                         </option>
@@ -201,7 +202,9 @@ const CreateDeploymentStepThree = observer(() => {
                         name="sourceNode"
                         onChange={handlePriority}
                         value={deployment.priority.sourceNode}
-                        disabled={deployment.priority.sourceCluster === "" && true}
+                        disabled={
+                          deployment.priority.sourceCluster === "" && true
+                        }
                       >
                         <option value={""} selected disabled hidden>
                           Select Source Node
@@ -219,7 +222,11 @@ const CreateDeploymentStepThree = observer(() => {
                 ) : (
                   <div style={{ paddingTop: "4px" }}>
                     <FormControl style={{ width: "50%" }}>
-                      <select name="sourceCluster" value={deployment.priority.sourceCluster} onChange={handlePriority}>
+                      <select
+                        name="sourceCluster"
+                        value={deployment.priority.sourceCluster}
+                        onChange={handlePriority}
+                      >
                         <option value={""} selected disabled hidden>
                           Select Cluster
                         </option>
@@ -235,7 +242,9 @@ const CreateDeploymentStepThree = observer(() => {
                         name="podName"
                         onChange={handlePriority}
                         value={deployment.priority.podName}
-                        disabled={deployment.priority.sourceCluster === "" && true}
+                        disabled={
+                          deployment.priority.sourceCluster === "" && true
+                        }
                       >
                         <option value={""} selected disabled hidden>
                           Select Pod
@@ -304,14 +313,16 @@ const CreateDeploymentStepThree = observer(() => {
                         name="sourceNode"
                         onChange={handlePriority}
                         value={deployment.priority.sourceNode}
-                        disabled={deployment.priority.sourceCluster === "" && true}
+                        disabled={
+                          deployment.priority.sourceCluster === "" && true
+                        }
                       >
                         <option value={""} selected disabled hidden>
                           Select Source Node
                         </option>
                         {clusterDetail.nodes !== null ? (
                           clusterDetail.nodes.map((node) => (
-                            <option value={node.name}>{node.name}</option> 
+                            <option value={node.name}>{node.name}</option>
                           ))
                         ) : (
                           <option value={"noData"}>No Data</option>
@@ -324,7 +335,7 @@ const CreateDeploymentStepThree = observer(() => {
             </>
           );
         case "GSetClusterPriority":
-          return ;
+          return;
         default:
           break;
       }
@@ -339,8 +350,12 @@ const CreateDeploymentStepThree = observer(() => {
           <FormControl className="form_fullWidth">
             <select name="name" onChange={handlePriority}>
               <option value={"GLowLatencyPriority"}>GLowLatencyPriority</option>
-              <option value={"GMostRequestPriority"}>GMostRequestPriority</option>
-              <option value={"GSelectedClusterPriority"}>GSelectedClusterPriority</option>
+              <option value={"GMostRequestPriority"}>
+                GMostRequestPriority
+              </option>
+              <option value={"GSelectedClusterPriority"}>
+                GSelectedClusterPriority
+              </option>
               <option value={"GSetClusterPriority"}>GSetClusterPriority</option>
             </select>
           </FormControl>
@@ -385,7 +400,10 @@ const CreateDeploymentStepThree = observer(() => {
             <td>
               <Button
                 style={{ marginBottom: "2px" }}
-                disabled={deployment.priority.name === "GSelectedClusterPriority" && deployment.priority.mode === "node"}
+                disabled={
+                  deployment.priority.name === "GSelectedClusterPriority" &&
+                  deployment.priority.mode === "node"
+                }
                 onClick={() => openTargetClusters(-1)}
               >
                 {showTargetClusters()}

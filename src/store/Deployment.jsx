@@ -168,18 +168,18 @@ class Deployment {
       name: "GLowLatencyPriority",
       mode: "default",
       sourceCluster: "",
-      sourceNode: ""
+      sourceNode: "",
     },
-    targetClusters: ""
+    targetClusters: "",
   };
 
   setDeployment = (name, value) => {
     this.deployment[name] = value;
-  }
+  };
 
   setDeploymentPriority = (name, value) => {
     this.deployment.priority[name] = value;
-  }
+  };
 
   resetDeployment = () => {
     runInAction(() => {
@@ -197,12 +197,12 @@ class Deployment {
           name: "GLowLatencyPriority",
           mode: "default",
           sourceCluster: "",
-          sourceNode: ""
+          sourceNode: "",
         },
-        targetClusters: ""
+        targetClusters: "",
       };
-    })
-  }
+    });
+  };
 
   hpaWorkspaceList = [
     {
@@ -287,8 +287,8 @@ class Deployment {
     runInAction(() => {
       this.unselectedClusters = [
         ...this.unselectedClusters,
-        ...[].concat(...this.targetClusters)
-      ]
+        ...[].concat(...this.targetClusters),
+      ];
       this.targetClusters = [];
     });
   };
@@ -730,8 +730,8 @@ class Deployment {
           parameters: {
             source_cluster: this.deployment.priority.sourceCluster,
             source_node: this.deployment.priority.sourceNode,
-            select_clusters: this.targetClusters
-          }
+            select_clusters: this.targetClusters,
+          },
         };
       } else {
         return {
@@ -742,9 +742,9 @@ class Deployment {
           parameters: {
             source_cluster: this.deployment.priority.sourceCluster,
             pod_name: this.deployment.priority.podName,
-            select_clusters: this.targetClusters
-          }
-        }
+            select_clusters: this.targetClusters,
+          },
+        };
       }
     }
     if (this.deployment.priority.name === "GMostRequestPriority") {
@@ -754,9 +754,9 @@ class Deployment {
         project_name: this.deployment.project,
         mode: this.deployment.priority.mode,
         parameters: {
-          select_clusters: this.targetClusters
-        }
-      }
+          select_clusters: this.targetClusters,
+        },
+      };
     }
     if (this.deployment.priority.name === "GSelectedClusterPriority") {
       if (this.deployment.priority.mode === "default") {
@@ -766,9 +766,9 @@ class Deployment {
           project_name: this.deployment.project,
           mode: this.deployment.priority.mode,
           parameters: {
-            select_clusters: this.targetClusters
-          }
-        }
+            select_clusters: this.targetClusters,
+          },
+        };
       } else {
         return {
           user_name: JSON.parse(localStorage.getItem("user")).id,
@@ -777,9 +777,9 @@ class Deployment {
           mode: this.deployment.priority.mode,
           parameters: {
             select_cluster: this.targetClusters[0],
-            select_node: this.deployment.priority.sourceNode
-          }
-        }
+            select_node: this.deployment.priority.sourceNode,
+          },
+        };
       }
     }
     if (this.deployment.priority.name === "GSetClusterPriority") {
@@ -788,18 +788,28 @@ class Deployment {
         workspace_name: this.deployment.workspace,
         project_name: this.deployment.project,
         parameters: {
-          select_clusters: this.targetClusters[0]
-        }
-      }
+          select_clusters: this.targetClusters[0],
+        },
+      };
     }
-  }
+  };
 
   postDeploymentGM = async (callback) => {
+    const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    console.log("requestId :", randomNumber);
-    console.log("priority:", this.deployment.priority.name);
-    console.log("options:", toJS(this.getOptionsFromPriority()));
-    console.log("body :", this.content);
+    const option = {
+      user_name: "user1",
+      workspace_name: "ws1",
+      workspace_uid: "649128e7fc34732e0eccfa6d",
+      project_name: "p1",
+      type: "default",
+      data: {
+        selected_cluster: "onpremise(dongjak)",
+      },
+    };
+    const options = encodeURI(JSON.stringify(option));
+    const requestId = "requestId" + randomNumber;
+
     await axios
       .post(
         `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
