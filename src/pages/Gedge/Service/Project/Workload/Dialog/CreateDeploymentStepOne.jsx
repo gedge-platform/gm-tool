@@ -79,24 +79,13 @@ const Table = styled.table`
 const CreateDeploymentStepOne = observer((props) => {
   const { open } = props;
   const [open2, setOpen2] = useState(false);
-  const [stepValue, setStepValue] = useState(1);
   const [containerIndex, setContainerIndex] = useState(1);
 
-  const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "fromNode",
-      //data: {}
-    },
-  });
-
   const {
-    deploymentInfo,
-    setDeploymentInfo,
     removeContainer,
     initTargetClusters,
+    deployment,
+    setDeployment
   } = deploymentStore;
 
   const {
@@ -114,54 +103,49 @@ const CreateDeploymentStepOne = observer((props) => {
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
 
-  const onChange = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-  };
+  const handleDeployment = (e) => {
+    if (e.target.name === "deploymentName") {
+      setDeployment(e.target.name, e.target.value);
+    }
 
-  const onChangeWorkspace = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-    loadProjectListInWorkspace(e.target.value);
-    loadWorkspaceDetail(e.target.value);
-  };
+    if (e.target.name === "workspace") {
+      setDeployment(e.target.name, e.target.value);
+      loadProjectListInWorkspace(e.target.value);
+      loadWorkspaceDetail(e.target.value);
+    }
 
-  const onChangePod = async ({ target: { name, value } }) => {
-    let projectNameTemp = "";
-    let clusterNameTemp = "";
-
-    if (name === "project") {
-      setDeploymentInfo(name, value);
-      setPriorityDisable(false);
-      projectNameTemp = value;
-      loadProjectDetail(value);
+    if (e.target.name === "project") {
+      setDeployment(e.target.name, e.target.value);
+      loadProjectDetail(e.target.value);
       initTargetClusters(
         selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
       );
     }
-    if (name === "cluster") {
-      setPrioritytPodDisable(false);
-      clusterNameTemp = value;
-      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
+
+    if (e.target.name === "replicas") {
+      setDeployment(e.target.name, e.target.value);
     }
-  };
+
+    if (e.target.name === "claimVolume") {
+      const pvc = JSON.parse(e.target.value);
+      setCheckPVCInDeployment(pvc.name, pvc.volume);
+      setDeployment("pvcName", pvc.name);
+      setDeployment("volume", pvc.volume);
+    }
+  }
 
   const openAddContainer = (index) => {
     setOpen2(true);
     setContainerIndex(index);
   };
 
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const onChangeCheckPVC = ({ target: { name, value } }) => {
-    setCheckPVCInDeployment(name, value);
-    setDeploymentInfo("pvcName", name);
-    setDeploymentInfo("volume", value);
-  };
-
   const deleteContainer = (e, index) => {
     e.stopPropagation();
     removeContainer(index);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
   };
 
   useEffect(() => {
@@ -207,8 +191,8 @@ const CreateDeploymentStepOne = observer((props) => {
                 placeholder="Deployment Name(영어소문자, 숫자만 가능)"
                 className="form_fullWidth"
                 name="deploymentName"
-                onChange={onChange}
-                value={deploymentInfo.deploymentName}
+                onChange={handleDeployment}
+                value={deployment.deploymentName}
               />
             </td>
           </tr>
@@ -221,8 +205,8 @@ const CreateDeploymentStepOne = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select
                   name="workspace"
-                  onChange={onChangeWorkspace}
-                  value={deploymentInfo.workspace}
+                  onChange={handleDeployment}
+                  value={deployment.workspace}
                 >
                   <option value={""} selected disabled hidden>
                     Select Workspace
@@ -244,10 +228,10 @@ const CreateDeploymentStepOne = observer((props) => {
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  disabled={!deploymentInfo.workspace}
+                  disabled={!deployment.workspace}
                   name="project"
-                  onChange={onChangePod}
-                  value={deploymentInfo.project}
+                  onChange={handleDeployment}
+                  value={deployment.project}
                 >
                   <option value={""} selected hidden disabled>
                     Select Project
@@ -272,8 +256,8 @@ const CreateDeploymentStepOne = observer((props) => {
                 placeholder="Replicas"
                 className="form_fullWidth"
                 name="replicas"
-                onChange={onChange}
-                value={deploymentInfo.replicas}
+                onChange={handleDeployment}
+                value={deployment.replicas}
               />
             </td>
           </tr>
@@ -297,10 +281,10 @@ const CreateDeploymentStepOne = observer((props) => {
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
                           type="radio"
-                          checked={deploymentInfo.pvcName === pvc.name}
-                          name={pvc.name}
-                          onChange={onChangeCheckPVC}
-                          value={pvc.volume}
+                          checked={deployment.pvcName === pvc.name}
+                          name="claimVolume"
+                          onChange={handleDeployment}
+                          value={JSON.stringify(pvc)}
                         />
                       </td>
                       <td>{pvc.name}</td>
@@ -326,7 +310,7 @@ const CreateDeploymentStepOne = observer((props) => {
                 + Add Container
               </Button>
               <div>
-                {deploymentInfo.containers.map((container, index) => (
+                {deployment.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
                     onClick={() => openAddContainer(index)}

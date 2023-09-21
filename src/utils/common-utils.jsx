@@ -31,35 +31,27 @@ export const agDateColumnFilter = () => {
     },
     browserDatePicker: true,
     suppressAndOrCondition: true,
-    defaultOption: "startsWith",
   };
 };
 
 export var filterParams = {
   comparator: (filterLocalDateAtMidnight, cellValue) => {
     if (cellValue === null) return -1;
-
     const filterLocalDateAtMidnightAsString = dayjs(
       new Date(filterLocalDateAtMidnight)
     ).format("YYYY-MM-DD");
-
     const cellValueAsString = cellValue.split("T")[0];
-
     if (cellValueAsString === filterLocalDateAtMidnightAsString) {
       return 0;
     }
-
     if (cellValueAsString < filterLocalDateAtMidnightAsString) {
       return -1;
     }
-
     if (cellValueAsString > filterLocalDateAtMidnightAsString) {
       return -1;
     }
-
     return 0;
   },
-
   browserDatePicker: true,
   suppressAndOrCondition: true,
 };

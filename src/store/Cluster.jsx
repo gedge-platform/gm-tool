@@ -248,8 +248,8 @@ class Cluster {
         this.paginationList();
       })
       .then(() => {
-        this.loadCluster(this.viewList[0].clusterName);
-        this.loadClusterDetail(this.viewList[0].clusterName);
+        this.loadCluster(this.viewList[0]?.clusterName);
+        this.loadClusterDetail(this.viewList[0]?.clusterName);
       });
   };
 

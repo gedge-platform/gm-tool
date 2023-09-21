@@ -44,6 +44,7 @@ const CreatePodStepThree = observer((props) => {
     podListInclusterAPI,
     selectedCluster,
     setSelectedCluster,
+    resetTargetClusters
   } = podStore;
 
   const { loadProjectListInWorkspace } = projectStore;
@@ -134,6 +135,7 @@ const CreatePodStepThree = observer((props) => {
 
   const PriorityComponent = () => {
     const onChangePriority = (e) => {
+      resetTargetClusters();
       if (e.target.value === "GLowLatencyPriority") {
         if (type === "from_node") {
           setPriority({
@@ -286,6 +288,7 @@ const CreatePodStepThree = observer((props) => {
       console.log("e.target : ", e.target);
       setType(value);
       if (name === "type") {
+        resetTargetClusters();
         setPriority({
           ...priority,
           options: {

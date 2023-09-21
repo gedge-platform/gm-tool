@@ -151,6 +151,16 @@ class Pod {
     });
   };
 
+  resetTargetClusters = () => {
+    runInAction(() => {
+      this.unselectedClusters = [
+        ...this.unselectedClusters,
+        ...[].concat(...this.targetClusters)
+      ]
+      this.targetClusters = [];
+    });
+  };
+
   initPodInfo = () => {
     runInAction(() => {
       this.podInfo = {

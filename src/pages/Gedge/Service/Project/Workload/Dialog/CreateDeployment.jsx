@@ -96,8 +96,6 @@ const CreateDeployment = observer((props) => {
   const [stepValue, setStepValue] = useState(1);
 
   const {
-    deploymentInfo,
-    initDeploymentInfo,
     setContent,
     setClearLA,
     setTemplate,
@@ -109,23 +107,19 @@ const CreateDeployment = observer((props) => {
     postDeploymentGM,
     keyValuePair,
     secretConfigmap,
+    deployment,
+    resetDeployment,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
 
   const { loadWorkSpaceList } = workspaceStore;
 
-  const [projectDisable, setProjectDisable] = useState(true);
-  const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-
-  console.log(deploymentInfo);
-
   const template = {
     apiVersion: "apps/v1",
     kind: "Deployment",
     metadata: {
-      name: deploymentInfo.deploymentName,
+      name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
       namespace: "default",
@@ -134,17 +128,17 @@ const CreateDeployment = observer((props) => {
       selector: {
         matchLabels: labelInput,
       },
-      replicas: deploymentInfo.replicas,
+      replicas: deployment.replicas,
       template: {
         metadata: {
           annotations: annotationInput,
           labels: labelInput,
         },
         spec: {
-          imagePullSecret: deploymentInfo.containers?.map((e) => {
+          imagePullSecret: deployment.containers?.map((e) => {
             return { name: e.pullSecret };
           }),
-          containers: deploymentInfo.containers?.map((e) => {
+          containers: deployment.containers?.map((e) => {
             return {
               name: e.containerName,
               image: e.containerImage,
@@ -190,16 +184,16 @@ const CreateDeployment = observer((props) => {
               // volumeMounts: e.volumes.map((i) => {
               //   return {
               //     mountPath: i.subPathInVolume,
-              //     name: deploymentInfo.pvcName,
+              //     name: deployment.pvcName,
               //   };
               // }),
             };
           }),
           // volumes: [
           //   {
-          //     name: deploymentInfo.pvcName,
+          //     name: deployment.pvcName,
           //     persistentVolumeClaim: {
-          //       claimName: deploymentInfo.volume,
+          //       claimName: deployment.volume,
           //     },
           //   },
           // ],
@@ -211,15 +205,13 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
-    initDeploymentInfo();
     setClearLA();
-    setProjectDisable(true);
-    setPriorityDisable(true);
-    setPrioritytPodDisable(true);
+    resetDeployment();
   };
 
   const createDeployment = () => {
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
@@ -227,27 +219,27 @@ const CreateDeployment = observer((props) => {
   const onClickStepTwo = (e) => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
 
-    if (deploymentInfo.deploymentName === "") {
+    if (deployment.deploymentName === "") {
       swalError("Deployment 이름을 입력해주세요");
       return;
-    } else if (!checkRegex.test(deploymentInfo.deploymentName)) {
+    } else if (!checkRegex.test(deployment.deploymentName)) {
       swalError("영어소문자와 숫자만 입력해주세요.");
       return;
     }
-    if (deploymentInfo.workspace === "") {
+    if (deployment.workspace === "") {
       swalError("Workspace를 선택해주세요");
       return;
     }
-    if (deploymentInfo.project === "") {
+    if (deployment.project === "") {
       swalError("Project를 선택해주세요");
       return;
     }
     // Replica는 기본 설정 1이라서 추가 안함
-    if (deploymentInfo.volume === "") {
+    if (deployment.volume === "") {
       swalError("Volume을 선택해주세요");
       return;
     }
-    if (deploymentInfo.containers.length === 0) {
+    if (deployment.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;
     }
