@@ -795,7 +795,6 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
-    console.log(this.priority);
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const option = {
@@ -810,9 +809,6 @@ class Deployment {
     };
     const options = encodeURI(JSON.stringify(option));
     const requestId = "requestId" + randomNumber;
-    console.log("body :", body);
-    console.log("options :", this.priority.options);
-    console.log("requestId :", requestId);
 
     await axios
       .post(
