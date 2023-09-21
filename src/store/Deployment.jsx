@@ -795,14 +795,28 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
+    console.log(this.priority);
+    const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    console.log("requestId :", randomNumber);
-    console.log("priority:", this.deployment.priority.name);
-    console.log("options:", toJS(this.getOptionsFromPriority()));
-    console.log("body :", this.content);
+    const option = {
+      user_name: "user1",
+      workspace_name: "ws1",
+      workspace_uid: "649128e7fc34732e0eccfa6d",
+      project_name: "p1",
+      type: "default",
+      data: {
+        selected_cluster: "onpremise(dongjak)",
+      },
+    };
+    const options = encodeURI(JSON.stringify(option));
+    const requestId = "requestId" + randomNumber;
+    console.log("body :", body);
+    console.log("options :", this.priority.options);
+    console.log("requestId :", requestId);
+
     await axios
       .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${randomNumber}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
         body
       )
       .then((res) => {
