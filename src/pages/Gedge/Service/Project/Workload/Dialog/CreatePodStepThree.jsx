@@ -184,10 +184,18 @@ const CreatePodStepThree = observer((props) => {
           },
         });
       } else if (e.target.value === "GMostRequestPriority") {
+        console.log(e.target.value);
         setPriority({
           name: e.target.value,
           options: {
-            type: "cpu",
+            user_name: workSpaceDetail.memberName,
+            workspace_name: podInfo.workspace,
+            workspace_uid: workSpaceDetail.objectId,
+            project_name: podInfo.project,
+            type: "CPU",
+            data: {
+              select_clusters: "",
+            },
           },
         });
       } else if (e.target.value === "GSelectedClusterPriority") {
@@ -216,16 +224,15 @@ const CreatePodStepThree = observer((props) => {
 
     const onChangeFrom = (e) => {
       const { name, value } = e.target;
-      setPriority({
-        ...priority,
-        options: {
-          type: value,
-        },
-      });
+      console.log(e.target);
+      priority.options.type = value;
+      console.log("priority : ", priority);
     };
 
     const onChangeSource = async (e) => {
       const { name, value } = e.target;
+      console.log("onChangeSource: ", e.target.value);
+      console.log("onChangeSource priority: ", priority);
       if (name === "selectCluster") {
         // priority.options.data.selected_cluster = value;
         setSelectedCluster(value);
@@ -242,7 +249,7 @@ const CreatePodStepThree = observer((props) => {
             data: {
               source_cluster: value,
               source_node: "",
-              selected_cluster: "",
+              selected_clusters: "",
             },
           },
         });
@@ -258,8 +265,12 @@ const CreatePodStepThree = observer((props) => {
         });
       }
       if (name === "sourceNode") {
+        console.log("1. priority: ", priority);
+        console.log(value);
+        priority.options.data.source_node = value;
         podListInclusterAPI(clusterNameInPriority, podInfo.project);
         setNodeName(value);
+        console.log("2. priority: ", priority);
       }
     };
 
@@ -274,6 +285,7 @@ const CreatePodStepThree = observer((props) => {
 
     const onChangeType = (e) => {
       const { name, value } = e.target;
+      console.log("e.target : ", e.target);
       setType(value);
       if (name === "type") {
         resetTargetClusters();

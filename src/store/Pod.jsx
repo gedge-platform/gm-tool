@@ -256,6 +256,7 @@ class Pod {
   };
   setTemplateLabel = () => {
     runInAction(() => {
+      console.log("labels : ", this.labels);
       this.labels.map((data) => {
         this.labelInput[data.labelKey] = data.labelValue;
       });
@@ -267,15 +268,6 @@ class Pod {
     });
   };
 
-  setTemplate = (template) => {
-    runInAction(() => {
-      delete template.metadata.labels[""];
-      delete template.metadata.annotations[""];
-      delete template.spec.template.metadata.labels[""];
-      delete template.spec.template.metadata.annotations[""];
-      delete template.spec.selector.matchLabels[""];
-    });
-  };
   setClearLA = () => {
     runInAction(() => {
       this.labelKey = "";
@@ -397,9 +389,6 @@ class Pod {
     runInAction(() => {
       delete template.metadata.labels[""];
       delete template.metadata.annotations[""];
-      delete template.spec.template.metadata.labels[""];
-      delete template.spec.template.metadata.annotations[""];
-      delete template.spec.selector.matchLabels[""];
     });
   };
 
@@ -409,7 +398,6 @@ class Pod {
         this.annotationInput[data.annotationKey] = data.annotationValue;
       });
     });
-    console.log(this.annotations);
   };
 
   constructor() {
@@ -633,37 +621,37 @@ class Pod {
     console.log(this.priority);
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    // const options = encodeURI(JSON.stringify(this.priority.options));
-    const option = {
-      user_name: "innogrid",
-      workspace_name: "scheduler_test",
-      workspace_uid: "63032defd74175d7b58babd2",
-      project_name: "scheduling-8c906681-2341-4acc-8188-fd51d4eda125",
-      type: "default",
-      data: {
-        selected_cluster: "onpremise(dongjak)",
-      },
-    };
+    const options = encodeURI(JSON.stringify(this.priority.options));
+    // const option = {
+    //   user_name: "user1",
+    //   workspace_name: "ws1",
+    //   workspace_uid: "649128e7fc34732e0eccfa6d",
+    //   project_name: "p1",
+    //   type: "default",
+    //   data: {
+    //     selected_cluster: "onpremise(dongjak)",
+    //   },
+    // };
     const requestId = "requestId" + randomNumber;
-    const options = encodeURI(JSON.stringify(option));
+    // const options = encodeURI(JSON.stringify(option));
     console.log("body :", body);
     // console.log("options :", JSON.stringify(this.priority.options));
     console.log("option : ", options);
     console.log("requestId :", requestId);
 
-    await axios
-      .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
-        body
-      )
-      .then((res) => {
-        console.log("res :", res.data);
-        if (res.status === 201) {
-          swalError("Pod가 생성되었습니다.", callback);
-        } else {
-          swalError("Pod 생성 실패", callback);
-        }
-      });
+    // await axios
+    //   .post(
+    //     `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
+    //     body
+    //   )
+    //   .then((res) => {
+    //     console.log("res :", res.data);
+    //     if (res.status === 201) {
+    //       swalError("Pod가 생성되었습니다.", callback);
+    //     } else {
+    //       swalError("Pod 생성 실패", callback);
+    //     }
+    //   });
   };
 
   deletePod = async (podName, callback) => {

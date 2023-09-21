@@ -143,10 +143,12 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
               resources: {
-                limits: { memory: e.memoryLimit + "Mi" },
+                limits: {
+                  memory: e.memoryLimit + "Mi",
+                },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
@@ -179,22 +181,22 @@ const CreateDeployment = observer((props) => {
                   value: i[1],
                 };
               }),
-              volumeMounts: e.volumes.map((i) => {
-                return {
-                  mountPath: i.subPathInVolume,
-                  name: deployment.pvcName,
-                };
-              }),
+              // volumeMounts: e.volumes.map((i) => {
+              //   return {
+              //     mountPath: i.subPathInVolume,
+              //     name: deployment.pvcName,
+              //   };
+              // }),
             };
           }),
-          volumes: [
-            {
-              name: deployment.pvcName,
-              persistentVolumeClaim: {
-                claimName: deployment.volume,
-              },
-            },
-          ],
+          // volumes: [
+          //   {
+          //     name: deployment.pvcName,
+          //     persistentVolumeClaim: {
+          //       claimName: deployment.volume,
+          //     },
+          //   },
+          // ],
         },
       },
     },
@@ -358,7 +360,7 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml labelsList={labelsList} />
+          <DeploymentYaml />
           <div
             style={{
               display: "flex",
