@@ -192,7 +192,7 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
 
   useEffect(() => {
     setSelectedClusters(cloneDeep(targetClusters));
-    setUnselected(cloneDeep(unselectedClusters));
+    setUnselected(unselectedClusters);
   }, [open]);
 
   return (
