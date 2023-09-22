@@ -154,6 +154,29 @@ class Deployment {
   annotationKey = "";
   annotationValue = "";
 
+  appName = "";
+  appWorkspace = "";
+  appProject = "";
+  appPort = "";
+
+  appInfo = {
+    appName: "",
+    appWorkspace: "",
+    appProject: "",
+    appReplica: 1,
+    appPort: "",
+    priority: {
+      name: "GLowLatencyPriority",
+      mode: "default",
+      sourceCluster: "",
+      sourceNode: "",
+    },
+  };
+
+  setAppInfo = (name, value) => {
+    this.appInfo[name] = value;
+  };
+
   deployment = {
     deploymentName: "",
     workspace: "",

@@ -12,7 +12,7 @@ import { deploymentStore } from "@/store";
 import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { filterParams } from "../../../../../../utils/common-utils";
-import TamplateCreate from "./TamplateCreate";
+import TamplateCreate from "../Dialog/TamplateCreate";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -115,7 +115,8 @@ const DeploymentListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>{" "}
+            &nbsp;
             <CCreateButton onClick={handleTamplateCreateOpen}>
               템플릿
             </CCreateButton>
