@@ -160,6 +160,8 @@ class Deployment {
   appPort = "";
 
   appInfo = {
+    app: "",
+    appVersion: "",
     appName: "",
     appWorkspace: "",
     appProject: "",

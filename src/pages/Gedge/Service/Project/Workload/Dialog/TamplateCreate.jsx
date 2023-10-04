@@ -126,30 +126,30 @@ const TamplateCreate = observer((props) => {
       );
     } else if (stepValue === 2) {
       return (
-        <>
-          <CreateTamplateStepTwo />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "32px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "240px",
-                justifyContent: "center",
-              }}
-            >
-              <Button onClick={backStepOne}>이전</Button>
-              <ButtonNext onClick={goStepThree}>다음</ButtonNext>
-            </div>
-          </div>
-        </>
-      );
-    } else if (stepValue === 3) {
-      return (
+        //     <>
+        //       <CreateTamplateStepTwo />
+        //       <div
+        //         style={{
+        //           display: "flex",
+        //           justifyContent: "flex-end",
+        //           marginTop: "32px",
+        //         }}
+        //       >
+        //         <div
+        //           style={{
+        //             display: "flex",
+        //             width: "240px",
+        //             justifyContent: "center",
+        //           }}
+        //         >
+        //           <Button onClick={backStepOne}>이전</Button>
+        //           <ButtonNext onClick={goStepThree}>다음</ButtonNext>
+        //         </div>
+        //       </div>
+        //     </>
+        //   );
+        // } else if (stepValue === 3) {
+        //   return (
         <>
           <CreateTamplateStepThree />
           <div

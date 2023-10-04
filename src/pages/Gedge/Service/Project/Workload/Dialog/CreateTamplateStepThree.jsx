@@ -363,11 +363,6 @@ const CreateTamplateStepThree = observer(() => {
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="arr"></div>
-          <div className="step">
-            <span>앱 선택</span>
-          </div>
-          <div className="arr"></div>
           <div className="step">
             <span>기본 정보</span>
           </div>
@@ -381,34 +376,27 @@ const CreateTamplateStepThree = observer(() => {
           </div>
         </div>
       </div>
-      <div
-        style={{
-          width: "600px",
-          borderTop: "1px solid",
-          height: "300px",
-        }}
-      >
-        <table className="tb_data_new tb_write">
-          <tbody>
-            {PriorityComponent()}
-            <tr>
-              <th>Target Clusters</th>
-              <td>
-                <Button
-                  style={{ marginBottom: "2px" }}
-                  disabled={
-                    deployment.priority.name === "GSelectedClusterPriority" &&
-                    deployment.priority.mode === "node"
-                  }
-                  onClick={() => openTargetClusters(-1)}
-                >
-                  {showTargetClusters()}
-                </Button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
+      <table className="tb_data_new tb_write">
+        <tbody>
+          {PriorityComponent()}
+          <tr>
+            <th>Target Clusters</th>
+            <td>
+              <Button
+                style={{ marginBottom: "2px" }}
+                disabled={
+                  deployment.priority.name === "GSelectedClusterPriority" &&
+                  deployment.priority.mode === "node"
+                }
+                onClick={() => openTargetClusters(-1)}
+              >
+                {showTargetClusters()}
+              </Button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 });
