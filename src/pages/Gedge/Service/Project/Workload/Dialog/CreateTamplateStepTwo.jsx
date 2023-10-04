@@ -1,23 +1,10 @@
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import Button from "@mui/material/Button";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { useState } from "react";
-import { CTextField } from "@/components/textfields";
 import { workspaceStore, projectStore, deploymentStore } from "@/store";
-
-// const Button = styled.button`
-//   background-color: #fff;
-//   border: 1px solid black;
-//   color: black;
-//   padding: 10px 35px;
-//   margin-right: 10px;
-//   border-radius: 4px;
-//   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
-// `;
+import { CTextField } from "@/components/textfields";
+import FormControl from "@material-ui/core/FormControl";
 
 const DeleteButton = styled.button`
   margin: 0px 0px 0px 3px;
@@ -76,25 +63,7 @@ const ImgButton = styled.button`
   border: black;
 `;
 
-const CreateTamplateStepOne = observer((props) => {
-  const [app, setApp] = useState("");
-  const [version, setVersion] = useState("");
-
-  const nginxVer = ["latest", "1.24.0", "1.23.0", "1.20.0"];
-  const mysqlVer = ["latest", "8.0", "5.7.43"];
-
-  const onChangeApp = (e) => {
-    setApp(e.target.value);
-    setAppInfo("app", e.target.value);
-    console.log("appInfo : ", appInfo);
-  };
-
-  const handleChange = (e) => {
-    setVersion(e.target.value);
-    setAppInfo("appVersion", e.target.value);
-    console.log("appInfo : ", appInfo);
-  };
-
+const CreateTamplateStepTwo = observer((props) => {
   const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
     workspaceStore;
   const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
@@ -122,6 +91,11 @@ const CreateTamplateStepOne = observer((props) => {
     <>
       <div className="step-container">
         <div className="signup-step">
+          <div className="arr"></div>
+          <div className="step">
+            <span>앱 선택</span>
+          </div>
+          <div className="arr"></div>
           <div className="step current">
             <span>기본 정보</span>
           </div>
@@ -137,40 +111,6 @@ const CreateTamplateStepOne = observer((props) => {
       </div>
       <table className="tb_data_new tb_write">
         <tbody>
-          <tr>
-            <th>
-              App <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select name="app" onChange={onChangeApp} value={app}>
-                  <option value={""} selected disabled hidden>
-                    Select Version
-                  </option>
-                  <option value="nginx">nginx</option>
-                  <option value="mysql">mysql</option>
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Version <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select name="version" onChange={handleChange} value={version}>
-                  <option value={""} selected disabled hidden>
-                    Select Version
-                  </option>
-                  {app === "nginx"
-                    ? nginxVer.map((e) => <option value={e}>{e}</option>)
-                    : mysqlVer.map((e) => <option value={e}>{e}</option>)}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-
           <tr>
             <th style={{ width: "200px" }}>
               Name <span className="requried">*</span>
@@ -271,4 +211,4 @@ const CreateTamplateStepOne = observer((props) => {
   );
 });
 
-export default CreateTamplateStepOne;
+export default CreateTamplateStepTwo;

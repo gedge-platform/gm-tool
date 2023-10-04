@@ -115,7 +115,8 @@ const DeploymentListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={loadDeploymentList}>
-            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>{" "}
+            &nbsp;
             <CCreateButton onClick={handleTamplateCreateOpen}>
               템플릿
             </CCreateButton>
