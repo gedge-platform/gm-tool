@@ -109,112 +109,104 @@ const CreateTamplateStepTwo = observer((props) => {
           </div>
         </div>
       </div>
-      <div
-        style={{
-          width: "600px",
-          borderTop: "1px solid",
-          height: "300px",
-        }}
-      >
-        <table className="tb_data_new tb_write">
-          <tbody>
-            <tr>
-              <th style={{ width: "200px" }}>
-                Name <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField
-                  type="text"
-                  placeholder="Name(영어소문자, 숫자만 가능)"
-                  className="form_fullWidth"
-                  name="appName"
-                  onChange={onChange}
-                  value={appInfo.appName}
-                />
-              </td>
-            </tr>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th style={{ width: "200px" }}>
+              Name <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField
+                type="text"
+                placeholder="Name(영어소문자, 숫자만 가능)"
+                className="form_fullWidth"
+                name="appName"
+                onChange={onChange}
+                value={appInfo.appName}
+              />
+            </td>
+          </tr>
 
-            <tr>
-              <th>
-                Workspace <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select
-                    name="appWorkspace"
-                    onChange={onChange}
-                    value={appInfo.appWorkspace}
-                  >
-                    <option value={""} selected disabled hidden>
-                      Select Workspace
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="appWorkspace"
+                  onChange={onChange}
+                  value={appInfo.appWorkspace}
+                >
+                  <option value={""} selected disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
                     </option>
-                    {workSpaceList.map((workspace) => (
-                      <option value={workspace.workspaceName}>
-                        {workspace.workspaceName}
-                      </option>
-                    ))}
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
 
-            <tr>
-              <th>
-                Project <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <FormControl className="form_fullWidth">
-                  <select
-                    // disabled={!deployment.workspace}
-                    name="appProject"
-                    onChange={onChange}
-                    value={appInfo.appProject}
-                  >
-                    <option value={""} selected hidden disabled>
-                      Select Project
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  // disabled={!deployment.workspace}
+                  name="appProject"
+                  onChange={onChange}
+                  value={appInfo.appProject}
+                >
+                  <option value={""} selected hidden disabled>
+                    Select Project
+                  </option>
+                  {projectListinWorkspace.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
                     </option>
-                    {projectListinWorkspace.map((project) => (
-                      <option value={project.projectName}>
-                        {project.projectName}
-                      </option>
-                    ))}
-                  </select>
-                </FormControl>
-              </td>
-            </tr>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
 
-            <tr>
-              <th>
-                Replicas <span className="requried">*</span>
-              </th>
-              <td colSpan="3">
-                <CTextField
-                  type="number"
-                  placeholder="1"
-                  className="form_fullWidth"
-                  name="appReplicas"
-                  onChange={onChange}
-                  value="1"
-                />
-              </td>
-            </tr>
+          <tr>
+            <th>
+              Replicas <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField
+                type="number"
+                placeholder="1"
+                className="form_fullWidth"
+                name="appReplicas"
+                onChange={onChange}
+                value="1"
+              />
+            </td>
+          </tr>
 
-            <tr>
-              <th>Port</th>
-              <td colSpan="3">
-                <CTextField
-                  type="number"
-                  placeholder="port"
-                  className="form_fullWidth"
-                  name="appPort"
-                  onChange={onChange}
-                  value={appInfo.appPort}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <tr>
+            <th>Port</th>
+            <td colSpan="3">
+              <CTextField
+                type="number"
+                placeholder="port"
+                className="form_fullWidth"
+                name="appPort"
+                onChange={onChange}
+                value={appInfo.appPort}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 });
