@@ -6,6 +6,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useState } from "react";
+import { CTextField } from "@/components/textfields";
+import { workspaceStore, projectStore, deploymentStore } from "@/store";
 
 // const Button = styled.button`
 //   background-color: #fff;
@@ -75,11 +77,45 @@ const ImgButton = styled.button`
 `;
 
 const CreateTamplateStepOne = observer((props) => {
-  const [logo, setLogo] = useState("");
+  const [app, setApp] = useState("");
+  const [version, setVersion] = useState("");
 
-  const onClickLogo = (e) => {
-    setLogo(e.target.value);
-    console.log(e.target.value);
+  const nginxVer = ["latest", "1.24.0", "1.23.0", "1.20.0"];
+  const mysqlVer = ["latest", "8.0", "5.7.43"];
+
+  const onChangeApp = (e) => {
+    setApp(e.target.value);
+    setAppInfo("app", e.target.value);
+    console.log("appInfo : ", appInfo);
+  };
+
+  const handleChange = (e) => {
+    setVersion(e.target.value);
+    setAppInfo("appVersion", e.target.value);
+    console.log("appInfo : ", appInfo);
+  };
+
+  const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
+    workspaceStore;
+  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+  const { setDeployment, setAppInfo, appInfo } = deploymentStore;
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "appName") {
+      setAppInfo(name, value);
+    }
+    if (name === "appWorkspace") {
+      setAppInfo(name, value);
+      loadProjectListInWorkspace(value);
+      loadWorkspaceDetail(value);
+    }
+    if (name === "appProject") {
+      setAppInfo(name, value);
+    }
+    if (name === "appPort") {
+      setAppInfo(name, value);
+    }
   };
 
   return (
@@ -87,10 +123,6 @@ const CreateTamplateStepOne = observer((props) => {
       <div className="step-container">
         <div className="signup-step">
           <div className="step current">
-            <span>앱 선택</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
@@ -103,70 +135,138 @@ const CreateTamplateStepOne = observer((props) => {
           </div>
         </div>
       </div>
+      <table className="tb_data_new tb_write">
+        <tbody>
+          <tr>
+            <th>
+              App <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="app" onChange={onChangeApp} value={app}>
+                  <option value={""} selected disabled hidden>
+                    Select Version
+                  </option>
+                  <option value="nginx">nginx</option>
+                  <option value="mysql">mysql</option>
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Version <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select name="version" onChange={handleChange} value={version}>
+                  <option value={""} selected disabled hidden>
+                    Select Version
+                  </option>
+                  {app === "nginx"
+                    ? nginxVer.map((e) => <option value={e}>{e}</option>)
+                    : mysqlVer.map((e) => <option value={e}>{e}</option>)}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
 
-      <div style={{ display: "flex", margin: "5px 5px 5px 5px" }}>
-        {/* <input
-            type="image"
-            src="images/resource/nginxLogo.png"
-            value="nginx"
-            width="150px"
-            onClick={onClickLogo}
-          />
-          <input
-            type="image"
-            src="images/resource/mysqlLogo.png"
-            value="mysql"
-            width="150px"
-            onClick={onClickLogo}
-          /> */}
-        <Button
-          onClick={onClickLogo}
-          value="nginx"
-          variant="outlined"
-          style={{ margin: "5px 5px 15px 5px" }}
-          size="large"
-        >
-          {/* <img
-              src="images/resource/nginx.png"
-              alt="nginx"
-              style={{ display: "block" }}
-              width={50}
-              height={50}
-            /> */}
-          NGINX
-        </Button>
-        <Button
-          onClick={onClickLogo}
-          value="mysql"
-          variant="outlined"
-          style={{ margin: "5px 5px 15px 5px" }}
-          size="large"
-        >
-          {/* <img
-              src="images/resource/mysql.png"
-              alt="mysql"
-              width={50}
-              // style={{ display: "block" }}
-            /> */}
-          MySQL
-        </Button>
-      </div>
-      <div style={{ width: "400px" }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Version</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            // value={age}
-            label="version"
-            // onChange={handleChange}
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+          <tr>
+            <th style={{ width: "200px" }}>
+              Name <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField
+                type="text"
+                placeholder="Name(영어소문자, 숫자만 가능)"
+                className="form_fullWidth"
+                name="appName"
+                onChange={onChange}
+                value={appInfo.appName}
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="appWorkspace"
+                  onChange={onChange}
+                  value={appInfo.appWorkspace}
+                >
+                  <option value={""} selected disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+
+          <tr>
+            <th>
+              Project <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  // disabled={!deployment.workspace}
+                  name="appProject"
+                  onChange={onChange}
+                  value={appInfo.appProject}
+                >
+                  <option value={""} selected hidden disabled>
+                    Select Project
+                  </option>
+                  {projectListinWorkspace.map((project) => (
+                    <option value={project.projectName}>
+                      {project.projectName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+
+          <tr>
+            <th>
+              Replicas <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <CTextField
+                type="number"
+                placeholder="1"
+                className="form_fullWidth"
+                name="appReplicas"
+                onChange={onChange}
+                value="1"
+              />
+            </td>
+          </tr>
+
+          <tr>
+            <th>Port</th>
+            <td colSpan="3">
+              <CTextField
+                type="number"
+                placeholder="port"
+                className="form_fullWidth"
+                name="appPort"
+                onChange={onChange}
+                value={appInfo.appPort}
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </>
   );
 });

@@ -363,11 +363,6 @@ const CreateTamplateStepThree = observer(() => {
     <>
       <div className="step-container">
         <div className="signup-step">
-          <div className="arr"></div>
-          <div className="step">
-            <span>앱 선택</span>
-          </div>
-          <div className="arr"></div>
           <div className="step">
             <span>기본 정보</span>
           </div>
