@@ -7,6 +7,7 @@ import CreateTamplateStepThree from "./CreateTamplateStepThree";
 import CreateTamplateStepFour from "./CreateTamplateStepFour";
 import styled from "styled-components";
 import { deploymentStore, workspaceStore } from "@/store";
+import TamplateYaml from "./TamplateYAML";
 
 const Button = styled.button`
   background-color: #fff;
@@ -29,23 +30,59 @@ const ButtonNext = styled.button`
 
 // deployment store 사용
 const TamplateCreate = observer((props) => {
-  const template = {
-    apiVersion: "apps/v1",
-    kind: "Deployment",
-    metadata: {
-      name: "deployment.deploymentName",
-      namespace: "default",
-    },
-    spec: {
-      replicas: 1,
-      template: {},
-    },
-  };
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: "deployment.deploymentName", //UI - 배포 이름(서비스명)
+  //     namespace: "default", //UI - 네임스페이스 입력
+  //   },
+  //   spec: {
+  //     replicas: 1, //수정 가능하도록
+  //     selector: {
+  //       matchLabels: {
+  //         app: "nginx",
+  //       },
+  //       template: {
+  //         metadata: {
+  //           labels: {
+  //             app: "nginx",
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   spec: {
+  //     containers: {
+  //       name: "nginx",
+  //       image: "nginx:latest", // UI - nginx 버전입력
+  //       ports: {
+  //         containerPort: 80, //UI - 포트 입력
+  //       },
+  //     },
+  //   },
+  //   ---
+  //   apiVersion: "v1",
+  //   kind: "Service",
+  //   metadata: {
+  //     name: "nginx-service", //UI - 배포 이름(서비스명)
+  //     namespace: "default", //UI - 네임스페이스 입력
+  //   },
+  //   spec: {
+  //     selector: {
+  //       app: "nginx"
+  //     },
+  //     ports: {
+  //       {protocol: TCP,
+  //         port: 80,             // UI - 포트 입력
+  //         targetPort: 80          // UI - 포트 입력}
+  //     }
+  //     type: LoadBalancer
+  // };
 
   const { setContent, setTemplate, postDeploymentGM, appInfo } =
     deploymentStore;
 
-  console.log(appInfo);
   const { loadWorkSpaceList } = workspaceStore;
 
   const { open } = props;
@@ -61,19 +98,11 @@ const TamplateCreate = observer((props) => {
     setStepValue(3);
   };
 
-  const goStepFour = () => {
-    setStepValue(4);
-  };
-
   const backStepOne = () => {
     setStepValue(1);
   };
 
   const backStepTwo = () => {
-    setStepValue(2);
-  };
-
-  const backStepThree = () => {
     setStepValue(2);
   };
 
@@ -92,7 +121,7 @@ const TamplateCreate = observer((props) => {
   useEffect(() => {
     loadWorkSpaceList();
 
-    if (stepValue === 4) {
+    if (stepValue === 3) {
       setTemplate(template);
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
@@ -166,16 +195,16 @@ const TamplateCreate = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={backStepTwo}>이전</Button>
-              <ButtonNext onClick={goStepFour}>다음</ButtonNext>
+              <Button onClick={backStepOne}>이전</Button>
+              <ButtonNext onClick={goStepThree}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
-    } else if (stepValue === 4) {
+    } else if (stepValue === 3) {
       return (
         <>
-          <CreateTamplateStepFour />
+          <TamplateYaml />
           <div
             style={{
               display: "flex",
@@ -190,7 +219,7 @@ const TamplateCreate = observer((props) => {
                 justifyContent: "center",
               }}
             >
-              <Button onClick={backStepThree}>이전</Button>
+              <Button onClick={backStepTwo}>이전</Button>
               <ButtonNext onClick={createApp}>Create App</ButtonNext>
             </div>
           </div>

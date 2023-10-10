@@ -145,7 +145,7 @@ const CreateTamplateStepOne = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="app" onChange={onChangeApp} value={app}>
                   <option value={""} selected disabled hidden>
-                    Select Version
+                    Select App
                   </option>
                   <option value="nginx">nginx</option>
                   <option value="mysql">mysql</option>
