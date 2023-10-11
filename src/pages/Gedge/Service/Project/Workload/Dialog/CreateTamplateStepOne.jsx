@@ -79,6 +79,7 @@ const ImgButton = styled.button`
 const CreateTamplateStepOne = observer((props) => {
   const [app, setApp] = useState("");
   const [version, setVersion] = useState("");
+  const [disabledSelect, setDisabledSelect] = useState(true);
 
   const nginxVer = ["latest", "1.24.0", "1.23.0", "1.20.0"];
   const mysqlVer = ["latest", "8.0", "5.7.43"];
@@ -87,6 +88,7 @@ const CreateTamplateStepOne = observer((props) => {
     setApp(e.target.value);
     setAppInfo("app", e.target.value);
     console.log("appInfo : ", appInfo);
+    setDisabledSelect(false);
   };
 
   const handleChange = (e) => {
@@ -159,7 +161,12 @@ const CreateTamplateStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="version" onChange={handleChange} value={version}>
+                <select
+                  name="version"
+                  onChange={handleChange}
+                  value={version}
+                  disabled={disabledSelect}
+                >
                   <option value={""} selected disabled hidden>
                     Select Version
                   </option>

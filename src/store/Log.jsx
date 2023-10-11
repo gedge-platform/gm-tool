@@ -1,6 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { LOG_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
 
 class LogStatus {
   logList = [];
@@ -54,6 +55,31 @@ class LogStatus {
   loadLogListAPI = async () => {
     await axios
       .get(`${LOG_URL}/log`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data.data !== null) {
+            this.logList = res.data;
+            this.logDetail = res.data[0];
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.logList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.logList = [];
+        this.paginationList();
+      });
+  };
+  loadUserLogListAPI = async () => {
+    let { id, role } = getItem("user");
+    role === "SA" ? (id = id) : (id = "");
+    await axios
+      .get(`${LOG_URL}/log/${id}`)
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
