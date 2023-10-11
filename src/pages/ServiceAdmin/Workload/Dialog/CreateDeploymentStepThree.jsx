@@ -51,6 +51,7 @@ const CreateDeploymentStepThree = observer(() => {
     deploymentInfo,
     selectedCluster,
     setSelectedCluster,
+    deployment,
   } = deploymentStore;
 
   const {
@@ -363,7 +364,7 @@ const CreateDeploymentStepThree = observer(() => {
     };
 
     const SelectedPriorityComponent = () => {
-      switch (priority.name) {
+      switch (deployment.priority.name) {
         case "GLowLatencyPriority":
           return (
             <>
@@ -606,9 +607,9 @@ const CreateDeploymentStepThree = observer(() => {
       loadCluster(nodeName);
     }, []);
 
-    useEffect(() => {
-      loadWorkspaceDetail(deploymentInfo.workspace);
-    }, []);
+    // useEffect(() => {
+    //   loadWorkspaceDetail(deploymentInfo.workspace);
+    // }, []);
 
     return (
       <tr>

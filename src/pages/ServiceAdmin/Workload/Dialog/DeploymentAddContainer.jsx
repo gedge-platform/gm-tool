@@ -42,6 +42,7 @@ const DeploymentAddContainer = observer((props) => {
     setCommand,
     editContainer,
     deploymentInfo,
+    deployment,
     loadVolumeList,
     keyValuePair,
     secretConfigmap,
@@ -263,7 +264,7 @@ const DeploymentAddContainer = observer((props) => {
         volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
       });
     } else {
-      const clonedData = cloneDeep(deploymentInfo.containers[containerIndex]);
+      const clonedData = cloneDeep(deployment.containers[containerIndex]);
       setContainerInfo(clonedData);
     }
   }, [open]);
