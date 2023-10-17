@@ -186,7 +186,7 @@ const CreateTamplateStepThree = observer(() => {
                 </td>
               </tr>
               <tr>
-                <th>Target Clusters & Nodes<span className="requried">*</span></th>
+                <th>Source Clusters & Nodes<span className="requried">*</span></th>
                 <td>
                   {deployment.priority.mode === "default" ? (
                     <div>
@@ -229,7 +229,7 @@ const CreateTamplateStepThree = observer(() => {
                       </FormControl>
                     </div>
                   ) : (
-                    <div style={{ paddingTop: "4px" }}>
+                    <div>
                       <FormControl style={{ width: "50%" }}>
                         <select
                           name="sourceCluster"
@@ -404,7 +404,7 @@ const CreateTamplateStepThree = observer(() => {
       <table className="tb_data_new tb_write">
         <tbody>
           {PriorityComponent()}
-          {deployment.priority.mode === "node" || (deployment.priority.name === "GLowLatencyPriority" && deployment.priority.mode === "default")? 
+          {deployment.priority.mode === "node" ? 
           (<></>)
           :(<tr>
             <th>Target Clusters</th>
