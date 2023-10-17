@@ -8,6 +8,7 @@ import CreateTamplateStepFour from "./CreateTamplateStepFour";
 import styled from "styled-components";
 import { deploymentStore, workspaceStore } from "@/store";
 import TamplateYaml from "./TamplateYAML";
+import templateStore from "../../../../../../store/Template";
 
 const Button = styled.button`
   background-color: #fff;
@@ -80,13 +81,16 @@ const TamplateCreate = observer((props) => {
   //     type: LoadBalancer
   // };
 
-  const { setContent, setTemplate, postDeploymentGM, appInfo } =
+  const { setContent, setTemplate, postDeploymentGM, appInfo, resetDeployment, initTargetClusters } =
     deploymentStore;
+  
+  const { deploymentYamlTemplate, serviceYamlTemplate } = templateStore;
 
   const { loadWorkSpaceList } = workspaceStore;
 
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const YAML = require("json-to-pretty-yaml");
 
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -112,7 +116,8 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    setContent(YAML.stringify(deploymentYamlTemplate)+"---\n"+YAML.stringify(serviceYamlTemplate))
+    postDeploymentGM();
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -122,11 +127,16 @@ const TamplateCreate = observer((props) => {
     loadWorkSpaceList();
 
     if (stepValue === 3) {
-      setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      // setTemplate(template);
+      // const YAML = require("json-to-pretty-yaml");
+      // setContent(YAML.stringify(template));
     }
   }, [stepValue]);
+
+  useEffect(() => {
+    resetDeployment();
+    initTargetClusters([]);
+  }, [open])
 
   const CreateTamplateComponent = () => {
     if (stepValue === 1) {
@@ -204,7 +214,7 @@ const TamplateCreate = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <TamplateYaml />
+          <CreateTamplateStepFour />
           <div
             style={{
               display: "flex",

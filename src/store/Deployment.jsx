@@ -165,8 +165,9 @@ class Deployment {
     appName: "",
     appWorkspace: "",
     appProject: "",
-    appReplica: 1,
+    appReplicas: 1,
     appPort: "",
+    appEnv: [],
     priority: {
       name: "GLowLatencyPriority",
       mode: "default",
@@ -174,6 +175,25 @@ class Deployment {
       sourceNode: "",
     },
   };
+
+  initAppInfo = () => {
+    this.appInfo = {
+      app: "",
+      appVersion: "",
+      appName: "",
+      appWorkspace: "",
+      appProject: "",
+      appReplicas: 1,
+      appPort: "",
+      appEnv: [],
+      priority: {
+        name: "GLowLatencyPriority",
+        mode: "default",
+        sourceCluster: "",
+        sourceNode: "",
+      },
+    }
+  }
 
   setAppInfo = (name, value) => {
     this.appInfo[name] = value;
@@ -833,6 +853,7 @@ class Deployment {
       },
     };
     const options = encodeURI(JSON.stringify(option));
+    console.log(option)
     const requestId = "requestId" + randomNumber;
 
     await axios
