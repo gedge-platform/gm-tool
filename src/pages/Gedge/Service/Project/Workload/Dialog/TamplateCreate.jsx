@@ -30,56 +30,6 @@ const ButtonNext = styled.button`
 
 // deployment store 사용
 const TamplateCreate = observer((props) => {
-  // const template = {
-  //   apiVersion: "apps/v1",
-  //   kind: "Deployment",
-  //   metadata: {
-  //     name: "deployment.deploymentName", //UI - 배포 이름(서비스명)
-  //     namespace: "default", //UI - 네임스페이스 입력
-  //   },
-  //   spec: {
-  //     replicas: 1, //수정 가능하도록
-  //     selector: {
-  //       matchLabels: {
-  //         app: "nginx",
-  //       },
-  //       template: {
-  //         metadata: {
-  //           labels: {
-  //             app: "nginx",
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  //   spec: {
-  //     containers: {
-  //       name: "nginx",
-  //       image: "nginx:latest", // UI - nginx 버전입력
-  //       ports: {
-  //         containerPort: 80, //UI - 포트 입력
-  //       },
-  //     },
-  //   },
-  //   ---
-  //   apiVersion: "v1",
-  //   kind: "Service",
-  //   metadata: {
-  //     name: "nginx-service", //UI - 배포 이름(서비스명)
-  //     namespace: "default", //UI - 네임스페이스 입력
-  //   },
-  //   spec: {
-  //     selector: {
-  //       app: "nginx"
-  //     },
-  //     ports: {
-  //       {protocol: TCP,
-  //         port: 80,             // UI - 포트 입력
-  //         targetPort: 80          // UI - 포트 입력}
-  //     }
-  //     type: LoadBalancer
-  // };
-
   const { setContent, setTemplate, postDeploymentGM, appInfo } =
     deploymentStore;
 
