@@ -1,23 +1,25 @@
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CTextField } from "@/components/textfields";
 import { workspaceStore, projectStore, deploymentStore } from "@/store";
+import templateStore from "../../../../../../store/Template";
 
-// const Button = styled.button`
-//   background-color: #fff;
-//   border: 1px solid black;
-//   color: black;
-//   padding: 10px 35px;
-//   margin-right: 10px;
-//   border-radius: 4px;
-//   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
-// `;
+const Button = styled.button`
+  border: none;
+  height: 28px;
+  width: 30px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: normal;
+  color: #36435c;
+  background-color: #eff4f9;
+`;
 
 const DeleteButton = styled.button`
   margin: 0px 0px 0px 3px;
@@ -77,31 +79,38 @@ const ImgButton = styled.button`
 `;
 
 const CreateTamplateStepOne = observer((props) => {
-  const [app, setApp] = useState("");
-  const [version, setVersion] = useState("");
-
-  const nginxVer = ["latest", "1.24.0", "1.23.0", "1.20.0"];
-  const mysqlVer = ["latest", "8.0", "5.7.43"];
-
-  const onChangeApp = (e) => {
-    setApp(e.target.value);
-    setAppInfo("app", e.target.value);
-    console.log("appInfo : ", appInfo);
-  };
-
-  const handleChange = (e) => {
-    setVersion(e.target.value);
-    setAppInfo("appVersion", e.target.value);
-    console.log("appInfo : ", appInfo);
-  };
-
   const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
     workspaceStore;
-  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-  const { setDeployment, setAppInfo, appInfo } = deploymentStore;
+  const {
+    loadProjectListInWorkspace,
+    projectListinWorkspace,
+    loadProjectDetail,
+  } = projectStore;
+  const { setDeployment, setAppInfo, appInfo, initTargetClusters } =
+    deploymentStore;
+  const { containerImageList } = templateStore;
+
+  const [env, setEnv] = useState({ name: "", value: "" });
 
   const onChange = (e) => {
     const { name, value } = e.target;
+    if (name === "app") {
+      setAppInfo(name, value);
+      setAppInfo("appVersion", "");
+      setAppInfo(
+        "appPort",
+        containerImageList.filter((image) => image.name === e.target.value)[0]
+          .port
+      );
+      setAppInfo(
+        "appEnv",
+        containerImageList.filter((image) => image.name === e.target.value)[0]
+          .env
+      );
+    }
+    if (name === "appVersion") {
+      setAppInfo(name, value);
+    }
     if (name === "appName") {
       setAppInfo(name, value);
     }
@@ -112,10 +121,36 @@ const CreateTamplateStepOne = observer((props) => {
     }
     if (name === "appProject") {
       setAppInfo(name, value);
+      loadProjectDetail(value);
+      initTargetClusters(
+        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      );
+    }
+    if (name === "appReplicas") {
+      setAppInfo(name, Number.parseInt(value));
     }
     if (name === "appPort") {
       setAppInfo(name, value);
     }
+    if (name === "envKey") {
+      setEnv({ name: value, value: env.value });
+      console.log(appInfo.appEnv.length);
+    }
+    if (name === "envValue") {
+      setEnv({ name: env.name, value: value });
+    }
+  };
+
+  const addEnv = () => {
+    setAppInfo("appEnv", [...appInfo.appEnv, env]);
+    setEnv({ name: "", value: "" });
+  };
+
+  const removeEnv = (index) => {
+    setAppInfo(
+      "appEnv",
+      appInfo.appEnv.filter((env, idx) => idx !== index)
+    );
   };
 
   return (
@@ -143,12 +178,13 @@ const CreateTamplateStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="app" onChange={onChangeApp} value={app}>
+                <select name="app" onChange={onChange} value={appInfo.app}>
                   <option value={""} selected disabled hidden>
                     Select App
                   </option>
                   <option value="nginx">nginx</option>
                   <option value="mysql">mysql</option>
+                  <option value="web">web</option>
                 </select>
               </FormControl>
             </td>
@@ -159,13 +195,19 @@ const CreateTamplateStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="version" onChange={handleChange} value={version}>
+                <select
+                  name="appVersion"
+                  onChange={onChange}
+                  value={appInfo.appVersion}
+                >
                   <option value={""} selected disabled hidden>
                     Select Version
                   </option>
-                  {app === "nginx"
-                    ? nginxVer.map((e) => <option value={e}>{e}</option>)
-                    : mysqlVer.map((e) => <option value={e}>{e}</option>)}
+                  {containerImageList
+                    .filter((image) => image.name === appInfo.app)[0]
+                    ?.versions.map((version) => (
+                      <option value={version}>{version}</option>
+                    ))}
                 </select>
               </FormControl>
             </td>
@@ -187,84 +229,183 @@ const CreateTamplateStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
-            <th>
-              Workspace <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  name="appWorkspace"
-                  onChange={onChange}
-                  value={appInfo.appWorkspace}
-                >
-                  <option value={""} selected disabled hidden>
-                    Select Workspace
-                  </option>
-                  {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
-                      {workspace.workspaceName}
+          {appInfo.app === "web" ? (
+            ""
+          ) : (
+            <tr>
+              <th>
+                Workspace <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <FormControl className="form_fullWidth">
+                  <select
+                    name="appWorkspace"
+                    onChange={onChange}
+                    value={appInfo.appWorkspace}
+                  >
+                    <option value={""} selected disabled hidden>
+                      Select Workspace
                     </option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
+                    {workSpaceList.map((workspace) => (
+                      <option value={workspace.workspaceName}>
+                        {workspace.workspaceName}
+                      </option>
+                    ))}
+                  </select>
+                </FormControl>
+              </td>
+            </tr>
+          )}
 
-          <tr>
-            <th>
-              Project <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  // disabled={!deployment.workspace}
-                  name="appProject"
-                  onChange={onChange}
-                  value={appInfo.appProject}
-                >
-                  <option value={""} selected hidden disabled>
-                    Select Project
-                  </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
+          {appInfo.app === "web" ? (
+            ""
+          ) : (
+            <tr>
+              <th>
+                Project <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <FormControl className="form_fullWidth">
+                  <select
+                    name="appProject"
+                    onChange={onChange}
+                    value={appInfo.appProject}
+                  >
+                    <option value={""} selected hidden disabled>
+                      Select Project
                     </option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
+                    {projectListinWorkspace.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))}
+                  </select>
+                </FormControl>
+              </td>
+            </tr>
+          )}
 
-          <tr>
-            <th>
-              Replicas <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                placeholder="1"
-                className="form_fullWidth"
-                name="appReplicas"
-                onChange={onChange}
-                value="1"
-              />
-            </td>
-          </tr>
+          {appInfo.app === "web" ? (
+            <tr>
+              <th>
+                Replicas <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  className="form_fullWidth"
+                  name="appReplicas"
+                  value="1"
+                  disabled={true}
+                />
+              </td>
+            </tr>
+          ) : (
+            <tr>
+              <th>
+                Replicas <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  className="form_fullWidth"
+                  name="appReplicas"
+                  onChange={onChange}
+                  value={appInfo.appReplicas}
+                />
+              </td>
+            </tr>
+          )}
 
-          <tr>
-            <th>Port</th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                placeholder="port"
-                className="form_fullWidth"
-                name="appPort"
-                onChange={onChange}
-                value={appInfo.appPort}
-              />
-            </td>
-          </tr>
+          {appInfo.app === "web" ? (
+            <tr>
+              <th>Port</th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  placeholder="port"
+                  className="form_fullWidth"
+                  name="appPort"
+                  onChange={onChange}
+                  value="80"
+                  disabled={true}
+                />
+              </td>
+            </tr>
+          ) : (
+            <tr>
+              <th>Port</th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  placeholder="port"
+                  className="form_fullWidth"
+                  name="appPort"
+                  onChange={onChange}
+                  value={appInfo.appPort}
+                  disabled={true}
+                />
+              </td>
+            </tr>
+          )}
+
+          {appInfo.app === "web" ? (
+            <tr>
+              <th>Containers Name</th>
+              <td colSpan="3">
+                <CTextField
+                  type="text"
+                  placeholder="Containsers Name"
+                  className="form_fullWidth"
+                  name="appContainersName"
+                  onChange={onChange}
+                  value={appInfo.appContainersName}
+                />
+              </td>
+            </tr>
+          ) : (
+            ""
+          )}
+
+          {appInfo.app === "nginx" ? (
+            ""
+          ) : (
+            <tr>
+              <th rowSpan={appInfo.appEnv.length + 1}>Env</th>
+              <td style={{ width: "400px" }}>
+                <CTextField
+                  type="text"
+                  placeholder="Key"
+                  className="form_fullWidth"
+                  name="envKey"
+                  onChange={onChange}
+                  value={env.name}
+                />
+              </td>
+              <td style={{ width: "400px" }}>
+                <CTextField
+                  type="text"
+                  placeholder="Value"
+                  className="form_fullWidth"
+                  name="envValue"
+                  onChange={onChange}
+                  value={env.value}
+                />
+              </td>
+              <td>
+                <Button onClick={addEnv}>+</Button>
+              </td>
+            </tr>
+          )}
+          {appInfo.appEnv?.map((env, index) => (
+            <tr>
+              <td style={{ width: "350px" }}>{env.name}</td>
+              <td style={{ width: "350px", padding: "8px" }}>{env.value}</td>
+              <td>
+                <Button onClick={() => removeEnv(index)}>-</Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

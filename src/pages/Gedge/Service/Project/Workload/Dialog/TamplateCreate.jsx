@@ -8,6 +8,7 @@ import CreateTamplateStepFour from "./CreateTamplateStepFour";
 import styled from "styled-components";
 import { deploymentStore, workspaceStore } from "@/store";
 import TamplateYaml from "./TamplateYAML";
+import templateStore from "../../../../../../store/Template";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,13 +31,73 @@ const ButtonNext = styled.button`
 
 // deployment store 사용
 const TamplateCreate = observer((props) => {
-  const { setContent, setTemplate, postDeploymentGM, appInfo } =
-    deploymentStore;
+  // const template = {
+  //   apiVersion: "apps/v1",
+  //   kind: "Deployment",
+  //   metadata: {
+  //     name: "deployment.deploymentName", //UI - 배포 이름(서비스명)
+  //     namespace: "default", //UI - 네임스페이스 입력
+  //   },
+  //   spec: {
+  //     replicas: 1, //수정 가능하도록
+  //     selector: {
+  //       matchLabels: {
+  //         app: "nginx",
+  //       },
+  //       template: {
+  //         metadata: {
+  //           labels: {
+  //             app: "nginx",
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  //   spec: {
+  //     containers: {
+  //       name: "nginx",
+  //       image: "nginx:latest", // UI - nginx 버전입력
+  //       ports: {
+  //         containerPort: 80, //UI - 포트 입력
+  //       },
+  //     },
+  //   },
+  //   ---
+  //   apiVersion: "v1",
+  //   kind: "Service",
+  //   metadata: {
+  //     name: "nginx-service", //UI - 배포 이름(서비스명)
+  //     namespace: "default", //UI - 네임스페이스 입력
+  //   },
+  //   spec: {
+  //     selector: {
+  //       app: "nginx"
+  //     },
+  //     ports: {
+  //       {protocol: TCP,
+  //         port: 80,             // UI - 포트 입력
+  //         targetPort: 80          // UI - 포트 입력}
+  //     }
+  //     type: LoadBalancer
+  // };
+
+  const {
+    setContent,
+    setTemplate,
+    postDeploymentGM,
+    appInfo,
+    resetDeployment,
+    initTargetClusters,
+    postTemplateGM,
+  } = deploymentStore;
+
+  const { deploymentYamlTemplate, serviceYamlTemplate } = templateStore;
 
   const { loadWorkSpaceList } = workspaceStore;
 
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
+  const YAML = require("json-to-pretty-yaml");
 
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -62,7 +123,12 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    setContent(
+      YAML.stringify(deploymentYamlTemplate) +
+        "---\n" +
+        YAML.stringify(serviceYamlTemplate)
+    );
+    postTemplateGM();
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -72,11 +138,16 @@ const TamplateCreate = observer((props) => {
     loadWorkSpaceList();
 
     if (stepValue === 3) {
-      setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      // setTemplate(template);
+      // const YAML = require("json-to-pretty-yaml");
+      // setContent(YAML.stringify(template));
     }
   }, [stepValue]);
+
+  useEffect(() => {
+    resetDeployment();
+    initTargetClusters([]);
+  }, [open]);
 
   const CreateTamplateComponent = () => {
     if (stepValue === 1) {
@@ -154,7 +225,7 @@ const TamplateCreate = observer((props) => {
     } else if (stepValue === 3) {
       return (
         <>
-          <TamplateYaml />
+          <CreateTamplateStepFour />
           <div
             style={{
               display: "flex",

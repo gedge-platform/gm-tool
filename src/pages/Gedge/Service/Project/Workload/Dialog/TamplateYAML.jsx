@@ -7,7 +7,7 @@ import { deploymentStore } from "@/store";
 
 const TamplateYaml = observer(() => {
   const { content, setContent } = deploymentStore;
-  // console.log(content);
+  console.log(content);
   return (
     <>
       <div className="step-container2">

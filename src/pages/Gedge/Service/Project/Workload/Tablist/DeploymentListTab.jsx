@@ -35,6 +35,7 @@ const DeploymentListTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
+    initAppInfo
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -95,6 +96,10 @@ const DeploymentListTab = observer(() => {
       initViewList();
     };
   }, []);
+
+  useEffect(() => {
+    initAppInfo();
+  }, [tamplateOpen])
 
   const handleCreateOpen = () => {
     setWorkspace("");
