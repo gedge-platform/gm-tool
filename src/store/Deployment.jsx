@@ -774,7 +774,7 @@ class Deployment {
           user_name: JSON.parse(localStorage.getItem("user")).id,
           workspace_name: this.deployment.workspace,
           project_name: this.deployment.project,
-          mode: "default",
+          mode: "cluster",
           parameters: {
             source_cluster: this.deployment.priority.sourceCluster,
             source_node: this.deployment.priority.sourceNode,
@@ -836,8 +836,8 @@ class Deployment {
           user_name: JSON.parse(localStorage.getItem("user")).id,
           workspace_name: this.deployment.workspace,
           project_name: this.deployment.project,
-          // mode: this.deployment.priority.mode,
-          mode: "cluster",
+          mode: this.deployment.priority.mode,
+          // mode: "cluster",
           parameters: {
             select_clusters: this.targetClusters,
           },
@@ -847,8 +847,8 @@ class Deployment {
           user_name: JSON.parse(localStorage.getItem("user")).id,
           workspace_name: this.deployment.workspace,
           project_name: this.deployment.project,
-          // mode: this.deployment.priority.mode,
-          mode: "node",
+          mode: this.deployment.priority.mode,
+          // mode: "node",
           parameters: {
             select_cluster: this.targetClusters[0],
             select_node: this.deployment.priority.sourceNode,
@@ -914,31 +914,37 @@ class Deployment {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    const option =
-      this.deployment.priority.mode === "cluster"
-        ? {
-            user_name: "user1",
-            workspace_name: this.appInfo.appWorkspace,
-            workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-            project_name: this.appInfo.appProject,
-            mode: "cluster",
-            parameters: {
-              select_clusters: ["onpremise(dongjak)"],
-            },
-          }
-        : {
-            user_name: "user1",
-            workspace_name: this.appInfo.appWorkspace,
-            workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-            project_name: this.appInfo.appProject,
-            mode: "node",
-            parameters: {
-              select_cluster: "onpremise(dongjak)",
-              select_node: this.deployment.priority.sourceNode,
-            },
-          };
+    console.log(this.deployment.priority.mode);
+    const option = () => {
+      if (this.deployment.priority.mode === "cluster" || "default") {
+        return {
+          user_name: "user1",
+          workspace_name: this.appInfo.appWorkspace,
+          workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+          project_name: this.appInfo.appProject,
+          mode: "cluster",
+          parameters: {
+            select_clusters: ["onpremise(dongjak)"],
+          },
+        };
+      } else {
+        return {
+          user_name: "user1",
+          workspace_name: this.appInfo.appWorkspace,
+          workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+          project_name: this.appInfo.appProject,
+          mode: "node",
+          parameters: {
+            select_cluster: "onpremise(dongjak)",
+            select_node: this.deployment.priority.sourceNode,
+          },
+        };
+      }
+    };
 
-    const options = encodeURI(JSON.stringify(option));
+    console.log(option);
+
+    const options = encodeURI(JSON.stringify(option()));
     const requestId = "requestId" + randomNumber;
 
     await axios

@@ -4,9 +4,16 @@ class Template {
   containerImageList = [
     {
       name: "web",
-      versions: ["latest"],
+      versions: ["adamkdean/redirect"],
       port: 80,
-      env: [],
+      env: [
+        { name: "REDIRECT_STATUS_CODE", value: "307" },
+        {
+          name: "REDIRECT_LOCATION",
+          value: "https://templates.iqonic.design/metordash-node/",
+        },
+        { name: "PRESERVE_URL", value: "true" },
+      ],
       type: "NodePort",
     },
     {
@@ -25,7 +32,7 @@ class Template {
         { name: "MYSQL_ROOT_PASSWORD", value: "" },
         { name: "MYSQL_DATABASE", value: "" },
       ],
-      type: "ClusterIP",
+      type: "NodePort",
     },
   ];
 
@@ -91,12 +98,13 @@ class Template {
             {
               name: "",
               image: "",
-              // env: [],
               ports: [
                 {
                   containerPort: 80,
                 },
               ],
+              // env 배열이 비어 있지 않은 경우에만 추가
+              // ...(env.length > 0 && { env: env }),
             },
           ],
         },
@@ -219,6 +227,9 @@ class Template {
   }
 
   setDeploymentYamlTemplateFromAppInfo = (appInfo) => {
+    console.log(
+      this.deploymentYamlTemplate.spec.template.spec.containers[0].name
+    );
     this.deploymentYamlTemplate.metadata.name = appInfo.appName + "-deployment";
     // this.deploymentYamlTemplate.metadata.namespace = appInfo.appWorkspace;
     this.deploymentYamlTemplate.spec.replicas = appInfo.appReplicas;
@@ -227,11 +238,18 @@ class Template {
     this.deploymentYamlTemplate.spec.template.metadata.labels.app =
       appInfo.app + "-" + appInfo.appName;
     this.deploymentYamlTemplate.spec.template.spec.containers[0].name =
-      appInfo.app;
+      appInfo.appName;
     this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
-      appInfo.app + ":" + appInfo.appVersion;
-    // this.deploymentYamlTemplate.spec.template.spec.containers[0].env =
-    // appInfo.appEnv;
+      appInfo.appVersion;
+    // if (appInfo.appName === "web") {
+    //   this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
+    //     appInfo.appVersion;
+    // } else {
+    //   this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
+    //     appInfo.app + ":" + appInfo.appVersion;
+    // }
+    this.deploymentYamlTemplate.spec.template.spec.containers[0].env =
+      appInfo.appEnv;
     this.deploymentYamlTemplate.spec.template.spec.containers[0].ports[0].containerPort =
       appInfo.appPort;
 
@@ -241,11 +259,6 @@ class Template {
       appInfo.app + "-" + appInfo.appName;
     this.serviceYamlTemplate.spec.ports[0].port = appInfo.appPort;
     this.serviceYamlTemplate.spec.ports[0].targetPort = appInfo.appPort;
-    if (appInfo.app === "nginx") {
-      this.serviceYamlTemplate.spec.type = "NodePort";
-    } else {
-      this.serviceYamlTemplate.spec.type = "ClusterIP";
-    }
   };
 }
 
