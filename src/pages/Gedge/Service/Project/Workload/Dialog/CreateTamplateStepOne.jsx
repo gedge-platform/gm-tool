@@ -79,33 +79,52 @@ const ImgButton = styled.button`
 `;
 
 const CreateTamplateStepOne = observer((props) => {
-  const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } = workspaceStore;
-  const { loadProjectListInWorkspace, projectListinWorkspace, loadProjectDetail,  } = projectStore;
-  const { setDeployment, setAppInfo, appInfo, initTargetClusters } = deploymentStore;
+  const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
+    workspaceStore;
+  const {
+    loadProjectListInWorkspace,
+    projectListinWorkspace,
+    loadProjectDetail,
+  } = projectStore;
+  const { setDeployment, setAppInfo, appInfo, initTargetClusters } =
+    deploymentStore;
   const { containerImageList } = templateStore;
 
-  const [env, setEnv] = useState({name: "", value: ""});
+  const [env, setEnv] = useState({ name: "", value: "" });
 
   const onChange = (e) => {
     const { name, value } = e.target;
+
     if (name === "app") {
       setAppInfo(name, value);
       setAppInfo("appVersion", "");
-      setAppInfo("appPort", containerImageList.filter(image => image.name === e.target.value)[0].port);
-      setAppInfo("appEnv", containerImageList.filter(image => image.name === e.target.value)[0].env);
+      setAppInfo(
+        "appPort",
+        containerImageList.filter((image) => image.name === e.target.value)[0]
+          .port
+      );
+      setAppInfo(
+        "appEnv",
+        containerImageList.filter((image) => image.name === e.target.value)[0]
+          .env
+      );
     }
-    if (name === "appVersion") {  
+    if (name === "appVersion") {
+      setAppInfo(name, value);
       setAppInfo(name, value);
     }
     if (name === "appName") {
       setAppInfo(name, value);
+      setAppInfo(name, value);
     }
     if (name === "appWorkspace") {
+      setAppInfo(name, value);
       setAppInfo(name, value);
       loadProjectListInWorkspace(value);
       loadWorkspaceDetail(value);
     }
     if (name === "appProject") {
+      setAppInfo(name, value);
       setAppInfo(name, value);
       loadProjectDetail(value);
       initTargetClusters(
@@ -113,28 +132,35 @@ const CreateTamplateStepOne = observer((props) => {
       );
     }
     if (name === "appReplicas") {
+      setAppInfo(name, value);
       setAppInfo(name, Number.parseInt(value));
     }
     if (name === "appPort") {
+      console.log("name ?", name);
+      console.log("value ?", value);
+      setAppInfo(name, value);
       setAppInfo(name, value);
     }
     if (name === "envKey") {
-      setEnv({name: value, value: env.value});
-      console.log(appInfo.appEnv.length)
+      setEnv({ name: value, value: env.value });
+      console.log(appInfo.appEnv.length);
     }
     if (name === "envValue") {
-      setEnv({name: env.name, value: value});
+      setEnv({ name: env.name, value: value });
     }
   };
 
   const addEnv = () => {
     setAppInfo("appEnv", [...appInfo.appEnv, env]);
-    setEnv({name: "", value: ""});
-  }
+    setEnv({ name: "", value: "" });
+  };
 
   const removeEnv = (index) => {
-    setAppInfo("appEnv", appInfo.appEnv.filter((env, idx) => idx !== index));
-  }
+    setAppInfo(
+      "appEnv",
+      appInfo.appEnv.filter((env, idx) => idx !== index)
+    );
+  };
 
   return (
     <>
@@ -167,6 +193,7 @@ const CreateTamplateStepOne = observer((props) => {
                   </option>
                   <option value="nginx">nginx</option>
                   <option value="mysql">mysql</option>
+                  <option value="web">web</option>
                 </select>
               </FormControl>
             </td>
@@ -177,13 +204,19 @@ const CreateTamplateStepOne = observer((props) => {
             </th>
             <td colSpan="3">
               <FormControl className="form_fullWidth">
-                <select name="appVersion" onChange={onChange} value={appInfo.appVersion}>
+                <select
+                  name="appVersion"
+                  onChange={onChange}
+                  value={appInfo.appVersion}
+                >
                   <option value={""} selected disabled hidden>
                     Select Version
                   </option>
                   {containerImageList
-                    .filter(image => image.name === appInfo.app)[0]?.versions
-                    .map(version => <option value={version}>{version}</option>)}
+                    .filter((image) => image.name === appInfo.app)[0]
+                    ?.versions.map((version) => (
+                      <option value={version}>{version}</option>
+                    ))}
                 </select>
               </FormControl>
             </td>
@@ -236,7 +269,6 @@ const CreateTamplateStepOne = observer((props) => {
             <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
-                  // disabled={!deployment.workspace}
                   name="appProject"
                   onChange={onChange}
                   value={appInfo.appProject}
@@ -254,74 +286,186 @@ const CreateTamplateStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
-            <th>
-              Replicas <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                className="form_fullWidth"
-                name="appReplicas"
-                onChange={onChange}
-                value={appInfo.appReplicas}
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th>Port</th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                placeholder="port"
-                className="form_fullWidth"
-                name="appPort"
-                onChange={onChange}
-                value={appInfo.appPort}
-              />
-            </td>
-          </tr>
-
-          <tr>
-            <th rowSpan={appInfo.appEnv.length+1}>Env</th>
-            <td style={{ width: "400px"}}>
-              <CTextField
-                type="text"
-                placeholder="Key"
-                className="form_fullWidth"
-                name="envKey"
-                onChange={onChange}
-                value={env.name}
-              />
-            </td>
-            <td style={{ width: "400px"}}>
-              <CTextField
-                type="text"
-                placeholder="Value"
-                className="form_fullWidth"
-                name="envValue"
-                onChange={onChange}
-                value={env.value}
-              />
-            </td>
-            <td>
-              <Button onClick={addEnv}>+</Button>
-            </td>
-          </tr>
-          {appInfo.appEnv?.map((env, index) => (
+          {appInfo.app === "web" ? (
             <tr>
-              <td style={{ width: "350px" }}>
-                {env.name}
+              <th>
+                Replicas <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  className="form_fullWidth"
+                  name="appReplicas"
+                  value="1"
+                  disabled={true}
+                />
               </td>
-              <td style={{ width: "350px", padding: "8px" }}>
-                {env.value}
+            </tr>
+          ) : (
+            <tr>
+              <th>
+                Replicas <span className="requried">*</span>
+              </th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  className="form_fullWidth"
+                  name="appReplicas"
+                  onChange={onChange}
+                  value={appInfo.appReplicas}
+                />
               </td>
+            </tr>
+          )}
+
+          {appInfo.app === "web" ? (
+            <tr>
+              <th>Port</th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  placeholder="port"
+                  className="form_fullWidth"
+                  name="appPort"
+                  onChange={onChange}
+                  value="80"
+                  disabled={true}
+                />
+              </td>
+            </tr>
+          ) : (
+            <tr>
+              <th>Port</th>
+              <td colSpan="3">
+                <CTextField
+                  type="number"
+                  placeholder="port"
+                  className="form_fullWidth"
+                  name="appPort"
+                  onChange={onChange}
+                  value={appInfo.appPort}
+                  disabled={true}
+                />
+              </td>
+            </tr>
+          )}
+
+          {/* {appInfo.app === "nginx" ? (
+            ""
+          ) : (
+            <>
+              <tr>
+                <th rowSpan={3}>Env</th>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Key"
+                    className="form_fullWidth"
+                    name="REDIRECT_STATUS_CODE"
+                    onChange={onChange}
+                    value="REDIRECT_STATUS_CODE"
+                    disabled={true}
+                  />
+                </td>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Value"
+                    className="form_fullWidth"
+                    name="envValue"
+                    onChange={onChange}
+                    value={env.value}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Key"
+                    className="form_fullWidth"
+                    name="REDIRECT_STATUS_CODE"
+                    onChange={onChange}
+                    value="REDIRECT_STATUS_CODE"
+                    disabled={true}
+                  />
+                </td>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Value"
+                    className="form_fullWidth"
+                    name="envValue"
+                    onChange={onChange}
+                    value={env.value}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Key"
+                    className="form_fullWidth"
+                    name="REDIRECT_STATUS_CODE"
+                    onChange={onChange}
+                    value="REDIRECT_STATUS_CODE"
+                    disabled={true}
+                  />
+                </td>
+                <td style={{ width: "400px" }}>
+                  <CTextField
+                    type="text"
+                    placeholder="Value"
+                    className="form_fullWidth"
+                    name="envValue"
+                    onChange={onChange}
+                    value={env.value}
+                  />
+                </td>
+              </tr>
+            </>
+          )} */}
+
+          {appInfo.app === "nginx" || "web" ? (
+            ""
+          ) : (
+            <tr>
+              <th rowSpan={appInfo.appEnv.length + 1}>Env</th>
+              <td style={{ width: "400px" }}>
+                <CTextField
+                  type="text"
+                  placeholder="Key"
+                  className="form_fullWidth"
+                  name="envKey"
+                  onChange={onChange}
+                  value={env.name}
+                />
+              </td>
+              <td style={{ width: "400px" }}>
+                <CTextField
+                  type="text"
+                  placeholder="Value"
+                  className="form_fullWidth"
+                  name="envValue"
+                  onChange={onChange}
+                  value={env.value}
+                />
+              </td>
+              <td>
+                <Button onClick={addEnv}>+</Button>
+              </td>
+            </tr>
+          )}
+          {/* {appInfo.appEnv?.map((env, index) => (
+            <tr>
+              <td style={{ width: "350px" }}>{env.name}</td>
+              <td style={{ width: "350px", padding: "8px" }}>{env.value}</td>
               <td>
                 <Button onClick={() => removeEnv(index)}>-</Button>
               </td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
     </>

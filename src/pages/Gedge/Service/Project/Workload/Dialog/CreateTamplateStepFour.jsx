@@ -7,8 +7,14 @@ import "ace-builds/src-noconflict/theme-monokai";
 import templateStore from "../../../../../../store/Template";
 
 const CreateTamplateStepFour = observer(() => {
-  const { appInfo } = deploymentStore;
-  const { deploymentYamlTemplate, serviceYamlTemplate, setDeploymentYamlTemplateFromAppInfo } = templateStore;
+  const { appInfo, deployment } = deploymentStore;
+  console.log("appInfo ? ", appInfo);
+  console.log("deployment ?", deployment);
+  const {
+    deploymentYamlTemplate,
+    serviceYamlTemplate,
+    setDeploymentYamlTemplateFromAppInfo,
+  } = templateStore;
   const YAML = require("json-to-pretty-yaml");
 
   useEffect(() => {
@@ -42,7 +48,11 @@ const CreateTamplateStepFour = observer(() => {
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
-        value={YAML.stringify(deploymentYamlTemplate)+"---\n"+YAML.stringify(serviceYamlTemplate)}
+        value={
+          YAML.stringify(deploymentYamlTemplate) +
+          "---\n" +
+          YAML.stringify(serviceYamlTemplate)
+        }
         setOptions={{
           enableBasicAutocompletion: false,
           enableLiveAutocompletion: false,

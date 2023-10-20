@@ -81,9 +81,16 @@ const TamplateCreate = observer((props) => {
   //     type: LoadBalancer
   // };
 
-  const { setContent, setTemplate, postDeploymentGM, appInfo, resetDeployment, initTargetClusters } =
-    deploymentStore;
-  
+  const {
+    setContent,
+    setTemplate,
+    postDeploymentGM,
+    appInfo,
+    resetDeployment,
+    initTargetClusters,
+    postTemplateGM,
+  } = deploymentStore;
+
   const { deploymentYamlTemplate, serviceYamlTemplate } = templateStore;
 
   const { loadWorkSpaceList } = workspaceStore;
@@ -116,8 +123,12 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
-    setContent(YAML.stringify(deploymentYamlTemplate)+"---\n"+YAML.stringify(serviceYamlTemplate))
-    postDeploymentGM();
+    setContent(
+      YAML.stringify(deploymentYamlTemplate) +
+        "---\n" +
+        YAML.stringify(serviceYamlTemplate)
+    );
+    postTemplateGM();
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -136,7 +147,7 @@ const TamplateCreate = observer((props) => {
   useEffect(() => {
     resetDeployment();
     initTargetClusters([]);
-  }, [open])
+  }, [open]);
 
   const CreateTamplateComponent = () => {
     if (stepValue === 1) {

@@ -11,6 +11,7 @@ class Dashboard {
   credentialCnt = 0;
   edgeClusterCnt = 0;
   workspaceCnt = 0;
+  coreClusterCnt = 0;
   projectCnt = 0;
   clusterCpuTop5 = [
     {
@@ -190,6 +191,7 @@ class Dashboard {
           this.edgeClusterCnt = data.edgeClusterCnt;
           this.workspaceCnt = data.workspaceCnt;
           this.projectCnt = data.projectCnt;
+          this.coreClusterCnt = data.coreClusterCnt;
 
           this.totalCpu = data.totalCpu;
           this.totalMem = data.totalMem;
