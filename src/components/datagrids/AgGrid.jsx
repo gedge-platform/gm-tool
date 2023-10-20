@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ModuleRegistry } from "@ag-grid-community/core";
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 import { AgGridReact } from "@ag-grid-community/react";
@@ -16,20 +16,21 @@ const AgGrid = (props) => {
     columnDefs,
     pagination = true,
     showPagination = true,
-    rowPerPage = 1000,
+    rowPerPage = 10,
     autoWidth = true,
     onCellClicked,
     totalElements,
     totalPages,
-    currentPage,
     goPrevPage,
     goNextPage,
     setDetail,
     isBottom,
   } = props;
-
+  
+  const gridRef = useRef();
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
     '<span class="ag-overlay-loading-center">No Data</span>'
@@ -49,7 +50,6 @@ const AgGrid = (props) => {
 
   const onGridReady = (params) => {
     setGridApi(params.api);
-    currentPage = 1;
     rowData = 0;
   };
 
@@ -88,6 +88,12 @@ const AgGrid = (props) => {
     setDetail(tempArr[0].id);
   };
 
+  const onPaginationChanged = useCallback(() => {
+    if (gridRef.current.api) {
+      setCurrentPage(gridRef.current.api.paginationGetCurrentPage()+1)
+    }
+  }, []);
+
   return (
     <div
       id="my-grid"
@@ -95,6 +101,7 @@ const AgGrid = (props) => {
       // style={{ height: 410 }}
     >
       <AgGridReact
+        ref={gridRef}
         defaultColDef={defaultColDef}
         onGridReady={onGridReady}
         onFirstDataRendered={onFirstDataRendered}
@@ -110,6 +117,7 @@ const AgGrid = (props) => {
         suppressPaginationPanel={true}
         onCellClicked={onCellClicked}
         onSelectionChanged={onSelectionChanged}
+        onPaginationChanged={onPaginationChanged}
       />
       <div
         id="pagination"
@@ -137,26 +145,26 @@ const AgGrid = (props) => {
                 type="button"
                 className="btn_comm"
                 onClick={() => {
-                  if (currentPage === 1) {
+                  if (gridRef.current.api.paginationGetCurrentPage() === 0) {
                     swalError("첫 페이지입니다");
                   } else {
-                    goPrevPage();
+                    gridRef.current.api.paginationGoToPreviousPage();
                   }
                 }}
               >
                 <span className="btnLabel_icon hover prev">Prev</span>
               </button>
               <span className="page-num">
-                {currentPage} of {totalPages}
+                {currentPage} of {gridRef?.current?.api.paginationGetTotalPages()}
               </span>
               <button type="button" className="btn_comm">
                 <span
                   className="btnLabel_icon hover next"
                   onClick={() => {
-                    if (currentPage === totalPages) {
+                    if (gridRef.current.api.paginationGetCurrentPage() === gridRef.current.api.paginationGetTotalPages()-1) {
                       swalError("마지막 페이지입니다");
                     } else {
-                      goNextPage();
+                      gridRef.current.api.paginationGoToNextPage();
                     }
                   }}
                 >
