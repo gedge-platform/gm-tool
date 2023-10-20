@@ -205,6 +205,8 @@ class Deployment {
   deployment = {
     deploymentName: "",
     workspace: "",
+    workspacetag: "",
+    workspaceuuid: "",
     project: "",
     replicas: 1,
     pvcName: "",
@@ -871,13 +873,16 @@ class Deployment {
   postDeploymentGM = async (callback) => {
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    console.log(this.appInfo);
+
     const option = {
       user_name: "user1",
-      workspace_name: this.appInfo.appWorkspace,
-      workspace_uid: "649128e7fc34732e0eccfa6d",
-      project_name: this.appInfo.appProject,
-      // type: "default",
+      // workspace_name: this.appInfo.appWorkspace,
+      // workspace_uid: "649128e7fc34732e0eccfa6d",
+      // project_name: this.appInfo.appProject,
+      workspace_name: this.deployment.workspacetag,
+      workspace_uid: this.deployment.workspaceuuid,
+      project_name: this.deployment.workspacetag,
+
       mode: "cluster",
       data: {
         selected_cluster: "onpremise(dongjak)",
@@ -914,17 +919,21 @@ class Deployment {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    console.log(this.deployment.priority.mode);
+    console.log(this.deployment.targetClusters);
     const option = () => {
       if (this.deployment.priority.mode === "cluster" || "default") {
         return {
           user_name: "user1",
-          workspace_name: this.appInfo.appWorkspace,
-          workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-          project_name: this.appInfo.appProject,
+          // workspace_name: this.appInfo.appWorkspace,
+          // workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+          // project_name: this.appInfo.appProject,
+          workspace_name: this.deployment.workspacetag,
+          workspace_uid: this.deployment.workspaceuuid,
+          project_name: this.deployment.workspacetag,
           mode: "cluster",
           parameters: {
-            select_clusters: ["onpremise(dongjak)"],
+            // select_clusters: ["onpremise(dongjak)"],
+            select_clusters: this.deployment.targetClusters,
           },
         };
       } else {

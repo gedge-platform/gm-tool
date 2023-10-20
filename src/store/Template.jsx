@@ -20,8 +20,6 @@ class Template {
       name: "nginx",
       versions: ["latest", "1.24.0", "1.23.0", "1.20.0"],
       port: 80,
-      // env: [],
-      // type: "LoadBalancer",
       type: "NodePort",
     },
     {
@@ -29,10 +27,10 @@ class Template {
       versions: ["latest", "8.0", "5.7.43"],
       port: 3306,
       env: [
-        { name: "MYSQL_ROOT_PASSWORD", value: "" },
-        { name: "MYSQL_DATABASE", value: "" },
+        { name: "MYSQL_ROOT_PASSWORD", value: "hello123!@#" },
+        { name: "MYSQL_DATABASE", value: "database_name" },
       ],
-      type: "NodePort",
+      type: "ClusterIP",
     },
   ];
 
@@ -158,28 +156,6 @@ class Template {
     },
   };
 
-  // serviceYamlTemplate = {
-  //   apiVersion: "v1",
-  //   kind: "Service",
-  //   metadata: {
-  //     name: "",
-  //     namespace: "",
-  //   },
-  //   spec: {
-  //     selector: {
-  //       app: "",
-  //     },
-  //     ports: [
-  //       {
-  //         protocol: "TCP",
-  //         port: 80,
-  //         targetPort: 80,
-  //       },
-  //     ],
-  //     type: "",
-  //   },
-  // };
-
   serviceYamlTemplate = {
     apiVersion: "v1",
     kind: "Service",
@@ -197,28 +173,7 @@ class Template {
           targetPort: 80,
         },
       ],
-      type: "NodePort",
-    },
-  };
-
-  webServiceYamlTemplate = {
-    apiVersion: "v1",
-    kind: "Service",
-    metadata: {
-      name: "",
-    },
-    spec: {
-      selector: {
-        app: "",
-      },
-      ports: [
-        {
-          protocol: "TCP",
-          port: 80,
-          targetPort: 80,
-        },
-      ],
-      type: "NodePort",
+      type: "",
     },
   };
 
@@ -227,11 +182,8 @@ class Template {
   }
 
   setDeploymentYamlTemplateFromAppInfo = (appInfo) => {
-    console.log(
-      this.deploymentYamlTemplate.spec.template.spec.containers[0].name
-    );
+    console.log(appInfo);
     this.deploymentYamlTemplate.metadata.name = appInfo.appName + "-deployment";
-    // this.deploymentYamlTemplate.metadata.namespace = appInfo.appWorkspace;
     this.deploymentYamlTemplate.spec.replicas = appInfo.appReplicas;
     this.deploymentYamlTemplate.spec.selector.matchLabels.app =
       appInfo.app + "-" + appInfo.appName;
@@ -241,24 +193,28 @@ class Template {
       appInfo.appName;
     this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
       appInfo.appVersion;
-    // if (appInfo.appName === "web") {
-    //   this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
-    //     appInfo.appVersion;
-    // } else {
-    //   this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
-    //     appInfo.app + ":" + appInfo.appVersion;
-    // }
+    if (appInfo.app === "web") {
+      this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
+        appInfo.appVersion;
+    } else {
+      this.deploymentYamlTemplate.spec.template.spec.containers[0].image =
+        appInfo.app + ":" + appInfo.appVersion;
+    }
     this.deploymentYamlTemplate.spec.template.spec.containers[0].env =
       appInfo.appEnv;
     this.deploymentYamlTemplate.spec.template.spec.containers[0].ports[0].containerPort =
       appInfo.appPort;
 
     this.serviceYamlTemplate.metadata.name = appInfo.appName + "-service";
-    // this.serviceYamlTemplate.metadata.namespace = appInfo.appWorkspace;
     this.serviceYamlTemplate.spec.selector.app =
       appInfo.app + "-" + appInfo.appName;
     this.serviceYamlTemplate.spec.ports[0].port = appInfo.appPort;
     this.serviceYamlTemplate.spec.ports[0].targetPort = appInfo.appPort;
+    if (appInfo.app === "mysql") {
+      this.serviceYamlTemplate.spec.type = "ClusterIP";
+    } else {
+      this.serviceYamlTemplate.spec.type = "NodePort";
+    }
   };
 }
 

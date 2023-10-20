@@ -116,11 +116,15 @@ const CreateDeploymentStepOne = observer((props) => {
     }
 
     if (e.target.name === "workspace") {
+      const selectedWorkspace = workSpaceList.find(
+        (workspace) => workspace.workspaceName === e.target.value
+      );
       setDeployment(e.target.name, e.target.value);
+      setDeployment("workspacetag", selectedWorkspace.workspaceTag);
+      setDeployment("workspaceuuid", selectedWorkspace.workspaceUUID);
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
     }
-
     if (e.target.name === "project") {
       setDeployment(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
@@ -243,11 +247,14 @@ const CreateDeploymentStepOne = observer((props) => {
                   onChange={handleDeployment}
                   value={deployment.workspace}
                 >
-                  <option value={""} selected disabled hidden>
+                  <option value={""} disabled hidden>
                     Select Workspace
                   </option>
                   {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
                       {workspace.workspaceName}
                     </option>
                   ))}

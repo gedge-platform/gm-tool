@@ -11,6 +11,7 @@ import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
+import TamplateCreate from "../../../Gedge/Service/Project/Workload/Dialog/TamplateCreate";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -18,6 +19,7 @@ const DeploymentListTab = observer(() => {
   const [deploymentName, setDeploymentName] = useState("");
   const [clusterName, setClusterName] = useState("");
   const [projectName, setProjectName] = useState("");
+  const [tamplateOpen, setTemplateOpen] = useState(false);
 
   const {
     totalElements,
@@ -31,6 +33,7 @@ const DeploymentListTab = observer(() => {
     viewList,
     goPrevPage,
     goNextPage,
+    initAppInfo,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -75,6 +78,7 @@ const DeploymentListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      sort: "desc",
     },
   ]);
 
@@ -92,6 +96,7 @@ const DeploymentListTab = observer(() => {
   const handleClose = () => {
     setWorkspace("");
     setOpen(false);
+    setTemplateOpen(false);
   };
 
   const handleDelete = () => {
@@ -105,9 +110,17 @@ const DeploymentListTab = observer(() => {
     setDeploymentName("");
   };
 
+  const handleTamplateCreateOpen = () => {
+    setTemplateOpen(true);
+  };
+
   const reloadData = () => {
     setReRun(true);
   };
+
+  useEffect(() => {
+    initAppInfo();
+  }, [tamplateOpen]);
 
   useEffect(() => {
     loadDeploymentList();
@@ -130,7 +143,10 @@ const DeploymentListTab = observer(() => {
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
-            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
+            {/* <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton> */}
+            <CCreateButton onClick={handleTamplateCreateOpen}>
+              템플릿
+            </CCreateButton>
           </CommActionBar>
           <div className="tabPanelContainer">
             <div className="grid-height2">
@@ -151,6 +167,11 @@ const DeploymentListTab = observer(() => {
             open={open}
             onClose={handleClose}
             reloadFunc={reloadData}
+          />
+          <TamplateCreate
+            open={tamplateOpen}
+            onClose={handleClose}
+            reloadFunc={loadDeploymentList}
           />
         </PanelBox>
         <Detail />
