@@ -139,7 +139,7 @@ const PodListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={podList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

@@ -8,8 +8,7 @@ import templateStore from "../../../../../../store/Template";
 
 const CreateTamplateStepFour = observer(() => {
   const { appInfo, deployment } = deploymentStore;
-  console.log("appInfo ? ", appInfo);
-  console.log("deployment ?", deployment);
+
   const {
     deploymentYamlTemplate,
     serviceYamlTemplate,

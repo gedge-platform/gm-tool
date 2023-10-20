@@ -11,7 +11,7 @@ import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
-import TamplateCreate from "../Dialog/TamplateCreate";
+import TamplateCreate from "../../../Gedge/Service/Project/Workload/Dialog/TamplateCreate";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
@@ -34,6 +34,7 @@ const DeploymentListTab = observer(() => {
     goPrevPage,
     goNextPage,
     initAppInfo,
+    deploymentList,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -78,6 +79,7 @@ const DeploymentListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      sort: "desc",
     },
   ]);
 
@@ -98,10 +100,6 @@ const DeploymentListTab = observer(() => {
     setTemplateOpen(false);
   };
 
-  const handleTamplateCreateOpen = () => {
-    setTemplateOpen(true);
-  };
-
   const handleDelete = () => {
     if (deploymentName === "") {
       swalError("Deployment를 선택해주세요!");
@@ -111,6 +109,10 @@ const DeploymentListTab = observer(() => {
       );
     }
     setDeploymentName("");
+  };
+
+  const handleTamplateCreateOpen = () => {
+    setTemplateOpen(true);
   };
 
   const reloadData = () => {
@@ -151,7 +153,7 @@ const DeploymentListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={deploymentList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

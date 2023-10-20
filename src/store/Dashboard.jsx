@@ -185,7 +185,6 @@ class Dashboard {
       .get(`${SERVER_URL}/totalDashboard`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log(data);
           this.dashboardDetail = data;
           this.clusterCnt = data.clusterCnt;
           this.credentialCnt = data.credentialCnt;

@@ -111,20 +111,26 @@ const CreateTamplateStepOne = observer((props) => {
     }
     if (name === "appVersion") {
       setAppInfo(name, value);
-      setAppInfo(name, value);
     }
     if (name === "appName") {
       setAppInfo(name, value);
-      setAppInfo(name, value);
     }
     if (name === "appWorkspace") {
+      // setAppInfo(name, value);
+      // setAppInfo(name, value);
+      // loadProjectListInWorkspace(value);
+      // loadWorkspaceDetail(value);
+      const selectedWorkspace = workSpaceList.find(
+        (workspace) => workspace.workspaceName === value
+      );
+      console.log(selectedWorkspace);
       setAppInfo(name, value);
-      setAppInfo(name, value);
+      setAppInfo("workspacetag", selectedWorkspace.workspaceTag);
+      setAppInfo("workspaceuuid", selectedWorkspace.workspaceUUID);
       loadProjectListInWorkspace(value);
       loadWorkspaceDetail(value);
     }
     if (name === "appProject") {
-      setAppInfo(name, value);
       setAppInfo(name, value);
       loadProjectDetail(value);
       initTargetClusters(
@@ -136,14 +142,11 @@ const CreateTamplateStepOne = observer((props) => {
       setAppInfo(name, Number.parseInt(value));
     }
     if (name === "appPort") {
-      console.log("name ?", name);
-      console.log("value ?", value);
       setAppInfo(name, value);
       setAppInfo(name, value);
     }
     if (name === "envKey") {
       setEnv({ name: value, value: env.value });
-      console.log(appInfo.appEnv.length);
     }
     if (name === "envValue") {
       setEnv({ name: env.name, value: value });
@@ -238,7 +241,7 @@ const CreateTamplateStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
+          {/* <tr>
             <th>
               Workspace <span className="requried">*</span>
             </th>
@@ -254,6 +257,32 @@ const CreateTamplateStepOne = observer((props) => {
                   </option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr> */}
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="appWorkspace"
+                  onChange={onChange}
+                  value={appInfo.appWorkspace}
+                >
+                  <option value={""} disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
                       {workspace.workspaceName}
                     </option>
                   ))}
@@ -349,83 +378,6 @@ const CreateTamplateStepOne = observer((props) => {
               </td>
             </tr>
           )}
-
-          {/* {appInfo.app === "nginx" ? (
-            ""
-          ) : (
-            <>
-              <tr>
-                <th rowSpan={3}>Env</th>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Key"
-                    className="form_fullWidth"
-                    name="REDIRECT_STATUS_CODE"
-                    onChange={onChange}
-                    value="REDIRECT_STATUS_CODE"
-                    disabled={true}
-                  />
-                </td>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Value"
-                    className="form_fullWidth"
-                    name="envValue"
-                    onChange={onChange}
-                    value={env.value}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Key"
-                    className="form_fullWidth"
-                    name="REDIRECT_STATUS_CODE"
-                    onChange={onChange}
-                    value="REDIRECT_STATUS_CODE"
-                    disabled={true}
-                  />
-                </td>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Value"
-                    className="form_fullWidth"
-                    name="envValue"
-                    onChange={onChange}
-                    value={env.value}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Key"
-                    className="form_fullWidth"
-                    name="REDIRECT_STATUS_CODE"
-                    onChange={onChange}
-                    value="REDIRECT_STATUS_CODE"
-                    disabled={true}
-                  />
-                </td>
-                <td style={{ width: "400px" }}>
-                  <CTextField
-                    type="text"
-                    placeholder="Value"
-                    className="form_fullWidth"
-                    name="envValue"
-                    onChange={onChange}
-                    value={env.value}
-                  />
-                </td>
-              </tr>
-            </>
-          )} */}
 
           {appInfo.app === "nginx" || "web" ? (
             ""

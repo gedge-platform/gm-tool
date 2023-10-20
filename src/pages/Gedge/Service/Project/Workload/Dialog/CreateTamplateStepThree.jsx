@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import { deploymentStore, projectStore } from "@/store";
+import { deploymentStore } from "@/store";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
-import claimStore from "../../../../../../store/Claim";
-import DeploymentTargetClusters from "./DeploymentTargetClusters";
-import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
-import { runInAction } from "mobx";
+import CreateTamplateTargetCluster from "./CreateTamplateTargetCluster";
 
 const Button = styled.button`
   background-color: #fff;
@@ -23,7 +18,7 @@ const Button = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const CreateDeploymentStepThree = observer(() => {
+const CreateTamplateStepThree = observer(() => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
@@ -37,13 +32,18 @@ const CreateDeploymentStepThree = observer(() => {
 
   const { selectClusterInfo } = workspaceStore;
 
-  const { loadCluster, clusterDetail } = clusterStore;
+  const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
   const openTargetClusters = (index) => {
     setOpen2(true);
     setContainerIndex(index);
+  };
+
+  const loadSourceNode = (targetCluster) => {
+    setDeploymentPriority("sourceNode", "");
+    loadCluster(targetCluster[0]);
   };
 
   const showTargetClusters = () => {
@@ -127,6 +127,7 @@ const CreateDeploymentStepThree = observer(() => {
             });
           }
           if (e.target.value === "node") {
+            initClusterDetail();
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "node",
@@ -167,171 +168,193 @@ const CreateDeploymentStepThree = observer(() => {
         case "GLowLatencyPriority":
           return (
             <>
-              <FormControl
-                className="form_fullWidth"
-                style={{ paddingTop: "4px" }}
-              >
-                <select
-                  name="mode"
-                  value={deployment.priority.mode}
-                  onChange={handlePriority}
-                >
-                  <option value={"default"}>from node</option>
-                  <option value={"from_pod"}>from pod</option>
-                </select>
-                {deployment.priority.mode === "default" ? (
-                  <div style={{ paddingTop: "4px" }}>
-                    <FormControl style={{ width: "50%" }}>
-                      <select
-                        name="sourceCluster"
-                        value={deployment.priority.sourceCluster}
-                        onChange={handlePriority}
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Source Cluster
-                        </option>
-                        {selectClusterInfo.map((cluster) => (
-                          <option value={cluster.clusterName}>
-                            {cluster.clusterName}
+              <tr>
+                <th>
+                  Priority Mode<span className="requried">*</span>
+                </th>
+                <td>
+                  <FormControl className="form_fullWidth">
+                    <select
+                      name="mode"
+                      value={deployment.priority.mode}
+                      onChange={handlePriority}
+                    >
+                      <option value={"default"}>from node</option>
+                      <option value={"from_pod"}>from pod</option>
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Source Clusters & Nodes<span className="requried">*</span>
+                </th>
+                <td>
+                  {deployment.priority.mode === "default" ? (
+                    <div>
+                      <FormControl style={{ width: "50%" }}>
+                        <select
+                          name="sourceCluster"
+                          value={deployment.priority.sourceCluster}
+                          onChange={handlePriority}
+                        >
+                          <option value={""} selected disabled hidden>
+                            Select Source Cluster
                           </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                      <select
-                        name="sourceNode"
-                        onChange={handlePriority}
-                        value={deployment.priority.sourceNode}
-                        disabled={
-                          deployment.priority.sourceCluster === "" && true
-                        }
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Source Node
-                        </option>
-                        {clusterDetail.nodes !== null ? (
-                          clusterDetail.nodes.map((node) => (
-                            <option value={node.name}>{node.name}</option>
-                          ))
-                        ) : (
-                          <option value={"noData"}>No Data</option>
-                        )}
-                      </select>
-                    </FormControl>
-                  </div>
-                ) : (
-                  <div style={{ paddingTop: "4px" }}>
-                    <FormControl style={{ width: "50%" }}>
-                      <select
-                        name="sourceCluster"
-                        value={deployment.priority.sourceCluster}
-                        onChange={handlePriority}
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Cluster
-                        </option>
-                        {selectClusterInfo.map((cluster) => (
-                          <option value={cluster.clusterName}>
-                            {cluster.clusterName}
+                          {selectClusterInfo.map((cluster) => (
+                            <option value={cluster.clusterName}>
+                              {cluster.clusterName}
+                            </option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                        <select
+                          name="sourceNode"
+                          onChange={handlePriority}
+                          value={deployment.priority.sourceNode}
+                          disabled={
+                            deployment.priority.sourceCluster === "" && true
+                          }
+                        >
+                          <option value={""} selected disabled hidden>
+                            Select Source Node
                           </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                      <select
-                        name="podName"
-                        onChange={handlePriority}
-                        value={deployment.priority.podName}
-                        disabled={
-                          deployment.priority.sourceCluster === "" && true
-                        }
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Pod
-                        </option>
-                        {podListIncluster !== null ? (
-                          podListIncluster.map((pod) => (
-                            <option value={pod.name}>{pod.name}</option>
-                          ))
-                        ) : (
-                          <option value={"noData"}>No Data</option>
-                        )}
-                      </select>
-                    </FormControl>
-                  </div>
-                )}
-              </FormControl>
+                          {clusterDetail.nodes !== null ? (
+                            clusterDetail.nodes.map((node) => (
+                              <option value={node.name}>{node.name}</option>
+                            ))
+                          ) : (
+                            <option value={"noData"}>No Data</option>
+                          )}
+                        </select>
+                      </FormControl>
+                    </div>
+                  ) : (
+                    <div>
+                      <FormControl style={{ width: "50%" }}>
+                        <select
+                          name="sourceCluster"
+                          value={deployment.priority.sourceCluster}
+                          onChange={handlePriority}
+                        >
+                          <option value={""} selected disabled hidden>
+                            Select Cluster
+                          </option>
+                          {selectClusterInfo.map((cluster) => (
+                            <option value={cluster.clusterName}>
+                              {cluster.clusterName}
+                            </option>
+                          ))}
+                        </select>
+                      </FormControl>
+                      <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
+                        <select
+                          name="podName"
+                          onChange={handlePriority}
+                          value={deployment.priority.podName}
+                          disabled={
+                            deployment.priority.sourceCluster === "" && true
+                          }
+                        >
+                          <option value={""} selected disabled hidden>
+                            Select Pod
+                          </option>
+                          {podListIncluster !== null ? (
+                            podListIncluster.map((pod) => (
+                              <option value={pod.name}>{pod.name}</option>
+                            ))
+                          ) : (
+                            <option value={"noData"}>No Data</option>
+                          )}
+                        </select>
+                      </FormControl>
+                    </div>
+                  )}
+                </td>
+              </tr>
             </>
           );
         case "GMostRequestPriority":
           return (
-            <>
-              <FormControl style={{ paddingTop: "4px" }}>
-                <select
-                  name="mode"
-                  value={deployment.priority.mode}
-                  onChange={handlePriority}
-                >
-                  <option value={"cpu"}>CPU</option>
-                  <option value={"gpu"}>GPU</option>
-                  <option value={"memory"}>MEMORY</option>
-                </select>
-              </FormControl>
-            </>
+            <tr>
+              <th>
+                Priority Mode<span className="requried">*</span>
+              </th>
+              <td>
+                <FormControl>
+                  <select
+                    name="mode"
+                    value={deployment.priority.mode}
+                    onChange={handlePriority}
+                  >
+                    <option value={"cpu"}>CPU</option>
+                    <option value={"gpu"}>GPU</option>
+                    <option value={"memory"}>MEMORY</option>
+                  </select>
+                </FormControl>
+              </td>
+            </tr>
           );
         case "GSelectedClusterPriority":
           return (
             <>
-              <FormControl
-                className="form_fullWidth"
-                style={{ paddingTop: "4px" }}
-              >
-                <select
-                  name="mode"
-                  value={deployment.priority.mode}
-                  onChange={handlePriority}
-                >
-                  <option value={"default"}>Cluster</option>
-                  <option value={"node"}>Node</option>
-                </select>
-                {deployment.priority.mode === "node" && (
-                  <div style={{ paddingTop: "4px" }}>
-                    <FormControl style={{ width: "50%" }}>
-                      <select name="sourceCluster" onChange={handlePriority}>
-                        <option value={""} selected disabled hidden>
-                          Select Source Cluster
-                        </option>
-                        {selectClusterInfo.map((cluster) => (
-                          <option value={cluster.clusterName}>
-                            {cluster.clusterName}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormControl style={{ width: "50%", paddingLeft: "4px" }}>
-                      <select
-                        name="sourceNode"
-                        onChange={handlePriority}
-                        value={deployment.priority.sourceNode}
-                        disabled={
-                          deployment.priority.sourceCluster === "" && true
-                        }
-                      >
-                        <option value={""} selected disabled hidden>
-                          Select Source Node
-                        </option>
-                        {clusterDetail.nodes !== null ? (
-                          clusterDetail.nodes.map((node) => (
-                            <option value={node.name}>{node.name}</option>
-                          ))
-                        ) : (
-                          <option value={"noData"}>No Data</option>
-                        )}
-                      </select>
-                    </FormControl>
-                  </div>
-                )}
-              </FormControl>
+              <tr>
+                <th>
+                  Priority Mode<span className="requried">*</span>
+                </th>
+                <td>
+                  <FormControl className="form_fullWidth">
+                    <select
+                      name="mode"
+                      value={deployment.priority.mode}
+                      onChange={handlePriority}
+                    >
+                      <option value={"default"}>Cluster</option>
+                      <option value={"node"}>Node</option>
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+              {deployment.priority.mode === "node" && (
+                <>
+                  <tr>
+                    <th>Target Clusters</th>
+                    <td>
+                      <Button onClick={() => openTargetClusters(-1)}>
+                        {showTargetClusters()}
+                      </Button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>
+                      Source Node<span className="requried">*</span>
+                    </th>
+                    <td>
+                      <div>
+                        <FormControl style={{ width: "100%" }}>
+                          <select
+                            name="sourceNode"
+                            onChange={handlePriority}
+                            value={deployment.priority.sourceNode}
+                          >
+                            <option value={""} selected disabled hidden>
+                              Select Source Node
+                            </option>
+                            {clusterDetail.nodes !== null ? (
+                              clusterDetail.nodes.map((node) => (
+                                <option value={node.name}>{node.name}</option>
+                              ))
+                            ) : (
+                              <option value={"noData"}>No Data</option>
+                            )}
+                          </select>
+                        </FormControl>
+                      </div>
+                    </td>
+                  </tr>
+                </>
+              )}
             </>
           );
         case "GSetClusterPriority":
@@ -342,48 +365,50 @@ const CreateDeploymentStepThree = observer(() => {
     };
 
     return (
-      <tr>
-        <th style={{ width: "30%" }}>
-          Priority <span className="requried">*</span>
-        </th>
-        <td colSpan="3">
-          <FormControl className="form_fullWidth">
-            <select name="name" onChange={handlePriority}>
-              <option value={"GLowLatencyPriority"}>GLowLatencyPriority</option>
-              <option value={"GMostRequestPriority"}>
-                GMostRequestPriority
-              </option>
-              <option value={"GSelectedClusterPriority"}>
-                GSelectedClusterPriority
-              </option>
-              <option value={"GSetClusterPriority"}>GSetClusterPriority</option>
-            </select>
-          </FormControl>
-          {SelectedPriorityComponent()}
-        </td>
-      </tr>
+      <>
+        <tr>
+          <th style={{ width: "30%" }}>
+            Priority Type <span className="requried">*</span>
+          </th>
+          <td>
+            <FormControl className="form_fullWidth">
+              <select name="name" onChange={handlePriority}>
+                <option value={"GLowLatencyPriority"}>
+                  GLowLatencyPriority
+                </option>
+                <option value={"GMostRequestPriority"}>
+                  GMostRequestPriority
+                </option>
+                <option value={"GSelectedClusterPriority"}>
+                  GSelectedClusterPriority
+                </option>
+                <option value={"GSetClusterPriority"}>
+                  GSetClusterPriority
+                </option>
+              </select>
+            </FormControl>
+          </td>
+        </tr>
+        {SelectedPriorityComponent()}
+      </>
     );
   };
 
   return (
     <>
-      <DeploymentTargetClusters
+      <CreateTamplateTargetCluster
         open={open2}
-        onClose={handleClose}
-      ></DeploymentTargetClusters>
-
+        onClose={() => setOpen2(false)}
+        onComplete={loadSourceNode}
+      />
       <div className="step-container">
         <div className="signup-step">
           <div className="step">
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
-          <div className="step">
-            <span>고급 설정</span>
-          </div>
-          <div className="arr"></div>
           <div className="step current">
-            <span>스케줄러</span>
+            <span>고급 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step">
@@ -395,24 +420,25 @@ const CreateDeploymentStepThree = observer(() => {
       <table className="tb_data_new tb_write">
         <tbody>
           {PriorityComponent()}
-          <tr>
-            <th>Target Clusters</th>
-            <td>
-              <Button
-                style={{ marginBottom: "2px" }}
-                disabled={
-                  deployment.priority.name === "GSelectedClusterPriority" &&
-                  deployment.priority.mode === "node"
-                }
-                onClick={() => openTargetClusters(-1)}
-              >
-                {showTargetClusters()}
-              </Button>
-            </td>
-          </tr>
+          {deployment.priority.mode === "node" ? (
+            <></>
+          ) : (
+            <tr>
+              <th>Target Clusters</th>
+              <td>
+                <Button
+                  style={{ marginBottom: "2px" }}
+                  onClick={() => openTargetClusters(-1)}
+                >
+                  {showTargetClusters()}
+                </Button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </>
   );
 });
-export default CreateDeploymentStepThree;
+
+export default CreateTamplateStepThree;

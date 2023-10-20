@@ -164,6 +164,8 @@ class Deployment {
     app: "",
     appVersion: "",
     appName: "",
+    workspacetag: "",
+    workspaceuuid: "",
     appWorkspace: "",
     appProject: "",
     appReplicas: 1,
@@ -184,6 +186,8 @@ class Deployment {
       appVersion: "",
       appName: "",
       appWorkspace: "",
+      workspacetag: "",
+      workspaceuuid: "",
       appProject: "",
       appReplicas: 1,
       appPort: "",
@@ -878,13 +882,16 @@ class Deployment {
     console.log(this.deployment);
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
-    console.log(this.appInfo);
+
     const option = {
       user_name: "user1",
-      workspace_name: this.appInfo.appWorkspace,
-      workspace_uid: "649128e7fc34732e0eccfa6d",
+      // workspace_name: this.appInfo.appWorkspace,
+      // workspace_uid: "649128e7fc34732e0eccfa6d",
+      // project_name: this.appInfo.appProject,
+      workspace_name: this.appInfo.workspacetag,
+      workspace_uid: this.appInfo.workspaceuuid,
       project_name: this.appInfo.appProject,
-      // type: "default",
+
       mode: "cluster",
       data: {
         selected_cluster: "onpremise(dongjak)",
@@ -921,22 +928,30 @@ class Deployment {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    console.log(this.deployment.priority.mode);
+    console.log(this.appInfo);
+    console.log("aaaaaaa", this.targetClusters);
     const option = () => {
       if (this.deployment.priority.mode === "cluster" || "default") {
         return {
-          user_name: "user1",
-          workspace_name: this.appInfo.appWorkspace,
-          workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-          project_name: this.appInfo.appProject,
+          user_name: "test",
+          // workspace_name: this.appInfo.appWorkspace,
+          // workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
+          // project_name: "display-project",
+          workspace_name: this.appInfo.workspacetag,
+          workspace_uid: this.appInfo.workspaceuuid,
+          project_name: this.appInfo.appProject.replace(
+            "-" + this.appInfo.workspaceuuid,
+            ""
+          ),
           mode: "cluster",
           parameters: {
-            select_clusters: ["onpremise(dongjak)"],
+            select_clusters: this.targetClusters,
+            // select_clusters: this.deployment.targetClusters,
           },
         };
       } else {
         return {
-          user_name: "user1",
+          user_name: "test",
           workspace_name: this.appInfo.appWorkspace,
           workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
           project_name: this.appInfo.appProject,

@@ -111,6 +111,7 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeployment(e.target.name, e.target.value);
       setDeployment("workspacetag", selectedWorkspace.workspaceTag);
       setDeployment("workspaceuuid", selectedWorkspace.workspaceUUID);
+      console.log(selectedWorkspace);
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
     }
