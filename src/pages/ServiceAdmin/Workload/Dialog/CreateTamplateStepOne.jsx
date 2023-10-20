@@ -7,7 +7,7 @@ import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
 import { CTextField } from "@/components/textfields";
 import { workspaceStore, projectStore, deploymentStore } from "@/store";
-import templateStore from "../../../../../../store/Template";
+import templateStore from "../../../../store/Template";
 
 const Button = styled.button`
   border: none;

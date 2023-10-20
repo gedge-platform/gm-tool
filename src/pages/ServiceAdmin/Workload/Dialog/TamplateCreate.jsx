@@ -2,13 +2,11 @@ import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { useState, useEffect } from "react";
 import CreateTamplateStepOne from "./CreateTamplateStepOne";
-import CreateTamplateStepTwo from "./CreateTamplateStepTwo";
 import CreateTamplateStepThree from "./CreateTamplateStepThree";
 import CreateTamplateStepFour from "./CreateTamplateStepFour";
 import styled from "styled-components";
 import { deploymentStore, workspaceStore } from "@/store";
-import TamplateYaml from "./TamplateYAML";
-import templateStore from "../../../../../../store/Template";
+import templateStore from "../../../../store/Template";
 
 const Button = styled.button`
   background-color: #fff;

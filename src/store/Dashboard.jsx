@@ -11,6 +11,7 @@ class Dashboard {
   credentialCnt = 0;
   edgeClusterCnt = 0;
   workspaceCnt = 0;
+  coreClusterCnt = 0;
   projectCnt = 0;
   coreClusterCnt = 0;
   clusterCpuTop5 = [

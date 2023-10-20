@@ -4,7 +4,7 @@ import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import templateStore from "../../../../../../store/Template";
+import templateStore from "../../../../store/Template";
 
 const CreateTamplateStepFour = observer(() => {
   const { appInfo, deployment } = deploymentStore;
