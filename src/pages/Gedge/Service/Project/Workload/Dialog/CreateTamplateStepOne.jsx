@@ -111,20 +111,26 @@ const CreateTamplateStepOne = observer((props) => {
     }
     if (name === "appVersion") {
       setAppInfo(name, value);
-      setAppInfo(name, value);
     }
     if (name === "appName") {
       setAppInfo(name, value);
-      setAppInfo(name, value);
     }
     if (name === "appWorkspace") {
+      // setAppInfo(name, value);
+      // setAppInfo(name, value);
+      // loadProjectListInWorkspace(value);
+      // loadWorkspaceDetail(value);
+      const selectedWorkspace = workSpaceList.find(
+        (workspace) => workspace.workspaceName === value
+      );
+      console.log(selectedWorkspace);
       setAppInfo(name, value);
-      setAppInfo(name, value);
+      setAppInfo("workspacetag", selectedWorkspace.workspaceTag);
+      setAppInfo("workspaceuuid", selectedWorkspace.workspaceUUID);
       loadProjectListInWorkspace(value);
       loadWorkspaceDetail(value);
     }
     if (name === "appProject") {
-      setAppInfo(name, value);
       setAppInfo(name, value);
       loadProjectDetail(value);
       initTargetClusters(
@@ -235,7 +241,7 @@ const CreateTamplateStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
+          {/* <tr>
             <th>
               Workspace <span className="requried">*</span>
             </th>
@@ -251,6 +257,32 @@ const CreateTamplateStepOne = observer((props) => {
                   </option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr> */}
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="appWorkspace"
+                  onChange={onChange}
+                  value={appInfo.appWorkspace}
+                >
+                  <option value={""} disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
                       {workspace.workspaceName}
                     </option>
                   ))}

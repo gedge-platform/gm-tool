@@ -34,6 +34,7 @@ const DeploymentListTab = observer(() => {
     goPrevPage,
     goNextPage,
     initAppInfo,
+    deploymentList,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -152,7 +153,7 @@ const DeploymentListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={deploymentList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

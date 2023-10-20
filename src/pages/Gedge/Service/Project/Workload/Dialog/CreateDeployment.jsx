@@ -147,12 +147,12 @@ const CreateDeployment = observer((props) => {
               args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
               resources: {
                 limits: {
+                  cpu: e.cpuLimit + "m",
                   memory: e.memoryLimit + "Mi",
                 },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
-                  "nvidia.com/gpu": "1",
                 },
               },
               ports: e.ports.map((i) => {

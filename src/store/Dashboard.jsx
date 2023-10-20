@@ -13,6 +13,7 @@ class Dashboard {
   workspaceCnt = 0;
   coreClusterCnt = 0;
   projectCnt = 0;
+  coreClusterCnt = 0;
   clusterCpuTop5 = [
     {
       cluster: "",

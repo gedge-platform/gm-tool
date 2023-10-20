@@ -44,7 +44,7 @@ const CreateTamplateStepThree = observer(() => {
   const loadSourceNode = (targetCluster) => {
     setDeploymentPriority("sourceNode", "");
     loadCluster(targetCluster[0]);
-  }
+  };
 
   const showTargetClusters = () => {
     if (targetClusters.length === 0) {
@@ -169,11 +169,11 @@ const CreateTamplateStepThree = observer(() => {
           return (
             <>
               <tr>
-                <th>Priority Mode<span className="requried">*</span></th>
+                <th>
+                  Priority Mode<span className="requried">*</span>
+                </th>
                 <td>
-                  <FormControl
-                    className="form_fullWidth"
-                  >
+                  <FormControl className="form_fullWidth">
                     <select
                       name="mode"
                       value={deployment.priority.mode}
@@ -182,11 +182,13 @@ const CreateTamplateStepThree = observer(() => {
                       <option value={"default"}>from node</option>
                       <option value={"from_pod"}>from pod</option>
                     </select>
-                </FormControl>
+                  </FormControl>
                 </td>
               </tr>
               <tr>
-                <th>Source Clusters & Nodes<span className="requried">*</span></th>
+                <th>
+                  Source Clusters & Nodes<span className="requried">*</span>
+                </th>
                 <td>
                   {deployment.priority.mode === "default" ? (
                     <div>
@@ -276,7 +278,9 @@ const CreateTamplateStepThree = observer(() => {
         case "GMostRequestPriority":
           return (
             <tr>
-              <th>Priority Mode<span className="requried">*</span></th>
+              <th>
+                Priority Mode<span className="requried">*</span>
+              </th>
               <td>
                 <FormControl>
                   <select
@@ -296,11 +300,11 @@ const CreateTamplateStepThree = observer(() => {
           return (
             <>
               <tr>
-                <th>Priority Mode<span className="requried">*</span></th>
+                <th>
+                  Priority Mode<span className="requried">*</span>
+                </th>
                 <td>
-                  <FormControl
-                    className="form_fullWidth"
-                  >
+                  <FormControl className="form_fullWidth">
                     <select
                       name="mode"
                       value={deployment.priority.mode}
@@ -317,15 +321,15 @@ const CreateTamplateStepThree = observer(() => {
                   <tr>
                     <th>Target Clusters</th>
                     <td>
-                      <Button
-                        onClick={() => openTargetClusters(-1)}
-                      >
+                      <Button onClick={() => openTargetClusters(-1)}>
                         {showTargetClusters()}
                       </Button>
                     </td>
                   </tr>
                   <tr>
-                    <th>Source Node<span className="requried">*</span></th>
+                    <th>
+                      Source Node<span className="requried">*</span>
+                    </th>
                     <td>
                       <div>
                         <FormControl style={{ width: "100%" }}>
@@ -369,10 +373,18 @@ const CreateTamplateStepThree = observer(() => {
           <td>
             <FormControl className="form_fullWidth">
               <select name="name" onChange={handlePriority}>
-                <option value={"GLowLatencyPriority"}>GLowLatencyPriority</option>
-                <option value={"GMostRequestPriority"}>GMostRequestPriority</option>
-                <option value={"GSelectedClusterPriority"}>GSelectedClusterPriority</option>
-                <option value={"GSetClusterPriority"}>GSetClusterPriority</option>
+                <option value={"GLowLatencyPriority"}>
+                  GLowLatencyPriority
+                </option>
+                <option value={"GMostRequestPriority"}>
+                  GMostRequestPriority
+                </option>
+                <option value={"GSelectedClusterPriority"}>
+                  GSelectedClusterPriority
+                </option>
+                <option value={"GSetClusterPriority"}>
+                  GSetClusterPriority
+                </option>
               </select>
             </FormControl>
           </td>
@@ -384,7 +396,11 @@ const CreateTamplateStepThree = observer(() => {
 
   return (
     <>
-      <CreateTamplateTargetCluster open={open2} onClose={() => setOpen2(false)} onComplete={loadSourceNode} />
+      <CreateTamplateTargetCluster
+        open={open2}
+        onClose={() => setOpen2(false)}
+        onComplete={loadSourceNode}
+      />
       <div className="step-container">
         <div className="signup-step">
           <div className="step">
@@ -404,19 +420,21 @@ const CreateTamplateStepThree = observer(() => {
       <table className="tb_data_new tb_write">
         <tbody>
           {PriorityComponent()}
-          {deployment.priority.mode === "node" ? 
-          (<></>)
-          :(<tr>
-            <th>Target Clusters</th>
-            <td>
-              <Button
-                style={{ marginBottom: "2px" }}
-                onClick={() => openTargetClusters(-1)}
-              >
-                {showTargetClusters()}
-              </Button>
-            </td>
-          </tr>)}
+          {deployment.priority.mode === "node" ? (
+            <></>
+          ) : (
+            <tr>
+              <th>Target Clusters</th>
+              <td>
+                <Button
+                  style={{ marginBottom: "2px" }}
+                  onClick={() => openTargetClusters(-1)}
+                >
+                  {showTargetClusters()}
+                </Button>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </>

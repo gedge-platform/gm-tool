@@ -89,95 +89,154 @@ const CreatePod = observer((props) => {
 
   const [stepValue, setStepValue] = useState(1);
 
-  const template = {
+  const pvcTemplate = {
+    apiVersion: "v1",
+    kind: "PersistentVolumeClaim",
+    metadata: {
+      name: podInfo.podName + "-pvc",
+    },
+    spec: {
+      accessModes: -"ReadWriteOnce",
+      resources: {
+        requests: {
+          storage: "8Gi",
+        },
+      },
+      storageClassName: "nfs-client",
+    },
+  };
+
+  const podTemplate = {
     apiVersion: "v1",
     kind: "Pod",
     metadata: {
       name: podInfo.podName,
-      labels: labelInput,
-      annotations: annotationInput,
     },
     spec: {
-      restartPolicy: "Always",
-      terminationGracePeriodSeconds: 30,
-      containers: podInfo.containers?.map((e) => {
-        return {
-          name: e.containerName,
-          image: e.containerImage,
-          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
-          env: e.variables.map((i) => {
-            if (i.type === "KeyValuePair") {
-              return {
-                name: i.value,
-                value: i.variableName,
-              };
-            } else {
-              return {
-                name: i.type + "_key",
-                valueForm: {
-                  [i.type + "Ref"]: {
-                    name: i.variableName,
-                    key: i.type + "-key",
-                  },
-                },
-              };
-            }
-          }),
-          // env: keyValuePair.map((i) => {
-          //   return {
-          //     name: i[0],
-          //     value: i[1],
-          //   };
-          // }),
-          // valueForm: secretConfigmap.map((t) => {
-          //   const item = t.type + "Ref";
-          //   return {
-          //     [t.type + "Ref"]: {
-          //       name: t.variableName,
-          //       key: t.type + "-key",
-          //     },
-          //   };
-          // }),
-          ports: e.ports.map((i) => {
-            return {
-              containerPort: parseInt(i.privateContainerPort),
-              protocol: i.protocol,
-            };
-          }),
-          resources: {
-            requests: {
-              cpu: e.cpuReservation,
-              memory: e.memoryReservation,
+      containers: [
+        {
+          name: "nginx",
+          image: "nginx:1.14.2",
+          ports: [
+            {
+              containerPort: "80",
             },
-            limits: {
-              cpu: e.cpuLimit,
-              memory: e.memoryLimit,
-              "nvidia.com/gpu": "1",
-            },
-          },
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: i.name,
-          //     mountPath: i.mountPoint,
-          //   };
-          // }),
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: "data-volume",
-          //     mountPath: "/data",
-          //   };
-          // }),
-        };
-      }),
-      // volumes: [
-      //   {
-      //     name: "data-volume",
-      //     emptyDir: {},
-      //   },
-      // ],
+          ],
+        },
+      ],
     },
   };
+
+  const serviceTemplate = {
+    apiVersion: "v1",
+    kind: "Service",
+    metadata: {
+      name: podInfo.podName + "-service",
+    },
+    spec: {
+      type: "NodePort",
+      selector: {
+        app: "nginx10",
+      },
+      ports: [
+        {
+          name: "http",
+          port: 80,
+          targetPort: 80,
+        },
+      ],
+    },
+  };
+
+  // const template = {
+  //   apiVersion: "v1",
+  //   kind: "Pod",
+  //   metadata: {
+  //     name: podInfo.podName,
+  //     labels: labelInput,
+  //     annotations: annotationInput,
+  //   },
+  //   spec: {
+  //     restartPolicy: "Always",
+  //     terminationGracePeriodSeconds: 30,
+  //     containers: podInfo.containers?.map((e) => {
+  //       return {
+  //         name: e.containerName,
+  //         image: e.containerImage,
+  //         command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
+  //         args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+  //         env: e.variables.map((i) => {
+  //           if (i.type === "KeyValuePair") {
+  //             return {
+  //               name: i.value,
+  //               value: i.variableName,
+  //             };
+  //           } else {
+  //             return {
+  //               name: i.type + "_key",
+  //               valueForm: {
+  //                 [i.type + "Ref"]: {
+  //                   name: i.variableName,
+  //                   key: i.type + "-key",
+  //                 },
+  //               },
+  //             };
+  //           }
+  //         }),
+  //         // env: keyValuePair.map((i) => {
+  //         //   return {
+  //         //     name: i[0],
+  //         //     value: i[1],
+  //         //   };
+  //         // }),
+  //         // valueForm: secretConfigmap.map((t) => {
+  //         //   const item = t.type + "Ref";
+  //         //   return {
+  //         //     [t.type + "Ref"]: {
+  //         //       name: t.variableName,
+  //         //       key: t.type + "-key",
+  //         //     },
+  //         //   };
+  //         // }),
+  //         ports: e.ports.map((i) => {
+  //           return {
+  //             containerPort: parseInt(i.privateContainerPort),
+  //             protocol: i.protocol,
+  //           };
+  //         }),
+  //         resources: {
+  //           requests: {
+  //             cpu: e.cpuReservation,
+  //             memory: e.memoryReservation,
+  //           },
+  //           limits: {
+  //             cpu: e.cpuLimit,
+  //             memory: e.memoryLimit,
+  //             "nvidia.com/gpu": "1",
+  //           },
+  //         },
+  //         // volumeMounts: e.volumes.map((i) => {
+  //         //   return {
+  //         //     name: i.name,
+  //         //     mountPath: i.mountPoint,
+  //         //   };
+  //         // }),
+  //         // volumeMounts: e.volumes.map((i) => {
+  //         //   return {
+  //         //     name: "data-volume",
+  //         //     mountPath: "/data",
+  //         //   };
+  //         // }),
+  //       };
+  //     }),
+  //     // volumes: [
+  //     //   {
+  //     //     name: "data-volume",
+  //     //     emptyDir: {},
+  //     //   },
+  //     // ],
+  //   },
+  // };
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -242,7 +301,15 @@ const CreatePod = observer((props) => {
   };
 
   const createPod = () => {
-    postPodGM(require("json-to-pretty-yaml").stringify(template));
+    const YAML = require("json-to-pretty-yaml");
+    const value =
+      YAML.stringify(pvcTemplate) +
+      "---\n" +
+      YAML.stringify(podTemplate) +
+      "---\n" +
+      YAML.stringify(serviceTemplate);
+    postPodGM(value);
+
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
@@ -250,7 +317,13 @@ const CreatePod = observer((props) => {
   useEffect(() => {
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(
+        YAML.stringify(pvcTemplate) +
+          "---\n" +
+          YAML.stringify(podTemplate) +
+          "---\n" +
+          YAML.stringify(serviceTemplate)
+      );
     }
   }, [stepValue]);
 

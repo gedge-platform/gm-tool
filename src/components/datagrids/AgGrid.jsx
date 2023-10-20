@@ -26,11 +26,12 @@ const AgGrid = (props) => {
     setDetail,
     isBottom,
   } = props;
-  
+
   const gridRef = useRef();
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
     '<span class="ag-overlay-loading-center">No Data</span>'
@@ -55,6 +56,7 @@ const AgGrid = (props) => {
 
   const onFirstDataRendered = (params) => {
     params.api.sizeColumnsToFit();
+    setTotal(gridRef?.current?.api.paginationGetTotalPages());
   };
 
   const onGridSizeChanged = (params) => {
@@ -90,7 +92,7 @@ const AgGrid = (props) => {
 
   const onPaginationChanged = useCallback(() => {
     if (gridRef.current.api) {
-      setCurrentPage(gridRef.current.api.paginationGetCurrentPage()+1)
+      setCurrentPage(gridRef.current.api.paginationGetCurrentPage() + 1);
     }
   }, []);
 
@@ -155,13 +157,17 @@ const AgGrid = (props) => {
                 <span className="btnLabel_icon hover prev">Prev</span>
               </button>
               <span className="page-num">
-                {currentPage} of {gridRef?.current?.api.paginationGetTotalPages()}
+                {currentPage} of{" "}
+                {gridRef?.current?.api.paginationGetTotalPages()}
               </span>
               <button type="button" className="btn_comm">
                 <span
                   className="btnLabel_icon hover next"
                   onClick={() => {
-                    if (gridRef.current.api.paginationGetCurrentPage() === gridRef.current.api.paginationGetTotalPages()-1) {
+                    if (
+                      gridRef.current.api.paginationGetCurrentPage() ===
+                      gridRef.current.api.paginationGetTotalPages() - 1
+                    ) {
                       swalError("마지막 페이지입니다");
                     } else {
                       gridRef.current.api.paginationGoToNextPage();

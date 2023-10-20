@@ -81,12 +81,8 @@ const CreateDeploymentStepOne = observer((props) => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
-  const {
-    removeContainer,
-    initTargetClusters,
-    deployment,
-    setDeployment
-  } = deploymentStore;
+  const { removeContainer, initTargetClusters, deployment, setDeployment } =
+    deploymentStore;
 
   const {
     loadWorkSpaceList,
@@ -109,7 +105,13 @@ const CreateDeploymentStepOne = observer((props) => {
     }
 
     if (e.target.name === "workspace") {
+      const selectedWorkspace = workSpaceList.find(
+        (workspace) => workspace.workspaceName === e.target.value
+      );
       setDeployment(e.target.name, e.target.value);
+      setDeployment("workspacetag", selectedWorkspace.workspaceTag);
+      setDeployment("workspaceuuid", selectedWorkspace.workspaceUUID);
+      console.log(selectedWorkspace);
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
     }
@@ -132,7 +134,7 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeployment("pvcName", pvc.name);
       setDeployment("volume", pvc.volume);
     }
-  }
+  };
 
   const openAddContainer = (index) => {
     setOpen2(true);
@@ -197,7 +199,7 @@ const CreateDeploymentStepOne = observer((props) => {
             </td>
           </tr>
 
-          <tr>
+          {/* <tr>
             <th>
               Workspace <span className="requried">*</span>
             </th>
@@ -213,6 +215,59 @@ const CreateDeploymentStepOne = observer((props) => {
                   </option>
                   {workSpaceList.map((workspace) => (
                     <option value={workspace.workspaceName}>
+                      {workspace.workspaceName}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr> */}
+          {/* <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="workspace"
+                  onChange={handleDeployment}
+                  value={deployment.workspace}
+                >
+                  <option value={""} disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
+                      {workspace.workspaceName}
+                    </option>
+
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr> */}
+          <tr>
+            <th>
+              Workspace <span className="requried">*</span>
+            </th>
+            <td colSpan="3">
+              <FormControl className="form_fullWidth">
+                <select
+                  name="workspace"
+                  onChange={handleDeployment}
+                  value={deployment.workspace}
+                >
+                  <option value={""} disabled hidden>
+                    Select Workspace
+                  </option>
+                  {workSpaceList.map((workspace) => (
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
                       {workspace.workspaceName}
                     </option>
                   ))}

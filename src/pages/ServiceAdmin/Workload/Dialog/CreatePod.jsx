@@ -18,6 +18,16 @@ import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
 import { swalError } from "@/utils/swal-utils";
 
+const Button = styled.button`
+  background-color: #fff;
+  border: 1px solid black;
+  color: black;
+  padding: 10px 35px;
+  margin-right: 10px;
+  border-radius: 4px;
+  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
+`;
+
 const ButtonNext = styled.button`
   background-color: #0f5ce9;
   color: white;
