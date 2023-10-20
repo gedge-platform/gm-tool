@@ -210,6 +210,7 @@ const CreateDeployment = observer((props) => {
   };
 
   const createDeployment = () => {
+    console.log(require("json-to-pretty-yaml").stringify(template));
     postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
 
     handleClose();

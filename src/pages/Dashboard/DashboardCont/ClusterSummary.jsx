@@ -10,6 +10,7 @@ const ClusterSummary = observer(() => {
     workspaceCnt,
     projectCnt,
     loadDashboardCnt,
+    coreClusterCnt,
   } = dashboardStore;
 
   useEffect(() => {
@@ -25,7 +26,7 @@ const ClusterSummary = observer(() => {
 
       <div className="ClusterSummary Core">
         <div className="ClusterCountTitle">클라우드 개수</div>
-        <div className="ClusterCount">{credentialCnt}</div>
+        <div className="ClusterCount">{coreClusterCnt}</div>
       </div>
 
       {/* <div className="ClusterSummary Test">
