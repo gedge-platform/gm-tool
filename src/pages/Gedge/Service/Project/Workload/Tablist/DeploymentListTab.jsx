@@ -35,7 +35,7 @@ const DeploymentListTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
-    initAppInfo
+    initAppInfo,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -80,6 +80,7 @@ const DeploymentListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      sort: "desc",
     },
   ]);
 
@@ -99,7 +100,7 @@ const DeploymentListTab = observer(() => {
 
   useEffect(() => {
     initAppInfo();
-  }, [tamplateOpen])
+  }, [tamplateOpen]);
 
   const handleCreateOpen = () => {
     setWorkspace("");
