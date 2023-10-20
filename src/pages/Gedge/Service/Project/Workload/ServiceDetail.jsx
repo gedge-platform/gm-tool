@@ -49,7 +49,7 @@ const Label = styled.span`
 `;
 
 const Detail = observer(() => {
-  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
+  const { serviceDetail, portTemp, involvesPods, involvesWorkloads, nodePort } =
     serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -125,6 +125,10 @@ const Detail = observer(() => {
                   <tr>
                     <th>Type</th>
                     <td>{serviceDetail.type ? serviceDetail.type : "-"}</td>
+                  </tr>
+                  <tr>
+                    <th>Node Port</th>
+                    <td>{nodePort ? nodePort : "-"}</td>
                   </tr>
                   <tr>
                     <th>Cluster IP</th>

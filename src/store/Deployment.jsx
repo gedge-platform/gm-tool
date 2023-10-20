@@ -165,14 +165,34 @@ class Deployment {
     appName: "",
     appWorkspace: "",
     appProject: "",
-    appReplica: 1,
+    appReplicas: 1,
     appPort: "",
+    appEnv: [],
     priority: {
       name: "GLowLatencyPriority",
       mode: "default",
       sourceCluster: "",
       sourceNode: "",
     },
+  };
+
+  initAppInfo = () => {
+    this.appInfo = {
+      app: "",
+      appVersion: "",
+      appName: "",
+      appWorkspace: "",
+      appProject: "",
+      appReplicas: 1,
+      appPort: "",
+      appEnv: [],
+      priority: {
+        name: "GLowLatencyPriority",
+        mode: "default",
+        sourceCluster: "",
+        sourceNode: "",
+      },
+    };
   };
 
   setAppInfo = (name, value) => {
@@ -182,6 +202,8 @@ class Deployment {
   deployment = {
     deploymentName: "",
     workspace: "",
+    workspacetag: "",
+    workspaceuuid: "",
     project: "",
     replicas: 1,
     pvcName: "",
@@ -225,6 +247,8 @@ class Deployment {
           sourceNode: "",
         },
         targetClusters: "",
+        workspacetag: "",
+        workspaceuuid: "",
       };
     });
   };
@@ -559,6 +583,7 @@ class Deployment {
           } else {
             this.deploymentList = [];
           }
+          console.log("deploymentList : ", this.deploymentList);
         });
       })
       .then(() => {
@@ -593,6 +618,7 @@ class Deployment {
           } else {
             this.deploymentList = [];
           }
+          console.log("deploymentList admin : ", this.deploymentList);
         });
       })
       .then(() => {
@@ -820,29 +846,37 @@ class Deployment {
   };
 
   postDeploymentGM = async (callback) => {
+    console.log(this.deployment);
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const option = {
       user_name: "user1",
-      workspace_name: "ws1",
-      workspace_uid: "649128e7fc34732e0eccfa6d",
-      project_name: "p1",
-      type: "default",
-      data: {
-        selected_cluster: "onpremise(dongjak)",
+      workspace_name: this.deployment.workspacetag,
+      workspace_uid: this.deployment.workspaceuuid,
+      project_name: this.deployment.workspacetag,
+      mode: "cluster",
+      parameters: {
+        select_clusters: ["onpremise(dongjak)"],
       },
     };
     const options = encodeURI(JSON.stringify(option));
+    console.log(option);
+    console.log(body);
     const requestId = "requestId" + randomNumber;
 
     await axios
       .post(
-        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
-        body
+        `http://101.79.4.15:32368/GEP/GSCH/requestQueue?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedCluster&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
       )
       .then((res) => {
         console.log("res :", res.data);
-        if (res.status === 201) {
+        if (res.status === 200) {
           swalError("Deployment가 생성되었습니다.");
           console.log(options);
           console.log(res);

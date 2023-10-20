@@ -1,35 +1,19 @@
 import { observer } from "mobx-react";
-import React, { useEffect } from "react";
-import { deploymentStore } from "@/store";
+import React from "react";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import templateStore from "../../../../../../store/Template";
+import { deploymentStore } from "@/store";
 
-const CreateTamplateStepFour = observer(() => {
-  const { appInfo } = deploymentStore;
-  const {
-    deploymentYamlTemplate,
-    serviceYamlTemplate,
-    podYamlTemplate,
-    setDeploymentYamlTemplateFromAppInfo,
-  } = templateStore;
-  const YAML = require("json-to-pretty-yaml");
-
-  useEffect(() => {
-    // setDeploymentYamlTemplateFromAppInfo(appInfo);
-  }, []);
-
+const TamplateYaml = observer(() => {
+  const { content, setContent } = deploymentStore;
+  console.log(content);
   return (
     <>
-      <div className="step-container">
+      <div className="step-container2">
         <div className="signup-step">
           <div className="step">
             <span>기본 정보</span>
-          </div>
-          <div className="arr"></div>
-          <div className="step">
-            <span>고급 설정</span>
           </div>
           <div className="arr"></div>
           <div className="step current">
@@ -43,17 +27,14 @@ const CreateTamplateStepFour = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
+        onChange={(value) => {
+          // setContent(value);
+        }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}
         highlightActiveLine={true}
-        value={
-          YAML.stringify(deploymentYamlTemplate) +
-          "---\n" +
-          YAML.stringify(podYamlTemplate) +
-          "---\n" +
-          YAML.stringify(serviceYamlTemplate)
-        }
+        value={content}
         setOptions={{
           enableBasicAutocompletion: false,
           enableLiveAutocompletion: false,
@@ -67,4 +48,4 @@ const CreateTamplateStepFour = observer(() => {
   );
 });
 
-export default CreateTamplateStepFour;
+export default TamplateYaml;

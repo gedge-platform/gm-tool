@@ -17,6 +17,7 @@ class Service {
       app: "",
     },
   };
+  nodePort = 0;
   totalElements = 0;
   portTemp = [];
 
@@ -164,6 +165,7 @@ class Service {
           this.serviceInvolvesData = involvesData;
           this.involvesPods = involvesData.pods;
           this.involvesWorkloads = involvesData.workloads;
+          this.nodePort = data.port[0].nodePort;
         });
       });
   };
