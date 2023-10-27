@@ -122,7 +122,7 @@ const CreateDeployment = observer((props) => {
       name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
-      namespace: "default",
+      namespace: deployment.workspacetag,
     },
     spec: {
       selector: {
@@ -135,9 +135,10 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecret: deployment.containers?.map((e) => {
-            return { name: e.pullSecret };
-          }),
+          imagePullSecrets: [{ name: "my" }],
+          // imagePullSecret: deployment.containers?.map((e) => {
+          //   return { name: e.pullSecret };
+          // }),
           containers: deployment.containers?.map((e) => {
             return {
               name: e.containerName,

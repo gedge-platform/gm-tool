@@ -590,7 +590,6 @@ class Deployment {
           } else {
             this.deploymentList = [];
           }
-          console.log("deploymentList : ", this.deploymentList);
         });
       })
       .then(() => {
@@ -777,145 +776,242 @@ class Deployment {
     });
   };
 
-  getOptionsFromPriority = () => {
-    if (this.deployment.priority.name === "GLowLatencyPriority") {
-      if (this.deployment.priority.mode === "cluster") {
-        return {
-          user_name: JSON.parse(localStorage.getItem("user")).id,
-          workspace_name: this.deployment.workspace,
-          project_name: this.deployment.project,
-          mode: "cluster",
-          parameters: {
-            source_cluster: this.deployment.priority.sourceCluster,
-            source_node: this.deployment.priority.sourceNode,
-            select_clusters: this.targetClusters,
-          },
-        };
-      } else {
-        return {
-          user_name: JSON.parse(localStorage.getItem("user")).id,
-          workspace_name: this.deployment.workspace,
-          project_name: this.deployment.project,
-          mode: "from_pod",
-          parameters: {
-            source_cluster: this.deployment.priority.sourceCluster,
-            pod_name: this.deployment.priority.podName,
-            select_clusters: this.targetClusters,
-          },
-        };
-      }
-    }
-    if (this.deployment.priority.name === "GMostRequestPriority") {
-      return {
-        user_name: JSON.parse(localStorage.getItem("user")).id,
-        workspace_name: this.deployment.workspace,
-        project_name: this.deployment.project,
-        mode: this.deployment.priority.mode,
-        parameters: {
-          select_clusters: this.targetClusters,
-        },
-      };
-    }
-    // if (this.deployment.priority.name === "GSelectedClusterPriority") {
-    //   if (this.deployment.priority.mode === "default") {
-    //     return {
-    //       user_name: JSON.parse(localStorage.getItem("user")).id,
-    //       workspace_name: this.deployment.workspace,
-    //       project_name: this.deployment.project,
-    //       mode: this.deployment.priority.mode,
-    //       parameters: {
-    //         select_clusters: this.targetClusters,
-    //       },
-    //     };
-    //   } else {
-    //     return {
-    //       user_name: JSON.parse(localStorage.getItem("user")).id,
-    //       workspace_name: this.deployment.workspace,
-    //       project_name: this.deployment.project,
-    //       mode: this.deployment.priority.mode,
-    //       parameters: {
-    //         select_cluster: this.targetClusters[0],
-    //         select_node: this.deployment.priority.sourceNode,
-    //       },
-    //     };
-    //   }
-    // }
-    if (this.deployment.priority.name === "GSelectedClusterPriority") {
-      if (this.deployment.priority.mode === "cluster") {
-        return {
-          user_name: JSON.parse(localStorage.getItem("user")).id,
-          workspace_name: this.deployment.workspace,
-          project_name: this.deployment.project,
-          mode: this.deployment.priority.mode,
-          // mode: "cluster",
-          parameters: {
-            select_clusters: this.targetClusters,
-          },
-        };
-      } else {
-        return {
-          user_name: JSON.parse(localStorage.getItem("user")).id,
-          workspace_name: this.deployment.workspace,
-          project_name: this.deployment.project,
-          mode: this.deployment.priority.mode,
-          // mode: "node",
-          parameters: {
-            select_cluster: this.targetClusters[0],
-            select_node: this.deployment.priority.sourceNode,
-          },
-        };
-      }
-    }
-    if (this.deployment.priority.name === "GSetClusterPriority") {
-      return {
-        user_name: JSON.parse(localStorage.getItem("user")).id,
-        workspace_name: this.deployment.workspace,
-        project_name: this.deployment.project,
-        parameters: {
-          select_clusters: this.targetClusters[0],
-        },
-      };
-    }
-  };
+  // getOptionsFromPriority = () => {
+  //   if (this.deployment.priority.name === "GLowLatencyPriority") {
+  //     if (this.deployment.priority.mode === "cluster") {
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: "cluster",
+  //         parameters: {
+  //           source_cluster: this.deployment.priority.sourceCluster,
+  //           source_node: this.deployment.priority.sourceNode,
+  //           select_clusters: this.targetClusters,
+  //         },
+  //       };
+  //     } else {
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: "from_pod",
+  //         parameters: {
+  //           source_cluster: this.deployment.priority.sourceCluster,
+  //           pod_name: this.deployment.priority.podName,
+  //           select_clusters: this.targetClusters,
+  //         },
+  //       };
+  //     }
+  //   }
+  //   if (this.deployment.priority.name === "GMostRequestPriority") {
+  //     return {
+  //       user_name: JSON.parse(localStorage.getItem("user")).id,
+  //       workspace_name: this.deployment.workspace,
+  //       project_name: this.deployment.project,
+  //       mode: this.deployment.priority.mode,
+  //       parameters: {
+  //         select_clusters: this.targetClusters,
+  //       },
+  //     };
+  //   }
+  //   if (this.deployment.priority.name === "GSelectedClusterPriority") {
+  //     console.log("----------getOptionsFromPriority----------");
+  //     if (this.deployment.priority.mode === "cluster") {
+  //       //default에서 변경
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: this.deployment.priority.mode,
+  //         parameters: {
+  //           select_clusters: this.targetClusters,
+  //         },
+  //       };
+  //     } else {
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: this.deployment.priority.mode,
+  //         parameters: {
+  //           select_cluster: this.targetClusters[0],
+  //           select_node: this.deployment.priority.sourceNode,
+  //         },
+  //       };
+  //     }
+  //   }
+  //   if (this.deployment.priority.name === "GSelectedClusterPriority") {
+  //     if (this.deployment.priority.mode === "cluster") {
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: this.deployment.priority.mode,
+  //         // mode: "cluster",
+  //         parameters: {
+  //           select_clusters: this.targetClusters,
+  //         },
+  //       };
+  //     } else {
+  //       return {
+  //         user_name: JSON.parse(localStorage.getItem("user")).id,
+  //         workspace_name: this.deployment.workspace,
+  //         project_name: this.deployment.project,
+  //         mode: this.deployment.priority.mode,
+  //         // mode: "node",
+  //         parameters: {
+  //           select_cluster: this.targetClusters[0],
+  //           select_node: this.deployment.priority.sourceNode,
+  //         },
+  //       };
+  //     }
+  //   }
+  //   if (this.deployment.priority.name === "GSetClusterPriority") {
+  //     return {
+  //       user_name: JSON.parse(localStorage.getItem("user")).id,
+  //       workspace_name: this.deployment.workspace,
+  //       project_name: this.deployment.project,
+  //       parameters: {
+  //         select_clusters: this.targetClusters[0],
+  //       },
+  //     };
+  //   }
+  // };
 
   postDeploymentGM = async (callback) => {
-    console.log(this.deployment);
+    console.log("----postDeploymentGM----");
     const body = this.content;
+
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+    const userName = JSON.parse(localStorage.getItem("user")).id;
 
-    const option = {
-      user_name: "user1",
-      // workspace_name: this.appInfo.appWorkspace,
-      // workspace_uid: "649128e7fc34732e0eccfa6d",
-      // project_name: this.appInfo.appProject,
-      workspace_name: this.appInfo.workspacetag,
-      workspace_uid: this.appInfo.workspaceuuid,
-      project_name: this.appInfo.appProject,
-
-      mode: "cluster",
-      data: {
-        selected_cluster: "onpremise(dongjak)",
-      },
+    const option = () => {
+      if (this.deployment.priority.name === "GLowLatencyPriority") {
+        if (this.deployment.priority.mode === "cluster") {
+          console.log("GLowLatencyPriority 여기냐?");
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.deployment.workspace,
+            project_name: this.deployment.project,
+            mode: "cluster",
+            parameters: {
+              source_cluster: this.deployment.priority.sourceCluster,
+              source_node: this.deployment.priority.sourceNode,
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.deployment.workspace,
+            project_name: this.deployment.project,
+            mode: "from_pod",
+            parameters: {
+              source_cluster: this.deployment.priority.sourceCluster,
+              pod_name: this.deployment.priority.podName,
+              select_clusters: this.targetClusters,
+            },
+          };
+        }
+      }
+      if (this.deployment.priority.name === "GMostRequestPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          mode: this.deployment.priority.mode,
+          parameters: {
+            select_clusters: this.targetClusters,
+          },
+        };
+      }
+      // if (this.deployment.priority.name === "GSelectedClusterPriority") {
+      //   if (this.deployment.priority.mode === "cluster") {
+      //     console.log("GSelectedClusterPriority--------");
+      //     return {
+      //       user_name: JSON.parse(localStorage.getItem("user")).id,
+      //       workspace_name: this.deployment.workspace,
+      //       project_name: this.deployment.project,
+      //       mode: this.deployment.priority.mode,
+      //       parameters: {
+      //         select_clusters: this.targetClusters,
+      //       },
+      //     };
+      //   } else {
+      //     return {
+      //       user_name: JSON.parse(localStorage.getItem("user")).id,
+      //       workspace_name: this.deployment.workspace,
+      //       project_name: this.deployment.project,
+      //       mode: this.deployment.priority.mode,
+      //       parameters: {
+      //         select_cluster: this.targetClusters[0],
+      //         select_node: this.deployment.priority.sourceNode,
+      //       },
+      //     };
+      //   }
+      // }
+      if (this.deployment.priority.name === "GSelectedClusterPriority") {
+        if (this.deployment.priority.mode === "cluster") {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.deployment.workspacetag,
+            workspace_uid: this.deployment.workspaceuuid,
+            project_name: this.deployment.project.replace(
+              "-" + this.deployment.workspaceuuid,
+              ""
+            ),
+            mode: "cluster",
+            parameters: {
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.deployment.workspacetag,
+            workspace_uid: this.deployment.workspaceuuid,
+            project_name: this.deployment.project.replace(
+              "-" + this.deployment.workspaceuuid,
+              ""
+            ),
+            mode: "node",
+            parameters: {
+              select_cluster: this.targetClusters[0],
+              select_node: this.deployment.priority.sourceNode,
+            },
+          };
+        }
+      }
+      if (this.deployment.priority.name === "GSetClusterPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.deployment.workspace,
+          project_name: this.deployment.project,
+          parameters: {
+            select_clusters: this.targetClusters[0],
+          },
+        };
+      }
     };
-    const options = encodeURI(JSON.stringify(option));
-    console.log(option);
+
+    const options = encodeURI(JSON.stringify(option()));
+
     const requestId = "requestId" + randomNumber;
 
     await axios
       .post(
-        `http://101.79.4.15:32368/GEP/GSCH/requestQueue?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
-        body
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedCluster&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
       )
-      // .post(
-      //   `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
-      //   body
-      // )
       .then((res) => {
-        console.log("res :", res.data);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
-          console.log(options);
-          console.log(res);
         } else {
           swalError("Deployment 생성 실패", callback);
         }
@@ -928,15 +1024,10 @@ class Deployment {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    console.log(this.appInfo);
-    console.log("aaaaaaa", this.targetClusters);
     const option = () => {
       if (this.deployment.priority.mode === "cluster" || "default") {
         return {
           user_name: "test",
-          // workspace_name: this.appInfo.appWorkspace,
-          // workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-          // project_name: "display-project",
           workspace_name: this.appInfo.workspacetag,
           workspace_uid: this.appInfo.workspaceuuid,
           project_name: this.appInfo.appProject.replace(
