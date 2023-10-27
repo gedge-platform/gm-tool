@@ -234,7 +234,6 @@ const CreateTamplateTargetCluster = observer(
     };
 
     const applyTargetClusters = async () => {
-      console.log("selectedClusters : ", selectedClusters);
       setTargetClusters(selectedClusters.filter((element) => element !== null));
       setUnselectedClusters(unselected);
       // setPriority({

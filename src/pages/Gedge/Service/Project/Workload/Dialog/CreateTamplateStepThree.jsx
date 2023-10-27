@@ -33,6 +33,7 @@ const CreateTamplateStepThree = observer(() => {
   const { selectClusterInfo } = workspaceStore;
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
+  console.log("템플릿", clusterDetail);
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
@@ -79,6 +80,7 @@ const CreateTamplateStepThree = observer(() => {
           });
         }
         if (e.target.value === "GSelectedClusterPriority") {
+          console.log("----handlePriority----");
           setDeployment("priority", {
             name: e.target.value,
             mode: "default",
@@ -127,6 +129,7 @@ const CreateTamplateStepThree = observer(() => {
             });
           }
           if (e.target.value === "node") {
+            console.log("----monde: node----");
             initClusterDetail();
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
