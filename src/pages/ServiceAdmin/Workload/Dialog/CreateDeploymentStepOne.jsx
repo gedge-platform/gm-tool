@@ -91,7 +91,7 @@ const CreateDeploymentStepOne = observer((props) => {
   const [priority, setPriority] = useState({
     name: "GLowLatencyPriority",
     options: {
-      type: "fromNode",
+      type: "from_node",
       //data: {}
     },
   });

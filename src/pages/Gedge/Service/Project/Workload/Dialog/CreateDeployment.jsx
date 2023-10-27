@@ -109,6 +109,10 @@ const CreateDeployment = observer((props) => {
     secretConfigmap,
     deployment,
     resetDeployment,
+    postGLowLatencyPriority,
+    postGSelectedClusterPriority,
+    postGMostRequestPriority,
+    postGSetClusterPriority,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
@@ -211,8 +215,26 @@ const CreateDeployment = observer((props) => {
   };
 
   const createDeployment = () => {
-    console.log(require("json-to-pretty-yaml").stringify(template));
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    if (deployment.priority.name === "GLowLatencyPriority") {
+      postGLowLatencyPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (deployment.priority.name === "GMostRequestPriority") {
+      postGMostRequestPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (deployment.priority.name === "GSelectedClusterPriority") {
+      postGSelectedClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (deployment.priority.name === "GSetClusterPriority") {
+      postGSetClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
 
     handleClose();
     props.reloadFunc && props.reloadFunc();

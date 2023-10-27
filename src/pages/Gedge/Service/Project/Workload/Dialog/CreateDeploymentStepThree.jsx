@@ -38,7 +38,6 @@ const CreateDeploymentStepThree = observer(() => {
   const { selectClusterInfo } = workspaceStore;
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
-  console.log("노드 개수 궁금 ", clusterDetail);
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
@@ -73,7 +72,7 @@ const CreateDeploymentStepThree = observer(() => {
         if (e.target.value === "GLowLatencyPriority") {
           setDeployment("priority", {
             name: "GLowLatencyPriority",
-            mode: "default",
+            mode: "from_node",
             sourceCluster: "",
             sourceNode: "",
           });
@@ -81,11 +80,11 @@ const CreateDeploymentStepThree = observer(() => {
         if (e.target.value === "GMostRequestPriority") {
           setDeployment("priority", {
             name: "GMostRequestPriority",
-            mode: "cpu",
+            // mode: "cpu",
+            mode: "default",
           });
         }
         if (e.target.value === "GSelectedClusterPriority") {
-          console.log("---왜 안되냐고---");
           setDeployment("priority", {
             name: e.target.value,
             mode: "cluster",
@@ -102,10 +101,11 @@ const CreateDeploymentStepThree = observer(() => {
       if (e.target.name === "mode") {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
-          if (e.target.value === "default") {
+          if (e.target.value === "from_node") {
+            console.log("from_node");
             setDeployment("priority", {
               name: "GLowLatencyPriority",
-              mode: "default",
+              mode: "from_node",
               sourceCluster: "",
               sourceNode: "",
             });
@@ -127,7 +127,6 @@ const CreateDeploymentStepThree = observer(() => {
         }
         if (deployment.priority.name === "GSelectedClusterPriority") {
           if (e.target.value === "default") {
-            console.log("----왜 안되냐고 2222----");
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "cluster",
@@ -135,7 +134,6 @@ const CreateDeploymentStepThree = observer(() => {
             });
           }
           if (e.target.value === "node") {
-            console.log("----왜 안되냐고 33333----");
             initClusterDetail();
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
@@ -149,9 +147,9 @@ const CreateDeploymentStepThree = observer(() => {
 
       if (e.target.name === "sourceCluster") {
         setDeploymentPriority("sourceCluster", e.target.value);
-        if (deployment.priority.mode === "default") {
+        if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
-          setDeploymentPriority("sourceNode", "");
+          setDeploymentPriority("sourceNode", e.target.value);
         }
         if (deployment.priority.mode === "from_pod") {
           podListInclusterAPI(e.target.value, deployment.project);
@@ -159,7 +157,7 @@ const CreateDeploymentStepThree = observer(() => {
         }
         if (deployment.priority.mode === "node") {
           loadCluster(e.target.value);
-          setDeploymentPriority("sourceNode", "");
+          setDeploymentPriority("sourceNode", e.target.value);
         }
       }
 
@@ -188,7 +186,7 @@ const CreateDeploymentStepThree = observer(() => {
                       value={deployment.priority.mode}
                       onChange={handlePriority}
                     >
-                      <option value={"default"}>from node</option>
+                      <option value={"from_node"}>from node</option>
                       <option value={"from_pod"}>from pod</option>
                     </select>
                   </FormControl>
@@ -199,7 +197,7 @@ const CreateDeploymentStepThree = observer(() => {
                   Source Clusters & Nodes<span className="requried">*</span>
                 </th>
                 <td>
-                  {deployment.priority.mode === "default" ? (
+                  {deployment.priority.mode === "from_node" ? (
                     <div>
                       <FormControl style={{ width: "50%" }}>
                         <select
@@ -297,6 +295,7 @@ const CreateDeploymentStepThree = observer(() => {
                     value={deployment.priority.mode}
                     onChange={handlePriority}
                   >
+                    <option value={"default"}>default</option>
                     <option value={"cpu"}>CPU</option>
                     <option value={"gpu"}>GPU</option>
                     <option value={"memory"}>MEMORY</option>
