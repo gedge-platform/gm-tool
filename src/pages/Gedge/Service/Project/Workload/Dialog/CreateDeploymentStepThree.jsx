@@ -47,7 +47,14 @@ const CreateDeploymentStepThree = observer(() => {
   };
 
   const loadSourceNode = (targetCluster) => {
-    setDeploymentPriority("sourceNode", "");
+    if (
+      !(
+        deployment.priority.name === "GLowLatencyPriority" &&
+        deployment.priority.mode === "from_node"
+      )
+    ) {
+      setDeploymentPriority("sourceNode", "");
+    }
     loadCluster(targetCluster[0]);
   };
 
