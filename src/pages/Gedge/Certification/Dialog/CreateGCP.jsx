@@ -21,46 +21,43 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateOPENSTACK = observer(props => {
+const CreateGCP = observer(props => {
   // const { open } = props;
   const [inputs, setInputs] = useState({
     credentialName: "",
-    ProviderName: "AWS",
-    IdentityEndPoint: "",
-    Username: "",
-    Password: "",
-    DomainName: "",
+    ProviderName: "GCP",
     ProjectID: "",
+    ClientId: "",
+    ClientSecret: "",
     Region: "",
+    Zone: "",
   });
-  
-  const { CredentialName, ProviderName, IdentityEndPoint, Username, Password, DomainName, ProjectID, Region } = inputs;
 
-  const { setCredentialName, setIdentityEndPoint, setUsername, setPassword, setProjectID, setDomainName, setRegion } =
+  const { CredentialName, ProviderName, ProjectID, ClientId, ClientSecret, Region, Zone } = inputs;
+
+  const { setCredentialName, setProjectID, setClientId, setClientSecret, setRegion, setZone } =
     certificationStore;
+
 
   const onChange = e => {
     const { value, name } = e.target;
     if (name === "CredentialName") {
       setCredentialName(value);
       return;
-    } else if (name === "IdentityEndPoint") {
-      setIdentityEndPoint(value);
-      return;
-    } else if (name === "Username") {
-      setUsername(value);
-      return;
-    } else if (name === "Password") {
-      setPassword(value);
-      return;
-    } else if (name === "DomainName") {
-      setDomainName(value);
-      return;
     } else if (name === "ProjectID") {
       setProjectID(value);
       return;
+    } else if (name === "ClientEmail") {
+      setClientId(value);
+      return;
+    } else if (name === "PrivateKey") {
+      setClientSecret(value);
+      return;
     } else if (name === "Region") {
       setRegion(value);
+      return;
+    } else if (name === "Zone") {
+      setZone(value);
       return;
     }
   };
@@ -89,54 +86,29 @@ const CreateOPENSTACK = observer(props => {
           </tr>
           <tr>
             <th>
-              IdentityEndPoint
+              Project ID
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField
-                type="text"
-                placeholder="IdentityEndPoint"
-                className="form_fullWidth"
-                name="IdentityEndPoint"
-                onChange={onChange}
-                value={IdentityEndPoint}
-              />
+              <CTextField type="text" placeholder="Project ID" className="form_fullWidth" name="ProjectID" onChange={onChange} value={ProjectID} />
             </td>
           </tr>
           <tr>
             <th>
-              Username
+              Client Email
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Username" className="form_fullWidth" name="Username" onChange={onChange} value={Username} />
+            <CTextField type="text" placeholder="Client Email" className="form_fullWidth" name="ClientEmail" onChange={onChange} value={ClientId} />
             </td>
           </tr>
           <tr>
             <th>
-              Password
+              Private Key
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="password" placeholder="Password" className="form_fullWidth" name="Password" onChange={onChange} value={Password} />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Domain Name
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField type="text" placeholder="Domain Name" className="form_fullWidth" name="DomainName" onChange={onChange} value={DomainName} />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              ProjectID
-              <span className="required">*</span>
-            </th>
-            <td>
-              <CTextField type="text" placeholder="ProjectID" className="form_fullWidth" name="ProjectID" onChange={onChange} value={ProjectID} />
+            <CTextField type="text" placeholder="Private Key" className="form_fullWidth" name="PrivateKey" onChange={onChange} value={ClientSecret} />
             </td>
           </tr>
           <tr>
@@ -145,7 +117,16 @@ const CreateOPENSTACK = observer(props => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Region" className="form_fullWidth" name="Region" onChange={onChange} value={Region} />
+              <CTextField type="text" placeholder="Region. ex) us-east1" className="form_fullWidth" name="Region" onChange={onChange} value={Region} />
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Zone
+              <span className="required">*</span>
+            </th>
+            <td>
+              <CTextField type="text" placeholder="Zone. ex) us-east1-b" className="form_fullWidth" name="Zone" onChange={onChange} value={Zone} />
             </td>
           </tr>
         </tbody>
@@ -153,4 +134,4 @@ const CreateOPENSTACK = observer(props => {
     </>
   );
 });
-export default CreateOPENSTACK;
+export default CreateGCP;
