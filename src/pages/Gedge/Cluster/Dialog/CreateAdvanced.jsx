@@ -56,7 +56,7 @@ const CreateAdvanced = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="config" onChange={onChange}>
                   <option value={""}>Select Credential</option>
-                  {credential.map((list) => (
+                  {credential?.map((list) => (
                     <option value={list.name}>{list.name}</option>
                   ))}
                 </select>
