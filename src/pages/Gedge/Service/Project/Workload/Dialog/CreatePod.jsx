@@ -148,95 +148,95 @@ const CreatePod = observer((props) => {
     },
   };
 
-  // const template = {
-  //   apiVersion: "v1",
-  //   kind: "Pod",
-  //   metadata: {
-  //     name: podInfo.podName,
-  //     labels: labelInput,
-  //     annotations: annotationInput,
-  //   },
-  //   spec: {
-  //     restartPolicy: "Always",
-  //     terminationGracePeriodSeconds: 30,
-  //     containers: podInfo.containers?.map((e) => {
-  //       return {
-  //         name: e.containerName,
-  //         image: e.containerImage,
-  //         command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-  //         args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
-  //         env: e.variables.map((i) => {
-  //           if (i.type === "KeyValuePair") {
-  //             return {
-  //               name: i.value,
-  //               value: i.variableName,
-  //             };
-  //           } else {
-  //             return {
-  //               name: i.type + "_key",
-  //               valueForm: {
-  //                 [i.type + "Ref"]: {
-  //                   name: i.variableName,
-  //                   key: i.type + "-key",
-  //                 },
-  //               },
-  //             };
-  //           }
-  //         }),
-  //         // env: keyValuePair.map((i) => {
-  //         //   return {
-  //         //     name: i[0],
-  //         //     value: i[1],
-  //         //   };
-  //         // }),
-  //         // valueForm: secretConfigmap.map((t) => {
-  //         //   const item = t.type + "Ref";
-  //         //   return {
-  //         //     [t.type + "Ref"]: {
-  //         //       name: t.variableName,
-  //         //       key: t.type + "-key",
-  //         //     },
-  //         //   };
-  //         // }),
-  //         ports: e.ports.map((i) => {
-  //           return {
-  //             containerPort: parseInt(i.privateContainerPort),
-  //             protocol: i.protocol,
-  //           };
-  //         }),
-  //         resources: {
-  //           requests: {
-  //             cpu: e.cpuReservation,
-  //             memory: e.memoryReservation,
-  //           },
-  //           limits: {
-  //             cpu: e.cpuLimit,
-  //             memory: e.memoryLimit,
-  //             "nvidia.com/gpu": "1",
-  //           },
-  //         },
-  //         // volumeMounts: e.volumes.map((i) => {
-  //         //   return {
-  //         //     name: i.name,
-  //         //     mountPath: i.mountPoint,
-  //         //   };
-  //         // }),
-  //         // volumeMounts: e.volumes.map((i) => {
-  //         //   return {
-  //         //     name: "data-volume",
-  //         //     mountPath: "/data",
-  //         //   };
-  //         // }),
-  //       };
-  //     }),
-  //     // volumes: [
-  //     //   {
-  //     //     name: "data-volume",
-  //     //     emptyDir: {},
-  //     //   },
-  //     // ],
-  //   },
-  // };
+  const template = {
+    apiVersion: "v1",
+    kind: "Pod",
+    metadata: {
+      name: podInfo.podName,
+      labels: labelInput,
+      annotations: annotationInput,
+    },
+    spec: {
+      restartPolicy: "Always",
+      terminationGracePeriodSeconds: 30,
+      containers: podInfo.containers?.map((e) => {
+        return {
+          name: e.containerName,
+          image: e.containerImage,
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+          env: e.variables.map((i) => {
+            if (i.type === "KeyValuePair") {
+              return {
+                name: i.value,
+                value: i.variableName,
+              };
+            } else {
+              return {
+                name: i.type + "_key",
+                valueForm: {
+                  [i.type + "Ref"]: {
+                    name: i.variableName,
+                    key: i.type + "-key",
+                  },
+                },
+              };
+            }
+          }),
+          // env: keyValuePair.map((i) => {
+          //   return {
+          //     name: i[0],
+          //     value: i[1],
+          //   };
+          // }),
+          // valueForm: secretConfigmap.map((t) => {
+          //   const item = t.type + "Ref";
+          //   return {
+          //     [t.type + "Ref"]: {
+          //       name: t.variableName,
+          //       key: t.type + "-key",
+          //     },
+          //   };
+          // }),
+          ports: e.ports.map((i) => {
+            return {
+              containerPort: parseInt(i.privateContainerPort),
+              protocol: i.protocol,
+            };
+          }),
+          resources: {
+            requests: {
+              cpu: e.cpuReservation,
+              memory: e.memoryReservation,
+            },
+            limits: {
+              cpu: e.cpuLimit,
+              memory: e.memoryLimit,
+              "nvidia.com/gpu": "1",
+            },
+          },
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: i.name,
+          //     mountPath: i.mountPoint,
+          //   };
+          // }),
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: "data-volume",
+          //     mountPath: "/data",
+          //   };
+          // }),
+        };
+      }),
+      // volumes: [
+      //   {
+      //     name: "data-volume",
+      //     emptyDir: {},
+      //   },
+      // ],
+    },
+  };
 
   const handleClose = () => {
     props.onClose && props.onClose();
