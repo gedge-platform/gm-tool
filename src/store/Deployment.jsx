@@ -173,8 +173,8 @@ class Deployment {
     appContainersName: "",
     appEnv: [],
     priority: {
-      name: "GSelectedClusterPriority", //GLowLatencyPriority
-      mode: "cluster", //cluster
+      name: "GLowLatencyPriority", //GLowLatencyPriority
+      mode: "from_node", //cluster
       sourceCluster: "",
       sourceNode: "",
     },
@@ -194,8 +194,8 @@ class Deployment {
       appContainersName: "",
       appEnv: [],
       priority: {
-        name: "GSelectedClusterPriority", //GLowLatencyPriority
-        mode: "cluster", //cluster
+        name: "GLowLatencyPriority", //GLowLatencyPriority
+        mode: "from_node", //cluster
         sourceCluster: "",
         sourceNode: "",
       },
@@ -1051,51 +1051,119 @@ class Deployment {
       });
   };
 
-  postTemplateGM = async (callback) => {
+  postTemplateGLowLatency = async (callback) => {
+    const body = this.content;
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    const option = () => {
+      if (this.deployment.priority.name === "GLowLatencyPriority") {
+        if (this.deployment.priority.mode === "from_node") {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.appInfo.workspacetag,
+            workspace_uid: this.appInfo.workspaceuuid,
+            project_name: this.appInfo.appProject.replace(
+              "-" + this.appInfo.workspaceuuid,
+              ""
+            ),
+            mode: this.deployment.priority.mode,
+            parameters: {
+              source_cluster: this.deployment.priority.sourceCluster,
+              source_node: this.deployment.priority.sourceNode,
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.appInfo.workspacetag,
+            workspace_uid: this.appInfo.workspaceuuid,
+            project_name: this.appInfo.appProject.replace(
+              "-" + this.appInfo.workspaceuuid,
+              ""
+            ),
+            mode: "from_pod",
+            parameters: {
+              source_cluster: this.deployment.priority.sourceCluster,
+              pod_name: this.deployment.priority.podName,
+              select_clusters: this.targetClusters,
+            },
+          };
+        }
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GLowLatencyPriority&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Deployment가 생성되었습니다.");
+        } else {
+          swalError("Deployment 생성 실패", callback);
+        }
+      });
+  };
+
+  postTemplateSelected = async (callback) => {
     const body = this.content;
     console.log(body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {
-      if (this.deployment.priority.mode === "cluster" || "default") {
-        return {
-          user_name: "test",
-          workspace_name: this.appInfo.workspacetag,
-          workspace_uid: this.appInfo.workspaceuuid,
-          project_name: this.appInfo.appProject.replace(
-            "-" + this.appInfo.workspaceuuid,
-            ""
-          ),
-          mode: "cluster",
-          parameters: {
-            select_clusters: this.targetClusters,
-            // select_clusters: this.deployment.targetClusters,
-          },
-        };
-      } else {
-        return {
-          user_name: "test",
-          workspace_name: this.appInfo.appWorkspace,
-          workspace_uid: "6f9dbcee-bb90-4b55-ad0a-d6d3000e2ec7",
-          project_name: this.appInfo.appProject,
-          mode: "node",
-          parameters: {
-            select_cluster: "onpremise(dongjak)",
-            select_node: this.deployment.priority.sourceNode,
-          },
-        };
+      if (this.deployment.priority.name === "GSelectedClusterPriority") {
+        if (this.deployment.priority.mode === "cluster") {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.appInfo.workspacetag,
+            workspace_uid: this.appInfo.workspaceuuid,
+            project_name: this.appInfo.appProject.replace(
+              "-" + this.appInfo.workspaceuuid,
+              ""
+            ),
+            mode: "cluster",
+            parameters: {
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.appInfo.appWorkspace,
+            workspace_uid: this.appInfo.workspaceuuid,
+            project_name: this.appInfo.appProject.replace(
+              "-" + this.appInfo.workspaceuuid,
+              ""
+            ),
+            mode: "node",
+            parameters: {
+              select_cluster: this.targetClusters[0],
+              select_node: this.deployment.priority.sourceNode,
+            },
+          };
+        }
       }
     };
-
-    console.log(option);
 
     const options = encodeURI(JSON.stringify(option()));
     const requestId = "requestId" + randomNumber;
 
     await axios
       .post(
-        `http://101.79.4.15:32368/GEP/GSCH/requestQueue?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedCluster&options=${options}`,
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedCluster&options=${options}`,
         body,
         {
           headers: {
@@ -1109,7 +1177,7 @@ class Deployment {
       // )
       .then((res) => {
         console.log("res :", res);
-        if (res.status === 200) {
+        if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
           console.log(options);
           console.log(res);
