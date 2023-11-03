@@ -91,7 +91,9 @@ const TamplateCreate = observer((props) => {
     initTargetClusters,
     postTemplateGM,
     postTemplateGLowLatency,
+    postTemplateGMostRequest,
     postTemplateSelected,
+    postTemplateGSetCluster
   } = deploymentStore;
   console.log("appInfo ??? ", appInfo);
 
@@ -136,8 +138,14 @@ const TamplateCreate = observer((props) => {
     if (deployment.priority.name === "GLowLatencyPriority") {
       postTemplateGLowLatency();
     }
+    if (deployment.priority.name === "GMostRequestPriority") {
+      postTemplateGMostRequest();
+    }
     if (deployment.priority.name === "GSelectedClusterPriority") {
       postTemplateSelected();
+    }
+    if (deployment.priority.name === "GSetClusterPriority") {
+      postTemplateGSetCluster();
     }
 
     handleClose();
