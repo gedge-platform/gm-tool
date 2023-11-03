@@ -37,7 +37,6 @@ const CreatePodStepTwo = observer(() => {
     labelInput,
     labelInputKey,
     labelInputValue,
-    annotationInput,
     annotationKey,
     annotationValue,
     setAnnotationInput,

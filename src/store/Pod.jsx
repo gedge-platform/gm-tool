@@ -105,9 +105,14 @@ class Pod {
 
   volumeList = [];
 
+  labels = [];
+  annotations = [];
+
   podInfo = {
     podName: "",
     workspace: "",
+    workspacetag: "",
+    workspaceuuid: "",
     project: "",
     volume: "",
     pvcName: "",
@@ -116,9 +121,9 @@ class Pod {
     annotations: [],
     priority: {
       name: "GLowLatencyPriority",
-      options: {
-        type: "from_node",
-      },
+      mode: "from_node",
+      sourceCluster: "",
+      sourceNode: "",
     },
     targetClusters: "",
   };
@@ -155,8 +160,8 @@ class Pod {
     runInAction(() => {
       this.unselectedClusters = [
         ...this.unselectedClusters,
-        ...[].concat(...this.targetClusters)
-      ]
+        ...[].concat(...this.targetClusters),
+      ];
       this.targetClusters = [];
     });
   };
@@ -166,16 +171,19 @@ class Pod {
       this.podInfo = {
         podName: "",
         workspace: "",
+        workspacetag: "",
+        workspaceuuid: "",
         project: "",
+        pvcName: "",
         volume: "",
         containers: [],
         labels: [],
         annotations: [],
         priority: {
           name: "GLowLatencyPriority",
-          options: {
-            type: "from_node",
-          },
+          mode: "from_node",
+          sourceCluster: "",
+          sourceNode: "",
         },
         targetClusters: "",
       };
@@ -265,13 +273,20 @@ class Pod {
     });
   };
 
+  // setTemplate = (template) => {
+  //   runInAction(() => {
+  //     delete template.metadata.labels[""];
+  //     delete template.metadata.annotations[""];
+  //     delete template.spec.template.metadata.labels[""];
+  //     delete template.spec.template.metadata.annotations[""];
+  //     delete template.spec.selector.matchLabels[""];
+  //   });
+  // };
+
   setTemplate = (template) => {
     runInAction(() => {
       delete template.metadata.labels[""];
       delete template.metadata.annotations[""];
-      // delete template.spec.template.metadata.labels[""];
-      // delete template.spec.template.metadata.annotations[""];
-      // delete template.spec.selector.matchLabels[""];
     });
   };
 
@@ -344,6 +359,8 @@ class Pod {
     runInAction(() => {});
   };
 
+  inputLabelKey = "";
+
   setInputLabelKey = (value) => {
     runInAction(() => {
       this.labelKey = value;
@@ -388,16 +405,6 @@ class Pod {
 
   labelKey = "";
   labelValue = "";
-
-  labels = [];
-  annotations = [];
-
-  setTemplate = (template) => {
-    runInAction(() => {
-      delete template.metadata.labels[""];
-      delete template.metadata.annotations[""];
-    });
-  };
 
   setTemplateAnnotation = () => {
     runInAction(() => {
@@ -622,6 +629,230 @@ class Pod {
       this.containerImage = "";
       this.containerPort = 0;
     });
+  };
+
+  postPodGLowLatencyPriority = async (callback) => {
+    const body = this.content;
+    console.log("body ??? ", body);
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    console.log("this.podInfo ??? ", this.podInfo);
+    const option = () => {
+      if (this.podInfo.priority.name === "GLowLatencyPriority") {
+        if (this.podInfo.priority.mode === "from_node") {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.podInfo.workspacetag,
+            workspace_uid: this.podInfo.workspaceuuid,
+            project_name: this.podInfo.project.replace(
+              "-" + this.podInfo.workspaceuuid,
+              ""
+            ),
+            mode: "from_node",
+            parameters: {
+              source_cluster: this.podInfo.priority.sourceCluster,
+              source_node: this.podInfo.priority.sourceNode,
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.podInfo.workspacetag,
+            workspace_uid: this.podInfo.workspaceuuid,
+            project_name: this.podInfo.project.replace(
+              "-" + this.podInfo.workspaceuuid,
+              ""
+            ),
+            mode: "from_pod",
+            parameters: {
+              source_cluster: this.podInfo.priority.sourceCluster,
+              pod_name: this.podInfo.priority.podName,
+              select_clusters: this.targetClusters,
+            },
+          };
+        }
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GLowLatencyPriority&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.");
+        } else {
+          swalError("Pod 생성 실패", callback);
+        }
+      });
+  };
+
+  postPodGMostRequestPriority = async (callback) => {
+    const body = this.content;
+    console.log("body ??? ", body);
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    console.log("this.podInfo ??? ", this.podInfo);
+    const option = () => {
+      if (this.podInfo.priority.name === "GMostRequestPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.podInfo.workspacetag,
+          workspace_uid: this.podInfo.workspaceuuid,
+          project_name: this.podInfo.project.replace(
+            "-" + this.podInfo.workspaceuuid,
+            ""
+          ),
+          mode: this.podInfo.priority.mode,
+          parameters: {
+            select_clusters: this.targetClusters,
+          },
+        };
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GMostRequestPriority&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.");
+        } else {
+          swalError("Pod 생성 실패", callback);
+        }
+      });
+  };
+
+  postPodGSelectedClusterPriority = async (callback) => {
+    const body = this.content;
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+    const userName = JSON.parse(localStorage.getItem("user")).id;
+
+    const option = () => {
+      if (this.podInfo.priority.name === "GSelectedClusterPriority") {
+        if (this.podInfo.priority.mode === "cluster") {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.podInfo.workspacetag,
+            workspace_uid: this.podInfo.workspaceuuid,
+            project_name: this.podInfo.project.replace(
+              "-" + this.podInfo.workspaceuuid,
+              ""
+            ),
+            mode: "cluster",
+            parameters: {
+              select_clusters: this.targetClusters,
+            },
+          };
+        } else {
+          return {
+            user_name: JSON.parse(localStorage.getItem("user")).id,
+            workspace_name: this.podInfo.workspacetag,
+            workspace_uid: this.podInfo.workspaceuuid,
+            project_name: this.podInfo.project.replace(
+              "-" + this.podInfo.workspaceuuid,
+              ""
+            ),
+            mode: "node",
+            parameters: {
+              select_cluster: this.targetClusters[0],
+              select_node: this.podInfo.priority.sourceNode,
+            },
+          };
+        }
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedCluster&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.");
+        } else {
+          swalError("Pod 생성 실패", callback);
+        }
+      });
+  };
+
+  postPodGSetClusterPriority = async (callback) => {
+    const body = this.content;
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    const option = () => {
+      if (this.podInfo.priority.name === "GSetClusterPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.podInfo.workspacetag,
+          workspace_uid: this.podInfo.workspaceuuid,
+          project_name: this.podInfo.project.replace(
+            "-" + this.podInfo.workspaceuuid,
+            ""
+          ),
+          parameters: {
+            select_clusters: this.targetClusters,
+          },
+        };
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSetCluster&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Pod가 생성되었습니다.");
+        } else {
+          swalError("Pod 생성 실패", callback);
+        }
+      });
   };
 
   postPodGM = async (callback) => {
