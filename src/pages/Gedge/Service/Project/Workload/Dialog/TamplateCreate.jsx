@@ -86,10 +86,16 @@ const TamplateCreate = observer((props) => {
     setTemplate,
     postDeploymentGM,
     appInfo,
+    deployment,
     resetDeployment,
     initTargetClusters,
     postTemplateGM,
+    postTemplateGLowLatency,
+    postTemplateGMostRequest,
+    postTemplateSelected,
+    postTemplateGSetCluster
   } = deploymentStore;
+  console.log("appInfo ??? ", appInfo);
 
   const { deploymentYamlTemplate, serviceYamlTemplate } = templateStore;
 
@@ -123,12 +129,24 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
+    console.log("deployment.priority.name ???", deployment.priority.name);
     setContent(
       YAML.stringify(deploymentYamlTemplate) +
         "---\n" +
         YAML.stringify(serviceYamlTemplate)
     );
-    postTemplateGM();
+    if (deployment.priority.name === "GLowLatencyPriority") {
+      postTemplateGLowLatency();
+    }
+    if (deployment.priority.name === "GMostRequestPriority") {
+      postTemplateGMostRequest();
+    }
+    if (deployment.priority.name === "GSelectedClusterPriority") {
+      postTemplateSelected();
+    }
+    if (deployment.priority.name === "GSetClusterPriority") {
+      postTemplateGSetCluster();
+    }
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -176,30 +194,6 @@ const TamplateCreate = observer((props) => {
       );
     } else if (stepValue === 2) {
       return (
-        //     <>
-        //       <CreateTamplateStepTwo />
-        //       <div
-        //         style={{
-        //           display: "flex",
-        //           justifyContent: "flex-end",
-        //           marginTop: "32px",
-        //         }}
-        //       >
-        //         <div
-        //           style={{
-        //             display: "flex",
-        //             width: "240px",
-        //             justifyContent: "center",
-        //           }}
-        //         >
-        //           <Button onClick={backStepOne}>이전</Button>
-        //           <ButtonNext onClick={goStepThree}>다음</ButtonNext>
-        //         </div>
-        //       </div>
-        //     </>
-        //   );
-        // } else if (stepValue === 3) {
-        //   return (
         <>
           <CreateTamplateStepThree />
           <div

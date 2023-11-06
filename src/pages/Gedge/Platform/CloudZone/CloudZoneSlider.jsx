@@ -18,7 +18,7 @@ const CloudZoneSlider = observer(() => {
   } = dashboardStore;
 
   useEffect(() => {
-    setVmStatusList();
+    // setVmStatusList();
     // loadVMStatusCnt();
     loadCredentialName();
   }, []);
@@ -97,7 +97,7 @@ const CloudZoneSlider = observer(() => {
         <SwiperSlide>
           <div className="SliderWrap">
             {vmStatus()}
-            {/* <div className="SliderBox">
+            <div className="SliderBox">
               <div className="iconBox azure">AZURE</div>
               <div className="contentsBox">
                 <div className="countBox">
@@ -338,7 +338,7 @@ const CloudZoneSlider = observer(() => {
                   </ul>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </SwiperSlide>
         {/* 아래는 추가를 위한 확인용 슬라이드 */}

@@ -94,6 +94,7 @@ class Cluster {
     config: "",
     image: "",
     disk: "50",
+    provider: "",
   };
 
   selectCluster = [];
@@ -276,6 +277,9 @@ class Cluster {
       } else if (type === "disk") {
         this.vmBody.disk = value;
         return;
+      } else if (type === "provider") {
+        this.vmBody.provider = value;
+        return;
       }
     });
   };
@@ -363,7 +367,7 @@ class Cluster {
   postVM = async (data, callback) => {
     await axios
       .post(
-        `${SERVER_URL}/spider/vm?name=${data.name}&config=${data.config}-config&image=${data.image}&flavor=${data.flavor}&disk=${data.disk}`
+        `${SERVER_URL}/spider/vm?name=${data.name}&config=${data.config}-config&image=${data.image}&flavor=${data.flavor}&disk=${data.disk}&provider=${data.provider}`
       )
       .then((res) => {
         runInAction(() => {

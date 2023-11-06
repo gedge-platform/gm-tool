@@ -30,7 +30,7 @@ const CreateVM = observer(props => {
   const [stepValue, setStepValue] = useState(1);
   const { postVM, ProviderName, setProviderName, vmBody, setVMBody } = clusterStore;
 
-  const ProviderList = ["AWS", "OPENSTACK"];
+  const ProviderList = ["AWS", "OPENSTACK", "GCP"];
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -48,6 +48,7 @@ const CreateVM = observer(props => {
       swalError("Provider Name를 선택해주세요");
       return;
     } else {
+      setVMBody("provider", ProviderName);
       setStepValue(2);
       return;
     }
@@ -59,6 +60,7 @@ const CreateVM = observer(props => {
     console.log("vmBody.image : ", vmBody.image);
     console.log("vmBody.flavor : ", vmBody.flavor);
     console.log("vmBody.disk : ", vmBody.disk);
+    console.log("vmBody.provider : ", vmBody.provider);
     if (vmBody.name === "") {
       swalError("이름을 입력해주세요!");
       return;
@@ -79,6 +81,11 @@ const CreateVM = observer(props => {
       swalError("Disk 용량을 입력해주세요!");
       return;
     }
+    if (vmBody.provider === "") {
+      swalError("provider를 입력해주세요!");
+      return; 
+    }
+    
     createVM(vmBody);
   };
 

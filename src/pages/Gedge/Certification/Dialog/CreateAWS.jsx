@@ -35,7 +35,7 @@ const CreateAWS = observer(props => {
 
   const { CredentialName, ProviderName, ClientId, ClientSecret, Region, Zone } = inputs;
 
-  const { postCredential, setCredentialName, setClientId, setClientSecret, setRegion, setZone } = certificationStore;
+  const { setCredentialName, setClientId, setClientSecret, setRegion, setZone } = certificationStore;
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -55,9 +55,11 @@ const CreateAWS = observer(props => {
       setCredentialName(value);
       return;
     } else if (name === "ClientId") {
+      console.log("ClientId is ",)
       setClientId(value);
       return;
     } else if (name === "ClientSecret") {
+      console.log("ClientSecret is ", ClientSecret)
       setClientSecret(value);
       return;
     } else if (name === "Region") {
@@ -67,12 +69,6 @@ const CreateAWS = observer(props => {
       setZone(value);
       return;
     }
-  };
-
-  const createCredential = async () => {
-    const result = await postCredential(inputs);
-    handleClose();
-    props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {});
@@ -128,7 +124,7 @@ const CreateAWS = observer(props => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Region" className="form_fullWidth" name="Region" onChange={onChange} value={Region} />
+              <CTextField type="text" placeholder="Region. ex) us-east-2" className="form_fullWidth" name="Region" onChange={onChange} value={Region} />
             </td>
           </tr>
           <tr>
@@ -137,7 +133,7 @@ const CreateAWS = observer(props => {
               <span className="required">*</span>
             </th>
             <td>
-              <CTextField type="text" placeholder="Zone" className="form_fullWidth" name="Zone" onChange={onChange} value={Zone} />
+              <CTextField type="text" placeholder="Zone. ex) us-east-2a" className="form_fullWidth" name="Zone" onChange={onChange} value={Zone} />
             </td>
           </tr>
         </tbody>

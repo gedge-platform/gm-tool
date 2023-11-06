@@ -28,6 +28,41 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 177px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, 0.1);
+  }
+
+  &:before,
+  &:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - 0.0625em);
+    width: 0.125em;
+    height: 70%;
+    border-radius: 0.125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: "";
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+`;
+
 const getListStyle = (isDraggingOver) => ({});
 
 const getItemStyle = (isDragging, draggableStyle) => ({
@@ -39,7 +74,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const DeploymentTargetClusters = observer(({ open, onClose }) => {
+const DeploymentTargetClusters = observer(({ open, onClose, onComplete }) => {
   const {
     targetClusters,
     unselectedClusters,
@@ -157,7 +192,11 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
       // 위치만 바꾸기
     } else {
       if (deployment.priority.name === "GSelectedClusterPriority") {
-        if (destination.droppableId === "unselected" || selectedClusters[destination.droppableId] === null || selectedClusters[destination.droppableId].length < 2) {
+        if (
+          destination.droppableId === "unselected" ||
+          selectedClusters[destination.droppableId] === null ||
+          selectedClusters[destination.droppableId].length < 2
+        ) {
           move(source, destination);
         }
       } else {
@@ -167,10 +206,25 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
   };
 
   const addLeveled = () => {
-    if (deployment.priority.name === "GSelectedClusterPriority" && deployment.priority.mode === "node" && selectedClusters.length > 0 || deployment.priority.name === "GSetClusterPriority" && selectedClusters.length > 0) {
+    if (
+      (deployment.priority.name === "GSelectedClusterPriority" &&
+        deployment.priority.mode === "node" &&
+        selectedClusters.length > 0) ||
+      (deployment.priority.name === "GSetClusterPriority" &&
+        selectedClusters.length > 0)
+    ) {
       return;
     }
     setSelectedClusters([...selectedClusters, null]);
+  };
+
+  const deleteLeveled = (index) => {
+    if (Array.isArray(selectedClusters[index])) {
+      setUnselected([...unselected, ...selectedClusters[index]]);
+    } else {
+      setUnselected([...unselected, selectedClusters[index]]);
+    }
+    setSelectedClusters(selectedClusters.filter((_, idx) => idx !== index));
   };
 
   const closeTargetClusters = () => {
@@ -186,6 +240,7 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
     //   target_clusters: targetClusters,
     // });
     onClose();
+    onComplete(selectedClusters.filter((element) => element !== null));
   };
 
   useEffect(() => {
@@ -223,9 +278,12 @@ const DeploymentTargetClusters = observer(({ open, onClose }) => {
                         overflowY: "auto",
                         background: "#3965FF1A",
                         margin: "5px",
-                        padding: "8px",
+                        padding: "6px",
                       }}
                     >
+                      <DeleteButton onClick={() => deleteLeveled(index)}>
+                        x
+                      </DeleteButton>
                       {Array.isArray(targetCluster) ? (
                         targetCluster.map((item, index) => (
                           <Draggable
