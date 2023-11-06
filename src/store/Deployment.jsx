@@ -844,6 +844,8 @@ class Deployment {
   };
 
   postGMostRequestPriority = async (callback) => {
+    console.log(this.deployment)
+    console.log(this.appInfo)
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
@@ -868,6 +870,10 @@ class Deployment {
 
     const options = encodeURI(JSON.stringify(option()));
     const requestId = "requestId" + randomNumber;
+
+    console.log("requestId", requestId);
+    console.log("options", options);
+    console.log("body", body)
 
     await axios
       .post(
@@ -1062,6 +1068,52 @@ class Deployment {
       });
   };
 
+  postTemplateGMostRequest = async (callback) => {
+    const body = this.content;
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    const option = () => {
+      if (this.deployment.priority.name === "GMostRequestPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.appInfo.workspacetag,
+          workspace_uid: this.appInfo.workspaceuuid,
+          project_name: this.appInfo.appProject.replace(
+            "-" + this.appInfo.workspaceuuid,
+            ""
+          ),
+          mode: this.deployment.priority.mode,
+          parameters: {
+            select_clusters: this.targetClusters,
+          },
+        };
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GMostRequestPriority&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Deployment가 생성되었습니다.");
+        } else {
+          swalError("Deployment 생성 실패", callback);
+        }
+      });
+  }
+
   postTemplateSelected = async (callback) => {
     const body = this.content;
     console.log(body);
@@ -1131,6 +1183,51 @@ class Deployment {
         }
       });
   };
+
+  postTemplateGSetCluster = async () => {
+    const body = this.content;
+
+    const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
+
+    const option = () => {
+      if (this.deployment.priority.name === "GSetClusterPriority") {
+        return {
+          user_name: JSON.parse(localStorage.getItem("user")).id,
+          workspace_name: this.appInfo.workspacetag,
+          workspace_uid: this.appInfo.workspaceuuid,
+          project_name: this.appInfo.appProject.replace(
+            "-" + this.appInfo.workspaceuuid,
+            ""
+          ),
+          parameters: {
+            select_clusters: this.targetClusters,
+          },
+        };
+      }
+    };
+
+    const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??? ", options);
+    const requestId = "requestId" + randomNumber;
+
+    await axios
+      .post(
+        `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSetCluster&options=${options}`,
+        body,
+        {
+          headers: {
+            "Content-Type": "application/x-yaml",
+          },
+        }
+      )
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Deployment가 생성되었습니다.");
+        } else {
+          swalError("Deployment 생성 실패", callback);
+        }
+      });
+  }
 
   postDeploymentPVC = async () => {
     const YAML = require("yamljs");
