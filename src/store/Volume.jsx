@@ -255,7 +255,7 @@
 //   };
 
 //   createVolume = (template, callback) => {
-//     const YAML = require("yamljs");
+//     const YAML = require("json-to-pretty-yaml");
 //     axios
 //       .post(
 //         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
@@ -537,7 +537,7 @@ class Volume {
   };
 
   createVolume = (template, callback) => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     axios
       .post(
         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,

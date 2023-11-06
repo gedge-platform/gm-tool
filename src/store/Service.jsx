@@ -234,7 +234,7 @@ class Service {
   };
 
   postService = (callback) => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     let count = 0;
     // console.log(this.cluster, this.workspace, this.project);
     this.cluster.map(async (item) => {

@@ -996,7 +996,7 @@ class Deployment {
   };
 
   postDeploymentPVC = async () => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     const { selectClusters } = volumeStore;
 
     await axios
