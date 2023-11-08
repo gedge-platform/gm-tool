@@ -37,6 +37,7 @@ const CloudZoneSlider = observer(() => {
   };
 
   const vmStatus = () => {
+    console.log(vmStatusList);
     return vmStatusList.map((vmstatus) => (
       <div className="SliderBox">
         {/* <div className="iconBox aws">{vmstatus[1]}</div> */}

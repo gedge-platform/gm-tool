@@ -3,7 +3,11 @@ import { PanelBox } from "@/components/styles/PanelBox";
 import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+  CCreateButton,
+  CSelectButton,
+  CDeleteButton,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
@@ -13,9 +17,14 @@ import CreateDeployment from "../Dialog/CreateDeployment";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { filterParams } from "../../../../../../utils/common-utils";
 import TamplateCreate from "../Dialog/TamplateCreate";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const DeploymentListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [deploymentName, setDeploymentName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
+  const [reRun, setReRun] = useState(false);
   const [tamplateOpen, setTemplateOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
@@ -36,6 +45,7 @@ const DeploymentListTab = observer(() => {
     goPrevPage,
     goNextPage,
     initAppInfo,
+    deleteDeployment,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -86,6 +96,9 @@ const DeploymentListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
+    setDeploymentName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     loadDeploymentDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
@@ -94,9 +107,10 @@ const DeploymentListTab = observer(() => {
   useEffect(() => {
     loadDeploymentList();
     return () => {
+      setReRun(false);
       initViewList();
     };
-  }, []);
+  }, [reRun]);
 
   useEffect(() => {
     initAppInfo();
@@ -116,13 +130,31 @@ const DeploymentListTab = observer(() => {
     setTemplateOpen(false);
   };
 
+  const reloadData = () => {
+    setReRun(true);
+    console.log(reRun);
+  };
+
+  const handleDelete = () => {
+    if (deploymentName === "") {
+      swalError("Deployment를 선택해주세요!");
+    } else {
+      swalUpdate(deploymentName + "를 삭제하시겠습니까?", () =>
+        deleteDeployment(deploymentName, clusterName, projectName, reloadData())
+      );
+    }
+    setDeploymentName("");
+  };
+
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDeploymentList}>
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>{" "}
-            &nbsp;
+            &nbsp;&nbsp;
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
+            &nbsp;&nbsp;
             <CCreateButton onClick={handleTamplateCreateOpen}>
               템플릿
             </CCreateButton>

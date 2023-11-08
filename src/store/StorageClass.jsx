@@ -340,7 +340,7 @@ class StorageClass {
   };
 
   postStorageClass = (callback) => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     axios
       .post(
         `${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`,

@@ -15,6 +15,8 @@ const ServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [serviceName, setServiceName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
 
   const {
     pServiceList,
@@ -73,6 +75,8 @@ const ServiceListTab = observer(() => {
 
   const handleClick = (e) => {
     setServiceName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     loadServiceDetail(e.data.name, e.data.cluster, e.data.project);
   };
 
@@ -89,7 +93,7 @@ const ServiceListTab = observer(() => {
       swalError("Service를 선택해주세요!");
     } else {
       swalUpdate(serviceName + "를 삭제하시겠습니까?", () =>
-        deleteService(serviceName, reloadData)
+        deleteService(serviceName, clusterName, projectName, reloadData())
       );
     }
     setServiceName("");

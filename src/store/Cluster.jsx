@@ -170,9 +170,8 @@ class Cluster {
           },
         ],
       };
-    })
-    
-  }
+    });
+  };
 
   initViewList = () => {
     runInAction(() => {
@@ -330,6 +329,7 @@ class Cluster {
         runInAction(() => {
           const list = data;
           this.clusterList = list;
+          console.log("data: ", data);
           this.clusterNameList = list.map((item) => item.IId.NameId);
           this.totalElements = this.clusterList.length;
           this.totalPages = Math.ceil(this.clusterList.length / 10);

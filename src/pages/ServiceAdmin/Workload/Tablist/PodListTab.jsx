@@ -17,6 +17,8 @@ const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [podName, setPodName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
 
   const {
     podList,
@@ -82,6 +84,8 @@ const PodListTab = observer(() => {
 
   const handleClick = (e) => {
     setPodName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     const data = e.data.status;
     if (data === "Failed") {
       return;
@@ -102,7 +106,7 @@ const PodListTab = observer(() => {
       swalError("Pod를 선택해주세요!");
     } else {
       swalUpdate(podName + "를 삭제하시겠습니까?", () =>
-        deletePod(podName, reloadData)
+        deletePod(podName, clusterName, projectName, reloadData())
       );
     }
     setPodName("");

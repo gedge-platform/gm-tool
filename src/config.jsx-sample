@@ -3,3 +3,4 @@ export const SERVER_URL = `${API_URL}/gmcapi/v2`;
 export const MONITORING_URL = `${API_URL}/kube/v1/monitoring`;
 export const SOCKET_URL = "ws://localhost:3111";
 export const BASIC_AUTH = { username: "admin", password: "password" };
+export const LOG_URL = "http://101.79.4.15:32368/GEP/GSCH";

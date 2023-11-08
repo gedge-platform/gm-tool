@@ -844,8 +844,8 @@ class Deployment {
   };
 
   postGMostRequestPriority = async (callback) => {
-    console.log(this.deployment)
-    console.log(this.appInfo)
+    console.log(this.deployment);
+    console.log(this.appInfo);
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
@@ -873,7 +873,7 @@ class Deployment {
 
     console.log("requestId", requestId);
     console.log("options", options);
-    console.log("body", body)
+    console.log("body", body);
 
     await axios
       .post(
@@ -1112,7 +1112,7 @@ class Deployment {
           swalError("Deployment 생성 실패", callback);
         }
       });
-  }
+  };
 
   postTemplateSelected = async (callback) => {
     const body = this.content;
@@ -1227,10 +1227,10 @@ class Deployment {
           swalError("Deployment 생성 실패", callback);
         }
       });
-  }
+  };
 
   postDeploymentPVC = async () => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     const { selectClusters } = volumeStore;
 
     await axios
@@ -1255,7 +1255,7 @@ class Deployment {
       )
       .then((res) => {
         console.log("delete res: ", res);
-        if (res.status === 201)
+        if (res.status === 200)
           swalError("Deployment가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));

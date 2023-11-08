@@ -4,16 +4,25 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+  CCreateButton,
+  CSelectButton,
+  CDeleteButton,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import Detail from "../ServiceDetail";
 import { serviceStore } from "@/store";
 import CreateService from "../Dialog/CreateService";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const ServiceListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [reRun, setReRun] = useState(false);
+  const [serviceName, setServiceName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -32,6 +41,7 @@ const ServiceListTab = observer(() => {
     totalPages,
     goPrevPage,
     goNextPage,
+    deleteService,
   } = serviceStore;
 
   const [columDefs] = useState([
@@ -83,7 +93,25 @@ const ServiceListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
+    setServiceName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     loadServiceDetail(e.data.name, e.data.cluster, e.data.project);
+  };
+
+  const handleDelete = () => {
+    if (serviceName === "") {
+      swalError("Service를 선택해주세요!");
+    } else {
+      swalUpdate(serviceName + "를 삭제하시겠습니까?", () =>
+        deleteService(serviceName, clusterName, projectName, reloadData())
+      );
+    }
+    setServiceName("");
+  };
+
+  const reloadData = () => {
+    setReRun(true);
   };
 
   const history = useHistory();
@@ -91,16 +119,19 @@ const ServiceListTab = observer(() => {
   useEffect(() => {
     loadServiceList();
     return () => {
+      setReRun(false);
       initViewList();
-    }
-  }, []);
+    };
+  }, [reRun]);
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadServiceList}>
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
