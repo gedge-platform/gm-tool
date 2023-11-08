@@ -174,8 +174,8 @@ const CreatePod = observer((props) => {
         return {
           name: e.containerName,
           image: e.containerImage,
-          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
           env: e.variables.map((i) => {
             if (i.type === "KeyValuePair") {
               return {
@@ -217,12 +217,12 @@ const CreatePod = observer((props) => {
           }),
           resources: {
             requests: {
-              cpu: e.cpuReservation,
-              memory: e.memoryReservation,
+              cpu: e.cpuReservation + "m",
+              memory: e.memoryReservation + "Mi",
             },
             limits: {
-              cpu: e.cpuLimit,
-              memory: e.memoryLimit,
+              cpu: e.cpuLimit + "m",
+              memory: e.memoryLimit + "Mi",
               "nvidia.com/gpu": e.NVIDIAGPU,
             },
           },

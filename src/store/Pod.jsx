@@ -496,9 +496,9 @@ class Pod {
         this.paginationList();
       });
     this.loadPodDetail(
-      this.viewList[0].name,
-      this.viewList[0].cluster,
-      this.viewList[0].project
+      this.podList[0].name,
+      this.podList[0].cluster,
+      this.podList[0].project
     );
   };
 
@@ -789,6 +789,7 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
+    console.log(options);
 
     const requestId = "requestId" + randomNumber;
 
@@ -834,6 +835,7 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
+    console.log(options);
     const requestId = "requestId" + randomNumber;
 
     await axios
