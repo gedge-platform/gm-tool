@@ -214,7 +214,7 @@ const PodAddContainer = observer((props) => {
         cpuLimit: "",
         memoryLimit: "",
         NVIDIAGPU: "",
-        volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
+        // volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
       });
     } else {
       const clonedData = cloneDeep(podInfo.containers[containerIndex]);

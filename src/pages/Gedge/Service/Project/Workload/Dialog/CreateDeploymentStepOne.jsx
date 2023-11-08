@@ -111,7 +111,7 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeployment(e.target.name, e.target.value);
       setDeployment("workspacetag", selectedWorkspace.workspaceTag);
       setDeployment("workspaceuuid", selectedWorkspace.workspaceUUID);
-      console.log(selectedWorkspace);
+
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
     }
@@ -129,7 +129,11 @@ const CreateDeploymentStepOne = observer((props) => {
     }
 
     if (e.target.name === "claimVolume") {
+      console.log(e.target.name);
       const pvc = JSON.parse(e.target.value);
+      console.log("pvc ??", pvc);
+      console.log("pvc.name ??", pvc.name);
+      console.log("pvc.volume ??", pvc.volume);
       setCheckPVCInDeployment(pvc.name, pvc.volume);
       setDeployment("pvcName", pvc.name);
       setDeployment("volume", pvc.volume);

@@ -30,7 +30,9 @@ const WorkspaceListTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
+    workSpaceList,
   } = workspaceStore;
+  console.log();
 
   const [columnDefs] = useState([
     {
@@ -38,7 +40,7 @@ const WorkspaceListTab = observer(() => {
       field: "workspaceName",
       filter: true,
       cellRenderer: function ({ data: { workspaceName } }) {
-        return `<span>${workspaceName.split("-")[0]}</span>`;
+        return `<span>${workspaceName}</span>`;
       },
     },
     {
@@ -110,10 +112,8 @@ const WorkspaceListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadWorkSpaceList}>
-            {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
-            {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
-          </CommActionBar>
+          <CommActionBar reloadFunc={loadWorkSpaceList}></CommActionBar>
+
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
