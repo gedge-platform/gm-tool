@@ -144,7 +144,8 @@ const DeploymentListTab = observer(() => {
           >
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
-            {/* <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton> */}
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
+            &nbsp;&nbsp;
             <CCreateButton onClick={handleTamplateCreateOpen}>
               템플릿
             </CCreateButton>

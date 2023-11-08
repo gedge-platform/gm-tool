@@ -4,7 +4,11 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CCreateButton, CSelectButton } from "@/components/buttons";
+import {
+  CCreateButton,
+  CSelectButton,
+  CDeleteButton,
+} from "@/components/buttons";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
@@ -13,9 +17,14 @@ import { podStore } from "@/store";
 import { dateFormatter } from "@/utils/common-utils";
 import CreatePod from "../Dialog/CreatePod";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
+import { swalUpdate, swalError } from "@/utils/swal-utils";
 
 const PodListTab = observer(() => {
   const [open, setOpen] = useState(false);
+  const [reRun, setReRun] = useState(false);
+  const [podName, setPodName] = useState("");
+  const [clusterName, setClusterName] = useState("");
+  const [projectName, setProjectName] = useState("");
   const [tabvalue, setTabvalue] = useState(0);
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -33,6 +42,7 @@ const PodListTab = observer(() => {
     goNextPage,
     viewList,
     initViewList,
+    deletePod,
   } = podStore;
   const [columDefs] = useState([
     {
@@ -92,6 +102,9 @@ const PodListTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
+    setPodName(e.data.name);
+    setClusterName(e.data.cluster);
+    setProjectName(e.data.project);
     const data = e.data.status;
     if (data === "Failed") {
       return;
@@ -101,19 +114,37 @@ const PodListTab = observer(() => {
 
   const history = useHistory();
 
+  const handleDelete = () => {
+    if (podName === "") {
+      swalError("Pod를 선택해주세요!");
+    } else {
+      swalUpdate(podName + "를 삭제하시겠습니까?", () =>
+        deletePod(podName, clusterName, projectName, reloadData())
+      );
+    }
+    setPodName("");
+  };
+
+  const reloadData = () => {
+    setReRun(true);
+  };
+
   useEffect(() => {
     loadPodList();
     return () => {
+      setReRun(false);
       initViewList();
     };
-  }, []);
+  }, [reRun]);
 
   return (
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadPodList}>
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
 
           <div className="tabPanelContainer">

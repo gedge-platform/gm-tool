@@ -894,11 +894,14 @@ class Pod {
     //   });
   };
 
-  deletePod = async (podName, callback) => {
+  deletePod = async (podName, clusterName, projectName, callback) => {
     axios
-      .delete(`${SERVER_URL}/pods/${podName}`)
+      .delete(
+        `${SERVER_URL}/pods/${podName}?cluster=${clusterName}&project=${projectName}`
+      )
       .then((res) => {
-        if (res.status === 201) swalError("Pod가 삭제되었습니다.", callback);
+        console.log("res: ", res);
+        if (res.status === 200) swalError("Pod가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));
   };
