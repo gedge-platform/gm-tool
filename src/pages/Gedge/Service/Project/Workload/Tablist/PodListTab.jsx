@@ -78,6 +78,7 @@ const PodListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      sort: "desc",
     },
   ]);
 
@@ -104,7 +105,7 @@ const PodListTab = observer(() => {
     loadPodList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -120,7 +121,7 @@ const PodListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={podList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

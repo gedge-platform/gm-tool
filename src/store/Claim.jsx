@@ -54,6 +54,7 @@ class Claim {
   pvClaimListInDeployment = [];
   checkPVCInDeployment = "";
   volumeName = "";
+  checkPVCInPod = "";
 
   setCheckPVCInDeployment = (pvcName, volume) => {
     runInAction(() => {
@@ -62,10 +63,9 @@ class Claim {
     });
   };
 
-  checkPVCInPod = "";
   setCheckPVCInPod = (pvcName, volume) => {
     runInAction(() => {
-      this.checkPVCInDeployment = pvcName;
+      this.checkPVCInPod = pvcName;
       this.volumeName = volume;
     });
   };

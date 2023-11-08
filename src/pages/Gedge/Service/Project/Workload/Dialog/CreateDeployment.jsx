@@ -139,10 +139,10 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecrets: [{ name: "my" }],
-          // imagePullSecret: deployment.containers?.map((e) => {
-          //   return { name: e.pullSecret };
-          // }),
+          // imagePullSecrets: [{ name: "my" }],
+          imagePullSecret: deployment.containers?.map((e) => {
+            return { name: e.pullSecret };
+          }),
           containers: deployment.containers?.map((e) => {
             return {
               name: e.containerName,
@@ -154,6 +154,7 @@ const CreateDeployment = observer((props) => {
                 limits: {
                   cpu: e.cpuLimit + "m",
                   memory: e.memoryLimit + "Mi",
+                  "nvidia.com/gpu": e.NVIDIAGPU,
                 },
                 requests: {
                   cpu: e.cpuReservation + "m",
