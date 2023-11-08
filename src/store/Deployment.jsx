@@ -777,6 +777,7 @@ class Deployment {
   };
 
   postGLowLatencyPriority = async (callback) => {
+    console.log("this.deployment ???", this.deployment);
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
@@ -900,52 +901,6 @@ class Deployment {
     const userName = JSON.parse(localStorage.getItem("user")).id;
 
     const option = () => {
-      // if (this.deployment.priority.name === "GLowLatencyPriority") {
-      //   if (this.deployment.priority.mode === "from_node") {
-      //     return {
-      //       user_name: JSON.parse(localStorage.getItem("user")).id,
-      //       workspace_name: this.deployment.workspacetag,
-      //       workspace_uid: this.deployment.workspaceuuid,
-      //       project_name: this.deployment.project.replace(
-      //         "-" + this.deployment.workspaceuuid,
-      //         ""
-      //       ),
-      //       mode: "from_node",
-      //       parameters: {
-      //         source_cluster: this.deployment.priority.sourceCluster,
-      //         source_node: this.deployment.priority.sourceNode,
-      //         select_clusters: this.targetClusters,
-      //       },
-      //     };
-      //   } else {
-      //     return {
-      //       user_name: JSON.parse(localStorage.getItem("user")).id,
-      //       workspace_name: this.deployment.workspacetag,
-      //       workspace_uid: this.deployment.workspaceuuid,
-      //       project_name: this.deployment.project.replace(
-      //         "-" + this.deployment.workspaceuuid,
-      //         ""
-      //       ),
-      //       mode: "from_pod",
-      //       parameters: {
-      //         source_cluster: this.deployment.priority.sourceCluster,
-      //         pod_name: this.deployment.priority.podName,
-      //         select_clusters: this.targetClusters,
-      //       },
-      //     };
-      //   }
-      // }
-      // if (this.deployment.priority.name === "GMostRequestPriority") {
-      //   return {
-      //     user_name: JSON.parse(localStorage.getItem("user")).id,
-      //     workspace_name: this.deployment.workspace,
-      //     project_name: this.deployment.project,
-      //     mode: this.deployment.priority.mode,
-      //     parameters: {
-      //       select_clusters: this.targetClusters,
-      //     },
-      //   };
-      // }
       if (this.deployment.priority.name === "GSelectedClusterPriority") {
         if (this.deployment.priority.mode === "cluster") {
           return {
@@ -978,16 +933,6 @@ class Deployment {
           };
         }
       }
-      // if (this.deployment.priority.name === "GSetClusterPriority") {
-      //   return {
-      //     user_name: JSON.parse(localStorage.getItem("user")).id,
-      //     workspace_name: this.deployment.workspace,
-      //     project_name: this.deployment.project,
-      //     parameters: {
-      //       select_clusters: this.targetClusters[0],
-      //     },
-      //   };
-      // }
     };
 
     const options = encodeURI(JSON.stringify(option()));

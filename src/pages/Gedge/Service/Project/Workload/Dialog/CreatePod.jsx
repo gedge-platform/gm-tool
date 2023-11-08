@@ -13,6 +13,8 @@ import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
 import PodYaml from "./PodYaml";
 import { swalError } from "../../../../../../utils/swal-utils";
+import workspaceStore from "../../../../../../store/WorkSpace";
+import claimStore from "../../../../../../store/Claim";
 
 const Button = styled.button`
   background-color: #fff;
@@ -85,68 +87,77 @@ const CreatePod = observer((props) => {
     postPodGM,
     keyValuePair,
     secretConfigmap,
+    postPodGLowLatencyPriority,
+    postPodGMostRequestPriority,
+    postPodGSelectedClusterPriority,
+    postPodGSetClusterPriority,
   } = podStore;
+
+  console.log("podInfo ???", podInfo);
+
+  const { loadPVClaims } = claimStore;
+  const { loadWorkSpaceList } = workspaceStore;
 
   const [stepValue, setStepValue] = useState(1);
 
-  const pvcTemplate = {
-    apiVersion: "v1",
-    kind: "PersistentVolumeClaim",
-    metadata: {
-      name: podInfo.podName + "-pvc",
-    },
-    spec: {
-      accessModes: -"ReadWriteOnce",
-      resources: {
-        requests: {
-          storage: "8Gi",
-        },
-      },
-      storageClassName: "nfs-client",
-    },
-  };
+  // const pvcTemplate = {
+  //   apiVersion: "v1",
+  //   kind: "PersistentVolumeClaim",
+  //   metadata: {
+  //     name: podInfo.podName + "-pvc",
+  //   },
+  //   spec: {
+  //     accessModes: -"ReadWriteOnce",
+  //     resources: {
+  //       requests: {
+  //         storage: "8Gi",
+  //       },
+  //     },
+  //     storageClassName: "nfs-client",
+  //   },
+  // };
 
-  const podTemplate = {
-    apiVersion: "v1",
-    kind: "Pod",
-    metadata: {
-      name: podInfo.podName,
-    },
-    spec: {
-      containers: [
-        {
-          name: "nginx",
-          image: "nginx:1.14.2",
-          ports: [
-            {
-              containerPort: "80",
-            },
-          ],
-        },
-      ],
-    },
-  };
+  // const podTemplate = {
+  //   apiVersion: "v1",
+  //   kind: "Pod",
+  //   metadata: {
+  //     name: podInfo.podName,
+  //   },
+  //   spec: {
+  //     containers: [
+  //       {
+  //         name: "nginx",
+  //         image: "nginx:1.14.2",
+  //         ports: [
+  //           {
+  //             containerPort: "80",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // };
 
-  const serviceTemplate = {
-    apiVersion: "v1",
-    kind: "Service",
-    metadata: {
-      name: podInfo.podName + "-service",
-    },
-    spec: {
-      type: "NodePort",
-      selector: {
-        app: "nginx10",
-      },
-      ports: [
-        {
-          name: "http",
-          port: 80,
-          targetPort: 80,
-        },
-      ],
-    },
-  };
+  // const serviceTemplate = {
+  //   apiVersion: "v1",
+  //   kind: "Service",
+  //   metadata: {
+  //     name: podInfo.podName + "-service",
+  //   },
+  //   spec: {
+  //     type: "NodePort",
+  //     selector: {
+  //       app: "nginx10",
+  //     },
+  //     ports: [
+  //       {
+  //         name: "http",
+  //         port: 80,
+  //         targetPort: 80,
+  //       },
+  //     ],
+  //   },
+  // };
 
   const template = {
     apiVersion: "v1",
@@ -163,8 +174,8 @@ const CreatePod = observer((props) => {
         return {
           name: e.containerName,
           image: e.containerImage,
-          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
           env: e.variables.map((i) => {
             if (i.type === "KeyValuePair") {
               return {
@@ -206,13 +217,13 @@ const CreatePod = observer((props) => {
           }),
           resources: {
             requests: {
-              cpu: e.cpuReservation,
-              memory: e.memoryReservation,
+              cpu: e.cpuReservation + "m",
+              memory: e.memoryReservation + "Mi",
             },
             limits: {
-              cpu: e.cpuLimit,
-              memory: e.memoryLimit,
-              "nvidia.com/gpu": "1",
+              cpu: e.cpuLimit + "m",
+              memory: e.memoryLimit + "Mi",
+              "nvidia.com/gpu": e.NVIDIAGPU,
             },
           },
           // volumeMounts: e.volumes.map((i) => {
@@ -301,29 +312,52 @@ const CreatePod = observer((props) => {
   };
 
   const createPod = () => {
-    const YAML = require("json-to-pretty-yaml");
-    const value =
-      YAML.stringify(pvcTemplate) +
-      "---\n" +
-      YAML.stringify(podTemplate) +
-      "---\n" +
-      YAML.stringify(serviceTemplate);
-    postPodGM(value);
+    if (podInfo.priority.name === "GLowLatencyPriority") {
+      postPodGLowLatencyPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GMostRequestPriority") {
+      postPodGMostRequestPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GSelectedClusterPriority") {
+      postPodGSelectedClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GSetClusterPriority") {
+      postPodGSetClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
 
+  // useEffect(() => {
+  //   if (stepValue === 4) {
+  //     const YAML = require("json-to-pretty-yaml");
+  //     setContent(
+  //       YAML.stringify(pvcTemplate) +
+  //         "---\n" +
+  //         YAML.stringify(podTemplate) +
+  //         "---\n" +
+  //         YAML.stringify(serviceTemplate)
+  //     );
+  //   }
+  // }, [stepValue]);
+
   useEffect(() => {
+    loadWorkSpaceList();
+    loadPVClaims();
+
     if (stepValue === 4) {
+      setTemplate(template);
       const YAML = require("json-to-pretty-yaml");
-      setContent(
-        YAML.stringify(pvcTemplate) +
-          "---\n" +
-          YAML.stringify(podTemplate) +
-          "---\n" +
-          YAML.stringify(serviceTemplate)
-      );
+      setContent(YAML.stringify(template));
     }
   }, [stepValue]);
 

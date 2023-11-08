@@ -175,7 +175,6 @@ class Workspace {
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          console.log("loadWorkSpaceList :", res);
           this.workSpaceList = res.data.data;
           this.totalPages = Math.ceil(this.workSpaceList.length / 10);
           this.totalElements = this.workSpaceList.length;
