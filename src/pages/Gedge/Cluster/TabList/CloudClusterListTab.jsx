@@ -25,7 +25,7 @@ const CloudClusterListTab = observer(() => {
     totalElements,
     loadClusterList,
     loadCluster,
-
+    clusterListInWorkspace,
     currentPage,
     totalPages,
     viewList,
@@ -128,7 +128,7 @@ const CloudClusterListTab = observer(() => {
           <div className="tabPanelContainer">
             <div className="grid-height2">
               <AgGrid
-                rowData={viewList}
+                rowData={clusterList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

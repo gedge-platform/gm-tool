@@ -110,7 +110,7 @@ const RequestStatusTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={viewList}
+                  rowData={requestList}
                   columnDefs={columDefs}
                   totalElements={totalElements}
                   isBottom={false}

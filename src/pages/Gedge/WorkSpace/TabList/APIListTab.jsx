@@ -26,6 +26,7 @@ const WorkspaceListTab = observer(() => {
     loadWorkspaceDetail,
     totalPages,
     viewList,
+    workSpaceList,
     goPrevPage,
     goNextPage,
     currentPage,

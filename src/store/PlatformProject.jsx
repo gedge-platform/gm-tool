@@ -9,6 +9,7 @@ class PlatformProject {
       clusterName: "",
     },
   ];
+  platformProjectLists = [];
   totalElements = 0;
   adminList = [];
   adminList = [];
@@ -167,6 +168,7 @@ class PlatformProject {
             console.log(res);
             console.log(res.data.data);
             this.platformProjectList = res.data.data;
+            this.platformProjectLists = res.data.data;
             this.platformDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;

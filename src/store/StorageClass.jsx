@@ -16,6 +16,7 @@ class StorageClass {
   totalPages = 1;
   totalElements = 0;
   storageClasses = [];
+  storageClassess = [];
   storageClass = {};
   scYamlFile = "";
   scParameters = {};
@@ -233,6 +234,7 @@ class StorageClass {
           console.log(res.data.data);
           if (res.data.data !== null) {
             this.storageClasses = res.data.data;
+            this.storageClassess = res.data.data;
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {

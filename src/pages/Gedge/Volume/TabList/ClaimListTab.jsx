@@ -38,6 +38,7 @@ const ClaimListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    pvClaimLists,
     goPrevPage,
     goNextPage,
   } = claimStore;
@@ -189,7 +190,7 @@ const ClaimListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={pvClaimLists}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}
