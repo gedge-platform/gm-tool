@@ -26,6 +26,7 @@ const WorkspaceListTab = observer(() => {
     loadWorkspaceDetail,
     totalPages,
     viewList,
+    workSpaceList,
     goPrevPage,
     goNextPage,
     currentPage,
@@ -113,13 +114,12 @@ const WorkspaceListTab = observer(() => {
             {/* <CCreateButton onClick={handleOpen}>생성</CCreateButton> */}
             {/* <CSelectButton items={[]}>{"All Cluster"}</CSelectButton> */}
           </CommActionBar>
-
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={workSpaceList}
                   columnDefs={columnDefs}
                   isBottom={false}
                   totalElements={totalElements}

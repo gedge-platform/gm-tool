@@ -28,6 +28,7 @@ const UserListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    userList,
     goPrevPage,
     goNextPage,
     inputs,
@@ -146,7 +147,7 @@ const UserListTab = observer(() => {
           </CommActionBar>
           <div className="grid-height2">
             <AgGrid
-              rowData={viewList}
+              rowData={userList}
               columnDefs={columnDefs}
               totalElements={totalElements}
               isBottom={false}

@@ -30,6 +30,7 @@ const StorageClassListTab = observer(() => {
     goNextPage,
     loadStorageClass,
     viewList,
+    storageClassess,
     getYamlFile,
     loadStorageClassYaml,
   } = StorageClassStore;
@@ -138,7 +139,7 @@ const StorageClassListTab = observer(() => {
                 <AgGrid
                   onCellClicked={handleClick}
                   //  rowData={viewList}
-                  rowData={viewList}
+                  rowData={storageClassess}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

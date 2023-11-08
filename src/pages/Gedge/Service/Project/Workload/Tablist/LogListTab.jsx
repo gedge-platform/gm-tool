@@ -103,7 +103,7 @@ const LogListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={viewList}
+                  rowData={logList}
                   columnDefs={columDefs}
                   totalElements={totalElements}
                   isBottom={false}

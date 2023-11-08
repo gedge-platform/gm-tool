@@ -33,6 +33,7 @@ const Storage = observer(() => {
     goNextPage,
     loadStorageClass,
     viewList,
+    storageClasses,
     getYamlFile,
     loadStorageClassYaml,
   } = StorageClassStore;
@@ -143,7 +144,7 @@ const Storage = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={viewList}
+                  rowData={storageClasses}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

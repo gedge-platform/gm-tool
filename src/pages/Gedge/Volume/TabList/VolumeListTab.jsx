@@ -34,6 +34,7 @@ const VolumeListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    pVolumesLists,
     goPrevPage,
     goNextPage,
   } = volumeStore;
@@ -172,7 +173,7 @@ const VolumeListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={pVolumesLists}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

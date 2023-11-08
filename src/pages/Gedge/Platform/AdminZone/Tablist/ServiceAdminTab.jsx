@@ -108,7 +108,7 @@ const ServiceAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={serviceList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

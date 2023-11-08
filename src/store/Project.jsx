@@ -6,6 +6,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Project {
   projectList = [];
+  projectLists = [];
   projectDetail = {};
   resourceUsage = {};
   adminList = [];
@@ -166,6 +167,7 @@ class Project {
           // );
           console.log(res.data.data);
           this.projectList = res.data.data;
+          this.projectLists = res.data.data;
           this.totalElements = res.data.data.length;
         });
       })

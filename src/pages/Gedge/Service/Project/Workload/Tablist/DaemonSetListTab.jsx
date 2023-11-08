@@ -100,7 +100,7 @@ const DaemonSetListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={daemonSetList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

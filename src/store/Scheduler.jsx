@@ -13,6 +13,7 @@ class Scheduler {
   resultList = {};
   viewList = null;
   yamlList = [];
+  yamlLists = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -63,6 +64,7 @@ class Scheduler {
         runInAction(() => {
           if (res.data.data !== null) {
             this.yamlList = res.data.data;
+            this.yamlLists = res.data.data;
             this.yamlDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 20);
             this.totalElements = res.data.data.length;
