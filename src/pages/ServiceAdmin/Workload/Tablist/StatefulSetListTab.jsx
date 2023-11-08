@@ -118,7 +118,7 @@ const StatefulSetListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={statefulSetList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements === 0 ? 0 : totalElements}

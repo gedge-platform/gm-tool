@@ -285,6 +285,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
+  pVolumesLists = [];
   pVolume = {};
   viewList = [];
   currentPage = 1;
@@ -494,6 +495,7 @@ class Volume {
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
+          this.pVolumesLists = res.data.data;
           this.totalElements =
             res.data.data === null ? 0 : this.pVolumesList.length;
         });

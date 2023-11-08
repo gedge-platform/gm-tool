@@ -35,6 +35,7 @@ const StorageClassAdminTab = observer(() => {
     getYamlFile,
     loadStorageClassYaml,
     storageclass,
+    storageClasses
   } = StorageClassStore;
 
   const [columDefs] = useState([
@@ -139,7 +140,7 @@ const StorageClassAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleOpen}
-                  rowData={viewList}
+                  rowData={storageClasses}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

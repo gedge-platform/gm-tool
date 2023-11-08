@@ -113,7 +113,7 @@ const EdgeZoneListTab = observer(() => {
             <CTabPanel value={tabvalue} index={0}>
               <div className="grid-height2">
                 <AgGrid
-                  rowData={viewList}
+                  rowData={clusterList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

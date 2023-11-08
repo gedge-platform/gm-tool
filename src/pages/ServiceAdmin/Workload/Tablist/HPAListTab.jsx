@@ -99,7 +99,7 @@ const HPAListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={hpaList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

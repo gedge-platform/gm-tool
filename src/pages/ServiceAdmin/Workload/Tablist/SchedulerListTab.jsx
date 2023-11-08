@@ -22,6 +22,7 @@ const SchedulerListTab = observer(() => {
     goPrevPage, 
     goNextPage,
     viewList, 
+    yamlLists,
     initViewList,
   } = schedulerStore;
 
@@ -114,7 +115,7 @@ const SchedulerListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 // onCellClicked={handleClick}
-                rowData={viewList}
+                rowData={yamlLists}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

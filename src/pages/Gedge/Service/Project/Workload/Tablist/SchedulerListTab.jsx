@@ -22,6 +22,7 @@ const SchedulerListTab = observer(() => {
   const {
     totalElements,
     loadYamlList,
+    yamlList,
     currentPage,
     totalPages,
     viewList,
@@ -111,7 +112,7 @@ const SchedulerListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={yamlList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

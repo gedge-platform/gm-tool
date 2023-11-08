@@ -5,6 +5,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Certification {
   credential = [];
+  credentialList = [];
   certificationDetail = {};
   CredentialName = "";
   // credentialName = "";
@@ -209,6 +210,7 @@ class Certification {
         runInAction(() => {
           console.log("data is ", data);
           this.credential = data;
+          this.credentialList = data;
           this.totalElements = this.credential.length;
           this.CredentialName = this.credential.map((list) => list.name);
           this.ProviderName = this.credential.map((list) => list.type);

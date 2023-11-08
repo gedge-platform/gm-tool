@@ -11,6 +11,7 @@ class Claim {
   totalElements = 0;
   pvClaim = {};
   pvClaimList = [];
+  pvClaimLists = [];
   pvClaimYamlFile = "";
   pvClaimAnnotations = {};
   pvClaimLables = {};
@@ -339,6 +340,7 @@ class Claim {
       .then((res) => {
         runInAction(() => {
           this.pvClaimList = res.data.data;
+          this.pvClaimLists = res.data.data;
           this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
           this.totalElements = res.data.data.length;
         });

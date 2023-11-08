@@ -24,7 +24,7 @@ const CreateUser = observer(() => {
 
   const {
     projectDetail,
-    projectList,
+    projectLists,
     totalElements,
     loadProjectList,
     loadProjectDetail,
@@ -35,7 +35,6 @@ const CreateUser = observer(() => {
     goPrevPage,
     goNextPage,
   } = projectStore;
-  console.log(projectList);
 
   const [columDefs] = useState([
     {
@@ -128,7 +127,7 @@ const CreateUser = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={projectLists}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

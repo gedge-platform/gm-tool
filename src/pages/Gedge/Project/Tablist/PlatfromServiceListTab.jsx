@@ -22,6 +22,7 @@ const PlatfromServiceListTab = observer(() => {
 
   const {
     platformProjectList,
+    platformProjectLists,
     totalElements,
     loadPlatformProjectList,
     platformDetil,
@@ -106,7 +107,7 @@ const PlatfromServiceListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={platformProjectLists}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
