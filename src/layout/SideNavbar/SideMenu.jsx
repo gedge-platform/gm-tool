@@ -6,7 +6,7 @@ import { NavScrollbar } from "@/components/scrollbars";
 import { Title } from "@/pages";
 import { useHistory } from "react-router-dom";
 import { getItem } from "@/utils/sessionStorageFn";
-import { TreeItem, TreeView } from "@mui/lab";
+import { TreeItem, TreeView } from "@mui/x-tree-view";
 
 const CustomTreeItem = styled(TreeItem)`
 // & .MuiTreeItem-group {
