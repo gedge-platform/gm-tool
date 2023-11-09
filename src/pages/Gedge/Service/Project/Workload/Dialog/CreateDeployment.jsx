@@ -139,8 +139,7 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          // imagePullSecrets: [{ name: "my" }],
-          imagePullSecret: deployment.containers?.map((e) => {
+          imagePullSecrets: deployment.containers?.map((e) => {
             return { name: e.pullSecret };
           }),
           containers: deployment.containers?.map((e) => {

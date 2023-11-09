@@ -202,11 +202,13 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.adminList = res.data.data;
-          this.workSpaceList = this.adminList.filter((workspace) =>
-            workspace.selectCluster.some(
-              (cluster) => cluster.clusterName === "gm-cluster"
-            )
-          );
+          console.log("adminList ???? ", res.data.data);
+          this.workSpaceList = res.data.data;
+          // this.workSpaceList = this.adminList.filter((workspace) =>
+          //   workspace.selectCluster.some(
+          //     (cluster) => cluster.clusterName === "gm-cluster"
+          //   )
+          // );
           if (this.workSpaceList.length !== 0) {
             this.totalPages = Math.ceil(this.workSpaceList.length / 10);
             this.totalElements = this.workSpaceList.length;
@@ -229,6 +231,7 @@ class Workspace {
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
+    console.log(workspaceName);
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;

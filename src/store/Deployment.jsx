@@ -780,6 +780,8 @@ class Deployment {
     console.log("this.deployment ???", this.deployment);
     const body = this.content;
 
+    console.log(body);
+
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {
@@ -822,6 +824,7 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
+    console.log(options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -844,8 +847,8 @@ class Deployment {
   };
 
   postGMostRequestPriority = async (callback) => {
-    console.log(this.deployment)
-    console.log(this.appInfo)
+    console.log(this.deployment);
+    console.log(this.appInfo);
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
@@ -873,7 +876,7 @@ class Deployment {
 
     console.log("requestId", requestId);
     console.log("options", options);
-    console.log("body", body)
+    console.log("body", body);
 
     await axios
       .post(
@@ -1112,7 +1115,7 @@ class Deployment {
           swalError("Deployment 생성 실패", callback);
         }
       });
-  }
+  };
 
   postTemplateSelected = async (callback) => {
     const body = this.content;
@@ -1227,7 +1230,7 @@ class Deployment {
           swalError("Deployment 생성 실패", callback);
         }
       });
-  }
+  };
 
   postDeploymentPVC = async () => {
     const YAML = require("yamljs");
