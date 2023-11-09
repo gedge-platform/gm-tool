@@ -29,6 +29,7 @@ const CertificationListTab = observer(() => {
     currentPage,
     totalPages,
     viewList,
+    credentialList,
     goPrevPage,
     goNextPage,
     totalElements,
@@ -139,7 +140,7 @@ const CertificationListTab = observer(() => {
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid2
-              rowData={viewList}
+              rowData={credentialList}
               columnDefs={columDefs}
               isBottom={false}
               onCellClicked={handleClick}

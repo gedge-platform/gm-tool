@@ -102,7 +102,7 @@ const SecretListTab = observer(() => {
                 <AgGrid
                   onCellClicked={handleClick}
                   //Pagenation rowData={viewList}
-                  rowData={viewList}
+                  rowData={secretList}
                   columnDefs={columDefs}
                   //Pagenation isBottom = false
                   // isBottom={true}

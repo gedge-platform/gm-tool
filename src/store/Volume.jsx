@@ -255,7 +255,7 @@
 //   };
 
 //   createVolume = (template, callback) => {
-//     const YAML = require("yamljs");
+//     const YAML = require("json-to-pretty-yaml");
 //     axios
 //       .post(
 //         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
@@ -285,6 +285,7 @@ import { swalError } from "../utils/swal-utils";
 
 class Volume {
   pVolumesList = [];
+  pVolumesLists = [];
   pVolume = {};
   viewList = [];
   currentPage = 1;
@@ -494,6 +495,7 @@ class Volume {
       .then((res) => {
         runInAction(() => {
           this.pVolumesList = res.data.data;
+          this.pVolumesLists = res.data.data;
           this.totalElements =
             res.data.data === null ? 0 : this.pVolumesList.length;
         });
@@ -537,7 +539,7 @@ class Volume {
   };
 
   createVolume = (template, callback) => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     axios
       .post(
         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,

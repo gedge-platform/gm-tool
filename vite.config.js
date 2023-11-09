@@ -28,6 +28,7 @@ export default ({ mode }) => {
       outDir: resolve(__dirname, "public", "dist"),
       // publicPath: "",
       sourcemap: false,
+      chunkSizeWarningLimit: 5000,
       minify: true,
       commonjsOptions: {
         transformMixedEsModules: true,

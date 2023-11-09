@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class Service {
   currentPage = 1;
@@ -234,7 +235,7 @@ class Service {
   };
 
   postService = (callback) => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     let count = 0;
     // console.log(this.cluster, this.workspace, this.project);
     this.cluster.map(async (item) => {
@@ -255,11 +256,13 @@ class Service {
     });
   };
 
-  deleteService = async (serviceName, callback) => {
+  deleteService = async (serviceName, clusterName, projectName, callback) => {
     axios
-      .delete(`${SERVER_URL}/services/${serviceName}`)
+      .delete(
+        `${SERVER_URL}/services/${serviceName}?cluster=${clusterName}&project=${projectName}`
+      )
       .then((res) => {
-        if (res.status === 201) swalError("서비스가 삭제되었습니다.", callback);
+        if (res.status === 200) swalError("서비스가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));
   };

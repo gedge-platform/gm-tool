@@ -1233,7 +1233,7 @@ class Deployment {
   };
 
   postDeploymentPVC = async () => {
-    const YAML = require("yamljs");
+    const YAML = require("json-to-pretty-yaml");
     const { selectClusters } = volumeStore;
 
     await axios
@@ -1258,7 +1258,7 @@ class Deployment {
       )
       .then((res) => {
         console.log("delete res: ", res);
-        if (res.status === 201)
+        if (res.status === 200)
           swalError("Deployment가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));

@@ -110,7 +110,7 @@ const PlatfromServiceAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={viewList}
+                  rowData={platformProjectList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}
