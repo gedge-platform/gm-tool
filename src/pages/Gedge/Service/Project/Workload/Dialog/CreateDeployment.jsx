@@ -126,7 +126,7 @@ const CreateDeployment = observer((props) => {
       name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
-      namespace: deployment.workspacetag,
+      // namespace: deployment.workspacetag,
     },
     spec: {
       selector: {

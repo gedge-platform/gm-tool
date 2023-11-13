@@ -32,6 +32,7 @@ const PlatfromServiceAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
     loadPlatformProjectDetail,
+    platformProjectLists,
   } = platformProjectStore;
 
   const [columDefs] = useState([
@@ -108,10 +109,10 @@ const PlatfromServiceAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={platformProjectList}
+                  rowData={platformProjectLists}
                   columnDefs={columDefs}
                   isBottom={false}
-                  totalElements={totalElements}
+                  totalElements={platformProjectLists.length}
                   totalPages={totalPages}
                   currentPage={currentPage}
                   goNextPage={goNextPage}

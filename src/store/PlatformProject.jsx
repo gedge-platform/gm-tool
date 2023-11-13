@@ -201,21 +201,25 @@ class PlatformProject {
         runInAction(() => {
           console.log(res.data);
           this.adminList = res.data.data;
+          this.platformProjectLists = res.data.data.filter(
+            (data) => data.clusterName === "gm-cluster"
+          );
           this.platformProjectList = this.adminList.filter(
             (data) => data.clusterName === "gm-cluster"
           );
-          if (this.platformProjectList.length !== 0) {
-            this.platformDetail = this.platformProjectList[0];
-            this.totalElements = this.platformProjectList.length;
-            this.totalPages = Math.ceil(this.platformProjectList.length / 10);
-          } else {
-            this.platformProjectList = [];
-          }
+          // this.totalElements = this.platformProjectLists.length;
+          // if (this.platformProjectList.length !== 0) {
+          //   this.platformDetail = this.platformProjectList[0];
+          //   this.totalElements = this.platformProjectList.length;
+          //   this.totalPages = Math.ceil(this.platformProjectList.length / 10);
+          // } else {
+          //   this.platformProjectList = [];
+          // }
         });
       })
-      .then(() => {
-        this.paginationList();
-      })
+      // .then(() => {
+      //   this.paginationList();
+      // })
       .then(() => {
         this.loadPlatformProjectDetail(
           this.platformProjectList[0].projectName,
@@ -230,7 +234,7 @@ class PlatformProject {
       })
       .catch((err) => {
         this.platformProjectList = [];
-        this.paginationList();
+        // this.paginationList();
       });
   };
 

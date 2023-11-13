@@ -27,11 +27,14 @@ const AgGrid = (props) => {
     isBottom,
   } = props;
 
+  console.log(totalPages);
+
   const gridRef = useRef();
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
     '<span class="ag-overlay-loading-center">No Data</span>'
@@ -44,8 +47,13 @@ const AgGrid = (props) => {
   useEffect(() => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
-      gridApi.showLoadingOverlay();
-      gridApi.hideOverlay();
+      if (loading) {
+        gridApi.showLoadingOverlay();
+      } else if (rowData && rowData.length === 0) {
+        gridApi.showNoRowsOverlay();
+      } else {
+        gridApi.hideOverlay();
+      }
     }
   }, [rowData]);
 
@@ -159,7 +167,9 @@ const AgGrid = (props) => {
               </button>
               <span className="page-num">
                 {currentPage} of{" "}
-                {gridRef?.current?.api.paginationGetTotalPages()}
+                {gridRef?.current?.api.paginationGetTotalPages() === 0
+                  ? 1
+                  : gridRef?.current?.api.paginationGetTotalPages()}
               </span>
               <button type="button" className="btn_comm">
                 <span

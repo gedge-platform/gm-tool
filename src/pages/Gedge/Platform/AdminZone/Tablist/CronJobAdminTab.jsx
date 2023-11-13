@@ -91,9 +91,9 @@ const CronJobAdminTab = observer(() => {
 
   useEffect(() => {
     loadAdminCronJobList();
-    return () => {
-      initViewList();
-    }
+    // return () => {
+    //   initViewList();
+    // };
   }, []);
 
   return (
@@ -114,7 +114,6 @@ const CronJobAdminTab = observer(() => {
                   isBottom={false}
                   totalElements={totalElements}
                   totalPages={totalPages}
-                  currentPage={currentPage}
                   goNextPage={goNextPage}
                   goPrevPage={goPrevPage}
                 />
