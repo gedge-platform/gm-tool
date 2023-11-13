@@ -23,7 +23,6 @@ import {
   Storage,
   CreateUser,
   PlatformControl,
-  Template,
   StorageDashboard,
   // PlatformServiceListTab,
   PlatformProject,
@@ -105,7 +104,6 @@ export const App = () => {
           <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
-          <AuthRoute path="/template" component={NotFound} />
           <AuthRoute path="/StorageDashboard" component={StorageDashboard} />
 
           <Route path="/login" component={Login} />

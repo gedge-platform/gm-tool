@@ -129,11 +129,7 @@ const CreateDeploymentStepOne = observer((props) => {
     }
 
     if (e.target.name === "claimVolume") {
-      console.log(e.target.name);
       const pvc = JSON.parse(e.target.value);
-      console.log("pvc ??", pvc);
-      console.log("pvc.name ??", pvc.name);
-      console.log("pvc.volume ??", pvc.volume);
       setCheckPVCInDeployment(pvc.name, pvc.volume);
       setDeployment("pvcName", pvc.name);
       setDeployment("volume", pvc.volume);
@@ -203,56 +199,6 @@ const CreateDeploymentStepOne = observer((props) => {
             </td>
           </tr>
 
-          {/* <tr>
-            <th>
-              Workspace <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  name="workspace"
-                  onChange={handleDeployment}
-                  value={deployment.workspace}
-                >
-                  <option value={""} selected disabled hidden>
-                    Select Workspace
-                  </option>
-                  {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
-                      {workspace.workspaceName}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr> */}
-          {/* <tr>
-            <th>
-              Workspace <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  name="workspace"
-                  onChange={handleDeployment}
-                  value={deployment.workspace}
-                >
-                  <option value={""} disabled hidden>
-                    Select Workspace
-                  </option>
-                  {workSpaceList.map((workspace) => (
-                    <option
-                      key={workspace.workspaceUUID}
-                      value={workspace.workspaceName}
-                    >
-                      {workspace.workspaceName}
-                    </option>
-
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr> */}
           <tr>
             <th>
               Workspace <span className="requried">*</span>

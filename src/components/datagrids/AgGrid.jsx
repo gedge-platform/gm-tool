@@ -57,6 +57,7 @@ const AgGrid = (props) => {
   const onFirstDataRendered = (params) => {
     params.api.sizeColumnsToFit();
     setTotal(gridRef?.current?.api.paginationGetTotalPages());
+    gridRef.current.api.paginationSetPageSize(rowPerPage);
   };
 
   const onGridSizeChanged = (params) => {

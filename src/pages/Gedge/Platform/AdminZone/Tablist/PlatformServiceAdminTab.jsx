@@ -25,8 +25,6 @@ const PlatfromServiceAdminTab = observer(() => {
     totalElements,
     loadAdminPlatformProjectList,
     platformDetil,
-    loadPlatformDetail,
-    loadCluster,
     currentPage,
     totalPages,
     viewList,
@@ -89,7 +87,7 @@ const PlatfromServiceAdminTab = observer(() => {
     loadAdminPlatformProjectList("system");
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (

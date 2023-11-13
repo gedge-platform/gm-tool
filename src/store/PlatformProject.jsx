@@ -165,8 +165,6 @@ class PlatformProject {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            console.log(res);
-            console.log(res.data.data);
             this.platformProjectList = res.data.data;
             this.platformProjectLists = res.data.data;
             this.platformDetail = res.data.data[0];
@@ -201,6 +199,7 @@ class PlatformProject {
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res.data);
           this.adminList = res.data.data;
           this.platformProjectList = this.adminList.filter(
             (data) => data.clusterName === "gm-cluster"
@@ -239,7 +238,6 @@ class PlatformProject {
     await axios
       .get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`)
       .then((res) => {
-        console.log("res", res);
         runInAction(() => {
           this.platformProjectDetail = res.data;
           this.detailInfo = res.data.DetailInfo;
