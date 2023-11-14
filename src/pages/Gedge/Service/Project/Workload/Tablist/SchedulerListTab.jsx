@@ -96,7 +96,7 @@ const SchedulerListTab = observer(() => {
     loadYamlList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -113,6 +113,7 @@ const SchedulerListTab = observer(() => {
                 <AgGrid
                   onCellClicked={handleClick}
                   rowData={yamlList}
+                  rowPerPage={20}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

@@ -340,13 +340,10 @@ class StorageClass {
   };
 
   postStorageClass = (callback) => {
-    const YAML = require("json-to-pretty-yaml");
-    axios
-      .post(
-        `${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`,
+    const body = this.content;
 
-        YAML.parse(this.content)
-      )
+    axios
+      .post(`${SERVER_URL}/storageclasses?cluster=${this.selectClusters}`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 201) {
