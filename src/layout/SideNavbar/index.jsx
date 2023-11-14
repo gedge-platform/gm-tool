@@ -37,7 +37,7 @@ const SideNavbar = () => {
   return (
     <SidebarArea>
       <LogoArea>
-        <Link to="/">
+        <Link to="/total">
           <img src={sideLogo} alt="GEdge Cloud" />
         </Link>
       </LogoArea>

@@ -27,8 +27,6 @@ const AgGrid = (props) => {
     isBottom,
   } = props;
 
-  console.log(totalPages);
-
   const gridRef = useRef();
   const [gridApi, setGridApi] = useState(null);
   const [setGridColumnApi] = useState(null);
@@ -140,13 +138,7 @@ const AgGrid = (props) => {
       >
         <div className="paging-wrap">
           <div>
-            {/* <select className="btn_comm">
-                            <option value="10">10건</option>
-                            <option value="20">20건</option>
-                            <option value="50">50건</option>
-                        </select> */}
             <span>총 {totalElements !== 0 ? totalElements : 0}건</span>
-            {/* <span> | {rowPerPage * currentPage - rowPerPage}~{rowPerPage * currentPage}건</span> */}
           </div>
           {isBottom ? (
             ""
@@ -167,9 +159,7 @@ const AgGrid = (props) => {
               </button>
               <span className="page-num">
                 {currentPage} of{" "}
-                {gridRef?.current?.api.paginationGetTotalPages() === 0
-                  ? 1
-                  : gridRef?.current?.api.paginationGetTotalPages()}
+                {gridRef?.current?.api.paginationGetTotalPages() || 1}
               </span>
               <button type="button" className="btn_comm">
                 <span

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import theme from "@/styles/theme";
 import { NavScrollbar } from "@/components/scrollbars";
@@ -7,6 +7,8 @@ import { Title } from "@/pages";
 import { useHistory } from "react-router-dom";
 import { getItem } from "@/utils/sessionStorageFn";
 import { TreeItem, TreeView } from "@mui/x-tree-view";
+import { observer } from "mobx-react";
+import menuStore from "../../store/Menu";
 
 const CustomTreeItem = styled(TreeItem)`
 // & .MuiTreeItem-group {
@@ -183,16 +185,61 @@ const MenuNav = styled.nav`
   }
 `;
 
-export const SideMenu = () => {
+const SideMenu = observer(() => {
   const history = useHistory();
   const userRole = getItem("userRole");
+  const location = useLocation();
+  const { expanded, setExpanded } = menuStore;
 
-  // const [open, setOpen] = React.useState(true);
-  const [expanded, setExpanded] = useState(false);
+  const CustomNavLink = ({ to, exact, nodeId, children }) => {
+    const location = useLocation();
 
-  // const handleClick = () => {
-  //   setOpen(!open);
-  // };
+    return (
+      <NavLink
+        to={to}
+        exact={exact}
+        activeClassName="active" // active 클래스 추가
+        isActive={(match) => {
+          // 만약 nodeId가 설정되어 있고, 현재 location.pathname이 해당 nodeId에 속하거나
+          // 현재 location.pathname이 to prop과 일치한다면 true를 반환하여 isActive 클래스를 추가.
+          return (nodeId && match) || to === location.pathname;
+        }}
+      >
+        {children}
+      </NavLink>
+    );
+  };
+
+  // 메뉴 버튼을 눌렀을 때 하위 메뉴가 있는 메뉴는 Toggle 함수 사용
+  const onNodeToggle = (e, nodeId) => {
+    setExpanded(nodeId);
+  };
+
+  // 페이지 로드 시 메뉴 상태를 복원
+  useEffect(() => {
+    const savedExpanded = localStorage.getItem("menuExpanded");
+    if (savedExpanded) {
+      setExpanded(JSON.parse(savedExpanded));
+    }
+  }, [setExpanded]);
+
+  // 메뉴가 변경될 때마다 상태를 저장
+  useEffect(() => {
+    localStorage.setItem("menuExpanded", JSON.stringify(expanded));
+  }, [expanded]);
+
+  // 하위 메뉴가 없는 메뉴들은 선택 시 다른 하위 메뉴 expanded 삭제
+  useEffect(() => {
+    if (
+      location.pathname === "/total" ||
+      location.pathname === "/user" ||
+      location.pathname === "/monitoring" ||
+      location.pathname === "/configuration" ||
+      location.pathname === "/certification"
+    ) {
+      setExpanded([]);
+    }
+  }, [location]);
 
   const handleClick = (event, nodeId) => {
     setExpanded(nodeId);
@@ -203,190 +250,141 @@ export const SideMenu = () => {
       <NavScrollbar>
         {userRole === "PA" ? (
           <ul>
-            <TreeView sx={{ overflowY: "auto" }} aria-expanded={false}>
+            <TreeView
+              sx={{ overflowY: "auto" }}
+              aria-expanded={false}
+              onNodeToggle={onNodeToggle}
+              expanded={expanded}
+            >
               <li>
-                <NavLink exact to="/total" activeClassName="active">
+                <CustomNavLink exact to="/total" activeClassName="active">
                   {Title.TotalDashboard}
-                </NavLink>
+                </CustomNavLink>
               </li>
-              <CustomTreeItem
-                nodeId="1"
-                label={Title.Platform}
-                onNodeFocus={handleClick}
-              >
+              <CustomTreeItem nodeId="1" label={Title.Platform}>
                 <li>
-                  <NavLink
-                    nodeId="3"
+                  <CustomNavLink
+                    nodeId="2"
                     // exact
                     to="/platformDashboard"
                     activeClassName="active"
                   >
                     {Title.Dashboard}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
 
                 <li>
-                  <NavLink
-                    nodeId="5"
+                  <CustomNavLink
+                    nodeId="3"
                     exact
                     to="/edgeZone"
                     activeClassName="active"
                   >
                     {Title.EdgeZone}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
                 <li>
-                  <NavLink
-                    nodeId="6"
+                  <CustomNavLink
+                    nodeId="4"
                     exact
                     to="/cloudZone"
                     activeClassName="active"
                   >
                     {Title.CloudZone}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
 
                 <li>
-                  <NavLink
+                  <CustomNavLink
                     exact
                     to="/adminZone"
-                    nodeId="7"
+                    nodeId="5"
                     activeClassName="active"
                   >
                     {Title.AdminZone}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem
-                nodeId="8"
-                label={Title.Infra}
-                onNodeFocus={handleClick}
-              >
-                <CustomTreeItem nodeId="9" label={Title.NetWork}>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/loadbalancer"
-                      nodeId="10"
-                      activeClassName="active"
-                    >
-                      {Title.Loadbalancer}
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/topology"
-                      nodeId="11"
-                      activeClassName="active"
-                    >
-                      {Title.Topology}
-                    </NavLink>
-                  </li>
-                </CustomTreeItem>
-                {/* <li>
-                  <NavLink exact to="/storage" activeClassName="active">
-                    {Title.Storage}
-                  </NavLink>
-                </li> */}
-                <CustomTreeItem nodeId="12" label={Title.Storage}>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/storageDashboard"
-                      nodeId="13"
-                      activeClassName="active"
-                    >
-                      {Title.StorageDashboard}
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink
-                      exact
-                      to="/storage"
-                      nodeId="14"
-                      activeClassName="active"
-                    >
-                      {Title.Storage}
-                    </NavLink>
-                  </li>
-                </CustomTreeItem>
+              <CustomTreeItem nodeId="6" label={Title.Infra}>
                 <li>
-                  <NavLink to="/volumes" activeClassName="active">
+                  <CustomNavLink
+                    exact
+                    to="/storageDashboard"
+                    nodeId="7"
+                    activeClassName="active"
+                  >
+                    {Title.StorageDashboard}
+                  </CustomNavLink>
+                </li>
+
+                <li>
+                  <CustomNavLink to="/volumes" activeClassName="active">
                     {Title.Volume}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem
-                nodeId="15"
-                label={Title.Service}
-                onNodeFocus={handleClick}
-              >
+              <CustomTreeItem nodeId="8" label={Title.Service}>
                 <li>
-                  <NavLink
+                  <CustomNavLink
                     exact
                     to="/workSpace"
-                    nodeId="16"
+                    nodeId="9"
                     activeClassName="active"
                   >
                     {Title.WorkSpace}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
-                <CustomTreeItem
-                  nodeId="17"
-                  label={Title.Project}
-                  onNodeFocus={handleClick}
-                >
+                <CustomTreeItem nodeId="10" label={Title.Project}>
                   <li>
-                    <NavLink
+                    <CustomNavLink
                       exact
                       to="/userProject"
-                      nodeId="18"
+                      nodeId="11"
                       activeClassName="active"
                     >
                       {Title.CreateUser}
-                    </NavLink>
+                    </CustomNavLink>
                   </li>
                   <li>
-                    <NavLink
+                    <CustomNavLink
                       exact
                       to="/platformProject"
                       activeClassName="active"
                     >
                       {Title.PlatformControl}
-                    </NavLink>
+                    </CustomNavLink>
                   </li>
                 </CustomTreeItem>
                 <li>
-                  <NavLink exact to="/workload" activeClassName="active">
+                  <CustomNavLink exact to="/workload" activeClassName="active">
                     {Title.Workload}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
                 <li>
-                  <NavLink exact to="/faas" activeClassName="active">
+                  <CustomNavLink exact to="/faas" activeClassName="active">
                     {Title.FaaS}
-                  </NavLink>
+                  </CustomNavLink>
                 </li>
               </CustomTreeItem>
               <li>
-                <NavLink to="/user" activeClassName="active">
+                <CustomNavLink to="/user" activeClassName="active">
                   {Title.PlatformUser}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/monitoring" activeClassName="active">
+                <CustomNavLink to="/monitoring" activeClassName="active">
                   {Title.Monitoring}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/configuration" activeClassName="active">
+                <CustomNavLink to="/configuration" activeClassName="active">
                   {Title.Configuration}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/certification" activeClassName="active">
+                <CustomNavLink to="/certification" activeClassName="active">
                   {Title.Certification}
-                </NavLink>
+                </CustomNavLink>
               </li>
             </TreeView>
           </ul>
@@ -394,60 +392,34 @@ export const SideMenu = () => {
           <ul>
             <TreeView sx={{ overflowY: "auto" }} aria-expanded={false}>
               <li>
-                <NavLink exact to="/service" activeClassName="active">
+                <CustomNavLink exact to="/service" activeClassName="active">
                   {Title.ServiceAdminDashboard}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink exact to="/service/map" activeClassName="active">
+                <CustomNavLink exact to="/service/map" activeClassName="active">
                   {Title.ServiceAdminMapDashboard}
-                </NavLink>
+                </CustomNavLink>
               </li>
-              {/* <CustomTreeItem
-                nodeId="1"
-                label={Title.Platform}
-                onNodeFocus={handleClick}
-              >
-                <li>
-                  <NavLink
-                    nodeId="2"
-                    exact
-                    to="/service"
-                    activeClassName="active"
-                  >
-                    {Title.ServiceAdminDashboard}
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    nodeId="3"
-                    exact
-                    to="/service/map"
-                    activeClassName="active"
-                  >
-                    {Title.ServiceAdminMapDashboard}
-                  </NavLink>
-                </li>
-              </CustomTreeItem> */}
               <li>
-                <NavLink to="/service/Workspace" activeClassName="active">
+                <CustomNavLink to="/service/Workspace" activeClassName="active">
                   {Title.WorkSpace}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/service/project" activeClassName="active">
+                <CustomNavLink to="/service/project" activeClassName="active">
                   {Title.Project}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/service/workload" activeClassName="active">
+                <CustomNavLink to="/service/workload" activeClassName="active">
                   {Title.Workload}
-                </NavLink>
+                </CustomNavLink>
               </li>
               <li>
-                <NavLink to="/service/volumes" activeClassName="active">
+                <CustomNavLink to="/service/volumes" activeClassName="active">
                   {Title.Volume}
-                </NavLink>
+                </CustomNavLink>
               </li>
             </TreeView>
           </ul>
@@ -455,6 +427,6 @@ export const SideMenu = () => {
       </NavScrollbar>
     </MenuNav>
   );
-};
+});
 
 export default SideMenu;
