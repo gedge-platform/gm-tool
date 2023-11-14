@@ -64,7 +64,7 @@ const Login = () => {
           // swalError("로그인 되었습니다.", () => history.push("/"));
 
           swalError("로그인 되었습니다.", () => {
-            window.location.replace("/");
+            window.location.replace("/total");
           });
           const logined_at = {
             logined_at: new Date(),
