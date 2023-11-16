@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { SERVER_URL } from "../../../../config";
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import FormControl from "@material-ui/core/FormControl";
@@ -7,6 +8,7 @@ import styled from "styled-components";
 import { projectStore, workspaceStore, clusterStore } from "@/store";
 import { swalConfirm, swalError } from "@/utils/swal-utils";
 import { duplicateCheck } from "@/utils/common-utils";
+import axios from "axios";
 
 const Button = styled.button`
   background-color: #fff;
@@ -70,6 +72,7 @@ const CreateProject = observer((props) => {
     loadWorkspaceDetail,
     adminList,
     loadAdminWorkSpaceList,
+    workSpaceDetail,
   } = workspaceStore;
 
   const { createProject } = projectStore;
@@ -79,10 +82,23 @@ const CreateProject = observer((props) => {
   const [workspace, setWorkspace] = useState("");
   const [selectClusters, setSelectClusters] = useState([]);
   const [check, setCheck] = useState(false);
+  const [test, setTest] = useState([]);
+  const [clusterList, setClusterList] = useState([]);
+  console.log("clusterList ???", clusterList);
+
+  console.log("selectClusterInfo ???", selectClusterInfo);
+  console.log("selectClusters ???", selectClusters);
+  console.log("test ????", test);
 
   const [toggle, setToggle] = useState(false);
   const clickedToggle = () => {
     setToggle((prev) => !prev);
+  };
+
+  const initialCheckedValue = {
+    clusterName: "",
+    clusterType: "",
+    clusterEndpoint: "",
   };
 
   const handleClose = () => {
@@ -97,25 +113,30 @@ const CreateProject = observer((props) => {
   };
 
   const onChange = async ({ target: { name, value } }) => {
-    // if (name === "workspace") {
-    //   setWorkspace(value);
-    // }
-
-    // 수정중
     if (name === "workspace") {
+      setWorkspace(value);
       if (value === "") {
-        setSelectClusterInfo([]);
-        return;
-      } else {
-        setWorkspace(value);
+        setClusterList([]);
       }
-      await loadWorkspaceDetail(value);
-      setSelectClusters([...selectClusterInfo]);
+
+      // await loadWorkspaceDetail(value);
+      try {
+        // axios 호출을 try 블록 내에 놓습니다.
+        const response = await axios.get(`${SERVER_URL}/workspaces/${value}`);
+        const dataList = response.data.selectCluster;
+        setClusterList(dataList);
+      } catch (error) {
+        console.error("axios 요청 중 오류 발생:", error);
+        // 오류 처리, 예를 들면 swalError를 사용하여 오류 메시지를 표시할 수 있습니다.
+      }
     }
+    setSelectClusters([...clusterList]);
+    // setSelectClusters([...selectClusterInfo]);
 
     if (name === "projectName") setProjectName(value);
     if (name === "projectDescription") setProjectDescription(value);
   };
+
   const checkCluster = ({ target: { checked } }, clusterName) => {
     if (checked) {
       setSelectClusters([...selectClusters, clusterName]);
@@ -125,6 +146,16 @@ const CreateProject = observer((props) => {
       );
     }
   };
+
+  // const checkCluster = ({ target: { checked } }, clusterName) => {
+  //   if (checked) {
+  //     console.log("체크함");
+  //     setTest([clusterName]);
+  //   } else {
+  //     console.log("체크 안함");
+  //     setTest(selectClusters.filter((cluster) => cluster !== clusterName));
+  //   }
+  // };
 
   const checkProjectName = async () => {
     const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -179,6 +210,12 @@ const CreateProject = observer((props) => {
     loadAdminWorkSpaceList(true);
     // setSelectClusterInfo([]);
   }, []);
+
+  // useEffect(() => {
+  //   setSelectClusters([
+  //     ...selectClusterInfo.map((cluster) => cluster.clusterName),
+  //   ]);
+  // }, [selectClusterInfo]);
 
   // useEffect(() => {
   //   setSelectClusters([...selectClusterInfo]);
@@ -263,7 +300,7 @@ const CreateProject = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
-                  <option value={" "} selected disabled hidden>
+                  <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
                   {adminList?.map((workspace) => (
@@ -288,7 +325,27 @@ const CreateProject = observer((props) => {
                     <th>타입</th>
                     <th>IP</th>
                   </tr>
-                  {selectClusterInfo.map(
+                  {clusterList.length === 0
+                    ? ""
+                    : clusterList.map(
+                        ({ clusterName, clusterType, clusterEndpoint }) => (
+                          <tr>
+                            <td style={{ textAlign: "center" }}>
+                              <input
+                                type="checkbox"
+                                name="clusterCheck"
+                                onChange={(e) => checkCluster(e, clusterName)}
+                                defaultValue={initialCheckedValue}
+                              />
+                            </td>
+                            <td>{clusterName}</td>
+                            <td>{clusterType}</td>
+                            <td>{clusterEndpoint}</td>
+                          </tr>
+                        )
+                      )}
+
+                  {/* {selectClusterInfo.map(
                     ({ clusterName, clusterType, clusterEndpoint }) => (
                       <tr>
                         <td style={{ textAlign: "center" }}>
@@ -296,6 +353,7 @@ const CreateProject = observer((props) => {
                             type="checkbox"
                             name="clusterCheck"
                             onChange={(e) => checkCluster(e, clusterName)}
+                            defaultValue={initialCheckedValue}
                           />
                         </td>
                         <td>{clusterName}</td>
@@ -303,7 +361,7 @@ const CreateProject = observer((props) => {
                         <td>{clusterEndpoint}</td>
                       </tr>
                     )
-                  )}
+                  )} */}
                 </tbody>
               </table>
             </td>

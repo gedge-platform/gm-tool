@@ -165,8 +165,6 @@ class PlatformProject {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            console.log(res);
-            console.log(res.data.data);
             this.platformProjectList = res.data.data;
             this.platformProjectLists = res.data.data;
             this.platformDetail = res.data.data[0];
@@ -202,21 +200,25 @@ class PlatformProject {
       .then((res) => {
         runInAction(() => {
           this.adminList = res.data.data;
+          this.platformProjectLists = res.data.data.filter(
+            (data) => data.clusterName === "gm-cluster"
+          );
           this.platformProjectList = this.adminList.filter(
             (data) => data.clusterName === "gm-cluster"
           );
-          if (this.platformProjectList.length !== 0) {
-            this.platformDetail = this.platformProjectList[0];
-            this.totalElements = this.platformProjectList.length;
-            this.totalPages = Math.ceil(this.platformProjectList.length / 10);
-          } else {
-            this.platformProjectList = [];
-          }
+          // this.totalElements = this.platformProjectLists.length;
+          // if (this.platformProjectList.length !== 0) {
+          //   this.platformDetail = this.platformProjectList[0];
+          //   this.totalElements = this.platformProjectList.length;
+          //   this.totalPages = Math.ceil(this.platformProjectList.length / 10);
+          // } else {
+          //   this.platformProjectList = [];
+          // }
         });
       })
-      .then(() => {
-        this.paginationList();
-      })
+      // .then(() => {
+      //   this.paginationList();
+      // })
       .then(() => {
         this.loadPlatformProjectDetail(
           this.platformProjectList[0].projectName,
@@ -231,7 +233,7 @@ class PlatformProject {
       })
       .catch((err) => {
         this.platformProjectList = [];
-        this.paginationList();
+        // this.paginationList();
       });
   };
 
@@ -239,7 +241,6 @@ class PlatformProject {
     await axios
       .get(`${SERVER_URL}/systemProjects/${projectName}?cluster=${clusterName}`)
       .then((res) => {
-        console.log("res", res);
         runInAction(() => {
           this.platformProjectDetail = res.data;
           this.detailInfo = res.data.DetailInfo;

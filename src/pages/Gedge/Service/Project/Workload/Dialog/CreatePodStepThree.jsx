@@ -157,7 +157,7 @@ const CreatePodStepThree = observer(() => {
         setPodInfoPriority("sourceCluster", e.target.value);
         if (podInfo.priority.mode === "from_node") {
           loadCluster(e.target.value);
-          setPodInfoPriority("sourceNode", e.target.value);
+          // setPodInfoPriority("sourceNode", e.target.value);
         }
         if (podInfo.priority.mode === "from_pod") {
           podListInclusterAPI(e.target.value, podInfo.project);
@@ -170,6 +170,7 @@ const CreatePodStepThree = observer(() => {
       }
 
       if (e.target.name === "sourceNode") {
+        console.log(e.target.value);
         setPodInfoPriority("sourceNode", e.target.value);
       }
 

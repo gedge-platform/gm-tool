@@ -38,6 +38,7 @@ class CronJob {
     runInAction(() => {
       this.viewList = null;
       this.currentPage = 1;
+      this.totalPages = 1;
     });
   };
 
@@ -146,10 +147,12 @@ class CronJob {
           if (res.data.data !== null) {
             this.cronJobList = res.data.data;
             this.cronJobDetail = res.data.data[0];
+
             this.totalPages = Math.ceil(res.data.data.length / 10);
+
             this.totalElements = res.data.data.length;
           } else {
-            this.cronJobList = [];
+            this.cronJobList = null;
           }
         });
       })
@@ -220,7 +223,7 @@ class CronJob {
           if (data.events !== null) {
             this.events = data.events;
           } else {
-            this.events = null;
+            this.events = [];
           }
         });
       });

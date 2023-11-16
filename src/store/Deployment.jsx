@@ -780,6 +780,8 @@ class Deployment {
     console.log("this.deployment ???", this.deployment);
     const body = this.content;
 
+    console.log(body);
+
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {
@@ -822,6 +824,7 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
+    console.log(options);
     const requestId = "requestId" + randomNumber;
 
     await axios

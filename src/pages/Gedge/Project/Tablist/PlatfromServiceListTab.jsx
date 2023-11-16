@@ -21,7 +21,6 @@ const PlatfromServiceListTab = observer(() => {
   };
 
   const {
-    platformProjectList,
     platformProjectLists,
     totalElements,
     loadPlatformProjectList,
@@ -68,7 +67,7 @@ const PlatfromServiceListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     const fieldName = e.colDef.field;
     // console.log(e.data.projectName);
     // loadPlatformProjectList()
@@ -119,7 +118,12 @@ const PlatfromServiceListTab = observer(() => {
               </div>
             </CTabPanel>
           </div>
-          <CreateProject reloadFunc={loadPlatformProjectList} type={"admin"} open={open} onClose={handleClose} />
+          <CreateProject
+            reloadFunc={loadPlatformProjectList}
+            type={"admin"}
+            open={open}
+            onClose={handleClose}
+          />
         </PanelBox>
         <Detail platformDetil={platformDetil} />
       </CReflexBox>
