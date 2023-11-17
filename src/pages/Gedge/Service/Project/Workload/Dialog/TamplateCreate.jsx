@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { deploymentStore, workspaceStore } from "@/store";
 import TamplateYaml from "./TamplateYAML";
 import templateStore from "../../../../../../store/Template";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -93,7 +94,7 @@ const TamplateCreate = observer((props) => {
     postTemplateGLowLatency,
     postTemplateGMostRequest,
     postTemplateSelected,
-    postTemplateGSetCluster
+    postTemplateGSetCluster,
   } = deploymentStore;
   console.log("appInfo ??? ", appInfo);
 
@@ -103,7 +104,6 @@ const TamplateCreate = observer((props) => {
 
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const YAML = require("json-to-pretty-yaml");
 
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -129,11 +129,10 @@ const TamplateCreate = observer((props) => {
   };
 
   const createApp = () => {
-    console.log("deployment.priority.name ???", deployment.priority.name);
     setContent(
-      YAML.stringify(deploymentYamlTemplate) +
+      stringify(deploymentYamlTemplate) +
         "---\n" +
-        YAML.stringify(serviceYamlTemplate)
+        stringify(serviceYamlTemplate)
     );
     if (deployment.priority.name === "GLowLatencyPriority") {
       postTemplateGLowLatency();

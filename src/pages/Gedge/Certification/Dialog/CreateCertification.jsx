@@ -56,14 +56,11 @@ const CreateCertification = observer((props) => {
     if (ProviderName === "") {
       swalError("Provider Name를 선택해주세요");
       return;
-    }
-    else if (ProviderName === "AWS") {
+    } else if (ProviderName === "AWS") {
       setStepValue(2);
-    }
-    else if (ProviderName === "OPENSTACK") {
+    } else if (ProviderName === "OPENSTACK") {
       setStepValue(2);
-    }
-    else if (ProviderName === "GCP") {
+    } else if (ProviderName === "GCP") {
       setStepValue(2);
     } else {
       return;
@@ -128,7 +125,6 @@ const CreateCertification = observer((props) => {
     }
   };
 
-  
   const onClickCreateGCP = () => {
     if (CredentialName === "") {
       swalError("Name을 입력해주세요");
@@ -157,7 +153,6 @@ const CreateCertification = observer((props) => {
       createCredential();
     }
   };
-
 
   const createCredential = async () => {
     if (ProviderName === "OPENSTACK") {
@@ -197,11 +192,6 @@ const CreateCertification = observer((props) => {
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
-
-  // useEffect(() => {
-  //   const YAML = require("json-to-pretty-yaml");
-  //   setContent(YAML.stringify(template));
-  // });
 
   const stepOfComponent = () => {
     if (stepValue === 1) {

@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
+import { stringify } from "json-to-pretty-yaml2";
 
 class Claim {
   viewList = [];
@@ -325,8 +326,7 @@ class Claim {
       )
       .then((res) => {
         runInAction(() => {
-          const YAML = require("json-to-pretty-yaml");
-          this.getYamlFile = YAML.stringify(res.data.data);
+          this.getYamlFile = stringify(res.data.data);
         });
       });
   };
@@ -380,8 +380,7 @@ class Claim {
 
           Object.entries(this.pvClaim?.annotations).forEach(([key, value]) => {
             try {
-              const YAML = require("json-to-pretty-yaml");
-              this.pvClaimYamlFile = YAML.stringify(JSON.parse(value));
+              this.pvClaimYamlFile = stringify(JSON.parse(value));
             } catch (e) {
               if (key && value) {
                 this.pvClaimAnnotations[key] = value;
@@ -393,7 +392,6 @@ class Claim {
   };
 
   createVolumeClaim = (template, callback) => {
-    const YAML = require("json-to-pretty-yaml");
     axios
       .post(
         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,

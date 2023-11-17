@@ -15,6 +15,7 @@ import PodYaml from "./PodYaml";
 import { swalError } from "../../../../../../utils/swal-utils";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import claimStore from "../../../../../../store/Claim";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -313,42 +314,21 @@ const CreatePod = observer((props) => {
 
   const createPod = () => {
     if (podInfo.priority.name === "GLowLatencyPriority") {
-      postPodGLowLatencyPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGLowLatencyPriority(stringify(template));
     }
     if (podInfo.priority.name === "GMostRequestPriority") {
-      postPodGMostRequestPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGMostRequestPriority(stringify(template));
     }
     if (podInfo.priority.name === "GSelectedClusterPriority") {
-      postPodGSelectedClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGSelectedClusterPriority(stringify(template));
     }
     if (podInfo.priority.name === "GSetClusterPriority") {
-      postPodGSetClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGSetClusterPriority(stringify(template));
     }
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
-
-  // useEffect(() => {
-  //   if (stepValue === 4) {
-  //     const YAML = require("json-to-pretty-yaml");
-  //     setContent(
-  //       YAML.stringify(pvcTemplate) +
-  //         "---\n" +
-  //         YAML.stringify(podTemplate) +
-  //         "---\n" +
-  //         YAML.stringify(serviceTemplate)
-  //     );
-  //   }
-  // }, [stepValue]);
 
   useEffect(() => {
     loadWorkSpaceList();
@@ -356,8 +336,7 @@ const CreatePod = observer((props) => {
 
     if (stepValue === 4) {
       setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 

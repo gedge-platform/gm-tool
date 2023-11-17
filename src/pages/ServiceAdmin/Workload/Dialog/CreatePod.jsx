@@ -17,6 +17,7 @@ import CreatePodStepOne from "./CreatePodStepOne";
 import CreatePodStepTwo from "./CreatePodStepTwo";
 import CreatePodStepThree from "./CreatePodStepThree";
 import { swalError } from "@/utils/swal-utils";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -251,24 +252,16 @@ const CreatePod = observer((props) => {
 
   const createPod = () => {
     if (podInfo.priority.name === "GLowLatencyPriority") {
-      postPodGLowLatencyPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGLowLatencyPriority(stringify(template));
     }
     if (podInfo.priority.name === "GMostRequestPriority") {
-      postPodGMostRequestPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGMostRequestPriority(stringify(template));
     }
     if (podInfo.priority.name === "GSelectedClusterPriority") {
-      postPodGSelectedClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGSelectedClusterPriority(stringify(template));
     }
     if (podInfo.priority.name === "GSetClusterPriority") {
-      postPodGSetClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postPodGSetClusterPriority(stringify(template));
     }
     handleClose();
     props.reloadFunc && props.reloadFunc();
@@ -279,8 +272,7 @@ const CreatePod = observer((props) => {
     loadPVClaims();
 
     if (stepValue === 4) {
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 
