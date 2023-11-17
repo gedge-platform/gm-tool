@@ -30,7 +30,7 @@ const NotFound = () => {
     <>
       <Container>
         <p>404 Not Found</p>
-        <NavLink to="/">메인페이지로</NavLink>
+        <NavLink to="/total">메인페이지로</NavLink>
       </Container>
     </>
     // <>

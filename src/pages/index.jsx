@@ -24,7 +24,6 @@ export { default as Topology } from "./Gedge/Infra/Network/Topology/Topology";
 export { default as Storage } from "./Gedge/Infra/Storage/Storage";
 export { default as CreateUser } from "./Gedge/Service/Project/CreateUser/CreateUser";
 export { default as PlatformControl } from "./Gedge/Service/Project/PlatformControl/PlatformControl";
-export { default as Template } from "./Gedge/Service/Template/Template";
 export { default as Workload } from "./Gedge/Service/Project/Workload/Workload";
 export { default as FaaS } from "./Gedge/Service/FaaS/FaaS";
 export { default as ServiceAdminDashboard } from "./Gedge/ServiceAdminDashboard/ServiceAdminDashboard";
@@ -71,7 +70,6 @@ const Title = {
   Project: "프로젝트",
   CreateUser: "사용자별 생성",
   PlatformControl: "플랫폼 관리",
-  Template: "템플릿",
   FaaS: "FaaS",
 
   ServiceAdminDashboard: "통합 대시보드",

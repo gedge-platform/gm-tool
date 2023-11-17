@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
 import { swalError } from "../utils/swal-utils";
+import { stringify } from "json-to-pretty-yaml2";
 
 class Service {
   currentPage = 1;
@@ -235,7 +236,6 @@ class Service {
   };
 
   postService = (callback) => {
-    const YAML = require("json-to-pretty-yaml");
     let count = 0;
     // console.log(this.cluster, this.workspace, this.project);
     this.cluster.map(async (item) => {

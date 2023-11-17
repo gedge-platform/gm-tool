@@ -1,7 +1,7 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { createContext } from "react";
-import { SERVER_URL, SPIDER } from "../config";
+import { SERVER_URL, SPIDER_URL } from "../config";
 // import { SERVER_URL } from "../config";
 
 class Dashboard {
@@ -251,7 +251,7 @@ class Dashboard {
 
   loadCredentialName = async () => {
     await axios
-      .get(`${SERVER_URL}/spider/connectionconfig`)
+      .get(`${SPIDER_URL}/spider/connectionconfig`)
       .then((res) => {
         runInAction(() => {
           this.connectionconfig = res.data.connectionconfig;
@@ -280,7 +280,7 @@ class Dashboard {
 
   // loadVMStatusCnt = async () => {
   //   const urls = axios.get(
-  //     `http://210.207.104.188:1024/spider/connectionconfig`
+  //     `${SPIDER_URL}/spider/connectionconfig`
   //   );
   //   const configResult = await Promise.all([urls]).then((res) => {
   //     return res;
@@ -291,7 +291,7 @@ class Dashboard {
   //     let configName = config.ConfigName;
   //     axios
   //       .post(
-  //         `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
+  //         `${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`,
   //         {
   //           ConnectionName: configName,
   //         }
@@ -311,7 +311,7 @@ class Dashboard {
   // ConfigName = this.ConfigName.map(name => this.loadVMCnt(name));
 
   // loadVMCnt = async (ConfigName) => {
-  //   await axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmCount`,
+  //   await axios.post(`${SERVER_URL}/spider/vm/vmCount`,
   //   {ConnectionName: ConfigName})
   //   .then((res) => {
   //     // console.log(res);
@@ -338,7 +338,7 @@ class Dashboard {
   // });
   // };
   // loadVMCnt = async () => {
-  //   const urls = axios.get(`${SPIDER}/spider/connectionconfig`);
+  //   const urls = axios.get(`${SPIDER_URL}/spider/connectionconfig`);
   //   const configResult = await Promise.all([urls]).then((res) => {
   //     return res;
   //   });
@@ -347,7 +347,7 @@ class Dashboard {
   //   await configNameList.forEach((config) => {
   //     let configName = config.ConfigName;
   //     axios
-  //       .post(`${SERVER_URL}/gmcapi/v2/spider/vm/vmCount`, {
+  //       .post(`${SERVER_URL}/spider/vm/vmCount`, {
   //         ConnectionName: configName,
   //       })
   //       .then((res) => {
@@ -370,7 +370,7 @@ class Dashboard {
 
   loadVMStatusCnt = async (configName, providerName) => {
     axios
-      .post(`${SERVER_URL}/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`, {
+      .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
         ConnectionName: configName,
       })
       .then((res) => {
@@ -390,9 +390,7 @@ class Dashboard {
   };
 
   loadVMStatusCnt = async () => {
-    const urls = axios.get(
-      `http://210.207.104.188:1024/spider/connectionconfi g`
-    );
+    const urls = axios.get(`${SERVER_URL}/spider/connectionconfig`);
     const configResult = await Promise.all([urls]).then((res) => {
       return res;
     });
@@ -401,12 +399,9 @@ class Dashboard {
     await configNameList.forEach((config) => {
       let configName = config.ConfigName;
       axios
-        .post(
-          `http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
-          {
-            ConnectionName: configName,
-          }
-        )
+        .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
+          ConnectionName: configName,
+        })
         .then((res) => {
           const stop = res.data.Stop;
           const running = res.data.Running;
@@ -424,7 +419,7 @@ class Dashboard {
   };
 
   // loadVMStatusCnt = async (ConfigName) => {
-  //   await axios.post(`http://192.168.160.216:8010/gmcapi/v2/spider/vm/vmstatus/vmstatusCount`,
+  //   await axios.post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`,
   //   {ConnectionName: ConfigName})
   //   .then((res) => {
   //     runInAction(() => {
@@ -460,7 +455,6 @@ class Dashboard {
       runInAction(() => {
         this.edgeType = data.filter((item) => item.clusterType === "edge");
         this.clusterNameList = this.edgeType.map((item) => item.clusterName);
-        console.log(this.clusterNameList);
         this.totalElements = data.length;
       });
     });

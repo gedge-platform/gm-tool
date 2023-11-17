@@ -13,6 +13,7 @@ import {
   projectStore,
   StorageClassStore,
 } from "@/store";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -132,7 +133,7 @@ const CreateVolume = observer((props) => {
 
   const CreateVolume = () => {
     // for문으로 복수의 클러스터이름 보내게
-    createVolume(require("json-to-pretty-yaml").stringify(template));
+    createVolume(stringify(template));
     handleClose();
     props.reloadFunc && props.reloadFunc();
     // setSelectClusters();
@@ -140,8 +141,7 @@ const CreateVolume = observer((props) => {
 
   useEffect(() => {
     if (stepValue === 3) {
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 

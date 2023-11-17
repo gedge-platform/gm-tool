@@ -5,8 +5,9 @@ import { claimStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import YAML from "yamljs";
+// import YAML from "yamljs";
 import { isEmpty } from "lodash-es";
+import { stringify } from "json-to-pretty-yaml2";
 
 const ClaimYamlPopup = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
@@ -29,7 +30,7 @@ const ClaimYamlPopup = observer(() => {
       ) {
         delete obj_content.metadata.labels;
       }
-      setContent(require("json-to-pretty-yaml").stringify(obj_content));
+      setContent(stringify(obj_content));
     }
   }, [content]);
 

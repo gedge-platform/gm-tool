@@ -32,6 +32,7 @@ const AgGrid = (props) => {
   const [setGridColumnApi] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const [overlayNoRowsTemplate, setOverlayNoRowsTemplate] = useState(
     '<span class="ag-overlay-loading-center">No Data</span>'
@@ -44,8 +45,13 @@ const AgGrid = (props) => {
   useEffect(() => {
     if (gridApi) {
       gridApi.sizeColumnsToFit();
-      gridApi.showLoadingOverlay();
-      gridApi.hideOverlay();
+      if (loading) {
+        gridApi.showLoadingOverlay();
+      } else if (rowData && rowData.length === 0) {
+        gridApi.showNoRowsOverlay();
+      } else {
+        gridApi.hideOverlay();
+      }
     }
   }, [rowData]);
 
@@ -57,6 +63,7 @@ const AgGrid = (props) => {
   const onFirstDataRendered = (params) => {
     params.api.sizeColumnsToFit();
     setTotal(gridRef?.current?.api.paginationGetTotalPages());
+    gridRef.current.api.paginationSetPageSize(rowPerPage);
   };
 
   const onGridSizeChanged = (params) => {
@@ -131,13 +138,7 @@ const AgGrid = (props) => {
       >
         <div className="paging-wrap">
           <div>
-            {/* <select className="btn_comm">
-                            <option value="10">10건</option>
-                            <option value="20">20건</option>
-                            <option value="50">50건</option>
-                        </select> */}
             <span>총 {totalElements !== 0 ? totalElements : 0}건</span>
-            {/* <span> | {rowPerPage * currentPage - rowPerPage}~{rowPerPage * currentPage}건</span> */}
           </div>
           {isBottom ? (
             ""
@@ -158,7 +159,7 @@ const AgGrid = (props) => {
               </button>
               <span className="page-num">
                 {currentPage} of{" "}
-                {gridRef?.current?.api.paginationGetTotalPages()}
+                {gridRef?.current?.api.paginationGetTotalPages() || 1}
               </span>
               <button type="button" className="btn_comm">
                 <span

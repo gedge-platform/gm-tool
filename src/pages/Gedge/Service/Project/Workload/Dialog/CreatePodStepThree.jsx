@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  workspaceStore,
-  clusterStore,
-  podStore,
-  claimStore,
-} from "@/store";
+import { workspaceStore, clusterStore, podStore } from "@/store";
 import PodTargetClusters from "./PodTargetClusters";
-import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
-import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;
@@ -157,7 +146,7 @@ const CreatePodStepThree = observer(() => {
         setPodInfoPriority("sourceCluster", e.target.value);
         if (podInfo.priority.mode === "from_node") {
           loadCluster(e.target.value);
-          setPodInfoPriority("sourceNode", e.target.value);
+          // setPodInfoPriority("sourceNode", e.target.value);
         }
         if (podInfo.priority.mode === "from_pod") {
           podListInclusterAPI(e.target.value, podInfo.project);
@@ -170,6 +159,7 @@ const CreatePodStepThree = observer(() => {
       }
 
       if (e.target.name === "sourceNode") {
+        console.log(e.target.value);
         setPodInfoPriority("sourceNode", e.target.value);
       }
 

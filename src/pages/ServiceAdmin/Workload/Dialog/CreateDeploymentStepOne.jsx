@@ -83,32 +83,45 @@ const Table = styled.table`
 const CreateDeploymentStepOne = observer((props) => {
   const { open } = props;
   const [open2, setOpen2] = useState(false);
-  const [stepValue, setStepValue] = useState(1);
   const [containerIndex, setContainerIndex] = useState(1);
 
-  const [prioritytDisable, setPriorityDisable] = useState(true);
-  const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  const [priority, setPriority] = useState({
-    name: "GLowLatencyPriority",
-    options: {
-      type: "from_node",
-      //data: {}
-    },
-  });
+  // const [prioritytDisable, setPriorityDisable] = useState(true);
+  // const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
+  // const [priority, setPriority] = useState({
+  //   name: "GLowLatencyPriority",
+  //   options: {
+  //     type: "from_node",
+  //     //data: {}
+  //   },
+  // });
 
-  const { deployment, setDeploymentInfo, removeContaine, setDeployment } =
+  // const { deployment, setDeploymentInfo, removeContaine, setDeployment } =
+  //   deploymentStore;
+
+  // const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
+  //   workspaceStore;
+
+  // const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+
+  // const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
+
+  const { removeContainer, initTargetClusters, deployment, setDeployment } =
     deploymentStore;
 
-  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
-    workspaceStore;
+  const {
+    loadWorkSpaceList,
+    workSpaceList,
+    loadWorkspaceDetail,
+    selectClusterInfo,
+  } = workspaceStore;
 
-  const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
+  const {
+    loadProjectListInWorkspace,
+    projectListinWorkspace,
+    loadProjectDetail,
+  } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
-
-  const onChange = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-  };
 
   const handleDeployment = (e) => {
     if (e.target.name === "deploymentName") {
@@ -145,27 +158,27 @@ const CreateDeploymentStepOne = observer((props) => {
     }
   };
 
-  const onChangeWorkspace = (e) => {
-    setDeploymentInfo(e.target.name, e.target.value);
-    loadProjectListInWorkspace(e.target.value);
-    loadWorkspaceDetail(e.target.value);
-  };
+  // const onChangeWorkspace = (e) => {
+  //   setDeploymentInfo(e.target.name, e.target.value);
+  //   loadProjectListInWorkspace(e.target.value);
+  //   loadWorkspaceDetail(e.target.value);
+  // };
 
-  const onChangePod = async ({ target: { name, value } }) => {
-    let projectNameTemp = "";
-    let clusterNameTemp = "";
+  // const onChangePod = async ({ target: { name, value } }) => {
+  //   let projectNameTemp = "";
+  //   let clusterNameTemp = "";
 
-    if (name === "project") {
-      setDeploymentInfo(name, value);
-      setPriorityDisable(false);
-      projectNameTemp = value;
-    }
-    if (name === "cluster") {
-      setPrioritytPodDisable(false);
-      clusterNameTemp = value;
-      await podListInclusterAPI(clusterNameTemp, projectNameTemp);
-    }
-  };
+  //   if (name === "project") {
+  //     setDeploymentInfo(name, value);
+  //     setPriorityDisable(false);
+  //     projectNameTemp = value;
+  //   }
+  //   if (name === "cluster") {
+  //     setPrioritytPodDisable(false);
+  //     clusterNameTemp = value;
+  //     await podListInclusterAPI(clusterNameTemp, projectNameTemp);
+  //   }
+  // };
 
   const openAddContainer = (index) => {
     setOpen2(true);
@@ -176,11 +189,11 @@ const CreateDeploymentStepOne = observer((props) => {
     setOpen2(false);
   };
 
-  const onChangeCheckPVC = ({ target: { name, value } }) => {
-    setCheckPVCInDeployment(name, value);
-    setDeploymentInfo("pvcName", name);
-    setDeploymentInfo("volume", value);
-  };
+  // const onChangeCheckPVC = ({ target: { name, value } }) => {
+  //   setCheckPVCInDeployment(name, value);
+  //   setDeploymentInfo("pvcName", name);
+  //   setDeploymentInfo("volume", value);
+  // };
 
   const deleteContainer = (e, index) => {
     e.stopPropagation();
@@ -278,11 +291,15 @@ const CreateDeploymentStepOne = observer((props) => {
                   <option value={""} selected hidden disabled>
                     Select Project
                   </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
+                  {projectListinWorkspace ? (
+                    projectListinWorkspace.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={""}>No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>
