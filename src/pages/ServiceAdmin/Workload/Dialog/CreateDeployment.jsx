@@ -9,6 +9,7 @@ import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
 import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
 import { swalError } from "@/utils/swal-utils";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -85,7 +86,6 @@ const CreateDeployment = observer((props) => {
   const [stepValue, setStepValue] = useState(1);
 
   const {
-    deploymentInfo,
     deployment,
     initDeploymentInfo,
     setContent,
@@ -99,7 +99,13 @@ const CreateDeployment = observer((props) => {
     postDeploymentGM,
     keyValuePair,
     secretConfigmap,
+    postGLowLatencyPriority,
+    postGSelectedClusterPriority,
+    postGMostRequestPriority,
+    postGSetClusterPriority,
+    resetDeployment,
   } = deploymentStore;
+  console.log("deployment ????", deployment);
 
   const { loadPVClaims } = claimStore;
 
@@ -113,10 +119,10 @@ const CreateDeployment = observer((props) => {
     apiVersion: "apps/v1",
     kind: "Deployment",
     metadata: {
-      name: deployment,
+      name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
-      namespace: "default",
+      namespace: deployment.workspacetag,
     },
     spec: {
       selector: {
@@ -129,7 +135,7 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecret: deployment.containers?.map((e) => {
+          imagePullSecrets: deployment.containers?.map((e) => {
             return { name: e.pullSecret };
           }),
           containers: deployment.containers?.map((e) => {
@@ -137,10 +143,14 @@ const CreateDeployment = observer((props) => {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
-              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
               resources: {
-                limits: { memory: e.memoryLimit + "Mi" },
+                limits: {
+                  cpu: e.cpuLimit + "m",
+                  memory: e.memoryLimit + "Mi",
+                  "nvidia.com/gpu": e.NVIDIAGPU,
+                },
                 requests: {
                   cpu: e.cpuReservation + "m",
                   memory: e.memoryReservation + "Mi",
@@ -172,22 +182,22 @@ const CreateDeployment = observer((props) => {
                   value: i[1],
                 };
               }),
-              volumeMounts: e.volumes.map((i) => {
-                return {
-                  mountPath: i.subPathInVolume,
-                  name: deployment.pvcName,
-                };
-              }),
+              // volumeMounts: e.volumes.map((i) => {
+              //   return {
+              //     mountPath: i.subPathInVolume,
+              //     name: deployment.pvcName,
+              //   };
+              // }),
             };
           }),
-          volumes: [
-            {
-              name: deployment.pvcName,
-              persistentVolumeClaim: {
-                claimName: deployment.volume,
-              },
-            },
-          ],
+          // volumes: [
+          //   {
+          //     name: deployment.pvcName,
+          //     persistentVolumeClaim: {
+          //       claimName: deployment.volume,
+          //     },
+          //   },
+          // ],
         },
       },
     },
@@ -196,7 +206,8 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
-    initDeploymentInfo();
+    // initDeploymentInfo();
+    resetDeployment();
     setClearLA();
     setProjectDisable(true);
     setPriorityDisable(true);
@@ -204,9 +215,24 @@ const CreateDeployment = observer((props) => {
   };
 
   const createDeployment = () => {
-    postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    if (deployment.priority.name === "GLowLatencyPriority") {
+      postGLowLatencyPriority(stringify(template));
+    }
+    if (deployment.priority.name === "GMostRequestPriority") {
+      postGMostRequestPriority(stringify(template));
+    }
+    if (deployment.priority.name === "GSelectedClusterPriority") {
+      postGSelectedClusterPriority(stringify(template));
+    }
+    if (deployment.priority.name === "GSetClusterPriority") {
+      postGSetClusterPriority(stringify(template));
+    }
+
     handleClose();
     props.reloadFunc && props.reloadFunc();
+    // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
+    // handleClose();
+    // props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {
@@ -271,8 +297,7 @@ const CreateDeployment = observer((props) => {
 
     if (stepValue === 4) {
       setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 
@@ -353,7 +378,8 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          <DeploymentYaml labelsList={labelsList} />
+          {/* <DeploymentYaml labelsList={labelsList} /> */}
+          <DeploymentYaml />
           <div
             style={{
               display: "flex",

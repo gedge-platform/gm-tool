@@ -58,12 +58,14 @@ class Scheduler {
   loadYamlList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
+    console.log(id);
     await axios
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
             this.yamlList = res.data.data;
+            console.log(res.data.data);
             this.yamlLists = res.data.data;
             this.yamlDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 20);

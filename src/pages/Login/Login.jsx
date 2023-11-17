@@ -41,13 +41,10 @@ const Login = () => {
 
     await axios
       .post(`${SERVER_URL}/auth`, inputs)
-      // .post(`${SERVER_URL}/auth`, inputs)
+
       .then(({ data }) => {
         const { accessToken, status } = data;
         if (status === 200) {
-          // setItem("userRole", data.userRole);
-          // setItem("user", id);
-
           axios.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
@@ -59,13 +56,16 @@ const Login = () => {
 
           const userRoles = jwtDecode(accessToken).role;
 
-          // 속도가 느리지만 일단 작동은 됩니다.....
-          // 로그인 후 새로고침을 다시 해서 데이터 받아오기 때문에 느리지만 데이터를 처음부터 체크하면서 받아오니까 잘 가져온다......
-          // swalError("로그인 되었습니다.", () => history.push("/"));
+          if (userRoles === "PA") {
+            swalError("로그인 되었습니다.", () => {
+              window.location.replace("/total");
+            });
+          } else {
+            swalError("로그인 되었습니다.", () => {
+              window.location.replace("/service");
+            });
+          }
 
-          swalError("로그인 되었습니다.", () => {
-            window.location.replace("/total");
-          });
           const logined_at = {
             logined_at: new Date(),
           };

@@ -5,6 +5,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 import templateStore from "../../../../../../store/Template";
+import { stringify } from "json-to-pretty-yaml2";
 
 const CreateTamplateStepFour = observer(() => {
   const { appInfo, deployment } = deploymentStore;
@@ -14,7 +15,6 @@ const CreateTamplateStepFour = observer(() => {
     serviceYamlTemplate,
     setDeploymentYamlTemplateFromAppInfo,
   } = templateStore;
-  const YAML = require("json-to-pretty-yaml");
 
   useEffect(() => {
     setDeploymentYamlTemplateFromAppInfo(appInfo);
@@ -48,9 +48,9 @@ const CreateTamplateStepFour = observer(() => {
         showGutter={true}
         highlightActiveLine={true}
         value={
-          YAML.stringify(deploymentYamlTemplate) +
+          stringify(deploymentYamlTemplate) +
           "---\n" +
-          YAML.stringify(serviceYamlTemplate)
+          stringify(serviceYamlTemplate)
         }
         setOptions={{
           enableBasicAutocompletion: false,

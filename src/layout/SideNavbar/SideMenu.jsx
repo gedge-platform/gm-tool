@@ -188,7 +188,7 @@ const MenuNav = styled.nav`
 const SideMenu = observer(() => {
   const history = useHistory();
   const userRole = getItem("userRole");
-  const location = useLocation();
+  // const location = useLocation();
   const { expanded, setExpanded } = menuStore;
 
   const CustomNavLink = ({ to, exact, nodeId, children }) => {
@@ -212,12 +212,15 @@ const SideMenu = observer(() => {
 
   // 메뉴 버튼을 눌렀을 때 하위 메뉴가 있는 메뉴는 Toggle 함수 사용
   const onNodeToggle = (e, nodeId) => {
+    console.log("nodeId ??? ", nodeId);
     setExpanded(nodeId);
+    console.log("expanded ??? ", expanded);
   };
 
   // 페이지 로드 시 메뉴 상태를 복원
   useEffect(() => {
     const savedExpanded = localStorage.getItem("menuExpanded");
+    console.log("savedExpanded ??? ", savedExpanded);
     if (savedExpanded) {
       setExpanded(JSON.parse(savedExpanded));
     }
@@ -226,10 +229,12 @@ const SideMenu = observer(() => {
   // 메뉴가 변경될 때마다 상태를 저장
   useEffect(() => {
     localStorage.setItem("menuExpanded", JSON.stringify(expanded));
+    console.log("Expanded state:", expanded);
   }, [expanded]);
 
   // 하위 메뉴가 없는 메뉴들은 선택 시 다른 하위 메뉴 expanded 삭제
   useEffect(() => {
+    console.log(location.pathname);
     if (
       location.pathname === "/total" ||
       location.pathname === "/user" ||
@@ -260,7 +265,7 @@ const SideMenu = observer(() => {
               <CustomTreeItem nodeId="1" label={Title.Platform}>
                 <li>
                   <CustomNavLink
-                    nodeId="3"
+                    nodeId="2"
                     // exact
                     to="/platformDashboard"
                     activeClassName="active"
@@ -271,7 +276,7 @@ const SideMenu = observer(() => {
 
                 <li>
                   <CustomNavLink
-                    nodeId="5"
+                    nodeId="3"
                     exact
                     to="/edgeZone"
                     activeClassName="active"
@@ -281,7 +286,7 @@ const SideMenu = observer(() => {
                 </li>
                 <li>
                   <CustomNavLink
-                    nodeId="6"
+                    nodeId="4"
                     exact
                     to="/cloudZone"
                     activeClassName="active"
@@ -294,86 +299,48 @@ const SideMenu = observer(() => {
                   <CustomNavLink
                     exact
                     to="/adminZone"
-                    nodeId="7"
+                    nodeId="5"
                     activeClassName="active"
                   >
                     {Title.AdminZone}
                   </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem nodeId="8" label={Title.Infra}>
-                <CustomTreeItem nodeId="9" label={Title.NetWork}>
-                  <li>
-                    <CustomNavLink
-                      exact
-                      to="/loadbalancer"
-                      nodeId="10"
-                      activeClassName="active"
-                    >
-                      {Title.Loadbalancer}
-                    </CustomNavLink>
-                  </li>
-                  <li>
-                    <CustomNavLink
-                      exact
-                      to="/topology"
-                      nodeId="11"
-                      activeClassName="active"
-                    >
-                      {Title.Topology}
-                    </CustomNavLink>
-                  </li>
-                </CustomTreeItem>
-                {/* <li>
-                  <CustomNavLink exact to="/storage" activeClassName="active">
-                    {Title.Storage}
+              <CustomTreeItem nodeId="6" label={Title.Infra}>
+                <li>
+                  <CustomNavLink
+                    exact
+                    to="/storageDashboard"
+                    nodeId="7"
+                    activeClassName="active"
+                  >
+                    {Title.StorageDashboard}
                   </CustomNavLink>
-                </li> */}
-                <CustomTreeItem nodeId="12" label={Title.Storage}>
-                  <li>
-                    <CustomNavLink
-                      exact
-                      to="/storageDashboard"
-                      nodeId="13"
-                      activeClassName="active"
-                    >
-                      {Title.StorageDashboard}
-                    </CustomNavLink>
-                  </li>
-                  <li>
-                    <CustomNavLink
-                      exact
-                      to="/storage"
-                      nodeId="14"
-                      activeClassName="active"
-                    >
-                      {Title.Storage}
-                    </CustomNavLink>
-                  </li>
-                </CustomTreeItem>
+                </li>
+
                 <li>
                   <CustomNavLink to="/volumes" activeClassName="active">
                     {Title.Volume}
                   </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem nodeId="15" label={Title.Service}>
+              <CustomTreeItem nodeId="8" label={Title.Service}>
                 <li>
                   <CustomNavLink
                     exact
                     to="/workSpace"
-                    nodeId="16"
+                    nodeId="9"
                     activeClassName="active"
                   >
                     {Title.WorkSpace}
                   </CustomNavLink>
                 </li>
-                <CustomTreeItem nodeId="17" label={Title.Project}>
+                <CustomTreeItem nodeId="10" label={Title.Project}>
                   <li>
                     <CustomNavLink
                       exact
                       to="/userProject"
-                      nodeId="18"
+                      nodeId="11"
                       activeClassName="active"
                     >
                       {Title.CreateUser}
@@ -397,11 +364,6 @@ const SideMenu = observer(() => {
                 <li>
                   <CustomNavLink exact to="/faas" activeClassName="active">
                     {Title.FaaS}
-                  </CustomNavLink>
-                </li>
-                <li>
-                  <CustomNavLink exact to="/template" activeClassName="active">
-                    {Title.Template}
                   </CustomNavLink>
                 </li>
               </CustomTreeItem>
@@ -440,32 +402,6 @@ const SideMenu = observer(() => {
                   {Title.ServiceAdminMapDashboard}
                 </CustomNavLink>
               </li>
-              {/* <CustomTreeItem
-                nodeId="1"
-                label={Title.Platform}
-                onNodeFocus={handleClick}
-              >
-                <li>
-                  <CustomNavLink
-                    nodeId="2"
-                    exact
-                    to="/service"
-                    activeClassName="active"
-                  >
-                    {Title.ServiceAdminDashboard}
-                  </CustomNavLink>
-                </li>
-                <li>
-                  <CustomNavLink
-                    nodeId="3"
-                    exact
-                    to="/service/map"
-                    activeClassName="active"
-                  >
-                    {Title.ServiceAdminMapDashboard}
-                  </CustomNavLink>
-                </li>
-              </CustomTreeItem> */}
               <li>
                 <CustomNavLink to="/service/Workspace" activeClassName="active">
                   {Title.WorkSpace}

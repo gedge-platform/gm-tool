@@ -27,6 +27,7 @@ const LogListTab = observer(() => {
     goPrevPage,
     goNextPage,
   } = logStore;
+  console.log(logList);
 
   const [columDefs] = useState([
     {
@@ -104,6 +105,7 @@ const LogListTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   rowData={logList}
+                  rowPerPage={20}
                   columnDefs={columDefs}
                   totalElements={totalElements}
                   isBottom={false}

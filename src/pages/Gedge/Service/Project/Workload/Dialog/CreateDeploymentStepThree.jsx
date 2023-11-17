@@ -109,7 +109,6 @@ const CreateDeploymentStepThree = observer(() => {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
           if (e.target.value === "from_node") {
-            console.log("from_node");
             setDeployment("priority", {
               name: "GLowLatencyPriority",
               mode: "from_node",
@@ -156,7 +155,7 @@ const CreateDeploymentStepThree = observer(() => {
         setDeploymentPriority("sourceCluster", e.target.value);
         if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
-          setDeploymentPriority("sourceNode", e.target.value);
+          // setDeploymentPriority("sourceNode", e.target.value);
         }
         if (deployment.priority.mode === "from_pod") {
           podListInclusterAPI(e.target.value, deployment.project);

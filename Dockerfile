@@ -1,31 +1,21 @@
-FROM node:16 as base
 
- 
 
-# set working directory
+FROM oven/bun:1 as builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . ./
+COPY package*.json ./
+RUN bun install
 
- 
+COPY . .
+RUN bun run build
 
-ARG MAX_OLD_SPACE_SIZE=4096
+FROM nginx:stable-alpine
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-ENV NODE_OPTIONS=--max-old-space-size=${MAX_OLD_SPACE_SIZE}
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/dist /usr/share/nginx/html
 
- 
-
-RUN yarn install
-
- 
-
-# expose port
-
-EXPOSE 8080
-
- 
-
-#start app
-
-CMD ["yarn", "run", "start"]
+EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

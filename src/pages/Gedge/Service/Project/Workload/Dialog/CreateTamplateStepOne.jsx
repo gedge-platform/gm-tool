@@ -305,11 +305,15 @@ const CreateTamplateStepOne = observer((props) => {
                   <option value={""} selected hidden disabled>
                     Select Project
                   </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
+                  {projectListinWorkspace ? (
+                    projectListinWorkspace.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={""}>No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>

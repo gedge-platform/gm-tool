@@ -4,6 +4,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
 import { podStore } from "@/store";
+import { stringify } from "json-to-pretty-yaml2";
 
 const PodYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
@@ -28,7 +29,7 @@ const PodYaml = observer(() => {
       ) {
         delete obj_content.metadata?.labels;
       }
-      setContent(require("json-to-pretty-yaml").stringify(obj_content));
+      setContent(stringify(obj_content));
     }
   }, [content]);
 
@@ -59,9 +60,9 @@ const PodYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
-          // setContent(value);
-        }}
+        // onChange={(value) => {
+        //   setContent(value);
+        // }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}

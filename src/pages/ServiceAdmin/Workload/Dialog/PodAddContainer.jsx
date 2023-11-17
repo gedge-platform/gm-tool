@@ -30,14 +30,6 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
-const ButtonAddHost = styled.button`
-  background-color: #fff;
-  border: 1px solid black;
-  height: 30px;
-  color: black;
-  border-radius: 4px;
-`;
-
 const PodAddContainer = observer((props) => {
   const { checkPVCInDeployment } = claimStore;
   const {
@@ -151,11 +143,10 @@ const PodAddContainer = observer((props) => {
         secretConfigmap.push(e);
       }
     });
-    // if (isContainerValid()) {
+
     const temp = { ...containerInfo };
     addContainer(temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const editContainers = () => {
@@ -212,7 +203,7 @@ const PodAddContainer = observer((props) => {
         cpuLimit: "",
         memoryLimit: "",
         NVIDIAGPU: "",
-        volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
+        // volumes: [{ name: "", mountPoint: "", subPathInVolume: "" }],
       });
     } else {
       const clonedData = cloneDeep(podInfo.containers[containerIndex]);
@@ -407,7 +398,9 @@ const PodAddContainer = observer((props) => {
                 </td>
               </tr>
               <tr>
-                <th>Pull Secret</th>
+                <th>
+                  Pull Secret<span className="requried">*</span>
+                </th>
                 <td colSpan="3">
                   <CTextField
                     type="text"
@@ -646,7 +639,7 @@ const PodAddContainer = observer((props) => {
           </div>
         </>
       );
-    } else if (tabvalue === 1) {
+    } else {
       return (
         <>
           <table className="tb_data_new tb_write">
@@ -735,96 +728,97 @@ const PodAddContainer = observer((props) => {
           </div>
         </>
       );
-    } else {
-      return (
-        <>
-          <table className="tb_data_new tb_write">
-            <tbody>
-              <tr>
-                <th>Volume</th>
-                <td>
-                  {containerInfo.volumes.map((volume, index) => (
-                    <>
-                      <FormControl>
-                        <select
-                          name="name"
-                          onChange={(e) => onChangeVolume(e, index)}
-                          value={volume.name}
-                          style={{ width: "200px", padding: "0px 2px 2px 2px" }}
-                        >
-                          <option value={""} selected disabled hidden>
-                            Select Volume
-                          </option>
-                          {
-                            <option value={checkPVCInDeployment}>
-                              {checkPVCInDeployment}
-                            </option>
-                          }
-                        </select>
-                      </FormControl>
-                      <CTextField
-                        style={{ width: "35%", padding: "0px 2px 2px 2px" }}
-                        type="text"
-                        placeholder="Mount Point"
-                        className="form_fullWidth"
-                        name="mountPoint"
-                        onChange={() => onChangeVolume(event, index)}
-                        value={volume.mountPoint}
-                      />
-                      <CTextField
-                        style={{ width: "35%", padding: "0px 2px 2px 0px" }}
-                        type="text"
-                        placeholder="Sub Path in Volume"
-                        className="form_fullWidth"
-                        name="subPathInVolume"
-                        onChange={() => onChangeVolume(event, index)}
-                        value={volume.subPathInVolume}
-                      />
-
-                      <Button
-                        style={{
-                          border: "none",
-                          height: "28px",
-                          width: "30px",
-                          fontSize: "20px",
-                          fontWeight: 600,
-                          lineHeight: 1,
-                          letterSpacing: "normal",
-                          color: "#36435c",
-                          backgroundColor: "#eff4f9",
-                          padding: "0 0 0 0",
-                          margin: "2px",
-                          borderRadius: "0",
-                        }}
-                        onClick={() => removeVolume(index)}
-                      >
-                        -
-                      </Button>
-                    </>
-                  ))}
-                  <Button onClick={addVolume}>Add Volume</Button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div
-            style={{
-              display: "flex",
-              width: "300px",
-              justifyContent: "center",
-              marginTop: "377px",
-            }}
-          >
-            <Button onClick={handleClose}>취소</Button>
-            {containerIndex === -1 ? (
-              <ButtonNext onClick={addContainers}>추가</ButtonNext>
-            ) : (
-              <ButtonNext onClick={editContainers}>변경</ButtonNext>
-            )}
-          </div>
-        </>
-      );
     }
+    // else {
+    //   return (
+    //     <>
+    //       <table className="tb_data_new tb_write">
+    //         <tbody>
+    //           <tr>
+    //             <th>Volume</th>
+    //             <td>
+    //               {containerInfo.volumes.map((volume, index) => (
+    //                 <>
+    //                   <FormControl>
+    //                     <select
+    //                       name="name"
+    //                       onChange={(e) => onChangeVolume(e, index)}
+    //                       value={volume.name}
+    //                       style={{ width: "200px", padding: "0px 2px 2px 2px" }}
+    //                     >
+    //                       <option value={""} selected disabled hidden>
+    //                         Select Volume
+    //                       </option>
+    //                       {
+    //                         <option value={checkPVCInDeployment}>
+    //                           {checkPVCInDeployment}
+    //                         </option>
+    //                       }
+    //                     </select>
+    //                   </FormControl>
+    //                   <CTextField
+    //                     style={{ width: "35%", padding: "0px 2px 2px 2px" }}
+    //                     type="text"
+    //                     placeholder="Mount Point"
+    //                     className="form_fullWidth"
+    //                     name="mountPoint"
+    //                     onChange={() => onChangeVolume(event, index)}
+    //                     value={volume.mountPoint}
+    //                   />
+    //                   <CTextField
+    //                     style={{ width: "35%", padding: "0px 2px 2px 0px" }}
+    //                     type="text"
+    //                     placeholder="Sub Path in Volume"
+    //                     className="form_fullWidth"
+    //                     name="subPathInVolume"
+    //                     onChange={() => onChangeVolume(event, index)}
+    //                     value={volume.subPathInVolume}
+    //                   />
+
+    //                   <Button
+    //                     style={{
+    //                       border: "none",
+    //                       height: "28px",
+    //                       width: "30px",
+    //                       fontSize: "20px",
+    //                       fontWeight: 600,
+    //                       lineHeight: 1,
+    //                       letterSpacing: "normal",
+    //                       color: "#36435c",
+    //                       backgroundColor: "#eff4f9",
+    //                       padding: "0 0 0 0",
+    //                       margin: "2px",
+    //                       borderRadius: "0",
+    //                     }}
+    //                     onClick={() => removeVolume(index)}
+    //                   >
+    //                     -
+    //                   </Button>
+    //                 </>
+    //               ))}
+    //               <Button onClick={addVolume}>Add Volume</Button>
+    //             </td>
+    //           </tr>
+    //         </tbody>
+    //       </table>
+    //       <div
+    //         style={{
+    //           display: "flex",
+    //           width: "300px",
+    //           justifyContent: "center",
+    //           marginTop: "377px",
+    //         }}
+    //       >
+    //         <Button onClick={handleClose}>취소</Button>
+    //         {containerIndex === -1 ? (
+    //           <ButtonNext onClick={addContainers}>추가</ButtonNext>
+    //         ) : (
+    //           <ButtonNext onClick={editContainers}>변경</ButtonNext>
+    //         )}
+    //       </div>
+    //     </>
+    //   );
+    // }
   };
 
   return (
@@ -840,7 +834,6 @@ const PodAddContainer = observer((props) => {
       <CSubTabs value={tabvalue} onChange={handleTabChange}>
         <CSubTab label="General"></CSubTab>
         <CSubTab label="Resource"></CSubTab>
-        <CSubTab label="Storage"></CSubTab>
       </CSubTabs>
       {AddContainerComponent()}
     </CDialogNew>

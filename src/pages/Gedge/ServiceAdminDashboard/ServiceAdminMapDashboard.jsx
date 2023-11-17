@@ -15,35 +15,37 @@ const LeafletContainer = styled.div`
 `;
 
 const ServiceAdminMapDashboard = observer(() => {
-  const currentPageTitle = "Pod 대시보드";
+  const currentPageTitle = "지도 대시보드";
   const mapRef = useRef();
 
   useEffect(async () => {
     const result = await axios(`${SERVER_URL}/totalDashboard`);
     const markerInfos = result.data.data.edgeInfo;
-    
+
     mapRef.current = L.map("serviceadminmap", mapParams);
 
     const statusCircle = (status) => {
-      if (status === "success"){
-        return "run"
-      }else if (status === "failed"){
-        return "stop"
+      if (status === "success") {
+        return "run";
+      } else if (status === "failed") {
+        return "stop";
       }
-    }
+    };
+
+    console.log(markerInfos);
 
     const marker = markerInfos.map((info, i) => {
-      L.marker([info.point.y, info.point.x], { icon: CustomIcon("blue")})
-      .addTo(mapRef.current)
-      .bindPopup(`
+      L.marker([info.point.y, info.point.x], {
+        icon: CustomIcon("blue"),
+      }).addTo(mapRef.current).bindPopup(`
         <div class="leaflet-popup-title">
-          ${info.address}
+          ${info.clusterName}
         </div>
         <div class="leaflet-popup-table">
           <table>
             <tr>
-              <th>Name</th>
-              <td>${info.clusterName}</td>
+              <th>Location</th>
+              <td>${info.address}</td>
             </tr>
             <tr>
               <th>Status</th>
@@ -58,17 +60,20 @@ const ServiceAdminMapDashboard = observer(() => {
               <td>${info.clusterEndpoint}</td>
             </tr>
             <tr>
-              <th rowSpan=${info.node_status.length+1}>Node</th>
+              <th rowSpan=${info.node_status.length + 1}>Node</th>
             </tr>
-            ${info.node_status.map((node)=>
-              `<tr>
+            ${info.node_status
+              .map(
+                (node) =>
+                  `<tr>
                 <td>${node.name}</td>
               </tr>`
-            ).join('')}
+              )
+              .join("")}
           </table>
         </div>
-      `)
-    })
+      `);
+    });
   }, []);
 
   const MAP_TILE = L.tileLayer(

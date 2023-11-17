@@ -4,6 +4,7 @@ import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import { stringify } from "json-to-pretty-yaml2";
 
 const DeploymentYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
@@ -30,7 +31,7 @@ const DeploymentYaml = observer(() => {
         delete obj_content.spec.template.metadata.labels;
         delete obj_content.metadata.labels;
       }
-      setContent(require("json-to-pretty-yaml").stringify(obj_content));
+      setContent(stringify(obj_content));
     }
   }, [content]);
 
@@ -61,9 +62,9 @@ const DeploymentYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
-          // setContent(value);
-        }}
+        // onChange={(value) => {
+        //   setContent(value);
+        // }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}

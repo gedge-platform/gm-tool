@@ -242,7 +242,7 @@ const WorkspaceDetail = observer(() => {
                     <th>Workspace Name</th>
                     <td>
                       {workSpaceDetail.workspaceName
-                        ? workSpaceDetail.workspaceName.split("-")[0]
+                        ? workSpaceDetail.workspaceName
                         : "-"}
                     </td>
                     <th>Description</th>

@@ -4,7 +4,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { projectStore, claimStore, podStore, workspaceStore } from "@/store";
 import styled from "styled-components";
 import PodAddContainer from "./PodAddContainer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -69,24 +69,71 @@ const Table = styled.table`
 `;
 
 const CreatePodStepOne = observer((props) => {
-  const { podInfo, setPodInfo } = podStore;
+  const { podInfo, setPodInfo, initTargetClusters, removeContainer } = podStore;
 
-  const { workSpaceList } = workspaceStore;
+  const {
+    loadWorkSpaceList,
+    workSpaceList,
+    loadWorkspaceDetail,
+    selectClusterInfo,
+  } = workspaceStore;
 
-  const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
+  const {
+    projectListinWorkspace,
+    loadProjectListInWorkspace,
+    loadProjectDetail,
+  } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
 
   const [containerIndex, setContainerIndex] = useState(1);
   const [open, setOpen] = useState(false);
   const [prioritytDisable, setPriorityDisable] = useState(true);
+  // const { podInfo, setPodInfo } = podStore;
+
+  // const { workSpaceList } = workspaceStore;
+
+  // const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
+
+  // const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
+
+  // const [containerIndex, setContainerIndex] = useState(1);
+  // const [open, setOpen] = useState(false);
+  // const [prioritytDisable, setPriorityDisable] = useState(true);
 
   const onChange = (e) => {
-    setPodInfo(e.target.name, e.target.value);
+    console.log("e", e.target.name);
+    if (e.target.name === "podName") {
+      setPodInfo(e.target.name, e.target.value);
+    }
+
     if (e.target.name === "workspace") {
+      const selectedWorkspace = workSpaceList.find(
+        (workspace) => workspace.workspaceName === e.target.value
+      );
+      console.log(selectedWorkspace);
+      setPodInfo(e.target.name, e.target.value);
+      setPodInfo("workspacetag", selectedWorkspace.workspaceTag);
+      setPodInfo("workspaceuuid", selectedWorkspace.workspaceUUID);
+
       loadProjectListInWorkspace(e.target.value);
+      loadWorkspaceDetail(e.target.value);
     } else if (e.target.name === "volume") {
       setCheckPVCInPod(e.target.value);
+    }
+
+    if (e.target.name === "project") {
+      setPodInfo(e.target.name, e.target.value);
+      loadProjectDetail(e.target.value);
+      initTargetClusters(
+        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      );
+    }
+    if (e.target.name === "claimVolume") {
+      const pvc = JSON.parse(e.target.value);
+      setCheckPVCInPod(pvc.name, pvc.volume);
+      setPodInfo("pvcName", pvc.name);
+      setPodInfo("volume", pvc.volume);
     }
   };
 
@@ -95,19 +142,14 @@ const CreatePodStepOne = observer((props) => {
     setOpen(true);
   };
 
-  const removeContainer = (e, removeIndex) => {
+  const deleteContainer = (e, removeIndex) => {
     e.stopPropagation();
-    setPodInfo(
-      "containers",
-      podInfo.containers.filter((_, index) => index !== removeIndex)
-    );
+    removeContainer(index);
   };
 
-  const onChangeCheckPVC = ({ target: { name, value } }) => {
-    setCheckPVCInPod(name, value);
-    setPodInfo("pvcName", name);
-    setPodInfo("volume", value);
-  };
+  useEffect(() => {
+    loadWorkSpaceList();
+  }, []);
 
   return (
     <>
@@ -168,7 +210,10 @@ const CreatePodStepOne = observer((props) => {
                     Select Workspace
                   </option>
                   {workSpaceList.map((workspace) => (
-                    <option value={workspace.workspaceName}>
+                    <option
+                      key={workspace.workspaceUUID}
+                      value={workspace.workspaceName}
+                    >
                       {workspace.workspaceName}
                     </option>
                   ))}
@@ -192,31 +237,19 @@ const CreatePodStepOne = observer((props) => {
                   <option value={""} selected hidden disabled>
                     Select Project
                   </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
+                  {projectListinWorkspace ? (
+                    projectListinWorkspace?.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={""}>No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>
           </tr>
-
-          {/* <tr>
-            <th>
-              Replicas <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <CTextField
-                type="number"
-                placeholder="Replicas"
-                className="form_fullWidth"
-                name="replicas"
-                onChange={onChange}
-                value={podInfo.replicas}
-              />
-            </td>
-          </tr> */}
 
           <tr>
             <th>ClaimVolume</th>
@@ -228,6 +261,7 @@ const CreatePodStepOne = observer((props) => {
                     <th style={{ textAlign: "center" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Namespace</th>
                     <th style={{ textAlign: "center" }}>cluster</th>
+                    <th style={{ textAlign: "center" }}>volume</th>
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
@@ -238,9 +272,9 @@ const CreatePodStepOne = observer((props) => {
                           <input
                             type="radio"
                             checked={podInfo.pvcName === pvc.name}
-                            name={pvc.name}
-                            onChange={onChangeCheckPVC}
-                            value={pvc.volume}
+                            name="claimVolume"
+                            onChange={onChange}
+                            value={JSON.stringify(pvc)}
                           />
                         </td>
                         <td>{pvc.name}</td>

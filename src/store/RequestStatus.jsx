@@ -66,12 +66,14 @@ class RequestStatus {
       .get(`${SERVER_URL}`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           if (res.data.data !== null) {
             this.requestList = res.data.data;
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.requestList = [];
+            this.totalPages = "1";
           }
         });
       })
