@@ -9,7 +9,8 @@ class Workspace {
   workSpaceDetail = [];
   totalElements = 0;
   adminList = [];
-  adminList = [];
+  adminLists = [];
+  test = [];
   events = [
     {
       kind: "",
@@ -164,6 +165,11 @@ class Workspace {
           (this.currentPage - 1) * 10,
           this.currentPage * 10
         );
+      } else if (this.adminLists !== null) {
+        this.viewList = this.adminLists.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
       }
     });
   };
@@ -202,20 +208,29 @@ class Workspace {
       .then((res) => {
         runInAction(() => {
           this.adminList = res.data.data;
-          console.log("adminList ???? ", res.data.data);
+          this.adminLists = this.adminList.filter((workspace) =>
+            workspace.selectCluster.some(
+              (cluster) => cluster.clusterName === "gm-cluster"
+            )
+          );
           this.workSpaceList = res.data.data;
-          // this.workSpaceList = this.adminList.filter((workspace) =>
-          //   workspace.selectCluster.some(
-          //     (cluster) => cluster.clusterName === "gm-cluster"
-          //   )
-          // );
           if (this.workSpaceList.length !== 0) {
             this.totalPages = Math.ceil(this.workSpaceList.length / 10);
             this.totalElements = this.workSpaceList.length;
             this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+          }
+          if (this.adminLists.length !== 0) {
+            this.totalPages = Math.ceil(this.adminLists.length / 10);
+            this.totalElements = this.adminLists.length;
+            this.loadWorkspaceDetail(this.adminLists[0].workspaceName);
           } else {
+            // 두 경우 모두 해당하지 않는 경우
+            this.adminLists = [];
             this.workSpaceList = [];
           }
+          // else {
+          //   this.workSpaceList = [];
+          // }
         });
       })
       .then((res) => {

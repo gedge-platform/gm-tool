@@ -179,7 +179,7 @@ const CreatePodStepOne = observer((props) => {
             <td colSpan="3">
               <CTextField
                 type="text"
-                placeholder="Pod Name"
+                placeholder="Pod Name(영어소문자, 숫자만 가능)"
                 className="form_fullWidth"
                 name="podName"
                 onChange={onChange}

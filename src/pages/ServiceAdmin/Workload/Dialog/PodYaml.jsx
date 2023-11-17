@@ -59,9 +59,9 @@ const PodYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        onChange={(value) => {
-          // setContent(value);
-        }}
+        // onChange={(value) => {
+        //   setContent(value);
+        // }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}

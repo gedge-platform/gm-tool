@@ -32,7 +32,11 @@ const WorkspaceAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
+    adminList,
+    adminLists,
   } = workspaceStore;
+
+  console.log(adminLists);
 
   const [columDefs] = useState([
     {
@@ -47,10 +51,14 @@ const WorkspaceAdminTab = observer(() => {
     },
     {
       headerName: "클러스터",
-      field: "memberName",
+      field: "clusterName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        console.log(selectCluster);
+        const clusterNames = selectCluster
+          .map((item) => item.clusterName)
+          .join(", ");
+        return `<span>${clusterNames}</span>`;
       },
     },
     {
@@ -105,7 +113,7 @@ const WorkspaceAdminTab = observer(() => {
     loadAdminWorkSpaceList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -122,7 +130,7 @@ const WorkspaceAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={workSpaceList}
+                  rowData={adminLists}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

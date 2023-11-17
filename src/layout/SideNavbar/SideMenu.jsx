@@ -188,7 +188,7 @@ const MenuNav = styled.nav`
 const SideMenu = observer(() => {
   const history = useHistory();
   const userRole = getItem("userRole");
-  const location = useLocation();
+  // const location = useLocation();
   const { expanded, setExpanded } = menuStore;
 
   const CustomNavLink = ({ to, exact, nodeId, children }) => {
@@ -212,12 +212,15 @@ const SideMenu = observer(() => {
 
   // 메뉴 버튼을 눌렀을 때 하위 메뉴가 있는 메뉴는 Toggle 함수 사용
   const onNodeToggle = (e, nodeId) => {
+    console.log("nodeId ??? ", nodeId);
     setExpanded(nodeId);
+    console.log("expanded ??? ", expanded);
   };
 
   // 페이지 로드 시 메뉴 상태를 복원
   useEffect(() => {
     const savedExpanded = localStorage.getItem("menuExpanded");
+    console.log("savedExpanded ??? ", savedExpanded);
     if (savedExpanded) {
       setExpanded(JSON.parse(savedExpanded));
     }
@@ -226,10 +229,12 @@ const SideMenu = observer(() => {
   // 메뉴가 변경될 때마다 상태를 저장
   useEffect(() => {
     localStorage.setItem("menuExpanded", JSON.stringify(expanded));
+    console.log("Expanded state:", expanded);
   }, [expanded]);
 
   // 하위 메뉴가 없는 메뉴들은 선택 시 다른 하위 메뉴 expanded 삭제
   useEffect(() => {
+    console.log(location.pathname);
     if (
       location.pathname === "/total" ||
       location.pathname === "/user" ||
@@ -240,10 +245,6 @@ const SideMenu = observer(() => {
       setExpanded([]);
     }
   }, [location]);
-
-  const handleClick = (event, nodeId) => {
-    setExpanded(nodeId);
-  };
 
   return (
     <MenuNav>

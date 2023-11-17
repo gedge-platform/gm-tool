@@ -87,6 +87,10 @@ const CreatePod = observer((props) => {
     labelInput,
     annotationInput,
     postPodGM,
+    postPodGLowLatencyPriority,
+    postPodGMostRequestPriority,
+    postPodGSelectedClusterPriority,
+    postPodGSetClusterPriority,
   } = podStore;
 
   const [stepValue, setStepValue] = useState(1);
@@ -109,8 +113,8 @@ const CreatePod = observer((props) => {
         return {
           name: e.containerName,
           image: e.containerImage,
-          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : "",
-          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : "",
+          command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+          args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
           env: e.variables.map((i) => {
             if (i.type === "KeyValuePair") {
               return {
@@ -152,13 +156,13 @@ const CreatePod = observer((props) => {
           }),
           resources: {
             requests: {
-              cpu: e.cpuReservation,
-              memory: e.memoryReservation,
+              cpu: e.cpuReservation + "m",
+              memory: e.memoryReservation + "Mi",
             },
             limits: {
-              cpu: e.cpuLimit,
-              memory: e.memoryLimit,
-              "nvidia.com/gpu": "1",
+              cpu: e.cpuLimit + "m",
+              memory: e.memoryLimit + "Mi",
+              "nvidia.com/gpu": e.NVIDIAGPU,
             },
           },
           // volumeMounts: e.volumes.map((i) => {
@@ -167,20 +171,20 @@ const CreatePod = observer((props) => {
           //     mountPath: i.mountPoint,
           //   };
           // }),
-          volumeMounts: e.volumes.map((i) => {
-            return {
-              name: "data-volume",
-              mountPath: "/data",
-            };
-          }),
+          // volumeMounts: e.volumes.map((i) => {
+          //   return {
+          //     name: "data-volume",
+          //     mountPath: "/data",
+          //   };
+          // }),
         };
       }),
-      volumes: [
-        {
-          name: "data-volume",
-          emptyDir: {},
-        },
-      ],
+      // volumes: [
+      //   {
+      //     name: "data-volume",
+      //     emptyDir: {},
+      //   },
+      // ],
     },
   };
 
@@ -246,14 +250,34 @@ const CreatePod = observer((props) => {
   };
 
   const createPod = () => {
-    postPodGM(require("json-to-pretty-yaml").stringify(template));
+    if (podInfo.priority.name === "GLowLatencyPriority") {
+      postPodGLowLatencyPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GMostRequestPriority") {
+      postPodGMostRequestPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GSelectedClusterPriority") {
+      postPodGSelectedClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
+    if (podInfo.priority.name === "GSetClusterPriority") {
+      postPodGSetClusterPriority(
+        require("json-to-pretty-yaml").stringify(template)
+      );
+    }
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
 
   useEffect(() => {
-    // loadPVClaims();
-    // loadWorkSpaceList();
+    loadWorkSpaceList();
+    loadPVClaims();
+
     if (stepValue === 4) {
       const YAML = require("json-to-pretty-yaml");
       setContent(YAML.stringify(template));
@@ -336,7 +360,7 @@ const CreatePod = observer((props) => {
     } else {
       return (
         <>
-          <PodYaml labelsList={labelsList} />
+          <PodYaml />
           <div
             style={{
               display: "flex",
