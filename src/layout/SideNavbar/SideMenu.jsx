@@ -188,7 +188,7 @@ const MenuNav = styled.nav`
 const SideMenu = observer(() => {
   const history = useHistory();
   const userRole = getItem("userRole");
-  // const location = useLocation();
+  const location = useLocation();
   const { expanded, setExpanded } = menuStore;
 
   const CustomNavLink = ({ to, exact, nodeId, children }) => {
@@ -212,15 +212,12 @@ const SideMenu = observer(() => {
 
   // 메뉴 버튼을 눌렀을 때 하위 메뉴가 있는 메뉴는 Toggle 함수 사용
   const onNodeToggle = (e, nodeId) => {
-    console.log("nodeId ??? ", nodeId);
     setExpanded(nodeId);
-    console.log("expanded ??? ", expanded);
   };
 
   // 페이지 로드 시 메뉴 상태를 복원
   useEffect(() => {
     const savedExpanded = localStorage.getItem("menuExpanded");
-    console.log("savedExpanded ??? ", savedExpanded);
     if (savedExpanded) {
       setExpanded(JSON.parse(savedExpanded));
     }
@@ -229,19 +226,53 @@ const SideMenu = observer(() => {
   // 메뉴가 변경될 때마다 상태를 저장
   useEffect(() => {
     localStorage.setItem("menuExpanded", JSON.stringify(expanded));
-    console.log("Expanded state:", expanded);
   }, [expanded]);
 
-  // 하위 메뉴가 없는 메뉴들은 선택 시 다른 하위 메뉴 expanded 삭제
   useEffect(() => {
-    console.log(location.pathname);
-    if (
-      location.pathname === "/total" ||
-      location.pathname === "/user" ||
-      location.pathname === "/monitoring" ||
-      location.pathname === "/configuration" ||
-      location.pathname === "/certification"
-    ) {
+    // 노드와 관련된 정보를 매핑 (메뉴 depth nodeId 값에 따라 처리) - 관리자 일 경우
+    const nodeAdminMappings = {
+      "/total": [],
+      "/platformDashboard": ["1"],
+      "/edgeZone": ["1"],
+      "/cloudZone": ["1"],
+      "/adminZone": ["1"],
+      "/storageDashboard": ["2"],
+      "/volumes": ["2"],
+      "/workSpace": ["3"],
+      "/userProject": ["3", "4"],
+      "/platformProject": ["3", "4"],
+      "/workload": ["3"],
+      "/faas": ["3"],
+      "/user": [],
+      "/monitoring": [],
+      "/configuration": [],
+      "/certification": [],
+    };
+
+    // 노드와 관련된 정보를 매핑 (메뉴 depth nodeId 값에 따라 처리) - 사용자 일 경우
+    const nodeUserMappings = {
+      "/service": [],
+      "/service/map": [],
+      "/service/Workspace": [],
+      "/service/project": [],
+      "/service/workload": [],
+      "/service/volumes": [],
+    };
+
+    // 매핑 시켜 놓은 nodeAdminMappings 에서 find를 통해 url과 nodeId 확인
+    // userRole에 따라 적절한 매핑 정보 선택
+    const nodeMappings =
+      userRole === "PA" ? nodeAdminMappings : nodeUserMappings;
+
+    const selectedNode = Object.keys(nodeAdminMappings).find(
+      (path) => location.pathname === path
+    );
+
+    // 선택한 노드에 해당하는 정보가 있을 경우 해당 정보로 expanded 업데이트
+    if (selectedNode) {
+      setExpanded(nodeMappings[selectedNode]);
+    } else {
+      // 선택한 노드에 해당하는 정보가 없을 경우 빈 배열로 초기화
       setExpanded([]);
     }
   }, [location]);
@@ -265,8 +296,7 @@ const SideMenu = observer(() => {
               <CustomTreeItem nodeId="1" label={Title.Platform}>
                 <li>
                   <CustomNavLink
-                    nodeId="2"
-                    // exact
+                    exact
                     to="/platformDashboard"
                     activeClassName="active"
                   >
@@ -275,43 +305,27 @@ const SideMenu = observer(() => {
                 </li>
 
                 <li>
-                  <CustomNavLink
-                    nodeId="3"
-                    exact
-                    to="/edgeZone"
-                    activeClassName="active"
-                  >
+                  <CustomNavLink exact to="/edgeZone" activeClassName="active">
                     {Title.EdgeZone}
                   </CustomNavLink>
                 </li>
                 <li>
-                  <CustomNavLink
-                    nodeId="4"
-                    exact
-                    to="/cloudZone"
-                    activeClassName="active"
-                  >
+                  <CustomNavLink exact to="/cloudZone" activeClassName="active">
                     {Title.CloudZone}
                   </CustomNavLink>
                 </li>
 
                 <li>
-                  <CustomNavLink
-                    exact
-                    to="/adminZone"
-                    nodeId="5"
-                    activeClassName="active"
-                  >
+                  <CustomNavLink exact to="/adminZone" activeClassName="active">
                     {Title.AdminZone}
                   </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem nodeId="6" label={Title.Infra}>
+              <CustomTreeItem nodeId="2" label={Title.Infra}>
                 <li>
                   <CustomNavLink
                     exact
                     to="/storageDashboard"
-                    nodeId="7"
                     activeClassName="active"
                   >
                     {Title.StorageDashboard}
@@ -324,23 +338,17 @@ const SideMenu = observer(() => {
                   </CustomNavLink>
                 </li>
               </CustomTreeItem>
-              <CustomTreeItem nodeId="8" label={Title.Service}>
+              <CustomTreeItem nodeId="3" label={Title.Service}>
                 <li>
-                  <CustomNavLink
-                    exact
-                    to="/workSpace"
-                    nodeId="9"
-                    activeClassName="active"
-                  >
+                  <CustomNavLink exact to="/workSpace" activeClassName="active">
                     {Title.WorkSpace}
                   </CustomNavLink>
                 </li>
-                <CustomTreeItem nodeId="10" label={Title.Project}>
+                <CustomTreeItem nodeId="4" label={Title.Project}>
                   <li>
                     <CustomNavLink
                       exact
                       to="/userProject"
-                      nodeId="11"
                       activeClassName="active"
                     >
                       {Title.CreateUser}

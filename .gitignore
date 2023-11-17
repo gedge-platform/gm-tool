@@ -7,6 +7,7 @@
 # production
 /build
 /dist
+public/dist
 
 # config
 src/config.jsx
