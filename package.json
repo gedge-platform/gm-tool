@@ -33,6 +33,7 @@
     "dotenv": "^9.0.0",
     "form-data": "^4.0.0",
     "json-to-pretty-yaml": "^1.2.2",
+    "json-to-pretty-yaml2": "^1.0.0",
     "jwt-decode": "^3.1.2",
     "leaflet": "^1.7.1",
     "lodash-es": "^4.17.21",

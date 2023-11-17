@@ -10,6 +10,7 @@ import projectStore from "../../../../store/Project";
 import clusterStore from "../../../../store/Cluster";
 import cluster from "cluster";
 import deploymentStore from "../../../../store/Deployment";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -111,9 +112,8 @@ const CreateHPA = observer((props) => {
   // console.log(clusters);
 
   const createHPA = () => {
-    const YAML = require("json-to-pretty-yaml");
     console.log(
-      YAML.stringify({
+      stringify({
         apiVersion: "autoscaling/v2beta2",
         kind: "HorizontalPodAutoscaler",
         metadata: {

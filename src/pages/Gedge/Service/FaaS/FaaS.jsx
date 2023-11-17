@@ -6,6 +6,7 @@ import EnvironmentListTab from "./TabList/EnvironmentListTab";
 import FunctionListTab from "./TabList/FunctionListTab";
 import PackageListTab from "./TabList/PackageListTab";
 import TriggerListTab from "./TabList/TriggerListTab";
+import PoolSizeListTab from "./TabList/PoolSizeListTab";
 
 const FaaS = () => {
   const currentPageTitle = Title.FaaS;
@@ -22,6 +23,7 @@ const FaaS = () => {
         <CTab label="Function" />
         <CTab label="Package" />
         <CTab label="Trigger" />
+        <CTab label="Pool Size" />
       </CTabs>
       <div className="tabPanelContainer">
         <CTabPanel value={tabvalue} index={0}>
@@ -35,6 +37,9 @@ const FaaS = () => {
         </CTabPanel>
         <CTabPanel value={tabvalue} index={3}>
           <TriggerListTab />
+        </CTabPanel>
+        <CTabPanel value={tabvalue} index={4}>
+          <PoolSizeListTab />
         </CTabPanel>
       </div>
     </Layout>

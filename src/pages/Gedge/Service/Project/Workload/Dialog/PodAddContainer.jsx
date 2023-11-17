@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import { CDialogNew } from "@/components/dialogs";
 import { CTextField } from "@/components/textfields";
-import Tabs from "@material-ui/core/Tabs";
 import { CSubTab, CTab } from "@/components/tabs";
 import FormControl from "@material-ui/core/FormControl";
 import styled from "styled-components";
@@ -28,14 +27,6 @@ const ButtonNext = styled.button`
   padding: 10px 35px;
   border-radius: 4px;
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
-`;
-
-const ButtonAddHost = styled.button`
-  background-color: #fff;
-  border: 1px solid black;
-  height: 30px;
-  color: black;
-  border-radius: 4px;
 `;
 
 const PodAddContainer = observer((props) => {
@@ -143,21 +134,17 @@ const PodAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    console.log(containerInfo);
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
         keyValuePair.push([e.variableName, e.value]);
-        console.log(keyValuePair);
       } else {
         secretConfigmap.push(e);
-        console.log(secretConfigmap);
       }
     });
-    // if (isContainerValid()) {
+
     const temp = { ...containerInfo };
     addContainer(temp);
     props.onClose && props.onClose();
-    // }
   };
 
   const editContainers = () => {

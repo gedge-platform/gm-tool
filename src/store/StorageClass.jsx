@@ -9,6 +9,7 @@ import {
   stepConverter,
 } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
+import { stringify } from "json-to-pretty-yaml2";
 class StorageClass {
   viewList = null;
   adminList = [];
@@ -218,8 +219,7 @@ class StorageClass {
       .get(`${SERVER_URL}/view/${name}?cluster=${clusterName}&kind=${kind}`)
       .then((res) => {
         runInAction(() => {
-          const YAML = require("json-to-pretty-yaml");
-          this.getYamlFile = YAML.stringify(res.data.data);
+          this.getYamlFile = stringify(res.data.data);
         });
       });
   };
@@ -305,11 +305,10 @@ class StorageClass {
           Object.entries(this.storageClass?.annotations).forEach(
             ([key, value]) => {
               try {
-                const YAML = require("json-to-pretty-yaml");
                 if (value === "true" || value === "false") {
                   throw e;
                 }
-                this.scYamlFile = YAML.stringify(JSON.parse(value));
+                this.scYamlFile = stringify(JSON.parse(value));
               } catch (e) {
                 if (key && value) {
                   this.scAnnotations[key] = value;

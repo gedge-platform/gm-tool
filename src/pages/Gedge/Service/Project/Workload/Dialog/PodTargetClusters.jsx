@@ -3,7 +3,6 @@ import { CDialogNew } from "@/components/dialogs";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import deploymentStore from "../../../../../../store/Deployment";
 import { cloneDeep } from "lodash-es";
 import podStore from "../../../../../../store/Pod";
 import platformProjectStore from "../../../../../../store/PlatformProject";

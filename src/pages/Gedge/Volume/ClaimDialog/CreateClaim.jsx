@@ -2,7 +2,6 @@ import { observer } from "mobx-react";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { swalError } from "@/utils/swal-utils";
-
 import { CDialogNew } from "@/components/dialogs";
 import {
   claimStore,
@@ -17,6 +16,7 @@ import VolumYamlPopup from "../Dialog/VolumYamlPopup";
 import VolumePopup from "../Dialog/VolumePopup";
 import ClaimAdvancedSetting from "./ClaimAdvancedSetting";
 import ClaimYamlPopup from "./ClaimYamlPopup";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -158,7 +158,7 @@ const CreateClaim = observer((props) => {
   };
 
   const CreateVolume = () => {
-    createVolumeClaim(require("json-to-pretty-yaml").stringify(template));
+    createVolumeClaim(stringify(template));
     handleClose();
     props.reloadFunc && props.reloadFunc();
   };
@@ -171,8 +171,7 @@ const CreateClaim = observer((props) => {
   useEffect(() => {
     if (stepValue === 3) {
       setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 

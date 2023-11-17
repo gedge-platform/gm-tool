@@ -62,7 +62,7 @@ const Login = () => {
             });
           } else {
             swalError("로그인 되었습니다.", () => {
-              window.location.replace("/totalservice");
+              window.location.replace("/service");
             });
           }
 
