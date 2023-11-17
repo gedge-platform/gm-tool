@@ -264,7 +264,7 @@ const SideMenu = observer(() => {
     const nodeMappings =
       userRole === "PA" ? nodeAdminMappings : nodeUserMappings;
 
-    const selectedNode = Object.keys(nodeAdminMappings).find(
+    const selectedNode = Object.keys(nodeMappings).find(
       (path) => location.pathname === path
     );
 
