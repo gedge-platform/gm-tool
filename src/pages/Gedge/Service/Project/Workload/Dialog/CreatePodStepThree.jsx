@@ -1,20 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
-import {
-  deploymentStore,
-  projectStore,
-  workspaceStore,
-  clusterStore,
-  podStore,
-  claimStore,
-} from "@/store";
+import { workspaceStore, clusterStore, podStore } from "@/store";
 import PodTargetClusters from "./PodTargetClusters";
-import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
-import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;

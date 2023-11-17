@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { cloneDeep } from "lodash-es";
 import podStore from "../../../../store/Pod";
+import platformProjectStore from "../../../../store/PlatformProject";
 
 const Button = styled.button`
   background-color: #fff;
@@ -25,6 +26,41 @@ const ButtonNext = styled.button`
   /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
+const DeleteButton = styled.button`
+  margin: 0px 0px 0px 177px;
+  overflow: hidden;
+  position: relative;
+  border: none;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background: transparent;
+  font: inherit;
+  text-indent: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(29, 161, 142, 0.1);
+  }
+
+  &:before,
+  &:after {
+    position: absolute;
+    top: 15%;
+    left: calc(50% - 0.0625em);
+    width: 0.125em;
+    height: 70%;
+    border-radius: 0.125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: "";
+  }
+
+  &:after {
+    transform: rotate(-45deg);
+  }
+`;
+
 const getItemStyle = (isDragging, draggableStyle) => ({
   userSelect: "none",
   padding: 16,
@@ -34,13 +70,21 @@ const getItemStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 });
 
-const PodTargetClusters = observer(({ open2, onClose }) => {
+const PodTargetClusters = observer(({ open, onClose, onComplete }) => {
   const {
     targetClusters,
     unselectedClusters,
     setTargetClusters,
     setUnselectedClusters,
+    priority,
+    podInfo,
   } = podStore;
+  const { loadAdminPlatformProjectList } = platformProjectStore;
+
+  useEffect(() => {
+    loadAdminPlatformProjectList();
+  }, []);
+
   const [selectedClusters, setSelectedClusters] = useState([]);
   const [unselected, setUnselected] = useState([]);
 
@@ -143,12 +187,40 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
     if (source.droppableId === destination.droppableId) {
       // 위치만 바꾸기
     } else {
-      move(source, destination);
+      if (podInfo.priority.name === "GSelectedClusterPriority") {
+        if (
+          destination.droppableId === "unselected" ||
+          selectedClusters[destination.droppableId] === null ||
+          selectedClusters[destination.droppableId].length < 2
+        ) {
+          move(source, destination);
+        }
+      } else {
+        move(source, destination);
+      }
     }
   };
 
   const addLeveled = () => {
+    if (
+      (podInfo.priority.name === "GSelectedClusterPriority" &&
+        podInfo.priority.mode === "node" &&
+        selectedClusters.length > 0) ||
+      (podInfo.priority.name === "GSetClusterPriority" &&
+        selectedClusters.length > 0)
+    ) {
+      return;
+    }
     setSelectedClusters([...selectedClusters, null]);
+  };
+
+  const deleteLeveled = (index) => {
+    if (Array.isArray(selectedClusters[index])) {
+      setUnselected([...unselected, ...selectedClusters[index]]);
+    } else {
+      setUnselected([...unselected, selectedClusters[index]]);
+    }
+    setSelectedClusters(selectedClusters.filter((_, idx) => idx !== index));
   };
 
   const closeTargetClusters = () => {
@@ -159,6 +231,7 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
     setTargetClusters(selectedClusters.filter((element) => element !== null));
     setUnselectedClusters(unselected);
     onClose();
+    onComplete(selectedClusters.filter((element) => element !== null));
   };
 
   useEffect(() => {
@@ -169,7 +242,7 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
   return (
     <CDialogNew
       id="myDialog"
-      open={open2}
+      open={open}
       maxWidth="md"
       title={"Target Clusters"}
       onClose={onClose}
@@ -199,6 +272,9 @@ const PodTargetClusters = observer(({ open2, onClose }) => {
                         padding: "8px",
                       }}
                     >
+                      <DeleteButton onClick={() => deleteLeveled(index)}>
+                        x
+                      </DeleteButton>
                       {Array.isArray(targetCluster) ? (
                         targetCluster.map((item, index) => (
                           <Draggable

@@ -9,6 +9,7 @@ import CreateDeploymentStepOne from "./CreateDeploymentStepOne";
 import CreateDeploymentStepTwo from "./CreateDeploymentStepTwo";
 import CreateDeploymentStepThree from "./CreateDeploymentStepThree";
 import { swalError } from "@/utils/swal-utils";
+import { stringify } from "json-to-pretty-yaml2";
 
 const Button = styled.button`
   background-color: #fff;
@@ -215,24 +216,16 @@ const CreateDeployment = observer((props) => {
 
   const createDeployment = () => {
     if (deployment.priority.name === "GLowLatencyPriority") {
-      postGLowLatencyPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postGLowLatencyPriority(stringify(template));
     }
     if (deployment.priority.name === "GMostRequestPriority") {
-      postGMostRequestPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postGMostRequestPriority(stringify(template));
     }
     if (deployment.priority.name === "GSelectedClusterPriority") {
-      postGSelectedClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postGSelectedClusterPriority(stringify(template));
     }
     if (deployment.priority.name === "GSetClusterPriority") {
-      postGSetClusterPriority(
-        require("json-to-pretty-yaml").stringify(template)
-      );
+      postGSetClusterPriority(stringify(template));
     }
 
     handleClose();
@@ -304,8 +297,7 @@ const CreateDeployment = observer((props) => {
 
     if (stepValue === 4) {
       setTemplate(template);
-      const YAML = require("json-to-pretty-yaml");
-      setContent(YAML.stringify(template));
+      setContent(stringify(template));
     }
   }, [stepValue]);
 

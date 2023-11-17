@@ -22,15 +22,13 @@ const DeploymentAdminTab = observer(() => {
     loadAdminDeploymentList,
     deploymentDetail,
     loadDeploymentDetail,
-    // deploymentList,
-    adminList,
     currentPage,
     totalPages,
-    viewList,
     initViewList,
     goPrevPage,
     goNextPage,
     totalElements,
+    deploymentList,
   } = deploymentStore;
 
   const [columDefs] = useState([
@@ -89,7 +87,7 @@ const DeploymentAdminTab = observer(() => {
     loadAdminDeploymentList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -105,7 +103,7 @@ const DeploymentAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={adminList}
+                  rowData={deploymentList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

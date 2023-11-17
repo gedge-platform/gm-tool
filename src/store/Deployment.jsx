@@ -5,6 +5,7 @@ import { swalError } from "../utils/swal-utils";
 import volumeStore from "./Volume";
 import { getItem } from "../utils/sessionStorageFn";
 import { useState } from "react";
+import { stringify } from "json-to-pretty-yaml2";
 
 class Deployment {
   currentPage = 1;
@@ -1233,7 +1234,6 @@ class Deployment {
   };
 
   postDeploymentPVC = async () => {
-    const YAML = require("json-to-pretty-yaml");
     const { selectClusters } = volumeStore;
 
     await axios
