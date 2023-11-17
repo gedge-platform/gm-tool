@@ -30,7 +30,6 @@ const WorkspaceListTab = observer(() => {
     goPrevPage,
     goNextPage,
     currentPage,
-    workSpaceList,
   } = workspaceStore;
   console.log();
 
