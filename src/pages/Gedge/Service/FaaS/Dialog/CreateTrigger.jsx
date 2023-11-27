@@ -31,7 +31,7 @@ const ButtonNext = styled.button`
 
 const CreateTrigger = observer((props) => {
   const { open } = props;
-  const trigType = ["HTTPTrigger", "MQTrigger"];
+  const triggerType = ["HTTP", "KafkaQueue"];
   const [value, setValue] = useState("");
 
   const handleClose = () => {
@@ -44,7 +44,7 @@ const CreateTrigger = observer((props) => {
     props.onClose && props.onClose();
   };
 
-  const onChange = (event) => {
+  const onChangeTrigger = (event) => {
     setValue(event.target.value);
   };
 
@@ -62,62 +62,110 @@ const CreateTrigger = observer((props) => {
         <tbody>
           <tr>
             <th>
-              Name <span className="requried">*</span>
+              Trigger Type <span className="requried">*</span>
+            </th>
+            <td>
+              <FormControl className="form_fullWidth">
+                <select name="Posttype" onChange={onChangeTrigger}>
+                  <option value={""}>Select Post type</option>
+                  {triggerType.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
+              </FormControl>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Trigger Name <span className="requried">*</span>
             </th>
             <td>
               <CTextField
                 type="text"
                 placeholder="Trigger Name"
                 className="form-fullWidth"
-                name="Trigger Name"
+                name="triggerName"
                 style={{ width: "100%" }}
               />
             </td>
           </tr>
           <tr>
             <th>
-              Trigger Type <span className="requried">*</span>
+              Function <span className="requried">*</span>
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <RadioGroup
-                  aria-labelledby="demo-controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
-                  value={value}
-                  onChange={onChange}
-                >
-                  <FormControlLabel
-                    value="HTTP Trigger"
-                    control={<Radio />}
-                    label="HTTP Trigger"
-                  />
-                  <FormControlLabel
-                    value="MQ Trigger"
-                    control={<Radio />}
-                    label="MQ Trigger"
-                  />
-                </RadioGroup>
+                <select name="Posttype">
+                  <option value={""}>Select Post type</option>
+                  {triggerType.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
               </FormControl>
             </td>
           </tr>
-          {value === "HTTP Trigger" ? (
-            <tr>
-              <th>
-                Call URL <span className="requried">*</span>
-              </th>
-              <td>
-                <CTextField
-                  type="text"
-                  placeholder="Call URL"
-                  className="form-fullWidth"
-                  name="Call URL"
-                  style={{ width: "100%" }}
-                />
-              </td>
-            </tr>
-          ) : null}
-          {value === "MQ Trigger" ? (
+          {value === "HTTP" ? (
             <>
+              <tr>
+                <th>
+                  Method <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Method"
+                    className="form-fullWidth"
+                    name="method"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Url <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Url"
+                    className="form-fullWidth"
+                    name="url"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+            </>
+          ) : null}
+          {value === "KafkaQueue" ? (
+            <>
+              <tr>
+                <th>
+                  KafkaQueue Type <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="KafkaQueue Type"
+                    className="form-fullWidth"
+                    name="kafkaQueueType"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  KafkaQueue Kind <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="KafkaQueue Kind"
+                    className="form-fullWidth"
+                    name="kafkaQueueKind"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
               <tr>
                 <th>
                   Topic <span className="requried">*</span>
@@ -127,7 +175,7 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Topic"
                     className="form-fullWidth"
-                    name="Topic"
+                    name="topic"
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -162,14 +210,70 @@ const CreateTrigger = observer((props) => {
               </tr>
               <tr>
                 <th>
-                  Server URL <span className="requried">*</span>
+                  Max Retries <span className="requried">*</span>
                 </th>
                 <td>
                   <CTextField
                     type="text"
-                    placeholder="Server URL"
+                    placeholder="Max Retries"
                     className="form-fullWidth"
-                    name="Server URL"
+                    name="maxRetries"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Cooldown Period <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Cooldown Period"
+                    className="form-fullWidth"
+                    name="kafkaQueueType"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Polling Interval <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Pooling Interval"
+                    className="form-fullWidth"
+                    name="poolingInterval"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Metadata <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Metadata"
+                    className="form-fullWidth"
+                    name="metadata"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Secret <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    placeholder="Secret"
+                    className="form-fullWidth"
+                    name="secret"
                     style={{ width: "100%" }}
                   />
                 </td>
