@@ -79,7 +79,6 @@ const Detail = observer((props) => {
         deployment_count,
         job_count,
         pod_count,
-        // gpu,
         service_count,
         volume_count,
         Statefulset_count,
@@ -89,7 +88,9 @@ const Detail = observer((props) => {
     dataUsage,
     gpu,
     loadCluster,
+    gpuInfo,
   } = clusterStore;
+
   const nodesChk = nodes === null ? 0 : nodes;
 
   const [open, setOpen] = useState(false);
@@ -118,6 +119,60 @@ const Detail = observer((props) => {
 
   const reloadData = () => {
     setReRun(true);
+  };
+
+  const nodeTemp = nodes ? nodes?.map((data) => data.name).join(", ") : "-";
+  const containerRuntimeVersionTemp = nodes
+    ? nodes?.map((data) => data.containerRuntimeVersion).join(", ")
+    : "-";
+
+  const FormatNewLines = (nodeTemp) => {
+    // 쉼표를 기준으로 분리하고 trim() 메서드로 양쪽 공백 제거
+    const dataArray = nodeTemp.split(",").map((item) => item.trim());
+
+    // 각 항목을 새 줄로 이어붙이기
+    // html 부분에도 style={{ whiteSpace: "pre-line" }} 추가해야함
+    const nodeResult = dataArray.join("\n");
+
+    return nodeResult;
+  };
+
+  const allocatableData = () => {
+    let allocatableResult = 0;
+    const allocatableArray = gpuInfo?.map((data) => data.allocatable);
+
+    if (allocatableArray) {
+      for (let i = 0; i < allocatableArray.length; i++) {
+        const allocatableValue = allocatableArray[i]?.["nvidia.com/gpu"];
+
+        allocatableResult += allocatableValue;
+      }
+
+      return allocatableResult;
+    } else {
+      return 0;
+    }
+  };
+
+  const limitsData = () => {
+    let limitsResult = 0;
+
+    const limitsArray = gpuInfo?.map((data) => data.limits);
+
+    if (limitsArray) {
+      for (let i = 0; i < limitsArray.length; i++) {
+        const limitsValue =
+          limitsArray[i]?.["nvidia.com/gpu"] !== undefined
+            ? limitsArray[i]?.["nvidia.com/gpu"]
+            : 0;
+
+        limitsResult += limitsValue;
+      }
+
+      return limitsResult;
+    } else {
+      return 0;
+    }
   };
 
   const nodeList = () => {
@@ -160,35 +215,36 @@ const Detail = observer((props) => {
       </tr>
     ));
   };
-  const test = (gpu) => {
-    return gpu?.nodes
-      ? gpu.nodes.map((x) => {
-          if (x.type === "master") {
-            return (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody className="tb_data_detail">
-                    <tr>
-                      <th>clusterName</th>
-                      <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
-                      <th>node</th>
-                      <td>{x.name ? x.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>gpu</th>
-                      <td>{gpu.gpu ? gpu.gpu : "-"}</td>
-                      <th>container</th>
-                      <td>{x.containerRuntimeVersion}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            );
-          }
-        })
-      : null;
-  };
+
+  // const test = (gpu) => {
+  //   return gpu?.nodes
+  //     ? gpu.nodes.map((x) => {
+  //         if (x.type === "master") {
+  //           return (
+  //             <>
+  //               <table className="tb_data" style={{ tableLayout: "fixed" }}>
+  //                 <tbody className="tb_data_detail">
+  //                   <tr>
+  //                     <th>clusterName</th>
+  //                     <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
+  //                     <th>node</th>
+  //                     <td>{x.name ? x.name : "-"}</td>
+  //                   </tr>
+  //                   <tr>
+  //                     <th>gpu (used / total)</th>
+  //                     <td></td>
+  //                     <th>container</th>
+  //                     <td>{x.containerRuntimeVersion}</td>
+  //                   </tr>
+  //                 </tbody>
+  //               </table>
+  //               <br />
+  //             </>
+  //           );
+  //         }
+  //       })
+  //     : null;
+  // };
 
   useEffect(() => {
     if (nodesChk.length >= 1) {
@@ -209,92 +265,67 @@ const Detail = observer((props) => {
       </CTabs>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data">
-            {/* <tbody className="tb_data_detail">
-              <tr>
-                <th>Cluster Name</th>
-                <td>{clusterName}</td>
-                <th>IP</th>
-                <td>{ipAddr}</td>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <td>{clusterType}</td>
-                <th>Creator</th>
-                <td>{clusterCreator}</td>
-              </tr>
-              <tr>
-                <th>Created</th>
-                <td>{dateFormatter(created_at)}</td>
-              </tr>
-            </tbody> */}
-          </table>
-          <br />
-
-          {/* <TableTitle>GPU List</TableTitle> */}
-          {gpu ? (
-            <>
-              {test(gpu)}
-              {/* <table className="tb_data" style={{ tableLayout: "fixed" }}>
+          <>
+            <div>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_detail">
                   <tr>
                     <th>clusterName</th>
-                    <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
-                    <th>created_at</th>
-                    <td>{gpu.created_at ? gpu.created_at : "-"}</td>
+                    <td>{clusterName ? clusterName : "-"}</td>
+                    <th>node</th>
+                    <td style={{ whiteSpace: "pre-line" }}>
+                      {FormatNewLines(nodeTemp)}
+                    </td>
                   </tr>
                   <tr>
-                    <th>gpu</th>
-                    <td>{gpu.gpu ? gpu.gpu : "-"}</td>
-                    <th>container</th>
+                    <th>gpu (used / total)</th>
                     <td>
-                      {gpu?.nodes
-                        ? gpu.nodes.map((x) => x.type === "master" ? x.containerRuntimeVersion : "")
-                        : "-"}</td>
-                  </tr>
-                  <tr>
+                      {limitsData()} / {allocatableData()}
+                    </td>
+                    <th>container</th>
+                    <td style={{ whiteSpace: "pre-line" }}>
+                      {FormatNewLines(containerRuntimeVersionTemp)}
+                    </td>
                   </tr>
                 </tbody>
-              </table> */}
-              <TableTitle>Resource Usage</TableTitle>
-              <tbody>
-                <tr className="tb_workload_detail_th">
-                  <td colSpan={4}>
-                    {dataUsage ? (
-                      <>
-                        <table className="tb_data">
-                          <tbody>
-                            <tr>
-                              <th style={{ width: "307px" }}>CPU</th>
-                              <td style={{ width: "307px" }}>
-                                {dataUsage?.cpuUsage
-                                  ? dataUsage?.cpuUsage.value
-                                  : "-"}
-                              </td>
-                              <th style={{ width: "307px" }}>MEMORY</th>
-                              <td style={{ width: "307px" }}>
-                                {dataUsage?.memoryUsage
-                                  ? dataUsage?.memoryUsage.value
-                                  : "-"}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    ) : (
-                      <LabelContainer>
-                        <p>No Resource Usage Information</p>
-                      </LabelContainer>
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </>
-          ) : (
-            <LabelContainer>
-              <p>No GPU Info</p>
-            </LabelContainer>
-          )}
+              </table>
+            </div>
+            <br />
+            <TableTitle>Resource Usage</TableTitle>
+            <div style={{ padding: "3px" }}></div>
+            <tbody>
+              <tr className="tb_workload_detail_th">
+                <td colSpan={4}>
+                  {dataUsage ? (
+                    <>
+                      <table className="tb_data">
+                        <tbody>
+                          <tr>
+                            <th style={{ width: "307px" }}>CPU</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.cpuUsage
+                                ? dataUsage?.cpuUsage.value
+                                : "-"}
+                            </td>
+                            <th style={{ width: "307px" }}>MEMORY</th>
+                            <td style={{ width: "307px" }}>
+                              {dataUsage?.memoryUsage
+                                ? dataUsage?.memoryUsage.value
+                                : "-"}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </>
+                  ) : (
+                    <LabelContainer>
+                      <p>No Resource Usage Information</p>
+                    </LabelContainer>
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </>
         </div>
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={1}>
