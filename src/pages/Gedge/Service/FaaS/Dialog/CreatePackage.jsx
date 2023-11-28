@@ -5,6 +5,8 @@ import { CDialogNew } from "@/components/dialogs";
 
 import { swalError } from "../../../../../utils/swal-utils";
 import styled from "styled-components";
+import { useState } from "react";
+import { CFileField } from "../../../../../components/textfields/CFilefield";
 
 const Button = styled.button`
   background-color: #fff;
@@ -27,6 +29,9 @@ const ButtonNext = styled.button`
 
 const CreatePackage = observer((props) => {
   const { open } = props;
+  const postType = ["source", "deploy", "code"];
+  const [value, setValue] = useState("");
+  const [selectFile, setSelectFile] = useState("");
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -37,6 +42,21 @@ const CreatePackage = observer((props) => {
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
+
+  const onSelectFile = (e) => {
+    e.preventDefault();
+    e.persist();
+    const selectedFile = e.target.files;
+    const fileList = [...selectedFile];
+
+    console.log("selectFile: ", selectedFile[0].name);
+    setSelectFile(selectedFile[0].name);
+  };
+
+  const onChangePackage = (event) => {
+    setValue(event.target.value);
+  };
+
   return (
     <CDialogNew
       id="myDialog"
@@ -51,60 +71,197 @@ const CreatePackage = observer((props) => {
         <tbody>
           <tr>
             <th>
-              Name <span className="requried">*</span>
+              Post type <span className="requried">*</span>
             </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Package Name"
-                className="form-fullWidth"
-                name="Package Name"
-                style={{ width: "100%" }}
-              />
+            <td colSpan={3}>
+              <FormControl className="form_fullWidth">
+                <select name="Posttype" onChange={onChangePackage}>
+                  <option value={""}>Select Post type</option>
+                  {postType.map((item) => (
+                    <option value={item}>{item}</option>
+                  ))}
+                </select>
+              </FormControl>
             </td>
           </tr>
-          <tr>
-            <th>
-              Env Name <span className="requried">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Env Name"
-                className="form-fullWidth"
-                name="Env Name"
-                style={{ width: "100%" }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Source dir <span className="requried">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Source dir"
-                className="form-fullWidth"
-                name="Source dir"
-                style={{ width: "100%" }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Build cmd <span className="requried">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="text"
-                placeholder="Build cmd"
-                className="form-fullWidth"
-                name="Build cmd"
-                style={{ width: "100%" }}
-              />
-            </td>
-          </tr>
+          {value === "source" ? (
+            <>
+              <tr>
+                <th>
+                  File List <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    className="form-fullWidth"
+                    name="selectFile"
+                    value={selectFile}
+                    readOnly
+                    style={{ width: "100%" }}
+                  />
+                </td>
+                <th>
+                  File Upload <span className="requried">*</span>
+                </th>
+                <td>
+                  <input type="file" onChange={onSelectFile} />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Package Name <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <div style={{ display: "flex" }}>
+                    <CTextField
+                      type="text"
+                      placeholder="Package Name"
+                      className="form-fullWidth"
+                      name="packageName"
+                      style={{ width: "100%", marginRight: "10px" }}
+                    />
+                    <button style={{ width: "200px" }}>Unique Check</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Environment <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <FormControl className="form_fullWidth">
+                    <select name="Posttype">
+                      <option value={""}>Select Environment</option>
+                      {postType.map((item) => (
+                        <option value={item}>{item}</option>
+                      ))}
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Build <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <CTextField
+                    type="text"
+                    placeholder="Build"
+                    className="form-fullWidth"
+                    name="build"
+                    style={{ width: "100%", marginRight: "10px" }}
+                  />
+                </td>
+              </tr>
+            </>
+          ) : null}
+          {value === "deploy" ? (
+            <>
+              <tr>
+                <th>
+                  File List <span className="requried">*</span>
+                </th>
+                <td>
+                  <CTextField
+                    type="text"
+                    className="form-fullWidth"
+                    name="selectFile"
+                    value={selectFile}
+                    readOnly
+                    style={{ width: "100%" }}
+                  />
+                </td>
+                <th>
+                  File Upload <span className="requried">*</span>
+                </th>
+                <td>
+                  <input type="file" onChange={onSelectFile} />
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Package Name <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <div style={{ display: "flex" }}>
+                    <CTextField
+                      type="text"
+                      placeholder="Package Name"
+                      className="form-fullWidth"
+                      name="packageName"
+                      style={{ width: "100%", marginRight: "10px" }}
+                    />
+                    <button style={{ width: "200px" }}>Unique Check</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Environment <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <FormControl className="form_fullWidth">
+                    <select name="Posttype">
+                      <option value={""}>Select Environment</option>
+                      {postType.map((item) => (
+                        <option value={item}>{item}</option>
+                      ))}
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+            </>
+          ) : null}
+          {value === "code" ? (
+            <>
+              <tr>
+                <th>
+                  Package Name <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <div style={{ display: "flex" }}>
+                    <CTextField
+                      type="text"
+                      placeholder="Package Name"
+                      className="form-fullWidth"
+                      name="packageName"
+                      style={{ width: "100%", marginRight: "10px" }}
+                    />
+                    <button style={{ width: "200px" }}>Unique Check</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Environment <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <FormControl className="form_fullWidth">
+                    <select name="Posttype">
+                      <option value={""}>Select Environment</option>
+                      {postType.map((item) => (
+                        <option value={item}>{item}</option>
+                      ))}
+                    </select>
+                  </FormControl>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  Code <span className="requried">*</span>
+                </th>
+                <td colSpan={3}>
+                  <CTextField
+                    type="text"
+                    placeholder="Code"
+                    className="form-fullWidth"
+                    name="code"
+                    style={{ width: "100%" }}
+                  />
+                </td>
+              </tr>
+            </>
+          ) : null}
         </tbody>
       </table>
       <div
