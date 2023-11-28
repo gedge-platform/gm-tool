@@ -39,6 +39,7 @@ const EdgeClusterListTab = observer(() => {
     goPrevPage,
     goNextPage,
     loadClusterDetail,
+    loadGpuAPI,
   } = clusterStore;
 
   const [columDefs] = useState([
@@ -89,6 +90,7 @@ const EdgeClusterListTab = observer(() => {
     loadCluster(e.data.clusterName);
     loadClusterDetail(e.data.clusterName);
     setClusterName(e.data.clusterName);
+    loadGpuAPI(e.data.clusterName);
   };
 
   const handleCreateOpen = () => {
