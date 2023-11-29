@@ -18,16 +18,6 @@ const EnvironmentListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "ID",
-      field: "uid",
-      filter: true,
-    },
-    {
-      headerName: "크기",
-      field: "poolsize",
-      filter: true,
-    },
-    {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
@@ -36,24 +26,26 @@ const EnvironmentListTab = observer(() => {
       },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "이미지",
+      field: "image",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
+    },
+    {
+      headerName: "풀 사이즈  ",
+      field: "poolsize",
+      filter: true,
+    },
+    {
+      headerName: "생성일",
+      field: "create_at",
+      // filter: "agDateColumnFilter",
+      // filterParams: agDateColumnFilter(),
+      // minWidth: 150,
+      // maxWidth: 200,
+      // cellRenderer: function (data) {
+      //   return `<span>${dateFormatter(data.value)}</span>`;
       // },
     },
-    // {
-    //   headerName: "생성일",
-    //   field: "createAt",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
-    //   },
-    // },
   ]);
 
   const handleOpen = () => {

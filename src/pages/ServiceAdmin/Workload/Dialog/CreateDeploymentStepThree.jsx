@@ -207,7 +207,6 @@ const CreateDeploymentStepThree = observer(() => {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
           if (e.target.value === "from_node") {
-            console.log("from_node");
             setDeployment("priority", {
               name: "GLowLatencyPriority",
               mode: "from_node",

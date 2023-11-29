@@ -23,7 +23,6 @@ class Cluster {
     clusterEndpoint: "",
     clusterCreator: "",
     created_at: "",
-    gpu: [],
     resource: {
       deployment_count: 0,
       pod_count: 0,
@@ -118,7 +117,6 @@ class Cluster {
         clusterEndpoint: "",
         clusterCreator: "",
         created_at: "",
-        gpu: [],
         resource: {
           deployment_count: 0,
           pod_count: 0,
@@ -301,32 +299,62 @@ class Cluster {
     });
   };
 
+  // loadClusterList = async (type) => {
+  //   await axios
+  //     .get(`${SERVER_URL}/clusters`)
+  //     .then(({ data: { data } }) => {
+  //       runInAction(() => {
+  //         this.clusterListInWorkspace = data;
+  //         const list =
+  //           type === ""
+  //             ? data
+  //             : data.filter((item) => item.clusterType === type);
+  //         this.clusterList = list;
+  //         // this.clusterList = list.filter(
+  //         //   (name) => name.clusterName !== "gm-cluster"
+  //         // );
+  //         this.clusterNameList = list.map((item) => item.clusterName);
+  //         this.totalElements = this.clusterList.length;
+  //         this.totalPages = Math.ceil(this.clusterList.length / 10);
+  //       });
+  //     })
+  //     .then(() => {
+  //       this.paginationList();
+  //     })
+  //     .then(() => {
+  //       this.loadCluster(this.viewList[0]?.clusterName);
+  //       this.loadGpuAPI(this.viewList[0]?.clusterName);
+  //       this.loadClusterDetail(this.viewList[0]?.clusterName);
+  //     });
+  // };
+
   loadClusterList = async (type) => {
-    await axios
-      .get(`${SERVER_URL}/clusters`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.clusterListInWorkspace = data;
-          const list =
-            type === ""
-              ? data
-              : data.filter((item) => item.clusterType === type);
-          this.clusterList = list;
-          // this.clusterList = list.filter(
-          //   (name) => name.clusterName !== "gm-cluster"
-          // );
-          this.clusterNameList = list.map((item) => item.clusterName);
-          this.totalElements = this.clusterList.length;
-          this.totalPages = Math.ceil(this.clusterList.length / 10);
-        });
-      })
-      .then(() => {
-        this.paginationList();
-      })
-      .then(() => {
-        this.loadCluster(this.viewList[0]?.clusterName);
-        this.loadClusterDetail(this.viewList[0]?.clusterName);
+    try {
+      const {
+        data: { data },
+      } = await axios.get(`${SERVER_URL}/clusters`);
+
+      runInAction(() => {
+        this.clusterListInWorkspace = data;
+        const list =
+          type === "" ? data : data.filter((item) => item.clusterType === type);
+        this.clusterList = list;
+        this.clusterNameList = list.map((item) => item.clusterName);
+        this.totalElements = this.clusterList.length;
+        this.totalPages = Math.ceil(this.clusterList.length / 10);
       });
+
+      await this.paginationList();
+      await this.loadCluster(this.viewList[0]?.clusterName);
+
+      // 비동기로 데이터를 가져오는 loadGpuAPI 함수 호출
+      await this.loadGpuAPI(this.viewList[0]?.clusterName);
+
+      // loadGpuAPI 함수 호출 후에 loadClusterDetail 함수 호출
+      await this.loadClusterDetail(this.viewList[0]?.clusterName);
+    } catch (error) {
+      console.error("Error loading cluster list:", error);
+    }
   };
 
   loadVMList = async () => {
@@ -412,17 +440,35 @@ class Cluster {
 
   /* TODO: 옳바르지 않은 클러스터 IP 예외처리 */
   loadCluster = async (clusterName) => {
-    await axios
-      .get(`${SERVER_URL}/clusters/${clusterName}`)
-      .then(({ data: { data } }) => {
-        runInAction(() => {
-          this.clusterDetail = data;
-          this.gpu = data;
-          this.nodes =
-            this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
-        });
+    try {
+      const response = await axios.get(`${SERVER_URL}/clusters/${clusterName}`);
+      const { data } = response.data;
+
+      runInAction(() => {
+        this.clusterDetail = data;
+        this.nodes =
+          this.clusterDetail && this.clusterDetail.nodes !== null
+            ? this.clusterDetail.nodes
+            : 0;
       });
-    return this.clusterDetail;
+
+      return this.clusterDetail;
+    } catch (error) {
+      console.error("Error loading cluster:", error);
+      // 에러가 발생한 경우에 대한 추가적인 처리를 수행하거나 에러를 다시 throw할 수 있습니다.
+      throw error;
+    }
+    // await axios
+    //   .get(`${SERVER_URL}/clusters/${clusterName}`)
+    //   .then(({ data: { data } }) => {
+    //     runInAction(() => {
+    //       this.clusterDetail = data;
+    //       this.gpu = data;
+    //       this.nodes =
+    //         this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
+    //     });
+    //   });
+    // return this.clusterDetail;
   };
 
   loadClusterDetail = async (clusterName) => {
@@ -480,6 +526,24 @@ class Cluster {
     runInAction(() => {
       this.ProviderName = n;
     });
+  };
+
+  gpuInfo = [];
+
+  loadGpuAPI = async (clusterName) => {
+    console.log("clusterName", clusterName);
+    try {
+      const response = await axios.get(
+        `${SERVER_URL}/gpu?cluster=${clusterName}`
+      );
+      const { data } = response.data;
+
+      runInAction(() => {
+        this.gpuInfo = data;
+      });
+    } catch (err) {
+      console.log("gpuInfo err", err);
+    }
   };
 
   postCluster = async (data, callback) => {
