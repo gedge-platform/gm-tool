@@ -16,16 +16,18 @@ const CloudVMListTab = observer(() => {
   const [vmName, setVMName] = useState("");
   const [config, setConfig] = useState("");
 
-  const { 
-    deleteVM, 
-    loadVMList, 
-    currentPage, 
-    totalPages, 
-    viewList, 
+  const {
+    clusterList,
+    deleteVM,
+    loadVMList,
+    currentPage,
+    totalPages,
+    viewList,
     initViewList,
-    goPrevPage, 
-    goNextPage, 
-    totalElements 
+    initClusterList,
+    goPrevPage,
+    goNextPage,
+    totalElements,
   } = clusterStore;
 
   const [columDefs] = useState([
@@ -94,7 +96,7 @@ const CloudVMListTab = observer(() => {
     },
   ]);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     setVMName(e.data.IId.NameId);
 
     var configStr = e.data.KeyPairIId.NameId;
@@ -115,7 +117,11 @@ const CloudVMListTab = observer(() => {
       swalError("VM을 선택해주세요!");
     } else {
       swalUpdate(vmName + "를 삭제하시겠습니까?", () => {
-        swalLoading("VM 삭제중..", 3000000, "이 창은 VM 삭제가 완료되면 사라집니다.");
+        swalLoading(
+          "VM 삭제중..",
+          3000000,
+          "이 창은 VM 삭제가 완료되면 사라집니다."
+        );
         deleteVM(vmName, config, reloadData);
       });
     }
@@ -127,10 +133,11 @@ const CloudVMListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    initViewList();
+    initClusterList();
     loadVMList();
     return () => {
       setReRun(false);
-      initViewList();
     };
   }, [reRun]);
 
@@ -148,7 +155,7 @@ const CloudVMListTab = observer(() => {
             {/* <CTabPanel value={tabvalue} index={0}> */}
             <div className="grid-height2">
               <AgGrid
-                rowData={viewList}
+                rowData={clusterList}
                 columnDefs={columDefs}
                 isBottom={false}
                 onCellClicked={handleClick}

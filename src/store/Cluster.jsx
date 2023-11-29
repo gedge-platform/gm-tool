@@ -180,6 +180,13 @@ class Cluster {
     });
   };
 
+  initClusterList = () => {
+    runInAction(() => {
+      this.clusterList = null;
+      this.currentPage = 1;
+    });
+  };
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
