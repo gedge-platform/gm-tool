@@ -6,10 +6,18 @@ import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreatePackage from "../Dialog/CreatePackage";
+import faasStore from "../../../../../store/Faas";
 
 const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const { loadPackageList, packageList } = faasStore;
+
+  useEffect(() => {
+    loadPackageList();
+    console.log("packageList: ", packageList);
+  }, []);
 
   const [columDefs] = useState([
     {
@@ -81,7 +89,7 @@ const PackageListTab = observer(() => {
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
-              rowData={[]}
+              rowData={packageList}
               columnDefs={columDefs}
               totalElements={0}
               isBottom={false}
