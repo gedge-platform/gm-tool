@@ -12,7 +12,15 @@ import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 const FunctionListTab = observer(() => {
   // const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
-  const { loadFuncionsListAPI, functionsList } = FaasStore;
+  const {
+    loadFuncionsListAPI,
+    functionsList,
+    totalElements,
+    totalPages,
+    currentPage,
+    goNextPage,
+    goPrevPage,
+  } = FaasStore;
 
   const [columDefs] = useState([
     {
@@ -84,12 +92,12 @@ const FunctionListTab = observer(() => {
             <AgGrid
               rowData={functionsList}
               columnDefs={columDefs}
-              totalElements={0}
+              totalElements={totalElements}
               isBottom={false}
-              totalPages={1}
-              currentPage={1}
-              goNextPage={2}
-              goPrevPage={0}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
         </div>
