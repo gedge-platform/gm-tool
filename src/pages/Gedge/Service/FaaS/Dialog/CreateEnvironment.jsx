@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
 import { FormControl } from "@material-ui/core";
+import FaasStore from "../../../../../store/Faas";
 
 const Button = styled.button`
   background-color: #fff;
@@ -26,13 +27,27 @@ const ButtonNext = styled.button`
 
 const CreateEnvironment = observer((props) => {
   const { open } = props;
+  const { envName, setEnvName, envImage, setEnvImage, PostEnvAPI } = FaasStore;
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "envName") {
+      setEnvName(value);
+    }
+
+    if (name === "envImage") {
+      setEnvImage(value);
+    }
+  };
 
   const handleClose = () => {
     props.onClose && props.onClose();
   };
 
   const postEnvironment = () => {
-    swalError("Environment가 생성되었습니다.");
+    PostEnvAPI(envName, envImage);
+
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
@@ -86,9 +101,9 @@ const CreateEnvironment = observer((props) => {
                 type="text"
                 placeholder="Environment Name"
                 className="form-fullWidth"
-                name="environmentName"
-                // onChange={onChange}
-                value={"environmentName"}
+                name="envName"
+                value={envName}
+                onChange={onChange}
                 style={{ width: "100%" }}
               />
             </td>
@@ -117,11 +132,7 @@ const CreateEnvironment = observer((props) => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select
-                  name="image"
-                  value={"image"}
-                  // onChange={handlePriority}
-                >
+                <select name="envImage" value={envImage} onChange={onChange}>
                   <option value={"fission/node-env"}>fission/node-env</option>
                   <option value={"fission/node-env-16"}>
                     fission/node-env-16
