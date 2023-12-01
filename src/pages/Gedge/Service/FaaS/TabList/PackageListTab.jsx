@@ -28,8 +28,8 @@ const PackageListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
+      headerName: "네임스페이스",
+      field: "namespace",
       filter: true,
       cellRenderer: function (data) {
         return `<span>${data.value ? data.value : "-"}</span>`;
