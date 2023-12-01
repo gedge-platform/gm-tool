@@ -6,54 +6,52 @@ import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateEnvironment from "../Dialog/CreateEnvironment";
+import FaasStore from "../../../../../store/Faas";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 
 const EnvironmentListTab = observer(() => {
-  const [reRun, setReRun] = useState(false);
+  // const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
+  const { loadEnvListAPI, envList } = FaasStore;
 
   const [columDefs] = useState([
     {
       headerName: "이름",
-      field: "name",
+      field: "env_name",
       filter: true,
     },
     {
-      headerName: "ID",
-      field: "uid",
+      headerName: "네임스페이스",
+      field: "namespace",
       filter: true,
-    },
-    {
-      headerName: "크기",
-      field: "poolsize",
-      filter: true,
-    },
-    {
-      headerName: "워크스페이스",
-      field: "workspace",
-      filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${fission_meta.namespace}</span>`;
       },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "이미지",
+      field: "image",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
     },
-    // {
-    //   headerName: "생성일",
-    //   field: "createAt",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
-    //   },
-    // },
+    {
+      headerName: "풀 사이즈  ",
+      field: "poolsize",
+      filter: true,
+      cellRenderer: function ({ data: { fission_spec } }) {
+        return `<span>${fission_spec.poolsize}</span>`;
+      },
+    },
+    {
+      headerName: "생성일",
+      field: "create_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${dateFormatter(fission_meta.creationTimestamp)}</span>`;
+      },
+    },
   ]);
 
   const handleOpen = () => {
@@ -68,7 +66,10 @@ const EnvironmentListTab = observer(() => {
     setReRun(true);
   };
 
-  useEffect(() => {}, [reRun]);
+  // useEffect(() => {}, [reRun]);
+  useEffect(() => {
+    loadEnvListAPI();
+  }, []);
 
   return (
     <CReflexBox>
@@ -81,7 +82,7 @@ const EnvironmentListTab = observer(() => {
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
-              rowData={[]}
+              rowData={envList}
               columnDefs={columDefs}
               totalElements={0}
               isBottom={false}

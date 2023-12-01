@@ -30,6 +30,7 @@ const CloudClusterListTab = observer(() => {
     totalPages,
     viewList,
     initViewList,
+    initClusterList,
     goPrevPage,
     goNextPage,
     loadClusterDetail,
@@ -108,10 +109,11 @@ const CloudClusterListTab = observer(() => {
   };
 
   useLayoutEffect(() => {
+    initViewList();
+    initClusterList();
     loadClusterList("cloud");
     return () => {
       setReRun(false);
-      initViewList();
     };
   }, [reRun]);
 
@@ -119,7 +121,7 @@ const CloudClusterListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar>
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleCreateOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>

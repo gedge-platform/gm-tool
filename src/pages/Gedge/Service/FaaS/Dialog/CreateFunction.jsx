@@ -38,6 +38,38 @@ const CreateFunction = observer((props) => {
     props.onClose && props.onClose();
   };
 
+  // const onChange = ({ target }) => {
+  //   const { value, name } = target;
+  //   setInputs({
+  //     ...inputs,
+  //     [name]: value,
+  //   });
+  // };
+
+  // const checkName = async () => {
+  //   if (id === "") {
+  //     swalError("아이디를 입력해주세요!");
+  //     return;
+  //   }
+  //   await axios
+  //     .get(`${SERVER_URL}/check/${id}`)
+  //     .then(({ data: { status } }) => {
+  //       if (status === "true") {
+  //         setIsID(true);
+  //         swalError("사용가능한 이름입니다.");
+  //       } else {
+  //         setIsID(false);
+  //         swalError("사용중인 이름입니다.");
+  //         return;
+  //       }
+  //     })
+  //     .catch(e => console.log(e));
+  // };
+
+  const onChangeFile = () => {
+    console.log("file");
+  };
+
   return (
     <CDialogNew
       id="myDialog"
@@ -59,78 +91,58 @@ const CreateFunction = observer((props) => {
                 type="text"
                 placeholder="Function Name"
                 className="form-fullWidth"
-                name="Function Name"
+                name="functionName"
+                // onChange={onChange}
+                value={"functionName"}
                 style={{ width: "100%" }}
               />
+            </td>
+            <td style={{ display: "flex" }}>
+              <button
+                type="button"
+                style={{
+                  width: "60%",
+                  height: "30px",
+                  backgroundColor: "#0a2348",
+                  color: "white",
+                  fontWeight: "bold",
+                  borderRadius: "4px",
+                  fontSize: "13px",
+                  border: "none",
+                }}
+                // onClick={checkName}
+              >
+                중복확인
+              </button>
             </td>
           </tr>
           <tr>
             <th>
-              Min Scale <span className="requried">*</span>
+              Environment <span className="requried">*</span>
             </th>
             <td>
-              <CTextField
-                type="number"
-                placeholder="Function Min Size"
-                className="form-fullWidth"
-                name="Function Min Size"
-                style={{ width: "100%" }}
-              />
+              <FormControl className="form_fullWidth">
+                <select
+                  name="environment"
+                  value={"environment"}
+                  // onChange={handlePriority}
+                >
+                  <option value={"fission/node-env"}>pack-env</option>
+                </select>
+              </FormControl>
             </td>
+            <td></td>
           </tr>
           <tr>
             <th>
-              Max Scale <span className="requried">*</span>
-            </th>
-            <td>
-              <CTextField
-                type="number"
-                placeholder="Function Max Size"
-                className="form-fullWidth"
-                name="Function MAx Size"
-                style={{ width: "100%" }}
-              />
-            </td>
-          </tr>
-          <tr>
-            <th>
-              Env Name <span className="requried">*</span>
+              Content <span className="requried">*</span>
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select name="EnvName">
-                  <option value={""}>Select Env Name</option>
-                  {envName.map((item) => (
-                    <option value={item}>{item}</option>
-                  ))}
-                </select>
+                <input type="file" name="file" onChange={onChangeFile} />
               </FormControl>
             </td>
-          </tr>
-          <tr>
-            <th rowSpan={2}>Package</th>
-            <td>
-              <FormControl className="form_fullWidth">
-                <select name="PackageName">
-                  <option value={""}>Select Package Name</option>
-                  {envName.map((item) => (
-                    <option value={item}>{item}</option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <FormControl className="form_fullWidth">
-                <select name="Entrypoint">
-                  <option value={""}>Select Entrypoint</option>
-                  {envName.map((item) => (
-                    <option value={item}>{item}</option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
