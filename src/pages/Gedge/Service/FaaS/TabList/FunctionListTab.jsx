@@ -6,28 +6,31 @@ import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateFunction from "../Dialog/CreateFunction";
+import FaasStore from "../../../../../store/Faas";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 
 const FunctionListTab = observer(() => {
-  const [reRun, setReRun] = useState(false);
+  // const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
+  const { loadFuncionsListAPI, functionsList } = FaasStore;
 
   const [columDefs] = useState([
     {
       headerName: "이름",
-      field: "name",
+      field: "func_name",
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
+      headerName: "네임스페이스",
+      field: "namespace",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${fission_meta.namespace}</span>`;
       },
     },
     {
       headerName: "Env",
-      field: "env",
+      field: "env_name",
       filter: true,
     },
 
@@ -35,20 +38,20 @@ const FunctionListTab = observer(() => {
       headerName: "Concurrency",
       field: "concurrency",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
+      cellRenderer: function ({ data: { fission_spec } }) {
+        return `<span>${fission_spec.concurrency}</span>`;
+      },
     },
     {
       headerName: "생성일",
-      field: "createAt",
-      // filter: "agDateColumnFilter",
-      // filterParams: agDateColumnFilter(),
-      // minWidth: 150,
-      // maxWidth: 200,
-      // cellRenderer: function (data) {
-      //   return `<span>${dateFormatter(data.value)}</span>`;
-      // },
+      field: "create_at",
+      filter: "agDateColumnFilter",
+      filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      cellRenderer: function ({ data: { fission_meta } }) {
+        return `<span>${dateFormatter(fission_meta.creationTimestamp)}</span>`;
+      },
     },
   ]);
 
@@ -63,7 +66,10 @@ const FunctionListTab = observer(() => {
     setReRun(true);
   };
 
-  useEffect(() => {}, [reRun]);
+  // useEffect(() => {}, [reRun]);
+  useEffect(() => {
+    loadFuncionsListAPI();
+  }, []);
 
   return (
     <CReflexBox>
@@ -76,7 +82,7 @@ const FunctionListTab = observer(() => {
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
-              rowData={[]}
+              rowData={functionsList}
               columnDefs={columDefs}
               totalElements={0}
               isBottom={false}

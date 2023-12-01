@@ -142,6 +142,7 @@ const CreateFunction = observer((props) => {
                 <input type="file" name="file" onChange={onChangeFile} />
               </FormControl>
             </td>
+            <td></td>
           </tr>
         </tbody>
       </table>

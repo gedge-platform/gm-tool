@@ -5,7 +5,7 @@ import CommActionBar from "@/components/common/CommActionBar";
 import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
-import CreateTrigger from "../Dialog/CreateTrigger";
+import CreatePoolSize from "../Dialog/CreatePoolSize";
 
 const PoolSizeListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
@@ -28,8 +28,8 @@ const PoolSizeListTab = observer(() => {
       filter: true,
     },
     {
-      headerName: "워크스페이스",
-      field: "workspace",
+      headerName: "네임스페이스",
+      field: "namespace",
       filter: true,
       cellRenderer: function (data) {
         return `<span>${data.value ? data.value : "-"}</span>`;
@@ -92,7 +92,7 @@ const PoolSizeListTab = observer(() => {
             />
           </div>
         </div>
-        <CreateTrigger
+        <CreatePoolSize
           open={open}
           onClose={handleClose}
           reloadFunc={reloadData}
