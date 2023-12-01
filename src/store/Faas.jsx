@@ -6,6 +6,8 @@ import { getItem } from "../utils/sessionStorageFn";
 class FaasStatus {
   envList = [];
   functionsList = [];
+  packageList = [];
+  triggerList = [];
 
   totalElements = 0;
   currentPage = 1;
@@ -96,6 +98,52 @@ class FaasStatus {
       })
       .catch((error) => {
         this.functionsList = [];
+        this.paginationList();
+      });
+  };
+
+  loadPackageListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/packages`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.packageList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.packageList = [];
+        this.paginationList();
+      });
+  };
+
+  loadTriggerListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/triggers`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.triggerList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.triggerList = [];
         this.paginationList();
       });
   };

@@ -6,62 +6,54 @@ import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreatePackage from "../Dialog/CreatePackage";
-import faasStore from "../../../../../store/Faas";
+import FaasStore from "../../../../../store/Faas";
 
 const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { loadPackageList, packageList } = faasStore;
+  const { loadPackageListAPI, packageList } = FaasStore;
 
   useEffect(() => {
-    loadPackageList();
-    console.log("packageList: ", packageList);
+    loadPackageListAPI();
   }, []);
 
   const [columDefs] = useState([
     {
       headerName: "이름",
-      field: "name",
-      filter: true,
-    },
-    {
-      headerName: "ID",
-      field: "uid",
-      filter: true,
-    },
-    {
-      headerName: "크기",
-      field: "poolsize",
+      field: "fission_meta.name",
       filter: true,
     },
     {
       headerName: "네임스페이스",
-      field: "namespace",
+      field: "fission_meta.namespace",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "Env",
+      field: "env_name",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
-      // },
     },
+
     // {
-    //   headerName: "생성일",
-    //   field: "createAt",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
+    //   headerName: "상태",
+    //   field: "ready",
+    //   filter: true,
+    //   cellRenderer: function ({ value }) {
+    //     return drawStatus(value.toLowerCase());
     //   },
     // },
+    {
+      headerName: "생성일",
+      field: "fission_meta.creationTimestamp",
+      filter: "agDateColumnFilter",
+      // filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      // cellRenderer: function (data) {
+      //   return `<span>${dateFormatter(data.value)}</span>`;
+      // },
+    },
   ]);
 
   const handleOpen = () => {

@@ -6,54 +6,56 @@ import { AgGrid } from "@/components/datagrids";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateTrigger from "../Dialog/CreateTrigger";
+import FaasStore from "../../../../../store/Faas";
 
 const TriggerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
 
+  const { loadTriggerListAPI, triggerList } = FaasStore;
+
+  useEffect(() => {
+    loadTriggerListAPI();
+  }, []);
+  console.log("triggerList: ", triggerList);
+
   const [columDefs] = useState([
     {
       headerName: "이름",
-      field: "name",
-      filter: true,
-    },
-    {
-      headerName: "ID",
-      field: "uid",
-      filter: true,
-    },
-    {
-      headerName: "크기",
-      field: "poolsize",
+      field: "fission_meta.name",
       filter: true,
     },
     {
       headerName: "네임스페이스",
-      field: "namespace",
+      field: "fission_meta.namespace",
       filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
     },
     {
-      headerName: "상태",
-      field: "ready",
+      headerName: "Function",
+      field: "function",
       filter: true,
-      // cellRenderer: function ({ value }) {
-      //   return drawStatus(value.toLowerCase());
+    },
+    {
+      headerName: "Method",
+      field: "method",
+      filter: true,
+    },
+    {
+      headerName: "RelativeUrl",
+      field: "url",
+      filter: true,
+    },
+    {
+      headerName: "생성일",
+      field: "fission_meta.creationTimestamp",
+      filter: "agDateColumnFilter",
+      // filterParams: agDateColumnFilter(),
+      minWidth: 150,
+      maxWidth: 200,
+      // cellRenderer: function (data) {
+      //   return `<span>${dateFormatter(data.value)}</span>`;
       // },
     },
-    // {
-    //   headerName: "생성일",
-    //   field: "createAt",
-    //   filter: "agDateColumnFilter",
-    //   filterParams: agDateColumnFilter(),
-    //   minWidth: 150,
-    //   maxWidth: 200,
-    //   cellRenderer: function (data) {
-    //     return `<span>${dateFormatter(data.value)}</span>`;
-    //   },
-    // },
   ]);
 
   const handleOpen = () => {
@@ -81,7 +83,7 @@ const TriggerListTab = observer(() => {
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
-              rowData={[]}
+              rowData={triggerList}
               columnDefs={columDefs}
               totalElements={0}
               isBottom={false}
