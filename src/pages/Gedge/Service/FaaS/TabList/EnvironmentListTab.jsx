@@ -12,7 +12,15 @@ import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 const EnvironmentListTab = observer(() => {
   // const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
-  const { loadEnvListAPI, envList } = FaasStore;
+  const {
+    loadEnvListAPI,
+    envList,
+    totalElements,
+    totalPages,
+    currentPage,
+    goNextPage,
+    goPrevPage,
+  } = FaasStore;
 
   const [columDefs] = useState([
     {
@@ -84,12 +92,12 @@ const EnvironmentListTab = observer(() => {
             <AgGrid
               rowData={envList}
               columnDefs={columDefs}
-              totalElements={0}
+              totalElements={totalElements}
               isBottom={false}
-              totalPages={1}
-              currentPage={1}
-              goNextPage={2}
-              goPrevPage={0}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
         </div>
