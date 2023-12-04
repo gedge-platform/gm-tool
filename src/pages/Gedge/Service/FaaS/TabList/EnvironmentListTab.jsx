@@ -8,9 +8,10 @@ import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateEnvironment from "../Dialog/CreateEnvironment";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const EnvironmentListTab = observer(() => {
-  // const [reRun, setReRun] = useState(false);
+  const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
   const {
     loadEnvListAPI,
@@ -20,7 +21,10 @@ const EnvironmentListTab = observer(() => {
     currentPage,
     goNextPage,
     goPrevPage,
+    DeleteEnvAPI,
+    initViewList,
   } = FaasStore;
+  const [envListName, setEnvListName] = useState("");
 
   const [columDefs] = useState([
     {
@@ -62,6 +66,10 @@ const EnvironmentListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    setEnvListName(e.value);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -70,14 +78,28 @@ const EnvironmentListTab = observer(() => {
     setOpen(false);
   };
 
+  const handleDelete = () => {
+    if (envListName === "") {
+      swalError("Environment를 선택해주세요!");
+    } else {
+      swalUpdate(envListName + "를 삭제하시겠습니까?", () =>
+        DeleteEnvAPI(envListName, reloadData())
+      );
+    }
+    setEnvListName("");
+  };
+
   const reloadData = () => {
     setReRun(true);
   };
 
-  // useEffect(() => {}, [reRun]);
   useEffect(() => {
     loadEnvListAPI();
-  }, []);
+    return () => {
+      setReRun(false);
+      initViewList();
+    };
+  }, [reRun]);
 
   return (
     <CReflexBox>
@@ -85,11 +107,12 @@ const EnvironmentListTab = observer(() => {
         <CommActionBar reloadFunc={reloadData}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
-          <CDeleteButton>삭제</CDeleteButton>
+          <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
+              onCellClicked={handleClick}
               rowData={envList}
               columnDefs={columDefs}
               totalElements={totalElements}
