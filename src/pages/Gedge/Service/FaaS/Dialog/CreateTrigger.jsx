@@ -38,9 +38,7 @@ const CreateTrigger = observer((props) => {
   const [postType, setPostType] = useState("");
   const [type, setType] = useState("");
   const {
-    loadEnvListAPI,
     loadFuncionsListAPI,
-    envList,
     functionsList,
     createTrigger,
     setTriggerHttpInputs,
@@ -50,14 +48,8 @@ const CreateTrigger = observer((props) => {
   } = FaasStore;
 
   useEffect(() => {
-    // loadEnvListAPI()
     loadFuncionsListAPI();
   }, []);
-
-  // console.log(
-  //   "functionsList: ",
-  //   functionsList.map((e) => e.func_name)
-  // );
 
   const handleClose = () => {
     props.onClose && props.onClose();
