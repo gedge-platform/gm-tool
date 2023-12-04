@@ -7,6 +7,8 @@ import { swalError } from "../utils/swal-utils";
 class FaasStatus {
   envList = [];
   functionsList = [];
+  packageList = [];
+  triggerList = [];
 
   totalElements = 0;
   currentPage = 1;
@@ -49,6 +51,43 @@ class FaasStatus {
     });
   };
 
+  triggerHttpInputs = {
+    trig_name: "",
+    trig_type: "",
+    url: "",
+    method: "",
+    function: "",
+  };
+
+  triggerKatkaQueue = {
+    trig_name: "",
+    trig_type: "",
+    function: "",
+    mqtype: "",
+    mqtkind: "",
+    topic: "",
+    resptopic: "",
+    errortopic: "",
+    maxretries: 0,
+    metadata: [],
+    cooldownperiod: 0,
+    pollinginterval: 0,
+    secret: "",
+  };
+
+  packageSource = {
+    pack_name: "",
+    env_name: "",
+    sourcearchive: "",
+    build: "",
+  };
+
+  packageCode = {
+    pack_name: "",
+    env_name: "",
+    code: "",
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -86,6 +125,30 @@ class FaasStatus {
           this.currentPage * 20
         );
       }
+    });
+  };
+
+  setTriggerHttpInputs = (e) => {
+    runInAction(() => {
+      this.triggerHttpInputs = e;
+    });
+  };
+
+  setTriggerKatkaQueue = (e) => {
+    runInAction(() => {
+      this.triggerKatkaQueue = e;
+    });
+  };
+
+  setPackageSource = (e) => {
+    runInAction(() => {
+      this.packageSource = e;
+    });
+  };
+
+  setPackageCode = (e) => {
+    runInAction(() => {
+      this.packageCode = e;
     });
   };
 
@@ -160,25 +223,25 @@ class FaasStatus {
       });
   };
 
-  PostFuncionsAPI = async (
-    functionName,
-    envNameList,
-    functionFileContent,
-    callback
-  ) => {
+  PostFuncionsAPI = async (callback) => {
     const body = {
-      func_name: functionName,
-      env_name: envNameList,
-      func_content: toJS(functionFileContent),
+      func_name: this.functionName,
+      env_name: this.envNameList,
+      func_content: JSON.stringify(this.functionFileContent),
     };
-    await axios.post(`${FAAS_URL}/functions`, body).then((res) => {
-      console.log(res);
-      if (res.status === 201) {
-        swalError("Environment가 생성되었습니다.");
-      } else {
-        swalError("Environment  생성 실패", callback);
-      }
-    });
+    await axios
+      .post(`${FAAS_URL}/functions`, body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Environment가 생성되었습니다.");
+        } else {
+          swalError("Environment  생성 실패", callback);
+        }
+      });
   };
 
   DeleteFuncionsAPI = async (envName, callback) => {
@@ -188,6 +251,71 @@ class FaasStatus {
       } else {
         swalError("Environment  삭제 실패", callback);
       }
+    });
+  };
+
+  loadPackageListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/packages`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.packageList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.packageList = [];
+        this.paginationList();
+      });
+  };
+
+  loadTriggerListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/triggers`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.triggerList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.triggerList = [];
+        this.paginationList();
+      });
+  };
+
+  createTrigger = async (data, callback) => {
+    const body = { ...data };
+    console.log(body);
+    await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: ", res);
+      });
+    });
+  };
+
+  createPackage = async (data, callback) => {
+    const body = { ...data };
+    await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: res");
+      });
     });
   };
 }

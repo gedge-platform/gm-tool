@@ -97,9 +97,6 @@ const CreateFunction = observer((props) => {
         const content = e.target.result;
         setFunctionFileContent(content);
         console.log(content);
-
-        const jsonData = JSON.parse(content);
-        console.log(jsonData);
       };
 
       reader.readAsText(selectFile);

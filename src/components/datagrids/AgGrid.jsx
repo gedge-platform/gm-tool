@@ -67,7 +67,7 @@ const AgGrid = (props) => {
   };
 
   const onGridSizeChanged = (params) => {
-    const gridWidth = document.getElementById("my-grid").offsetWidth;
+    const gridWidth = document?.getElementById("my-grid")?.offsetWidth;
     const columnsToShow = [];
     const columnsToHide = [];
     let totalColsWidth = 0;
