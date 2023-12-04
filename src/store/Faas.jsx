@@ -28,6 +28,20 @@ class FaasStatus {
     });
   };
 
+  envNameList = "";
+  setEnvNameList = (value) => {
+    runInAction(() => {
+      this.envNameList = value;
+    });
+  };
+
+  functionName = "";
+  setFunctionName = (value) => {
+    runInAction(() => {
+      this.functionName = value;
+    });
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
