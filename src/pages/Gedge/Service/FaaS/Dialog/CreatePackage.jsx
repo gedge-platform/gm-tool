@@ -160,7 +160,7 @@ const CreatePackage = observer((props) => {
                       onChange={onChange}
                       style={{ width: "100%", marginRight: "10px" }}
                     />
-                    <button style={{ width: "200px" }}>Unique Check</button>
+                    {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>
                 </td>
               </tr>
@@ -173,7 +173,7 @@ const CreatePackage = observer((props) => {
                     <select name="env_name" onChange={onChange}>
                       <option value={""}>Select Environment</option>
                       {envList.map((item) => (
-                        <option value={item}>{item}</option>
+                        <option value={item.env_name}>{item.env_name}</option>
                       ))}
                     </select>
                   </FormControl>
@@ -232,7 +232,7 @@ const CreatePackage = observer((props) => {
                       name="packageName"
                       style={{ width: "100%", marginRight: "10px" }}
                     />
-                    <button style={{ width: "200px" }}>Unique Check</button>
+                    {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>
                 </td>
               </tr>
@@ -244,8 +244,8 @@ const CreatePackage = observer((props) => {
                   <FormControl className="form_fullWidth">
                     <select name="Posttype">
                       <option value={""}>Select Environment</option>
-                      {Type.map((item) => (
-                        <option value={item}>{item}</option>
+                      {envList.map((item) => (
+                        <option value={item.env_name}>{item.env_name}</option>
                       ))}
                     </select>
                   </FormControl>
@@ -269,7 +269,7 @@ const CreatePackage = observer((props) => {
                       onChange={onChange}
                       style={{ width: "100%", marginRight: "10px" }}
                     />
-                    <button style={{ width: "200px" }}>Unique Check</button>
+                    {/* <button style={{ width: "200px" }}>Unique Check</button> */}
                   </div>
                 </td>
               </tr>
