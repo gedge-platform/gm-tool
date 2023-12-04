@@ -456,9 +456,7 @@ const DeploymentAddContainer = observer((props) => {
                 </td>
               </tr>
               <tr>
-                <th>
-                  Pull Secret <span className="requried">*</span>
-                </th>
+                <th>Pull Secret</th>
                 <td colSpan="3">
                   <CTextField
                     type="text"
