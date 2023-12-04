@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { CFileField } from "../../../../../components/textfields/CFilefield";
 import FaasStore from "../../../../../store/Faas";
+import { useEffect } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -31,16 +32,21 @@ const ButtonNext = styled.button`
 const CreatePackage = observer((props) => {
   const { open } = props;
   const Type = ["source", "deploy", "code"];
-  const envList = ["env2"];
   const [postType, setPostType] = useState("");
   const [selectFile, setSelectFile] = useState("");
   const {
+    loadEnvListAPI,
+    envList,
     createPackage,
     packageCode,
     setPackageCode,
     packageSource,
     setPackageSource,
   } = FaasStore;
+
+  useEffect(() => {
+    loadEnvListAPI();
+  }, []);
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -276,7 +282,7 @@ const CreatePackage = observer((props) => {
                     <select name="env_name" onChange={onChange}>
                       <option value={""}>Select Environment</option>
                       {envList.map((item) => (
-                        <option value={item}>{item}</option>
+                        <option value={item.env_name}>{item.env_name}</option>
                       ))}
                     </select>
                   </FormControl>

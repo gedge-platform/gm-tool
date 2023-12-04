@@ -4,6 +4,8 @@ import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
+import FaasStore from "../../../../../store/Faas";
+import { useState } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -25,26 +27,39 @@ const ButtonNext = styled.button`
 `;
 
 const CreateFunction = observer((props) => {
-  const envName = ["env1", "env2", "env3", "env4"];
   const { open } = props;
+  const { envList, functionName, setFunctionName, setEnvNameList } = FaasStore;
+
+  const [fileContent, setFileContent] = useState("");
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    setFunctionName("");
+    setEnvNameList("");
   };
 
   const postFunction = () => {
-    swalError("Function가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 
-  // const onChange = ({ target }) => {
-  //   const { value, name } = target;
-  //   setInputs({
-  //     ...inputs,
-  //     [name]: value,
-  //   });
-  // };
+  const onChange = ({ target }) => {
+    const { value, name } = target;
+    console.log("name ??", name);
+    console.log("value ??", value);
+
+    if (name === "functionName") {
+      setFunctionName(value);
+    }
+
+    if (name === "environment") {
+      setEnvNameList(value);
+    }
+    // setInputs({
+    //   ...inputs,
+    //   [name]: value,
+    // });
+  };
 
   // const checkName = async () => {
   //   if (id === "") {
@@ -66,8 +81,23 @@ const CreateFunction = observer((props) => {
   //     .catch(e => console.log(e));
   // };
 
-  const onChangeFile = () => {
-    console.log("file");
+  const onChangeFile = (e) => {
+    const selectFile = e.target.files[0];
+
+    if (selectFile) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const content = e.target.result;
+        setFileContent(content);
+        console.log(content);
+      };
+
+      reader.readAsText(selectFile);
+    }
+
+    // const selectFile = files;
+    // console.log("selectFile ???", selectFile);
   };
 
   return (
@@ -92,8 +122,8 @@ const CreateFunction = observer((props) => {
                 placeholder="Function Name"
                 className="form-fullWidth"
                 name="functionName"
-                // onChange={onChange}
-                value={"functionName"}
+                onChange={onChange}
+                value={functionName}
                 style={{ width: "100%" }}
               />
             </td>
@@ -122,12 +152,21 @@ const CreateFunction = observer((props) => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select
-                  name="environment"
-                  value={"environment"}
-                  // onChange={handlePriority}
-                >
-                  <option value={"fission/node-env"}>pack-env</option>
+                <select name="environment" onChange={onChange}>
+                  <option value="" disabled>
+                    Select Environment
+                  </option>
+                  {envList ? (
+                    envList?.map((data) => (
+                      <option key={data.env_name} value={data.env_name}>
+                        {data.env_name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No Data
+                    </option>
+                  )}
                 </select>
               </FormControl>
             </td>
@@ -141,6 +180,7 @@ const CreateFunction = observer((props) => {
               <FormControl className="form_fullWidth">
                 <input type="file" name="file" onChange={onChangeFile} />
               </FormControl>
+              <div>{fileContent}</div>
             </td>
             <td></td>
           </tr>

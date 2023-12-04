@@ -8,9 +8,10 @@ import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateFunction from "../Dialog/CreateFunction";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const FunctionListTab = observer(() => {
-  // const [reRun, setReRun] = useState(false);
+  const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
   const {
     loadFuncionsListAPI,
@@ -20,7 +21,10 @@ const FunctionListTab = observer(() => {
     currentPage,
     goNextPage,
     goPrevPage,
+    DeleteFuncionsAPI,
+    initViewList,
   } = FaasStore;
+  const [functionsListName, setFunctionsListName] = useState("");
 
   const [columDefs] = useState([
     {
@@ -63,6 +67,21 @@ const FunctionListTab = observer(() => {
     },
   ]);
 
+  const handleClick = (e) => {
+    setFunctionsListName(e.value);
+  };
+
+  const handleDelete = () => {
+    if (functionsListName === "") {
+      swalError("Function을 선택해주세요!");
+    } else {
+      swalUpdate(functionsListName + "을 삭제하시겠습니까?", () =>
+        DeleteFuncionsAPI(functionsListName, reloadData())
+      );
+    }
+    setFunctionsListName("");
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -74,10 +93,13 @@ const FunctionListTab = observer(() => {
     setReRun(true);
   };
 
-  // useEffect(() => {}, [reRun]);
   useEffect(() => {
     loadFuncionsListAPI();
-  }, []);
+    return () => {
+      setReRun(false);
+      initViewList();
+    };
+  }, [reRun]);
 
   return (
     <CReflexBox>
@@ -85,11 +107,12 @@ const FunctionListTab = observer(() => {
         <CommActionBar reloadFunc={reloadData}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
-          <CDeleteButton>삭제</CDeleteButton>
+          <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
+              onCellClicked={handleClick}
               rowData={functionsList}
               columnDefs={columDefs}
               totalElements={totalElements}

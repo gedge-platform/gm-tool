@@ -78,7 +78,7 @@ const CreateTrigger = observer((props) => {
   const onChangeTrigger = (e) => {
     const { name, value } = e.target;
     setPostType(value);
-    if (postType === "HTTP") {
+    if (value === "HTTP") {
       setTriggerHttpInputs({
         ...triggerHttpInputs,
         [name]: "httptrigger",

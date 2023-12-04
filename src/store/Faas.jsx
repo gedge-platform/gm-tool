@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { FAAS_URL } from "../config";
 import { getItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class FaasStatus {
   envList = [];
@@ -14,6 +15,34 @@ class FaasStatus {
   totalPages = 1;
   resultList = {};
   viewList = null;
+
+  envName = "";
+  setEnvName = (value) => {
+    runInAction(() => {
+      this.envName = value;
+    });
+  };
+
+  envImage = "";
+  setEnvImage = (value) => {
+    runInAction(() => {
+      this.envImage = value;
+    });
+  };
+
+  envNameList = "";
+  setEnvNameList = (value) => {
+    runInAction(() => {
+      this.envNameList = value;
+    });
+  };
+
+  functionName = "";
+  setFunctionName = (value) => {
+    runInAction(() => {
+      this.functionName = value;
+    });
+  };
 
   triggerHttpInputs = {
     trig_name: "",
@@ -59,6 +88,7 @@ class FaasStatus {
   initViewList = () => {
     runInAction(() => {
       this.viewList = null;
+      this.currentPage = 1;
     });
   };
 
@@ -120,7 +150,6 @@ class FaasStatus {
       .get(`${FAAS_URL}/environments`)
       .then((res) => {
         runInAction(() => {
-          console.log("environments ???", res.data);
           if (res.data !== null) {
             this.envList = res.data;
             this.totalPages = Math.ceil(res.data.length / 20);
@@ -137,6 +166,30 @@ class FaasStatus {
         this.envList = [];
         this.paginationList();
       });
+  };
+
+  PostEnvAPI = async (envName, envImage, callback) => {
+    const body = {
+      env_name: envName,
+      image: envImage,
+    };
+    await axios.post(`${FAAS_URL}/environments`, body).then((res) => {
+      if (res.status === 201) {
+        swalError("Environment가 생성되었습니다.");
+      } else {
+        swalError("Environment  생성 실패", callback);
+      }
+    });
+  };
+
+  DeleteEnvAPI = async (envName, callback) => {
+    await axios.delete(`${FAAS_URL}/environments/${envName}`).then((res) => {
+      if (res.status === 200) {
+        swalError("Environment가 삭제되었습니다.");
+      } else {
+        swalError("Environment  삭제 실패", callback);
+      }
+    });
   };
 
   loadFuncionsListAPI = async () => {
@@ -161,6 +214,16 @@ class FaasStatus {
         this.functionsList = [];
         this.paginationList();
       });
+  };
+
+  DeleteFuncionsAPI = async (envName, callback) => {
+    await axios.delete(`${FAAS_URL}/functions/${envName}`).then((res) => {
+      if (res.status === 200) {
+        swalError("Environment가 삭제되었습니다.");
+      } else {
+        swalError("Environment  삭제 실패", callback);
+      }
+    });
   };
 
   loadPackageListAPI = async () => {
