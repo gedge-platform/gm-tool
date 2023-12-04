@@ -28,25 +28,31 @@ const ButtonNext = styled.button`
 
 const CreateFunction = observer((props) => {
   const { open } = props;
-  const { envList, functionName, setFunctionName, setEnvNameList } = FaasStore;
-
-  const [fileContent, setFileContent] = useState("");
+  const {
+    envList,
+    functionName,
+    setFunctionName,
+    setEnvNameList,
+    functionFileContent,
+    setFunctionFileContent,
+    PostFuncionsAPI,
+  } = FaasStore;
 
   const handleClose = () => {
     props.onClose && props.onClose();
     setFunctionName("");
     setEnvNameList("");
+    setFileContent("");
   };
 
   const postFunction = () => {
+    PostFuncionsAPI();
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 
   const onChange = ({ target }) => {
     const { value, name } = target;
-    console.log("name ??", name);
-    console.log("value ??", value);
 
     if (name === "functionName") {
       setFunctionName(value);
@@ -89,7 +95,7 @@ const CreateFunction = observer((props) => {
 
       reader.onload = (e) => {
         const content = e.target.result;
-        setFileContent(content);
+        setFunctionFileContent(content);
         console.log(content);
       };
 
@@ -127,7 +133,7 @@ const CreateFunction = observer((props) => {
                 style={{ width: "100%" }}
               />
             </td>
-            <td style={{ display: "flex" }}>
+            {/* <td style={{ display: "flex" }}>
               <button
                 type="button"
                 style={{
@@ -144,7 +150,7 @@ const CreateFunction = observer((props) => {
               >
                 중복확인
               </button>
-            </td>
+            </td> */}
           </tr>
           <tr>
             <th>
@@ -153,9 +159,7 @@ const CreateFunction = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="environment" onChange={onChange}>
-                  <option value="" disabled>
-                    Select Environment
-                  </option>
+                  <option value="">Select Environment</option>
                   {envList ? (
                     envList?.map((data) => (
                       <option key={data.env_name} value={data.env_name}>
@@ -180,7 +184,6 @@ const CreateFunction = observer((props) => {
               <FormControl className="form_fullWidth">
                 <input type="file" name="file" onChange={onChangeFile} />
               </FormControl>
-              <div>{fileContent}</div>
             </td>
             <td></td>
           </tr>
