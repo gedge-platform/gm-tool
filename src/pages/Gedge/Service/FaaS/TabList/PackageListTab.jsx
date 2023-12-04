@@ -12,7 +12,15 @@ const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { loadPackageListAPI, packageList } = FaasStore;
+  const {
+    loadPackageListAPI,
+    packageList,
+    totalElements,
+    totalPages,
+    currentPage,
+    goNextPage,
+    goPrevPage,
+  } = FaasStore;
 
   useEffect(() => {
     loadPackageListAPI();
@@ -83,12 +91,12 @@ const PackageListTab = observer(() => {
             <AgGrid
               rowData={packageList}
               columnDefs={columDefs}
-              totalElements={0}
+              totalElements={totalElements}
               isBottom={false}
-              totalPages={1}
-              currentPage={1}
-              goNextPage={2}
-              goPrevPage={0}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
         </div>

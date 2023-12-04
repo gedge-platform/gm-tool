@@ -15,6 +15,43 @@ class FaasStatus {
   resultList = {};
   viewList = null;
 
+  triggerHttpInputs = {
+    trig_name: "",
+    trig_type: "",
+    url: "",
+    method: "",
+    function: "",
+  };
+
+  triggerKatkaQueue = {
+    trig_name: "",
+    trig_type: "",
+    function: "",
+    mqtype: "",
+    mqtkind: "",
+    topic: "",
+    resptopic: "",
+    errortopic: "",
+    maxretries: 0,
+    metadata: [],
+    cooldownperiod: 0,
+    pollinginterval: 0,
+    secret: "",
+  };
+
+  packageSource = {
+    pack_name: "",
+    env_name: "",
+    sourcearchive: "",
+    build: "",
+  };
+
+  packageCode = {
+    pack_name: "",
+    env_name: "",
+    code: "",
+  };
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -51,6 +88,30 @@ class FaasStatus {
           this.currentPage * 20
         );
       }
+    });
+  };
+
+  setTriggerHttpInputs = (e) => {
+    runInAction(() => {
+      this.triggerHttpInputs = e;
+    });
+  };
+
+  setTriggerKatkaQueue = (e) => {
+    runInAction(() => {
+      this.triggerKatkaQueue = e;
+    });
+  };
+
+  setPackageSource = (e) => {
+    runInAction(() => {
+      this.packageSource = e;
+    });
+  };
+
+  setPackageCode = (e) => {
+    runInAction(() => {
+      this.packageCode = e;
     });
   };
 
@@ -146,6 +207,25 @@ class FaasStatus {
         this.triggerList = [];
         this.paginationList();
       });
+  };
+
+  createTrigger = async (data, callback) => {
+    const body = { ...data };
+    console.log(body);
+    await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: ", res);
+      });
+    });
+  };
+
+  createPackage = async (data, callback) => {
+    const body = { ...data };
+    await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: res");
+      });
+    });
   };
 }
 

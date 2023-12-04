@@ -7,6 +7,7 @@ import { swalError } from "../../../../../utils/swal-utils";
 import styled from "styled-components";
 import { useState } from "react";
 import { CFileField } from "../../../../../components/textfields/CFilefield";
+import FaasStore from "../../../../../store/Faas";
 
 const Button = styled.button`
   background-color: #fff;
@@ -29,15 +30,29 @@ const ButtonNext = styled.button`
 
 const CreatePackage = observer((props) => {
   const { open } = props;
-  const postType = ["source", "deploy", "code"];
-  const [value, setValue] = useState("");
+  const Type = ["source", "deploy", "code"];
+  const envList = ["env2"];
+  const [postType, setPostType] = useState("");
   const [selectFile, setSelectFile] = useState("");
+  const {
+    createPackage,
+    packageCode,
+    setPackageCode,
+    packageSource,
+    setPackageSource,
+  } = FaasStore;
 
   const handleClose = () => {
     props.onClose && props.onClose();
   };
 
   const postPackage = () => {
+    if (postType === "code") {
+      createPackage(packageCode);
+    }
+    if (postType === "source") {
+      createPackage(packageSource);
+    }
     swalError("Package가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
@@ -54,7 +69,25 @@ const CreatePackage = observer((props) => {
   };
 
   const onChangePackage = (event) => {
-    setValue(event.target.value);
+    setPostType(event.target.value);
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    if (postType === "code") {
+      setPackageCode({
+        ...packageCode,
+        [name]: value,
+      });
+    }
+    if (postType === "source") {
+      setPackageSource({
+        ...packageSource,
+        [name]: value,
+      });
+    }
+    console.log("packageCode: ", packageCode);
+    console.log("packageSource: ", packageSource);
   };
 
   return (
@@ -77,14 +110,14 @@ const CreatePackage = observer((props) => {
               <FormControl className="form_fullWidth">
                 <select name="Posttype" onChange={onChangePackage}>
                   <option value={""}>Select Post type</option>
-                  {postType.map((item) => (
+                  {Type.map((item) => (
                     <option value={item}>{item}</option>
                   ))}
                 </select>
               </FormControl>
             </td>
           </tr>
-          {value === "source" ? (
+          {postType === "source" ? (
             <>
               <tr>
                 <th>
@@ -117,7 +150,8 @@ const CreatePackage = observer((props) => {
                       type="text"
                       placeholder="Package Name"
                       className="form-fullWidth"
-                      name="packageName"
+                      name="pack_name"
+                      onChange={onChange}
                       style={{ width: "100%", marginRight: "10px" }}
                     />
                     <button style={{ width: "200px" }}>Unique Check</button>
@@ -130,9 +164,9 @@ const CreatePackage = observer((props) => {
                 </th>
                 <td colSpan={3}>
                   <FormControl className="form_fullWidth">
-                    <select name="Posttype">
+                    <select name="env_name" onChange={onChange}>
                       <option value={""}>Select Environment</option>
-                      {postType.map((item) => (
+                      {envList.map((item) => (
                         <option value={item}>{item}</option>
                       ))}
                     </select>
@@ -149,13 +183,14 @@ const CreatePackage = observer((props) => {
                     placeholder="Build"
                     className="form-fullWidth"
                     name="build"
+                    onChange={onChange}
                     style={{ width: "100%", marginRight: "10px" }}
                   />
                 </td>
               </tr>
             </>
           ) : null}
-          {value === "deploy" ? (
+          {postType === "deploy" ? (
             <>
               <tr>
                 <th>
@@ -203,7 +238,7 @@ const CreatePackage = observer((props) => {
                   <FormControl className="form_fullWidth">
                     <select name="Posttype">
                       <option value={""}>Select Environment</option>
-                      {postType.map((item) => (
+                      {Type.map((item) => (
                         <option value={item}>{item}</option>
                       ))}
                     </select>
@@ -212,7 +247,7 @@ const CreatePackage = observer((props) => {
               </tr>
             </>
           ) : null}
-          {value === "code" ? (
+          {postType === "code" ? (
             <>
               <tr>
                 <th>
@@ -224,7 +259,8 @@ const CreatePackage = observer((props) => {
                       type="text"
                       placeholder="Package Name"
                       className="form-fullWidth"
-                      name="packageName"
+                      name="pack_name"
+                      onChange={onChange}
                       style={{ width: "100%", marginRight: "10px" }}
                     />
                     <button style={{ width: "200px" }}>Unique Check</button>
@@ -237,9 +273,9 @@ const CreatePackage = observer((props) => {
                 </th>
                 <td colSpan={3}>
                   <FormControl className="form_fullWidth">
-                    <select name="Posttype">
+                    <select name="env_name" onChange={onChange}>
                       <option value={""}>Select Environment</option>
-                      {postType.map((item) => (
+                      {envList.map((item) => (
                         <option value={item}>{item}</option>
                       ))}
                     </select>
@@ -256,6 +292,7 @@ const CreatePackage = observer((props) => {
                     placeholder="Code"
                     className="form-fullWidth"
                     name="code"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>

@@ -12,7 +12,15 @@ const TriggerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { loadTriggerListAPI, triggerList } = FaasStore;
+  const {
+    loadTriggerListAPI,
+    triggerList,
+    totalElements,
+    totalPages,
+    currentPage,
+    goNextPage,
+    goPrevPage,
+  } = FaasStore;
 
   useEffect(() => {
     loadTriggerListAPI();
@@ -85,12 +93,12 @@ const TriggerListTab = observer(() => {
             <AgGrid
               rowData={triggerList}
               columnDefs={columDefs}
-              totalElements={0}
+              totalElements={totalElements}
               isBottom={false}
-              totalPages={1}
-              currentPage={1}
-              goNextPage={2}
-              goPrevPage={0}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              goNextPage={goNextPage}
+              goPrevPage={goPrevPage}
             />
           </div>
         </div>
