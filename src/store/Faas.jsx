@@ -7,6 +7,8 @@ import { swalError } from "../utils/swal-utils";
 class FaasStatus {
   envList = [];
   functionsList = [];
+  packageList = [];
+  triggerList = [];
 
   totalElements = 0;
   currentPage = 1;
@@ -40,6 +42,43 @@ class FaasStatus {
     runInAction(() => {
       this.functionName = value;
     });
+  };
+
+  triggerHttpInputs = {
+    trig_name: "",
+    trig_type: "",
+    url: "",
+    method: "",
+    function: "",
+  };
+
+  triggerKatkaQueue = {
+    trig_name: "",
+    trig_type: "",
+    function: "",
+    mqtype: "",
+    mqtkind: "",
+    topic: "",
+    resptopic: "",
+    errortopic: "",
+    maxretries: 0,
+    metadata: [],
+    cooldownperiod: 0,
+    pollinginterval: 0,
+    secret: "",
+  };
+
+  packageSource = {
+    pack_name: "",
+    env_name: "",
+    sourcearchive: "",
+    build: "",
+  };
+
+  packageCode = {
+    pack_name: "",
+    env_name: "",
+    code: "",
   };
 
   constructor() {
@@ -79,6 +118,30 @@ class FaasStatus {
           this.currentPage * 20
         );
       }
+    });
+  };
+
+  setTriggerHttpInputs = (e) => {
+    runInAction(() => {
+      this.triggerHttpInputs = e;
+    });
+  };
+
+  setTriggerKatkaQueue = (e) => {
+    runInAction(() => {
+      this.triggerKatkaQueue = e;
+    });
+  };
+
+  setPackageSource = (e) => {
+    runInAction(() => {
+      this.packageSource = e;
+    });
+  };
+
+  setPackageCode = (e) => {
+    runInAction(() => {
+      this.packageCode = e;
     });
   };
 
@@ -160,6 +223,71 @@ class FaasStatus {
       } else {
         swalError("Environment  삭제 실패", callback);
       }
+    });
+  };
+
+  loadPackageListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/packages`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.packageList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.packageList = [];
+        this.paginationList();
+      });
+  };
+
+  loadTriggerListAPI = async () => {
+    await axios
+      .get(`${FAAS_URL}/triggers`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.data !== null) {
+            this.triggerList = res.data;
+            this.totalPages = Math.ceil(res.data.length / 20);
+            this.totalElements = res.data.length;
+          } else {
+            this.packageList = [];
+          }
+        });
+      })
+      .then(() => {
+        this.paginationList();
+      })
+      .catch((error) => {
+        this.triggerList = [];
+        this.paginationList();
+      });
+  };
+
+  createTrigger = async (data, callback) => {
+    const body = { ...data };
+    console.log(body);
+    await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: ", res);
+      });
+    });
+  };
+
+  createPackage = async (data, callback) => {
+    const body = { ...data };
+    await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: res");
+      });
     });
   };
 }

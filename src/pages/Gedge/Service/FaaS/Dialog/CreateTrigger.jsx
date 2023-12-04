@@ -9,6 +9,8 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import FaasStore from "../../../../../store/Faas";
+import { useEffect } from "react";
 
 const Button = styled.button`
   background-color: #fff;
@@ -32,20 +34,94 @@ const ButtonNext = styled.button`
 const CreateTrigger = observer((props) => {
   const { open } = props;
   const triggerType = ["HTTP", "KafkaQueue"];
-  const [value, setValue] = useState("");
+  const funcList = ["consumer"];
+  const [postType, setPostType] = useState("");
+  const [type, setType] = useState("");
+  const {
+    loadEnvListAPI,
+    loadFuncionsListAPI,
+    envList,
+    functionsList,
+    createTrigger,
+    setTriggerHttpInputs,
+    triggerHttpInputs,
+    triggerKatkaQueue,
+    setTriggerKatkaQueue,
+  } = FaasStore;
+
+  useEffect(() => {
+    // loadEnvListAPI()
+    loadFuncionsListAPI();
+  }, []);
+
+  // console.log(
+  //   "functionsList: ",
+  //   functionsList.map((e) => e.func_name)
+  // );
 
   const handleClose = () => {
     props.onClose && props.onClose();
   };
 
   const postTrigger = () => {
+    if (postType === "HTTP") {
+      createTrigger(triggerHttpInputs);
+    } else {
+      createTrigger(triggerKatkaQueue);
+    }
+
     swalError("Trigger가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 
-  const onChangeTrigger = (event) => {
-    setValue(event.target.value);
+  const onChangeTrigger = (e) => {
+    const { name, value } = e.target;
+    setPostType(value);
+    if (value === "HTTP") {
+      setTriggerHttpInputs({
+        ...triggerHttpInputs,
+        [name]: "httptrigger",
+      });
+    } else {
+      setTriggerKatkaQueue({
+        ...triggerKatkaQueue,
+        [name]: "mqtrigger",
+      });
+    }
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    if (postType === "HTTP") {
+      setTriggerHttpInputs({
+        ...triggerHttpInputs,
+        [name]: value,
+      });
+    } else {
+      setTriggerKatkaQueue({
+        ...triggerKatkaQueue,
+        [name]: value,
+      });
+    }
+    console.log("triggerHttpInputs: ", triggerHttpInputs);
+    console.log("triggerKatkaQueue: ", triggerKatkaQueue);
+  };
+
+  const onChangeMetadata = (e) => {
+    const { name, value } = e.target;
+    const metadata = value.split(", ");
+    if (postType === "HTTP") {
+      setTriggerHttpInputs({
+        ...triggerHttpInputs,
+        [name]: metadata,
+      });
+    } else {
+      setTriggerKatkaQueue({
+        ...triggerKatkaQueue,
+        [name]: metadata,
+      });
+    }
   };
 
   return (
@@ -66,7 +142,7 @@ const CreateTrigger = observer((props) => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select name="Posttype" onChange={onChangeTrigger}>
+                <select name="trig_type" onChange={onChangeTrigger}>
                   <option value={""}>Select Post type</option>
                   {triggerType.map((item) => (
                     <option value={item}>{item}</option>
@@ -84,7 +160,8 @@ const CreateTrigger = observer((props) => {
                 type="text"
                 placeholder="Trigger Name"
                 className="form-fullWidth"
-                name="triggerName"
+                name="trig_name"
+                onChange={onChange}
                 style={{ width: "100%" }}
               />
             </td>
@@ -95,16 +172,16 @@ const CreateTrigger = observer((props) => {
             </th>
             <td>
               <FormControl className="form_fullWidth">
-                <select name="Posttype">
+                <select name="function" onChange={onChange}>
                   <option value={""}>Select Post type</option>
-                  {triggerType.map((item) => (
-                    <option value={item}>{item}</option>
+                  {functionsList.map((item) => (
+                    <option value={item.func_name}>{item.func_name}</option>
                   ))}
                 </select>
               </FormControl>
             </td>
           </tr>
-          {value === "HTTP" ? (
+          {postType === "HTTP" ? (
             <>
               <tr>
                 <th>
@@ -116,6 +193,7 @@ const CreateTrigger = observer((props) => {
                     placeholder="Method"
                     className="form-fullWidth"
                     name="method"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -130,13 +208,14 @@ const CreateTrigger = observer((props) => {
                     placeholder="Url"
                     className="form-fullWidth"
                     name="url"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
               </tr>
             </>
           ) : null}
-          {value === "KafkaQueue" ? (
+          {postType === "KafkaQueue" ? (
             <>
               <tr>
                 <th>
@@ -147,7 +226,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="KafkaQueue Type"
                     className="form-fullWidth"
-                    name="kafkaQueueType"
+                    name="mqtype"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -161,7 +241,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="KafkaQueue Kind"
                     className="form-fullWidth"
-                    name="kafkaQueueKind"
+                    name="mqtkind"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -176,6 +257,7 @@ const CreateTrigger = observer((props) => {
                     placeholder="Topic"
                     className="form-fullWidth"
                     name="topic"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -189,7 +271,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Response Topic"
                     className="form-fullWidth"
-                    name="Response Topic"
+                    name="resptopic"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -203,7 +286,7 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Error Topic"
                     className="form-fullWidth"
-                    name="Error Topic"
+                    name="errortopic"
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -217,7 +300,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Max Retries"
                     className="form-fullWidth"
-                    name="maxRetries"
+                    name="maxretries"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -231,7 +315,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Cooldown Period"
                     className="form-fullWidth"
-                    name="kafkaQueueType"
+                    name="cooldownperiod"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -245,7 +330,8 @@ const CreateTrigger = observer((props) => {
                     type="text"
                     placeholder="Pooling Interval"
                     className="form-fullWidth"
-                    name="poolingInterval"
+                    name="pollinginterval"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -260,6 +346,7 @@ const CreateTrigger = observer((props) => {
                     placeholder="Metadata"
                     className="form-fullWidth"
                     name="metadata"
+                    onChange={onChangeMetadata}
                     style={{ width: "100%" }}
                   />
                 </td>
@@ -274,6 +361,7 @@ const CreateTrigger = observer((props) => {
                     placeholder="Secret"
                     className="form-fullWidth"
                     name="secret"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
