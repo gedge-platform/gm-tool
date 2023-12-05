@@ -451,6 +451,7 @@ class Cluster {
 
       runInAction(() => {
         this.clusterDetail = data;
+        console.log("this.clusterDetail ???? ", this.clusterDetail);
         this.nodes =
           this.clusterDetail && this.clusterDetail.nodes !== null
             ? this.clusterDetail.nodes
@@ -460,20 +461,9 @@ class Cluster {
       return this.clusterDetail;
     } catch (error) {
       console.error("Error loading cluster:", error);
-      // 에러가 발생한 경우에 대한 추가적인 처리를 수행하거나 에러를 다시 throw할 수 있습니다.
+
       throw error;
     }
-    // await axios
-    //   .get(`${SERVER_URL}/clusters/${clusterName}`)
-    //   .then(({ data: { data } }) => {
-    //     runInAction(() => {
-    //       this.clusterDetail = data;
-    //       this.gpu = data;
-    //       this.nodes =
-    //         this.clusterDetail.nodes !== null ? this.clusterDetail.nodes : 0;
-    //     });
-    //   });
-    // return this.clusterDetail;
   };
 
   loadClusterDetail = async (clusterName) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import FormControl from "@material-ui/core/FormControl";
@@ -7,6 +7,7 @@ import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
 import CreateTamplateTargetCluster from "./CreateTamplateTargetCluster";
+import projectStore from "../../../../../../store/Project";
 
 const Button = styled.button`
   background-color: #fff;
@@ -22,20 +23,29 @@ const CreateTamplateStepThree = observer(() => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
+  const { loadProjectList, projectLists } = projectStore;
+
   const {
     targetClusters,
     resetTargetClusters,
     deployment,
     setDeployment,
     setDeploymentPriority,
+    appInfo,
   } = deploymentStore;
 
-  const { selectClusterInfo } = workspaceStore;
+  useEffect(() => {
+    loadProjectList();
+  }, []);
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
-  console.log("템플릿", clusterDetail);
 
   const { podListInclusterAPI, podListIncluster } = podStore;
+
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === appInfo.appWorkspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -70,8 +80,6 @@ const CreateTamplateStepThree = observer(() => {
 
   const PriorityComponent = () => {
     const handlePriority = (e) => {
-      console.log("name", e.target.name);
-      console.log("name", e.target.value);
       if (e.target.name === "name") {
         resetTargetClusters();
         if (e.target.value === "GLowLatencyPriority") {
@@ -89,7 +97,6 @@ const CreateTamplateStepThree = observer(() => {
           });
         }
         if (e.target.value === "GSelectedClusterPriority") {
-          console.log("----handlePriority----");
           setDeployment("priority", {
             name: e.target.value,
             mode: "cluster",
@@ -106,7 +113,6 @@ const CreateTamplateStepThree = observer(() => {
       if (e.target.name === "mode") {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
-          console.log("mode???", e.target.value);
           if (e.target.value === "from_node") {
             setDeployment("priority", {
               name: "GLowLatencyPriority",
@@ -116,7 +122,6 @@ const CreateTamplateStepThree = observer(() => {
             });
           }
           if (e.target.value === "from_pod") {
-            console.log("mode???", e.target.value);
             setDeployment("priority", {
               name: "GLowLatencyPriority",
               mode: "from_pod",
@@ -140,7 +145,6 @@ const CreateTamplateStepThree = observer(() => {
             });
           }
           if (e.target.value === "node") {
-            console.log("----monde: node----");
             initClusterDetail();
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
@@ -153,14 +157,14 @@ const CreateTamplateStepThree = observer(() => {
       }
 
       if (e.target.name === "sourceCluster") {
-        console.log("sourceCluster???", e.target.name);
         setDeploymentPriority("sourceCluster", e.target.value);
+
         if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
           setDeploymentPriority("sourceNode", e.target.value);
         }
         if (deployment.priority.mode === "from_pod") {
-          podListInclusterAPI(e.target.value, deployment.project);
+          podListInclusterAPI(e.target.value, appInfo.appProject);
           setDeploymentPriority("podName", "");
         }
         if (deployment.priority.mode === "node") {
@@ -216,7 +220,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -256,7 +260,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -303,7 +307,7 @@ const CreateTamplateStepThree = observer(() => {
                     value={deployment.priority.mode}
                     onChange={handlePriority}
                   >
-                    <option value={"default"}>default</option>
+                    <option value={"default"}>Default</option>
                     <option value={"cpu"}>CPU</option>
                     <option value={"gpu"}>GPU</option>
                     <option value={"memory"}>MEMORY</option>

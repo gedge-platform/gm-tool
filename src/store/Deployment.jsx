@@ -326,6 +326,7 @@ class Deployment {
     runInAction(() => {
       this.targetClusters = [];
       this.unselectedClusters = defaultUnselectedClusters;
+      console.log("this.unselectedClusters ???", this.unselectedClusters);
     });
   };
 
@@ -338,6 +339,7 @@ class Deployment {
   setUnselectedClusters = (value) => {
     runInAction(() => {
       this.unselectedClusters = value;
+      console.log("this.unselectedClusters 2222 ???", this.unselectedClusters);
     });
   };
 

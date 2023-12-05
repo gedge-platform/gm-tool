@@ -199,6 +199,7 @@ class PlatformProject {
       .get(`${SERVER_URL}/systemProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
+          console.log("loadAdminPlatformProjectList ????", res.data.data);
           this.adminList = res.data.data;
           this.platformProjectLists = res.data.data.filter(
             (data) => data.clusterName === "gm-cluster"

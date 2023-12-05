@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { CTextField } from "@/components/textfields";
 import { workspaceStore, projectStore, deploymentStore } from "@/store";
 import templateStore from "../../../../../../store/Template";
+import { getItem } from "@/utils/sessionStorageFn";
 
 const Button = styled.button`
   border: none;
@@ -79,12 +80,13 @@ const ImgButton = styled.button`
 `;
 
 const CreateTamplateStepOne = observer((props) => {
-  const { workSpaceList, selectClusterInfo, loadWorkspaceDetail } =
-    workspaceStore;
+  const { workSpaceList, loadSourceCluster } = workspaceStore;
   const {
     loadProjectListInWorkspace,
     projectListinWorkspace,
     loadProjectDetail,
+    loadProjectList,
+    projectLists,
   } = projectStore;
   const { setDeployment, setAppInfo, appInfo, initTargetClusters } =
     deploymentStore;
@@ -116,25 +118,27 @@ const CreateTamplateStepOne = observer((props) => {
       setAppInfo(name, value);
     }
     if (name === "appWorkspace") {
-      // setAppInfo(name, value);
-      // setAppInfo(name, value);
-      // loadProjectListInWorkspace(value);
-      // loadWorkspaceDetail(value);
       const selectedWorkspace = workSpaceList.find(
         (workspace) => workspace.workspaceName === value
       );
-      console.log(selectedWorkspace);
+
       setAppInfo(name, value);
       setAppInfo("workspacetag", selectedWorkspace.workspaceTag);
       setAppInfo("workspaceuuid", selectedWorkspace.workspaceUUID);
       loadProjectListInWorkspace(value);
-      loadWorkspaceDetail(value);
+      loadSourceCluster(value);
     }
     if (name === "appProject") {
       setAppInfo(name, value);
       loadProjectDetail(value);
+
+      // 프로젝트 기준의 클러스터리스트
+      const selectedProject = projectLists.find(
+        (data) => data.workspace.workspaceName === appInfo.appWorkspace
+      );
+
       initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
       );
     }
     if (name === "appReplicas") {
@@ -164,6 +168,10 @@ const CreateTamplateStepOne = observer((props) => {
       appInfo.appEnv.filter((env, idx) => idx !== index)
     );
   };
+
+  useEffect(() => {
+    loadProjectList();
+  }, []);
 
   return (
     <>

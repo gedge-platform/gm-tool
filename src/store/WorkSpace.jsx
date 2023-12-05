@@ -40,6 +40,13 @@ class Workspace {
   workspaceName = "";
   workspaceDescription = "";
 
+  sourceClusterList = [];
+  setSourceClusterList = (value) => {
+    runInAction(() => {
+      this.sourceClusterList = value;
+    });
+  };
+
   setCheck = () => {
     this.check = true;
   };
@@ -246,7 +253,6 @@ class Workspace {
 
   // 워크스페이스에서 클러스터 불러오면 된다
   loadWorkspaceDetail = async (workspaceName) => {
-    console.log(workspaceName);
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.workSpaceDetail = res.data;
@@ -259,21 +265,16 @@ class Workspace {
         this.detailInfo = res.data.projectList ? res.data.projectList : 0;
         this.selectClusterInfo = res.data.selectCluster;
         this.projectList = res.data.projectList ? res.data.projectList : 0;
-        // await axios
-        //   .get(`${SERVER_URL}/workspaces/${workspaceName}`)
-        //   .then((res) => {
-        //     runInAction(() => {
-        //       this.workSpaceDetail = res.data;
-        //       this.dataUsage = this.workSpaceDetail.resourceUsage;
-        //       if (res.data.events !== null) {
-        //         this.events = this.workSpaceDetail.events;
-        //       } else {
-        //         this.events = null;
-        //       }
-        //       this.detailInfo = res.data.projectList ? res.data.projectList : 0;
-        //       this.selectClusterInfo = res.data.selectCluster;
-        //       this.projectList = res.data.projectList ? res.data.projectList : 0;
-        //     });
+      });
+    });
+  };
+
+  loadSourceCluster = async (workspaceName) => {
+    console.log(workspaceName);
+    await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
+      runInAction(() => {
+        this.sourceClusterList = res.data.selectCluster;
+        console.log(this.sourceClusterList);
       });
     });
   };

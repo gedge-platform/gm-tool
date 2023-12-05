@@ -1,4 +1,6 @@
 import { makeAutoObservable, runInAction, toJS } from "mobx";
+import axios from "axios";
+import { SERVER_URL } from "../config";
 
 class Template {
   containerImageList = [
