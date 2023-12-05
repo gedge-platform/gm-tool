@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import FormControl from "@material-ui/core/FormControl";
@@ -7,6 +7,7 @@ import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
 import CreateTamplateTargetCluster from "./CreateTamplateTargetCluster";
+import projectStore from "../../../../../../store/Project";
 
 const Button = styled.button`
   background-color: #fff;
@@ -22,19 +23,29 @@ const CreateTamplateStepThree = observer(() => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
+  const { loadProjectList, projectLists } = projectStore;
+
   const {
     targetClusters,
     resetTargetClusters,
     deployment,
     setDeployment,
     setDeploymentPriority,
+    appInfo,
   } = deploymentStore;
 
-  const { sourceClusterList } = workspaceStore;
+  useEffect(() => {
+    loadProjectList();
+  }, []);
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;
+
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === appInfo.appWorkspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -147,13 +158,13 @@ const CreateTamplateStepThree = observer(() => {
 
       if (e.target.name === "sourceCluster") {
         setDeploymentPriority("sourceCluster", e.target.value);
-        console.log(e.target.value);
+
         if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
           setDeploymentPriority("sourceNode", e.target.value);
         }
         if (deployment.priority.mode === "from_pod") {
-          podListInclusterAPI(e.target.value, deployment.project);
+          podListInclusterAPI(e.target.value, appInfo.appProject);
           setDeploymentPriority("podName", "");
         }
         if (deployment.priority.mode === "node") {
@@ -209,7 +220,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {sourceClusterList.map((cluster) => (
+                          {selectedProject.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -249,7 +260,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {sourceClusterList.map((cluster) => (
+                          {selectedProject.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -296,7 +307,7 @@ const CreateTamplateStepThree = observer(() => {
                     value={deployment.priority.mode}
                     onChange={handlePriority}
                   >
-                    <option value={"default"}>default</option>
+                    <option value={"default"}>Default</option>
                     <option value={"cpu"}>CPU</option>
                     <option value={"gpu"}>GPU</option>
                     <option value={"memory"}>MEMORY</option>

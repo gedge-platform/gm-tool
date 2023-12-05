@@ -94,10 +94,6 @@ const CreateTamplateTargetCluster = observer(
     const [selectedClusters, setSelectedClusters] = useState([]);
     const [unselected, setUnselected] = useState([]);
 
-    console.log("targetClusters ???", targetClusters);
-    console.log("unselectedClusters ???", unselectedClusters);
-    console.log("selectedClusters ???", selectedClusters);
-
     const move = (source, destination) => {
       if (source.droppableId === "unselected") {
         // 추가

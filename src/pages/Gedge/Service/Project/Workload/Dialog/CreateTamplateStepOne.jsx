@@ -140,10 +140,6 @@ const CreateTamplateStepOne = observer((props) => {
       initTargetClusters(
         selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
       );
-
-      // initTargetClusters(
-      //   sourceClusterList.map((clusterInfo) => clusterInfo.clusterName)
-      // );
     }
     if (name === "appReplicas") {
       setAppInfo(name, value);
