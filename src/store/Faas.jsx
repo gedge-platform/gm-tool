@@ -44,6 +44,13 @@ class FaasStatus {
     });
   };
 
+  functionFileContent = "";
+  setFunctionFileContent = (value) => {
+    runInAction(() => {
+      this.funcionFileContent = value;
+    });
+  };
+
   triggerHttpInputs = {
     trig_name: "",
     trig_type: "",
@@ -213,6 +220,27 @@ class FaasStatus {
       .catch((error) => {
         this.functionsList = [];
         this.paginationList();
+      });
+  };
+
+  PostFuncionsAPI = async (callback) => {
+    const body = {
+      func_name: this.functionName,
+      env_name: this.envNameList,
+      func_content: JSON.stringify(this.functionFileContent),
+    };
+    await axios
+      .post(`${FAAS_URL}/functions`, body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          swalError("Environment가 생성되었습니다.");
+        } else {
+          swalError("Environment  생성 실패", callback);
+        }
       });
   };
 
