@@ -104,8 +104,8 @@ const CreatePod = observer((props) => {
     kind: "Pod",
     metadata: {
       name: podInfo.podName,
-      labels: labelInput,
       annotations: annotationInput,
+      labels: labelInput,
     },
     spec: {
       restartPolicy: "Always",
@@ -270,8 +270,24 @@ const CreatePod = observer((props) => {
   useEffect(() => {
     loadWorkSpaceList();
     loadPVClaims();
-
     if (stepValue === 4) {
+      setTemplate(template);
+
+      if (template) {
+        if (
+          template.metadata?.annotations === ': ""' ||
+          isEmpty(template.metadata?.annotations)
+        ) {
+          delete template.metadata.annotations;
+        }
+        if (
+          template.metadata?.labels === ': ""' ||
+          isEmpty(template.metadata.labels)
+        ) {
+          delete template.metadata.labels;
+        }
+        setContent(stringify(template));
+      }
       setContent(stringify(template));
     }
   }, [stepValue]);

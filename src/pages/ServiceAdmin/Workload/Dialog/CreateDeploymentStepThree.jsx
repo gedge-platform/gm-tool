@@ -44,53 +44,16 @@ const CreateDeploymentStepThree = observer(() => {
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
-  // const [open2, setOpen2] = useState(false);
-  // const [projectDisable, setProjectDisable] = useState(true);
-  // const [containerIndex, setContainerIndex] = useState(1);
-  // const [prioritytDisable, setPriorityDisable] = useState(true);
-  // const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  // const [nodeDisable, setNodeDisable] = useState(true);
-  // const [nodeName, setNodeName] = useState("");
-  // const [clusterNameInPriority, setClusterNameInPriority] = useState("");
-  // const [podName, setPodName] = useState("");
-  // const [type, setType] = useState("default");
-  // const [userName, setUserName] = useState("");
-  // const [workspaceName, setWorkspaceName] = useState("");
-  // const [projectName, setProjectName] = useState("");
+  const { loadProjectList, projectLists } = projectStore;
 
-  // const {
-  //   setDeploymentInfo,
-  //   priority,
-  //   setPriority,
-  //   targetClusters,
-  //   priorityNodes,
-  //   setPriorityNodes,
-  //   deploymentInfo,
-  //   selectedCluster,
-  //   setSelectedCluster,
-  //   deployment,
-  // } = deploymentStore;
+  useEffect(() => {
+    loadProjectList();
+  }, []);
 
-  // const {
-  //   loadWorkSpaceList,
-  //   loadWorkspaceDetail,
-  //   selectClusterInfo,
-  //   workSpaceList,
-  //   workSpaceDetail,
-  // } = workspaceStore;
-
-  // const { loadProjectListInWorkspace } = projectStore;
-
-  // const { loadPVClaims } = claimStore;
-
-  // const {
-  //   loadClusterList,
-  //   clusterListInWorkspace,
-  //   loadCluster,
-  //   clusterDetail,
-  // } = clusterStore;
-
-  // const { podListInclusterAPI, podListIncluster } = podStore;
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === deployment.workspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -122,53 +85,6 @@ const CreateDeploymentStepThree = observer(() => {
   const handleClose = () => {
     setOpen2(false);
   };
-
-  // const onChange = (e) => {
-  //   const { name, value } = e.target;
-  //   if (name == "workspace") {
-  //     setDeploymentInfo(name, value);
-  //     setProjectDisable(false);
-  //     loadProjectListInWorkspace(value);
-  //     loadClusterList();
-  //     loadWorkspaceDetail(value);
-  //   } else if (name === "workspaceName") {
-  //     priority.options.data.workspace_name === value;
-  //   } else if (name === "projectName") {
-  //     priority.options.data.project_name === value;
-  //   }
-  // };
-
-  // const onChangePod = async ({ target: { name, value } }) => {
-  //   let projectNameTemp = deploymentInfo.project;
-  //   let clusterNameTemp = "";
-  //   setPrioritytPodDisable(false);
-
-  //   if (name === "project") {
-  //     setPriorityDisable(false);
-  //     projectNameTemp = value;
-  //   }
-  //   if (name === "cluster") {
-  //     setPrioritytPodDisable(false);
-  //     setPriority({
-  //       ...priority,
-  //       data: {
-  //         workspace_name: "",
-  //         project_name: "",
-  //         pod_name: "",
-  //         target_clusters: "",
-  //       },
-  //     });
-  //   }
-  //   if (name === "sourceCluster") {
-  //     clusterNameTemp = value;
-
-  //     await podListInclusterAPI(clusterNameTemp, projectNameTemp);
-  //   }
-  //   if (name === "pod") {
-  //     setPodName(value);
-  //     priority.options.data.pod_name = value;
-  //   }
-  // };
 
   const PriorityComponent = () => {
     const handlePriority = (e) => {
@@ -312,7 +228,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -352,7 +268,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

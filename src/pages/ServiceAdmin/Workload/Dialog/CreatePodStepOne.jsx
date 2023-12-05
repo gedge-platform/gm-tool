@@ -82,6 +82,8 @@ const CreatePodStepOne = observer((props) => {
     projectListinWorkspace,
     loadProjectListInWorkspace,
     loadProjectDetail,
+    loadProjectList,
+    projectLists,
   } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
@@ -89,17 +91,6 @@ const CreatePodStepOne = observer((props) => {
   const [containerIndex, setContainerIndex] = useState(1);
   const [open, setOpen] = useState(false);
   const [prioritytDisable, setPriorityDisable] = useState(true);
-  // const { podInfo, setPodInfo } = podStore;
-
-  // const { workSpaceList } = workspaceStore;
-
-  // const { projectListinWorkspace, loadProjectListInWorkspace } = projectStore;
-
-  // const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
-
-  // const [containerIndex, setContainerIndex] = useState(1);
-  // const [open, setOpen] = useState(false);
-  // const [prioritytDisable, setPriorityDisable] = useState(true);
 
   const onChange = (e) => {
     console.log("e", e.target.name);
@@ -125,8 +116,13 @@ const CreatePodStepOne = observer((props) => {
     if (e.target.name === "project") {
       setPodInfo(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
+      // 프로젝트 기준의 클러스터리스트
+      const selectedProject = projectLists.find(
+        (data) => data.workspace.workspaceName === podInfo.workspace
+      );
+
       initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
       );
     }
     if (e.target.name === "claimVolume") {
@@ -149,6 +145,7 @@ const CreatePodStepOne = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
+    loadProjectList();
   }, []);
 
   return (

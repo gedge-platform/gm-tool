@@ -122,7 +122,6 @@ const CreateDeployment = observer((props) => {
       name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
-      namespace: deployment.workspacetag,
     },
     spec: {
       selector: {
@@ -297,6 +296,24 @@ const CreateDeployment = observer((props) => {
 
     if (stepValue === 4) {
       setTemplate(template);
+      if (template) {
+        if (
+          template.metadata?.annotations === ': ""' ||
+          isEmpty(template.metadata?.annotations)
+        ) {
+          delete template.spec.template.metadata.annotations;
+          delete template.metadata.annotations;
+        }
+        if (
+          template.metadata?.labels === ': ""' ||
+          isEmpty(template.metadata.labels)
+        ) {
+          delete template.metadata.labels;
+          delete template.spec.template.metadata.labels;
+          delete template.metadata.labels;
+        }
+        setContent(stringify(template));
+      }
       setContent(stringify(template));
     }
   }, [stepValue]);

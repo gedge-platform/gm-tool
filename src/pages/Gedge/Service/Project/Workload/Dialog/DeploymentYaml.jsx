@@ -4,37 +4,14 @@ import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
+import { stringify } from "json-to-pretty-yaml2";
 
 const DeploymentYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
     deploymentStore;
-
-  console.log("content ???", content);
-  const YAML = require("json-to-pretty-yaml");
-
   useEffect(() => {
     setTemplateAnnotation();
     setTemplateLabel();
-    if (content) {
-      var obj_content = YAML.stringify(content);
-      console.log(obj_content);
-      if (
-        obj_content.metadata?.annotations === ': ""' ||
-        isEmpty(obj_content.metadata?.annotations)
-      ) {
-        delete obj_content.spec.template.metadata.annotations;
-        delete obj_content.metadata.annotations;
-      }
-      if (
-        obj_content.metadata.labels === ': ""' ||
-        isEmpty(obj_content.metadata.labels)
-      ) {
-        delete obj_content.metadata.labels;
-        delete obj_content.spec.template.metadata.labels;
-        delete obj_content.metadata.labels;
-      }
-      setContent(stringify(obj_content));
-    }
   }, [content]);
 
   return (

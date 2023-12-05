@@ -85,26 +85,6 @@ const CreateDeploymentStepOne = observer((props) => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
-  // const [prioritytDisable, setPriorityDisable] = useState(true);
-  // const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  // const [priority, setPriority] = useState({
-  //   name: "GLowLatencyPriority",
-  //   options: {
-  //     type: "from_node",
-  //     //data: {}
-  //   },
-  // });
-
-  // const { deployment, setDeploymentInfo, removeContaine, setDeployment } =
-  //   deploymentStore;
-
-  // const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail } =
-  //   workspaceStore;
-
-  // const { loadProjectListInWorkspace, projectListinWorkspace } = projectStore;
-
-  // const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
-
   const { removeContainer, initTargetClusters, deployment, setDeployment } =
     deploymentStore;
 
@@ -119,6 +99,8 @@ const CreateDeploymentStepOne = observer((props) => {
     loadProjectListInWorkspace,
     projectListinWorkspace,
     loadProjectDetail,
+    loadProjectList,
+    projectLists,
   } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
@@ -141,8 +123,14 @@ const CreateDeploymentStepOne = observer((props) => {
     if (e.target.name === "project") {
       setDeployment(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
+
+      // 프로젝트 기준의 클러스터리스트
+      const selectedProject = projectLists.find(
+        (data) => data.workspace.workspaceName === deployment.workspace
+      );
+
       initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
       );
     }
 
@@ -158,28 +146,6 @@ const CreateDeploymentStepOne = observer((props) => {
     }
   };
 
-  // const onChangeWorkspace = (e) => {
-  //   setDeploymentInfo(e.target.name, e.target.value);
-  //   loadProjectListInWorkspace(e.target.value);
-  //   loadWorkspaceDetail(e.target.value);
-  // };
-
-  // const onChangePod = async ({ target: { name, value } }) => {
-  //   let projectNameTemp = "";
-  //   let clusterNameTemp = "";
-
-  //   if (name === "project") {
-  //     setDeploymentInfo(name, value);
-  //     setPriorityDisable(false);
-  //     projectNameTemp = value;
-  //   }
-  //   if (name === "cluster") {
-  //     setPrioritytPodDisable(false);
-  //     clusterNameTemp = value;
-  //     await podListInclusterAPI(clusterNameTemp, projectNameTemp);
-  //   }
-  // };
-
   const openAddContainer = (index) => {
     setOpen2(true);
     setContainerIndex(index);
@@ -189,12 +155,6 @@ const CreateDeploymentStepOne = observer((props) => {
     setOpen2(false);
   };
 
-  // const onChangeCheckPVC = ({ target: { name, value } }) => {
-  //   setCheckPVCInDeployment(name, value);
-  //   setDeploymentInfo("pvcName", name);
-  //   setDeploymentInfo("volume", value);
-  // };
-
   const deleteContainer = (e, index) => {
     e.stopPropagation();
     removeContainer(index);
@@ -202,6 +162,7 @@ const CreateDeploymentStepOne = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
+    loadProjectList();
   }, []);
 
   return (

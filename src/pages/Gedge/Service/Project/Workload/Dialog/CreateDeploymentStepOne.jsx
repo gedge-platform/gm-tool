@@ -130,9 +130,6 @@ const CreateDeploymentStepOne = observer((props) => {
       initTargetClusters(
         selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
       );
-      // initTargetClusters(
-      //   selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
-      // );
     }
 
     if (e.target.name === "replicas") {

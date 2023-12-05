@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import FormControl from "@material-ui/core/FormControl";
-import { workspaceStore, clusterStore, podStore } from "@/store";
+import { workspaceStore, clusterStore, podStore, projectStore } from "@/store";
 import PodTargetClusters from "./PodTargetClusters";
 
 const Button = styled.button`
@@ -29,9 +29,18 @@ const CreatePodStepThree = observer(() => {
     podInfo,
   } = podStore;
 
-  const { selectClusterInfo } = workspaceStore;
-
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
+
+  const { loadProjectList, projectLists } = projectStore;
+
+  useEffect(() => {
+    loadProjectList();
+  }, []);
+
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === podInfo.workspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen(true);
@@ -206,7 +215,7 @@ const CreatePodStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -246,7 +255,7 @@ const CreatePodStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
