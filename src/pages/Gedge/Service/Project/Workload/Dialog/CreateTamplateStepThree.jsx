@@ -30,10 +30,9 @@ const CreateTamplateStepThree = observer(() => {
     setDeploymentPriority,
   } = deploymentStore;
 
-  const { selectClusterInfo } = workspaceStore;
+  const { sourceClusterList } = workspaceStore;
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
-  console.log("템플릿", clusterDetail);
 
   const { podListInclusterAPI, podListIncluster } = podStore;
 
@@ -70,8 +69,6 @@ const CreateTamplateStepThree = observer(() => {
 
   const PriorityComponent = () => {
     const handlePriority = (e) => {
-      console.log("name", e.target.name);
-      console.log("name", e.target.value);
       if (e.target.name === "name") {
         resetTargetClusters();
         if (e.target.value === "GLowLatencyPriority") {
@@ -89,7 +86,6 @@ const CreateTamplateStepThree = observer(() => {
           });
         }
         if (e.target.value === "GSelectedClusterPriority") {
-          console.log("----handlePriority----");
           setDeployment("priority", {
             name: e.target.value,
             mode: "cluster",
@@ -106,7 +102,6 @@ const CreateTamplateStepThree = observer(() => {
       if (e.target.name === "mode") {
         resetTargetClusters();
         if (deployment.priority.name === "GLowLatencyPriority") {
-          console.log("mode???", e.target.value);
           if (e.target.value === "from_node") {
             setDeployment("priority", {
               name: "GLowLatencyPriority",
@@ -116,7 +111,6 @@ const CreateTamplateStepThree = observer(() => {
             });
           }
           if (e.target.value === "from_pod") {
-            console.log("mode???", e.target.value);
             setDeployment("priority", {
               name: "GLowLatencyPriority",
               mode: "from_pod",
@@ -140,7 +134,6 @@ const CreateTamplateStepThree = observer(() => {
             });
           }
           if (e.target.value === "node") {
-            console.log("----monde: node----");
             initClusterDetail();
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
@@ -153,8 +146,8 @@ const CreateTamplateStepThree = observer(() => {
       }
 
       if (e.target.name === "sourceCluster") {
-        console.log("sourceCluster???", e.target.name);
         setDeploymentPriority("sourceCluster", e.target.value);
+        console.log(e.target.value);
         if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
           setDeploymentPriority("sourceNode", e.target.value);
@@ -216,7 +209,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {sourceClusterList.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -256,7 +249,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {sourceClusterList.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
