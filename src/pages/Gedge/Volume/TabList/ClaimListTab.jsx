@@ -81,11 +81,17 @@ const ClaimListTab = observer(() => {
       headerName: "Volume",
       field: "volume",
       filter: true,
+      cellRenderer: function ({ data: { volume } }) {
+        return `<span>${volume ? volume : "-"}`;
+      },
     },
     {
       headerName: "StorageClass",
       field: "storageClass",
       filter: true,
+      cellRenderer: function ({ data: { storageClass } }) {
+        return `<span>${storageClass ? storageClass : "-"}`;
+      },
     },
     {
       headerName: "Create At",

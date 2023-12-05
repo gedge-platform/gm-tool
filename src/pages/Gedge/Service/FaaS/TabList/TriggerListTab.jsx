@@ -7,6 +7,7 @@ import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateTrigger from "../Dialog/CreateTrigger";
 import FaasStore from "../../../../../store/Faas";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 
 const TriggerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
@@ -25,7 +26,6 @@ const TriggerListTab = observer(() => {
   useEffect(() => {
     loadTriggerListAPI();
   }, []);
-  console.log("triggerList: ", triggerList);
 
   const [columDefs] = useState([
     {
@@ -47,22 +47,28 @@ const TriggerListTab = observer(() => {
       headerName: "Method",
       field: "method",
       filter: true,
+      cellRenderer: function (data) {
+        return `<span>${data.value ? data.value : "-"}</span`;
+      },
     },
     {
       headerName: "RelativeUrl",
       field: "url",
       filter: true,
+      cellRenderer: function (data) {
+        return `<span>${data.value ? data.value : "-"}</span`;
+      },
     },
     {
       headerName: "생성일",
       field: "fission_meta.creationTimestamp",
       filter: "agDateColumnFilter",
-      // filterParams: agDateColumnFilter(),
+      filterParams: agDateColumnFilter(),
       minWidth: 150,
       maxWidth: 200,
-      // cellRenderer: function (data) {
-      //   return `<span>${dateFormatter(data.value)}</span>`;
-      // },
+      cellRenderer: function (data) {
+        return `<span>${dateFormatter(data.value)}</span>`;
+      },
     },
   ]);
 

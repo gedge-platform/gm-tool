@@ -51,8 +51,13 @@ const CreateUser = observer(() => {
       headerName: "클러스터",
       field: "selectCluster",
       filter: true,
+      // cellRenderer: function ({ data: { selectCluster } }) {
+      //   return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+      // },
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) =>
+          item.clusterName ? " " + item.clusterName : ""
+        )}</span>`;
       },
     },
     {

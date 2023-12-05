@@ -345,13 +345,18 @@ class Cluster {
       });
 
       await this.paginationList();
-      await this.loadCluster(this.viewList[0]?.clusterName);
+      console.log("this.viewList: ", this.viewList);
+      if (this.viewList.length !== 0) {
+        await this.loadCluster(this.viewList[0]?.clusterName);
+        await this.loadGpuAPI(this.viewList[0]?.clusterName);
+        await this.loadClusterDetail(this.viewList[0]?.clusterName);
+      }
 
       // 비동기로 데이터를 가져오는 loadGpuAPI 함수 호출
-      await this.loadGpuAPI(this.viewList[0]?.clusterName);
+      // await this.loadGpuAPI(this.viewList[0]?.clusterName);
 
       // loadGpuAPI 함수 호출 후에 loadClusterDetail 함수 호출
-      await this.loadClusterDetail(this.viewList[0]?.clusterName);
+      // await this.loadClusterDetail(this.viewList[0]?.clusterName);
     } catch (error) {
       console.error("Error loading cluster list:", error);
     }
