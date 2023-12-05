@@ -198,7 +198,7 @@ const CreateDeploymentStepTwo = observer(() => {
               <Button onClick={addRow}>+</Button>
             </td>
           </tr>
-          {labels.map((item) => (
+          {labels?.map((item) => (
             <tr>
               <th>Labels</th>
               <td style={{ width: "300px", padding: "8px" }}>
@@ -208,9 +208,7 @@ const CreateDeploymentStepTwo = observer(() => {
                 {item.labelValue}
               </td>
               <td>
-                <Button onClick={() => deleteLabels(item.labelKey)}>
-                  -
-                </Button>
+                <Button onClick={() => deleteLabels(item.labelKey)}>-</Button>
               </td>
             </tr>
           ))}
