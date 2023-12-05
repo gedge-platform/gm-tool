@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { CTextField } from "@/components/textfields";
 import FormControl from "@material-ui/core/FormControl";
 import { deploymentStore, projectStore } from "@/store";
 import workspaceStore from "../../../../../../store/WorkSpace";
 import clusterStore from "../../../../../../store/Cluster";
 import podStore from "../../../../../../store/Pod";
-import claimStore from "../../../../../../store/Claim";
 import DeploymentTargetClusters from "./DeploymentTargetClusters";
-import axios from "axios";
-import { SERVER_URL } from "../../../../../../config";
-import { runInAction } from "mobx";
 
 const Button = styled.button`
   background-color: #fff;
@@ -40,6 +35,17 @@ const CreateDeploymentStepThree = observer(() => {
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;
+
+  const { loadProjectList, projectLists } = projectStore;
+
+  useEffect(() => {
+    loadProjectList();
+  }, []);
+
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === deployment.workspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -214,7 +220,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -254,7 +260,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

@@ -95,6 +95,8 @@ const CreateDeploymentStepOne = observer((props) => {
     loadProjectListInWorkspace,
     projectListinWorkspace,
     loadProjectDetail,
+    loadProjectList,
+    projectLists,
   } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInDeployment } = claimStore;
@@ -119,9 +121,18 @@ const CreateDeploymentStepOne = observer((props) => {
     if (e.target.name === "project") {
       setDeployment(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
-      initTargetClusters(
-        selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+
+      // 프로젝트 기준의 클러스터리스트
+      const selectedProject = projectLists.find(
+        (data) => data.workspace.workspaceName === deployment.workspace
       );
+
+      initTargetClusters(
+        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
+      );
+      // initTargetClusters(
+      //   selectClusterInfo.map((clusterInfo) => clusterInfo.clusterName)
+      // );
     }
 
     if (e.target.name === "replicas") {
@@ -152,6 +163,7 @@ const CreateDeploymentStepOne = observer((props) => {
 
   useEffect(() => {
     loadWorkSpaceList();
+    loadProjectList();
   }, []);
 
   return (

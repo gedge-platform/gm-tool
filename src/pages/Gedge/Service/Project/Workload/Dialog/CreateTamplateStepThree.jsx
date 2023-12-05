@@ -220,7 +220,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectedProject.selectCluster?.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -260,7 +260,7 @@ const CreateTamplateStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectedProject.selectCluster?.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
