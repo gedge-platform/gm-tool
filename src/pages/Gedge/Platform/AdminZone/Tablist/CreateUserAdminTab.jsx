@@ -36,6 +36,7 @@ const CreateUserAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
   } = projectStore;
+  console.log("projectList: ", projectList);
 
   const [columDefs] = useState([
     {
@@ -48,7 +49,9 @@ const CreateUserAdminTab = observer(() => {
       field: "selectCluster",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) =>
+          item.clusterName ? " " + item.clusterName : ""
+        )}</span>`;
       },
     },
     {
@@ -105,7 +108,7 @@ const CreateUserAdminTab = observer(() => {
     loadAdminProjectList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (

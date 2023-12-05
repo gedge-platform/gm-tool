@@ -48,6 +48,11 @@ const WorkspaceAdminTab = observer(() => {
       headerName: "설명",
       field: "workspaceDescription",
       filter: true,
+      cellRenderer: function ({ data: { workspaceDescription } }) {
+        return `<span>${
+          workspaceDescription ? workspaceDescription : "-"
+        }</span>`;
+      },
     },
     {
       headerName: "클러스터",

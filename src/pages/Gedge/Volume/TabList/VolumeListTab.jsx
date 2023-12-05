@@ -68,6 +68,9 @@ const VolumeListTab = observer(() => {
       headerName: "Storage Class",
       field: "storageClass",
       filter: true,
+      cellRenderer: function ({ data: { storageClass } }) {
+        return `<span>${storageClass ? storageClass : "-"}`;
+      },
     },
     {
       headerName: "Volume Mode",
@@ -83,6 +86,9 @@ const VolumeListTab = observer(() => {
       headerName: "Claim",
       field: "claim.name",
       filter: true,
+      cellRenderer: function ({ data: { claim } }) {
+        return `<span>${claim.name ? claim.name : "-"}`;
+      },
     },
     {
       headerName: "Create At",

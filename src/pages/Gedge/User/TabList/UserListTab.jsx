@@ -38,7 +38,7 @@ const UserListTab = observer(() => {
     userName,
     setUserName,
   } = userStore;
-  // console.log("inputs :", inputs);
+  console.log("userList :", userList);
 
   const [columnDefs] = useState([
     {
@@ -147,7 +147,7 @@ const UserListTab = observer(() => {
           </CommActionBar>
           <div className="grid-height2">
             <AgGrid
-              rowData={userList}
+              rowData={userList[0]}
               columnDefs={columnDefs}
               totalElements={totalElements}
               isBottom={false}

@@ -52,6 +52,9 @@ const CronJobListTab = observer(() => {
       headerName: "워크스페이스",
       field: "workspace",
       filter: true,
+      cellRenderer: function ({ data: { workspace } }) {
+        return `<span>${workspace ? workspace : "-"}</span>`;
+      },
     },
     {
       headerName: "스케줄",
@@ -93,7 +96,7 @@ const CronJobListTab = observer(() => {
     loadCronJobList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
