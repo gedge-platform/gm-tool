@@ -7,6 +7,7 @@ import { CReflexBox } from "@/layout/Common/CReflexBox";
 import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreatePackage from "../Dialog/CreatePackage";
 import FaasStore from "../../../../../store/Faas";
+import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 
 const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
@@ -55,12 +56,12 @@ const PackageListTab = observer(() => {
       headerName: "생성일",
       field: "fission_meta.creationTimestamp",
       filter: "agDateColumnFilter",
-      // filterParams: agDateColumnFilter(),
+      filterParams: agDateColumnFilter(),
       minWidth: 150,
       maxWidth: 200,
-      // cellRenderer: function (data) {
-      //   return `<span>${dateFormatter(data.value)}</span>`;
-      // },
+      cellRenderer: function (data) {
+        return `<span>${dateFormatter(data.value)}</span>`;
+      },
     },
   ]);
 

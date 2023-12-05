@@ -31,7 +31,6 @@ const WorkspaceListTab = observer(() => {
     goNextPage,
     currentPage,
   } = workspaceStore;
-  console.log();
 
   const [columnDefs] = useState([
     {
@@ -46,13 +45,20 @@ const WorkspaceListTab = observer(() => {
       headerName: "설명",
       field: "workspaceDescription",
       filter: true,
+      cellRenderer: function ({ data: { workspaceDescription } }) {
+        return `<span>${
+          workspaceDescription ? workspaceDescription : "-"
+        }</span>`;
+      },
     },
     {
       headerName: "클러스터",
       field: "clusterName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) =>
+          item.clusterName ? " " + item.clusterName : ""
+        )}</span>`;
       },
     },
     {

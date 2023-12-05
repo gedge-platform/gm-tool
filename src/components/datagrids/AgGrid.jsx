@@ -57,7 +57,7 @@ const AgGrid = (props) => {
 
   const onGridReady = (params) => {
     setGridApi(params.api);
-    rowData = 0;
+    // rowData = 0;
   };
 
   const onFirstDataRendered = (params) => {

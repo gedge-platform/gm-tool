@@ -46,7 +46,9 @@ const UserServiceListTab = observer(() => {
       field: "selectCluster",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        return `<span>${selectCluster.map((item) => item.clusterName)}</span>`;
+        return `<span>${selectCluster.map((item) =>
+          item.clusterName ? " " + item.clusterName : ""
+        )}</span>`;
       },
     },
     {
@@ -124,7 +126,7 @@ const UserServiceListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={projectList}
+                rowData={projectList[0]}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}
