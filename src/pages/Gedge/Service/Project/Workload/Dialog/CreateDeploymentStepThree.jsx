@@ -30,8 +30,6 @@ const CreateDeploymentStepThree = observer(() => {
     setDeploymentPriority,
   } = deploymentStore;
 
-  const { selectClusterInfo } = workspaceStore;
-
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
   const { podListInclusterAPI, podListIncluster } = podStore;

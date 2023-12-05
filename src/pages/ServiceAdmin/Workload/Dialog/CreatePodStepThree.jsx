@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
 import FormControl from "@material-ui/core/FormControl";
-import { workspaceStore, clusterStore, podStore } from "@/store";
+import { workspaceStore, clusterStore, podStore, projectStore } from "@/store";
 import PodTargetClusters from "./PodTargetClusters";
 
 const Button = styled.button`
@@ -33,48 +33,16 @@ const CreatePodStepThree = observer((props) => {
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
-  // const {
-  //   loadWorkSpaceList,
-  //   loadWorkspaceDetail,
-  //   selectClusterInfo,
-  //   workSpaceDetail,
-  // } = workspaceStore;
+  const { loadProjectList, projectLists } = projectStore;
 
-  // const {
-  //   priority,
-  //   setPriority,
-  //   podInfo,
-  //   setPodInfo,
-  //   targetClusters,
-  //   podListIncluster,
-  //   priorityNodes,
-  //   setPriorityNodes,
-  //   podListInclusterAPI,
-  //   selectedCluster,
-  //   setSelectedCluster,
-  // } = podStore;
+  useEffect(() => {
+    loadProjectList();
+  }, []);
 
-  // const { loadProjectListInWorkspace } = projectStore;
-
-  // const { loadPVClaims } = claimStore;
-
-  // const {
-  //   loadClusterList,
-  //   loadCluster,
-  //   loadClusterInWorkspace,
-  //   clusterDetail,
-  // } = clusterStore;
-
-  // const [open, setOpen] = useState(false);
-  // const [nodeName, setNodeName] = useState("");
-  // const [nodeDisable, setNodeDisable] = useState(true);
-  // const [containerIndex, setContainerIndex] = useState(1);
-  // const [prioritytDisable, setPriorityDisable] = useState(true);
-  // const [prioritytPodDisable, setPrioritytPodDisable] = useState(true);
-  // const [clusterNameInPriority, setClusterNameInPriority] = useState("");
-  // const [type, setType] = useState("from_node");
-  // const [podName, setPodName] = useState("");
-  // const [projectDisable, setProjectDisable] = useState(true);
+  // 프로젝트 기준의 클러스터리스트
+  const selectedProject = projectLists?.find(
+    (data) => data.workspace.workspaceName === podInfo.workspace
+  );
 
   const openTargetClusters = (index) => {
     setOpen(true);
@@ -249,7 +217,7 @@ const CreatePodStepThree = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -289,7 +257,7 @@ const CreatePodStepThree = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectClusterInfo.map((cluster) => (
+                          {selectedProject?.selectCluster?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

@@ -94,79 +94,18 @@ const CreatePod = observer((props) => {
     postPodGSetClusterPriority,
   } = podStore;
 
-  console.log("podInfo ???", podInfo);
-
   const { loadPVClaims } = claimStore;
   const { loadWorkSpaceList } = workspaceStore;
 
   const [stepValue, setStepValue] = useState(1);
-
-  // const pvcTemplate = {
-  //   apiVersion: "v1",
-  //   kind: "PersistentVolumeClaim",
-  //   metadata: {
-  //     name: podInfo.podName + "-pvc",
-  //   },
-  //   spec: {
-  //     accessModes: -"ReadWriteOnce",
-  //     resources: {
-  //       requests: {
-  //         storage: "8Gi",
-  //       },
-  //     },
-  //     storageClassName: "nfs-client",
-  //   },
-  // };
-
-  // const podTemplate = {
-  //   apiVersion: "v1",
-  //   kind: "Pod",
-  //   metadata: {
-  //     name: podInfo.podName,
-  //   },
-  //   spec: {
-  //     containers: [
-  //       {
-  //         name: "nginx",
-  //         image: "nginx:1.14.2",
-  //         ports: [
-  //           {
-  //             containerPort: "80",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // };
-
-  // const serviceTemplate = {
-  //   apiVersion: "v1",
-  //   kind: "Service",
-  //   metadata: {
-  //     name: podInfo.podName + "-service",
-  //   },
-  //   spec: {
-  //     type: "NodePort",
-  //     selector: {
-  //       app: "nginx10",
-  //     },
-  //     ports: [
-  //       {
-  //         name: "http",
-  //         port: 80,
-  //         targetPort: 80,
-  //       },
-  //     ],
-  //   },
-  // };
 
   const template = {
     apiVersion: "v1",
     kind: "Pod",
     metadata: {
       name: podInfo.podName,
-      labels: labelInput,
       annotations: annotationInput,
+      labels: labelInput,
     },
     spec: {
       restartPolicy: "Always",
@@ -336,6 +275,22 @@ const CreatePod = observer((props) => {
 
     if (stepValue === 4) {
       setTemplate(template);
+
+      if (template) {
+        if (
+          template.metadata?.annotations === ': ""' ||
+          isEmpty(template.metadata?.annotations)
+        ) {
+          delete template.metadata.annotations;
+        }
+        if (
+          template.metadata?.labels === ': ""' ||
+          isEmpty(template.metadata.labels)
+        ) {
+          delete template.metadata.labels;
+        }
+        setContent(stringify(template));
+      }
       setContent(stringify(template));
     }
   }, [stepValue]);

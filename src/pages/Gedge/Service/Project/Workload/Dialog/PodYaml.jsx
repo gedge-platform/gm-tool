@@ -10,27 +10,9 @@ const PodYaml = observer(() => {
   const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
     podStore;
 
-  console.log("content : ", content);
-
   useEffect(() => {
     setTemplateAnnotation();
     setTemplateLabel();
-    if (content) {
-      var obj_content = YAML.parse(content);
-      if (
-        obj_content.metadata?.annotations === ': ""' ||
-        isEmpty(obj_content.metadata?.annotations)
-      ) {
-        delete obj_content.metadata?.annotations;
-      }
-      if (
-        obj_content.metadata.labels === ': ""' ||
-        isEmpty(obj_content.metadata.labels)
-      ) {
-        delete obj_content.metadata?.labels;
-      }
-      setContent(stringify(obj_content));
-    }
   }, [content]);
 
   return (

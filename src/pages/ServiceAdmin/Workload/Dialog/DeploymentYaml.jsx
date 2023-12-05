@@ -13,26 +13,6 @@ const DeploymentYaml = observer(() => {
   useEffect(() => {
     setTemplateAnnotation();
     setTemplateLabel();
-    if (content) {
-      var obj_content = YAML.parse(content);
-      console.log(obj_content);
-      if (
-        obj_content.metadata.annotations === ': ""' ||
-        isEmpty(obj_content.metadata.annotations)
-      ) {
-        delete obj_content.spec.template.metadata.annotations;
-        delete obj_content.metadata.annotations;
-      }
-      if (
-        obj_content.metadata.labels === ': ""' ||
-        isEmpty(obj_content.metadata.labels)
-      ) {
-        delete obj_content.metadata.labels;
-        delete obj_content.spec.template.metadata.labels;
-        delete obj_content.metadata.labels;
-      }
-      setContent(stringify(obj_content));
-    }
   }, [content]);
 
   return (

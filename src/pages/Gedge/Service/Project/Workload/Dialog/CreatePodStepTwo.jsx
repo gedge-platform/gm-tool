@@ -243,7 +243,7 @@ const CreatePodStepTwo = observer(() => {
               <Button onClick={addAnnotations}>+</Button>
             </td>
           </tr>
-          {annotations.map((item) => (
+          {annotations?.map((item) => (
             <tr>
               <th>Annotations</th>
               <td style={{ width: "300px", padding: "8px" }}>
