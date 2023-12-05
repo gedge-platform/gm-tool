@@ -137,7 +137,7 @@ const CreateTamplateStepThree = observer(() => {
           });
         }
         if (deployment.priority.name === "GSelectedClusterPriority") {
-          if (e.target.value === "default") {
+          if (e.target.value === "cluster") {
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "cluster",
@@ -339,7 +339,9 @@ const CreateTamplateStepThree = observer(() => {
               {deployment.priority.mode === "node" && (
                 <>
                   <tr>
-                    <th>Target Clusters</th>
+                    <th>
+                      Target Clusters<span className="requried">*</span>
+                    </th>
                     <td>
                       <Button onClick={() => openTargetClusters(-1)}>
                         {showTargetClusters()}
@@ -444,7 +446,9 @@ const CreateTamplateStepThree = observer(() => {
             <></>
           ) : (
             <tr>
-              <th>Target Clusters</th>
+              <th>
+                Target Clusters<span className="requried">*</span>
+              </th>
               <td>
                 <Button
                   style={{ marginBottom: "2px" }}

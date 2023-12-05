@@ -10,6 +10,7 @@ import { deploymentStore, workspaceStore } from "@/store";
 import TamplateYaml from "./TamplateYAML";
 import templateStore from "../../../../../../store/Template";
 import { stringify } from "json-to-pretty-yaml2";
+import { swalError } from "../../../../../../utils/swal-utils";
 
 const Button = styled.button`
   background-color: #fff;
@@ -40,6 +41,7 @@ const TamplateCreate = observer((props) => {
     deployment,
     resetDeployment,
     initTargetClusters,
+    targetClusters,
     postTemplateGM,
     postTemplateGLowLatency,
     postTemplateGMostRequest,
@@ -54,13 +56,70 @@ const TamplateCreate = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
+  console.log("targetClusters: ", targetClusters);
+  console.log("deployment: ", deployment);
+
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
-
+    if (appInfo.app === "") {
+      swalError("App을 선택해주세요");
+      return;
+    }
+    if (appInfo.appVersion === "") {
+      swalError("Version을 선택해주세요");
+      return;
+    }
+    if (appInfo.appName === "") {
+      swalError("App 이름을 입력해주세요");
+      return;
+    } else if (!checkRegex.test(appInfo.appName)) {
+      swalError("영어소문자와 숫자만 입력해주세요.");
+      return;
+    }
+    if (appInfo.appWorkspace === "") {
+      swalError("Workspace를 선택해주세요");
+      return;
+    }
+    if (appInfo.appProject === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
+    if (appInfo.appReplicas === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
     setStepValue(2);
   };
 
   const goStepThree = () => {
+    if (deployment.priority.name === "GLowLatencyPriority") {
+      if (deployment.priority.sourceCluster === "") {
+        swalError("Source Cluster를 선택해주세요");
+        return;
+      }
+      // if (deployment.priority.sourceNode === "") {
+      //   swalError("Source Node를 선택해주세요");
+      //   return;
+      // }
+      if (deployment.priority.podName === "") {
+        swalError("Pod를 선택해주세요");
+        return;
+      }
+    }
+    if (deployment.priority.name === "GMostRequestPriority") {
+    }
+    if (deployment.priority.name === "GSelectedClusterPriority") {
+      if (deployment.priority.mode === "node") {
+        if (deployment.priority.sourceNode === "") {
+          swalError("Source Node를 선택해주세요");
+          return;
+        }
+      }
+    }
+    if (targetClusters.length === 0) {
+      swalError("Target Cluster를 선택해주세요");
+      return;
+    }
     setStepValue(3);
   };
 
