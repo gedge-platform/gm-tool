@@ -206,81 +206,6 @@ const CreateDeployment = observer((props) => {
     },
   };
 
-  const noPullSecretsTemplate = {
-    apiVersion: "apps/v1",
-    kind: "Deployment",
-    metadata: {
-      name: deployment.deploymentName,
-      annotations: annotationInput,
-      labels: labelInput,
-    },
-    spec: {
-      selector: {
-        matchLabels: labelInput,
-      },
-      replicas: deployment.replicas,
-      template: {
-        metadata: {
-          annotations: annotationInput,
-          labels: labelInput,
-        },
-        spec: {
-          containers: deployment.containers?.map((e) => {
-            return {
-              name: e.containerName,
-              image: e.containerImage,
-              imagePullPolicy: e.pullPolicy,
-              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
-              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
-              resources: {
-                limits: {
-                  cpu: e.cpuLimit + "m",
-                  memory: e.memoryLimit + "Mi",
-                  "nvidia.com/gpu": e.NVIDIAGPU,
-                },
-                requests: {
-                  cpu: e.cpuReservation + "m",
-                  memory: e.memoryReservation + "Mi",
-                },
-              },
-              ports: e.ports.map((i) => {
-                return {
-                  name: i.name,
-                  containerPort: parseInt(i.privateContainerPort),
-                  protocol: i.protocol,
-                };
-              }),
-              envFrom: secretConfigmap.map((i) => {
-                const item = i.type + "Ref";
-                return {
-                  [i.type + "Ref"]: { name: i.variableName },
-                };
-              }),
-              env: keyValuePair.map((i) => {
-                return {
-                  name: i[0],
-                  value: i[1],
-                };
-              }),
-            };
-          }),
-        },
-      },
-    },
-  };
-
-  const imagePullSecretsTemp = deployment?.containers.map((e) => e.pullSecret);
-
-  const test = (imagePullSecretsTemp) => {
-    if (imagePullSecretsTemp[0] === undefined) {
-      return noPullSecretsTemplate;
-    } else {
-      return template;
-    }
-  };
-
-  console.log(test(imagePullSecretsTemp));
-
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
@@ -325,10 +250,6 @@ const CreateDeployment = observer((props) => {
       return;
     }
     // Replica는 기본 설정 1이라서 추가 안함
-    if (deployment.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
     if (deployment.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;
@@ -340,7 +261,7 @@ const CreateDeployment = observer((props) => {
   const onClickStepThree = (e) => {
     if (labelKey.length < 1 || labelValue.length < 1) {
       swalError("Labels를 입력해주세요");
-      return; // Labels가 하나라도 입력되지 않았으면 함수를 여기서 종료
+      return;
     }
 
     const LabelKeyArr = [];
@@ -352,6 +273,45 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepFour = () => {
+    if (
+      deployment.priority.mode === "from_node" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (
+      deployment.priority.mode === "from_pod" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_pod") &
+      (deployment.priority.podName === "")
+    ) {
+      swalError("pod를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (targetClusters.length === 0) {
+      swalError("targetClusters를 선택해주세요.");
+      return;
+    }
     setStepValue(4);
   };
 

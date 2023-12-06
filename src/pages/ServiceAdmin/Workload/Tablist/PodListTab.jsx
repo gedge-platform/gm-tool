@@ -79,6 +79,7 @@ const PodListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      sort: "desc",
     },
   ]);
 

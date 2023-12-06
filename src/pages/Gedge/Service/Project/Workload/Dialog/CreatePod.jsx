@@ -76,24 +76,20 @@ const CreatePod = observer((props) => {
   const {
     podInfo,
     initPodInfo,
-    initTargetClusters,
     setContent,
     setClearLA,
     setTemplate,
-    labelsList,
     labels,
     annotations,
     labelInput,
     annotationInput,
-    postPodGM,
-    keyValuePair,
-    secretConfigmap,
     postPodGLowLatencyPriority,
     postPodGMostRequestPriority,
     postPodGSelectedClusterPriority,
     postPodGSetClusterPriority,
     labelKey,
     labelValue,
+    targetClusters,
   } = podStore;
 
   const { loadPVClaims } = claimStore;
@@ -112,6 +108,15 @@ const CreatePod = observer((props) => {
     spec: {
       restartPolicy: "Always",
       terminationGracePeriodSeconds: 30,
+      ...(podInfo.containers && podInfo.containers.some((e) => e.pullSecret)
+        ? {
+            imagePullSecrets: podInfo.containers
+              .filter((e) => e.pullSecret)
+              .map((e) => {
+                return { name: e.pullSecret };
+              }),
+          }
+        : {}),
       containers: podInfo.containers?.map((e) => {
         const resources = {
           requests: {},
@@ -193,11 +198,6 @@ const CreatePod = observer((props) => {
       swalError("Project를 선택해주세요");
       return;
     }
-    // Replica는 기본 설정 1이라서 추가 안함
-    if (podInfo.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
     if (podInfo.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;
@@ -220,6 +220,45 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepFour = () => {
+    if (
+      podInfo.priority.mode === "from_node" &&
+      podInfo.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "from_node") &
+      (podInfo.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (
+      podInfo.priority.mode === "from_pod" &&
+      podInfo.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "from_pod") &
+      (podInfo.priority.podName === "")
+    ) {
+      swalError("pod를 선택해주세요");
+      return;
+    }
+    if (targetClusters.length === 0) {
+      swalError("targetClusters를 선택해주세요.");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "node") &
+      (podInfo.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
     setStepValue(4);
   };
 

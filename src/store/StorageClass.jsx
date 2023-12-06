@@ -368,6 +368,7 @@ class StorageClass {
         `${SERVER_URL}/ceph/monitoring?start=${start}&end=${end}&step=${step}`
       )
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           // this.cephMetrics = res.data.items;
           this.osd_read_latency = res.data.items.osd_read_latency[0].values;

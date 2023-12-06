@@ -134,7 +134,7 @@ const CreatePodStepThree = observer((props) => {
           });
         }
         if (podInfo.priority.name === "GSelectedClusterPriority") {
-          if (e.target.value === "default") {
+          if (e.target.value === "cluster") {
             setPodInfo("priority", {
               name: "GSelectedClusterPriority",
               mode: "cluster",
