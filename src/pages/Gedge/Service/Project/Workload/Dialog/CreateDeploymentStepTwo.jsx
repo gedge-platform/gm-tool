@@ -51,6 +51,7 @@ const CreateDeploymentStepTwo = observer(() => {
 
   const handleChange = (e) => {
     const { value, name } = e.target;
+
     switch (name) {
       case "labelKey":
         setInputLabelKey(value);

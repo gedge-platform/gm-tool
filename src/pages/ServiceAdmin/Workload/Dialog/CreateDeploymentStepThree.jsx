@@ -101,7 +101,6 @@ const CreateDeploymentStepThree = observer(() => {
         if (e.target.value === "GMostRequestPriority") {
           setDeployment("priority", {
             name: "GMostRequestPriority",
-            // mode: "cpu",
             mode: "default",
           });
         }
@@ -146,7 +145,7 @@ const CreateDeploymentStepThree = observer(() => {
           });
         }
         if (deployment.priority.name === "GSelectedClusterPriority") {
-          if (e.target.value === "default") {
+          if (e.target.value === "cluster") {
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "cluster",
@@ -169,7 +168,7 @@ const CreateDeploymentStepThree = observer(() => {
         setDeploymentPriority("sourceCluster", e.target.value);
         if (deployment.priority.mode === "from_node") {
           loadCluster(e.target.value);
-          setDeploymentPriority("sourceNode", e.target.value);
+          // setDeploymentPriority("sourceNode", e.target.value);
         }
         if (deployment.priority.mode === "from_pod") {
           podListInclusterAPI(e.target.value, deployment.project);
@@ -252,7 +251,9 @@ const CreateDeploymentStepThree = observer(() => {
                               <option value={node.name}>{node.name}</option>
                             ))
                           ) : (
-                            <option value={"noData"}>No Data</option>
+                            <option value={"noData"} disabled>
+                              No Data
+                            </option>
                           )}
                         </select>
                       </FormControl>
@@ -292,7 +293,9 @@ const CreateDeploymentStepThree = observer(() => {
                               <option value={pod.name}>{pod.name}</option>
                             ))
                           ) : (
-                            <option value={"noData"}>No Data</option>
+                            <option value={"noData"} disabled>
+                              No Data
+                            </option>
                           )}
                         </select>
                       </FormControl>

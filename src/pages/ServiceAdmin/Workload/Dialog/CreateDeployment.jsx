@@ -87,16 +87,13 @@ const CreateDeployment = observer((props) => {
 
   const {
     deployment,
-    initDeploymentInfo,
     setContent,
     setClearLA,
     setTemplate,
-    labelsList,
     labels,
     annotations,
     labelInput,
     annotationInput,
-    postDeploymentGM,
     keyValuePair,
     secretConfigmap,
     postGLowLatencyPriority,
@@ -104,8 +101,11 @@ const CreateDeployment = observer((props) => {
     postGMostRequestPriority,
     postGSetClusterPriority,
     resetDeployment,
+    labelKey,
+    labelValue,
+    targetClusters,
   } = deploymentStore;
-  console.log("deployment ????", deployment);
+  console.log("deployment ????", deployment.priority);
 
   const { loadPVClaims } = claimStore;
 
@@ -134,27 +134,44 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecrets: deployment.containers?.map((e) => {
-            return { name: e.pullSecret };
-          }),
+          ...(deployment.containers &&
+          deployment.containers.some((e) => e.pullSecret)
+            ? {
+                imagePullSecrets: deployment.containers
+                  .filter((e) => e.pullSecret)
+                  .map((e) => {
+                    return { name: e.pullSecret };
+                  }),
+              }
+            : {}),
+
           containers: deployment.containers?.map((e) => {
+            const resources = {
+              limits: {},
+              requests: {},
+            };
+            if (e.cpuLimit !== "") {
+              resources.limits.cpu = e.cpuLimit + "m";
+            }
+            if (e.memoryLimit !== "") {
+              resources.limits.memory = e.memoryLimit + "Mi";
+            }
+            if (e.cpuLimit !== "") {
+              resources.limits.NVIDIAGPU = e.NVIDIAGPU;
+            }
+            if (e.cpuLimit !== "") {
+              resources.requests.cpu = e.cpuReservation + "m";
+            }
+            if (e.cpuLimit !== "") {
+              resources.requests.memory = e.memoryReservation + "Mi";
+            }
             return {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
               command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
               args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
-              resources: {
-                limits: {
-                  cpu: e.cpuLimit + "m",
-                  memory: e.memoryLimit + "Mi",
-                  "nvidia.com/gpu": e.NVIDIAGPU,
-                },
-                requests: {
-                  cpu: e.cpuReservation + "m",
-                  memory: e.memoryReservation + "Mi",
-                },
-              },
+              resources: resources,
               ports: e.ports.map((i) => {
                 return {
                   name: i.name,
@@ -163,13 +180,6 @@ const CreateDeployment = observer((props) => {
                 };
               }),
               envFrom: secretConfigmap.map((i) => {
-                // {
-                //   if (i.type === "secret") {
-                //     return { [i.type + "Ref"]: { name: i.variableName } };
-                //   } else if (i.type === "configMap") {
-                //     return { [i.type + "Ref"]: { name: i.variableName } };
-                //   }
-                // }
                 const item = i.type + "Ref";
                 return {
                   [i.type + "Ref"]: { name: i.variableName },
@@ -181,22 +191,8 @@ const CreateDeployment = observer((props) => {
                   value: i[1],
                 };
               }),
-              // volumeMounts: e.volumes.map((i) => {
-              //   return {
-              //     mountPath: i.subPathInVolume,
-              //     name: deployment.pvcName,
-              //   };
-              // }),
             };
           }),
-          // volumes: [
-          //   {
-          //     name: deployment.pvcName,
-          //     persistentVolumeClaim: {
-          //       claimName: deployment.volume,
-          //     },
-          //   },
-          // ],
         },
       },
     },
@@ -229,9 +225,6 @@ const CreateDeployment = observer((props) => {
 
     handleClose();
     props.reloadFunc && props.reloadFunc();
-    // postDeploymentGM(require("json-to-pretty-yaml").stringify(template));
-    // handleClose();
-    // props.reloadFunc && props.reloadFunc();
   };
 
   const onClickStepTwo = (e) => {
@@ -252,11 +245,6 @@ const CreateDeployment = observer((props) => {
       swalError("Project를 선택해주세요");
       return;
     }
-    // Replica는 기본 설정 1이라서 추가 안함
-    if (deployment.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
     if (deployment.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;
@@ -266,6 +254,11 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepThree = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 선택해주세요");
+      return;
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
 
@@ -275,6 +268,46 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepFour = () => {
+    if (
+      deployment.priority.mode === "from_node" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (
+      deployment.priority.mode === "from_pod" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_pod") &
+      (deployment.priority.podName === "")
+    ) {
+      swalError("pod를 선택해주세요");
+      return;
+    }
+    if (targetClusters.length === 0) {
+      swalError("targetClusters를 선택해주세요.");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+
     setStepValue(4);
   };
 

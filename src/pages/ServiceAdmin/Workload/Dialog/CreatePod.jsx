@@ -78,20 +78,20 @@ const CreatePod = observer((props) => {
   const {
     podInfo,
     initPodInfo,
-    initTargetClusters,
     setContent,
     setClearLA,
     setTemplate,
-    labelsList,
     labels,
     annotations,
     labelInput,
     annotationInput,
-    postPodGM,
     postPodGLowLatencyPriority,
     postPodGMostRequestPriority,
     postPodGSelectedClusterPriority,
     postPodGSetClusterPriority,
+    labelKey,
+    labelValue,
+    targetClusters,
   } = podStore;
 
   const [stepValue, setStepValue] = useState(1);
@@ -110,6 +110,15 @@ const CreatePod = observer((props) => {
     spec: {
       restartPolicy: "Always",
       terminationGracePeriodSeconds: 30,
+      ...(podInfo.containers && podInfo.containers.some((e) => e.pullSecret)
+        ? {
+            imagePullSecrets: podInfo.containers
+              .filter((e) => e.pullSecret)
+              .map((e) => {
+                return { name: e.pullSecret };
+              }),
+          }
+        : {}),
       containers: podInfo.containers?.map((e) => {
         return {
           name: e.containerName,
@@ -134,21 +143,6 @@ const CreatePod = observer((props) => {
               };
             }
           }),
-          // env: keyValuePair.map((i) => {
-          //   return {
-          //     name: i[0],
-          //     value: i[1],
-          //   };
-          // }),
-          // valueForm: secretConfigmap.map((t) => {
-          //   const item = t.type + "Ref";
-          //   return {
-          //     [t.type + "Ref"]: {
-          //       name: t.variableName,
-          //       key: t.type + "-key",
-          //     },
-          //   };
-          // }),
           ports: e.ports.map((i) => {
             return {
               containerPort: parseInt(i.privateContainerPort),
@@ -166,26 +160,8 @@ const CreatePod = observer((props) => {
               "nvidia.com/gpu": e.NVIDIAGPU,
             },
           },
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: i.name,
-          //     mountPath: i.mountPoint,
-          //   };
-          // }),
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: "data-volume",
-          //     mountPath: "/data",
-          //   };
-          // }),
         };
       }),
-      // volumes: [
-      //   {
-      //     name: "data-volume",
-      //     emptyDir: {},
-      //   },
-      // ],
     },
   };
 
@@ -227,6 +203,11 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepThree = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 입력해주세요");
+      return;
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
     labels.map((data) => LabelKeyArr.push(data.labelKey));
@@ -235,6 +216,45 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepFour = () => {
+    if (
+      podInfo.priority.mode === "from_node" &&
+      podInfo.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "from_node") &
+      (podInfo.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (
+      podInfo.priority.mode === "from_pod" &&
+      podInfo.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "from_pod") &
+      (podInfo.priority.podName === "")
+    ) {
+      swalError("pod를 선택해주세요");
+      return;
+    }
+    if (targetClusters.length === 0) {
+      swalError("targetClusters를 선택해주세요.");
+      return;
+    }
+    if (
+      (podInfo.priority.mode === "node") &
+      (podInfo.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
     setStepValue(4);
   };
 

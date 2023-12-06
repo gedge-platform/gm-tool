@@ -143,55 +143,20 @@ const DeploymentAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    // console.log("containerInfo : ", containerInfo);
-    // if (containerInfo.containerName === "") {
-    //   swalError("Container 이름을 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.containerImage === "") {
-    //   swalError("Container 이미지를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.pullSecret === "") {
-    //   swalError("Pull Secret을 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.pullPolicy === "") {
-    //   swalError("Pull Policy를 선택해주세요");
-    //   return;
-    // }
-    // if (containerInfo.ports.length === 0) {
-    //   swalError("Port를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.command === "") {
-    //   swalError("Command를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.arguments === "") {
-    //   swalError("Arguments를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.containerName === "") {
-    //   swalError("Container 이름을 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.variables.length === 0) {
-    //   swalError("Variable을 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.cpuReservation === "") {
-    //   swalError("CPU Request를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.memoryReservation === "") {
-    //   swalError("Memory Request를 입력해주세요");
-    //   return;
-    // }
-    // if (containerInfo.volumes.length === 0) {
-    //   swalError("Volume을 입력해주세요");
-    //   return;
-    // }
+    console.log("containerInfo : ", containerInfo);
+    if (containerInfo.containerName === "") {
+      swalError("Container 이름을 입력해주세요");
+      return;
+    }
+    if (containerInfo.containerImage === "") {
+      swalError("Container 이미지를 입력해주세요");
+      return;
+    }
+    if (containerInfo.ports.length === 0) {
+      swalError("Port를 입력해주세요");
+      return;
+    }
+
     setCommand(command);
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
@@ -210,35 +175,6 @@ const DeploymentAddContainer = observer((props) => {
     editContainer(containerIndex, temp);
     props.onClose && props.onClose();
   };
-
-  // const onChangeVolume = (e, index) => {
-  //   containerInfo.volumes[index] = {
-  //     ...containerInfo.volumes[index],
-  //     [e.target.name]: e.target.value,
-  //   };
-  //   setContainerInfo({
-  //     ...containerInfo,
-  //   });
-  // };
-
-  // const addVolume = () => {
-  //   setContainerInfo({
-  //     ...containerInfo,
-  //     volumes: [
-  //       ...containerInfo.volumes,
-  //       { name: "", mountPoint: "", subPathInVolume: "" },
-  //     ],
-  //   });
-  // };
-
-  // const removeVolume = (removeIndex) => {
-  //   containerInfo.volumes = containerInfo.volumes.filter(
-  //     (_, index) => removeIndex !== index
-  //   );
-  //   setContainerInfo({
-  //     ...containerInfo,
-  //   });
-  // };
 
   useEffect(() => {
     loadVolumeList();

@@ -250,11 +250,15 @@ const CreateDeploymentStepOne = observer((props) => {
                   <option value={""} selected hidden disabled>
                     Select Project
                   </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
+                  {projectListinWorkspace ? (
+                    projectListinWorkspace?.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value={""}>No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>
@@ -290,7 +294,7 @@ const CreateDeploymentStepOne = observer((props) => {
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {pvClaimListInDeployment.map((pvc) => (
+                  {pvClaimListInDeployment?.map((pvc) => (
                     <tr>
                       <td style={{ textAlign: "center", width: "7%" }}>
                         <input
@@ -324,7 +328,7 @@ const CreateDeploymentStepOne = observer((props) => {
                 + Add Container
               </Button>
               <div>
-                {deployment.containers.map((container, index) => (
+                {deployment?.containers.map((container, index) => (
                   <Button
                     style={{ marginTop: "2px", marginBottom: "2px" }}
                     onClick={() => openAddContainer(index)}
