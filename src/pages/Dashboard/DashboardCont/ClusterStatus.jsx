@@ -78,7 +78,7 @@ const ClusterStatus = observer(() => {
         <div className="ClusterStatusIcon openstack"></div>
         <div className="ClusterStatusInfoBox">
           <div className="Count">
-            2 <span>클러스터</span>
+            1 <span>클러스터</span>
           </div>
           <div className="Count">
             3 <span>VM</span>
@@ -87,7 +87,32 @@ const ClusterStatus = observer(() => {
         <div className="ClusterStatusList">
           <ul>
             <li className="run">
-              <span className="tit">실행</span> <span>8</span>
+              <span className="tit">실행</span> <span>3</span>
+            </li>
+            <li className="stop">
+              <span className="tit">중지</span> <span>0</span>
+            </li>
+            <li className="pause">
+              <span className="tit">일시중지</span> <span>0</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="ClusterStatusBox">
+        <div className="ClusterStatusIcon google"></div>
+        <div className="ClusterStatusInfoBox">
+          <div className="Count">
+            1 <span>클러스터</span>
+          </div>
+          <div className="Count">
+            3 <span>VM</span>
+          </div>
+        </div>
+        <div className="ClusterStatusList">
+          <ul>
+            <li className="run">
+              <span className="tit">실행</span> <span>3</span>
             </li>
             <li className="stop">
               <span className="tit">중지</span> <span>0</span>
@@ -103,16 +128,16 @@ const ClusterStatus = observer(() => {
         <div className="ClusterStatusIcon aws"></div>
         <div className="ClusterStatusInfoBox">
           <div className="Count">
-            3 <span>클러스터</span>
+            1 <span>클러스터</span>
           </div>
           <div className="Count">
-            4 <span>VM</span>
+            3 <span>VM</span>
           </div>
         </div>
         <div className="ClusterStatusList">
           <ul>
             <li className="run">
-              <span className="tit">실행</span> <span>4</span>
+              <span className="tit">실행</span> <span>3</span>
             </li>
             <li className="stop">
               <span className="tit">중지</span> <span>0</span>
@@ -150,7 +175,7 @@ const ClusterStatus = observer(() => {
           </ul>
         </div>
       </div>
-      <div className="ClusterStatusBox">
+      {/* <div className="ClusterStatusBox">
         <div className="ClusterStatusIcon"></div>
 
         <div className="ClusterStatusInfoBox">
@@ -174,7 +199,7 @@ const ClusterStatus = observer(() => {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 });
