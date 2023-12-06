@@ -96,8 +96,35 @@ const CloudZoneSlider = observer(() => {
       >
         <SwiperSlide>
           <div className="SliderWrap">
-            {vmStatus()}
+            {/* {vmStatus()} */}
             <div className="SliderBox">
+              <div className="iconBox azure">AZURE</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    1 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    3 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>3</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>0</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>0</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="SliderBox">
               <div className="iconBox azure">AZURE</div>
               <div className="contentsBox">
                 <div className="countBox">
@@ -149,68 +176,14 @@ const CloudZoneSlider = observer(() => {
                   </ul>
                 </div>
               </div>
-            </div>
-
-            <div className="SliderBox">
-              <div className="iconBox azure">AZURE</div>
-              <div className="contentsBox">
-                <div className="countBox">
-                  <div class="Count">
-                    10 <span>클러스터</span>
-                  </div>
-                  <div class="Count">
-                    10 <span>VM</span>
-                  </div>
-                </div>
-                <div className="StatusList">
-                  <ul>
-                    <li className="run">
-                      <span className="tit">실행</span> <span>7</span>
-                    </li>
-                    <li className="stop">
-                      <span className="tit">중지</span> <span>2</span>
-                    </li>
-                    <li className="pause">
-                      <span className="tit">일시중지</span> <span>1</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            </div> */}
 
             <div className="SliderBox">
               <div className="iconBox google">GOOGLE</div>
               <div className="contentsBox">
                 <div className="countBox">
                   <div class="Count">
-                    10 <span>클러스터</span>
-                  </div>
-                  <div class="Count">
-                    10 <span>VM</span>
-                  </div>
-                </div>
-                <div className="StatusList">
-                  <ul>
-                    <li className="run">
-                      <span className="tit">실행</span> <span>7</span>
-                    </li>
-                    <li className="stop">
-                      <span className="tit">중지</span> <span>2</span>
-                    </li>
-                    <li className="pause">
-                      <span className="tit">일시중지</span> <span>1</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="SliderBox">
-              <div className="iconBox aws">AWS</div>
-              <div className="contentsBox">
-                <div className="countBox">
-                  <div class="Count">
-                    3 <span>클러스터</span>
+                    1 <span>클러스터</span>
                   </div>
                   <div class="Count">
                     3 <span>VM</span>
@@ -233,6 +206,33 @@ const CloudZoneSlider = observer(() => {
             </div>
 
             <div className="SliderBox">
+              <div className="iconBox aws">AWS</div>
+              <div className="contentsBox">
+                <div className="countBox">
+                  <div class="Count">
+                    1 <span>클러스터</span>
+                  </div>
+                  <div class="Count">
+                    3 <span>VM</span>
+                  </div>
+                </div>
+                <div className="StatusList">
+                  <ul>
+                    <li className="run">
+                      <span className="tit">실행</span> <span>3</span>
+                    </li>
+                    <li className="stop">
+                      <span className="tit">중지</span> <span>0</span>
+                    </li>
+                    <li className="pause">
+                      <span className="tit">일시중지</span> <span>0</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* <div className="SliderBox">
               <div className="iconBox"></div>
               <div className="contentsBox">
                 <div className="countBox">
@@ -338,7 +338,7 @@ const CloudZoneSlider = observer(() => {
                   </ul>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </SwiperSlide>
         {/* 아래는 추가를 위한 확인용 슬라이드 */}

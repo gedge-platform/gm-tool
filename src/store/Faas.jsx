@@ -277,6 +277,19 @@ class FaasStatus {
       });
   };
 
+  postPackageFileApi = async (data, callback) => {
+    const body = { ...data };
+    await axios.post(`${FAAS_URL}/packages/upload`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: ", res);
+        if (res.status === 201) {
+          swalError("파일이 업로드 되었습니다.", callback);
+          return true;
+        }
+      });
+    });
+  };
+
   loadTriggerListAPI = async () => {
     await axios
       .get(`${FAAS_URL}/triggers`)

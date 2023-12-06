@@ -9,6 +9,7 @@ import { useState } from "react";
 import { CFileField } from "../../../../../components/textfields/CFilefield";
 import FaasStore from "../../../../../store/Faas";
 import { useEffect } from "react";
+import FormData from "form-data";
 
 const Button = styled.button`
   background-color: #fff;
@@ -42,6 +43,7 @@ const CreatePackage = observer((props) => {
     setPackageCode,
     packageSource,
     setPackageSource,
+    postPackageFileApi,
   } = FaasStore;
 
   useEffect(() => {
@@ -68,10 +70,17 @@ const CreatePackage = observer((props) => {
     e.preventDefault();
     e.persist();
     const selectedFile = e.target.files;
-    const fileList = [...selectedFile];
+    const file = selectedFile[0];
 
     console.log("selectFile: ", selectedFile[0].name);
     setSelectFile(selectedFile[0].name);
+
+    if (file) {
+      console.log("file: ", file);
+      const formData = new FormData();
+      formData.append("file", file);
+      postPackageFileApi(formData);
+    }
   };
 
   const onChangePackage = (event) => {
@@ -90,6 +99,7 @@ const CreatePackage = observer((props) => {
       setPackageSource({
         ...packageSource,
         [name]: value,
+        ["sourcearchive"]: selectFile,
       });
     }
     console.log("packageCode: ", packageCode);
