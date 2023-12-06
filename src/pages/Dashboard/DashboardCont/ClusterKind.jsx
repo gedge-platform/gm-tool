@@ -34,21 +34,21 @@ const ClusterKind = () => {
           swiper.navigation.update();
         }}
       >
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <div className="slide openstack">inno-seoul-openstack-01</div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slide openstack">inno-seoul-openstack-02</div>
-        </SwiperSlide>
+        </SwiperSlide> */}
         <SwiperSlide>
-          <div className="slide aws">aws-edge-1</div>
+          <div className="slide aws">aws-edge</div>
         </SwiperSlide>
-        <SwiperSlide>
+        {/* <SwiperSlide>
           <div className="slide aws">aws-edge-2</div>
         </SwiperSlide>
         <SwiperSlide>
           <div className="slide aws">aws-edge-3</div>
-        </SwiperSlide>
+        </SwiperSlide> */}
         <SwiperSlide>
           <div className="slide baremetal">gm-cluster</div>
         </SwiperSlide>

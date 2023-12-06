@@ -8,10 +8,12 @@ import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreatePackage from "../Dialog/CreatePackage";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
+  const [packageName, setPackageName] = useState("");
 
   const {
     loadPackageListAPI,
@@ -21,6 +23,7 @@ const PackageListTab = observer(() => {
     currentPage,
     goNextPage,
     goPrevPage,
+    deletePackageAPI,
   } = FaasStore;
 
   useEffect(() => {
@@ -69,6 +72,21 @@ const PackageListTab = observer(() => {
     setOpen(true);
   };
 
+  const cellClicked = (e) => {
+    setPackageName(e.value);
+  };
+
+  const handleDelete = () => {
+    if (packageName === "") {
+      swalError("Environment를 선택해주세요!");
+    } else {
+      swalUpdate(packageName + "를 삭제하시겠습니까?", () =>
+        deletePackageAPI(packageName, reloadData())
+      );
+    }
+    setPackageName("");
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -85,11 +103,12 @@ const PackageListTab = observer(() => {
         <CommActionBar reloadFunc={reloadData}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
-          <CDeleteButton>삭제</CDeleteButton>
+          <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
+              onCellClicked={cellClicked}
               rowData={packageList}
               columnDefs={columDefs}
               totalElements={totalElements}
