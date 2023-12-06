@@ -92,6 +92,8 @@ const CreatePod = observer((props) => {
     postPodGMostRequestPriority,
     postPodGSelectedClusterPriority,
     postPodGSetClusterPriority,
+    labelKey,
+    labelValue,
   } = podStore;
 
   const { loadPVClaims } = claimStore;
@@ -228,6 +230,11 @@ const CreatePod = observer((props) => {
   };
 
   const onClickStepThree = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 입력해주세요");
+      return;
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
     labels.map((data) => LabelKeyArr.push(data.labelKey));

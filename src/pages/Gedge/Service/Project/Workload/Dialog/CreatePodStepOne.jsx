@@ -209,14 +209,18 @@ const CreatePodStepOne = observer((props) => {
                   <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
-                  {workSpaceList.map((workspace) => (
-                    <option
-                      key={workspace.workspaceUUID}
-                      value={workspace.workspaceName}
-                    >
-                      {workspace.workspaceName}
-                    </option>
-                  ))}
+                  {workSpaceList ? (
+                    workSpaceList?.map((workspace) => (
+                      <option
+                        key={workspace.workspaceUUID}
+                        value={workspace.workspaceName}
+                      >
+                        {workspace.workspaceName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>
@@ -238,11 +242,15 @@ const CreatePodStepOne = observer((props) => {
                   <option value={""} selected hidden disabled>
                     Select Project
                   </option>
-                  {projectListinWorkspace.map((project) => (
-                    <option value={project.projectName}>
-                      {project.projectName}
-                    </option>
-                  ))}
+                  {projectListinWorkspace ? (
+                    projectListinWorkspace?.map((project) => (
+                      <option value={project.projectName}>
+                        {project.projectName}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No Data</option>
+                  )}
                 </select>
               </FormControl>
             </td>
@@ -262,23 +270,29 @@ const CreatePodStepOne = observer((props) => {
                   </tr>
                 </thead>
                 <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {pvClaimListInDeployment.map((pvc) => (
-                    <tr>
-                      <td style={{ textAlign: "center", width: "7%" }}>
-                        <input
-                          type="radio"
-                          checked={podInfo.pvcName === pvc.name}
-                          name="claimVolume"
-                          onChange={onChange}
-                          value={JSON.stringify(pvc)}
-                        />
-                      </td>
-                      <td>{pvc.name}</td>
-                      <td>{pvc.namespace}</td>
-                      <td>{pvc.clusterName}</td>
-                      <td>{pvc.volume ? pvc.volume : ""}</td>
-                    </tr>
-                  ))}
+                  {pvClaimListInDeployment ? (
+                    pvClaimListInDeployment?.map((pvc) => (
+                      <tr>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            checked={podInfo.pvcName === pvc.name}
+                            name="claimVolume"
+                            onChange={onChange}
+                            value={JSON.stringify(pvc)}
+                          />
+                        </td>
+                        <td>{pvc.name}</td>
+                        <td>{pvc.namespace}</td>
+                        <td>{pvc.clusterName}</td>
+                        <td>{pvc.volume ? pvc.volume : ""}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div style={{ textAlign: "center", padding: "43px 0" }}>
+                      <tr>No Data</tr>
+                    </div>
+                  )}
                 </tbody>
               </Table>
             </td>

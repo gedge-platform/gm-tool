@@ -114,6 +114,9 @@ const CreateDeployment = observer((props) => {
     postGSelectedClusterPriority,
     postGMostRequestPriority,
     postGSetClusterPriority,
+    labelKey,
+    labelInputKey,
+    labelValue,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
@@ -127,7 +130,6 @@ const CreateDeployment = observer((props) => {
       name: deployment.deploymentName,
       annotations: annotationInput,
       labels: labelInput,
-      // namespace: deployment.workspacetag,
     },
     spec: {
       selector: {
@@ -208,6 +210,81 @@ const CreateDeployment = observer((props) => {
     },
   };
 
+  const noPullSecretsTemplate = {
+    apiVersion: "apps/v1",
+    kind: "Deployment",
+    metadata: {
+      name: deployment.deploymentName,
+      annotations: annotationInput,
+      labels: labelInput,
+    },
+    spec: {
+      selector: {
+        matchLabels: labelInput,
+      },
+      replicas: deployment.replicas,
+      template: {
+        metadata: {
+          annotations: annotationInput,
+          labels: labelInput,
+        },
+        spec: {
+          containers: deployment.containers?.map((e) => {
+            return {
+              name: e.containerName,
+              image: e.containerImage,
+              imagePullPolicy: e.pullPolicy,
+              command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
+              args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
+              resources: {
+                limits: {
+                  cpu: e.cpuLimit + "m",
+                  memory: e.memoryLimit + "Mi",
+                  "nvidia.com/gpu": e.NVIDIAGPU,
+                },
+                requests: {
+                  cpu: e.cpuReservation + "m",
+                  memory: e.memoryReservation + "Mi",
+                },
+              },
+              ports: e.ports.map((i) => {
+                return {
+                  name: i.name,
+                  containerPort: parseInt(i.privateContainerPort),
+                  protocol: i.protocol,
+                };
+              }),
+              envFrom: secretConfigmap.map((i) => {
+                const item = i.type + "Ref";
+                return {
+                  [i.type + "Ref"]: { name: i.variableName },
+                };
+              }),
+              env: keyValuePair.map((i) => {
+                return {
+                  name: i[0],
+                  value: i[1],
+                };
+              }),
+            };
+          }),
+        },
+      },
+    },
+  };
+
+  const imagePullSecretsTemp = deployment?.containers.map((e) => e.pullSecret);
+
+  const test = (imagePullSecretsTemp) => {
+    if (imagePullSecretsTemp[0] === undefined) {
+      return noPullSecretsTemplate;
+    } else {
+      return template;
+    }
+  };
+
+  console.log(test(imagePullSecretsTemp));
+
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
@@ -265,6 +342,11 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepThree = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 입력해주세요");
+      return; // Labels가 하나라도 입력되지 않았으면 함수를 여기서 종료
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
 
