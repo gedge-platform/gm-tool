@@ -8,10 +8,12 @@ import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import CreateTrigger from "../Dialog/CreateTrigger";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
+import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const TriggerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
   const [open, setOpen] = useState(false);
+  const [trigName, setTrigName] = useState("");
 
   const {
     loadTriggerListAPI,
@@ -21,6 +23,7 @@ const TriggerListTab = observer(() => {
     currentPage,
     goNextPage,
     goPrevPage,
+    deleteTriggerAPI,
   } = FaasStore;
 
   useEffect(() => {
@@ -76,6 +79,21 @@ const TriggerListTab = observer(() => {
     setOpen(true);
   };
 
+  const cellClicked = (e) => {
+    setTrigName(e.value);
+  };
+
+  const handleDelete = () => {
+    if (trigName === "") {
+      swalError("Trigger를 선택해주세요!");
+    } else {
+      swalUpdate(trigName + "를 삭제하시겠습니까?", () =>
+        deleteTriggerAPI(trigName, reloadData())
+      );
+    }
+    setTrigName("");
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -92,11 +110,12 @@ const TriggerListTab = observer(() => {
         <CommActionBar reloadFunc={reloadData}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
-          <CDeleteButton>삭제</CDeleteButton>
+          <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
+              onCellClicked={cellClicked}
               rowData={triggerList}
               columnDefs={columDefs}
               totalElements={totalElements}

@@ -277,6 +277,29 @@ class FaasStatus {
       });
   };
 
+  postPackageFileApi = async (data, callback) => {
+    const body = { ...data };
+    await axios.post(`${FAAS_URL}/packages/upload`, body).then((res) => {
+      runInAction(() => {
+        console.log("res: ", res);
+        if (res.status === 200) {
+          swalError("파일이 업로드 되었습니다.", callback);
+          return true;
+        }
+      });
+    });
+  };
+
+  deletePackageAPI = async (envName, callback) => {
+    await axios.delete(`${FAAS_URL}/packages/${envName}`).then((res) => {
+      if (res.status === 200) {
+        swalError("Package가 삭제되었습니다.");
+      } else {
+        swalError("Package 삭제 실패", callback);
+      }
+    });
+  };
+
   loadTriggerListAPI = async () => {
     await axios
       .get(`${FAAS_URL}/triggers`)
@@ -307,6 +330,16 @@ class FaasStatus {
       runInAction(() => {
         console.log("res: ", res);
       });
+    });
+  };
+
+  deleteTriggerAPI = async (trigName, callback) => {
+    await axios.delete(`${FAAS_URL}/triggers/${trigName}`).then((res) => {
+      if (res.status === 200) {
+        swalError("Package가 삭제되었습니다.");
+      } else {
+        swalError("Package 삭제 실패", callback);
+      }
     });
   };
 

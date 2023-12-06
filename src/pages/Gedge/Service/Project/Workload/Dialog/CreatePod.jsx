@@ -113,6 +113,25 @@ const CreatePod = observer((props) => {
       restartPolicy: "Always",
       terminationGracePeriodSeconds: 30,
       containers: podInfo.containers?.map((e) => {
+        const resources = {
+          requests: {},
+          limits: {},
+        };
+        if (e.cpuLimit !== "") {
+          resources.limits.cpu = e.cpuLimit + "m";
+        }
+        if (e.memoryLimit !== "") {
+          resources.limits.memory = e.memoryLimit + "Mi";
+        }
+        if (e.cpuLimit !== "") {
+          resources.limits.NVIDIAGPU = e.NVIDIAGPU;
+        }
+        if (e.cpuLimit !== "") {
+          resources.requests.cpu = e.cpuReservation + "m";
+        }
+        if (e.cpuLimit !== "") {
+          resources.requests.memory = e.memoryReservation + "Mi";
+        }
         return {
           name: e.containerName,
           image: e.containerImage,
@@ -136,58 +155,16 @@ const CreatePod = observer((props) => {
               };
             }
           }),
-          // env: keyValuePair.map((i) => {
-          //   return {
-          //     name: i[0],
-          //     value: i[1],
-          //   };
-          // }),
-          // valueForm: secretConfigmap.map((t) => {
-          //   const item = t.type + "Ref";
-          //   return {
-          //     [t.type + "Ref"]: {
-          //       name: t.variableName,
-          //       key: t.type + "-key",
-          //     },
-          //   };
-          // }),
+
           ports: e.ports.map((i) => {
             return {
               containerPort: parseInt(i.privateContainerPort),
               protocol: i.protocol,
             };
           }),
-          resources: {
-            requests: {
-              cpu: e.cpuReservation + "m",
-              memory: e.memoryReservation + "Mi",
-            },
-            limits: {
-              cpu: e.cpuLimit + "m",
-              memory: e.memoryLimit + "Mi",
-              "nvidia.com/gpu": e.NVIDIAGPU,
-            },
-          },
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: i.name,
-          //     mountPath: i.mountPoint,
-          //   };
-          // }),
-          // volumeMounts: e.volumes.map((i) => {
-          //   return {
-          //     name: "data-volume",
-          //     mountPath: "/data",
-          //   };
-          // }),
+          resources: resources,
         };
       }),
-      // volumes: [
-      //   {
-      //     name: "data-volume",
-      //     emptyDir: {},
-      //   },
-      // ],
     },
   };
 

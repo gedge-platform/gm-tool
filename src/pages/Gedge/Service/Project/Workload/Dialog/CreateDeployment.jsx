@@ -142,27 +142,44 @@ const CreateDeployment = observer((props) => {
           labels: labelInput,
         },
         spec: {
-          imagePullSecrets: deployment.containers?.map((e) => {
-            return { name: e.pullSecret };
-          }),
+          ...(deployment.containers &&
+          deployment.containers.some((e) => e.pullSecret)
+            ? {
+                imagePullSecrets: deployment.containers
+                  .filter((e) => e.pullSecret)
+                  .map((e) => {
+                    return { name: e.pullSecret };
+                  }),
+              }
+            : {}),
+
           containers: deployment.containers?.map((e) => {
+            const resources = {
+              limits: {},
+              requests: {},
+            };
+            if (e.cpuLimit !== "") {
+              resources.limits.cpu = e.cpuLimit + "m";
+            }
+            if (e.memoryLimit !== "") {
+              resources.limits.memory = e.memoryLimit + "Mi";
+            }
+            if (e.cpuLimit !== "") {
+              resources.limits.NVIDIAGPU = e.NVIDIAGPU;
+            }
+            if (e.cpuLimit !== "") {
+              resources.requests.cpu = e.cpuReservation + "m";
+            }
+            if (e.cpuLimit !== "") {
+              resources.requests.memory = e.memoryReservation + "Mi";
+            }
             return {
               name: e.containerName,
               image: e.containerImage,
               imagePullPolicy: e.pullPolicy,
               command: e.command.length !== 0 ? e.command.split(/[\s,]+/) : [],
               args: e.arguments.length !== 0 ? e.arguments.split(/[\s,]+/) : [],
-              resources: {
-                limits: {
-                  cpu: e.cpuLimit + "m",
-                  memory: e.memoryLimit + "Mi",
-                  "nvidia.com/gpu": e.NVIDIAGPU,
-                },
-                requests: {
-                  cpu: e.cpuReservation + "m",
-                  memory: e.memoryReservation + "Mi",
-                },
-              },
+              resources: resources,
               ports: e.ports.map((i) => {
                 return {
                   name: i.name,
@@ -171,13 +188,6 @@ const CreateDeployment = observer((props) => {
                 };
               }),
               envFrom: secretConfigmap.map((i) => {
-                // {
-                //   if (i.type === "secret") {
-                //     return { [i.type + "Ref"]: { name: i.variableName } };
-                //   } else if (i.type === "configMap") {
-                //     return { [i.type + "Ref"]: { name: i.variableName } };
-                //   }
-                // }
                 const item = i.type + "Ref";
                 return {
                   [i.type + "Ref"]: { name: i.variableName },
@@ -189,22 +199,8 @@ const CreateDeployment = observer((props) => {
                   value: i[1],
                 };
               }),
-              // volumeMounts: e.volumes.map((i) => {
-              //   return {
-              //     mountPath: i.subPathInVolume,
-              //     name: deployment.pvcName,
-              //   };
-              // }),
             };
           }),
-          // volumes: [
-          //   {
-          //     name: deployment.pvcName,
-          //     persistentVolumeClaim: {
-          //       claimName: deployment.volume,
-          //     },
-          //   },
-          // ],
         },
       },
     },
