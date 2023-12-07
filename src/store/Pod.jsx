@@ -637,7 +637,6 @@ class Pod {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    console.log("this.podInfo ??? ", this.podInfo);
     const option = () => {
       if (this.podInfo.priority.name === "GLowLatencyPriority") {
         if (this.podInfo.priority.mode === "from_node") {
@@ -705,7 +704,6 @@ class Pod {
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
-    console.log("this.podInfo ??? ", this.podInfo);
     const option = () => {
       if (this.podInfo.priority.name === "GMostRequestPriority") {
         return {
@@ -749,6 +747,7 @@ class Pod {
 
   postPodGSelectedClusterPriority = async (callback) => {
     const body = this.content;
+    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const userName = JSON.parse(localStorage.getItem("user")).id;
@@ -814,7 +813,7 @@ class Pod {
 
   postPodGSetClusterPriority = async (callback) => {
     const body = this.content;
-
+    console.log("body ??? ", body);
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {

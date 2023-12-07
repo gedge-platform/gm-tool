@@ -114,6 +114,9 @@ const CreateDeployment = observer((props) => {
     postGSelectedClusterPriority,
     postGMostRequestPriority,
     postGSetClusterPriority,
+    labelKey,
+    labelInputKey,
+    labelValue,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
@@ -247,10 +250,6 @@ const CreateDeployment = observer((props) => {
       return;
     }
     // Replica는 기본 설정 1이라서 추가 안함
-    if (deployment.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
     if (deployment.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;
@@ -260,6 +259,11 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepThree = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 입력해주세요");
+      return;
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
 
@@ -269,6 +273,45 @@ const CreateDeployment = observer((props) => {
   };
 
   const onClickStepFour = () => {
+    if (
+      deployment.priority.mode === "from_node" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (
+      deployment.priority.mode === "from_pod" &&
+      deployment.priority.sourceCluster === ""
+    ) {
+      swalError("sourceCluster를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "from_pod") &
+      (deployment.priority.podName === "")
+    ) {
+      swalError("pod를 선택해주세요");
+      return;
+    }
+    if (
+      (deployment.priority.mode === "node") &
+      (deployment.priority.sourceNode === "")
+    ) {
+      swalError("sourceNode를 선택해주세요");
+      return;
+    }
+    if (targetClusters.length === 0) {
+      swalError("targetClusters를 선택해주세요.");
+      return;
+    }
     setStepValue(4);
   };
 

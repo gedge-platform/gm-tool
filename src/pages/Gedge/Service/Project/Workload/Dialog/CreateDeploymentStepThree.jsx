@@ -91,7 +91,6 @@ const CreateDeploymentStepThree = observer(() => {
         if (e.target.value === "GMostRequestPriority") {
           setDeployment("priority", {
             name: "GMostRequestPriority",
-            // mode: "cpu",
             mode: "default",
           });
         }
@@ -136,7 +135,7 @@ const CreateDeploymentStepThree = observer(() => {
           });
         }
         if (deployment.priority.name === "GSelectedClusterPriority") {
-          if (e.target.value === "default") {
+          if (e.target.value === "cluster") {
             setDeployment("priority", {
               name: "GSelectedClusterPriority",
               mode: "cluster",
