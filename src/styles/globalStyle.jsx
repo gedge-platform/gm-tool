@@ -1970,8 +1970,8 @@ const globalStyles = createGlobalStyle`
       .cluster_totalResources{
         justify-content: space-between;
         border-radius: 5px;
-        /* width: calc(64% - 10px); */
-        width: 45%;
+        width: calc(80% - 10px);
+        /* width: 45%; */
         height: 100%;
         background: #202842;
         border-radius: 5px;
@@ -2249,7 +2249,8 @@ const globalStyles = createGlobalStyle`
           border: 1px solid #11162a;
           border-radius: 5px;
           background: #27304c;
-          overflow-y: scroll;
+          /* overflow-y: scroll; */
+          overflow-y: hodden;
           &::-webkit-scrollbar {
             background: transparent;
             background-clip: padding-box;
