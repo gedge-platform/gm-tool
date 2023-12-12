@@ -6,6 +6,9 @@ import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
 import FaasStore from "../../../../../store/Faas";
 import { useState } from "react";
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/theme-monokai";
 
 const Button = styled.button`
   background-color: #fff;
@@ -37,6 +40,7 @@ const CreateFunction = observer((props) => {
     setFunctionFileContent,
     PostFuncionsAPI,
   } = FaasStore;
+  const [fileViewer, setFileViewer] = useState("");
 
   const handleClose = () => {
     props.onClose && props.onClose();
@@ -96,11 +100,36 @@ const CreateFunction = observer((props) => {
       reader.onload = (e) => {
         const content = e.target.result;
         setFunctionFileContent(content);
-        console.log(content);
+        setFileViewer(content);
       };
 
       reader.readAsText(selectFile);
     }
+  };
+
+  const ViewOfComponent = (content) => {
+    return (
+      <AceEditor
+        placeholder="Empty"
+        mode="javascript"
+        theme="monokai"
+        name="editor"
+        width="100%"
+        fontSize={14}
+        showPrintMargin={true}
+        showGutter={true}
+        highlightActiveLine={true}
+        value={content}
+        setOptions={{
+          enableBasicAutocompletion: false,
+          enableLiveAutocompletion: false,
+          enableSnippets: false,
+          showLineNumbers: true,
+          tabSize: 4,
+        }}
+        readOnly={true}
+      />
+    );
   };
 
   return (
@@ -182,7 +211,12 @@ const CreateFunction = observer((props) => {
                 <input type="file" name="file" onChange={onChangeFile} />
               </FormControl>
             </td>
+
             <td></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td>{ViewOfComponent(fileViewer)}</td>
           </tr>
         </tbody>
       </table>

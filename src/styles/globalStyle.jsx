@@ -2138,6 +2138,20 @@ const globalStyles = createGlobalStyle`
         border-radius: 5px;
         position: relative;
         /* position: absolute; */
+        .clusterKindBoxTitle {
+          width: 100%;
+          height: 38px;
+          padding: 0 18px;
+          display: flex;
+          align-items: center;
+          border-top-right-radius: 8px;
+          border-top-left-radius: 8px;
+          border-bottom: 1px solid #141a30;
+          background: #25304b;
+          font-size: 14px;
+          font-weight: bold;
+          color: #fff;
+        }
       
       .slide {
         width: 204px;
@@ -2180,7 +2194,7 @@ const globalStyles = createGlobalStyle`
     }
     .btn_prev, .btn_next {
       position: absolute;
-      top: 58%;
+      top: 64%;
       width: 50px;
       height: 50px;
       margin-top: -50px;

@@ -12,11 +12,14 @@ const ClusterKind = () => {
 
   return (
     // <div className="cluster_slideResourWrap">
-    <div className="ClusterKindWrap" style={{ padding: "36px 0 0 63px" }}>
+    <div className="ClusterKindWrap">
+      {/* style={{ padding: "36px 0 0 63px" }} */}
+      <div className="clusterKindBoxTitle">Cluster Kind</div>
       <div ref={navigationPrevRef} className="btn_prev" />
       <div ref={navigationNextRef} className="btn_next" />
 
       <Swiper
+        style={{ padding: "30px 0px 0px 60px" }}
         // install Swiper modules
         spaceBetween={0}
         slidesPerView={3}
