@@ -178,9 +178,6 @@ const TotalDashboard = () => {
               <ClusterRecent />
             </div>
           </div>
-          {/* <div className="cluster_nodes">
-            <NodeList />
-          </div> */}
         </PanelBox>
       </DashboardWrap>
     </Layout>
