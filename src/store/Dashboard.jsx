@@ -82,6 +82,7 @@ class Dashboard {
   VMList = [];
   vmStatusList = [];
   ConfigNameList = [];
+  configName = [];
 
   clusterNameList = [];
   cloudNameList = [];
@@ -251,9 +252,11 @@ class Dashboard {
 
   loadCredentialName = async () => {
     await axios
-      .get(`${SPIDER_URL}/spider/connectionconfig`)
+      // .get(`${SPIDER_URL}/spider/connectionconfig`)
+      .get(`http://101.79.4.15:1024/spider/connectionconfig`)
       .then((res) => {
         runInAction(() => {
+          console.log("Res: ", res);
           this.connectionconfig = res.data.connectionconfig;
           this.ConfigNameList = this.connectionconfig
             ? this.connectionconfig.map((name) => name.ConfigName)
@@ -279,28 +282,24 @@ class Dashboard {
   };
 
   // loadVMStatusCnt = async () => {
-  //   const urls = axios.get(
-  //     `${SPIDER_URL}/spider/connectionconfig`
-  //   );
+  //   const urls = axios.get(`${SPIDER_URL}/spider/connectionconfig`);
   //   const configResult = await Promise.all([urls]).then((res) => {
   //     return res;
   //   });
+  //   console.log("configResult: ", configResult);
   //   const configNameList = configResult[0].data.connectionconfig;
   //   const vmList = [];
   //   await configNameList.forEach((config) => {
   //     let configName = config.ConfigName;
   //     axios
-  //       .post(
-  //         `${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`,
-  //         {
-  //           ConnectionName: configName,
-  //         }
-  //       )
+  //       .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
+  //         ConnectionName: configName,
+  //       })
   //       .then((res) => {
   //         vmList.push(res);
   //       });
   //   });
-
+  // };
   // res.forEach((result) => {
   //   Object.values(result.data.connectionconfig).map(
   //     (val) => val.ConfigName
@@ -368,54 +367,55 @@ class Dashboard {
     });
   };
 
-  loadVMStatusCnt = async (configName, providerName) => {
-    axios
-      .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
-        ConnectionName: configName,
-      })
-      .then((res) => {
-        this.ProviderName = providerName;
-        this.ConfigName = configName;
-        this.Stop = res.data.Stop;
-        this.Running = res.data.Running;
-        this.Paused = res.data.Paused;
-        this.vmStatusList.push([
-          this.ConfigName,
-          this.ProviderName,
-          this.Running,
-          this.Stop,
-          this.Paused,
-        ]);
-      });
-  };
+  // loadVMStatusCnt = async (configName, providerName) => {
+  //   axios
+  //     .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
+  //       ConnectionName: configName,
+  //     })
+  //     .then((res) => {
+  //       this.ProviderName = providerName;
+  //       this.ConfigName = configName;
+  //       this.Stop = res.data.Stop;
+  //       this.Running = res.data.Running;
+  //       this.Paused = res.data.Paused;
+  //       this.vmStatusList.push([
+  //         this.ConfigName,
+  //         this.ProviderName,
+  //         this.Running,
+  //         this.Stop,
+  //         this.Paused,
+  //       ]);
+  //     });
+  // };
 
   loadVMStatusCnt = async () => {
     const urls = axios.get(`${SERVER_URL}/spider/connectionconfig`);
     const configResult = await Promise.all([urls]).then((res) => {
       return res;
     });
-    const configNameList = configResult[0].data.connectionconfig;
+
+    this.configName = configResult[0].data.data.connectionconfig;
     // const vmStatusList = [];
-    await configNameList.forEach((config) => {
-      let configName = config.ConfigName;
-      axios
-        .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
-          ConnectionName: configName,
-        })
-        .then((res) => {
-          const stop = res.data.Stop;
-          const running = res.data.Running;
-          const paused = res.data.Paused;
-          // vmStatusList.push(configName);
-          // vmStatusList.push(running);
-          // vmStatusList.push(stop);
-          // vmStatusList.push(paused);
-          this.vmStatusList.push([configName, running, stop, paused]);
-          // console.log(vmStatusList);
-          console.log(this.vmStatusList);
-          // return this.vmStatusList;
-        });
-    });
+    // await configNameList.forEach((config) => {
+    //   let configName = config.ConfigName;
+    //   axios
+    //     .post(`${SERVER_URL}/spider/vm/vmstatus/vmstatusCount`, {
+    //       ConnectionName: configName,
+    //     })
+    //     .then((res) => {
+    //       const stop = res.data.Stop;
+    //       const running = res.data.Running;
+    //       const paused = res.data.Paused;
+    //       // vmStatusList.push(configName);
+    //       // vmStatusList.push(running);
+    //       // vmStatusList.push(stop);
+    //       // vmStatusList.push(paused);
+    //       this.vmStatusList.push([configName, running, stop, paused]);
+    //       // console.log(vmStatusList);
+    //       console.log(this.vmStatusList);
+    //       // return this.vmStatusList;
+    //     });
+    // });
   };
 
   // loadVMStatusCnt = async (ConfigName) => {

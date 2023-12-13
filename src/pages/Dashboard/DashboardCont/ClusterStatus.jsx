@@ -1,25 +1,49 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
-import { dashboardStore } from "@/store";
+import { dashboardStore, clusterStore } from "@/store";
 
 const ClusterStatus = observer(() => {
-  const {
-    // loadCredentialName,
-    // loadVMStatusCnt,
-    // loadVMCnt,
-    // ConfigName,
-    // vmCntList,
-    vmStatusList,
-    connectionconfig,
-    ProviderName,
-    ConfigNameList,
-  } = dashboardStore;
+  const { loadVMStatusCnt, configName } = dashboardStore;
+  const { loadVMList, clusterList } = clusterStore;
 
   useEffect(() => {
-    // loadCredentialName();
-    // loadVMStatusCnt();
-    // clusterStatus2();
+    loadVMList();
+    loadVMStatusCnt();
   }, []);
+
+  console.log("clusterList: ", clusterList);
+  // console.log("configName: ", configName);
+
+  const clusterStatus = () => {
+    let VMcount = 0;
+    let runCount = 0;
+    let stopCount = 0;
+    let pauseCount = 0;
+    // configName.map((e) => {
+    //   if (clusterList.map((item) => item.ProviderName === e)) {
+    //     VMcount++;
+    //     if (item.VmStatus === "Suspended") {
+    //       pauseCount++;
+    //     }
+    //   }
+    // });
+    configName.forEach((e) => {
+      const providerExists = clusterList.some(
+        (item) => item.ProviderName === e
+      );
+      console.log("providerExists: ", providerExists);
+      if (providerExists) {
+        VMcount++;
+        const providerVM = clusterList.find((item) => item.ProviderName === e);
+        if (providerVM.VmStatus === "Suspended") {
+          pauseCount++;
+        }
+      }
+    });
+    console.log("VMcount: ", VMcount);
+    console.log("clusterList2: ", clusterList);
+    console.log("pauseCount: ", pauseCount);
+  };
 
   // if (vmStatusList === undefined) {
   //   loadVMStatusCnt();
@@ -98,6 +122,7 @@ const ClusterStatus = observer(() => {
           </ul>
         </div>
       </div>
+      {clusterStatus()}
 
       <div className="ClusterStatusBox">
         <div className="ClusterStatusIcon google"></div>

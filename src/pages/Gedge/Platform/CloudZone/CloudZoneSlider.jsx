@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { dashboardStore } from "@/store";
+import { dashboardStore, clusterStore } from "@/store";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination]);
