@@ -3,9 +3,7 @@ import Layout from "@/layout";
 import { Title } from "@/pages";
 import { PanelBox } from "@/components/styles/PanelBox";
 import styled from "styled-components";
-
 import MapContent from "./DashboardCont/MapContent";
-
 import ClusterSummary from "./DashboardCont/ClusterSummary";
 import ClusterKind from "./DashboardCont/ClusterKind";
 import ClusterStatus from "./DashboardCont/ClusterStatus";
@@ -180,9 +178,6 @@ const TotalDashboard = () => {
               <ClusterRecent />
             </div>
           </div>
-          {/* <div className="cluster_nodes">
-            <NodeList />
-          </div> */}
         </PanelBox>
       </DashboardWrap>
     </Layout>

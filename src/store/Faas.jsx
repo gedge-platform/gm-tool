@@ -157,6 +157,7 @@ class FaasStatus {
       .get(`${FAAS_URL}/environments`)
       .then((res) => {
         runInAction(() => {
+          console.log(res);
           if (res.data !== null) {
             this.envList = res.data;
             this.totalPages = Math.ceil(res.data.length / 20);
@@ -281,7 +282,6 @@ class FaasStatus {
     const body = { ...data };
     await axios.post(`${FAAS_URL}/packages/upload`, body).then((res) => {
       runInAction(() => {
-        console.log("res: ", res);
         if (res.status === 200) {
           swalError("파일이 업로드 되었습니다.", callback);
           return true;

@@ -55,6 +55,7 @@ const TotalClusterResources = observer(() => {
       className="totalClusterResourcesWrap"
       style={{
         display: "flex",
+        height: "100%",
       }}
     >
       <div className="stotalClusterResourcesCircleBox">
@@ -62,9 +63,11 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "1px",
-            marginLeft: "20px",
-            width: "210px",
+            // marginTop: "1px",
+            // marginLeft: "20px",
+            marginTop: "31px",
+            width: "270px",
+            display: "-webkit-box",
           }}
         >
           <PieChart
@@ -98,9 +101,9 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "1px",
-            marginLeft: "20px",
-            width: "210px",
+            marginTop: "31px",
+            width: "270px",
+            display: "-webkit-box",
           }}
         >
           <PieChart
@@ -134,9 +137,9 @@ const TotalClusterResources = observer(() => {
         <div
           className="chart"
           style={{
-            marginTop: "1px",
-            marginLeft: "20px",
-            width: "210px",
+            marginTop: "31px",
+            width: "270px",
+            display: "-webkit-box",
           }}
         >
           <PieChart
