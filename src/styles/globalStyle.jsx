@@ -1912,7 +1912,7 @@ const globalStyles = createGlobalStyle`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background: #202842;
+    background: #171E33;
     .ClusterSummary {
       width: calc(20% - 10px);
       /* width: calc(20% - 60px); */
@@ -1970,23 +1970,23 @@ const globalStyles = createGlobalStyle`
       .cluster_totalResources{
         justify-content: space-between;
         border-radius: 5px;
-        width: calc(80% - 10px);
-        /* width: 45%; */
+        /* width: calc(80% - 10px); */
+        width: 80%;
         height: 100%;
         background: #202842;
-        border-radius: 5px;
+        border-radius: 11px;
         position: relative;
         /* position: absolute; */
         margin-left: 13px;
         .stotalClusterResourcesCircleBox {
         width: calc(100% / 3);
-        /* background: #1d243c; */
+
         border: 1px solid #11162a;
         border-radius: 8px;
         color: #fff;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         .totalClusterResourcesBoxTitle {
           width: 100%;
           height: 38px;
@@ -2004,27 +2004,30 @@ const globalStyles = createGlobalStyle`
           .totalClusterResourcesContTxt {
           width: 100%;
             ul {
-              width: 100%; 
+              /* width: 100%;  */
+              margin-top: 50px;
+              width: 50%;
               border-top: 1px solid #11162a;
               border-bottom-left-radius: 8px;
               border-bottom-right-radius: 8px;
+
               li {
-                width: 100%;
+                width: %;
                 height: 30px;
                 border-bottom: 1px solid #11162a;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 position: relative;
-                font-size: 12px;
-                background: url(../images/resource/cloudzone_list_dot_bg.png) repeat-x center center;
+                font-size: 16px;
+                /* background: url(../images/resource/cloudzone_list_dot_bg.png) repeat-x center center; */
                 &::before {
                   content: '';
                   width: 7px;
                   height: 7px;
                   position: absolute;
                   top: 11px;
-                  left: 20px;
+                  left: 7px;
                 }
                 &:last-of-type {
                   border-bottom: 0;
@@ -2114,11 +2117,11 @@ const globalStyles = createGlobalStyle`
                 }
                 span {
                   padding: 0 30px 0 10px;
-                  font-size: 13px;
-                  background: #1d243c;
+                  font-size: 14px;
+                  /* background: #1d243c; */
                 }
                 span.tit {
-                  padding: 0 10px 0 35px;
+                  padding: 0 0 0 26px;
                   font-size: 13px;
                   color: rgba(255, 255, 255, 0.7);
                 }
@@ -2131,8 +2134,8 @@ const globalStyles = createGlobalStyle`
       }
       .cluster_kind {
         border-radius: 5px;
-        /* width: calc(64% - 10px); */
-        width: 55%;
+        width: calc(20% - 10px);
+        /* width: 20%; */
         height: 100%;
         background: #202842;
         border-radius: 5px;
@@ -2154,10 +2157,12 @@ const globalStyles = createGlobalStyle`
         }
       
       .slide {
-        width: 204px;
-        height: 204px;
+        width: 190px;
+        height: 190px;
+        /* width: 204px;
+        height: 204px; */
         padding-top: 140px;
-        margin-left: 11px;
+        margin-left: 7px;
         /* margin-right: 0px; */
         border: 8px solid #2b334e;
         border-radius: 100%;

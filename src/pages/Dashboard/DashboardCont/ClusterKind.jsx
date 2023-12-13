@@ -22,7 +22,8 @@ const ClusterKind = () => {
         style={{ padding: "30px 0px 0px 60px" }}
         // install Swiper modules
         spaceBetween={0}
-        slidesPerView={3}
+        // slidesPerView={3}
+        slidesPerView={1}
         navigation={{
           prevEl: navigationPrevRef.current,
           nextEl: navigationNextRef.current,
