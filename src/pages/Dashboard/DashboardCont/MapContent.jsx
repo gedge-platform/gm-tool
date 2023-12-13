@@ -139,7 +139,7 @@ const MapContent = observer(() => {
   return (
     <div
       id="map"
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: "100%", width: "100%", borderRadius: "5px" }}
       // 지도 크기 조정
     ></div>
   );

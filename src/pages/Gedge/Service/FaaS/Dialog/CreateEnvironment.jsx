@@ -133,53 +133,59 @@ const CreateEnvironment = observer((props) => {
             <td>
               <FormControl className="form_fullWidth">
                 <select name="envImage" value={envImage} onChange={onChange}>
-                  <option value={"fission/node-env"}>fission/node-env</option>
-                  <option value={"fission/node-env-16"}>
-                    fission/node-env-16
-                  </option>
-                  <option value={"fission/node-env-14"}>
-                    fission/node-env-14
-                  </option>
-                  <option value={"fission/node-env-12"}>
-                    fission/node-env-12
-                  </option>
-                  <option value={"fission/node-env-debian"}>
-                    fission/node-env-debian
-                  </option>
-                  <option value={"fission/go-env"}>fission/go-env</option>
-                  <option value={"fission/go-env-1.17"}>
-                    fission/go-env-1.17
-                  </option>
-                  <option value={"fission/go-env-1.16"}>
-                    fission/go-env-1.16
-                  </option>
-                  <option value={"fission/go-env-1.15"}>
-                    fission/go-env-1.15
-                  </option>
-                  <option value={"fission/go-env-1.14"}>
-                    fission/go-env-1.14
-                  </option>
-                  <option value={"fission/go-env-1.13"}>
-                    fission/go-env-1.13
-                  </option>
-                  <option value={"fission/go-env-1.12"}>
-                    fission/go-env-1.12
-                  </option>
-                  <option value={"fission/go-env-1.11.4"}>
-                    fission/go-env-1.11.4
-                  </option>
-                  <option value={"fission/go-env-1.11.4-1.12"}>
-                    fission/go-env-1.11.4-1.12
-                  </option>
-                  <option value={"fission/go-build-env"}>
-                    fission/go-build-env
-                  </option>
-                  <option value={"fission/pyton3-env"}>
-                    fission/pyton3-env
-                  </option>
-                  <option value={"fission/pyton3-env-3.10"}>
-                    fission/pyton3-env-3.10
-                  </option>
+                  <optgroup label="Node.js">
+                    <option value={"fission/node-env"}>fission/node-env</option>
+                    <option value={"fission/node-env-16"}>
+                      fission/node-env-16
+                    </option>
+                    <option value={"fission/node-env-14"}>
+                      fission/node-env-14
+                    </option>
+                    <option value={"fission/node-env-12"}>
+                      fission/node-env-12
+                    </option>
+                    <option value={"fission/node-env-debian"}>
+                      fission/node-env-debian
+                    </option>
+                  </optgroup>
+                  <optgroup label="Go">
+                    <option value={"fission/go-env"}>fission/go-env</option>
+                    <option value={"fission/go-env-1.17"}>
+                      fission/go-env-1.17
+                    </option>
+                    <option value={"fission/go-env-1.16"}>
+                      fission/go-env-1.16
+                    </option>
+                    <option value={"fission/go-env-1.15"}>
+                      fission/go-env-1.15
+                    </option>
+                    <option value={"fission/go-env-1.14"}>
+                      fission/go-env-1.14
+                    </option>
+                    <option value={"fission/go-env-1.13"}>
+                      fission/go-env-1.13
+                    </option>
+                    <option value={"fission/go-env-1.12"}>
+                      fission/go-env-1.12
+                    </option>
+                    <option value={"fission/go-env-1.11.4"}>
+                      fission/go-env-1.11.4
+                    </option>
+                    <option value={"fission/go-env-1.11.4-1.12"}>
+                      fission/go-env-1.11.4-1.12
+                    </option>
+                    <option value={"fission/go-build-env"}>
+                      fission/go-build-env
+                    </option>
+                  </optgroup>
+                  <optgroup label="Python">
+                    <option value={"fission/pyton3-env"}>
+                      fission/pyton3-env
+                    </option>
+                    <option value={"fission/pyton3-env-3.10"}>
+                      fission/pyton3-env-3.10
+                    </option>
+                  </optgroup>
                 </select>
               </FormControl>
             </td>
