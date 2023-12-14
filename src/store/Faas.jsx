@@ -279,9 +279,17 @@ class FaasStatus {
   };
 
   postPackageFileApi = async (data, callback) => {
-    const body = { ...data };
+    console.log("data: ", data);
+    const body = {
+      ...data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    console.log("body: ", body);
     await axios.post(`${FAAS_URL}/packages/upload`, body).then((res) => {
       runInAction(() => {
+        console.log("res: ", res.data);
         if (res.status === 200) {
           swalError("파일이 업로드 되었습니다.", callback);
           return true;
@@ -345,11 +353,25 @@ class FaasStatus {
 
   createPackage = async (data, callback) => {
     const body = { ...data };
-    await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
-      runInAction(() => {
-        console.log("res: res");
-      });
-    });
+    // await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
+    //   console.log("res: ", res);
+    //   console.log("callback: ", callback);
+    //   runInAction(() => {
+    //     console.log("res: ", res);
+    //     console.log("callback: ", callback);
+    //   });
+    // });
+    try {
+      const response = await axios.post(`${FAAS_URL}/packages`, body);
+      console.log("Server Response: ", response);
+
+      if (typeof callback === "function") {
+        callback(response.data);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // 에러 처리 로직 추가
+    }
   };
 }
 

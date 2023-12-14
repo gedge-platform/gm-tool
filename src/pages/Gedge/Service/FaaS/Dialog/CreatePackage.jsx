@@ -35,6 +35,7 @@ const CreatePackage = observer((props) => {
   const Type = ["source", "deploy", "code"];
   const [postType, setPostType] = useState("");
   const [selectFile, setSelectFile] = useState("");
+  const [callback, setCallback] = useState("");
   const {
     loadEnvListAPI,
     envList,
@@ -59,27 +60,31 @@ const CreatePackage = observer((props) => {
       createPackage(packageCode);
     }
     if (postType === "source") {
-      createPackage(packageSource);
+      createPackage(packageSource, callback);
     }
+    console.log("callback: ", callback);
     swalError("Package가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
   };
 
-  const onSelectFile = (e) => {
+  const onSelectFile = async (e) => {
     e.preventDefault();
     e.persist();
     const selectedFile = e.target.files;
+    console.log("selectedFile: ", selectedFile);
     const file = selectedFile[0];
 
-    console.log("selectFile: ", selectedFile[0].name);
+    console.log("selectedFile: ", selectedFile[0].name);
     setSelectFile(selectedFile[0].name);
 
     if (file) {
       console.log("file: ", file);
       const formData = new FormData();
-      formData.append("file", file);
-      postPackageFileApi(formData);
+      console.log("formData before: ", formData);
+      formData.append("test1", file);
+      await postPackageFileApi(formData);
+      console.log("formData after: ", formData);
     }
   };
 
