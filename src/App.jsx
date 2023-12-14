@@ -18,16 +18,13 @@ import {
   Configuration,
   Certification,
   PlatformUser,
-  Topology,
-  Loadbalancer,
   Storage,
   CreateUser,
-  PlatformControl,
   StorageDashboard,
-  // PlatformServiceListTab,
   PlatformProject,
   CloudZone,
   FaaS,
+  GsLink,
 } from "@/pages";
 
 import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
@@ -101,6 +98,7 @@ export const App = () => {
           <AuthRoute path="/storage" component={Storage} />
           <AuthRoute path="/workload" component={Workload} />
           <AuthRoute path="/faas" component={FaaS} />
+          <AuthRoute path="/gslink" component={GsLink} />
           <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />

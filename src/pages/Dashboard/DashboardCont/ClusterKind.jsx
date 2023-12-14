@@ -2,19 +2,29 @@ import React from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
+import dashboardStore from "../../../store/Dashboard";
+import { useEffect } from "react";
+import { observer } from "mobx-react";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination]);
 
-const ClusterKind = () => {
+const ClusterKind = observer(() => {
+  const { edgeInfo, loadDashboardCnt } = dashboardStore;
+
   const navigationPrevRef = React.useRef(null);
   const navigationNextRef = React.useRef(null);
+
+  useEffect(() => {
+    loadDashboardCnt();
+  }, []);
+  console.log("edgeInfo ????", edgeInfo);
 
   return (
     // <div className="cluster_slideResourWrap">
     <div className="ClusterKindWrap">
       {/* style={{ padding: "36px 0 0 63px" }} */}
-      <div className="clusterKindBoxTitle">Cluster Kind</div>
+      <div className="clusterKindBoxTitle">Clusters</div>
       <div ref={navigationPrevRef} className="btn_prev" />
       <div ref={navigationNextRef} className="btn_next" />
 
@@ -72,5 +82,5 @@ const ClusterKind = () => {
     </div>
     // </div>
   );
-};
+});
 export default ClusterKind;

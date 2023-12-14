@@ -48,7 +48,7 @@ class Dashboard {
       _id: "",
       address: "",
       clusterEndpoint: "",
-      // clusterName: "",
+      clusterName: "",
       clusterType: "",
       status: "",
       token: "",
@@ -186,6 +186,7 @@ class Dashboard {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
+          this.edgeInfo = data.edgeInfo;
           this.clusterCnt = data.clusterCnt;
           this.credentialCnt = data.credentialCnt;
           this.edgeClusterCnt = data.edgeClusterCnt;
