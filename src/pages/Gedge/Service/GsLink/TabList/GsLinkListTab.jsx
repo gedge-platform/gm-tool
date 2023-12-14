@@ -10,10 +10,17 @@ import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import gsLinkStatusStore from "../../../../../store/GsLink";
+import CreateGsLink from "../Dialog/CreateGsLink";
 
 const GsLinkListTab = observer(() => {
-  const handleTabChange = (event, newValue) => {
-    setTabvalue(newValue);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const {
@@ -107,8 +114,6 @@ const GsLinkListTab = observer(() => {
     },
   ]);
 
-  const history = useHistory();
-
   useEffect(() => {
     loadGsLinkList();
     return () => {
@@ -120,9 +125,9 @@ const GsLinkListTab = observer(() => {
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadGsLinkList} />
-          <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-
+          <CommActionBar reloadFunc={loadGsLinkList}>
+            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+          </CommActionBar>
           <div className="tabPanelContainer">
             <div className="grid-height2">
               <AgGrid
@@ -137,6 +142,11 @@ const GsLinkListTab = observer(() => {
               />
             </div>
           </div>
+          <CreateGsLink
+            open={open}
+            onClose={handleClose}
+            reloadFunc={loadGsLinkList}
+          />
         </PanelBox>
       </CReflexBox>
     </>

@@ -54,6 +54,7 @@ class GsLink {
     await axios
       .get(`${GSLINK_URL}`)
       .then((res) => {
+        console.log(res);
         runInAction(() => {
           if (res.data !== null) {
             this.gsLinkList = res.data;
