@@ -371,6 +371,7 @@ class StorageClass {
         console.log(res);
         runInAction(() => {
           // this.cephMetrics = res.data.items;
+          console.log("cephMetrics: ", res.data.items);
           this.osd_read_latency = res.data.items.osd_read_latency[0].values;
           this.osd_write_latency = res.data.items.osd_write_latency[0].values;
           this.overwrite_iops = res.data.items.overwrite_iops[0].values;

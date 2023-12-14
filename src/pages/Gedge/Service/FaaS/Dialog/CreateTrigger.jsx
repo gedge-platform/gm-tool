@@ -56,10 +56,83 @@ const CreateTrigger = observer((props) => {
   };
 
   const postTrigger = () => {
+    const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+    const checkNum = /^[0-9]*$/;
+    console.log("triggerHttpInputs: ", triggerHttpInputs);
     if (postType === "HTTP") {
-      createTrigger(triggerHttpInputs);
+      if (triggerHttpInputs.trig_name === "") {
+        swalError("Trigger 이름을 입력해주세요");
+        return;
+      } else if (!checkRegex.test(triggerHttpInputs.trig_name)) {
+        swalError("영어소문자와 숫자만 입력해주세요.");
+        return;
+      } else if (triggerHttpInputs.function === "") {
+        swalError("function 이름을 선택해주세요");
+        return;
+      } else if (triggerHttpInputs.method === "") {
+        swalError("method를 입력해주세요");
+        return;
+      } else if (triggerHttpInputs.url === "") {
+        swalError("url을 입력해주세요");
+        return;
+      } else {
+        createTrigger(triggerHttpInputs);
+      }
+    } else if (postType === "KafkaQueue") {
+      if (triggerKatkaQueue.trig_name === "") {
+        swalError("Trigger 이름을 입력해주세요");
+        return;
+      } else if (!checkRegex.test(triggerKatkaQueue.trig_name)) {
+        swalError("영어소문자와 숫자만 입력해주세요.");
+        return;
+      } else if (triggerKatkaQueue.function === "") {
+        swalError("function 이름을 선택해주세요");
+        return;
+      } else if (triggerKatkaQueue.mqtype === "") {
+        swalError("KafkaQueue Type을 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.mqtkind === "") {
+        swalError("KafkaQueue kind를 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.topic === "") {
+        swalError("topic을 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.resptopic === "") {
+        swalError("response topic을 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.errortopic === "") {
+        swalError("error topic을 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.maxretries === "") {
+        swalError("max retries을 입력해주세요");
+        return;
+        // } else if (!checkNum.test(triggerHttpInputs.maxretries)) {
+        //   swalError("max retries에 숫자만 입력해주세요");
+        //   return;
+      } else if (triggerKatkaQueue.cooldownperiod === "") {
+        swalError("cooldown period를 입력해주세요");
+        return;
+        // } else if (!checkNum.test(triggerHttpInputs.cooldownperiod)) {
+        //   swalError("cooldown period에 숫자만 입력해주세요");
+        //   return;
+      } else if (triggerKatkaQueue.pollinginterval === "") {
+        swalError("polling interval를 입력해주세요");
+        return;
+        // } else if (!checkNum.test(triggerHttpInputs.pollinginterval)) {
+        //   swalError("polling interval에 숫자만 입력해주세요");
+        //   return;
+      } else if (triggerKatkaQueue.metadata.length === 0) {
+        swalError("metadata를 입력해주세요");
+        return;
+      } else if (triggerKatkaQueue.secret === "") {
+        swalError("secret를 입력해주세요");
+        return;
+      } else {
+        createTrigger(triggerKatkaQueue);
+      }
     } else {
-      createTrigger(triggerKatkaQueue);
+      swalError("Trigger Type을 선택해주세요");
+      return;
     }
 
     swalError("Trigger가 생성되었습니다.");
@@ -279,6 +352,7 @@ const CreateTrigger = observer((props) => {
                     placeholder="Error Topic"
                     className="form-fullWidth"
                     name="errortopic"
+                    onChange={onChange}
                     style={{ width: "100%" }}
                   />
                 </td>
