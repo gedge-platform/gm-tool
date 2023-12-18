@@ -44,6 +44,8 @@ const CreatePackage = observer((props) => {
     setPackageCode,
     packageSource,
     setPackageSource,
+    packageDeploy,
+    setPackageDeploy,
     postPackageFileApi,
   } = FaasStore;
 
@@ -60,9 +62,11 @@ const CreatePackage = observer((props) => {
       createPackage(packageCode);
     }
     if (postType === "source") {
-      createPackage(packageSource, callback);
+      createPackage(packageSource);
     }
-    console.log("callback: ", callback);
+    if (postType === "deploy") {
+      createPackage(packageDeploy);
+    }
     swalError("Package가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
@@ -79,12 +83,10 @@ const CreatePackage = observer((props) => {
     setSelectFile(selectedFile[0].name);
 
     if (file) {
-      console.log("file: ", file);
       const formData = new FormData();
-      console.log("formData before: ", formData);
       formData.append("test1", file);
-      await postPackageFileApi(formData);
-      console.log("formData after: ", formData);
+      await postPackageFileApi(formData, callback);
+      console.log("callback: ", callback);
     }
   };
 
@@ -107,8 +109,16 @@ const CreatePackage = observer((props) => {
         ["sourcearchive"]: selectFile,
       });
     }
-    console.log("packageCode: ", packageCode);
-    console.log("packageSource: ", packageSource);
+    if (postType === "deploy") {
+      setPackageDeploy({
+        ...packageDeploy,
+        [name]: value,
+        ["deployarchive"]: selectFile,
+      });
+    }
+    // console.log("packageCode: ", packageCode);
+    // console.log("packageSource: ", packageSource);
+    console.log("packageDeploy: ", packageDeploy);
   };
 
   return (
@@ -244,7 +254,8 @@ const CreatePackage = observer((props) => {
                       type="text"
                       placeholder="Package Name"
                       className="form-fullWidth"
-                      name="packageName"
+                      name="pack_name"
+                      onChange={onChange}
                       style={{ width: "100%", marginRight: "10px" }}
                     />
                     {/* <button style={{ width: "200px" }}>Unique Check</button> */}
@@ -257,7 +268,7 @@ const CreatePackage = observer((props) => {
                 </th>
                 <td colSpan={3}>
                   <FormControl className="form_fullWidth">
-                    <select name="Posttype">
+                    <select name="env_name" onChange={onChange}>
                       <option value={""}>Select Environment</option>
                       {envList.map((item) => (
                         <option value={item.env_name}>{item.env_name}</option>

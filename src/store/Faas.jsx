@@ -82,6 +82,12 @@ class FaasStatus {
     build: "",
   };
 
+  packageDeploy = {
+    pack_name: "",
+    env_name: "",
+    deployarchive: "",
+  };
+
   packageCode = {
     pack_name: "",
     env_name: "",
@@ -134,15 +140,53 @@ class FaasStatus {
     });
   };
 
+  resetTriggerHttpInputs = () => {
+    runInAction(() => {
+      this.triggerHttpInputs = {
+        trig_name: "",
+        trig_type: "",
+        url: "",
+        method: "",
+        function: "",
+      };
+    });
+  };
+
   setTriggerKatkaQueue = (e) => {
     runInAction(() => {
       this.triggerKatkaQueue = e;
     });
   };
 
+  resetTriggerKatkaQueue = () => {
+    runInAction(() => {
+      this.triggerKatkaQueue = {
+        trig_name: "",
+        trig_type: "",
+        function: "",
+        mqtype: "",
+        mqtkind: "",
+        topic: "",
+        resptopic: "",
+        errortopic: "",
+        maxretries: 0,
+        metadata: [],
+        cooldownperiod: 0,
+        pollinginterval: 0,
+        secret: "",
+      };
+    });
+  };
+
   setPackageSource = (e) => {
     runInAction(() => {
       this.packageSource = e;
+    });
+  };
+
+  setPackageDeploy = (e) => {
+    runInAction(() => {
+      this.packageDeploy = e;
     });
   };
 
@@ -279,23 +323,31 @@ class FaasStatus {
   };
 
   postPackageFileApi = async (data, callback) => {
-    console.log("data: ", data);
+    for (let value of data.values()) {
+      console.log("data: ", value);
+    }
     const body = {
       ...data,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
     };
     console.log("body: ", body);
-    await axios.post(`${FAAS_URL}/packages/upload`, body).then((res) => {
-      runInAction(() => {
-        console.log("res: ", res.data);
-        if (res.status === 200) {
-          swalError("파일이 업로드 되었습니다.", callback);
-          return true;
-        }
+    await axios
+      .post(`${FAAS_URL}/packages/upload`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        runInAction(() => {
+          console.log("res: ", res.data);
+          if (res.data === []) {
+            swalError("파일이 업로드 되지 않았습니다.", callback);
+            return false;
+          } else {
+            swalError("파일이 업로드 되었습니다.", callback);
+            return true;
+          }
+        });
       });
-    });
   };
 
   deletePackageAPI = async (envName, callback) => {
@@ -331,14 +383,30 @@ class FaasStatus {
       });
   };
 
-  createTrigger = async (data, callback) => {
+  // createTrigger = async (data, callback) => {
+  //   const body = { ...data };
+  //   console.log(body);
+  //   await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
+  //     console.log("res: ", res);
+  //     if (res.status === 201) {
+  //       swalError("Trigger가 생성되었습니다.");
+  //     } else {
+  //       swalError("Trigger 생성 실패", callback);
+  //     }
+  //   });
+  // };
+
+  createTrigger = async (data) => {
     const body = { ...data };
-    console.log(body);
-    await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
-      runInAction(() => {
-        console.log("res: ", res);
-      });
-    });
+    try {
+      const response = await axios.post(`${FAAS_URL}/triggers`, body);
+      console.log("response: ", response);
+      if (response.status === 201) {
+        swalError("Trigger가 생성되었습니다.");
+      }
+    } catch (error) {
+      swalError(error.response.data);
+    }
   };
 
   deleteTriggerAPI = async (trigName, callback) => {
@@ -351,26 +419,35 @@ class FaasStatus {
     });
   };
 
-  createPackage = async (data, callback) => {
-    const body = { ...data };
-    // await axios.post(`${FAAS_URL}/packages`, body).then((res) => {
-    //   console.log("res: ", res);
-    //   console.log("callback: ", callback);
-    //   runInAction(() => {
-    //     console.log("res: ", res);
-    //     console.log("callback: ", callback);
-    //   });
-    // });
+  // createPackage = async (data, callback) => {
+  //   const body = { ...data };
+  //   console.log("data: ", body);
+  //   await axios
+  //     .post(`${FAAS_URL}/packages`, body, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log("res: ", res);
+  //       console.log("callback: ", callback);
+  //     });
+  // };
+  createPackage = async (data) => {
+    const body = JSON.stringify(data);
+    console.log("data: ", body);
     try {
-      const response = await axios.post(`${FAAS_URL}/packages`, body);
-      console.log("Server Response: ", response);
-
-      if (typeof callback === "function") {
-        callback(response.data);
+      const response = await axios.post(`${FAAS_URL}/packages`, body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("res: ", response);
+      if (response.status === 201) {
+        swalError("Package가 생성되었습니다.");
       }
     } catch (error) {
-      console.error("Error:", error);
-      // 에러 처리 로직 추가
+      console.error(error.response.data);
     }
   };
 }

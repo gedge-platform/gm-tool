@@ -100,7 +100,7 @@ const PackageListTab = observer(() => {
   return (
     <CReflexBox>
       <PanelBox>
-        <CommActionBar reloadFunc={reloadData}>
+        <CommActionBar reloadFunc={loadPackageListAPI}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
           <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
@@ -123,7 +123,7 @@ const PackageListTab = observer(() => {
         <CreatePackage
           open={open}
           onClose={handleClose}
-          reloadFunc={reloadData}
+          reloadFunc={loadPackageListAPI}
         />
       </PanelBox>
     </CReflexBox>

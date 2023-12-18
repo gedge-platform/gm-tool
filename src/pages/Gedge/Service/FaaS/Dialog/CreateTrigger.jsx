@@ -45,6 +45,8 @@ const CreateTrigger = observer((props) => {
     triggerHttpInputs,
     triggerKatkaQueue,
     setTriggerKatkaQueue,
+    resetTriggerHttpInputs,
+    resetTriggerKatkaQueue,
   } = FaasStore;
 
   useEffect(() => {
@@ -53,6 +55,9 @@ const CreateTrigger = observer((props) => {
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    resetTriggerHttpInputs();
+    resetTriggerKatkaQueue();
+    setPostType("");
   };
 
   const postTrigger = () => {
@@ -135,9 +140,12 @@ const CreateTrigger = observer((props) => {
       return;
     }
 
-    swalError("Trigger가 생성되었습니다.");
+    // swalError("Trigger가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    resetTriggerHttpInputs();
+    resetTriggerKatkaQueue();
+    setPostType("");
   };
 
   const onChangeTrigger = (e) => {
@@ -169,8 +177,6 @@ const CreateTrigger = observer((props) => {
         [name]: value,
       });
     }
-    console.log("triggerHttpInputs: ", triggerHttpInputs);
-    console.log("triggerKatkaQueue: ", triggerKatkaQueue);
   };
 
   const onChangeMetadata = (e) => {

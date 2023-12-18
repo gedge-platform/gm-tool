@@ -107,7 +107,7 @@ const TriggerListTab = observer(() => {
   return (
     <CReflexBox>
       <PanelBox>
-        <CommActionBar reloadFunc={reloadData}>
+        <CommActionBar reloadFunc={loadTriggerListAPI}>
           <CCreateButton onClick={handleOpen}>생성</CCreateButton>
           &nbsp;&nbsp;
           <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
@@ -130,7 +130,7 @@ const TriggerListTab = observer(() => {
         <CreateTrigger
           open={open}
           onClose={handleClose}
-          reloadFunc={reloadData}
+          reloadFunc={loadTriggerListAPI}
         />
       </PanelBox>
     </CReflexBox>
