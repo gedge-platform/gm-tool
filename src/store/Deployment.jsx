@@ -850,8 +850,6 @@ class Deployment {
   };
 
   postGMostRequestPriority = async (callback) => {
-    console.log(this.deployment);
-    console.log(this.appInfo);
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;

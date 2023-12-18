@@ -1,13 +1,15 @@
+import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
-import { FormControl } from "@material-ui/core";
-import { useEffect } from "react";
-import gsLinkStatusStore from "../../../../../store/GsLink";
+import { FormControl, Table } from "@material-ui/core";
+import gsLinkStore from "../../../../../store/GsLink";
 import workspaceStore from "../../../../../store/WorkSpace";
 import projectStore from "../../../../../store/Project";
+import CreateGsLinkStepOne from "./CreateGsLinkStepOne";
+import CreateGsLinkStepTwo from "./CreateGsLinkStepTwo";
 
 const Button = styled.button`
   background-color: #fff;
@@ -30,32 +32,113 @@ const ButtonNext = styled.button`
 
 const CreateGsLink = observer((props) => {
   const { open } = props;
+  const [stepValue, setStepValue] = useState(1);
 
   const { loadWorkSpaceList, workSpaceList } = workspaceStore;
-  const { projectListinWorkspace, loadProjectList } = projectStore;
+  const { projectListinWorkspace, loadProjectList, projectLists } =
+    projectStore;
+  const { postGsLink, gsLinkInfo, initGsLinkInfo } = gsLinkStore;
 
   useEffect(() => {
     loadWorkSpaceList();
     loadProjectList();
   }, []);
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "workspace") {
-      console.log("");
-    }
-  };
-
   const handleClose = () => {
     props.onClose && props.onClose();
+    setStepValue(1);
+    initGsLinkInfo();
   };
 
-  const postEnvironment = () => {
-    // PostEnvAPI(envName, envImage);
+  const onClickStepTwo = (e) => {
+    const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+
+    // if (deployment.deploymentName === "") {
+    //   swalError("Deployment 이름을 입력해주세요");
+    //   return;
+    // } else if (!checkRegex.test(deployment.deploymentName)) {
+    //   swalError("영어소문자와 숫자만 입력해주세요.");
+    //   return;
+    // }
+    // if (deployment.workspace === "") {
+    //   swalError("Workspace를 선택해주세요");
+    //   return;
+    // }
+    // if (deployment.project === "") {
+    //   swalError("Project를 선택해주세요");
+    //   return;
+    // }
+    // // Replica는 기본 설정 1이라서 추가 안함
+    // if (deployment.containers.length === 0) {
+    //   swalError("Container를 선택해주세요");
+    //   return;
+    // }
+    // setClearLA();
+    setStepValue(2);
+  };
+
+  const onClickBackStepOne = () => {
+    setStepValue(1);
+  };
+
+  const createtGsLink = () => {
+    postGsLink();
 
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+  };
+
+  const CreateGsLinkComponent = () => {
+    if (stepValue === 1) {
+      return (
+        <>
+          <CreateGsLinkStepOne />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "240px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={handleClose}>취소</Button>
+              <ButtonNext onClick={(e) => onClickStepTwo(e)}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 2) {
+      return (
+        <>
+          <CreateGsLinkStepTwo />
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => onClickBackStepOne()}>이전</Button>
+              <ButtonNext onClick={() => createtGsLink()}>생성</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    }
   };
 
   return (
@@ -68,83 +151,7 @@ const CreateGsLink = observer((props) => {
       bottomArea={false}
       modules={["custom"]}
     >
-      <table className="tb_data_new tb_write">
-        <tbody>
-          <tr>
-            <th>
-              Workspace <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  name="workspace"
-                  onChange={onChange}
-                  //   value={deployment.workspace}
-                >
-                  <option value={""} disabled hidden>
-                    Select Workspace
-                  </option>
-                  {workSpaceList.map((workspace) => (
-                    <option
-                      key={workspace.workspaceUUID}
-                      value={workspace.workspaceName}
-                    >
-                      {workspace.workspaceName}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-
-          <tr>
-            <th>
-              Project <span className="requried">*</span>
-            </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  //   disabled={!deployment.workspace}
-                  name="project"
-                  onChange={onChange}
-                  //   value={deployment.project}
-                >
-                  <option value={""} selected hidden disabled>
-                    Select Project
-                  </option>
-                  {projectListinWorkspace ? (
-                    projectListinWorkspace?.map((project) => (
-                      <option value={project.projectName}>
-                        {project.projectName}
-                      </option>
-                    ))
-                  ) : (
-                    <option value={""}>No Data</option>
-                  )}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            width: "240px",
-            justifyContent: "center",
-          }}
-        >
-          <Button onClick={handleClose}>취소</Button>
-          <ButtonNext onClick={postEnvironment}>생성</ButtonNext>
-        </div>
-      </div>
+      {CreateGsLinkComponent()}
     </CDialogNew>
   );
 });

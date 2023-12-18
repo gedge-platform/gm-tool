@@ -1,6 +1,8 @@
 import axios from "axios";
 import { makeAutoObservable, runInAction } from "mobx";
 import { GSLINK_URL } from "../config";
+import { getItem } from "../utils/sessionStorageFn";
+import { swalError } from "../utils/swal-utils";
 
 class GsLink {
   gsLinkList = [];
@@ -14,6 +16,51 @@ class GsLink {
   constructor() {
     makeAutoObservable(this);
   }
+
+  gsLinkInfo = {
+    user_name: "",
+    workspace_name: "",
+    project_name: "",
+    namespace_name: "",
+    status: "active",
+    source_type: "pod",
+    parameters: {
+      source_cluster: "",
+      source_name: "",
+      source_service: "",
+      target_cluster: "",
+    },
+  };
+
+  setGsLinkInfo = (name, value) => {
+    runInAction(() => {
+      this.gsLinkInfo[name] = value;
+    });
+  };
+
+  initGsLinkInfo = () => {
+    this.gsLinkInfo = {
+      user_name: "",
+      workspace_name: "",
+      project_name: "",
+      namespace_name: "",
+      status: "active",
+      source_type: "pod",
+      parameters: {
+        source_cluster: "",
+        source_name: "",
+        source_service: "",
+        target_cluster: "",
+      },
+    };
+  };
+
+  nodeList = [];
+  setLodeList = (value) => {
+    runInAction(() => {
+      this.nodeList = value;
+    });
+  };
 
   initViewList = () => {
     runInAction(() => {
@@ -74,7 +121,41 @@ class GsLink {
         this.paginationList();
       });
   };
+
+  postGsLink = async (data, callback) => {
+    let { id } = getItem("user");
+    console.log(id);
+    console.log(this.gsLinkInfo);
+    const body = {
+      user_name: "",
+      workspace_name: "",
+      project_name: "",
+      namespace_name: "",
+      status: "active",
+      source_type: "pod",
+      parameters: {
+        source_cluster: "",
+        source_name: "",
+        source_service: "",
+        target_cluster: "",
+      },
+    };
+    await axios
+      .post(`${GSLINK_URL}`, body)
+      .then((res) => {
+        console.log(res);
+        runInAction(() => {
+          if (res.status === 200) {
+            swalError("생성", callback);
+            return true;
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }
 
-const gsLinkStatusStore = new GsLink();
-export default gsLinkStatusStore;
+const gsLinkStore = new GsLink();
+export default gsLinkStore;

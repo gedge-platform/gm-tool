@@ -9,7 +9,7 @@ import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
-import gsLinkStatusStore from "../../../../../store/GsLink";
+import gsLinkStore from "../../../../../store/GsLink";
 import CreateGsLink from "../Dialog/CreateGsLink";
 
 const GsLinkListTab = observer(() => {
@@ -33,7 +33,7 @@ const GsLinkListTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
-  } = gsLinkStatusStore;
+  } = gsLinkStore;
 
   const [columDefs] = useState([
     {
