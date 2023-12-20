@@ -134,6 +134,37 @@ class FaasStatus {
     });
   };
 
+  resetPackageSource = () => {
+    runInAction(() => {
+      this.packageSource = {
+        pack_name: "",
+        env_name: "",
+        sourcearchive: "",
+        build: "",
+      };
+    });
+  };
+
+  resetPackageDeploy = () => {
+    runInAction(() => {
+      this.packageDeploy = {
+        pack_name: "",
+        env_name: "",
+        deployarchive: "",
+      };
+    });
+  };
+
+  resetPackageCode = () => {
+    runInAction(() => {
+      this.packageCode = {
+        pack_name: "",
+        env_name: "",
+        code: "",
+      };
+    });
+  };
+
   setTriggerHttpInputs = (e) => {
     runInAction(() => {
       this.triggerHttpInputs = e;
@@ -339,7 +370,7 @@ class FaasStatus {
       .then((res) => {
         runInAction(() => {
           console.log("res: ", res.data);
-          if (res.data === []) {
+          if (res.data.length === 0) {
             swalError("파일이 업로드 되지 않았습니다.", callback);
             return false;
           } else {
@@ -447,7 +478,7 @@ class FaasStatus {
         swalError("Package가 생성되었습니다.");
       }
     } catch (error) {
-      console.error(error.response.data);
+      swalError(error.response.data);
     }
   };
 }
