@@ -270,11 +270,9 @@ class Workspace {
   };
 
   loadSourceCluster = async (workspaceName) => {
-    console.log(workspaceName);
     await axios.get(`${SERVER_URL}/workspaces/${workspaceName}`).then((res) => {
       runInAction(() => {
         this.sourceClusterList = res.data.selectCluster;
-        console.log(this.sourceClusterList);
       });
     });
   };
@@ -296,8 +294,6 @@ class Workspace {
     axios
       .post(`${SERVER_URL}/workspaces`, body)
       .then((res) => {
-        console.log("res", res);
-        console.log("body", body);
         if (res.status === 201) {
           swalError("워크스페이스를 생성하였습니다.", callback);
         }

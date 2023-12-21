@@ -5,8 +5,6 @@ import { CCreateButton, CDeleteButton } from "@/components/buttons";
 import { AgGrid } from "@/components/datagrids";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { CReflexBox } from "@/layout/Common/CReflexBox";
-import { CTabs, CTab, CTabPanel } from "@/components/tabs";
-import { useHistory } from "react-router";
 import { observer } from "mobx-react";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import gsLinkStore from "../../../../../store/GsLink";

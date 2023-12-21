@@ -1,67 +1,65 @@
-import { FormControl, Table } from "@material-ui/core";
+import { FormControl } from "@material-ui/core";
+import styled from "styled-components";
 import projectStore from "../../../../../store/Project";
 import gsLinkStore from "../../../../../store/GsLink";
 import clusterStore from "../../../../../store/Cluster";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import workspaceStore from "../../../../../store/WorkSpace";
+import podStore from "../../../../../store/Pod";
+import { observer } from "mobx-react";
+import serviceStore from "../../../../../store/Service";
 
-const CreateGsLinkStepTwo = () => {
+const Table = styled.table`
+  tbody {
+    display: block;
+    height: 110px;
+    overflow: auto;
+  }
+  thead,
+  tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  thead {
+    width: 100%;
+  }
+`;
+
+const CreateGsLinkStepTwo = observer(() => {
   const { gsLinkInfo, setGsLinkInfo } = gsLinkStore;
   const { loadProjectList, projectLists } = projectStore;
   const { loadCluster, clusterDetail } = clusterStore;
+  const { sourceClusterList } = workspaceStore;
+  const { loadPodList, podList } = podStore;
+  const [selectedPod, setSelectedPod] = useState([]);
+  const [selectedService, setSelectedService] = useState([]);
+  const { loadServiceList, serviceList } = serviceStore;
 
-  useEffect(
-    () => {
-      const fetchData = async () => {
-        await loadProjectList();
+  useEffect(() => {
+    loadPodList();
+    loadServiceList();
+  }, []);
 
-        const selectedProject = projectLists?.find(
-          (data) => data.workspace.workspaceName === gsLinkInfo.workspace_name
-        );
-
-        const clusterNameData = await Promise.all(
-          (selectedProject?.selectCluster || []).map(async (cluster) => {
-            const clusterData = await loadCluster(cluster.clusterName);
-            return clusterData;
-          })
-        );
-
-        console.log(clusterNameData);
-        console.log("selectedProject ???", selectedProject.selectCluster);
-        console.log("clusterDetail ???", clusterDetail);
-        console.log("clusterNameData ???", clusterNameData);
-      };
-
-      fetchData();
-    },
-    [
-      // loadProjectList,
-      // projectLists,
-      // gsLinkInfo.workspace_name,
-      // loadCluster,
-      // clusterDetail,
-    ]
-  );
-
-  //   useEffect(() => {
-  //     loadProjectList();
-  //   }, []);
-
-  //   const selectedProject = projectLists?.find(
-  //     (data) => data.workspace.workspaceName === gsLinkInfo.workspace_name
-  //   );
-
-  //   const clusterNameData = await Promise.all(
-  //     (selectedProject?.selectCluster || []).map(async (cluster) => {
-  //       const clusterData = await loadCluster(cluster.clusterName);
-  //       return clusterData;
-  //     })
-  //   );
+  console.log("serviceList ???", serviceList);
 
   const onChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "sourceCluster") {
-      console.log("?");
+      console.log("podList ???", podList);
+      console.log("value ???", value);
+      const clusterListTemp = podList?.filter((data) => data.cluster === value);
+      setSelectedPod(clusterListTemp);
+      const serviceListTemp = serviceList?.filter(
+        (data) => data.cluster === value
+      );
+      setSelectedService(serviceListTemp);
+      console.log("serviceListTemp ???", serviceListTemp);
+    }
+    if (name === "pod") {
+    }
+    if (name === "service") {
     }
   };
 
@@ -82,88 +80,78 @@ const CreateGsLinkStepTwo = () => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th rowSpan={2}>
+            <th>
               Source Cluster <span className="requried">*</span>
             </th>
-            <td colSpan="3">
-              <FormControl className="form_fullWidth">
-                <select
-                  name="sourceCluster"
-                  onChange={onChange}
-                  value={gsLinkInfo.parameters.source_cluster}
-                >
-                  <option value={""} disabled hidden>
-                    Select Source Cluster
-                  </option>
-                  {/* {selectedProject?.selectCluster?.map((data) => (
-                    <option value={data.clusterName}>{data.clusterName}</option>
-                  ))} */}
-                </select>
-              </FormControl>
-            </td>
-          </tr>
-
-          <tr>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>
                   <tr>
                     <th style={{ textAlign: "center", width: "7%" }}></th>
-                    <th style={{ textAlign: "center" }}>Name</th>
+                    <th style={{ textAlign: "center", width: "70%" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Type</th>
-                    <th style={{ textAlign: "center" }}>node</th>
                   </tr>
                 </thead>
-                <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {/* {selectedProject?.selectCluster?.map((cluster) => (
+                <tbody className="tb_data_nodeInfo">
+                  {sourceClusterList ? (
+                    sourceClusterList?.map((cluster) => (
+                      <tr>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            // checked={cluster.clusterName}
+                            name="sourceCluster"
+                            onChange={onChange}
+                            value={cluster.clusterName}
+                          />
+                        </td>
+                        <td style={{ width: "70%" }}>{cluster.clusterName}</td>
+                        <td>{cluster.clusterType}</td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
-                      <td style={{ textAlign: "center", width: "7%" }}>
-                        <input
-                          type="radio"
-                          // checked={deployment.pvcName === pvc.name}
-                          name="sourceCluster2"
-                          onChange={onChange}
-                          // value={JSON.stringify(pvc)}
-                        />
-                      </td>
-                      <td>{cluster.clusterName}</td>
-                      <td>{cluster.clusterType}</td>
+                      <td colSpan="3">No Data</td>
                     </tr>
-                  ))} */}
+                  )}
                 </tbody>
               </Table>
             </td>
           </tr>
 
-          <tr>
+          <tr style={{}}>
             <th style={{ width: "144px" }}>Pod</th>
             <td colSpan="3">
               <Table className="tb_data_new">
                 <thead>
                   <tr>
                     <th style={{ textAlign: "center", width: "7%" }}></th>
-                    <th style={{ textAlign: "center" }}>Name</th>
+                    <th style={{ textAlign: "center", width: "70%" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Status</th>
                   </tr>
                 </thead>
-                <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {/* {pvClaimListInDeployment?.map((pvc) => (
-                          <tr>
-                            <td style={{ textAlign: "center", width: "7%" }}>
-                              <input
-                                type="radio"
-                                checked={deployment.pvcName === pvc.name}
-                                name="claimVolume"
-                                onChange={handleDeployment}
-                                value={JSON.stringify(pvc)}
-                              />
-                            </td>
-                            <td>{pvc.name}</td>
-                            <td>{pvc.namespace}</td>
-                            <td>{pvc.clusterName}</td>
-                            <td>{pvc.volume ? pvc.volume : ""}</td>
-                          </tr>
-                        ))} */}
+                <tbody className="tb_data_nodeInfo">
+                  {selectedPod.length > 0 ? (
+                    selectedPod?.map((data, index) => (
+                      <tr key={data.name}>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            // checked={deployment.pvcName === pvc.name}
+                            name="pod"
+                            onChange={onChange}
+                            value={data.name}
+                          />
+                        </td>
+                        <td style={{ width: "70%" }}>{data.name}</td>
+                        <td>{data.status}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3">No Data</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </td>
@@ -176,28 +164,32 @@ const CreateGsLinkStepTwo = () => {
                 <thead>
                   <tr>
                     <th style={{ textAlign: "center", width: "7%" }}></th>
-                    <th style={{ textAlign: "center" }}>Name</th>
+                    <th style={{ textAlign: "center", width: "70%" }}>Name</th>
                     <th style={{ textAlign: "center" }}>Type</th>
                   </tr>
                 </thead>
-                <tbody className="tb_data_nodeInfo" style={{ height: "105px" }}>
-                  {/* {pvClaimListInDeployment?.map((pvc) => (
-                          <tr>
-                            <td style={{ textAlign: "center", width: "7%" }}>
-                              <input
-                                type="radio"
-                                checked={deployment.pvcName === pvc.name}
-                                name="claimVolume"
-                                onChange={handleDeployment}
-                                value={JSON.stringify(pvc)}
-                              />
-                            </td>
-                            <td>{pvc.name}</td>
-                            <td>{pvc.namespace}</td>
-                            <td>{pvc.clusterName}</td>
-                            <td>{pvc.volume ? pvc.volume : ""}</td>
-                          </tr>
-                        ))} */}
+                <tbody className="tb_data_nodeInfo">
+                  {selectedService.length > 0 ? (
+                    selectedService?.map((data, index) => (
+                      <tr key={data.name}>
+                        <td style={{ textAlign: "center", width: "7%" }}>
+                          <input
+                            type="radio"
+                            // checked={deployment.pvcName === pvc.name}
+                            name="service"
+                            onChange={onChange}
+                            value={data.name}
+                          />
+                        </td>
+                        <td style={{ width: "70%" }}>{data.name}</td>
+                        <td>{data.type}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="3">No Data</td>
+                    </tr>
+                  )}
                 </tbody>
               </Table>
             </td>
@@ -235,6 +227,6 @@ const CreateGsLinkStepTwo = () => {
       </table>
     </>
   );
-};
+});
 
 export default CreateGsLinkStepTwo;

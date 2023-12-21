@@ -40,6 +40,7 @@ const drawStatus = (status) => {
     case "Warning":
     case "fail":
     case "failed":
+    case "inactive":
       // Red
       return `<span class="status_ico status_04">${status}</span>`;
     case "DEPLOYED":

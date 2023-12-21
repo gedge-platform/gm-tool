@@ -121,6 +121,7 @@ export const App = () => {
           <AuthRoute path="/service/project" component={ServiceProject} />
           <AuthRoute path="/service/workload" component={ServiceWorkload} />
           <AuthRoute path="/service/Workspace" component={ServiceWorkSpace} />
+          <AuthRoute path="/service/faas" component={FaaS} />
           <AuthRoute path="/service/volumes" component={Volume} />
 
           <Route path="/login" component={Login} />

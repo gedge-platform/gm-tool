@@ -18,7 +18,7 @@ const Button = styled.button`
 const CreatePodStepThree = observer((props) => {
   const [open, setOpen] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
-
+  const { sourceClusterList } = workspaceStore;
   const {
     targetClusters,
     resetTargetClusters,
@@ -170,7 +170,6 @@ const CreatePodStepThree = observer((props) => {
       }
 
       if (e.target.name === "sourceNode") {
-        console.log(e.target.value);
         setPodInfoPriority("sourceNode", e.target.value);
       }
 
@@ -217,7 +216,7 @@ const CreatePodStepThree = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -257,7 +256,7 @@ const CreatePodStepThree = observer((props) => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

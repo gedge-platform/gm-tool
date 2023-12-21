@@ -432,6 +432,15 @@ const SideMenu = observer(() => {
                 </CustomNavLink>
               </li>
               <li>
+                <CustomNavLink
+                  exact
+                  to="/service/faas"
+                  activeClassName="active"
+                >
+                  {Title.FaaS}
+                </CustomNavLink>
+              </li>
+              <li>
                 <CustomNavLink to="/service/volumes" activeClassName="active">
                   {Title.Volume}
                 </CustomNavLink>

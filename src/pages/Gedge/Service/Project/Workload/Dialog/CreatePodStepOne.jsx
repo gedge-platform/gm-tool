@@ -78,7 +78,8 @@ const CreatePodStepOne = observer((props) => {
     loadWorkSpaceList,
     workSpaceList,
     loadWorkspaceDetail,
-    selectClusterInfo,
+    loadSourceCluster,
+    sourceClusterList,
   } = workspaceStore;
 
   const {
@@ -86,7 +87,6 @@ const CreatePodStepOne = observer((props) => {
     loadProjectListInWorkspace,
     loadProjectDetail,
     loadProjectList,
-    projectLists,
   } = projectStore;
 
   const { pvClaimListInDeployment, setCheckPVCInPod } = claimStore;
@@ -111,6 +111,7 @@ const CreatePodStepOne = observer((props) => {
 
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
+      loadSourceCluster(e.target.value);
     } else if (e.target.name === "volume") {
       setCheckPVCInPod(e.target.value);
     }
@@ -118,13 +119,9 @@ const CreatePodStepOne = observer((props) => {
     if (e.target.name === "project") {
       setPodInfo(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
-      // 프로젝트 기준의 클러스터리스트
-      const selectedProject = projectLists.find(
-        (data) => data.workspace.workspaceName === podInfo.workspace
-      );
 
       initTargetClusters(
-        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
+        sourceClusterList?.map((clusterInfo) => clusterInfo.clusterName)
       );
     }
     if (e.target.name === "claimVolume") {

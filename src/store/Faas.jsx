@@ -339,7 +339,7 @@ class FaasStatus {
       .then((res) => {
         runInAction(() => {
           console.log("res: ", res.data);
-          if (res.data === []) {
+          if (res.data.length === 0) {
             swalError("파일이 업로드 되지 않았습니다.", callback);
             return false;
           } else {
