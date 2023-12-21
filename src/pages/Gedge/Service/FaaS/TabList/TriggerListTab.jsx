@@ -9,6 +9,7 @@ import CreateTrigger from "../Dialog/CreateTrigger";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
+import { AgGrid2 } from "../../../../../components/datagrids/AgGrid2";
 
 const TriggerListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
@@ -28,7 +29,7 @@ const TriggerListTab = observer(() => {
 
   useEffect(() => {
     loadTriggerListAPI();
-  }, []);
+  }, [reRun]);
 
   const [columDefs] = useState([
     {
@@ -102,8 +103,6 @@ const TriggerListTab = observer(() => {
     setReRun(true);
   };
 
-  useEffect(() => {}, [reRun]);
-
   return (
     <CReflexBox>
       <PanelBox>
@@ -114,7 +113,7 @@ const TriggerListTab = observer(() => {
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
-            <AgGrid
+            <AgGrid2
               onCellClicked={cellClicked}
               rowData={triggerList}
               columnDefs={columDefs}

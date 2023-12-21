@@ -32,7 +32,7 @@ const ButtonNext = styled.button`
 `;
 
 const CreateTrigger = observer((props) => {
-  const { open } = props;
+  const { open, reloadFunc } = props;
   const triggerType = ["HTTP", "KafkaQueue"];
   const funcList = ["consumer"];
   const [postType, setPostType] = useState("");
@@ -53,6 +53,8 @@ const CreateTrigger = observer((props) => {
     loadFuncionsListAPI();
   }, []);
 
+  console.log("props: ", props);
+
   const handleClose = () => {
     props.onClose && props.onClose();
     resetTriggerHttpInputs();
@@ -60,7 +62,7 @@ const CreateTrigger = observer((props) => {
     setPostType("");
   };
 
-  const postTrigger = () => {
+  const postTrigger = async () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     const checkNum = /^[0-9]*$/;
     console.log("triggerHttpInputs: ", triggerHttpInputs);
@@ -81,7 +83,7 @@ const CreateTrigger = observer((props) => {
         swalError("url을 입력해주세요");
         return;
       } else {
-        createTrigger(triggerHttpInputs);
+        await createTrigger(triggerHttpInputs);
       }
     } else if (postType === "KafkaQueue") {
       if (triggerKatkaQueue.trig_name === "") {
@@ -133,7 +135,7 @@ const CreateTrigger = observer((props) => {
         swalError("secret를 입력해주세요");
         return;
       } else {
-        createTrigger(triggerKatkaQueue);
+        await createTrigger(triggerKatkaQueue);
       }
     } else {
       swalError("Trigger Type을 선택해주세요");

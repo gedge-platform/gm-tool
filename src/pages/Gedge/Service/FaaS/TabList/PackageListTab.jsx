@@ -9,6 +9,7 @@ import CreatePackage from "../Dialog/CreatePackage";
 import FaasStore from "../../../../../store/Faas";
 import { agDateColumnFilter, dateFormatter } from "@/utils/common-utils";
 import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
+import { AgGrid2 } from "../../../../../components/datagrids/AgGrid2";
 
 const PackageListTab = observer(() => {
   const [reRun, setReRun] = useState(false);
@@ -107,7 +108,7 @@ const PackageListTab = observer(() => {
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
-            <AgGrid
+            <AgGrid2
               onCellClicked={cellClicked}
               rowData={packageList}
               columnDefs={columDefs}

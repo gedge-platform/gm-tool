@@ -31,7 +31,7 @@ const ButtonNext = styled.button`
 `;
 
 const CreatePackage = observer((props) => {
-  const { open } = props;
+  const { open, reloadFunc, onClose } = props;
   const Type = ["source", "deploy", "code"];
   const [postType, setPostType] = useState("");
   const [selectFile, setSelectFile] = useState("");
@@ -47,6 +47,9 @@ const CreatePackage = observer((props) => {
     packageDeploy,
     setPackageDeploy,
     postPackageFileApi,
+    resetPackageSource,
+    resetPackageDeploy,
+    resetPackageCode,
   } = FaasStore;
 
   useEffect(() => {
@@ -55,21 +58,27 @@ const CreatePackage = observer((props) => {
 
   const handleClose = () => {
     props.onClose && props.onClose();
+    resetPackageSource();
+    resetPackageDeploy();
+    resetPackageCode();
   };
 
-  const postPackage = () => {
+  const postPackage = async () => {
     if (postType === "code") {
-      createPackage(packageCode);
+      await createPackage(packageCode);
     }
     if (postType === "source") {
-      createPackage(packageSource);
+      await createPackage(packageSource);
     }
     if (postType === "deploy") {
-      createPackage(packageDeploy);
+      await createPackage(packageDeploy);
     }
-    swalError("Package가 생성되었습니다.");
+    // swalError("Package가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
+    resetPackageSource();
+    resetPackageDeploy();
+    resetPackageCode();
   };
 
   const onSelectFile = async (e) => {
