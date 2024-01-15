@@ -36,7 +36,7 @@ const CloudZoneSlider = observer(() => {
     let pauseCount = 0;
 
     configName.forEach((e) => {
-      const providerVMs = clusterList.filter(
+      const providerVMs = clusterList?.filter(
         (item) => item.ProviderName === e.ProviderName
       );
       providerVMs.forEach((providerVM) => {
