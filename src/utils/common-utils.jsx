@@ -91,7 +91,6 @@ export const dateFormatter = (date) => {
 
 export const strFormatByLength = (str, length = 200) => {
   if (str === undefined) {
-    console.log("dshkasdjksad");
   } else if (str.length >= length) return `${str.substr(0, length)}...`;
   return str;
 };
