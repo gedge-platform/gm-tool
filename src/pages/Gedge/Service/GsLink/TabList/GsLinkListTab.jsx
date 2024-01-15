@@ -9,17 +9,10 @@ import { observer } from "mobx-react";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import gsLinkStore from "../../../../../store/GsLink";
 import CreateGsLink from "../Dialog/CreateGsLink";
+import { swalError, swalUpdate } from "../../../../../utils/swal-utils";
 
 const GsLinkListTab = observer(() => {
   const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const {
     gsLinkList,
@@ -31,7 +24,26 @@ const GsLinkListTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
+    deleteGsLink,
   } = gsLinkStore;
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleDelete = (e) => {
+    if (gsLinkList.request_id === "") {
+      swalError("리퀘스트 아이디를 선택해주세요!");
+    } else {
+      swalUpdate("삭제하시겠습니까?", () =>
+        deleteGsLink(gsLinkList.request_id)
+      );
+    }
+  };
 
   const [columDefs] = useState([
     {
@@ -54,11 +66,6 @@ const GsLinkListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${data.data.parameters.target_cluster}</span>`;
       },
-    },
-    {
-      headerName: "파드 이름",
-      field: "job_pod_name",
-      filter: true,
     },
     {
       headerName: "상태",
@@ -125,6 +132,8 @@ const GsLinkListTab = observer(() => {
         <PanelBox>
           <CommActionBar reloadFunc={loadGsLinkList}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
+            &nbsp;&nbsp;
+            <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
           <div className="tabPanelContainer">
             <div className="grid-height2">

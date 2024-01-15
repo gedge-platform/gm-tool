@@ -105,7 +105,6 @@ const CreateDeployment = observer((props) => {
     labelValue,
     targetClusters,
   } = deploymentStore;
-  console.log("deployment ????", deployment.priority);
 
   const { loadPVClaims } = claimStore;
 
@@ -201,7 +200,6 @@ const CreateDeployment = observer((props) => {
   const handleClose = () => {
     props.onClose && props.onClose();
     setStepValue(1);
-    // initDeploymentInfo();
     resetDeployment();
     setClearLA();
     setProjectDisable(true);
@@ -428,7 +426,6 @@ const CreateDeployment = observer((props) => {
     } else if (stepValue === 4) {
       return (
         <>
-          {/* <DeploymentYaml labelsList={labelsList} /> */}
           <DeploymentYaml />
           <div
             style={{

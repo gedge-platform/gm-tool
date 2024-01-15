@@ -36,7 +36,6 @@ const CreateUserAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
   } = projectStore;
-  console.log("projectList: ", projectList);
 
   const [columDefs] = useState([
     {

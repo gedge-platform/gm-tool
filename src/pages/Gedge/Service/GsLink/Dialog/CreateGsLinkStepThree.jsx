@@ -1,5 +1,8 @@
+import { FormControl } from "@material-ui/core";
 import styled from "styled-components";
+import projectStore from "../../../../../store/Project";
 import gsLinkStore from "../../../../../store/GsLink";
+import clusterStore from "../../../../../store/Cluster";
 import { useEffect, useState } from "react";
 import workspaceStore from "../../../../../store/WorkSpace";
 import podStore from "../../../../../store/Pod";
@@ -23,37 +26,25 @@ const Table = styled.table`
   }
 `;
 
-const CreateGsLinkStepTwo = observer(() => {
-  const { setParameters } = gsLinkStore;
+const CreateGsLinkStepThree = observer(() => {
+  const { gsLinkInfo, setGsLinkInfo, parameters, setParameters } = gsLinkStore;
+  const { loadProjectList, projectLists } = projectStore;
+  const { loadCluster, clusterDetail } = clusterStore;
   const { sourceClusterList } = workspaceStore;
   const { loadPodList, podList } = podStore;
   const [selectedPod, setSelectedPod] = useState([]);
   const [selectedService, setSelectedService] = useState([]);
   const { loadServiceList, serviceList } = serviceStore;
 
-  useEffect(() => {
-    loadPodList();
-    loadServiceList();
-  }, []);
-
   const onChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "sourceCluster") {
-      const clusterListTemp = podList?.filter((data) => data.cluster === value);
-      setSelectedPod(clusterListTemp);
-      const serviceListTemp = serviceList?.filter(
-        (data) => data.cluster === value
-      );
-      setSelectedService(serviceListTemp);
-
-      setParameters("source_cluster", value);
-    }
-
-    if (name === "service") {
-      setParameters("source_service", value);
+    if (name === "targetCluster") {
+      setParameters("target_cluster", value);
     }
   };
+
+  console.log("parameters", parameters);
 
   return (
     <>
@@ -63,11 +54,11 @@ const CreateGsLinkStepTwo = observer(() => {
             <span>기본 정보</span>
           </div>
           <div className="arr"></div>
-          <div className="step current">
+          <div className="step">
             <span>소스 클러스터</span>
           </div>
           <div className="arr"></div>
-          <div className="step">
+          <div className="step current">
             <span>대상 클러스터</span>
           </div>
         </div>
@@ -76,8 +67,8 @@ const CreateGsLinkStepTwo = observer(() => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
-              Source Cluster <span className="requried">*</span>
+            <th style={{ width: "144px" }}>
+              Target Cluster <span className="requried">*</span>
             </th>
             <td colSpan="3">
               <Table className="tb_data_new">
@@ -96,7 +87,7 @@ const CreateGsLinkStepTwo = observer(() => {
                           <input
                             type="radio"
                             // checked={cluster.clusterName}
-                            name="sourceCluster"
+                            name="targetCluster"
                             onChange={onChange}
                             value={cluster.clusterName}
                           />
@@ -114,48 +105,10 @@ const CreateGsLinkStepTwo = observer(() => {
               </Table>
             </td>
           </tr>
-
-          <tr>
-            <th style={{ width: "144px" }}>Service</th>
-            <td colSpan="3">
-              <Table className="tb_data_new">
-                <thead>
-                  <tr>
-                    <th style={{ textAlign: "center", width: "7%" }}></th>
-                    <th style={{ textAlign: "center", width: "70%" }}>Name</th>
-                    <th style={{ textAlign: "center" }}>Type</th>
-                  </tr>
-                </thead>
-                <tbody className="tb_data_nodeInfo">
-                  {selectedService.length > 0 ? (
-                    selectedService?.map((data, index) => (
-                      <tr key={data.name}>
-                        <td style={{ textAlign: "center", width: "7%" }}>
-                          <input
-                            type="radio"
-                            // checked={deployment.pvcName === pvc.name}
-                            name="service"
-                            onChange={onChange}
-                            value={data.name}
-                          />
-                        </td>
-                        <td style={{ width: "70%" }}>{data.name}</td>
-                        <td>{data.type}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr style={{ textAlign: "center", margin: "5% 0 0 0 " }}>
-                      No Data
-                    </tr>
-                  )}
-                </tbody>
-              </Table>
-            </td>
-          </tr>
         </tbody>
       </table>
     </>
   );
 });
 
-export default CreateGsLinkStepTwo;
+export default CreateGsLinkStepThree;

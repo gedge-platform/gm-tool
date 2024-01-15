@@ -32,8 +32,6 @@ const ServiceAdminMapDashboard = observer(() => {
       }
     };
 
-    console.log(markerInfos);
-
     const marker = markerInfos.map((info, i) => {
       L.marker([info.point.y, info.point.x], {
         icon: CustomIcon("blue"),

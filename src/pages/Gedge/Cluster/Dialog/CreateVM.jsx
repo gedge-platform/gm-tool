@@ -25,10 +25,11 @@ const ButtonNext = styled.button`
   border-radius: 4px;
 `;
 
-const CreateVM = observer(props => {
+const CreateVM = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
-  const { postVM, ProviderName, setProviderName, vmBody, setVMBody } = clusterStore;
+  const { postVM, ProviderName, setProviderName, vmBody, setVMBody } =
+    clusterStore;
 
   const ProviderList = ["AWS", "OPENSTACK", "GCP"];
 
@@ -55,12 +56,6 @@ const CreateVM = observer(props => {
   };
 
   const verify = () => {
-    console.log("vmBody.name : ", vmBody.name);
-    console.log("vmBody.config : ", vmBody.config);
-    console.log("vmBody.image : ", vmBody.image);
-    console.log("vmBody.flavor : ", vmBody.flavor);
-    console.log("vmBody.disk : ", vmBody.disk);
-    console.log("vmBody.provider : ", vmBody.provider);
     if (vmBody.name === "") {
       swalError("이름을 입력해주세요!");
       return;
@@ -83,15 +78,19 @@ const CreateVM = observer(props => {
     }
     if (vmBody.provider === "") {
       swalError("provider를 입력해주세요!");
-      return; 
+      return;
     }
-    
+
     createVM(vmBody);
   };
 
-  const createVM = async body => {
-    // swalLoading("VM 생성중..", 100000, "이 창은 VM 생성이 완료되면 사라집니다. (<b></b> ms)", props.onClose && props.onClose());
-    swalLoading("VM 생성중..", 1000000, "이 창은 VM 생성이 완료되면 사라집니다.", props.onClose && props.onClose());
+  const createVM = async (body) => {
+    swalLoading(
+      "VM 생성중..",
+      1000000,
+      "이 창은 VM 생성이 완료되면 사라집니다.",
+      props.onClose && props.onClose()
+    );
     const result = await postVM(body);
     props.reloadFunc && props.reloadFunc();
   };
@@ -99,10 +98,6 @@ const CreateVM = observer(props => {
   const onChange = ({ target: { name, value } }) => {
     setProviderName(value);
   };
-
-  // useEffect(props => {
-  //   console.log("props is ", props);
-  // }, []);
 
   const stepOfComponent = () => {
     if (stepValue === 1) {
@@ -119,7 +114,7 @@ const CreateVM = observer(props => {
                   <FormControl className="form_fullWidth">
                     <select name="ProviderName" onChange={onChange}>
                       <option value={""}>Select Provider</option>
-                      {ProviderList.map(provider => (
+                      {ProviderList.map((provider) => (
                         <option value={provider}>{provider}</option>
                       ))}
                     </select>
@@ -143,17 +138,15 @@ const CreateVM = observer(props => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={e => onClickStepOne(e)}>다음</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepOne(e)}>다음</ButtonNext>
             </div>
           </div>
         </>
       );
     } else if (stepValue === 2) {
-      // loadTypeCredentialList(ProviderName);
       return (
         <>
           <CreateAdvanced provider={ProviderName} />
-          {/* <CreateAdvanced provider={ProviderName} /> */}
           <div
             style={{
               display: "flex",
@@ -178,7 +171,15 @@ const CreateVM = observer(props => {
   };
 
   return (
-    <CDialogNew id="myDialog" open={open} maxWidth="md" title={"Create VM"} onClose={handleClose} bottomArea={false} modules={["custom"]}>
+    <CDialogNew
+      id="myDialog"
+      open={open}
+      maxWidth="md"
+      title={"Create VM"}
+      onClose={handleClose}
+      bottomArea={false}
+      modules={["custom"]}
+    >
       {stepOfComponent()}
     </CDialogNew>
   );

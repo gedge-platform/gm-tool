@@ -19,14 +19,12 @@ import {
 
 const SchedulerAreaChart = observer(({ value }) => {
   const { allMetrics, lastTime, interval } = monitoringStore;
-  console.log(allMetrics);
 
   let title = "";
   let metrics = [];
 
   const searchMetrics = (filter) => {
     Object.entries(allMetrics).map(([key, value]) => {
-      console.log(["key: ", key, "value:", value]);
       if (key === filter) {
         if (value?.length === 0) {
           for (

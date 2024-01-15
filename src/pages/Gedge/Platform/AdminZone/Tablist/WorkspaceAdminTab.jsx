@@ -36,8 +36,6 @@ const WorkspaceAdminTab = observer(() => {
     adminLists,
   } = workspaceStore;
 
-  console.log(adminLists);
-
   const [columDefs] = useState([
     {
       headerName: "이름",
@@ -59,7 +57,6 @@ const WorkspaceAdminTab = observer(() => {
       field: "clusterName",
       filter: true,
       cellRenderer: function ({ data: { selectCluster } }) {
-        console.log(selectCluster);
         const clusterNames = selectCluster
           .map((item) => item.clusterName)
           .join(", ");

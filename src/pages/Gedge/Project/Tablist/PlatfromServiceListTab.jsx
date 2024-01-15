@@ -25,11 +25,8 @@ const PlatfromServiceListTab = observer(() => {
     totalElements,
     loadPlatformProjectList,
     platformDetil,
-    loadPlatformDetail,
-    loadCluster,
     currentPage,
     totalPages,
-    viewList,
     goPrevPage,
     goNextPage,
     loadPlatformProjectDetail,
@@ -68,11 +65,7 @@ const PlatfromServiceListTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
-    const fieldName = e.colDef.field;
-    // console.log(e.data.projectName);
-    // loadPlatformProjectList()
     loadPlatformProjectDetail(e.data.projectName, e.data.clusterName);
-    // loadPlatformDetail(e.data.projectName);
   };
 
   const history = useHistory();

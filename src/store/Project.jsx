@@ -162,10 +162,6 @@ class Project {
       .get(`${SERVER_URL}/userProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          // const list = res.data.data.filter(
-          //   (item) => item.projectType === type
-          // );
-          console.log(res.data.data);
           this.projectList = res.data.data;
           this.projectLists = res.data.data;
           this.totalElements = res.data.data.length;
@@ -255,11 +251,6 @@ class Project {
       this.clusterList = null;
       this.selectCluster = null;
       this.resourceUsage = { namespace_cpu: null, namespace_memory: null };
-      // .then(() => {
-      // this.eventLength = this.events.length;
-      // console.log(this.events);
-      // this.convertEventList(this.events, this.setEventList);
-      // });
     }
   };
 
@@ -324,24 +315,10 @@ class Project {
       memberName: id,
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
-    console.log("project body :", body);
 
-    // // const body2 = {
-    // //   projectName,
-    // //   projectDescription,
-    // //   memberName: getItem("user"),
-    // //   clusterName: selectCluster,
-    // //   projectType,
-    // //   workspaceName,
-    // // };
-    // axios
-    //   .post(`${SERVER_URL}/projects`, body2)
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.error(err));
     axios
       .post(`${SERVER_URL}/projects`, body)
       .then((res) => {
-        console.log(res);
         if (res.status === 201) {
           swalError("Project가 생성되었습니다!", callback);
         }

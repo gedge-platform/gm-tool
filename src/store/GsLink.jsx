@@ -24,17 +24,24 @@ class GsLink {
     namespace_name: "",
     status: "active",
     source_type: "pod",
-    parameters: {
-      source_cluster: "",
-      source_name: "",
-      source_service: "",
-      target_cluster: "",
-    },
+  };
+
+  parameters = {
+    source_cluster: "",
+    source_name: "",
+    source_service: "",
+    target_cluster: "",
   };
 
   setGsLinkInfo = (name, value) => {
     runInAction(() => {
       this.gsLinkInfo[name] = value;
+    });
+  };
+
+  setParameters = (name, value) => {
+    runInAction(() => {
+      this.parameters[name] = value;
     });
   };
 
@@ -52,6 +59,15 @@ class GsLink {
         source_service: "",
         target_cluster: "",
       },
+    };
+  };
+
+  initParameters = () => {
+    this.parameters = {
+      source_cluster: "",
+      source_name: "",
+      source_service: "",
+      target_cluster: "",
     };
   };
 
@@ -101,7 +117,6 @@ class GsLink {
     await axios
       .get(`${GSLINK_URL}`)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           if (res.data !== null) {
             this.gsLinkList = res.data;
@@ -124,30 +139,45 @@ class GsLink {
 
   postGsLink = async (data, callback) => {
     let { id } = getItem("user");
-    console.log(id);
-    console.log(this.gsLinkInfo);
+
     const body = {
-      user_name: "",
-      workspace_name: "",
-      project_name: "",
+      user_name: id,
+      workspace_name: this.gsLinkInfo.workspace_name,
+      project_name: this.gsLinkInfo.project_name,
       namespace_name: "",
       status: "active",
       source_type: "pod",
       parameters: {
-        source_cluster: "",
+        source_cluster: this.parameters.source_cluster,
         source_name: "",
-        source_service: "",
-        target_cluster: "",
+        source_service: this.parameters.source_service,
+        target_cluster: this.parameters.target_cluster,
       },
     };
     await axios
       .post(`${GSLINK_URL}`, body)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           if (res.status === 200) {
-            swalError("생성", callback);
-            return true;
+            swalError("이동에 성공하였습니다.", callback);
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  deleteGsLink = async (requestId) => {
+    await axios
+      .delete(`${GSLINK_URL}/${requestId}`)
+      .then((res) => {
+        runInAction(() => {
+          if (res.status === 200) {
+            swalError("삭제되었습니다.", callback);
+          }
+          if (res.status === 400) {
+            swalError("삭제에 실패했습니다.", callback);
           }
         });
       })

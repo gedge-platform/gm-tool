@@ -3,23 +3,15 @@ import { observer } from "mobx-react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { dashboardStore, clusterStore } from "@/store";
+import { dashboardStore } from "@/store";
 
 // install Swiper modules
 SwiperCore.use([Navigation, Pagination]);
 
 const CloudZoneSlider = observer(() => {
-  const {
-    loadCredentialName,
-    ConfigNameList,
-    vmStatusList,
-    loadVMStatusCnt,
-    setVmStatusList,
-  } = dashboardStore;
+  const { loadCredentialName, vmStatusList } = dashboardStore;
 
   useEffect(() => {
-    // setVmStatusList();
-    // loadVMStatusCnt();
     loadCredentialName();
   }, []);
 
@@ -27,20 +19,16 @@ const CloudZoneSlider = observer(() => {
   const navigationNextRef = React.useRef(null);
 
   const icon = (Provider) => {
-    // vmStatusList.map((vmstatus) =>
     if (Provider === "AWS") {
       return <div className="iconBox aws">{Provider}</div>;
     } else if (Provider === "OPENSTACK") {
       return <div className="iconBox openstack">{Provider}</div>;
     }
-    // )
   };
 
   const vmStatus = () => {
-    console.log(vmStatusList);
     return vmStatusList.map((vmstatus) => (
       <div className="SliderBox">
-        {/* <div className="iconBox aws">{vmstatus[1]}</div> */}
         {icon(vmstatus[1])}
         <div className="contentsBox">
           <div className="countBox">

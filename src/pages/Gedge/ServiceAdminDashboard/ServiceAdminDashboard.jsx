@@ -70,16 +70,11 @@ const ServiceAdminDashboard = observer(() => {
     statefulsetMetrics,
   } = serviceAdminDashboardStore;
 
-  // console.log("projectList", projectList);
-
   const { lastTime, interval } = monitoringStore;
   const [resetTest, setResetTest] = useState("");
 
   useEffect(() => {
     loadWorkspaceName();
-    // loadServiceAdminDashboard(setWorkspaceName);
-    // loadProjectName();
-    // serviceAdminMonitoring();
   }, []);
 
   const currentPageTitle = Title.ServiceAdminDashboard;
@@ -87,7 +82,6 @@ const ServiceAdminDashboard = observer(() => {
   const onChange = ({ target: { name, value } }) => {
     if (name === "workspace") {
       setWorkspaceName(value);
-      console.log("workspace", value);
       loadServiceAdminDashboard(value);
       setProjectNameInMonitoring("");
       serviceAdminMonitoring(
@@ -98,9 +92,8 @@ const ServiceAdminDashboard = observer(() => {
       );
     }
     if (name === "projectName") {
-      console.log("projectName");
       setProjectNameInMonitoring(value);
-      console.log("projectName", value);
+
       serviceAdminMonitoring(
         value,
         unixStartTime(60),
@@ -253,9 +246,6 @@ const ServiceAdminDashboard = observer(() => {
                       <option value={name}>{name}</option>
                     ))}
                   </select>
-                  {/* <Select inputProps={{ "aria-label": "Without label" }}>
-                    <MenuItem value="selct">SELECT</MenuItem>
-                  </Select> */}
                 </FormControl>
               </div>
             </div>
@@ -313,7 +303,6 @@ const ServiceAdminDashboard = observer(() => {
 
           <>
             <div className="ServiceRecentWrap">
-              {/* <div className="ServiceRecentTitle"> */}
               {toggleProject ? (
                 <div className="ServiceRecentInner">
                   <ButtonStyle
@@ -323,7 +312,7 @@ const ServiceAdminDashboard = observer(() => {
                   >
                     Project CPU Top 5
                   </ButtonStyle>
-                  {/* </div> */}
+
                   <div className="ServiceRecentListWrap">
                     <ul>{projectCpuTop5()}</ul>
                   </div>
@@ -390,10 +379,6 @@ const ServiceAdminDashboard = observer(() => {
                   ) : (
                     <></>
                   )}
-
-                  {/* {Object.values(projectList).map((val) => (
-                       <option value={val.projectName}>{val.projectName}</option>
-                     ))} */}
                 </FormControl>
               </div>
             </div>

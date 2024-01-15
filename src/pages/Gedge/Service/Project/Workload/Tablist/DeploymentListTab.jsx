@@ -132,7 +132,6 @@ const DeploymentListTab = observer(() => {
 
   const reloadData = () => {
     setReRun(true);
-    console.log(reRun);
   };
 
   const handleDelete = () => {

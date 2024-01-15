@@ -143,7 +143,6 @@ const DeploymentAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    console.log("containerInfo : ", containerInfo);
     if (containerInfo.containerName === "") {
       swalError("Container 이름을 입력해주세요");
       return;

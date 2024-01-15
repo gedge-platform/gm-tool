@@ -6,8 +6,7 @@ import "ace-builds/src-noconflict/theme-monokai";
 import { deploymentStore } from "@/store";
 
 const TamplateYaml = observer(() => {
-  const { content, setContent } = deploymentStore;
-  console.log(content);
+  const { content } = deploymentStore;
   return (
     <>
       <div className="step-container2">

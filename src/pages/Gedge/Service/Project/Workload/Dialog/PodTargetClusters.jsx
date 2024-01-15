@@ -228,7 +228,6 @@ const PodTargetClusters = observer(({ open, onClose, onComplete }) => {
   };
 
   const applyTargetClusters = () => {
-    console.log(targetClusters);
     setTargetClusters(selectedClusters.filter((element) => element !== null));
     setUnselectedClusters(unselected);
     onClose();

@@ -10,6 +10,7 @@ import workspaceStore from "../../../../../store/WorkSpace";
 import projectStore from "../../../../../store/Project";
 import CreateGsLinkStepOne from "./CreateGsLinkStepOne";
 import CreateGsLinkStepTwo from "./CreateGsLinkStepTwo";
+import CreateGsLinkStepThree from "./CreateGsLinkStepThree";
 
 const Button = styled.button`
   background-color: #fff;
@@ -37,7 +38,7 @@ const CreateGsLink = observer((props) => {
   const { loadWorkSpaceList, workSpaceList } = workspaceStore;
   const { projectListinWorkspace, loadProjectList, projectLists } =
     projectStore;
-  const { postGsLink, gsLinkInfo, initGsLinkInfo } = gsLinkStore;
+  const { postGsLink, gsLinkInfo, initGsLinkInfo, parameters } = gsLinkStore;
 
   useEffect(() => {
     loadWorkSpaceList();
@@ -51,37 +52,44 @@ const CreateGsLink = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
-    const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
+    if (gsLinkInfo.workspace_name === "") {
+      swalError("Workspace를 선택해주세요.");
+      return;
+    }
+    if (gsLinkInfo.project_name === "") {
+      swalError("Project를 선택해주세요");
+      return;
+    }
 
-    // if (deployment.deploymentName === "") {
-    //   swalError("Deployment 이름을 입력해주세요");
-    //   return;
-    // } else if (!checkRegex.test(deployment.deploymentName)) {
-    //   swalError("영어소문자와 숫자만 입력해주세요.");
-    //   return;
-    // }
-    // if (deployment.workspace === "") {
-    //   swalError("Workspace를 선택해주세요");
-    //   return;
-    // }
-    // if (deployment.project === "") {
-    //   swalError("Project를 선택해주세요");
-    //   return;
-    // }
-    // // Replica는 기본 설정 1이라서 추가 안함
-    // if (deployment.containers.length === 0) {
-    //   swalError("Container를 선택해주세요");
-    //   return;
-    // }
     // setClearLA();
     setStepValue(2);
+  };
+
+  const onClickStepThree = () => {
+    if (parameters.source_cluster === "") {
+      swalError("Cluster를 선택해주세요.");
+      return;
+    }
+    if (parameters.source_service === "") {
+      swalError("Service를 선택해주세요.");
+      return;
+    }
+    setStepValue(3);
   };
 
   const onClickBackStepOne = () => {
     setStepValue(1);
   };
 
+  const onClickBackStepTwo = () => {
+    setStepValue(2);
+  };
+
   const createtGsLink = () => {
+    if (parameters.target_cluster === "") {
+      swalError("Cluster를 선택해주세요.");
+      return;
+    }
     postGsLink();
 
     props.reloadFunc && props.reloadFunc();
@@ -133,7 +141,32 @@ const CreateGsLink = observer((props) => {
               }}
             >
               <Button onClick={() => onClickBackStepOne()}>이전</Button>
-              <ButtonNext onClick={() => createtGsLink()}>생성</ButtonNext>
+              <ButtonNext onClick={(e) => onClickStepThree(e)}>다음</ButtonNext>
+            </div>
+          </div>
+        </>
+      );
+    } else if (stepValue === 3) {
+      return (
+        <>
+          <CreateGsLinkStepThree />
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginTop: "32px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "300px",
+                justifyContent: "center",
+              }}
+            >
+              <Button onClick={() => onClickBackStepTwo()}>이전</Button>
+              <ButtonNext onClick={() => createtGsLink()}>이동</ButtonNext>
             </div>
           </div>
         </>

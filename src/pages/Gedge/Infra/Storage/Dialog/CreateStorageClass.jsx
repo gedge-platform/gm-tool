@@ -75,7 +75,6 @@ const CreateStorageClass = observer((props) => {
     },
     allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
     reclaimPolicy: reclaimPolicy,
-    // volumeBindingMode: volumeBindingMode,
   };
 
   const templateNfs = {
@@ -107,7 +106,6 @@ const CreateStorageClass = observer((props) => {
     },
     allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
     reclaimPolicy: reclaimPolicy,
-    // volumeBindingMode: volumeBindingMode,
   };
 
   const templateRbd = {
@@ -138,7 +136,6 @@ const CreateStorageClass = observer((props) => {
     },
     allowVolumeExpansion: Boolean(volumeExpansion === true ? true : false),
     reclaimPolicy: reclaimPolicy,
-    // volumeBindingMode: volumeBindingMode,
   };
 
   const handleClose = () => {
@@ -192,11 +189,9 @@ const CreateStorageClass = observer((props) => {
       postStorageClass(stringify(templateCephfs));
     }
     if (storageSystem === "NFS") {
-      console.log("NFS: ", storageSystem);
       postStorageClass(stringify(templateNfs));
     }
     if (storageSystem === "BlockStorage") {
-      console.log("BlockStorage: ", storageSystem);
       postStorageClass(stringify(templateRbd));
     }
     handleClose();

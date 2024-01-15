@@ -98,12 +98,7 @@ export const strFormatByLength = (str, length = 200) => {
 
 export const duplicateCheck = async (name, type) => {
   return await axios
-    .get(
-      `${SERVER_URL}/duplicateCheck/${name}?type=${type}`
-      // , {
-      //   auth: BASIC_AUTH,
-      // }
-    )
+    .get(`${SERVER_URL}/duplicateCheck/${name}?type=${type}`)
     .then((res) => {
       if (res.status === 200) {
         return true;

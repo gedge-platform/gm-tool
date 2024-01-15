@@ -61,13 +61,11 @@ class HPA {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            console.log("1");
             this.hpaList = res.data.data;
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
             this.hpaList = [];
-            console.log("2");
           }
         });
       })

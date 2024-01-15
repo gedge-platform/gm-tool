@@ -50,7 +50,11 @@ const CreateGsLinkStepOne = observer((props) => {
           </div>
           <div className="arr"></div>
           <div className="step">
-            <span>고급 설정</span>
+            <span>소스 클러스터</span>
+          </div>
+          <div className="arr"></div>
+          <div className="step">
+            <span>대상 클러스터</span>
           </div>
         </div>
       </div>

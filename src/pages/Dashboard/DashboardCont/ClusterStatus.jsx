@@ -13,23 +13,18 @@ const ClusterStatus = observer(() => {
     loadVMStatusCnt();
   }, [VMList]);
 
-  console.log("clusterList: ", clusterList);
-  console.log("configName: ", configName);
-
   const clusterStatus = () => {
     let VMcount = 0;
     let runCount = 0;
     let stopCount = 0;
     let pauseCount = 0;
-    // const VMList = {};
+
     configName.forEach((e) => {
-      console.log("e: ", e.ProviderName);
       // 사용하려는 프로바이더명이 clusterList 배열에 존재하는지 확인
       const providerVMs = clusterList.filter(
         (item) => item.ProviderName === e.ProviderName
       );
       // 해당 프로바이더의 모든 VM에 대해 반복
-      console.log("providerVMs: ", providerVMs);
       providerVMs.forEach((providerVM) => {
         VMcount++;
 
@@ -43,11 +38,6 @@ const ClusterStatus = observer(() => {
         }
       });
 
-      console.log(e.ProviderName + " count : " + VMcount);
-      console.log("pauseCount: ", pauseCount);
-      console.log("runCount: ", runCount);
-      console.log("stopCount: ", stopCount);
-
       VMList[e.ProviderName] = {
         VMcount,
         pauseCount,
@@ -60,7 +50,6 @@ const ClusterStatus = observer(() => {
       runCount = 0;
       stopCount = 0;
     });
-    console.log("VMList: ", VMList);
   };
 
   // if (vmStatusList === undefined) {

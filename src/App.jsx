@@ -58,18 +58,6 @@ export const App = () => {
   //   }
   // }, []);
 
-  // const setMainPage = () => {
-  //   if (userRole) {
-  //     switch (userRole) {
-  //       case "PA":
-  //         return <TotalDashboard />;
-  //         break;
-  //       case "SA":
-  //         return <ServiceAdminDashboard />;
-  //         break;
-  //     }
-  //   }
-  // };
   if (userRole === "PA") {
     return (
       <>

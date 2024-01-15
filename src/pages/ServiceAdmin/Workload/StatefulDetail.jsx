@@ -52,24 +52,8 @@ const Label = styled.span`
 `;
 
 const StatefulSetDetail = observer(() => {
-  const {
-    // statefulSetDetail: {
-    statefulSetDetail,
-    annotations,
-    cluster,
-    containers,
-    createAt,
-    events,
-    label,
-    name,
-    ownerReferences,
-    project,
-    status,
-    // },
-  } = statefulSetStore;
-  console.log("label: ", label);
-  console.log("annotations: ", annotations);
-  console.log("statefulSetDetail.name: ", statefulSetDetail.name);
+  const { statefulSetDetail, annotations, containers, events, label } =
+    statefulSetStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -150,20 +134,7 @@ const StatefulSetDetail = observer(() => {
                     <th>Image</th>
                     <td>{container.image ? container.image : "-"}</td>
                   </tr>
-                  {/* <tr>
-                    <th>Container Ports</th>
-                    <td>
-                      {container?.ports.containerPort ? (
-                        container.ports?.map((port) => (
-                          <p>
-                            {port.containerPort}/{port.protocol}
-                          </p>
-                        ))
-                      ) : (
-                        <p>-</p>
-                      )}
-                    </td>
-                  </tr> */}
+
                   <tr>
                     <th>Container Ports</th>
                     <td>
@@ -182,35 +153,6 @@ const StatefulSetDetail = observer(() => {
                     </td>
                   </tr>
 
-                  {/* <tr>
-                    <th>Environment</th>
-                    <td>
-                      {container.env.name ? (
-                        <table className="tb_data">
-                          <tbody>
-                            <tr>
-                              <th>Name</th>
-                              <th>Value</th>
-                              <th>Source</th>
-                            </tr>
-                            {container.env.map((item) => (
-                              <tr>
-                                <td>{item.name ? item.name : "-"}</td>
-                                <td>{item.value ? item.value : "-"}</td>
-                                <td>
-                                  {item.valueFrom?.fieldRef?.fieldPath
-                                    ? item.valueFrom?.fieldRef?.fieldPath
-                                    : "-"}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      ) : (
-                        "No Env Info"
-                      )}
-                    </td>
-                  </tr> */}
                   <tr>
                     <th>Environment</th>
                     <td>
@@ -246,33 +188,7 @@ const StatefulSetDetail = observer(() => {
                       {container.args ? JSON.stringify(container.args) : "-"}
                     </td>
                   </tr>
-                  {/* <tr>
-                    <th>Volume Mounts</th>
-                    <td>
-                      {container.volumeMounts.length === 0 ? (
-                        "No Volume Info"
-                      ) : (
-                        <table className="tb_data">
-                          <tbody>
-                            <tr>
-                              <th>Name</th>
-                              <th>Mount Path</th>
-                              <th>Propagation</th>
-                            </tr>
-                            {container.volumeMounts.map((volume) => (
-                              <tr>
-                                <td>{volume.name ? volume.name : "-"}</td>
-                                <td>
-                                  {volume.mountPath ? volume.mountPath : "-"}
-                                </td>
-                                <td>-</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      )}
-                    </td>
-                  </tr> */}
+
                   <tr>
                     <th>Volume Mounts</th>
                     <td>

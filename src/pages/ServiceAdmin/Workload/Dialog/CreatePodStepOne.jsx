@@ -94,7 +94,6 @@ const CreatePodStepOne = observer((props) => {
   const [prioritytDisable, setPriorityDisable] = useState(true);
 
   const onChange = (e) => {
-    console.log("e", e.target.name);
     if (e.target.name === "podName") {
       setPodInfo(e.target.name, e.target.value);
     }
@@ -103,7 +102,6 @@ const CreatePodStepOne = observer((props) => {
       const selectedWorkspace = workSpaceList.find(
         (workspace) => workspace.workspaceName === e.target.value
       );
-      console.log(selectedWorkspace);
       setPodInfo(e.target.name, e.target.value);
       setPodInfo("workspacetag", selectedWorkspace.workspaceTag);
       setPodInfo("workspaceuuid", selectedWorkspace.workspaceUUID);

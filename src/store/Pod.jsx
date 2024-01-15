@@ -261,7 +261,6 @@ class Pod {
   };
   setTemplateLabel = () => {
     runInAction(() => {
-      console.log("labels : ", this.labels);
       this.labels.map((data) => {
         this.labelInput[data.labelKey] = data.labelValue;
       });
@@ -633,7 +632,6 @@ class Pod {
 
   postPodGLowLatencyPriority = async (callback) => {
     const body = this.content;
-    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
@@ -676,7 +674,6 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log("options ??? ", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -700,7 +697,6 @@ class Pod {
 
   postPodGMostRequestPriority = async (callback) => {
     const body = this.content;
-    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
@@ -723,7 +719,6 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log("options ??? ", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -747,7 +742,6 @@ class Pod {
 
   postPodGSelectedClusterPriority = async (callback) => {
     const body = this.content;
-    console.log("body ??? ", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const userName = JSON.parse(localStorage.getItem("user")).id;
@@ -788,7 +782,6 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log(options);
 
     const requestId = "requestId" + randomNumber;
 
@@ -813,7 +806,6 @@ class Pod {
 
   postPodGSetClusterPriority = async (callback) => {
     const body = this.content;
-    console.log("body ??? ", body);
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {
@@ -834,7 +826,6 @@ class Pod {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log(options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -857,40 +848,11 @@ class Pod {
   };
 
   postPodGM = async (callback) => {
-    console.log(this.priority);
     const body = this.content;
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
     const options = encodeURI(JSON.stringify(this.priority.options));
-    // const option = {
-    //   user_name: "user1",
-    //   workspace_name: "ws1",
-    //   workspace_uid: "649128e7fc34732e0eccfa6d",
-    //   project_name: "p1",
-    //   type: "default",
-    //   data: {
-    //     selected_cluster: "onpremise(dongjak)",
-    //   },
-    // };
-    const requestId = "requestId" + randomNumber;
-    // const options = encodeURI(JSON.stringify(option));
-    console.log("body :", body);
-    // console.log("options :", JSON.stringify(this.priority.options));
-    console.log("option : ", options);
-    console.log("requestId :", requestId);
 
-    // await axios
-    //   .post(
-    //     `http://101.79.4.15:31701/gmcapi/v2/gs-scheduler?requestId=${requestId}&callbackUrl=http://zento.co.kr/callback&priority=GSelectedClusterPriority&options=${options}`,
-    //     body
-    //   )
-    //   .then((res) => {
-    //     console.log("res :", res.data);
-    //     if (res.status === 201) {
-    //       swalError("Pod가 생성되었습니다.", callback);
-    //     } else {
-    //       swalError("Pod 생성 실패", callback);
-    //     }
-    //   });
+    const requestId = "requestId" + randomNumber;
   };
 
   deletePod = async (podName, clusterName, projectName, callback) => {
@@ -899,7 +861,6 @@ class Pod {
         `${SERVER_URL}/pods/${podName}?cluster=${clusterName}&project=${projectName}`
       )
       .then((res) => {
-        console.log("res: ", res);
         if (res.status === 200) swalError("Pod가 삭제되었습니다.", callback);
       })
       .catch((err) => swalError("삭제에 실패하였습니다."));

@@ -532,9 +532,7 @@ class Cluster {
       runInAction(() => {
         this.gpuInfo = data;
       });
-    } catch (err) {
-      console.log("gpuInfo err", err);
-    }
+    } catch (err) {}
   };
 
   postCluster = async (data, callback) => {

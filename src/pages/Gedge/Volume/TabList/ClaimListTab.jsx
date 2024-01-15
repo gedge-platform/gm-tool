@@ -12,13 +12,8 @@ import ClaimDetail from "../ClaimDetail";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import CreateClaim from "../ClaimDialog/CreateClaim";
 import { swalUpdate, swalError } from "@/utils/swal-utils";
-// import { useLocation } from "react-router";
-
-// let prePath = "";
 
 const ClaimListTab = observer(() => {
-  // let locations = useLocation();
-
   const [open, setOpen] = useState(false);
   const [reRun, setReRun] = useState(false);
   const [claimName, setClaimName] = useState("");
@@ -26,8 +21,6 @@ const ClaimListTab = observer(() => {
   const {
     pvClaim,
     totalElements,
-    pvClaimEvents,
-    pvClaimYamlFile,
     pvClaimAnnotations,
     pvClaimLables,
     loadClaimYaml,
@@ -37,7 +30,6 @@ const ClaimListTab = observer(() => {
     loadPVClaim,
     currentPage,
     totalPages,
-    viewList,
     pvClaimLists,
     goPrevPage,
     goNextPage,
@@ -168,25 +160,11 @@ const ClaimListTab = observer(() => {
     };
   }, [reRun]);
 
-  // useEffect(() => {
-  //   if (prePath.indexOf("/service/volumes") !== -1) {
-  //     console.log("새로고침");
-  //     prePath = "";
-  //     window.location.reload();
-  //   }
-  //   prePath = location.pathname;
-  // }, [location]);
-
   return (
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={reloadData}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
@@ -222,7 +200,6 @@ const ClaimListTab = observer(() => {
           pvClaim={pvClaim}
           metadata={pvClaimAnnotations}
           lables={pvClaimLables}
-          // events={pvClaimEvents}
         />
       </CReflexBox>
     </>

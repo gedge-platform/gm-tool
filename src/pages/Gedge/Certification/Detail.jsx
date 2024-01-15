@@ -20,7 +20,7 @@ const Detail = observer((props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log("cert", cert);
+
   useEffect(() => {}, []);
 
   return (
