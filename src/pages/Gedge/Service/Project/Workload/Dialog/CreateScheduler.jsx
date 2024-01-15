@@ -94,45 +94,12 @@ const CreateScheduler = observer((props) => {
     clearAll();
   };
 
-  // const createDeployment = () => {
-  //   postDeployment(handleClose);
-  // };
   const createScheduler = () => {
     const requestId = `workload-${randomString()}`;
     postWorkload(requestId, workspace, project);
     // postWorkload(requestId, workspace, project);
     postScheduler2(requestId, content, handleClose);
     props.reloadFunc && props.reloadFunc();
-
-    // let formData = new FormData();
-    // formData.append("callbackUrl", `${REQUEST_UR2}`); // 수정 필요
-    // formData.append("requestId", requestId);
-    // formData.append("yaml", content);
-    // formData.append("clusters", JSON.stringify(clusters));
-
-    // axios
-    //   .post(`http://101.79.4.15:32527/yaml`, formData)
-    //   .then(function (response) {
-    //     console.log(response);
-    //     if (response.status === 200) {
-    //       setResponseData(response.data);
-
-    //       const popup = window.open(
-    //         "",
-    //         "Gedge scheduler",
-    //         `width=${screen.width},height=${screen.height}`,
-    //         "fullscreen=yes"
-    //       );
-    //       popup.document.open().write(response.data);
-    //       popup.document.close();
-
-    //       handleClose();
-    //       // setStepValue(4);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
   };
   useEffect(() => {
     if (stepValue === 1) {
