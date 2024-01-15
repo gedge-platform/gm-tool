@@ -190,10 +190,7 @@ const CreatePod = observer((props) => {
       swalError("Project를 선택해주세요");
       return;
     }
-    if (podInfo.volume === "") {
-      swalError("Volume을 선택해주세요");
-      return;
-    }
+
     if (podInfo.containers.length === 0) {
       swalError("Container를 선택해주세요");
       return;

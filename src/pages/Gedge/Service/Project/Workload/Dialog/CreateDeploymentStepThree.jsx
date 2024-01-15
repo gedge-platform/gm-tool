@@ -22,6 +22,7 @@ const CreateDeploymentStepThree = observer(() => {
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 
+  const { sourceClusterList } = workspaceStore;
   const {
     targetClusters,
     resetTargetClusters,
@@ -39,11 +40,6 @@ const CreateDeploymentStepThree = observer(() => {
   useEffect(() => {
     loadProjectList();
   }, []);
-
-  // 프로젝트 기준의 클러스터리스트
-  const selectedProject = projectLists?.find(
-    (data) => data.workspace.workspaceName === deployment.workspace
-  );
 
   const openTargetClusters = (index) => {
     setOpen2(true);
@@ -217,7 +213,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -257,7 +253,7 @@ const CreateDeploymentStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

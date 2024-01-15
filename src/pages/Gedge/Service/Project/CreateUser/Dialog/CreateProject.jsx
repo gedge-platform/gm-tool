@@ -99,8 +99,6 @@ const CreateProject = observer((props) => {
 
   const onChange = async (e) => {
     const { name, value } = e.target;
-    console.log("workspace");
-    console.log("onChange :", name, value);
     if (name === "workspace") {
       if (value === "") {
         setSelectClusterInfo([]);
@@ -151,7 +149,6 @@ const CreateProject = observer((props) => {
       return;
     }
     if (workspace === "") {
-      console.log("workspace :", workspace);
       swalError("워크스페이스를 확인해주세요!");
       return;
     }

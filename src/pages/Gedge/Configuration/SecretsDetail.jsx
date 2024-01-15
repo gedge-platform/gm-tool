@@ -7,13 +7,6 @@ import styled from "styled-components";
 import EventAccordion from "@/components/detail/EventAccordion";
 import { dateFormatter } from "@/utils/common-utils";
 import SeeMoreBtn from "./SeeMoreBtn";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Typography,
-} from "@mui/material";
-import { ExpandMoreRounded } from "@mui/icons-material";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -87,8 +80,6 @@ const SecretDetail = observer(() => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  console.log("secretTabList : ", secretTabList);
 
   const dataAccordion = () => {
     data.length !== 0

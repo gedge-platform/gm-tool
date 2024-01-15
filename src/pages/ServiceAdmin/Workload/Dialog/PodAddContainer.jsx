@@ -135,7 +135,6 @@ const PodAddContainer = observer((props) => {
   };
 
   const addContainers = () => {
-    console.log(containerInfo);
     containerInfo.variables.map((e) => {
       if (e.type === "KeyValuePair") {
         keyValuePair.push([e.variableName, e.value]);

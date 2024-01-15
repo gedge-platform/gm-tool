@@ -109,8 +109,6 @@ const CreateHPA = observer((props) => {
     setDeploymentEnable(true);
   };
 
-  // console.log(clusters);
-
   const createHPA = () => {
     console.log(
       stringify({

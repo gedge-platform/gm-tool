@@ -92,7 +92,8 @@ const CreateDeploymentStepOne = observer((props) => {
     loadWorkSpaceList,
     workSpaceList,
     loadWorkspaceDetail,
-    selectClusterInfo,
+    loadSourceCluster,
+    sourceClusterList,
   } = workspaceStore;
 
   const {
@@ -119,18 +120,14 @@ const CreateDeploymentStepOne = observer((props) => {
       setDeployment("workspaceuuid", selectedWorkspace.workspaceUUID);
       loadProjectListInWorkspace(e.target.value);
       loadWorkspaceDetail(e.target.value);
+      loadSourceCluster(e.target.value);
     }
     if (e.target.name === "project") {
       setDeployment(e.target.name, e.target.value);
       loadProjectDetail(e.target.value);
 
-      // 프로젝트 기준의 클러스터리스트
-      const selectedProject = projectLists.find(
-        (data) => data.workspace.workspaceName === deployment.workspace
-      );
-
       initTargetClusters(
-        selectedProject.selectCluster?.map((cluster) => cluster.clusterName)
+        sourceClusterList?.map((cluster) => cluster.clusterName)
       );
     }
 

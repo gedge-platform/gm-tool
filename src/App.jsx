@@ -18,16 +18,13 @@ import {
   Configuration,
   Certification,
   PlatformUser,
-  Topology,
-  Loadbalancer,
   Storage,
   CreateUser,
-  PlatformControl,
   StorageDashboard,
-  // PlatformServiceListTab,
   PlatformProject,
   CloudZone,
   FaaS,
+  GsLink,
 } from "@/pages";
 
 import PlatformDashboard from "./pages/Gedge/Platform/PlatformDashboard";
@@ -61,18 +58,6 @@ export const App = () => {
   //   }
   // }, []);
 
-  // const setMainPage = () => {
-  //   if (userRole) {
-  //     switch (userRole) {
-  //       case "PA":
-  //         return <TotalDashboard />;
-  //         break;
-  //       case "SA":
-  //         return <ServiceAdminDashboard />;
-  //         break;
-  //     }
-  //   }
-  // };
   if (userRole === "PA") {
     return (
       <>
@@ -101,6 +86,7 @@ export const App = () => {
           <AuthRoute path="/storage" component={Storage} />
           <AuthRoute path="/workload" component={Workload} />
           <AuthRoute path="/faas" component={FaaS} />
+          <AuthRoute path="/gslink" component={GsLink} />
           <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
@@ -123,6 +109,7 @@ export const App = () => {
           <AuthRoute path="/service/project" component={ServiceProject} />
           <AuthRoute path="/service/workload" component={ServiceWorkload} />
           <AuthRoute path="/service/Workspace" component={ServiceWorkSpace} />
+          <AuthRoute path="/service/faas" component={FaaS} />
           <AuthRoute path="/service/volumes" component={Volume} />
 
           <Route path="/login" component={Login} />

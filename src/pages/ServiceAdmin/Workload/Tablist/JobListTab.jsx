@@ -56,13 +56,6 @@ const JobListTab = observer(() => {
       headerName: "상태",
       field: "completions",
       filter: true,
-      // cellRenderer: ({ value }) => {
-      //   if (value === 1) {
-      //     return drawStatus("True");
-      //   } else {
-      //     return drawStatus("False");
-      //   }
-      // },
     },
     {
       headerName: "지속시간(초)",
@@ -119,18 +112,11 @@ const JobListTab = observer(() => {
     };
   }, [reRun]);
 
-  console.log("viewList : ", viewList);
-
   return (
     <>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={reloadData}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
@@ -150,8 +136,6 @@ const JobListTab = observer(() => {
               />
             </div>
           </div>
-          {/* TODO: CreateJob 팝업 작업 필요 */}
-          {/* <CreateJob type={"user"} open={open} onClose={handleClose} reloadFunc={reloadData} /> */}
         </PanelBox>
         <Detail job={jobDetail} />
       </CReflexBox>

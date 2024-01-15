@@ -56,9 +56,6 @@ const TamplateCreate = observer((props) => {
   const { open } = props;
   const [stepValue, setStepValue] = useState(1);
 
-  console.log("targetClusters: ", targetClusters);
-  console.log("deployment: ", deployment);
-
   const goStepTwo = () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     if (appInfo.app === "") {

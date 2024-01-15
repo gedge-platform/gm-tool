@@ -243,6 +243,7 @@ const SideMenu = observer(() => {
       "/platformProject": ["3", "4"],
       "/workload": ["3"],
       "/faas": ["3"],
+      "/gsLink": ["3"],
       "/user": [],
       "/monitoring": [],
       "/configuration": [],
@@ -374,6 +375,11 @@ const SideMenu = observer(() => {
                     {Title.FaaS}
                   </CustomNavLink>
                 </li>
+                <li>
+                  <CustomNavLink exact to="/gslink" activeClassName="active">
+                    {Title.GsLink}
+                  </CustomNavLink>
+                </li>
               </CustomTreeItem>
               <li>
                 <CustomNavLink to="/user" activeClassName="active">
@@ -423,6 +429,15 @@ const SideMenu = observer(() => {
               <li>
                 <CustomNavLink to="/service/workload" activeClassName="active">
                   {Title.Workload}
+                </CustomNavLink>
+              </li>
+              <li>
+                <CustomNavLink
+                  exact
+                  to="/service/faas"
+                  activeClassName="active"
+                >
+                  {Title.FaaS}
                 </CustomNavLink>
               </li>
               <li>

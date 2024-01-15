@@ -59,7 +59,6 @@ const CronJobAdminDetail = observer(() => {
     cronjobInvolvesJobs,
   } = cronJobStore;
 
-  console.log("cronjobdetail", cronJobDetail.length);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 

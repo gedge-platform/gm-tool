@@ -80,7 +80,6 @@ class Deployment {
 
   setCommand = (e) => {
     runInAction(() => {
-      // command = e.split(" ");
       console.log(e.value);
     });
   };
@@ -233,7 +232,6 @@ class Deployment {
   };
 
   setDeploymentPriority = (name, value) => {
-    console.log(name, value);
     this.deployment.priority[name] = value;
   };
 
@@ -326,7 +324,6 @@ class Deployment {
     runInAction(() => {
       this.targetClusters = [];
       this.unselectedClusters = defaultUnselectedClusters;
-      console.log("this.unselectedClusters ???", this.unselectedClusters);
     });
   };
 
@@ -339,7 +336,6 @@ class Deployment {
   setUnselectedClusters = (value) => {
     runInAction(() => {
       this.unselectedClusters = value;
-      console.log("this.unselectedClusters 2222 ???", this.unselectedClusters);
     });
   };
 
@@ -780,17 +776,13 @@ class Deployment {
   };
 
   postGLowLatencyPriority = async (callback) => {
-    console.log("this.deployment ???", this.deployment);
     const body = this.content;
-
-    console.log(body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
     const option = () => {
       if (this.deployment.priority.name === "GLowLatencyPriority") {
         if (this.deployment.priority.mode === "from_node") {
-          console.log("GLowLatencyPriority ? ", this.deployment.priority);
           return {
             user_name: JSON.parse(localStorage.getItem("user")).id,
             workspace_name: this.deployment.workspacetag,
@@ -827,7 +819,6 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log(options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -850,8 +841,6 @@ class Deployment {
   };
 
   postGMostRequestPriority = async (callback) => {
-    console.log(this.deployment);
-    console.log(this.appInfo);
     const body = this.content;
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
@@ -876,10 +865,6 @@ class Deployment {
 
     const options = encodeURI(JSON.stringify(option()));
     const requestId = "requestId" + randomNumber;
-
-    console.log("requestId", requestId);
-    console.log("options", options);
-    console.log("body", body);
 
     await axios
       .post(
@@ -1052,7 +1037,6 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log("options ??? ", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -1098,7 +1082,6 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log("options ??? ", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -1122,7 +1105,6 @@ class Deployment {
 
   postTemplateSelected = async (callback) => {
     const body = this.content;
-    console.log(body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
@@ -1179,11 +1161,8 @@ class Deployment {
       //   body
       // )
       .then((res) => {
-        console.log("res :", res);
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
-          console.log(options);
-          console.log(res);
         } else {
           swalError("Deployment 생성 실패", callback);
         }
@@ -1213,7 +1192,6 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
-    console.log("options ??? ", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -1259,7 +1237,6 @@ class Deployment {
         `${SERVER_URL}/deployments/${deploymentName}?cluster=${clusterName}&project=${projectName} `
       )
       .then((res) => {
-        console.log("delete res: ", res);
         if (res.status === 200)
           swalError("Deployment가 삭제되었습니다.", callback);
       })

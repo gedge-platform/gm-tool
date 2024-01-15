@@ -237,7 +237,6 @@ class Service {
 
   postService = (callback) => {
     let count = 0;
-    // console.log(this.cluster, this.workspace, this.project);
     this.cluster.map(async (item) => {
       await axios
         .post(
@@ -245,7 +244,6 @@ class Service {
           YAML.parse(this.content)
         )
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             count++;
             if (count === this.cluster.length) {

@@ -9,7 +9,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -18,7 +17,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreatePoolSize = observer((props) => {

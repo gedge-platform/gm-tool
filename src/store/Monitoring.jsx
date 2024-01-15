@@ -80,10 +80,6 @@ class Monitoring {
     }
   };
 
-  // checkedNullValue = (res) => {
-  //     console.log(res.data.items.length);
-  // };
-
   convertResponseToMonit = (res) => {
     const array = [];
     runInAction(() => {
@@ -119,7 +115,6 @@ class Monitoring {
         array.push(clusterMetric);
       });
     });
-    console.log(array);
     return array;
   };
 
@@ -129,7 +124,6 @@ class Monitoring {
       .then((res) => {
         runInAction(() => {
           this.clusterNames = res.data.data?.map((item) => item.clusterName);
-          // this.clusterName = this.clusterNames[0];
         });
       })
       .then(() => callback());
@@ -138,7 +132,6 @@ class Monitoring {
     await axios.get(`${SERVER_URL}/clusters`).then((res) => {
       runInAction(() => {
         this.clusterNames = res.data.data?.map((item) => item.clusterName);
-        // this.clusterName = this.clusterNames[0];
       });
     });
   };
@@ -178,7 +171,6 @@ class Monitoring {
       )
       .then((res) => {
         this.coPieMemory = this.convertResponseToMonit(res);
-        // console.log(this.coPieMemory[2]?.metrics);
       });
   };
 
@@ -336,14 +328,7 @@ class Monitoring {
       });
   };
 
-  loadAllMetrics = async (
-    target,
-    // start,
-    end,
-    // step,
-    metricFilter,
-    ...option
-  ) => {
+  loadAllMetrics = async (target, end, metricFilter, ...option) => {
     await axios
       .get(
         this.getMonitURL(
@@ -364,14 +349,7 @@ class Monitoring {
       });
   };
 
-  loadRealAllMetrics = async (
-    target,
-    // start,
-    end,
-    // step,
-    metricFilter,
-    ...option
-  ) => {
+  loadRealAllMetrics = async (target, end, metricFilter, ...option) => {
     await axios
       .get(
         this.getMonitURL(
@@ -392,14 +370,7 @@ class Monitoring {
       });
   };
 
-  loadAppMetrics = async (
-    target,
-    // start,
-    end,
-    // step,
-    metricFilter,
-    ...option
-  ) => {
+  loadAppMetrics = async (target, end, metricFilter, ...option) => {
     await axios
       .get(
         this.getMonitURL(
@@ -420,14 +391,7 @@ class Monitoring {
       });
   };
 
-  loadRealAppMetrics = async (
-    target,
-    // start,
-    end,
-    // step,
-    metricFilter,
-    ...option
-  ) => {
+  loadRealAppMetrics = async (target, end, metricFilter, ...option) => {
     await axios
       .get(
         this.getMonitURL(
@@ -447,33 +411,6 @@ class Monitoring {
         });
       });
   };
-
-  // loadMetrics = async (
-  //     target,
-  //     start,
-  //     end,
-  //     step,
-  //     clusterFilter,
-  //     metricFilter,
-  //     ...options
-  // ) => {
-  //     await axios
-  //         .get(
-  //             this.getMonitURL(
-  //                 target,
-  //                 start,
-  //                 end,
-  //                 step,
-  //                 clusterFilter,
-  //                 metricFilter,
-  //                 options
-  //             ),
-  //             { auth: BASIC_AUTH }
-  //         )
-  //         .then((res) => {
-  //             this.convertResponseToMonit(res);
-  //         });
-  // };
 }
 
 const monitoringStore = new Monitoring();

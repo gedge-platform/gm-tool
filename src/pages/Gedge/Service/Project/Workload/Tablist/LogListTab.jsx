@@ -27,7 +27,6 @@ const LogListTab = observer(() => {
     goPrevPage,
     goNextPage,
   } = logStore;
-  console.log(logList);
 
   const [columDefs] = useState([
     {

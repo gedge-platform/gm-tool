@@ -69,10 +69,7 @@ const PlatfromServiceAdminTab = observer(() => {
 
   const handleClick = (e) => {
     const fieldName = e.colDef.field;
-    // console.log(e.data.projectName);
-    // loadPlatformProjectList()
     loadPlatformProjectDetail(e.data.projectName, e.data.clusterName);
-    // loadPlatformDetail(e.data.projectName);
   };
 
   const history = useHistory();

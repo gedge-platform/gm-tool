@@ -168,9 +168,7 @@ class User {
       .then((res) => {
         runInAction(() => {
           this.userList = res.data;
-          // console.log(this.userList);
           this.totalElements = res.data.length;
-          // this.userDetail = res.data.data[0];
         });
       })
       .then(() => {
@@ -210,14 +208,11 @@ class User {
   updateUserList = async (userName, data) => {
     const body = data;
     const { id } = getItem("user");
-    console.log("userName : ", userName);
-    console.log("body", body);
-    // return
+
     await axios
       .put(`${SERVER_URL}/members/${userName}`, body)
       .then((res) => {
         runInAction(() => {
-          console.log(res.status);
           if (res.status === 200) {
             swalError("사용자가 수정되었습니다.");
             return true;
@@ -230,7 +225,6 @@ class User {
   updateUser = async (data) => {
     const body = data;
     const { id } = getItem("user");
-    // return
     await axios
       .put(`${SERVER_URL}/members/${id}`, body)
       .then((res) => {

@@ -18,7 +18,7 @@ const Button = styled.button`
 const CreatePodStepThree = observer(() => {
   const [open, setOpen] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
-
+  const { sourceClusterList } = workspaceStore;
   const {
     targetClusters,
     resetTargetClusters,
@@ -36,11 +36,6 @@ const CreatePodStepThree = observer(() => {
   useEffect(() => {
     loadProjectList();
   }, []);
-
-  // 프로젝트 기준의 클러스터리스트
-  const selectedProject = projectLists?.find(
-    (data) => data.workspace.workspaceName === podInfo.workspace
-  );
 
   const openTargetClusters = (index) => {
     setOpen(true);
@@ -168,7 +163,6 @@ const CreatePodStepThree = observer(() => {
       }
 
       if (e.target.name === "sourceNode") {
-        console.log(e.target.value);
         setPodInfoPriority("sourceNode", e.target.value);
       }
 
@@ -215,7 +209,7 @@ const CreatePodStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Source Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>
@@ -255,7 +249,7 @@ const CreatePodStepThree = observer(() => {
                           <option value={""} selected disabled hidden>
                             Select Cluster
                           </option>
-                          {selectedProject?.selectCluster?.map((cluster) => (
+                          {sourceClusterList?.map((cluster) => (
                             <option value={cluster.clusterName}>
                               {cluster.clusterName}
                             </option>

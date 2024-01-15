@@ -345,7 +345,7 @@ class Cluster {
       });
 
       await this.paginationList();
-      console.log("this.viewList: ", this.viewList);
+
       if (this.viewList.length !== 0) {
         await this.loadCluster(this.viewList[0]?.clusterName);
         await this.loadGpuAPI(this.viewList[0]?.clusterName);
@@ -369,7 +369,6 @@ class Cluster {
         runInAction(() => {
           const list = data;
           this.clusterList = list;
-          console.log("data: ", data);
           this.clusterNameList = list.map((item) => item.IId.NameId);
           this.totalElements = this.clusterList.length;
           this.totalPages = Math.ceil(this.clusterList.length / 10);
@@ -451,7 +450,6 @@ class Cluster {
 
       runInAction(() => {
         this.clusterDetail = data;
-        console.log("this.clusterDetail ???? ", this.clusterDetail);
         this.nodes =
           this.clusterDetail && this.clusterDetail.nodes !== null
             ? this.clusterDetail.nodes
@@ -497,7 +495,6 @@ class Cluster {
       .get(`${SERVER_URL}/clusters?id=${id}&workspace=${workspace}`)
       .then((res) =>
         runInAction(() => {
-          console.log("res :", res);
           this.clustersInWorkspace = res.data.data;
         })
       );
@@ -526,7 +523,6 @@ class Cluster {
   gpuInfo = [];
 
   loadGpuAPI = async (clusterName) => {
-    console.log("clusterName", clusterName);
     try {
       const response = await axios.get(
         `${SERVER_URL}/gpu?cluster=${clusterName}`
@@ -536,9 +532,7 @@ class Cluster {
       runInAction(() => {
         this.gpuInfo = data;
       });
-    } catch (err) {
-      console.log("gpuInfo err", err);
-    }
+    } catch (err) {}
   };
 
   postCluster = async (data, callback) => {

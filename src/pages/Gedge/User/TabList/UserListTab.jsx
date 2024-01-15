@@ -38,7 +38,6 @@ const UserListTab = observer(() => {
     userName,
     setUserName,
   } = userStore;
-  console.log("userList :", userList);
 
   const [columnDefs] = useState([
     {
@@ -95,7 +94,6 @@ const UserListTab = observer(() => {
     loadUserDetail(e.data.memberId);
     setUserName(e.data.memberId);
     setInputsEdit(e.data);
-    // console.log("e.data :", e.data);
   };
 
   const handleOpen = () => {

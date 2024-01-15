@@ -112,8 +112,6 @@ const VolumeAdvancedSetting = observer(() => {
     setAnnotations(deletedNewList);
   };
 
-  console.log(labels);
-
   return (
     <>
       <div className="step-container">

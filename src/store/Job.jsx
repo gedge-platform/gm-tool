@@ -118,7 +118,6 @@ class Job {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            console.log(res.data.data);
             this.jobList = res.data.data;
             this.jobDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
@@ -174,8 +173,6 @@ class Job {
     await axios
       .get(`${SERVER_URL}/jobs/${name}?cluster=${cluster}&project=${project}`)
       .then(({ data: { data, involves } }) => {
-        // console.log(data);
-        // console.log(involves);
         runInAction(() => {
           this.jobDetailData = data;
           this.containers = data.containers;

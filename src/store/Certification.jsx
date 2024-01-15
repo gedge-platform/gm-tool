@@ -125,14 +125,12 @@ class Certification {
 
   setCredentialName = (n) => {
     runInAction(() => {
-      console.log(n);
       this.CredentialName = n;
     });
   };
 
   setDomainName = (n) => {
     runInAction(() => {
-      console.log(this.DomainName);
       this.DomainName = n;
     });
   };
@@ -208,7 +206,6 @@ class Certification {
       .get(`${SERVER_URL}/spider/credentialList`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("data is ", data);
           this.credential = data;
           this.credentialList = data;
           this.totalElements = this.credential.length;
@@ -229,7 +226,6 @@ class Certification {
       .get(`${SERVER_URL}/spider/credentialList/${provider}`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          console.log("data is ", data);
           this.credential = data;
         });
       });
@@ -238,10 +234,8 @@ class Certification {
   loadCertificationDetail = async (certId) => {
     await axios.get(`${SERVER_URL}/certifications/${certId}`).then((res) => {
       runInAction(() => {
-        console.log(res);
         this.certificationDetail = res.data;
       });
-      console.log(this.certificationDetail);
     });
   };
 
@@ -250,11 +244,10 @@ class Certification {
       ...data,
       enabled: true,
     };
-    console.log(body);
+
     await axios
       .post(`${SERVER_URL}/spider/credentials`, body)
       .then((res) => {
-        console.log(res);
         runInAction(() => {
           if (res.status === 200) {
             swalError("인증이 생성되었습니다.", callback);

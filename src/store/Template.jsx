@@ -184,7 +184,6 @@ class Template {
   }
 
   setDeploymentYamlTemplateFromAppInfo = (appInfo) => {
-    console.log(appInfo);
     this.deploymentYamlTemplate.metadata.name = appInfo.appName + "-deployment";
     this.deploymentYamlTemplate.spec.replicas = appInfo.appReplicas;
     this.deploymentYamlTemplate.spec.selector.matchLabels.app =

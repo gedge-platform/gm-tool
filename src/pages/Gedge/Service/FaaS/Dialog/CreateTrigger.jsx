@@ -4,11 +4,7 @@ import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
 import { swalError } from "../../../../../utils/swal-utils";
 import { useState } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import FaasStore from "../../../../../store/Faas";
 import { useEffect } from "react";
 
@@ -19,7 +15,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -28,15 +23,13 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreateTrigger = observer((props) => {
   const { open, reloadFunc } = props;
   const triggerType = ["HTTP", "KafkaQueue"];
-  const funcList = ["consumer"];
   const [postType, setPostType] = useState("");
-  const [type, setType] = useState("");
+
   const {
     loadFuncionsListAPI,
     functionsList,
@@ -53,8 +46,6 @@ const CreateTrigger = observer((props) => {
     loadFuncionsListAPI();
   }, []);
 
-  console.log("props: ", props);
-
   const handleClose = () => {
     props.onClose && props.onClose();
     resetTriggerHttpInputs();
@@ -65,7 +56,6 @@ const CreateTrigger = observer((props) => {
   const postTrigger = async () => {
     const checkRegex = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
     const checkNum = /^[0-9]*$/;
-    console.log("triggerHttpInputs: ", triggerHttpInputs);
     if (postType === "HTTP") {
       if (triggerHttpInputs.trig_name === "") {
         swalError("Trigger 이름을 입력해주세요");
@@ -113,21 +103,12 @@ const CreateTrigger = observer((props) => {
       } else if (triggerKatkaQueue.maxretries === "") {
         swalError("max retries을 입력해주세요");
         return;
-        // } else if (!checkNum.test(triggerHttpInputs.maxretries)) {
-        //   swalError("max retries에 숫자만 입력해주세요");
-        //   return;
       } else if (triggerKatkaQueue.cooldownperiod === "") {
         swalError("cooldown period를 입력해주세요");
         return;
-        // } else if (!checkNum.test(triggerHttpInputs.cooldownperiod)) {
-        //   swalError("cooldown period에 숫자만 입력해주세요");
-        //   return;
       } else if (triggerKatkaQueue.pollinginterval === "") {
         swalError("polling interval를 입력해주세요");
         return;
-        // } else if (!checkNum.test(triggerHttpInputs.pollinginterval)) {
-        //   swalError("polling interval에 숫자만 입력해주세요");
-        //   return;
       } else if (triggerKatkaQueue.metadata.length === 0) {
         swalError("metadata를 입력해주세요");
         return;
@@ -142,7 +123,6 @@ const CreateTrigger = observer((props) => {
       return;
     }
 
-    // swalError("Trigger가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     resetTriggerHttpInputs();

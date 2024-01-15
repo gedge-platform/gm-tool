@@ -48,7 +48,7 @@ class Dashboard {
       _id: "",
       address: "",
       clusterEndpoint: "",
-      // clusterName: "",
+      clusterName: "",
       clusterType: "",
       status: "",
       token: "",
@@ -187,6 +187,7 @@ class Dashboard {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.dashboardDetail = data;
+          this.edgeInfo = data.edgeInfo;
           this.clusterCnt = data.clusterCnt;
           this.credentialCnt = data.credentialCnt;
           this.edgeClusterCnt = data.edgeClusterCnt;
@@ -256,7 +257,6 @@ class Dashboard {
       .get(`http://101.79.4.15:1024/spider/connectionconfig`)
       .then((res) => {
         runInAction(() => {
-          console.log("Res: ", res);
           this.connectionconfig = res.data.connectionconfig;
           this.ConfigNameList = this.connectionconfig
             ? this.connectionconfig.map((name) => name.ConfigName)
@@ -468,7 +468,6 @@ class Dashboard {
         runInAction(() => {
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
-          // console.log(this.nodeInfo);
           this.type = this.nodeInfo.map((val) => val.type);
           this.master = this.type.reduce(
             (cnt, element) => cnt + ("master" === element),

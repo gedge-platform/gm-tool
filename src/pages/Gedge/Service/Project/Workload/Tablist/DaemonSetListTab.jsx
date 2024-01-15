@@ -48,14 +48,6 @@ const DaemonSetListTab = observer(() => {
       field: "project",
       filter: true,
     },
-    // {
-    //   headerName: "워크스페이스",
-    //   field: "workspace",
-    //   filter: true,
-    //   cellRenderer: function (data) {
-    //     console.log("data", data);
-    //   },
-    // },
     {
       headerName: "생성날짜",
       field: "createAt",
@@ -84,7 +76,7 @@ const DaemonSetListTab = observer(() => {
     loadDaemonSetList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (

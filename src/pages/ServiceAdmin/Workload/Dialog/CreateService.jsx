@@ -133,41 +133,12 @@ const CreatePod = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={createService}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={createService}>생성</ButtonNext>
             </div>
           </div>
         </>
       );
-    } else if (stepValue === 3) {
-      return (
-        <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: "10px",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                width: "430px",
-                justifyContent: "space-around",
-              }}
-            >
-              <Button onClick={handleClose}>취소</Button>
-              <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={() => console.log("")}>
-                Schedule Apply
-              </ButtonNext>
-              <ButtonNext onClick={() => console.log("")}>
-                Default Apply
-              </ButtonNext>
-            </div>
-          </div>
-        </>
-      );
-    } else return <>4</>;
+    }
   };
 
   return (

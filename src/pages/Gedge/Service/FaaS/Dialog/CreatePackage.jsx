@@ -2,11 +2,8 @@ import { observer } from "mobx-react";
 import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import { CDialogNew } from "@/components/dialogs";
-
-import { swalError } from "../../../../../utils/swal-utils";
 import styled from "styled-components";
 import { useState } from "react";
-import { CFileField } from "../../../../../components/textfields/CFilefield";
 import FaasStore from "../../../../../store/Faas";
 import { useEffect } from "react";
 import FormData from "form-data";
@@ -18,7 +15,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -27,7 +23,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreatePackage = observer((props) => {
@@ -73,7 +68,6 @@ const CreatePackage = observer((props) => {
     if (postType === "deploy") {
       await createPackage(packageDeploy);
     }
-    // swalError("Package가 생성되었습니다.");
     props.reloadFunc && props.reloadFunc();
     props.onClose && props.onClose();
     resetPackageSource();
@@ -85,17 +79,14 @@ const CreatePackage = observer((props) => {
     e.preventDefault();
     e.persist();
     const selectedFile = e.target.files;
-    console.log("selectedFile: ", selectedFile);
     const file = selectedFile[0];
 
-    console.log("selectedFile: ", selectedFile[0].name);
     setSelectFile(selectedFile[0].name);
 
     if (file) {
       const formData = new FormData();
       formData.append("test1", file);
       await postPackageFileApi(formData, callback);
-      console.log("callback: ", callback);
     }
   };
 
@@ -125,9 +116,6 @@ const CreatePackage = observer((props) => {
         ["deployarchive"]: selectFile,
       });
     }
-    // console.log("packageCode: ", packageCode);
-    // console.log("packageSource: ", packageSource);
-    console.log("packageDeploy: ", packageDeploy);
   };
 
   return (

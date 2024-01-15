@@ -57,7 +57,6 @@ const UserProject = observer((props) => {
   const checkCluster = ({ target: { checked } }, clusterName) => {
     if (checked) {
       setSelectCluster([...selectCluster, clusterName]);
-      console.log(selectCluster);
     } else {
       setSelectCluster(
         selectCluster.filter((cluster) => cluster !== clusterName)
@@ -84,7 +83,6 @@ const UserProject = observer((props) => {
   };
   const checkWorkspaceName = async () => {
     const result = await duplicateCheck(workspaceName, "workspace");
-    console.log(result);
 
     if (result) {
       swalError("사용 가능한 이름입니다.");

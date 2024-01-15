@@ -232,7 +232,6 @@ class FaasStatus {
       .get(`${FAAS_URL}/environments`)
       .then((res) => {
         runInAction(() => {
-          console.log(res);
           if (res.data !== null) {
             this.envList = res.data;
             this.totalPages = Math.ceil(res.data.length / 20);
@@ -280,7 +279,6 @@ class FaasStatus {
       .get(`${FAAS_URL}/functions`)
       .then((res) => {
         runInAction(() => {
-          console.log("functions ???", res.data);
           if (res.data !== null) {
             this.functionsList = res.data;
             this.totalPages = Math.ceil(res.data.length / 20);
@@ -355,12 +353,10 @@ class FaasStatus {
 
   postPackageFileApi = async (data, callback) => {
     for (let value of data.values()) {
-      console.log("data: ", value);
     }
     const body = {
       ...data,
     };
-    console.log("body: ", body);
     await axios
       .post(`${FAAS_URL}/packages/upload`, data, {
         headers: {
@@ -369,7 +365,6 @@ class FaasStatus {
       })
       .then((res) => {
         runInAction(() => {
-          console.log("res: ", res.data);
           if (res.data.length === 0) {
             swalError("파일이 업로드 되지 않았습니다.", callback);
             return false;
@@ -414,24 +409,10 @@ class FaasStatus {
       });
   };
 
-  // createTrigger = async (data, callback) => {
-  //   const body = { ...data };
-  //   console.log(body);
-  //   await axios.post(`${FAAS_URL}/triggers`, body).then((res) => {
-  //     console.log("res: ", res);
-  //     if (res.status === 201) {
-  //       swalError("Trigger가 생성되었습니다.");
-  //     } else {
-  //       swalError("Trigger 생성 실패", callback);
-  //     }
-  //   });
-  // };
-
   createTrigger = async (data) => {
     const body = { ...data };
     try {
       const response = await axios.post(`${FAAS_URL}/triggers`, body);
-      console.log("response: ", response);
       if (response.status === 201) {
         swalError("Trigger가 생성되었습니다.");
       }
@@ -450,30 +431,14 @@ class FaasStatus {
     });
   };
 
-  // createPackage = async (data, callback) => {
-  //   const body = { ...data };
-  //   console.log("data: ", body);
-  //   await axios
-  //     .post(`${FAAS_URL}/packages`, body, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log("res: ", res);
-  //       console.log("callback: ", callback);
-  //     });
-  // };
   createPackage = async (data) => {
     const body = JSON.stringify(data);
-    console.log("data: ", body);
     try {
       const response = await axios.post(`${FAAS_URL}/packages`, body, {
         headers: {
           "Content-Type": "application/json",
         },
       });
-      console.log("res: ", response);
       if (response.status === 201) {
         swalError("Package가 생성되었습니다.");
       }

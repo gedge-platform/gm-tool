@@ -3,7 +3,6 @@ import FormControl from "@material-ui/core/FormControl";
 import { CTextField } from "@/components/textfields";
 import styled from "styled-components";
 import { CDialogNew } from "@/components/dialogs";
-import { swalError } from "../../../../../utils/swal-utils";
 import FaasStore from "../../../../../store/Faas";
 import { useState } from "react";
 import AceEditor from "react-ace";
@@ -17,7 +16,6 @@ const Button = styled.button`
   padding: 10px 35px;
   margin-right: 10px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const ButtonNext = styled.button`
@@ -26,7 +24,6 @@ const ButtonNext = styled.button`
   border: none;
   padding: 10px 35px;
   border-radius: 4px;
-  /* box-shadow: 0 8px 16px 0 rgb(35 45 65 / 28%); */
 `;
 
 const CreateFunction = observer((props) => {
@@ -65,31 +62,7 @@ const CreateFunction = observer((props) => {
     if (name === "environment") {
       setEnvNameList(value);
     }
-    // setInputs({
-    //   ...inputs,
-    //   [name]: value,
-    // });
   };
-
-  // const checkName = async () => {
-  //   if (id === "") {
-  //     swalError("아이디를 입력해주세요!");
-  //     return;
-  //   }
-  //   await axios
-  //     .get(`${SERVER_URL}/check/${id}`)
-  //     .then(({ data: { status } }) => {
-  //       if (status === "true") {
-  //         setIsID(true);
-  //         swalError("사용가능한 이름입니다.");
-  //       } else {
-  //         setIsID(false);
-  //         swalError("사용중인 이름입니다.");
-  //         return;
-  //       }
-  //     })
-  //     .catch(e => console.log(e));
-  // };
 
   const onChangeFile = (e) => {
     const selectFile = e.target.files[0];
@@ -159,24 +132,6 @@ const CreateFunction = observer((props) => {
                 style={{ width: "100%" }}
               />
             </td>
-            {/* <td style={{ display: "flex" }}>
-              <button
-                type="button"
-                style={{
-                  width: "60%",
-                  height: "30px",
-                  backgroundColor: "#0a2348",
-                  color: "white",
-                  fontWeight: "bold",
-                  borderRadius: "4px",
-                  fontSize: "13px",
-                  border: "none",
-                }}
-                // onClick={checkName}
-              >
-                중복확인
-              </button>
-            </td> */}
           </tr>
           <tr>
             <th>

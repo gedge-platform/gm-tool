@@ -84,12 +84,6 @@ const CreateProject = observer((props) => {
   const [check, setCheck] = useState(false);
   const [test, setTest] = useState([]);
   const [clusterList, setClusterList] = useState([]);
-  console.log("clusterList ???", clusterList);
-
-  console.log("selectClusterInfo ???", selectClusterInfo);
-  console.log("selectClusters ???", selectClusters);
-  console.log("test ????", test);
-
   const [toggle, setToggle] = useState(false);
   const clickedToggle = () => {
     setToggle((prev) => !prev);
@@ -118,20 +112,15 @@ const CreateProject = observer((props) => {
       if (value === "") {
         setClusterList([]);
       }
-
-      // await loadWorkspaceDetail(value);
       try {
-        // axios 호출을 try 블록 내에 놓습니다.
         const response = await axios.get(`${SERVER_URL}/workspaces/${value}`);
         const dataList = response.data.selectCluster;
         setClusterList(dataList);
       } catch (error) {
         console.error("axios 요청 중 오류 발생:", error);
-        // 오류 처리, 예를 들면 swalError를 사용하여 오류 메시지를 표시할 수 있습니다.
       }
     }
     setSelectClusters([...clusterList]);
-    // setSelectClusters([...selectClusterInfo]);
 
     if (name === "projectName") setProjectName(value);
     if (name === "projectDescription") setProjectDescription(value);
@@ -146,16 +135,6 @@ const CreateProject = observer((props) => {
       );
     }
   };
-
-  // const checkCluster = ({ target: { checked } }, clusterName) => {
-  //   if (checked) {
-  //     console.log("체크함");
-  //     setTest([clusterName]);
-  //   } else {
-  //     console.log("체크 안함");
-  //     setTest(selectClusters.filter((cluster) => cluster !== clusterName));
-  //   }
-  // };
 
   const checkProjectName = async () => {
     const regType1 = /^[a-z0-9]([-a-z0-9]*[a-z0-9])*$/;
@@ -206,20 +185,8 @@ const CreateProject = observer((props) => {
   };
 
   useEffect(() => {
-    // loadWorkSpaceList(true);
     loadAdminWorkSpaceList(true);
-    // setSelectClusterInfo([]);
   }, []);
-
-  // useEffect(() => {
-  //   setSelectClusters([
-  //     ...selectClusterInfo.map((cluster) => cluster.clusterName),
-  //   ]);
-  // }, [selectClusterInfo]);
-
-  // useEffect(() => {
-  //   setSelectClusters([...selectClusterInfo]);
-  // }, [workspace]);
 
   return (
     <CDialogNew
@@ -344,24 +311,6 @@ const CreateProject = observer((props) => {
                           </tr>
                         )
                       )}
-
-                  {/* {selectClusterInfo.map(
-                    ({ clusterName, clusterType, clusterEndpoint }) => (
-                      <tr>
-                        <td style={{ textAlign: "center" }}>
-                          <input
-                            type="checkbox"
-                            name="clusterCheck"
-                            onChange={(e) => checkCluster(e, clusterName)}
-                            defaultValue={initialCheckedValue}
-                          />
-                        </td>
-                        <td>{clusterName}</td>
-                        <td>{clusterType}</td>
-                        <td>{clusterEndpoint}</td>
-                      </tr>
-                    )
-                  )} */}
                 </tbody>
               </table>
             </td>

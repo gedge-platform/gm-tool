@@ -15,7 +15,6 @@ import HPAListTab from "./Tablist/HPAListTab";
 import LogListTab from "./Tablist/LogListTab";
 
 const Workload = () => {
-  // console.log("77");
   const currentPageTitle = Title.Workload;
 
   const [tabvalue, setTabvalue] = useState(0);
