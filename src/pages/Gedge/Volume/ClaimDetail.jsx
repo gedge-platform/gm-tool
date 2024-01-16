@@ -7,6 +7,7 @@ import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import { claimStore } from "@/store";
 import styled from "styled-components";
+import { toJS } from "mobx";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -62,8 +63,7 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
 
   const { pvClaimLables, pvClaim, events, label, pvClaimAnnotations } =
     claimStore;
-  console.log("pvClaim ? ", pvClaim);
-  console.log("pvClaimAnnotations ? ", pvClaimAnnotations.length);
+  const plainObject = toJS(pvClaimAnnotations);
   const annotationTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
@@ -96,27 +96,6 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     ));
   };
 
-  // if (pvClaim?.annotations !== "") {
-  //   Object.entries(pvClaim?.annotations).map(([key, value]) => {
-  //     metaTable.push(
-  //       <tr>
-  //         <th style={{ width: "20%" }}>{key}</th>
-  //         <td>
-  //           {isValidJSON(value) ? (
-  //             <ReactJson
-  //               src={JSON.parse(value)}
-  //               theme="summerfruit"
-  //               displayDataTypes={false}
-  //               displayObjectSize={false}
-  //             />
-  //           ) : (
-  //             value
-  //           )}
-  //         </td>
-  //       </tr>
-  //     );
-  //   });
-  // }
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -174,17 +153,15 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
           </LabelContainer>
 
           <TableTitle>Annotaions</TableTitle>
-          <table className="tb_data">
-            <tbody>
-              {pvClaimAnnotations.length !== 0 ? (
-                metaTable()
-              ) : (
-                <LabelContainer>
-                  <p>No Annotations Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+          {Object.keys(plainObject).length !== 0 ? (
+            <table className="tb_data">
+              <tbody>{metaTable()}</tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
