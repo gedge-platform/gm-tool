@@ -117,7 +117,6 @@ const JobListTab = observer(() => {
       <CReflexBox>
         <PanelBox>
           <CommActionBar reloadFunc={reloadData}>
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
