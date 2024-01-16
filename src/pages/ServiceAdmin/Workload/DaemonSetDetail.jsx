@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -252,7 +253,6 @@ const Detail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
 
           <TableTitle>Annotations</TableTitle>
           {annotations.length !== 0 ? (
@@ -271,7 +271,6 @@ const Detail = observer(() => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>

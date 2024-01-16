@@ -19,18 +19,14 @@ const TableTitle = styled.span`
   color: rgba(255, 255, 255, 0.8);
 `;
 
-const NodeButton = styled.span`
-  flex: 1;
-`;
-
 const LabelContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
-
+  margin: 10px 0;
   p {
     color: rgba(255, 255, 255, 0.6);
   }
@@ -44,7 +40,6 @@ const Label = styled.span`
   line-height: 20px;
   font-weight: 600;
   margin: 6px 6px;
-
   .key {
     padding: 0 2px;
     background-color: #eff4f9;
@@ -58,21 +53,11 @@ const Label = styled.span`
   }
 `;
 
-const NoInfo = styled.div`
-  padding: 12px 12px;
-  background-color: #141a30;
-`;
-
 const Detail = observer((props) => {
   const {
     clusterDetail: {
       clusterName,
-      clusterEndpoint,
-      clusterCreator,
-      clusterType,
-      created_at,
       events,
-      ipAddr,
       nodes,
       resource: {
         cronjob_count,
@@ -86,7 +71,6 @@ const Detail = observer((props) => {
       },
     },
     dataUsage,
-    gpu,
     loadCluster,
     gpuInfo,
   } = clusterStore;
@@ -216,36 +200,6 @@ const Detail = observer((props) => {
     ));
   };
 
-  // const test = (gpu) => {
-  //   return gpu?.nodes
-  //     ? gpu.nodes.map((x) => {
-  //         if (x.type === "master") {
-  //           return (
-  //             <>
-  //               <table className="tb_data" style={{ tableLayout: "fixed" }}>
-  //                 <tbody className="tb_data_detail">
-  //                   <tr>
-  //                     <th>clusterName</th>
-  //                     <td>{gpu.clusterName ? gpu.clusterName : "-"}</td>
-  //                     <th>node</th>
-  //                     <td>{x.name ? x.name : "-"}</td>
-  //                   </tr>
-  //                   <tr>
-  //                     <th>gpu (used / total)</th>
-  //                     <td></td>
-  //                     <th>container</th>
-  //                     <td>{x.containerRuntimeVersion}</td>
-  //                   </tr>
-  //                 </tbody>
-  //               </table>
-  //               <br />
-  //             </>
-  //           );
-  //         }
-  //       })
-  //     : null;
-  // };
-
   useEffect(() => {
     if (nodesChk.length >= 1) {
       labelByNode();
@@ -363,10 +317,10 @@ const Detail = observer((props) => {
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Node List</TableTitle>&nbsp;&nbsp;&nbsp;&nbsp;
-          <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
+          {/* <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
             Node 추가
           </CCreateButton>
-          {/* <NodeButton onClick={handleAddNodeOpen}>Node 추가</NodeButton> */}
+         */}
           <EdgeZoneAddNode
             open={AddNode}
             onClose={handleAddNodeClose}
@@ -402,20 +356,14 @@ const Detail = observer((props) => {
       </CTabPanel>
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={3}>
         <div className="tb_container">
-          <TableTitle>
-            Labels({nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
-          </TableTitle>
+          <TableTitle>Labels</TableTitle>
           <LabelContainer>
             {nodesChk.length >= 1 ? labelByNode() : <p>No Labels Info</p>}
           </LabelContainer>
-          <br />
-          <br />
-          <TableTitle>
-            Annotations(
-            {nodesChk.length >= 1 ? nodes[nodeNum].name : "NotFound"})
-          </TableTitle>
+
+          <TableTitle>Annotations</TableTitle>
           {nodesChk.length >= 1 ? (
-            <table className="tb_data">
+            <table className="tb_data" style={{ margin: "10px 0" }}>
               <tbody>{annotationByNode()}</tbody>
             </table>
           ) : (

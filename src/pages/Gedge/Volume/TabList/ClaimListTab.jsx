@@ -37,32 +37,32 @@ const ClaimListTab = observer(() => {
 
   const [columDefs] = useState([
     {
-      headerName: "Name",
+      headerName: "이름",
       field: "name",
       filter: true,
     },
     {
-      headerName: "Namespace",
+      headerName: "프로젝트",
       field: "namespace",
       filter: true,
     },
     {
-      headerName: "Cluster",
+      headerName: "클러스터",
       field: "clusterName",
       filter: true,
     },
     {
-      headerName: "Capacity",
+      headerName: "용량",
       field: "capacity",
       filter: true,
     },
     {
-      headerName: "Access Mode",
+      headerName: "접근모드",
       field: "accessMode",
       filter: true,
     },
     {
-      headerName: "Status",
+      headerName: "상태",
       field: "status",
       filter: true,
       cellRenderer: ({ value }) => {
@@ -70,7 +70,7 @@ const ClaimListTab = observer(() => {
       },
     },
     {
-      headerName: "Volume",
+      headerName: "볼륨",
       field: "volume",
       filter: true,
       cellRenderer: function ({ data: { volume } }) {
@@ -78,7 +78,7 @@ const ClaimListTab = observer(() => {
       },
     },
     {
-      headerName: "StorageClass",
+      headerName: "스토리지클래스",
       field: "storageClass",
       filter: true,
       cellRenderer: function ({ data: { storageClass } }) {
@@ -86,7 +86,7 @@ const ClaimListTab = observer(() => {
       },
     },
     {
-      headerName: "Create At",
+      headerName: "생성일",
       field: "createAt",
       filter: "agDateColumnFilter",
       filterParams: agDateColumnFilter(),
@@ -95,6 +95,7 @@ const ClaimListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
+      // sort: "desc",
     },
     {
       headerName: "Yaml",

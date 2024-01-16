@@ -21,8 +21,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -52,21 +53,8 @@ const Label = styled.span`
 `;
 
 const StatefulSetAdminDetail = observer(() => {
-  const {
-    // statefulSetDetail: {
-    statefulSetDetail,
-    annotations,
-    cluster,
-    containers,
-    createAt,
-    events,
-    label,
-    name,
-    ownerReferences,
-    project,
-    status,
-    // },
-  } = statefulSetStore;
+  const { statefulSetDetail, annotations, containers, events, label } =
+    statefulSetStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);

@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 `;
 
 const Label = styled.span`
@@ -191,7 +192,6 @@ const Detail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
 
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
@@ -218,9 +218,11 @@ const Detail = observer(() => {
           )}
         </div>
       </CTabPanel>
+
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
       </CTabPanel>
+
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>References</TableTitle>
@@ -267,7 +269,6 @@ const Detail = observer(() => {
               <p>No Reference Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
     </PanelBox>

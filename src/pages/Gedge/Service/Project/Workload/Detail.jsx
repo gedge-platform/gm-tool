@@ -19,9 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
-
+  margin: 10px 0;
   p {
     color: rgba(255, 255, 255, 0.6);
   }
@@ -334,7 +334,6 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
 
-          <br />
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -352,16 +351,10 @@ const Detail = observer(() => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
-          </table>
-        </div> */}
       </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
@@ -387,7 +380,6 @@ const Detail = observer(() => {
                     </tr>
                   </tbody>
                 </table>
-                <br />
               </>
             ))
           ) : (
@@ -395,6 +387,7 @@ const Detail = observer(() => {
               <p>No Pod Info</p>
             </LabelContainer>
           )}
+
           <TableTitle>Service</TableTitle>
           {depServices.name === "" ? (
             <>

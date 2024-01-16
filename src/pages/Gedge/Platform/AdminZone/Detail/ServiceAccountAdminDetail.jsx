@@ -18,8 +18,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -135,7 +136,7 @@ const ServiceAccountsAdminDetail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
+
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -153,29 +154,6 @@ const ServiceAccountsAdminDetail = observer(() => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          {/* <LabelContainer>
-            {annotations ? (
-              Object.entries(annotations).map(([key, value]) => (
-                <tr>
-                  <th style={{ width: "20%" }}>{key}</th>
-                  <td>
-                    {isValidJSON(value) ? (
-                      <ReactJson
-                        src={JSON.parse(value)}
-                        theme="summerfruit"
-                        displayDataTypes={false}
-                        displayObjectSize={false}
-                      />
-                    ) : (
-                      value
-                    )}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <p>No Annotations Info</p>
-            )}
-          </LabelContainer> */}
         </div>
       </CTabPanel>
     </PanelBox>

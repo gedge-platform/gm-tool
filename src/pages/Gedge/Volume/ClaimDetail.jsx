@@ -7,17 +7,12 @@ import { isValidJSON } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 import { claimStore } from "@/store";
 import styled from "styled-components";
+import { toJS } from "mobx";
 
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
-  color: rgba(255, 255, 255, 0.8);
-`;
-const TableSubTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  margin: 12px 0;
   color: rgba(255, 255, 255, 0.8);
 `;
 
@@ -26,8 +21,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -59,13 +55,15 @@ const Label = styled.span`
 const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  const [annotationRows, setAnnotationRows] = useState([]);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables, pvClaim, events, label } = claimStore;
-
+  const { pvClaimLables, pvClaim, events, label, pvClaimAnnotations } =
+    claimStore;
+  const plainObject = toJS(pvClaimAnnotations);
   const annotationTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
@@ -77,28 +75,26 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     );
   });
 
-  const metaTable = [];
-  if (pvClaim?.annotations) {
-    Object.entries(pvClaim?.annotations).map(([key, value]) => {
-      metaTable.push(
-        <tr>
-          <th style={{ width: "20%" }}>{key}</th>
-          <td>
-            {isValidJSON(value) ? (
-              <ReactJson
-                src={JSON.parse(value)}
-                theme="summerfruit"
-                displayDataTypes={false}
-                displayObjectSize={false}
-              />
-            ) : (
-              value
-            )}
-          </td>
-        </tr>
-      );
-    });
-  }
+  // const metaTable = [];
+  const metaTable = () => {
+    return Object.entries(pvClaimAnnotations).map(([key, value]) => (
+      <tr>
+        <th style={{ width: "20%" }}>{key}</th>
+        <td>
+          {isValidJSON(value) ? (
+            <ReactJson
+              src={JSON.parse(value)}
+              theme="summerfruit"
+              displayDataTypes={false}
+              displayObjectSize={false}
+            />
+          ) : (
+            value
+          )}
+        </td>
+      </tr>
+    ));
+  };
 
   return (
     <PanelBox style={{ overflowY: "scroll" }}>
@@ -156,11 +152,16 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
             )}
           </LabelContainer>
 
-          <br />
           <TableTitle>Annotaions</TableTitle>
-          <table className="tb_data">
-            <tbody>{metaTable}</tbody>
-          </table>
+          {Object.keys(plainObject).length !== 0 ? (
+            <table className="tb_data">
+              <tbody>{metaTable()}</tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Annotations Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>

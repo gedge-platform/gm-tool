@@ -161,9 +161,10 @@ class Service {
         `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
+        console.log(data);
         runInAction(() => {
           this.serviceDetail = data;
-          this.portTemp = data.port;
+          this.portTemp = data.port ? data.port : 0;
           this.serviceInvolvesData = involvesData;
           this.involvesPods = involvesData.pods;
           this.involvesWorkloads = involvesData.workloads;

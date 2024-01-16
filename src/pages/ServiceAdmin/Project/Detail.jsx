@@ -7,47 +7,6 @@ import { projectStore } from "@/store";
 import "@grapecity/wijmo.styles/wijmo.css";
 import EventAccordion from "@/components/detail/EventAccordion";
 
-const EventWrap = styled.div`
-  .MuiInputBase-input {
-    color: rgba(255, 255, 255, 0.8);
-    width: 200px;
-    margin: 10px;
-    font-weight: 400;
-    font-size: 15px;
-  }
-
-  .MuiInputBase-root {
-    font: inherit;
-    line-height: inherit;
-  }
-
-  .MuiPopover-paper {
-    color: red;
-  }
-
-  .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-
-  .MuiSvgIcon-root {
-    color: white;
-  }
-
-  .MuiOutlinedInput-input {
-    padding: 8px;
-    box-sizing: content-box;
-  }
-
-  .MuiPopover-paper {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .MuiPaper-elevation8 {
-    height: 40px;
-    background-color: #2f3855;
-  }
-`;
-
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -67,8 +26,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -110,10 +70,6 @@ const Detail = observer(() => {
     events,
   } = projectStore;
   const [tabvalue, setTabvalue] = useState(0);
-
-  // const clusterChange = (e) => {
-  //   changeCluster(e.target.value);
-  // };
 
   const clusterResourceTable = () => {
     return detailInfo.map((cluster) => (
@@ -317,7 +273,6 @@ const Detail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
 
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
@@ -346,157 +301,3 @@ const Detail = observer(() => {
   );
 });
 export default Detail;
-
-/*
-    <PanelBox>
-      <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
-        <CTab label="상세정보" />
-        <CTab label="노드 정보" />
-        <CTab label="채널 정보" />
-      </CTabs>
-      <div className="tabPanelContainer">
-        <CTabPanel value={tabvalue} index={0}>
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>네트워크 이름</th>
-                  <td>OOO 조회</td>
-                  <th>조직ID</th>
-                  <td>JSON</td>
-                </tr>
-                <tr>
-                  <th>Import 여부</th>
-                  <td colSpan={1}>N</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>Node Type</th>
-                  <th>Node 이름</th>
-                  <th>상태</th>
-                </tr>
-                <tr>
-                  <td>CA</td>
-                  <td>block-ca</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer(Endorser)</td>
-                  <td>block-peer1(Committer)</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer2</td>
-                  <td>운영 중</td>
-                </tr>
-                <tr>
-                  <td>Peer</td>
-                  <td>block-peer3</td>
-                  <td>운영 중</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="tb_container">
-            <table className="tb_data">
-              <tbody>
-                <tr>
-                  <th>조직 이름</th>
-                  <th>채널 이름</th>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-1</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-2</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-3</td>
-                </tr>
-                <tr>
-                  <td>block-orderer</td>
-                  <td>my-block-channel-4</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={1}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>Node Type</th>
-                    <th>Node 이름</th>
-                    <th>상태</th>
-                  </tr>
-                  <tr>
-                    <td>CA</td>
-                    <td>block-ca</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer(Endorser)</td>
-                    <td>block-peer1(Committer)</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer2</td>
-                    <td>운영 중</td>
-                  </tr>
-                  <tr>
-                    <td>Peer</td>
-                    <td>block-peer3</td>
-                    <td>운영 중</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-        <CTabPanel value={tabvalue} index={2}>
-          <div className="panelCont">
-            <div className="grid-height">
-              <table className="tb_data">
-                <tbody>
-                  <tr>
-                    <th>조직 이름</th>
-                    <th>채널 이름</th>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-1</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-2</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-3</td>
-                  </tr>
-                  <tr>
-                    <td>block-orderer</td>
-                    <td>my-block-channel-4</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </CTabPanel>
-      </div>
-    </PanelBox>
-*/

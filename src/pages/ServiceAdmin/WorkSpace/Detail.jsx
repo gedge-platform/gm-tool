@@ -8,68 +8,20 @@ import "@grapecity/wijmo.styles/wijmo.css";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
 
-const EventWrap = styled.div`
-  .MuiInputBase-input {
-    color: rgba(255, 255, 255, 0.8);
-    width: 200px;
-    margin: 10px;
-    font-weight: 400;
-    font-size: 15px;
-  }
-
-  .MuiInputBase-root {
-    font: inherit;
-    line-height: inherit;
-  }
-
-  .MuiPopover-paper {
-    color: red;
-  }
-
-  .MuiOutlinedInput-notchedOutline {
-    border: none;
-  }
-
-  .MuiSvgIcon-root {
-    color: white;
-  }
-
-  .MuiOutlinedInput-input {
-    padding: 8px;
-    box-sizing: content-box;
-  }
-
-  .MuiPopover-paper {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  .MuiPaper-elevation8 {
-    height: 40px;
-    background-color: #2f3855;
-  }
-`;
-
 const TableTitle = styled.p`
   font-size: 14px;
   font-weight: 500;
   margin: 8px 0;
   color: rgba(255, 255, 255, 0.8);
 `;
-
-const ClusterTitle = styled.p`
-  font-size: 13px;
-  font-weight: 500;
-  margin: 6px 0;
-  color: rgba(255, 255, 255, 0.7);
-`;
-
 const LabelContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -332,7 +284,7 @@ const WorkspaceDetail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
+
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>

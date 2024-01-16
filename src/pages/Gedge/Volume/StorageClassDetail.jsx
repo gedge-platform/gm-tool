@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PanelBox } from "@/components/styles/PanelBox";
 import { CTabs, CTab, CTabPanel } from "@/components/tabs";
 import { observer } from "mobx-react";
 import ReactJson from "react-json-view";
-import {
-  agDateColumnFilter,
-  dateFormatter,
-  isValidJSON,
-  nullCheck,
-} from "@/utils/common-utils";
-import EventAccordion from "@/components/detail/EventAccordion";
+import { dateFormatter, isValidJSON } from "@/utils/common-utils";
+
 import styled from "styled-components";
 import { StorageClassStore } from "@/store";
 
@@ -25,8 +20,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -161,7 +157,6 @@ const StorageClassDetail = observer(({}) => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
 
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
@@ -180,12 +175,9 @@ const StorageClassDetail = observer(({}) => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
-      {/* <CTabPanel value={tabvalue} index={2}>
-        <EventAccordion events={events} />
-      </CTabPanel> */}
+
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
           {scParameters !== "" ? (
@@ -206,18 +198,6 @@ const StorageClassDetail = observer(({}) => {
           )}
         </div>
       </CTabPanel>
-      {/* <CTabPanel value={tabvalue} index={3}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">value</th>
-                <td>{storageClass?.finalizers}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </CTabPanel> */}
     </PanelBox>
   );
 });

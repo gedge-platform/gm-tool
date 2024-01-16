@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -228,7 +229,6 @@ const Detail = observer(() => {
                     </tr>
                   </tbody>
                 </table>
-                <br />
               </>
             ))
           ) : (
@@ -253,7 +253,6 @@ const Detail = observer(() => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-          <br />
 
           <TableTitle>Annotations</TableTitle>
           {annotations.length !== 0 ? (
@@ -272,7 +271,6 @@ const Detail = observer(() => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
@@ -323,51 +321,50 @@ const Detail = observer(() => {
             </LabelContainer>
           )}
           <TableTitle>Service</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody className="tb_workload_pod_detail">
-              {services.name ? (
-                <>
-                  <tr>
-                    <th>Name</th>
-                    <td>{services.name ? services.name : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Port</th>
-                    <td>
-                      <table className="tb_data">
-                        <tbody className="tb_services_detail_th">
-                          <tr>
-                            <th>Name</th>
-                            <th>Port</th>
-                            <th>Protocol</th>
-                          </tr>
-                          {services?.port ? (
-                            services.port?.map((port) => (
-                              <tr>
-                                <td>{port.name}</td>
-                                <td>{port.port}</td>
-                                <td>{port.protocol}</td>
-                              </tr>
-                            ))
-                          ) : (
+
+          {services.name ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody className="tb_workload_pod_detail">
+                <tr>
+                  <th>Name</th>
+                  <td>{services.name ? services.name : "-"}</td>
+                </tr>
+                <tr>
+                  <th>Port</th>
+                  <td>
+                    <table className="tb_data">
+                      <tbody className="tb_services_detail_th">
+                        <tr>
+                          <th>Name</th>
+                          <th>Port</th>
+                          <th>Protocol</th>
+                        </tr>
+                        {services?.port ? (
+                          services.port?.map((port) => (
                             <tr>
-                              <td>-</td>
-                              <td>-</td>
-                              <td>-</td>
+                              <td>{port.name}</td>
+                              <td>{port.port}</td>
+                              <td>{port.protocol}</td>
                             </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Service Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                          ))
+                        ) : (
+                          <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Service Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>
