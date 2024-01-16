@@ -389,7 +389,7 @@ class Claim {
           this.pvClaimList = res.data.data;
           this.pvClaimLists = res.data.data;
           this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
-          this.totalElements = res.data.data.length;
+          this.totalElements = res.data.data ? res.data.data.length : 0;
         });
       })
       .then(() => {

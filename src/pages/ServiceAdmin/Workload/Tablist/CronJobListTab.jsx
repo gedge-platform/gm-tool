@@ -127,7 +127,6 @@ const CronJobListTab = observer(() => {
             // isSelect={true}
             // keywordList={["이름"]}
           >
-            <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
           </CommActionBar>
