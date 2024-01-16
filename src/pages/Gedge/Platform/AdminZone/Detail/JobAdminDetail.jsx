@@ -20,9 +20,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
-
+  margin: 10px 0;
   p {
     color: rgba(255, 255, 255, 0.6);
   }
@@ -364,26 +364,24 @@ const JobAdminDetail = observer(() => {
               <p>No Pod Info</p>
             </LabelContainer>
           )}
-          <br />
+
           <TableTitle>References</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {ownerReferences.kind ? (
-                Object.entries(ownerReferences).map(([key, value]) => (
-                  <tr>
-                    <th style={{ width: "25%" }}>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </th>
-                    <td>{value}</td>
-                  </tr>
-                ))
-              ) : (
-                <LabelContainer>
-                  <p>No Reference Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+
+          {ownerReferences.kind ? (
+            Object.entries(ownerReferences).map(([key, value]) => (
+              <tr>
+                <th style={{ width: "25%" }}>
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </th>
+                <td>{value}</td>
+              </tr>
+            ))
+          ) : (
+            <LabelContainer>
+              {" "}
+              <p>No Reference Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

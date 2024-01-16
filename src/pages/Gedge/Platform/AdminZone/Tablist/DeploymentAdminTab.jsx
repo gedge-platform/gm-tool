@@ -30,6 +30,7 @@ const DeploymentAdminTab = observer(() => {
     totalElements,
     deploymentList,
   } = deploymentStore;
+  console.log(deploymentDetail);
 
   const [columDefs] = useState([
     {

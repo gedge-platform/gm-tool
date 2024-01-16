@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -234,54 +235,6 @@ const DeploymentAdminDetail = observer(() => {
                       )}
                     </td>
                   </tr>
-                  {/* <tr>
-                  <th>Resources</th>
-                  <td>
-                    <table className="tb_data">
-                      <tbody>
-                        <tr>
-                          <th style={{ width: "50%" }}>Limits</th>
-                        </tr>
-                        <tr>
-                          <td>
-                            {Object.entries(containers?.resources).map(
-                              ([key, value]) =>
-                                Object.entries(value).map(([key1, value1]) => (
-                                  <tr>
-                                    <th>{key1}</th>
-                                    <td>{value1}</td>
-                                  </tr>
-                                ))
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr> */}
-                  {/* <tr>
-                  <th>SecurityContext</th>
-                  <td>
-                  {containers?.securityContext === undefined ? (
-                      <>-</>
-                    ) : (
-                      Object.entries(containers?.securityContext).map(
-                        ([key, value]) => (
-                          <table className="tb_data" style={{ width: "30%" }}>
-                            <tbody>
-                              <tr>
-                                <th>{key}</th>
-                              </tr>
-                              <tr>
-                                <td>{value}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )
-                      )
-                    )}
-                  </td>
-                </tr> */}
 
                   <tr>
                     <th>VolumeMounts</th>
@@ -334,7 +287,6 @@ const DeploymentAdminDetail = observer(() => {
             )}
           </LabelContainer>
 
-          <br />
           <TableTitle>Annotations</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -357,11 +309,6 @@ const DeploymentAdminDetail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
         <EventAccordion events={events} />
-        {/* <div className="tb_container">
-          <table className="tb_data">
-            <tbody>{eventsTable}</tbody>
-          </table>
-        </div> */}
       </CTabPanel>
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">

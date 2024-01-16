@@ -95,7 +95,7 @@ const ClaimListTab = observer(() => {
       cellRenderer: function (data) {
         return `<span>${dateFormatter(data.value)}</span>`;
       },
-      sort: "desc",
+      // sort: "desc",
     },
     {
       headerName: "Yaml",

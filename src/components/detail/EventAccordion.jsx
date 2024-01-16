@@ -12,20 +12,14 @@ import theme from "@/styles/theme";
 import { drawStatus } from "@/components/datagrids/AggridFormatter";
 import { color } from "@mui/system";
 
-// const EventsContainer = styled.div`
-//   margin: 8px 8px;
-//   padding: 12px 12px;
-//   background-color: #141a30;
-// `;
-
 const EventsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 99%;
   margin: 8px 8px 8px 8px;
   padding: 12px 12px;
-  border-radius: 4px;
   background-color: #2f3855;
+  border: 1px double #141a30;
 
   p {
     color: rgba(255, 255, 255, 0.6);

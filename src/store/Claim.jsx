@@ -160,6 +160,13 @@ class Claim {
     makeAutoObservable(this);
   }
 
+  initViewList = () => {
+    runInAction(() => {
+      this.viewList = null;
+      this.currentPage = 1;
+    });
+  };
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
@@ -388,10 +395,11 @@ class Claim {
       .then(() => {
         this.paginationList();
       })
-      .catch((err) => {
-        this.requestList = [];
+      .catch(() => {
+        this.pvClaimList = [];
         this.paginationList();
       });
+
     this.loadPVClaim(
       this.pvClaimList[0].name,
       this.pvClaimList[0].clusterName,

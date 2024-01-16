@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -88,10 +89,10 @@ const PodAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {podDetail ? (
-                <>
+          {podDetail ? (
+            <>
+              <table className="tb_data" style={{ tableLayout: "fixed" }}>
+                <tbody>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
                     <td>{podDetail.name ? podDetail.name : "-"}</td>
@@ -120,14 +121,14 @@ const PodAdminDetail = observer(() => {
                         : "-"}
                     </td>
                   </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
