@@ -12,31 +12,9 @@ import {
   volumeStore,
 } from "@/store";
 
-const Button = styled.button`
-  background-color: #fff;
-  border: 1px solid black;
-  color: black;
-  padding: 10px 35px;
-  margin-right: 10px;
-  border-radius: 4px;
-`;
-
-const ButtonNext = styled.button`
-  background-color: #0f5ce9;
-  color: white;
-  border: none;
-  padding: 10px 35px;
-  border-radius: 4px;
-`;
-
 const ClaimBasicInformation = observer((props) => {
-  const {
-    loadWorkSpaceList,
-    workSpaceList,
-    loadWorkspaceDetail,
-    projectList,
-    viewList,
-  } = workspaceStore;
+  const { loadWorkSpaceList, workSpaceList, loadWorkspaceDetail, projectList } =
+    workspaceStore;
 
   const [projectEnable, setProjectEnable] = useState(true);
   const [clusterEnable, setClusterEnable] = useState(true);
@@ -46,36 +24,31 @@ const ClaimBasicInformation = observer((props) => {
   const { setWorkspace } = deploymentStore;
 
   const {
-    setVolumeName,
     setClaimName,
     setAccessMode,
     setVolumeCapacity,
     volumeCapacity,
-    volumeName,
     claimName,
     setProject,
-    selectClusters,
     setSelectClusters,
   } = claimStore;
 
-  const {
-    setSelectStorageClass,
-    loadStorageClassName,
-    setStorageClass,
-    storageClassNameData,
-  } = StorageClassStore;
+  const { setSelectStorageClass, loadStorageClassName, storageClassNameData } =
+    StorageClassStore;
 
   const onChange = async (e) => {
     const { value, name } = e.target;
     if (name === "claimName") {
       setClaimName(value);
-    } else if (name === "workspace") {
+    }
+    if (name === "workspace") {
       setSelectClusterInfo([]);
       loadWorkspaceDetail(value);
       setWorkspace(value);
       setProjectEnable(false);
       return;
-    } else if (name === "project") {
+    }
+    if (name === "project") {
       if (value === "") {
         setSelectClusterInfo([]);
         return;
@@ -84,18 +57,22 @@ const ClaimBasicInformation = observer((props) => {
       setSelectClusters([...selectClusterInfo]);
       setProject(value);
       setClusterEnable(false);
-      setStorageClassEnable(false);
       return;
-    } else if (name === "selectClusters") {
+    }
+    if (name === "selectClusters") {
       setSelectClusters(value);
+
       return;
-    } else if (name === "selectStorageClass") {
+    }
+    if (name === "selectStorageClass") {
       setSelectStorageClass(value);
       return;
-    } else if (name === "accessMode") {
+    }
+    if (name === "accessMode") {
       setAccessMode(value);
       return;
-    } else if (name === "volumeCapacity") {
+    }
+    if (name === "volumeCapacity") {
       setVolumeCapacity(value);
       return;
     }
@@ -105,6 +82,7 @@ const ClaimBasicInformation = observer((props) => {
     if (checked) {
       setSelectClusters(clusterName);
       loadStorageClassName(clusterName);
+      setStorageClassEnable(false);
     }
   };
 
@@ -137,11 +115,11 @@ const ClaimBasicInformation = observer((props) => {
       <table className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>
+            <th style={{ width: "200px" }}>
               VolumeClaim Name
               <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <CTextField
                 type="text"
                 placeholder="Volume Claim Name"
@@ -151,19 +129,18 @@ const ClaimBasicInformation = observer((props) => {
                 value={claimName}
               />
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               Workspace <span className="requried">*</span>
             </th>
-            <td style={{ width: "50%" }}>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""} selected disabled hidden>
                     Select Workspace
                   </option>
-                  {viewList.map((item) => (
+                  {workSpaceList?.map((item) => (
                     <option value={item.workspaceName}>
                       {item.workspaceName}
                     </option>
@@ -171,13 +148,12 @@ const ClaimBasicInformation = observer((props) => {
                 </select>
               </FormControl>
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               Project <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 {projectList !== 0 ? (
                   <select
@@ -195,17 +171,26 @@ const ClaimBasicInformation = observer((props) => {
                     ))}
                   </select>
                 ) : (
-                  <div>&nbsp;&nbsp; Project does not exist. </div>
+                  <select
+                    disabled={projectEnable}
+                    name="project"
+                    onChange={onChange}
+                  >
+                    <option value={""} selected disabled hidden>
+                      Select Project
+                    </option>
+                    <option value={"NoData"}>No Data</option>
+                  </select>
                 )}
               </FormControl>
             </td>
-            <th></th>
           </tr>
+
           <tr>
             <th>
               Cluster <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <table className="tb_data_new">
                 {projectList !== 0 ? (
                   <tbody className="tb_data_nodeInfo">
@@ -246,13 +231,12 @@ const ClaimBasicInformation = observer((props) => {
                 )}
               </table>
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               StorageClass <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 {projectList !== 0 ? (
                   <select
@@ -272,17 +256,25 @@ const ClaimBasicInformation = observer((props) => {
                       : ""}
                   </select>
                 ) : (
-                  <div>&nbsp;&nbsp; StorageClass does not exist. </div>
+                  <select
+                    disabled={storageClassEnable}
+                    name="selectStorageClass"
+                    onChange={onChange}
+                  >
+                    <option value={""} selected disabled hidden>
+                      Select StorageClass
+                    </option>
+                    <option value={"NoData"}>No Data</option>
+                  </select>
                 )}
               </FormControl>
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               Access Mode <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select name="accessMode" onChange={onChange}>
                   <option value={""} selected disabled hidden>
@@ -295,14 +287,13 @@ const ClaimBasicInformation = observer((props) => {
                 </select>
               </FormControl>
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               Volume Capacity
               <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <CTextField
                 type="number"
                 placeholder="Volume Capacity"
@@ -312,7 +303,6 @@ const ClaimBasicInformation = observer((props) => {
                 value={volumeCapacity || ""}
               />
             </td>
-            <th></th>
           </tr>
         </tbody>
       </table>

@@ -17,14 +17,6 @@ const Button = styled.button`
   border-radius: 4px;
 `;
 
-const ButtonNext = styled.button`
-  background-color: #0f5ce9;
-  color: white;
-  border: none;
-  padding: 10px 35px;
-  border-radius: 4px;
-`;
-
 const DeleteButton = styled.button`
   margin: 0px 0px 0px 3px;
   overflow: hidden;
@@ -77,7 +69,6 @@ const Table = styled.table`
 `;
 
 const CreateDeploymentStepOne = observer((props) => {
-  const { open } = props;
   const [open2, setOpen2] = useState(false);
   const [containerIndex, setContainerIndex] = useState(1);
 

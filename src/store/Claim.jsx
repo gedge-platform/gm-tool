@@ -319,6 +319,17 @@ class Claim {
     window.close();
   };
 
+  paginationList = () => {
+    runInAction(() => {
+      if (this.pvClaimList !== null) {
+        this.viewList = this.pvClaimList.slice(
+          (this.currentPage - 1) * 10,
+          this.currentPage * 10
+        );
+      }
+    });
+  };
+
   loadClaimYaml = async (name, clusterName, projectName, kind) => {
     await axios
       .get(
@@ -332,6 +343,35 @@ class Claim {
   };
 
   // 클레임 관리
+  // loadPVClaims = async () => {
+  //   let { id, role } = getItem("user");
+  //   role === "SA" ? (id = id) : (id = "");
+  //   await axios
+  //     .get(`${SERVER_URL}/pvcs?user=${id}`)
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         this.pvClaimList = res.data.data;
+  //         this.pvClaimLists = res.data.data;
+  //         this.pvClaimListInDeployment = res.data.data ? res.data.data : null;
+  //         this.totalElements = res.data.data.length;
+  //       });
+  //     })
+  //     .then(() => {
+  //       if (this.pvClaimList !== null) {
+  //         this.convertList(this.pvClaimList, this.setPvClaimList);
+  //       }
+  //     })
+  //     .then(() => {
+  //       if (this.pvClaimList !== null) {
+  //         this.loadPVClaim(
+  //           this.viewList[0].name,
+  //           this.viewList[0].clusterName,
+  //           this.viewList[0].namespace
+  //         );
+  //       }
+  //     });
+  // };
+
   loadPVClaims = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -346,19 +386,17 @@ class Claim {
         });
       })
       .then(() => {
-        if (this.pvClaimList !== null) {
-          this.convertList(this.pvClaimList, this.setPvClaimList);
-        }
+        this.paginationList();
       })
-      .then(() => {
-        if (this.pvClaimList !== null) {
-          this.loadPVClaim(
-            this.viewList[0].name,
-            this.viewList[0].clusterName,
-            this.viewList[0].namespace
-          );
-        }
+      .catch((err) => {
+        this.requestList = [];
+        this.paginationList();
       });
+    this.loadPVClaim(
+      this.pvClaimList[0].name,
+      this.pvClaimList[0].clusterName,
+      this.pvClaimList[0].namespace
+    );
   };
 
   loadPVClaim = async (name, clusterName, namespace) => {
@@ -368,9 +406,11 @@ class Claim {
       )
       .then(({ data: { data } }) => {
         runInAction(() => {
+          console.log(data);
           this.pvClaim = data;
           this.pvClaimYamlFile = "";
-          this.pvClaimAnnotations = {};
+          // this.pvClaimAnnotations = {};
+          this.pvClaimAnnotations = data.annotations;
           this.pvClaimLables = {};
           this.events = data.events;
           this.label = data.label;
@@ -391,12 +431,12 @@ class Claim {
       });
   };
 
-  createVolumeClaim = (template, callback) => {
-    axios
+  createVolumeClaim = async (template, callback) => {
+    const body = this.content;
+    await axios
       .post(
         `${SERVER_URL}/pvcs?cluster=${this.selectClusters}&project=${this.project}`,
-
-        YAML.parse(this.content)
+        body
       )
       .then((res) => {
         if (res.status === 201) {

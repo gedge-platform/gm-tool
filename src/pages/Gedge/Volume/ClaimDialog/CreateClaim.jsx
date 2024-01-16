@@ -55,10 +55,8 @@ const CreateClaim = observer((props) => {
     annotations,
     labelInput,
     annotationInput,
-
     labelKey,
     labelValue,
-
     annotationKey,
     annotationValue,
     setTemplate,
@@ -143,6 +141,11 @@ const CreateClaim = observer((props) => {
   };
 
   const onClickStepTwo = (e) => {
+    if (labelKey.length < 1 || labelValue.length < 1) {
+      swalError("Labels를 입력해주세요");
+      return;
+    }
+
     const LabelKeyArr = [];
     const AnnotationKeyArr = [];
 
@@ -171,6 +174,21 @@ const CreateClaim = observer((props) => {
   useEffect(() => {
     if (stepValue === 3) {
       setTemplate(template);
+      if (template) {
+        if (
+          template.metadata?.annotations === ': ""' ||
+          isEmpty(template.metadata?.annotations)
+        ) {
+          delete template.metadata.annotations;
+        }
+        if (
+          template.metadata?.labels === ': ""' ||
+          isEmpty(template.metadata.labels)
+        ) {
+          delete template.metadata.labels;
+        }
+        setContent(stringify(template));
+      }
       setContent(stringify(template));
     }
   }, [stepValue]);

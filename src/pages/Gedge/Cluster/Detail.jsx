@@ -363,10 +363,10 @@ const Detail = observer((props) => {
       <CTabPanel style={{ overflowY: "scroll" }} value={tabvalue} index={2}>
         <div className="tb_container">
           <TableTitle>Node List</TableTitle>&nbsp;&nbsp;&nbsp;&nbsp;
-          <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
+          {/* <CCreateButton onClick={handleAddNodeOpen} styled={{ flex: 1 }}>
             Node 추가
           </CCreateButton>
-          {/* <NodeButton onClick={handleAddNodeOpen}>Node 추가</NodeButton> */}
+         */}
           <EdgeZoneAddNode
             open={AddNode}
             onClose={handleAddNodeClose}

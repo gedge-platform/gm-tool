@@ -4,11 +4,9 @@ import { deploymentStore } from "@/store";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/theme-monokai";
-import { stringify } from "json-to-pretty-yaml2";
 
 const DeploymentYaml = observer(() => {
-  const { content, setContent, setTemplateAnnotation, setTemplateLabel } =
-    deploymentStore;
+  const { content, setTemplateAnnotation, setTemplateLabel } = deploymentStore;
 
   useEffect(() => {
     setTemplateAnnotation();
@@ -42,9 +40,6 @@ const DeploymentYaml = observer(() => {
         theme="monokai"
         name="editor"
         width="90%"
-        // onChange={(value) => {
-        //   setContent(value);
-        // }}
         fontSize={14}
         showPrintMargin={true}
         showGutter={true}

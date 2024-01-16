@@ -64,8 +64,9 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
     setTabvalue(newValue);
   };
 
-  const { pvClaimLables, pvClaim, events, label } = claimStore;
-
+  const { pvClaimLables, pvClaim, events, label, pvClaimAnnotations } =
+    claimStore;
+  console.log("pvClaimAnnotations ? ", pvClaimAnnotations);
   const annotationTable = [];
 
   Object.entries(metadata).map(([key, value]) => {
@@ -78,8 +79,8 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
   });
 
   const metaTable = [];
-  if (pvClaim?.annotations) {
-    Object.entries(pvClaim?.annotations).map(([key, value]) => {
+  if (pvClaimAnnotations) {
+    Object.entries(pvClaimAnnotations).map(([key, value]) => {
       metaTable.push(
         <tr>
           <th style={{ width: "20%" }}>{key}</th>
@@ -98,6 +99,10 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
         </tr>
       );
     });
+  } else {
+    <LabelContainer>
+      <p>No Info</p>
+    </LabelContainer>;
   }
 
   return (
@@ -155,7 +160,6 @@ const ClaimDetail = observer(({ pvClaim1, metadata }) => {
               <p>No Labels Info</p>
             )}
           </LabelContainer>
-
           <br />
           <TableTitle>Annotaions</TableTitle>
           <table className="tb_data">

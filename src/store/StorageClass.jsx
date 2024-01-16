@@ -351,6 +351,7 @@ class StorageClass {
         swalError("StorageClass 생성에 실패하였습니다.", callback);
       });
   };
+
   loadStorageMonit = async () => {
     await axios.get(`${SERVER_URL}/ceph/monit`).then((res) => {
       runInAction(() => {

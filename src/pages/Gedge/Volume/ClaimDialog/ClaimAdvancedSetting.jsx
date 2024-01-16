@@ -69,8 +69,6 @@ const ClaimAdvancedSetting = observer(() => {
 
   useEffect(() => {
     setLabelInput({
-      // ...labelInput, : 기존의 labelInput 객체를 복사한 뒤
-      // [name]: value, : name 키를 가진 값을 value로 설정
       [labelKey]: labelValue,
     });
     setAnnotationInput({
