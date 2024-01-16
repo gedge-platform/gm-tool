@@ -9,26 +9,14 @@ import { volumeStore } from "@/store";
 import styled from "styled-components";
 import { dateFormatter } from "@/utils/common-utils";
 
-const TableTitle = styled.p`
-  font-size: 14px;
-  font-weight: 500;
-  margin: 8px 0;
-  color: rgba(255, 255, 255, 0.8);
-`;
-const TableSubTitle = styled.p`
-  font-size: 12px;
-  font-weight: 500;
-  margin: 12px 0;
-  color: rgba(255, 255, 255, 0.8);
-`;
-
 const LabelContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -254,7 +242,7 @@ const VolumeDetail = observer(({ pVolume1, metadata }) => {
             </table>
           ) : (
             <LabelContainer>
-              <p>No Annotation Info</p>
+              <p>No Annotations Info</p>
             </LabelContainer>
           )}
         </div>

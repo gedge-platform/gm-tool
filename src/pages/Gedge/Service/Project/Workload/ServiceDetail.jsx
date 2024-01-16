@@ -18,8 +18,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -53,6 +54,8 @@ const Detail = observer(() => {
     serviceStore;
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+
+  console.log(portTemp);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -239,7 +242,7 @@ const Detail = observer(() => {
       </CTabPanel>
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp ? (
+          {portTemp !== 0 ? (
             portTemp.map((port) => (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>

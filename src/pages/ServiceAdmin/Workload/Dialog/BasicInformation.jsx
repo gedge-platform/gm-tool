@@ -54,7 +54,7 @@ const BasicInformation = observer(() => {
             <th>
               Workspace <span className="requried">*</span>
             </th>
-            <td style={{ width: "50%" }}>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select name="workspace" onChange={onChange}>
                   <option value={""}>Select Workspace</option>
@@ -64,13 +64,12 @@ const BasicInformation = observer(() => {
                 </select>
               </FormControl>
             </td>
-            <th></th>
           </tr>
           <tr>
             <th>
               Project <span className="requried">*</span>
             </th>
-            <td>
+            <td colSpan="3">
               <FormControl className="form_fullWidth">
                 <select
                   disabled={projectEnable}
@@ -86,7 +85,6 @@ const BasicInformation = observer(() => {
                 </select>
               </FormControl>
             </td>
-            <th></th>
           </tr>
         </tbody>
       </table>

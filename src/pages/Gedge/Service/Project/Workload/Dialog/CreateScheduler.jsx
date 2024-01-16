@@ -127,7 +127,7 @@ const CreateScheduler = observer((props) => {
               }}
             >
               <Button onClick={handleClose}>취소</Button>
-              <ButtonNext onClick={createScheduler}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={createScheduler}>생성</ButtonNext>
             </div>
           </div>
         </>
@@ -151,7 +151,7 @@ const CreateScheduler = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(1)}>이전</Button>
-              <ButtonNext onClick={createScheduler}>Schedule Apply</ButtonNext>
+              <ButtonNext onClick={createScheduler}>생성</ButtonNext>
             </div>
           </div>
         </>
@@ -175,8 +175,7 @@ const CreateScheduler = observer((props) => {
               }}
             >
               <Button onClick={() => setStepValue(2)}>이전</Button>
-              <ButtonNext onClick={createDeployment}>Schedule Apply</ButtonNext>
-              {/* <ButtonNext onClick={createDeployment}>Default Apply</ButtonNext> */}
+              <ButtonNext onClick={createDeployment}>생성</ButtonNext>
             </div>
           </div>
         </>

@@ -103,9 +103,7 @@ const JobListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadJobList}>
-            <CCreateButton>생성</CCreateButton>
-          </CommActionBar>
+          <CommActionBar reloadFunc={loadJobList}></CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>

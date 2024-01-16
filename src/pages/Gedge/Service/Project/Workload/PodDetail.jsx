@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -200,7 +201,6 @@ const Detail = observer(() => {
                               ))}
                             </tbody>
                           </table>
-                          <br />
                         </>
                       </td>
                     </tr>
@@ -224,7 +224,6 @@ const Detail = observer(() => {
                                 ))}
                               </tbody>
                             </table>
-                            <br />
                           </>
                         ) : (
                           <>-</>
@@ -245,7 +244,6 @@ const Detail = observer(() => {
                     </tr>
                   </tbody>
                 </table>
-                <br />
               </>
             ))
           ) : (
@@ -271,7 +269,6 @@ const Detail = observer(() => {
             )}
           </LabelContainer>
 
-          <br />
           <TableTitle>Annotaions</TableTitle>
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
@@ -289,7 +286,6 @@ const Detail = observer(() => {
               <p>No Annotations Info</p>
             </LabelContainer>
           )}
-          <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={3}>
@@ -328,7 +324,6 @@ const Detail = observer(() => {
                     </tr>
                   </tbody>
                 </table>
-                <br />
               </>
             ))
           ) : (
@@ -376,7 +371,7 @@ const Detail = observer(() => {
               <p>No Workload Info</p>
             </LabelContainer>
           )}
-          <br />
+
           <TableTitle>Service</TableTitle>
           {serviceList ? (
             serviceList.length !== 0 ? (
@@ -475,7 +470,7 @@ const Detail = observer(() => {
                           )}
                         </tbody>
                       </table>
-                      <br />
+
                       <TableTitle>Ports</TableTitle>
                       <table className="tb_data">
                         <tbody className="tb_workload_pod_detail">
@@ -491,15 +486,6 @@ const Detail = observer(() => {
                               <td>-</td>
                             </tr>
                           ) : (
-                            // ) : (
-                            //   involvesData?.serviceList?.map((item) =>
-                            //     Object.entries(item?.subsets).map(([inx, value]) =>
-                            //       value.ports === undefined ? (
-                            //         <tr>
-                            //           <td>-</td>
-                            //           <td>-</td>
-                            //           <td>-</td>
-                            //         </tr>
                             involvesData?.serviceList?.map((item) =>
                               Object.entries(item?.subsets).map(
                                 ([inx, value]) =>

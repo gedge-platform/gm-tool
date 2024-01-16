@@ -83,9 +83,7 @@ const DaemonSetListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar reloadFunc={loadDaemonSetList}>
-            <CCreateButton>생성</CCreateButton>
-          </CommActionBar>
+          <CommActionBar reloadFunc={loadDaemonSetList}></CommActionBar>
 
           <div className="tabPanelContainer">
             <CTabPanel value={tabvalue} index={0}>

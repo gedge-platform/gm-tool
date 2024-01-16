@@ -73,11 +73,7 @@ const PoolSizeListTab = observer(() => {
   return (
     <CReflexBox>
       <PanelBox>
-        <CommActionBar reloadFunc={reloadData}>
-          <CCreateButton onClick={handleOpen}>생성</CCreateButton>
-          &nbsp;&nbsp;
-          <CDeleteButton>삭제</CDeleteButton>
-        </CommActionBar>
+        <CommActionBar reloadFunc={reloadData}></CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
             <AgGrid
