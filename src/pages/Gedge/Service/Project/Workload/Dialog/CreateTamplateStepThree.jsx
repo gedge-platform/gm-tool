@@ -430,7 +430,7 @@ const CreateTamplateStepThree = observer(() => {
           </div>
           <div className="arr"></div>
           <div className="step current">
-            <span>고급 설정</span>
+            <span>스케줄러</span>
           </div>
           <div className="arr"></div>
           <div className="step">

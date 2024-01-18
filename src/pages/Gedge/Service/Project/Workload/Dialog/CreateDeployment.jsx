@@ -57,6 +57,7 @@ const CreateDeployment = observer((props) => {
     labelKey,
     labelInputKey,
     labelValue,
+    targetClusters,
   } = deploymentStore;
 
   const { loadPVClaims } = claimStore;
