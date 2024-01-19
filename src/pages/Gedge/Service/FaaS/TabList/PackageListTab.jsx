@@ -26,6 +26,7 @@ const PackageListTab = observer(() => {
     goPrevPage,
     deletePackageAPI,
   } = FaasStore;
+  console.log(packageList);
 
   useEffect(() => {
     loadPackageListAPI();
@@ -108,7 +109,7 @@ const PackageListTab = observer(() => {
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
-            <AgGrid2
+            <AgGrid
               onCellClicked={cellClicked}
               rowData={packageList}
               columnDefs={columDefs}
