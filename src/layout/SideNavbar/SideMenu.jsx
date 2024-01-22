@@ -243,7 +243,7 @@ const SideMenu = observer(() => {
       "/platformProject": ["3", "4"],
       "/workload": ["3"],
       "/faas": ["3"],
-      "/gsLink": ["3"],
+      "/gLink": ["3"],
       "/user": [],
       "/monitoring": [],
       "/configuration": [],
@@ -376,7 +376,7 @@ const SideMenu = observer(() => {
                   </CustomNavLink>
                 </li>
                 <li>
-                  <CustomNavLink exact to="/gslink" activeClassName="active">
+                  <CustomNavLink exact to="/glink" activeClassName="active">
                     {Title.GsLink}
                   </CustomNavLink>
                 </li>

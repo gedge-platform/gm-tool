@@ -179,7 +179,7 @@ const CreateGsLink = observer((props) => {
       id="myDialog"
       open={open}
       maxWidth="md"
-      title={`Create GsLink`}
+      title={`Create GLink`}
       onClose={handleClose}
       bottomArea={false}
       modules={["custom"]}

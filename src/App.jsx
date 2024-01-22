@@ -86,7 +86,7 @@ export const App = () => {
           <AuthRoute path="/storage" component={Storage} />
           <AuthRoute path="/workload" component={Workload} />
           <AuthRoute path="/faas" component={FaaS} />
-          <AuthRoute path="/gslink" component={GsLink} />
+          <AuthRoute path="/glink" component={GsLink} />
           <AuthRoute path="/adminMonitoring" component={AdminMonitoring} />
 
           <AuthRoute path="/platformControl" component={NotFound} />
