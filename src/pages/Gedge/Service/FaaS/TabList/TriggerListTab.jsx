@@ -113,7 +113,7 @@ const TriggerListTab = observer(() => {
         </CommActionBar>
         <div className="tabPanelContainer">
           <div className="grid-height2">
-            <AgGrid2
+            <AgGrid
               onCellClicked={cellClicked}
               rowData={triggerList}
               columnDefs={columDefs}

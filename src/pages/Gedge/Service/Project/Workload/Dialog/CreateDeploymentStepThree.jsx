@@ -30,6 +30,8 @@ const CreateDeploymentStepThree = observer(() => {
     setDeployment,
     setDeploymentPriority,
   } = deploymentStore;
+  console.log("deployment ??", deployment);
+  console.log("targetClusters ??", targetClusters);
 
   const { loadCluster, clusterDetail, initClusterDetail } = clusterStore;
 
