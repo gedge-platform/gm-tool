@@ -65,21 +65,41 @@ class Project {
     });
   };
 
+  // goPrevPage = () => {
+  //   runInAction(() => {
+  //     if (this.currentPage > 1) {
+  //       this.currentPage = this.currentPage - 1;
+  //       this.setViewList(this.currentPage - 1);
+  //       this.loadProjectDetail(this.viewList[0].projectName);
+  //     }
+  //   });
+  // };
+
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
         this.currentPage = this.currentPage - 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadProjectDetail(this.viewList[0].projectName);
       }
     });
   };
 
+  // goNextPage = () => {
+  //   runInAction(() => {
+  //     if (this.totalPages > this.currentPage) {
+  //       this.currentPage = this.currentPage + 1;
+  //       this.setViewList(this.currentPage - 1);
+  //       this.loadProjectDetail(this.viewList[0].projectName);
+  //     }
+  //   });
+  // };
+
   goNextPage = () => {
     runInAction(() => {
       if (this.totalPages > this.currentPage) {
         this.currentPage = this.currentPage + 1;
-        this.setViewList(this.currentPage - 1);
+        this.paginationList();
         this.loadProjectDetail(this.viewList[0].projectName);
       }
     });
@@ -155,6 +175,26 @@ class Project {
     });
   };
 
+  // loadProjectList = async () => {
+  //   let { id, role } = getItem("user");
+  //   role === "SA" ? (id = id) : (id = "");
+  //   await axios
+  //     .get(`${SERVER_URL}/userProjects?user=${id}`)
+  //     .then((res) => {
+  //       runInAction(() => {
+  //         this.projectList = res.data.data;
+  //         this.projectLists = res.data.data;
+  //         this.totalElements = res.data.data.length;
+  //       });
+  //     })
+  //     .then(() => {
+  //       this.convertList(this.projectList, this.setProjectList);
+  //     })
+  //     .then(() => {
+  //       this.loadProjectDetail(this.viewList[0].projectName);
+  //     });
+  // };
+
   loadProjectList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -168,11 +208,13 @@ class Project {
         });
       })
       .then(() => {
-        this.convertList(this.projectList, this.setProjectList);
+        this.paginationList();
       })
-      .then(() => {
-        this.loadProjectDetail(this.viewList[0].projectName);
+      .catch(() => {
+        this.projectList = [];
+        this.paginationList();
       });
+    this.loadProjectDetail(this.projectList[0].projectName);
   };
 
   loadAdminProjectList = async () => {
@@ -316,10 +358,13 @@ class Project {
       istioCheck: istioCheck ? "enabled" : "disabled",
     };
 
+    console.log("body ?", body);
+
     axios
       .post(`${SERVER_URL}/projects`, body)
       .then((res) => {
         if (res.status === 201) {
+          console.log(res);
           swalError("Project가 생성되었습니다!", callback);
         }
       })

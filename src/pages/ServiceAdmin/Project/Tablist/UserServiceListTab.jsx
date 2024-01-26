@@ -111,12 +111,7 @@ const UserServiceListTab = observer(() => {
     <div style={{ height: 900 }}>
       <CReflexBox>
         <PanelBox>
-          <CommActionBar
-            reloadFunc={reloadData}
-            // isSearch={true}
-            // isSelect={true}
-            // keywordList={["이름"]}
-          >
+          <CommActionBar reloadFunc={reloadData}>
             <CCreateButton onClick={handleOpen}>생성</CCreateButton>
             &nbsp;&nbsp;
             <CDeleteButton onClick={handleDelete}>삭제</CDeleteButton>
@@ -126,7 +121,7 @@ const UserServiceListTab = observer(() => {
             <div className="grid-height2">
               <AgGrid
                 onCellClicked={handleClick}
-                rowData={projectList[0]}
+                rowData={projectList}
                 columnDefs={columDefs}
                 isBottom={false}
                 totalElements={totalElements}

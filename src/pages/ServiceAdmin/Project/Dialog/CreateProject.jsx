@@ -102,10 +102,12 @@ const CreateProject = observer((props) => {
     setWorkspace("");
     setSelectClusters([]);
     setSelectClusterInfo([]);
+    setClusterList([]);
     setToggle(false);
     setCheck(false);
   };
 
+  console.log(selectClusters);
   const onChange = async ({ target: { name, value } }) => {
     if (name === "workspace") {
       setWorkspace(value);

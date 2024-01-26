@@ -583,6 +583,7 @@ class Deployment {
         runInAction(() => {
           // 응답 data를 deploymentList에 넣고 총 페이지와 개수 입력
           if (res.data.data !== null) {
+            console.log(res);
             this.deploymentList = res.data.data;
             this.deploymentDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
@@ -777,6 +778,7 @@ class Deployment {
 
   postGLowLatencyPriority = async (callback) => {
     const body = this.content;
+    console.log("body ??", body);
 
     const randomNumber = Math.floor(Math.random() * (10000 - 1)) + 1;
 
@@ -819,6 +821,7 @@ class Deployment {
     };
 
     const options = encodeURI(JSON.stringify(option()));
+    console.log("options ??", options);
     const requestId = "requestId" + randomNumber;
 
     await axios
@@ -834,6 +837,7 @@ class Deployment {
       .then((res) => {
         if (res.status === 201) {
           swalError("Deployment가 생성되었습니다.");
+          console.log("res ???", res);
         } else {
           swalError("Deployment 생성 실패", callback);
         }
