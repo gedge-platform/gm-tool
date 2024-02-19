@@ -2306,6 +2306,11 @@ const globalStyles = createGlobalStyle`
                   background:  url(../images/dashboard/icon_aws.png) no-repeat center center #11162a;
                   background-size: 50%;
                 }
+                &.noIcon {
+                  background:  url(../images/dashboard/icon_no.png) no-repeat center center #11162a;
+                  background-size: 50%;
+                }
+               
               }
               .ClusterStatusInfoBox {
                 width: 45%;

@@ -13,6 +13,7 @@ const CloudZoneSlider = observer(() => {
   const { loadVMStatusCnt, configName } = dashboardStore;
   const { loadVMList, clusterList } = clusterStore;
 
+  console.log("configName ??", configName);
   useEffect(() => {
     loadVMList();
     loadVMStatusCnt();
@@ -35,7 +36,7 @@ const CloudZoneSlider = observer(() => {
     let stopCount = 0;
     let pauseCount = 0;
 
-    configName.forEach((e) => {
+    configName?.forEach((e) => {
       const providerVMs = clusterList?.filter(
         (item) => item.ProviderName === e.ProviderName
       );

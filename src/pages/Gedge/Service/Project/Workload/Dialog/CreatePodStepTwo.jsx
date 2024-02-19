@@ -173,7 +173,9 @@ const CreatePodStepTwo = observer(() => {
       <table id="labelTable" className="tb_data_new tb_write">
         <tbody>
           <tr>
-            <th>Labels</th>
+            <th>
+              Labels<span className="requried">*</span>
+            </th>
             <td>
               <CTextField
                 type="text"

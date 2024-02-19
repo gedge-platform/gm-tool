@@ -65,16 +65,6 @@ class Project {
     });
   };
 
-  // goPrevPage = () => {
-  //   runInAction(() => {
-  //     if (this.currentPage > 1) {
-  //       this.currentPage = this.currentPage - 1;
-  //       this.setViewList(this.currentPage - 1);
-  //       this.loadProjectDetail(this.viewList[0].projectName);
-  //     }
-  //   });
-  // };
-
   goPrevPage = () => {
     runInAction(() => {
       if (this.currentPage > 1) {
@@ -84,16 +74,6 @@ class Project {
       }
     });
   };
-
-  // goNextPage = () => {
-  //   runInAction(() => {
-  //     if (this.totalPages > this.currentPage) {
-  //       this.currentPage = this.currentPage + 1;
-  //       this.setViewList(this.currentPage - 1);
-  //       this.loadProjectDetail(this.viewList[0].projectName);
-  //     }
-  //   });
-  // };
 
   goNextPage = () => {
     runInAction(() => {
@@ -174,26 +154,6 @@ class Project {
       }
     });
   };
-
-  // loadProjectList = async () => {
-  //   let { id, role } = getItem("user");
-  //   role === "SA" ? (id = id) : (id = "");
-  //   await axios
-  //     .get(`${SERVER_URL}/userProjects?user=${id}`)
-  //     .then((res) => {
-  //       runInAction(() => {
-  //         this.projectList = res.data.data;
-  //         this.projectLists = res.data.data;
-  //         this.totalElements = res.data.data.length;
-  //       });
-  //     })
-  //     .then(() => {
-  //       this.convertList(this.projectList, this.setProjectList);
-  //     })
-  //     .then(() => {
-  //       this.loadProjectDetail(this.viewList[0].projectName);
-  //     });
-  // };
 
   loadProjectList = async () => {
     let { id, role } = getItem("user");

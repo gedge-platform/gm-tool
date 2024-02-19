@@ -369,7 +369,7 @@ class Cluster {
         runInAction(() => {
           const list = data;
           this.clusterList = list;
-          this.clusterNameList = list.map((item) => item.IId.NameId);
+          this.clusterNameList = list?.map((item) => item.IId.NameId);
           this.totalElements = this.clusterList.length;
           this.totalPages = Math.ceil(this.clusterList.length / 10);
         });

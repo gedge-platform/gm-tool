@@ -293,7 +293,7 @@ class Dashboard {
       return res;
     });
 
-    this.configName = configResult[0].data.data.connectionconfig;
+    this.configName = configResult[0]?.data?.data.connectionconfig;
   };
 
   edgeType = [];
@@ -317,12 +317,12 @@ class Dashboard {
         runInAction(() => {
           this.clusterInfo = data.ClusterInfo;
           this.nodeInfo = data.nodeInfo;
-          this.type = this.nodeInfo.map((val) => val.type);
-          this.master = this.type.reduce(
+          this.type = this.nodeInfo?.map((val) => val.type);
+          this.master = this.type?.reduce(
             (cnt, element) => cnt + ("master" === element),
             0
           );
-          this.worker = this.type.reduce(
+          this.worker = this.type?.reduce(
             (cnt, element) => cnt + ("worker" === element),
             0
           );

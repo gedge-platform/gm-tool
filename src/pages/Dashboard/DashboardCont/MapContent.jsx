@@ -4,8 +4,6 @@ import { observer } from "mobx-react";
 import axios from "axios";
 import { dashboardStore } from "@/store";
 import { SERVER_URL } from "@/config";
-import { serviceAdminDashboardStore, monitoringStore } from "@/store";
-import { LineElement } from "chart.js";
 
 const MapContent = observer(() => {
   const {
@@ -32,6 +30,7 @@ const MapContent = observer(() => {
     // 엣지존, 클라우드 대시보드의 클러스터 이름
     setClusterName(clusterNameData[0]);
     setDataEdgeInfo(edgeInfoTemp);
+    console.log("edgeInfoTemp ??", edgeInfoTemp);
     const dataPoint = edgeInfoTemp.map((item) => item.point);
     const dataStatus = edgeInfoTemp.map((item) => item.status);
     setData(dataPoint);
@@ -41,8 +40,12 @@ const MapContent = observer(() => {
 
     //지도
     mapRef.current = L.map("map", mapParams);
+    console.log(
+      "dataPoint ??",
+      dataPoint.map((point, i) => point)
+    );
 
-    const marker = dataPoint.map((point, i) => {
+    const marker = dataPoint?.map((point, i) => {
       L.marker([point.y, point.x], { icon: CustomIcon("green") })
         .addTo(mapRef.current)
         .bindPopup(
