@@ -2763,6 +2763,10 @@ const globalStyles = createGlobalStyle`
             &.aws {
               background: url(../images/resource/bg_aws.png) no-repeat center 35px #252d48;
             }
+            &.noIcon {
+              background: url(../images/resource/bg_no.png) no-repeat center 20px #252d48;
+              background-size: 70%;
+            }
           }
 
           .contentsBox {
