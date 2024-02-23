@@ -50,9 +50,9 @@ const Label = styled.span`
 `;
 
 const ServiceAdminDetail = observer(() => {
-  const { serviceDetail, portTemp, involvesPods, involvesWorkloads } =
+  const { portTemp, involvesPods, involvesWorkloads, adminServiceDetail } =
     serviceStore;
-
+  console.log("adminServiceDetail ???", adminServiceDetail);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -75,89 +75,94 @@ const ServiceAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {serviceDetail ? (
-                <>
-                  <tr>
-                    <th style={{ width: "25%" }}>Service Name</th>
-                    <td>{serviceDetail.name ? serviceDetail.name : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Cluster</th>
-                    <td>
-                      {serviceDetail.cluster ? serviceDetail.cluster : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>
-                      {serviceDetail.project ? serviceDetail.project : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Selector</th>
-                    <td>
-                      {serviceDetail.selector ? (
-                        Object.entries(serviceDetail.selector).map(
-                          ([key, value]) => (
-                            <>
-                              <table
-                                className="tb_data"
-                                style={{ width: "50%" }}
-                              >
-                                <tbody>
-                                  <tr>
-                                    <th>{key}</th>
-                                  </tr>
-                                  <tr>
-                                    <td>{value}</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                              <br />
-                            </>
-                          )
+          {Object.keys(adminServiceDetail).length !== 0 ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                <tr>
+                  <th style={{ width: "25%" }}>Service Name</th>
+                  <td>
+                    {adminServiceDetail.name ? adminServiceDetail.name : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Cluster</th>
+                  <td>
+                    {adminServiceDetail.cluster
+                      ? adminServiceDetail.cluster
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Project</th>
+                  <td>
+                    {adminServiceDetail.project
+                      ? adminServiceDetail.project
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Selector</th>
+                  <td>
+                    {adminServiceDetail.selector ? (
+                      Object.entries(adminServiceDetail.selector).map(
+                        ([key, value]) => (
+                          <>
+                            <table className="tb_data" style={{ width: "50%" }}>
+                              <tbody>
+                                <tr>
+                                  <th>{key}</th>
+                                </tr>
+                                <tr>
+                                  <td>{value}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <br />
+                          </>
                         )
-                      ) : (
-                        <>-</>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Type</th>
-                    <td>{serviceDetail.type ? serviceDetail.type : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>Cluster IP</th>
-                    <td>
-                      {serviceDetail.clusterIp ? serviceDetail.clusterIp : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Session Affinity</th>
-                    <td>
-                      {serviceDetail.sessionAffinity
-                        ? serviceDetail.sessionAffinity
-                        : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>
-                      {serviceDetail.createAt
-                        ? dateFormatter(serviceDetail.createAt)
-                        : "-"}
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+                      )
+                    ) : (
+                      <>-</>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Type</th>
+                  <td>
+                    {adminServiceDetail.type ? adminServiceDetail.type : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Cluster IP</th>
+                  <td>
+                    {adminServiceDetail.clusterIp
+                      ? adminServiceDetail.clusterIp
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Session Affinity</th>
+                  <td>
+                    {adminServiceDetail.sessionAffinity
+                      ? adminServiceDetail.sessionAffinity
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td>
+                    {adminServiceDetail.createAt
+                      ? dateFormatter(adminServiceDetail.createAt)
+                      : "-"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Resources Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>

@@ -59,7 +59,10 @@ const JobAdminDetail = observer(() => {
     events,
     ownerReferences,
     containers,
+    adminJobDetailData,
   } = jobStore;
+
+  console.log("adminJobDetailData ??", adminJobDetailData);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -85,62 +88,70 @@ const JobAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {jobDetailData ? (
-                <>
-                  <tr>
-                    <th>Name</th>
-                    <td>{jobDetailData.name ? jobDetailData.name : "-"}</td>
-                    <th>Cluster</th>
-                    <td>
-                      {jobDetailData.cluster ? jobDetailData.cluster : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>
-                      {jobDetailData.project ? jobDetailData.project : "-"}
-                    </td>
-                    <th>Status</th>
-                    <td>{jobDetailData.status ? jobDetailData.status : "-"}</td>
-                  </tr>
-                  <tr>
-                    <th>BackOffLimit</th>
-                    <td>
-                      {jobDetailData.backoffLimit
-                        ? jobDetailData.backoffLimit
-                        : "-"}
-                    </td>
-                    <th>Completions</th>
-                    <td>
-                      {jobDetailData.completions
-                        ? jobDetailData.completions
-                        : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Start Time</th>
-                    <td>
-                      {jobDetailData.startTime
-                        ? dateFormatter(jobDetailData.startTime)
-                        : "-"}
-                    </td>
-                    <th>Created</th>
-                    <td>
-                      {jobDetailData.created_at
-                        ? dateFormatter(jobDetailData.created_at)
-                        : "-"}
-                    </td>
-                  </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+          {adminJobDetailData.length !== 0 ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <td>
+                    {adminJobDetailData.name ? adminJobDetailData.name : "-"}
+                  </td>
+                  <th>Cluster</th>
+                  <td>
+                    {adminJobDetailData.cluster
+                      ? adminJobDetailData.cluster
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Project</th>
+                  <td>
+                    {adminJobDetailData.project
+                      ? adminJobDetailData.project
+                      : "-"}
+                  </td>
+                  <th>Status</th>
+                  <td>
+                    {adminJobDetailData.status
+                      ? adminJobDetailData.status
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>BackOffLimit</th>
+                  <td>
+                    {adminJobDetailData.backoffLimit
+                      ? adminJobDetailData.backoffLimit
+                      : "-"}
+                  </td>
+                  <th>Completions</th>
+                  <td>
+                    {adminJobDetailData.completions
+                      ? adminJobDetailData.completions
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Start Time</th>
+                  <td>
+                    {adminJobDetailData.startTime
+                      ? dateFormatter(adminJobDetailData.startTime)
+                      : "-"}
+                  </td>
+                  <th>Created</th>
+                  <td>
+                    {adminJobDetailData.created_at
+                      ? dateFormatter(adminJobDetailData.created_at)
+                      : "-"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Resources Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>

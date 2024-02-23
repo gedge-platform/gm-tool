@@ -29,6 +29,7 @@ const JobAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
     initViewList,
+    adminJobDetailData,
   } = jobStore;
 
   const [columDefs] = useState([
@@ -46,14 +47,6 @@ const JobAdminTab = observer(() => {
       headerName: "프로젝트",
       field: "project",
       filter: true,
-    },
-    {
-      headerName: "워크스페이스",
-      field: "workspace",
-      filter: true,
-      cellRenderer: function ({ data: { workspace } }) {
-        return `<span>${workspace ? workspace : "-"}</span>`;
-      },
     },
     {
       headerName: "상태",
@@ -125,7 +118,7 @@ const JobAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <JobAdminDetail job={jobDetail} />
+        <JobAdminDetail job={adminJobDetailData} />
       </CReflexBox>
     </div>
   );

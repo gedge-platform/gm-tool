@@ -89,8 +89,6 @@ const Detail = observer(() => {
       strategyTemp.rollingUpdate.maxSurge;
   }
 
-  useEffect(() => {});
-
   return (
     <PanelBox>
       <CTabs type="tab2" value={tabvalue} onChange={handleTabChange}>
@@ -234,55 +232,6 @@ const Detail = observer(() => {
                       )}
                     </td>
                   </tr>
-                  {/* <tr>
-                  <th>Resources</th>
-                  <td>
-                    <table className="tb_data">
-                      <tbody>
-                        <tr>
-                          <th style={{ width: "50%" }}>Limits</th>
-                        </tr>
-                        <tr>
-                          <td>
-                            {Object.entries(containers?.resources).map(
-                              ([key, value]) =>
-                                Object.entries(value).map(([key1, value1]) => (
-                                  <tr>
-                                    <th>{key1}</th>
-                                    <td>{value1}</td>
-                                  </tr>
-                                ))
-                            )}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr> */}
-                  {/* <tr>
-                  <th>SecurityContext</th>
-                  <td>
-                  {containers?.securityContext === undefined ? (
-                      <>-</>
-                    ) : (
-                      Object.entries(containers?.securityContext).map(
-                        ([key, value]) => (
-                          <table className="tb_data" style={{ width: "30%" }}>
-                            <tbody>
-                              <tr>
-                                <th>{key}</th>
-                              </tr>
-                              <tr>
-                                <td>{value}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        )
-                      )
-                    )}
-                  </td>
-                </tr> */}
-
                   <tr>
                     <th>VolumeMounts</th>
                     <td>
@@ -322,7 +271,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
+            {labels.length !== 0 ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -335,7 +284,7 @@ const Detail = observer(() => {
           </LabelContainer>
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations.length !== 0 ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -359,7 +308,7 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {pods ? (
+          {pods.length !== 0 ? (
             pods?.map((pod) => (
               <>
                 <table className="tb_data">
@@ -389,7 +338,7 @@ const Detail = observer(() => {
           )}
 
           <TableTitle>Service</TableTitle>
-          {depServices.name === "" ? (
+          {depServices.length !== 0 ? (
             <>
               <LabelContainer>
                 <p>No Service Info</p>

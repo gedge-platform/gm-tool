@@ -29,8 +29,8 @@ const DeploymentAdminTab = observer(() => {
     goNextPage,
     totalElements,
     deploymentList,
+    adminDeploymentDetail,
   } = deploymentStore;
-  console.log(deploymentDetail);
 
   const [columDefs] = useState([
     {
@@ -47,14 +47,6 @@ const DeploymentAdminTab = observer(() => {
       headerName: "프로젝트",
       field: "project",
       filter: true,
-    },
-    {
-      headerName: "워크스페이스",
-      field: "workspace",
-      filter: true,
-      cellRenderer: function (data) {
-        return `<span>${data.value ? data.value : "-"}</span>`;
-      },
     },
     {
       headerName: "상태",
@@ -117,7 +109,7 @@ const DeploymentAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <DeploymentAdminDetail deployment={deploymentDetail} />
+        <DeploymentAdminDetail deployment={adminDeploymentDetail} />
       </CReflexBox>
     </div>
   );

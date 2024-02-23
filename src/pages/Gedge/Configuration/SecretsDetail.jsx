@@ -112,7 +112,7 @@ const SecretDetail = observer(() => {
                 secretTabList.length !== 0 ? (
                   <>
                     <tr>
-                      <th className="tb_workload_detail_labels_th">Name</th>
+                      <th style={{ width: "15%" }}>Name</th>
                       <td>{secretTabList.name ? secretTabList.name : "-"}</td>
                     </tr>
                     <tr>

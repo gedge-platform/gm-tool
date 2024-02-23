@@ -66,6 +66,7 @@ class Deployment {
     involvesData: {},
   };
 
+  adminDeploymentDetail = {};
   deploymentEvents = [];
 
   deploymentInvolvesData = {};
@@ -583,7 +584,6 @@ class Deployment {
         runInAction(() => {
           // 응답 data를 deploymentList에 넣고 총 페이지와 개수 입력
           if (res.data.data !== null) {
-            console.log(res);
             this.deploymentList = res.data.data;
             this.deploymentDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
@@ -614,14 +614,19 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.deploymentList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.deploymentList.length !== 0) {
-            this.deploymentDetail = this.deploymentList[0];
-            this.totalPages = Math.ceil(this.deploymentList.length / 10);
-            this.totalElements = this.deploymentList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.deploymentList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.deploymentList.length !== 0) {
+              this.adminDeploymentDetail = this.deploymentList[0];
+              this.totalPages = Math.ceil(this.deploymentList.length / 10);
+              this.totalElements = this.deploymentList.length;
+            }
           } else {
             this.deploymentList = [];
           }
@@ -648,7 +653,10 @@ class Deployment {
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
+          console.log("data ???", data);
+          console.log("involves ??? ", involvesData);
           this.deploymentDetail = data;
+          this.adminDeploymentDetail = data;
           this.workspace = data.workspace;
           this.workspaceName = data.workspace;
           this.projectName = data.project;

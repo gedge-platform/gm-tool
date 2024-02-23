@@ -19,6 +19,7 @@ class Service {
       app: "",
     },
   };
+  adminServiceDetail = {};
   nodePort = 0;
   totalElements = 0;
   portTemp = [];
@@ -128,14 +129,19 @@ class Service {
       .get(`${SERVER_URL}/services?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.serviceList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.serviceList.length !== 0) {
-            this.serviceDetail = this.serviceList[0];
-            this.totalPages = Math.ceil(this.serviceList.length / 10);
-            this.totalElements = this.serviceList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.serviceList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.serviceList.length !== 0) {
+              this.adminServiceDetail = this.serviceList[0];
+              this.totalPages = Math.ceil(this.serviceList.length / 10);
+              this.totalElements = this.serviceList.length;
+            }
           } else {
             this.serviceList = [];
           }
@@ -161,9 +167,9 @@ class Service {
         `${SERVER_URL}/services/${name}?cluster=${cluster}&project=${project}`
       )
       .then(({ data: { data, involvesData } }) => {
-        console.log(data);
         runInAction(() => {
           this.serviceDetail = data;
+          this.adminServiceDetail = data;
           this.portTemp = data.port ? data.port : 0;
           this.serviceInvolvesData = involvesData;
           this.involvesPods = involvesData.pods;

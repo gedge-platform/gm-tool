@@ -22,17 +22,15 @@ const ServiceAdminTab = observer(() => {
 
   const {
     loadAdminServiceList,
-    pServiceList,
-    viewList,
     initViewList,
     serviceList,
-    serviceDetail,
     totalElements,
     loadServiceDetail,
     currentPage,
     totalPages,
     goPrevPage,
     goNextPage,
+    adminServiceDetail,
   } = serviceStore;
 
   const [columDefs] = useState([
@@ -50,14 +48,6 @@ const ServiceAdminTab = observer(() => {
       headerName: "프로젝트",
       field: "project",
       filter: true,
-    },
-    {
-      headerName: "워크스페이스",
-      field: "workspace",
-      filter: true,
-      cellRenderer: function ({ data: { workspace } }) {
-        return `<span>${workspace ? workspace : "-"}</span>`;
-      },
     },
     {
       headerName: "액세스 타입",
@@ -129,7 +119,7 @@ const ServiceAdminTab = observer(() => {
             reloadFunc={loadServiceList}
           /> */}
         </PanelBox>
-        <ServiceAdminDetail service={serviceDetail} />
+        <ServiceAdminDetail service={adminServiceDetail} />
       </CReflexBox>
     </div>
   );

@@ -6,6 +6,7 @@ import { deploymentStore } from "@/store";
 import { observer } from "mobx-react";
 import { dateFormatter } from "@/utils/common-utils";
 import EventAccordion from "@/components/detail/EventAccordion";
+import { object } from "react-dom-factories";
 
 const TableTitle = styled.p`
   font-size: 14px;
@@ -52,7 +53,6 @@ const Label = styled.span`
 
 const DeploymentAdminDetail = observer(() => {
   const {
-    deploymentDetail,
     events,
     strategy,
     labels,
@@ -60,7 +60,10 @@ const DeploymentAdminDetail = observer(() => {
     pods,
     depServices,
     containersTemp,
+    adminDeploymentDetail,
   } = deploymentStore;
+
+  console.log(depServices);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -69,28 +72,23 @@ const DeploymentAdminDetail = observer(() => {
     setTabvalue(newValue);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   let strategyTable = [];
   let strategyTemp = strategy;
 
-  if (strategyTemp.type === "Recreate") {
-    strategyTable = strategyTemp.type;
-  } else if (strategyTemp.type === "RollingUpdate") {
-    strategyTable =
-      "maxUnavailable : " +
-      strategyTemp.rollingUpdate.maxUnavailable +
-      "\n" +
-      "maxSurge : " +
-      strategyTemp.rollingUpdate.maxSurge;
+  if (Object.keys(adminDeploymentDetail).length !== 0) {
+    if (strategyTemp.type === "Recreate") {
+      strategyTable = strategyTemp.type;
+    } else if (strategyTemp.type === "RollingUpdate") {
+      strategyTable =
+        "maxUnavailable : " +
+        strategyTemp.rollingUpdate.maxUnavailable +
+        "\n" +
+        "maxSurge : " +
+        strategyTemp.rollingUpdate.maxSurge;
+    }
+  } else {
+    strategyTable = "-";
   }
-
-  useEffect(() => {});
 
   return (
     <PanelBox>
@@ -103,70 +101,80 @@ const DeploymentAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <tbody>
-              {deploymentDetail ? (
-                <>
-                  <tr>
-                    <th className="tb_workload_detail_th">Name</th>
-                    <td>
-                      {deploymentDetail.name ? deploymentDetail.name : "-"}
-                    </td>
-                    <th className="tb_workload_detail_th">Cluster</th>
-                    <td>
-                      {deploymentDetail.cluster
-                        ? deploymentDetail.cluster
-                        : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Project</th>
-                    <td>
-                      {deploymentDetail.project
-                        ? deploymentDetail.project
-                        : "-"}
-                    </td>
-                    <th>Workspace</th>
-                    <td>
-                      {deploymentDetail.workspace
-                        ? deploymentDetail.workspace
-                        : "-"}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>Status</th>
-                    <td>
-                      {deploymentDetail.ready ? deploymentDetail.ready : "-"}
-                    </td>
-                    <th>Strategy</th>
-                    <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
-                  </tr>
-                  <tr>
-                    <th>Created</th>
-                    <td>{dateFormatter(deploymentDetail.createAt)}</td>
-                    <th>Updated</th>
-                    <td>{dateFormatter(deploymentDetail.updateAt)}</td>
-                  </tr>
-                </>
-              ) : (
-                <LabelContainer>
-                  <p>No Resources Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+          {adminDeploymentDetail.name !== "" ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
+              <tbody>
+                <tr>
+                  <th className="tb_workload_detail_th">Name</th>
+                  <td>
+                    {adminDeploymentDetail.name
+                      ? adminDeploymentDetail.name
+                      : "-"}
+                  </td>
+                  <th className="tb_workload_detail_th">Cluster</th>
+                  <td>
+                    {adminDeploymentDetail.cluster
+                      ? adminDeploymentDetail.cluster
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Project</th>
+                  <td>
+                    {adminDeploymentDetail.project
+                      ? adminDeploymentDetail.project
+                      : "-"}
+                  </td>
+                  <th>Workspace</th>
+                  <td>
+                    {adminDeploymentDetail.workspace
+                      ? adminDeploymentDetail.workspace
+                      : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td>
+                    {adminDeploymentDetail.ready
+                      ? adminDeploymentDetail.ready
+                      : "-"}
+                  </td>
+                  <th>Strategy</th>
+                  <td style={{ whiteSpace: "pre-line" }}>{strategyTable}</td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td>
+                    {adminDeploymentDetail.createAt
+                      ? dateFormatter(adminDeploymentDetail.createAt)
+                      : "-"}
+                  </td>
+                  <th>Updated</th>
+                  <td>
+                    {adminDeploymentDetail.updateAt
+                      ? dateFormatter(adminDeploymentDetail.updateAt)
+                      : "-"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Resources Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containersTemp ? (
-            containersTemp.map((containers) => (
+          {containersTemp.map((containers) =>
+            containers.name !== "" ? (
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody className="tb_data_container">
                   <tr>
                     <th>Container Name</th>
-                    <td>{containers?.name}</td>
+                    <td>{containers?.name ? containers?.name : "-"}</td>
                   </tr>
                   <tr>
                     <th>Image</th>
@@ -263,11 +271,11 @@ const DeploymentAdminDetail = observer(() => {
                   </tr>
                 </tbody>
               </table>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Resources Info</p>
-            </LabelContainer>
+            ) : (
+              <LabelContainer>
+                <p>No Contatiners Info</p>
+              </LabelContainer>
+            )
           )}
         </div>
       </CTabPanel>
@@ -275,7 +283,7 @@ const DeploymentAdminDetail = observer(() => {
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>
           <LabelContainer>
-            {labels ? (
+            {labels.length !== 0 ? (
               Object.entries(labels).map(([key, value]) => (
                 <Label>
                   <span className="key">{key}</span>
@@ -288,7 +296,7 @@ const DeploymentAdminDetail = observer(() => {
           </LabelContainer>
 
           <TableTitle>Annotations</TableTitle>
-          {annotations ? (
+          {annotations.length !== 0 ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>
                 {Object.entries(annotations).map(([key, value]) => (
@@ -313,7 +321,7 @@ const DeploymentAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={4}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {pods ? (
+          {pods.length !== 0 ? (
             pods?.map((pod) => (
               <>
                 <table className="tb_data">
@@ -343,7 +351,7 @@ const DeploymentAdminDetail = observer(() => {
             </LabelContainer>
           )}
           <TableTitle>Service</TableTitle>
-          {depServices.name === "" ? (
+          {Object.keys(depServices).length === 0 ? (
             <>
               <LabelContainer>
                 <p>No Service Info</p>
@@ -355,7 +363,9 @@ const DeploymentAdminDetail = observer(() => {
                 <tbody>
                   <tr>
                     <th style={{ width: "25%" }}>Name</th>
-                    <td>{depServices?.name}</td>
+                    <td>
+                      {depServices?.name !== "" ? depServices?.name : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <th>Port</th>
@@ -367,19 +377,23 @@ const DeploymentAdminDetail = observer(() => {
                             <th>Port</th>
                             <th>Protocol</th>
                           </tr>
-                          {depServices.port?.map((port) => (
-                            <tr>
-                              <td>
-                                {port.name === undefined ? (
-                                  <>-</>
-                                ) : (
-                                  <>{port?.name}</>
-                                )}
-                              </td>
-                              <td>{port.port ? port.port : "-"}</td>
-                              <td>{port.protocol ? port.protocol : "-"}</td>
-                            </tr>
-                          ))}
+                          {depServices.port !== "" ? (
+                            depServices.port?.map((port) => (
+                              <tr>
+                                <td>
+                                  {port.name === undefined ? (
+                                    <>-</>
+                                  ) : (
+                                    <>{port?.name}</>
+                                  )}
+                                </td>
+                                <td>{port.port ? port.port : "-"}</td>
+                                <td>{port.protocol ? port.protocol : "-"}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <></>
+                          )}
                         </tbody>
                       </table>
                     </td>

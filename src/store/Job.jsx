@@ -14,28 +14,8 @@ class Job {
   jobList = [];
   containers = [];
   jobDetailData = [];
-  // jobDetailData = {
-  //   containers: [
-  //     {
-  //       name: "",
-  //       image: "",
-  //     },
-  //   ],
-  //   ownerReferences: [
-  //     {
-  //       name: "",
-  //       apiVersion: "",
-  //       kind: "",
-  //     },
-  //   ],
-  //   conditions: [
-  //     {
-  //       status: "",
-  //       type: "",
-  //       lastProbeTime: "",
-  //     },
-  //   ],
-  // };
+  adminJobDetailData = [];
+
   depServicesPort = [
     {
       name: "",
@@ -146,14 +126,20 @@ class Job {
       .get(`${SERVER_URL}/jobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.jobList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.jobList.length !== 0) {
-            this.jobDetailData = this.jobList[0];
-            this.totalPages = Math.ceil(this.jobList.length / 10);
-            this.totalElements = this.jobList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            this.jobList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.jobList.length !== 0) {
+              this.jobDetailData = this.jobList[0];
+              this.adminJobDetailData = this.jobList[0];
+              this.totalPages = Math.ceil(this.jobList.length / 10);
+              this.totalElements = this.jobList.length;
+            }
           } else {
             this.jobList = [];
           }
@@ -175,6 +161,7 @@ class Job {
       .then(({ data: { data, involves } }) => {
         runInAction(() => {
           this.jobDetailData = data;
+          this.adminJobDetailData = data;
           this.containers = data.containers;
           this.jobDetailInvolves = involves;
           this.labels = data.label;

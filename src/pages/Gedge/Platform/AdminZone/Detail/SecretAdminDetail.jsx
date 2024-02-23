@@ -56,6 +56,7 @@ const SecretAdminDetail = observer(() => {
   const secretTable = [];
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
+  console.log("secretTabList ??? ", secretTabList);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
