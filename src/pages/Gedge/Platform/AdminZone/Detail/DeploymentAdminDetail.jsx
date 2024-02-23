@@ -377,7 +377,7 @@ const DeploymentAdminDetail = observer(() => {
                             <th>Port</th>
                             <th>Protocol</th>
                           </tr>
-                          {depServices.port !== "" ? (
+                          {depServices.port !== "" && null ? (
                             depServices.port?.map((port) => (
                               <tr>
                                 <td>
@@ -392,7 +392,11 @@ const DeploymentAdminDetail = observer(() => {
                               </tr>
                             ))
                           ) : (
-                            <></>
+                            <tr>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                            </tr>
                           )}
                         </tbody>
                       </table>
