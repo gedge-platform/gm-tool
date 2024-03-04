@@ -53,8 +53,14 @@ const Label = styled.span`
 `;
 
 const StatefulSetAdminDetail = observer(() => {
-  const { statefulSetDetail, annotations, containers, events, label } =
-    statefulSetStore;
+  const {
+    statefulSetDetail,
+    annotations,
+    containers,
+    events,
+    label,
+    adminStatefulSetDetail,
+  } = statefulSetStore;
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -82,24 +88,32 @@ const StatefulSetAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody className="tb_data_detail">
-              {statefulSetDetail ? (
+              {adminStatefulSetDetail.length !== 0 ? (
                 <>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
-                    <td>{statefulSetDetail ? statefulSetDetail.name : "-"}</td>
+                    <td>
+                      {adminStatefulSetDetail
+                        ? adminStatefulSetDetail.name
+                        : "-"}
+                    </td>
                     <th className="tb_workload_detail_th">Cluster</th>
                     <td>
-                      {statefulSetDetail ? statefulSetDetail.cluster : "-"}
+                      {adminStatefulSetDetail
+                        ? adminStatefulSetDetail.cluster
+                        : "-"}
                     </td>
                   </tr>
                   <tr>
                     <th>Project</th>
                     <td>
-                      {statefulSetDetail ? statefulSetDetail.project : "-"}
+                      {adminStatefulSetDetail
+                        ? adminStatefulSetDetail.project
+                        : "-"}
                     </td>
                     <th>Created</th>
                     <td>
-                      {statefulSetDetail
+                      {adminStatefulSetDetail
                         ? dateFormatter(statefulSetDetail.createAt)
                         : "-"}
                     </td>
@@ -146,7 +160,6 @@ const StatefulSetAdminDetail = observer(() => {
                       )}
                     </td>
                   </tr>
-
                   <tr>
                     <th>Environment</th>
                     <td>
@@ -184,30 +197,7 @@ const StatefulSetAdminDetail = observer(() => {
                   </tr>
                   <tr>
                     <th>Volume Mounts</th>
-                    {/* <td>
-                      {container.volumeMounts.length === 0 ? (
-                        "No Volume Info"
-                      ) : (
-                        <table className="tb_data">
-                          <tbody>
-                            <tr>
-                              <th>Name</th>
-                              <th>Mount Path</th>
-                              <th>Propagation</th>
-                            </tr>
-                            {container.volumeMounts.map((volume) => (
-                              <tr>
-                                <td>{volume.name ? volume.name : "-"}</td>
-                                <td>
-                                  {volume.mountPath ? volume.mountPath : "-"}
-                                </td>
-                                <td>-</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      )}
-                    </td> */}
+
                     <td>
                       {container.volumeMounts ? (
                         <table className="tb_data">

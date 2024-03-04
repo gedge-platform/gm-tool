@@ -35,7 +35,8 @@ const StorageClassAdminTab = observer(() => {
     getYamlFile,
     loadStorageClassYaml,
     storageclass,
-    storageClasses
+    storageClasses,
+    adminStorageClass,
   } = StorageClassStore;
 
   const [columDefs] = useState([
@@ -64,14 +65,6 @@ const StorageClassAdminTab = observer(() => {
       field: "volumeBindingMode",
       filter: true,
     },
-    // {
-    //   headerName: "AllowVolumeExpansion",
-    //   field: "allowVolumeExpansion",
-    //   filter: true,
-    //   cellRenderer: ({ value }) => {
-    //     return drawStatus(value);
-    //   },
-    // },
     {
       headerName: "Created",
       field: "createAt",
@@ -111,21 +104,13 @@ const StorageClassAdminTab = observer(() => {
     setOpenYaml(false);
   };
 
-  const handleCreateOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const history = useHistory();
 
   useEffect(() => {
     loadAdminStorageClasses();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -159,7 +144,7 @@ const StorageClassAdminTab = observer(() => {
           />
           {/* <CreateStorageClass open={open} onClose={handleClose} reloadFunc={loadStorageClasses} /> */}
         </PanelBox>
-        <StorageClassAdminDetail storageclass={storageclass} />
+        <StorageClassAdminDetail storageclass={adminStorageClass} />
       </CReflexBox>
     </div>
   );

@@ -52,11 +52,11 @@ const Label = styled.span`
 `;
 
 const SecretAdminDetail = observer(() => {
-  const { secretTabList, events, data, label, annotations } = secretStore;
+  const { secretTabList, events, data, label, annotations, adminSecretDetail } =
+    secretStore;
   const secretTable = [];
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
-  console.log("secretTabList ??? ", secretTabList);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
@@ -73,7 +73,15 @@ const SecretAdminDetail = observer(() => {
     data.length !== 0
       ? Object.entries(data).map(([keys, value]) => {
           secretTable.push(
-            <SeeMoreBtn name={secretTabList.name} keys={keys} value={value} />
+            <table className="tb_data">
+              <tbody>
+                <SeeMoreBtn
+                  name={secretTabList.name}
+                  keys={keys}
+                  value={value}
+                />
+              </tbody>
+            </table>
           );
         })
       : secretTable.push(
@@ -93,47 +101,44 @@ const SecretAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          <table className="tb_data">
-            <tbody>
-              {secretTabList ? (
-                secretTabList.length !== 0 ? (
-                  <>
-                    <tr>
-                      <th style={{ width: "15%" }}>Name</th>
-                      <td>{secretTabList.name ? secretTabList.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Type</th>
-                      <td>{secretTabList.type ? secretTabList.type : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Created</th>
-                      <td>
-                        {secretTabList.createAt
-                          ? dateFormatter(secretTabList.createAt)
-                          : "-"}
-                      </td>
-                    </tr>
-                  </>
-                ) : (
-                  <LabelContainer>
-                    <p>No Detail Info</p>
-                  </LabelContainer>
-                )
-              ) : (
-                <LabelContainer>
-                  <p>No Detail Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table>
+          {adminSecretDetail.length !== 0 ? (
+            <table className="tb_data">
+              <tbody>
+                <tr>
+                  <th style={{ width: "15%" }}>Name</th>
+                  <td>
+                    {adminSecretDetail.name ? adminSecretDetail.name : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Type</th>
+                  <td>
+                    {adminSecretDetail.type ? adminSecretDetail.type : "-"}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Created</th>
+                  <td>
+                    {adminSecretDetail.createAt
+                      ? dateFormatter(adminSecretDetail.createAt)
+                      : "-"}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Detail Info</p>
+            </LabelContainer>
+          )}
+
           <br />
           <TableTitle>Data</TableTitle>
-          <table className="tb_data">
-            <tbody>{dataAccordion()}</tbody>
-          </table>
+
+          {dataAccordion()}
         </div>
       </CTabPanel>
+
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Labels</TableTitle>

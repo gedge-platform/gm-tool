@@ -59,7 +59,9 @@ const DaemonSetAdminDetail = observer(() => {
     pods,
     services,
     containers,
+    adminDaemonSetDetail,
   } = daemonSetStore;
+  console.log("adminDaemonSetDetail?????", adminDaemonSetDetail);
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
@@ -87,25 +89,33 @@ const DaemonSetAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {daemonSetDetail.length !== 0 ? (
+              {adminDaemonSetDetail.length !== 0 ? (
                 <>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
-                    <td>{daemonSetDetail.name ? daemonSetDetail.name : "-"}</td>
+                    <td>
+                      {adminDaemonSetDetail.name
+                        ? adminDaemonSetDetail.name
+                        : "-"}
+                    </td>
                     <th className="tb_workload_detail_th">Cluster</th>
                     <td>
-                      {daemonSetDetail.cluster ? daemonSetDetail.cluster : "-"}
+                      {adminDaemonSetDetail.cluster
+                        ? adminDaemonSetDetail.cluster
+                        : "-"}
                     </td>
                   </tr>
                   <tr>
                     <th>Project</th>
                     <td>
-                      {daemonSetDetail.project ? daemonSetDetail.project : "-"}
+                      {adminDaemonSetDetail.project
+                        ? adminDaemonSetDetail.project
+                        : "-"}
                     </td>
                     <th>Created</th>
                     <td>
-                      {daemonSetDetail.createAt
-                        ? dateFormatter(daemonSetDetail.createAt)
+                      {adminDaemonSetDetail.createAt
+                        ? dateFormatter(adminDaemonSetDetail.createAt)
                         : "-"}
                     </td>
                   </tr>
@@ -324,53 +334,49 @@ const DaemonSetAdminDetail = observer(() => {
             </LabelContainer>
           )}
           <TableTitle>Service</TableTitle>
-          <table className="tb_data" style={{ tableLayout: "fixed" }}>
-            <>
+          {services.name ? (
+            <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody className="tb_workload_pod_detail">
-                {services.name ? (
-                  <>
-                    <tr>
-                      <th>Name</th>
-                      <td>{services.name ? services.name : "-"}</td>
-                    </tr>
-                    <tr>
-                      <th>Port</th>
-                      <td>
-                        <table className="tb_data">
-                          <tbody className="tb_services_detail_th">
+                <tr>
+                  <th>Name</th>
+                  <td>{services.name ? services.name : "-"}</td>
+                </tr>
+                <tr>
+                  <th>Port</th>
+                  <td>
+                    <table className="tb_data">
+                      <tbody className="tb_services_detail_th">
+                        <tr>
+                          <th>Name</th>
+                          <th>Port</th>
+                          <th>Protocol</th>
+                        </tr>
+                        {services?.port ? (
+                          services.port?.map((port) => (
                             <tr>
-                              <th>Name</th>
-                              <th>Port</th>
-                              <th>Protocol</th>
+                              <td>{port.name}</td>
+                              <td>{port.port}</td>
+                              <td>{port.protocol}</td>
                             </tr>
-                            {services?.port ? (
-                              services.port?.map((port) => (
-                                <tr>
-                                  <td>{port.name}</td>
-                                  <td>{port.port}</td>
-                                  <td>{port.protocol}</td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </>
-                ) : (
-                  <LabelContainer>
-                    <p>No Service Info</p>
-                  </LabelContainer>
-                )}
+                          ))
+                        ) : (
+                          <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
               </tbody>
-            </>
-          </table>
+            </table>
+          ) : (
+            <LabelContainer>
+              <p>No Service Info</p>
+            </LabelContainer>
+          )}
         </div>
       </CTabPanel>
     </PanelBox>

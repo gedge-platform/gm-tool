@@ -12,6 +12,7 @@ class DaemonSet {
   pDaemonSetList = [];
   daemonSetList = [];
   daemonSetDetail = [];
+  adminDaemonSetDetail = [];
   totalElements = 0;
   label = [];
   annotations = [];
@@ -90,8 +91,12 @@ class DaemonSet {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            this.daemonSetList = res.data.data;
+            this.daemonSetList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
             this.daemonSetDetail = res.data.data[0];
+
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
@@ -122,14 +127,20 @@ class DaemonSet {
       .get(`${SERVER_URL}/daemonsets?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.daemonSetList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.daemonSetList.length !== 0) {
-            this.daemonSetDetail = this.daemonSetList[0];
-            this.totalPages = Math.ceil(this.daemonSetList.length / 10);
-            this.totalElements = this.daemonSetList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.daemonSetList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            console.log(this.daemonSetList);
+            if (this.daemonSetList.length !== 0) {
+              this.daemonSetDetail = this.daemonSetList[0];
+              this.adminDaemonSetDetail = this.daemonSetList[0];
+              this.totalPages = Math.ceil(this.daemonSetList.length / 10);
+              this.totalElements = this.daemonSetList.length;
+            }
           } else {
             this.daemonSetList = [];
           }
@@ -159,6 +170,7 @@ class DaemonSet {
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.daemonSetDetail = data;
+          this.adminDaemonSetDetail = data;
           this.involvesData = involvesData;
           this.pods = involvesData.pods;
           this.containers = data.containers;

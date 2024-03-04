@@ -23,15 +23,13 @@ const SecretAdminListTab = observer(() => {
     totalElements,
     loadAdminsecretList,
     loadsecretTabList,
-    adminList,
-
-    //Pagenation Variable
     currentPage,
     totalPages,
     viewList,
     initViewList,
     goPrevPage,
     goNextPage,
+    adminSecretDetail,
   } = secretStore;
 
   const [columDefs] = useState([
@@ -85,7 +83,7 @@ const SecretAdminListTab = observer(() => {
     loadAdminsecretList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -111,7 +109,7 @@ const SecretAdminListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <SecretAdminDetail SecretAdminDetail={secretDetail} />
+        <SecretAdminDetail SecretAdminDetail={adminSecretDetail} />
       </CReflexBox>
     </div>
   );

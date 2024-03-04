@@ -52,13 +52,13 @@ const Label = styled.span`
 
 const CronJobAdminDetail = observer(() => {
   const {
-    containers,
-    cronJobDetail,
     label,
     annotations,
     events,
     cronjobInvolvesJobs,
+    adminCronJobDetail,
   } = cronJobStore;
+  console.log(adminCronJobDetail);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -85,48 +85,58 @@ const CronJobAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          {cronJobDetail ? (
-            cronJobDetail.length !== 0 ? (
+          {adminCronJobDetail ? (
+            adminCronJobDetail.length !== 0 ? (
               <>
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody>
                     <tr>
                       <th className="tb_workload_detail_th">Name</th>
-                      <td>{cronJobDetail.name ? cronJobDetail.name : "-"}</td>
+                      <td>
+                        {adminCronJobDetail.name
+                          ? adminCronJobDetail.name
+                          : "-"}
+                      </td>
                       <th className="tb_workload_detail_th">Cluster</th>
                       <td>
-                        {cronJobDetail.cluster ? cronJobDetail.cluster : "-"}
+                        {adminCronJobDetail.cluster
+                          ? adminCronJobDetail.cluster
+                          : "-"}
                       </td>
                     </tr>
                     <tr>
                       <th>Project</th>
                       <td>
-                        {cronJobDetail.project ? cronJobDetail.project : "-"}
+                        {adminCronJobDetail.project
+                          ? adminCronJobDetail.project
+                          : "-"}
                       </td>
                       <th>Schedule</th>
                       <td>
-                        {cronJobDetail.schedule ? cronJobDetail.schedule : "-"}
+                        {adminCronJobDetail.schedule
+                          ? adminCronJobDetail.schedule
+                          : "-"}
                       </td>
                     </tr>
                     <tr>
                       <th>Concurrency Policy</th>
                       <td>
-                        {cronJobDetail.concurrencyPolicy
-                          ? cronJobDetail.concurrencyPolicy
+                        {adminCronJobDetail.concurrencyPolicy
+                          ? adminCronJobDetail.concurrencyPolicy
                           : "-"}
                       </td>
                       <th>Successful Jobs History Limit</th>
                       <td>
-                        {cronJobDetail.successfulJobsHistoryLimit
-                          ? cronJobDetail.successfulJobsHistoryLimit
+                        {adminCronJobDetail.successfulJobsHistoryLimit
+                          ? adminCronJobDetail.successfulJobsHistoryLimit
                           : "-"}
                       </td>
                     </tr>
                     <tr>
                       <th>Created</th>
                       <td>
-                        {cronJobDetail.creationTimestamp
-                          ? dateFormatter(cronJobDetail.creationTimestamp)
+                        {adminCronJobDetail.creationTimestamp
+                          ? dateFormatter(adminCronJobDetail.creationTimestamp)
                           : "-"}
                       </td>
                       <th></th>
@@ -150,9 +160,9 @@ const CronJobAdminDetail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Containers</TableTitle>
-          {containers ? (
-            containers.length !== 0 ? (
-              containers.map((item) => (
+          {adminCronJobDetail ? (
+            adminCronJobDetail.length !== 0 ? (
+              adminCronJobDetail.map((item) => (
                 <table className="tb_data" style={{ tableLayout: "fixed" }}>
                   <tbody className="tb_data_container">
                     <tr>

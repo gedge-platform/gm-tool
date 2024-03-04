@@ -5,6 +5,7 @@ import { BASIC_AUTH, SERVER_URL } from "../config";
 class Configmaps {
   configmapsList = [];
   configmapsDetail = {};
+  adminConfigmapsDetail = [];
   adminList = [];
   totalElements = 0;
   data = {};
@@ -144,9 +145,9 @@ class Configmaps {
       })
       .then(() => {
         this.loadconfigmapsTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
+          this.configmapsList[0].name,
+          this.configmapsList[0].cluster,
+          this.configmapsList[0].namespace
         );
       });
   };
@@ -156,14 +157,19 @@ class Configmaps {
       .get(`${SERVER_URL}/configmaps`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.adminList = data;
-          this.configmapsList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.configmapsList.length !== 0) {
-            this.configmapsDetail = this.configmapsList[0];
-            this.totalElements = this.configmapsList.length;
-            this.totalPages = Math.ceil(this.configmapsList.length / 10);
+          if (data !== null) {
+            this.adminList = data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.configmapsList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.configmapsList.length !== 0) {
+              this.configmapsDetail = this.configmapsList[0];
+              this.adminConfigmapsDetail = this.configmapsList[0];
+              this.totalElements = this.configmapsList.length;
+              this.totalPages = Math.ceil(this.configmapsList.length / 10);
+            }
           } else {
             this.configmapsList = [];
           }
@@ -192,13 +198,13 @@ class Configmaps {
       )
       .then((res) => {
         runInAction(() => {
+          console.log("res ??? ", res);
           this.configmapsTabList = res.data.data;
-          // this.data = res.data.data;
-          // this.annotations = res.data.annotations;
           this.configmapsData = {};
 
           Object.entries(this.configmapsTabList?.data).map(([key, value]) => {
             this.configmapsData[key] = value;
+            console.log((this.configmapsData[key] = value));
           });
 
           Object.entries(this.configmapsTabList?.annotations).map(

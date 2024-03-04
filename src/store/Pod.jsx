@@ -128,6 +128,8 @@ class Pod {
     targetClusters: "",
   };
 
+  adminPodDetail = [];
+
   selectedCluster = "";
   setSelectedCluster = (value) => {
     runInAction(() => {
@@ -508,14 +510,21 @@ class Pod {
       .get(`${SERVER_URL}/pods?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.podList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.podList.length !== 0) {
-            this.podDetail = this.podList[0];
-            this.totalPages = Math.ceil(this.podList.length / 10);
-            this.totalElements = this.podList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              return (
+                new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
+              );
+            });
+            this.podList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.podList.length !== 0) {
+              this.podDetail = this.podList[0];
+              this.adminPodDetail = this.podList[0];
+              this.totalPages = Math.ceil(this.podList.length / 10);
+              this.totalElements = this.podList.length;
+            }
           } else {
             this.podList = [];
           }
@@ -541,6 +550,7 @@ class Pod {
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.podDetail = data;
+          this.adminPodDetail = data;
           this.involvesData = involvesData;
           this.workloadList = involvesData.workloadList;
           this.serviceList = involvesData.serviceList;

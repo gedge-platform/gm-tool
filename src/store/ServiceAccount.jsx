@@ -19,6 +19,7 @@ class ServiceAccount {
     annotations: {},
     createdAt: "",
   };
+  adminServiceAccountDetail = [];
 
   totalElements = 0;
 
@@ -152,9 +153,9 @@ class ServiceAccount {
       })
       .then(() => {
         this.loadServiceAccountTabList(
-          this.viewList[0].name,
-          this.viewList[0].cluster,
-          this.viewList[0].namespace
+          this.serviceAccountList[0].name,
+          this.serviceAccountList[0].cluster,
+          this.serviceAccountList[0].namespace
         );
       });
   };
@@ -164,14 +165,19 @@ class ServiceAccount {
       .get(`${SERVER_URL}/serviceaccounts`)
       .then(({ data: { data } }) => {
         runInAction(() => {
-          this.adminList = data;
-          this.serviceAccountList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.serviceAccountList.length !== 0) {
-            this.serviceAccountDetail = this.serviceAccountList[0];
-            this.totalElements = this.serviceAccountList.length;
-            this.totalPages = Math.ceil(this.serviceAccountList.length / 10);
+          if (data !== null) {
+            this.adminList = data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.serviceAccountList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.serviceAccountList.length !== 0) {
+              this.serviceAccountDetail = this.serviceAccountList[0];
+              this.adminServiceAccountDetail = this.serviceAccountList[0];
+              this.totalElements = this.serviceAccountList.length;
+              this.totalPages = Math.ceil(this.serviceAccountList.length / 10);
+            }
           } else {
             this.serviceAccountList = [];
           }
@@ -201,6 +207,7 @@ class ServiceAccount {
       .then((res) => {
         runInAction(() => {
           this.serviceAccountDetail = res.data.data;
+          this.adminServiceAccountDetail = res.data.data;
         });
       });
   };

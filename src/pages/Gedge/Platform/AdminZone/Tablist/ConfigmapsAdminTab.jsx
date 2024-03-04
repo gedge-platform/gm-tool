@@ -22,13 +22,13 @@ const ConfigmapsListTab = observer(() => {
     totalElements,
     loadAdminconfigmapsList,
     loadconfigmapsTabList,
-
     currentPage,
     totalPages,
     viewList,
     initViewList,
     goPrevPage,
     goNextPage,
+    adminConfigmapsDetail,
   } = configmapsStore;
 
   const [columDefs] = useState([
@@ -76,7 +76,7 @@ const ConfigmapsListTab = observer(() => {
     loadAdminconfigmapsList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -110,7 +110,7 @@ const ConfigmapsListTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <ConfigmapsAdminDetail configmapsDetail={configmapsDetail} />
+        <ConfigmapsAdminDetail configmapsDetail={adminConfigmapsDetail} />
       </CReflexBox>
     </div>
   );

@@ -18,17 +18,17 @@ const ServiceAccountAdminTab = observer(() => {
 
   const {
     serviceAccountList,
-    serviceAccountDetail,
+
     totalElements,
     loadAdminServiceAccountList,
     loadServiceAccountTabList,
-
     currentPage,
     totalPages,
-    viewList,
+
     initViewList,
     goPrevPage,
     goNextPage,
+    adminServiceAccountDetail,
   } = serviceAccountStore;
 
   const [columDefs] = useState([
@@ -76,7 +76,7 @@ const ServiceAccountAdminTab = observer(() => {
     loadAdminServiceAccountList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -110,7 +110,9 @@ const ServiceAccountAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <ServiceAccountsAdminDetail serviceAccount={serviceAccountDetail} />
+        <ServiceAccountsAdminDetail
+          serviceAccount={adminServiceAccountDetail}
+        />
       </CReflexBox>
     </div>
   );

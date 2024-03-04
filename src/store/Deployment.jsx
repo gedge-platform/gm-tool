@@ -636,7 +636,7 @@ class Deployment {
         this.paginationList();
       })
       .catch((err) => {
-        this.requestList = [];
+        this.deploymentList = [];
         this.paginationList();
       });
     this.loadDeploymentDetail(
@@ -653,8 +653,6 @@ class Deployment {
       )
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
-          console.log("data ???", data);
-          console.log("involves ??? ", involvesData);
           this.deploymentDetail = data;
           this.adminDeploymentDetail = data;
           this.workspace = data.workspace;
@@ -670,7 +668,6 @@ class Deployment {
           }
           this.pods = involvesData.pods;
           this.depServices = involvesData.services;
-          // this.depServicesPort = involvesData.services.port;
           this.deploymentEvents = data.events;
           this.containersTemp = data.containers;
         });

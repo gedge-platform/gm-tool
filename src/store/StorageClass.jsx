@@ -3,12 +3,6 @@ import { makeAutoObservable, runInAction, toJS } from "mobx";
 import { SERVER_URL } from "../config";
 import { swalError } from "../utils/swal-utils";
 import { getItem } from "../utils/sessionStorageFn";
-import {
-  unixToTime,
-  unixStartTime,
-  stepConverter,
-} from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
-import { unixCurrentTime } from "@/pages/Gedge/Monitoring/Utils/MetricsVariableFormatter";
 import { stringify } from "json-to-pretty-yaml2";
 class StorageClass {
   viewList = null;
@@ -40,6 +34,7 @@ class StorageClass {
   ];
   label = {};
   annotations = {};
+  adminStorageClass = [];
 
   currentPage = 1;
   totalPages = 1;
@@ -260,14 +255,19 @@ class StorageClass {
       .get(`${SERVER_URL}/storageclasses`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.storageClasses = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.storageClasses.length !== 0) {
-            this.storageClass = this.storageClasses[0];
-            this.totalPages = Math.ceil(this.storageClasses.length / 10);
-            this.totalElements = this.storageClasses.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.storageClasses = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.storageClasses.length !== 0) {
+              this.storageClass = this.storageClasses[0];
+              this.adminStorageClass = this.storageClasses[0];
+              this.totalPages = Math.ceil(this.storageClasses.length / 10);
+              this.totalElements = this.storageClasses.length;
+            }
           } else {
             this.storageClasses = [];
           }
@@ -293,6 +293,7 @@ class StorageClass {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.storageClass = data;
+          this.adminStorageClass = data;
           this.scYamlFile = "";
           this.scAnnotations = {};
           this.scLables = {};

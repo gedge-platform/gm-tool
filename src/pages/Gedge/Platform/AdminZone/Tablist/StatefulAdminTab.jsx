@@ -29,6 +29,7 @@ const StatefulSetAdminTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
+    adminStatefulSetDetail,
   } = statefulSetStore;
 
   const [columDefs] = useState([
@@ -76,7 +77,7 @@ const StatefulSetAdminTab = observer(() => {
     loadAdminStatefulSetList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -105,7 +106,7 @@ const StatefulSetAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <StatefulSetAdminDetail statefulSet={statefulDetail} />
+        <StatefulSetAdminDetail statefulSet={adminStatefulSetDetail} />
       </CReflexBox>
     </div>
   );

@@ -184,7 +184,10 @@ class Project {
       .get(`${SERVER_URL}/userProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
+          this.adminList = res.data.data.sort((a, b) => {
+            //최신순으로 정렬
+            return new Date(b.created_at) - new Date(a.created_at);
+          });
           this.projectList = this.adminList.filter((project) =>
             project.selectCluster.some(
               (cluster) => cluster.clusterName === "gm-cluster"

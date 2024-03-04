@@ -60,6 +60,7 @@ const PlatformServiceAdminDetail = observer(() => {
     resourceUsage,
     detailInfo,
     platformProjectDetail,
+    adminPlatformDetail,
   } = platformProjectStore;
 
   const [open, setOpen] = useState(false);
@@ -88,13 +89,13 @@ const PlatformServiceAdminDetail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {platformProjectDetail ? (
+              {adminPlatformDetail ? (
                 <>
                   <tr>
                     <th className="tb_workload_detail_th">Project Name</th>
                     <td>
-                      {platformProjectDetail.projectName
-                        ? platformProjectDetail.projectName
+                      {adminPlatformDetail.projectName
+                        ? adminPlatformDetail.projectName
                         : "-"}
                     </td>
                     <th className="tb_workload_detail_th">Cluster Name</th>
@@ -105,14 +106,14 @@ const PlatformServiceAdminDetail = observer(() => {
                   <tr>
                     <th>Status</th>
                     <td>
-                      {platformProjectDetail.status
-                        ? platformProjectDetail.status
+                      {adminPlatformDetail.status
+                        ? adminPlatformDetail.status
                         : "-"}
                     </td>
                     <th>Created</th>
                     <td>
-                      {platformProjectDetail.created_at
-                        ? dateFormatter(platformProjectDetail.created_at)
+                      {adminPlatformDetail.created_at
+                        ? dateFormatter(adminPlatformDetail.created_at)
                         : "-"}
                     </td>
                   </tr>

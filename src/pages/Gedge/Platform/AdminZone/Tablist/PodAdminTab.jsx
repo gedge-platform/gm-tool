@@ -32,6 +32,7 @@ const PodAdminTab = observer(() => {
     goNextPage,
     viewList,
     initViewList,
+    adminPodDetail,
   } = podStore;
   const [columDefs] = useState([
     {
@@ -103,7 +104,7 @@ const PodAdminTab = observer(() => {
     loadAdminPodList();
     return () => {
       initViewList();
-    }
+    };
   }, []);
 
   return (
@@ -137,7 +138,7 @@ const PodAdminTab = observer(() => {
             reloadFunc={loadPodList}
           /> */}
         </PanelBox>
-        <PodAdminDetail pod={podDetail} />
+        <PodAdminDetail pod={adminPodDetail} />
       </CReflexBox>
     </div>
   );

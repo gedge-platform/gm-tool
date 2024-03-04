@@ -61,7 +61,10 @@ const PodAdminDetail = observer(() => {
     involvesData,
     serviceList,
     workloadList,
+    adminPodDetail,
   } = podStore;
+
+  console.log("this.adminPodDetail ???", adminPodDetail);
 
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
@@ -89,35 +92,47 @@ const PodAdminDetail = observer(() => {
       </CTabs>
       <CTabPanel value={tabvalue} index={0}>
         <div className="tb_container">
-          {podDetail ? (
+          {adminPodDetail ? (
             <>
               <table className="tb_data" style={{ tableLayout: "fixed" }}>
                 <tbody>
                   <tr>
                     <th className="tb_workload_detail_th">Name</th>
-                    <td>{podDetail.name ? podDetail.name : "-"}</td>
+                    <td>{adminPodDetail.name ? adminPodDetail.name : "-"}</td>
                     <th>Cluster</th>
-                    <td>{podDetail.cluster ? podDetail.cluster : "-"}</td>
+                    <td>
+                      {adminPodDetail.cluster ? adminPodDetail.cluster : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <th>Project</th>
-                    <td>{podDetail.project ? podDetail.project : "-"}</td>
+                    <td>
+                      {adminPodDetail.project ? adminPodDetail.project : "-"}
+                    </td>
                     <th>Status</th>
-                    <td>{podDetail.status ? podDetail.status : "-"}</td>
+                    <td>
+                      {adminPodDetail.status ? adminPodDetail.status : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <th>Pod IP</th>
-                    <td>{podDetail.podIP ? podDetail.podIP : "-"}</td>
+                    <td>{adminPodDetail.podIP ? adminPodDetail.podIP : "-"}</td>
                     <th>Node Name</th>
-                    <td>{podDetail.node_name ? podDetail.node_name : "-"}</td>
+                    <td>
+                      {adminPodDetail.node_name
+                        ? adminPodDetail.node_name
+                        : "-"}
+                    </td>
                   </tr>
                   <tr>
                     <th>Qos Class</th>
-                    <td>{podDetail.qosClass ? podDetail.qosClass : "-"}</td>
+                    <td>
+                      {adminPodDetail.qosClass ? adminPodDetail.qosClass : "-"}
+                    </td>
                     <th>Created</th>
                     <td>
-                      {podDetail.creationTimestamp
-                        ? dateFormatter(podDetail.creationTimestamp)
+                      {adminPodDetail.creationTimestamp
+                        ? dateFormatter(adminPodDetail.creationTimestamp)
                         : "-"}
                     </td>
                   </tr>

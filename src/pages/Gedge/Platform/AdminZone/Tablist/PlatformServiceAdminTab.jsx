@@ -32,7 +32,7 @@ const PlatfromServiceAdminTab = observer(() => {
     goPrevPage,
     goNextPage,
     loadPlatformProjectDetail,
-    platformProjectLists,
+    adminPlatformDetail,
   } = platformProjectStore;
 
   const [columDefs] = useState([
@@ -68,18 +68,10 @@ const PlatfromServiceAdminTab = observer(() => {
   ]);
 
   const handleClick = (e) => {
-    const fieldName = e.colDef.field;
     loadPlatformProjectDetail(e.data.projectName, e.data.clusterName);
   };
 
   const history = useHistory();
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useLayoutEffect(() => {
     loadAdminPlatformProjectList("system");
@@ -106,10 +98,10 @@ const PlatfromServiceAdminTab = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={platformProjectLists}
+                  rowData={platformProjectList}
                   columnDefs={columDefs}
                   isBottom={false}
-                  totalElements={platformProjectLists.length}
+                  totalElements={totalElements}
                   totalPages={totalPages}
                   currentPage={currentPage}
                   goNextPage={goNextPage}
@@ -120,7 +112,7 @@ const PlatfromServiceAdminTab = observer(() => {
           </div>
           {/* <CreateProject reloadFunc={loadPlatformProjectList} type={"admin"} open={open} onClose={handleClose} /> */}
         </PanelBox>
-        <PlatformServiceAdminDetail platformDetil={platformDetil} />
+        <PlatformServiceAdminDetail platformDetil={adminPlatformDetail} />
       </CReflexBox>
     </>
   );

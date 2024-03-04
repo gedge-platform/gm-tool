@@ -29,6 +29,7 @@ class CronJob {
     },
   ];
   cronjobInvolvesJobs = [];
+  adminCronJobDetail = [];
 
   constructor() {
     makeAutoObservable(this);
@@ -147,7 +148,7 @@ class CronJob {
           if (res.data.data !== null) {
             this.cronJobList = res.data.data;
             this.cronJobDetail = res.data.data[0];
-
+            this.adminCronJobDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
 
             this.totalElements = res.data.data.length;
@@ -179,14 +180,21 @@ class CronJob {
       .get(`${SERVER_URL}/cronjobs?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.cronJobList = this.adminList.filter(
-            (data) => data.cluster === "gm-cluster"
-          );
-          if (this.cronJobList.length !== 0) {
-            this.cronJobDetail = this.cronJobList[0];
-            this.totalPages = Math.ceil(this.cronJobList.length / 10);
-            this.totalElements = this.cronJobList.length;
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return (
+                new Date(b.creationTimestamp) - new Date(a.creationTimestamp)
+              );
+            });
+            this.cronJobList = this.adminList.filter(
+              (data) => data.cluster === "gm-cluster"
+            );
+            if (this.cronJobList.length !== 0) {
+              this.cronJobDetail = this.cronJobList[0];
+              this.totalPages = Math.ceil(this.cronJobList.length / 10);
+              this.totalElements = this.cronJobList.length;
+            }
           } else {
             this.cronJobList = [];
           }
@@ -216,10 +224,12 @@ class CronJob {
       .then(({ data: { data, involvesData } }) => {
         runInAction(() => {
           this.cronJobDetail = data;
+          this.adminCronJobDetail = data;
           this.containers = data.containers;
           this.label = data.label;
           this.annotations = data.annotations;
           this.cronjobInvolvesJobs = involvesData.jobs;
+
           if (data.events !== null) {
             this.events = data.events;
           } else {

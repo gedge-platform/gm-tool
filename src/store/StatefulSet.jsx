@@ -26,13 +26,13 @@ class StatefulSet {
       updateRevision: "",
       updatedReplicas: 0,
     },
-    // containers: [{ env: [], ports: [], volumeMounts: [] }],
     ownerReferences: [],
     label: {},
     events: [],
     annotations: {},
     createAt: "",
   };
+  adminStatefulSetDetail = [];
   label = {};
   annotations = {};
   events = [
@@ -49,7 +49,6 @@ class StatefulSet {
   ];
   totalElements = 0;
   containers = [];
-  // containers = [{}];
 
   constructor() {
     makeAutoObservable(this);
@@ -109,8 +108,12 @@ class StatefulSet {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            this.statefulSetList = res.data.data;
+            this.statefulSetList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
             this.statefulSetDetail = res.data.data[0];
+            this.adminStatefulSetDetail = res.data.data[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
           } else {
@@ -182,6 +185,7 @@ class StatefulSet {
       .then(({ data: { data } }) => {
         runInAction(() => {
           this.statefulSetDetail = data;
+          this.adminStatefulSetDetail = data;
           this.containers = data.containers;
           this.label = data.label;
           this.annotations = data.annotations;

@@ -19,8 +19,9 @@ const LabelContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   padding: 12px;
-  border-radius: 4px;
+  border: 1px double #141a30;
   background-color: #2f3855;
+  margin: 10px 0;
 
   p {
     color: rgba(255, 255, 255, 0.6);
@@ -51,35 +52,13 @@ const Label = styled.span`
 
 const ConfigmapsAdminDetail = observer(() => {
   const { configmapsTabList } = configmapsStore;
-
-  const dataTable = [];
   const metadata = configmapsTabList.data;
-
-  const annotationsTable = [];
   const annotations = configmapsTabList.annotations;
-
-  const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  // Object.entries(metadata).map(([key, value]) => {
-  //   dataTable.push(
-  //     <tr>
-  //       <th style={{ width: "15%" }}>{key}</th>
-  //       <td>{value}</td>
-  //     </tr>
-  //   );
-  // });
 
   return (
     <PanelBox style={{ overflowY: "hidden" }}>
@@ -124,16 +103,14 @@ const ConfigmapsAdminDetail = observer(() => {
             </tbody>
           </table>
           <br />
+
           <TableTitle>Data</TableTitle>
           {metadata ? (
             <table className="tb_data">
-              <tbody
-                className="tb_data_detail"
-                style={{ whiteSpace: "pre-line" }}
-              >
+              <tbody style={{ whiteSpace: "pre-line" }}>
                 {Object.entries(metadata).map(([key, value]) => (
                   <tr>
-                    <th style={{ width: "5%" }}>{key}</th>
+                    <th style={{ width: "15%" }}>{key}</th>
                     <td
                       style={{ wordBreak: "break-all", wordWrap: "break-word" }}
                     >
@@ -148,24 +125,12 @@ const ConfigmapsAdminDetail = observer(() => {
               <p>No Data Info</p>
             </LabelContainer>
           )}
-          {/* <table className="tb_data">
-            <tbody>
-              {dataTable ? (
-                dataTable
-              ) : (
-                <LabelContainer>
-                  <p>No Data Info</p>
-                </LabelContainer>
-              )}
-            </tbody>
-          </table> */}
           <br />
         </div>
       </CTabPanel>
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container" style={{ width: "95%" }}>
           <TableTitle>Annotations</TableTitle>
-          {/* {annotationsTable.length > 0 ? ( */}
           {annotations ? (
             <table className="tb_data" style={{ tableLayout: "fixed" }}>
               <tbody>

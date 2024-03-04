@@ -63,11 +63,12 @@ const StorageClassAdminDetail = observer(({}) => {
     setTabvalue(newValue);
   };
 
-  const { storageClass, annotations, label, scParameters } = StorageClassStore;
+  const { storageClass, annotations, label, scParameters, adminStorageClass } =
+    StorageClassStore;
 
   const metaTable = [];
-  if (storageClass?.annotations) {
-    Object.entries(storageClass?.annotations).map(([key, value]) => {
+  if (adminStorageClass?.annotations) {
+    Object.entries(adminStorageClass?.annotations).map(([key, value]) => {
       metaTable.push(
         <tr>
           <th style={{ width: "20%" }}>{key}</th>
@@ -99,54 +100,49 @@ const StorageClassAdminDetail = observer(({}) => {
         <div className="panelCont">
           <table className="tb_data">
             <tbody className="tb_data_detail">
-              {storageClass ? (
+              {adminStorageClass ? (
                 <>
                   <tr>
                     <th>Name</th>
-                    <td>{storageClass?.name ? storageClass?.name : "-"}</td>
+                    <td>
+                      {adminStorageClass?.name ? adminStorageClass?.name : "-"}
+                    </td>
                     <th>Cluster Name</th>
                     <td>
-                      {storageClass?.cluster ? storageClass?.cluster : "-"}
+                      {adminStorageClass?.cluster
+                        ? adminStorageClass?.cluster
+                        : "-"}
                     </td>
                   </tr>
                   <tr>
                     <th>Reclaim Policy</th>
                     <td>
-                      {storageClass?.reclaimPolicy
-                        ? storageClass?.reclaimPolicy
+                      {adminStorageClass?.reclaimPolicy
+                        ? adminStorageClass?.reclaimPolicy
                         : "-"}
                     </td>
                     <th>Provisioner</th>
                     <td>
-                      {storageClass?.provisioner
-                        ? storageClass?.provisioner
+                      {adminStorageClass?.provisioner
+                        ? adminStorageClass?.provisioner
                         : "-"}
                     </td>
                   </tr>
                   <tr>
                     <th>VolumeBindingMode</th>
                     <td>
-                      {storageClass?.volumeBindingMode
-                        ? storageClass?.volumeBindingMode
+                      {adminStorageClass?.volumeBindingMode
+                        ? adminStorageClass?.volumeBindingMode
                         : "-"}
                     </td>
-                    {/* <th>AllowVolumeExpansion</th>
-                <td>
-                  {storageClass?.allowVolumeExpansion
-                    ? storageClass?.allowVolumeExpansion
-                    : "-"}
-                </td> */}
+
                     <th>Created</th>
                     <td>
-                      {storageClass?.createAt
-                        ? dateFormatter(storageClass?.createAt)
+                      {adminStorageClass?.createAt
+                        ? dateFormatter(adminStorageClass?.createAt)
                         : "-"}
                     </td>
                   </tr>
-                  {/* <tr>
-              <th>{null}</th>
-              <td>{null}</td>
-            </tr> */}
                 </>
               ) : (
                 <LabelContainer>
@@ -214,18 +210,6 @@ const StorageClassAdminDetail = observer(({}) => {
           )}
         </div>
       </CTabPanel>
-      {/* <CTabPanel value={tabvalue} index={3}>
-        <div className="panelCont">
-          <table className="tb_data">
-            <tbody>
-              <tr>
-                <th className="tb_volume_detail_th">value</th>
-                <td>{storageClass?.finalizers}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </CTabPanel> */}
     </PanelBox>
   );
 });

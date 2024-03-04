@@ -29,6 +29,7 @@ const DaemonSetAdminTab = observer(() => {
     initViewList,
     goPrevPage,
     goNextPage,
+    adminDaemonSetDetail,
   } = daemonSetStore;
 
   const [columDefs] = useState([
@@ -100,7 +101,7 @@ const DaemonSetAdminTab = observer(() => {
             </CTabPanel>
           </div>
         </PanelBox>
-        <DaemonSetAdminDetail daemonSet={daemonSetDetail} />
+        <DaemonSetAdminDetail daemonSet={adminDaemonSetDetail} />
       </CReflexBox>
     </div>
   );

@@ -6,10 +6,6 @@ import { getItem } from "../utils/sessionStorageFn";
 class User {
   userList = [];
   userDetail = {};
-  // user = {
-  //   id: "",
-  //   role: "",
-  // };
   totalElements = 0;
   currentPage = 1;
   totalPages = 1;

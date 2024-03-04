@@ -214,30 +214,31 @@ class Workspace {
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.adminList = res.data.data;
-          this.adminLists = this.adminList.filter((workspace) =>
-            workspace.selectCluster.some(
-              (cluster) => cluster.clusterName === "gm-cluster"
-            )
-          );
-          this.workSpaceList = res.data.data;
-          if (this.workSpaceList.length !== 0) {
-            this.totalPages = Math.ceil(this.workSpaceList.length / 10);
-            this.totalElements = this.workSpaceList.length;
-            this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
-          }
-          if (this.adminLists.length !== 0) {
-            this.totalPages = Math.ceil(this.adminLists.length / 10);
-            this.totalElements = this.adminLists.length;
-            this.loadWorkspaceDetail(this.adminLists[0].workspaceName);
+          if (res.data.data !== null) {
+            this.adminList = res.data.data.sort((a, b) => {
+              //최신순으로 정렬
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            this.adminLists = this.adminList.filter((workspace) =>
+              workspace.selectCluster.some(
+                (cluster) => cluster.clusterName === "gm-cluster"
+              )
+            );
+            this.workSpaceList = res.data.data;
+            if (this.workSpaceList.length !== 0) {
+              this.totalPages = Math.ceil(this.workSpaceList.length / 10);
+              this.totalElements = this.workSpaceList.length;
+              this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+            }
+            if (this.adminLists.length !== 0) {
+              this.totalPages = Math.ceil(this.adminLists.length / 10);
+              this.totalElements = this.adminLists.length;
+              this.loadWorkspaceDetail(this.adminLists[0].workspaceName);
+            }
           } else {
-            // 두 경우 모두 해당하지 않는 경우
             this.adminLists = [];
             this.workSpaceList = [];
           }
-          // else {
-          //   this.workSpaceList = [];
-          // }
         });
       })
       .then((res) => {
