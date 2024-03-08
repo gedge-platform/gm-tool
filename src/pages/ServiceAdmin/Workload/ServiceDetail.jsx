@@ -54,6 +54,8 @@ const Detail = observer(() => {
   const [open, setOpen] = useState(false);
   const [tabvalue, setTabvalue] = useState(0);
 
+  console.log("serviceDetail ??", serviceDetail);
+
   const handleTabChange = (event, newValue) => {
     setTabvalue(newValue);
   };
@@ -75,7 +77,7 @@ const Detail = observer(() => {
         <div className="tb_container">
           <table className="tb_data" style={{ tableLayout: "fixed" }}>
             <tbody>
-              {serviceDetail ? (
+              {serviceDetail.length !== 0 ? (
                 <>
                   <tr>
                     <th style={{ width: "25%" }}>Service Name</th>
@@ -165,84 +167,75 @@ const Detail = observer(() => {
       <CTabPanel value={tabvalue} index={1}>
         <div className="tb_container">
           <TableTitle>Pod</TableTitle>
-          {involvesPods ? (
-            involvesPods.length !== 0 ? (
-              involvesPods.map((pod) => (
-                <>
-                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                    <tbody>
-                      <tr>
-                        <th style={{ width: "25%" }}>Name</th>
-                        <td>{pod?.name ? pod?.name : "-"}</td>
-                      </tr>
-                      <tr>
-                        <th>IP</th>
-                        <td>{pod?.ip ? pod?.ip : "-"}</td>
-                      </tr>
-                      <tr>
-                        <th>Node Name</th>
-                        <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br />
-                </>
-              ))
-            ) : (
-              <LabelContainer>
-                <p>No Pods Info</p>
-              </LabelContainer>
-            )
-          ) : (
-            <LabelContainer>
-              <p>No Pods Info</p>
-            </LabelContainer>
-          )}
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {involvesPods.length !== 0 ? (
+                involvesPods.map((pod) => (
+                  <>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{pod?.name ? pod?.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>IP</th>
+                      <td>{pod?.ip ? pod?.ip : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Node Name</th>
+                      <td>{pod?.nodeName ? pod?.nodeName : "-"}</td>
+                    </tr>
+                    <br />
+                  </>
+                ))
+              ) : (
+                <LabelContainer>
+                  <p>No Pods Info</p>
+                </LabelContainer>
+              )}
+            </tbody>
+          </table>
+          <br />
           <TableTitle>Workload</TableTitle>
-          {involvesWorkloads ? (
-            involvesWorkloads.length !== 0 ? (
-              involvesWorkloads.map((workload) => (
-                <>
-                  <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                    <tbody>
-                      <tr>
-                        <th style={{ width: "25%" }}>Name</th>
-                        <td>{workload?.name ? workload?.name : "-"}</td>
-                      </tr>
-                      <tr>
-                        <th>Kind</th>
-                        <td>{workload?.kind ? workload?.kind : "-"}</td>
-                      </tr>
-                      <tr>
-                        <th>Replica Name</th>
-                        <td>
-                          {workload?.replicaName ? workload?.replicaName : "-"}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <br />
-                </>
-              ))
-            ) : (
-              <LabelContainer>
-                <p>No Workloads Info</p>
-              </LabelContainer>
-            )
-          ) : (
-            <LabelContainer>
-              <p>No Workloads Info</p>
-            </LabelContainer>
-          )}
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {involvesWorkloads.length !== 0 ? (
+                involvesWorkloads.map((workload) => (
+                  <>
+                    <tr>
+                      <th style={{ width: "25%" }}>Name</th>
+                      <td>{workload?.name ? workload?.name : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Kind</th>
+                      <td>{workload?.kind ? workload?.kind : "-"}</td>
+                    </tr>
+                    <tr>
+                      <th>Replica Name</th>
+                      <td>
+                        {workload?.replicaName ? workload?.replicaName : "-"}
+                      </td>
+                    </tr>
+
+                    <br />
+                  </>
+                ))
+              ) : (
+                <LabelContainer>
+                  <p>No Workloads Info</p>
+                </LabelContainer>
+              )}
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
+
       <CTabPanel value={tabvalue} index={2}>
         <div className="tb_container">
-          {portTemp.length !== 0 ? (
-            portTemp.map((port) => (
-              <>
-                <table className="tb_data" style={{ tableLayout: "fixed" }}>
-                  <tbody>
+          <table className="tb_data" style={{ tableLayout: "fixed" }}>
+            <tbody>
+              {portTemp.length !== 0 ? (
+                portTemp.map((port) => (
+                  <>
                     <tr>
                       <th>Name</th>
                       <td>{port?.name ? port?.name : "-"}</td>
@@ -255,16 +248,16 @@ const Detail = observer(() => {
                       <th>TargetPort</th>
                       <td>{port?.targetPort ? port?.targetPort : "-"}</td>
                     </tr>
-                  </tbody>
-                </table>
-                <br />
-              </>
-            ))
-          ) : (
-            <LabelContainer>
-              <p>No Port Info</p>
-            </LabelContainer>
-          )}
+                    <br />
+                  </>
+                ))
+              ) : (
+                <LabelContainer>
+                  <p>No Port Info</p>
+                </LabelContainer>
+              )}
+            </tbody>
+          </table>
         </div>
       </CTabPanel>
     </PanelBox>

@@ -582,12 +582,18 @@ class Deployment {
       .get(`${SERVER_URL}/deployments?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          // 응답 data를 deploymentList에 넣고 총 페이지와 개수 입력
           if (res.data.data !== null) {
-            this.deploymentList = res.data.data;
-            this.deploymentDetail = res.data.data[0];
+            this.deploymentList = res.data.data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+            this.deploymentDetail = this.deploymentList[0];
             this.totalPages = Math.ceil(res.data.data.length / 10);
             this.totalElements = res.data.data.length;
+            this.loadDeploymentDetail(
+              this.deploymentList[0].name,
+              this.deploymentList[0].cluster,
+              this.deploymentList[0].project
+            );
           } else {
             this.deploymentList = [];
           }
@@ -600,11 +606,6 @@ class Deployment {
         this.deploymentList = [];
         this.paginationList();
       });
-    this.loadDeploymentDetail(
-      this.deploymentList[0].name,
-      this.deploymentList[0].cluster,
-      this.deploymentList[0].project
-    );
   };
 
   loadAdminDeploymentList = async () => {
@@ -844,6 +845,7 @@ class Deployment {
           swalError("Deployment가 생성되었습니다.");
           console.log("res ???", res);
         } else {
+          console.log("res ???", res);
           swalError("Deployment 생성 실패", callback);
         }
       });

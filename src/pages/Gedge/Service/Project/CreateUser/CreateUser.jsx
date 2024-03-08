@@ -24,7 +24,7 @@ const CreateUser = observer(() => {
 
   const {
     projectDetail,
-    projectLists,
+    projectList,
     totalElements,
     loadProjectList,
     loadProjectDetail,
@@ -132,7 +132,7 @@ const CreateUser = observer(() => {
               <div className="grid-height2">
                 <AgGrid
                   onCellClicked={handleClick}
-                  rowData={projectLists}
+                  rowData={projectList}
                   columnDefs={columDefs}
                   isBottom={false}
                   totalElements={totalElements}

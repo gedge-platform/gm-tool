@@ -162,17 +162,20 @@ class Project {
       .get(`${SERVER_URL}/userProjects?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.projectList = res.data.data;
-          this.projectLists = res.data.data;
-          this.totalElements = res.data.data.length;
+          if (res.data.data !== null) {
+            this.projectList = res.data.data.sort((a, b) => {
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            this.projectLists = res.data.data.sort((a, b) => {
+              return new Date(b.create_at) - new Date(a.create_at);
+            });
+
+            this.totalElements = this.projectList.length;
+          }
         });
-      })
-      .then(() => {
-        this.paginationList();
       })
       .catch(() => {
         this.projectList = [];
-        this.paginationList();
       });
     this.loadProjectDetail(this.projectList[0].projectName);
   };

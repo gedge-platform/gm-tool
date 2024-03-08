@@ -188,17 +188,22 @@ class Workspace {
       .get(`${SERVER_URL}/workspaces?user=${id}`)
       .then((res) => {
         runInAction(() => {
-          this.workSpaceList = res.data.data;
-          this.totalPages = Math.ceil(this.workSpaceList.length / 10);
-          this.totalElements = this.workSpaceList.length;
-          this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
-          this.workspace = this.workSpaceList
-            ? this.workSpaceList.map((item) => item.workspaceName)
-            : null;
+          if (res.data.data !== null) {
+            this.workSpaceList = res.data.data.sort((a, b) => {
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            this.totalPages = Math.ceil(this.workSpaceList.length / 10);
+            this.totalElements = this.workSpaceList.length;
+            this.loadWorkspaceDetail(this.workSpaceList[0].workspaceName);
+            this.workspace = this.workSpaceList
+              ? this.workSpaceList.map((item) => item.workspaceName)
+              : null;
+          } else {
+            this.workSpaceList = [];
+          }
         });
       })
       .then(() => {
-        // this.convertList(this.workSpaceList, this.setWorkSpaceList);
         this.paginationList();
       })
       .catch(() => {

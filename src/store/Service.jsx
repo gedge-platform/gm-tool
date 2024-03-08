@@ -13,12 +13,7 @@ class Service {
   adminList = [];
   pServiceList = [];
   serviceList = [];
-  serviceDetail = {
-    externalIp: "",
-    selector: {
-      app: "",
-    },
-  };
+  serviceDetail = [];
   adminServiceDetail = {};
   nodePort = 0;
   totalElements = 0;
@@ -80,17 +75,6 @@ class Service {
     });
   };
 
-  paginationList = () => {
-    runInAction(() => {
-      if (this.serviceList !== null) {
-        this.viewList = this.serviceList.slice(
-          (this.currentPage - 1) * 10,
-          this.currentPage * 10
-        );
-      }
-    });
-  };
-
   loadServiceList = async () => {
     let { id, role } = getItem("user");
     role === "SA" ? (id = id) : (id = "");
@@ -99,27 +83,28 @@ class Service {
       .then((res) => {
         runInAction(() => {
           if (res.data.data !== null) {
-            this.serviceList = res.data.data;
-            this.serviceDetail = res.data.data[0];
-            this.totalPages = Math.ceil(res.data.data.length / 10);
-            this.totalElements = res.data.data.length;
+            this.serviceList = res.data.data.sort((a, b) => {
+              return new Date(b.createAt) - new Date(a.createAt);
+            });
+
+            if (this.serviceList.length !== 0) {
+              this.serviceDetail = this.serviceList[0];
+              this.loadServiceDetail(
+                this.serviceList[0].name,
+                this.serviceList[0].cluster,
+                this.serviceList[0].project
+              );
+              this.totalPages = Math.ceil(this.serviceList.length / 10);
+              this.totalElements = this.serviceList.length;
+            }
           } else {
             this.serviceList = [];
           }
         });
       })
-      .then(() => {
-        this.paginationList();
-      })
       .catch(() => {
         this.serviceList = [];
-        this.paginationList();
       });
-    this.loadServiceDetail(
-      this.viewList[0].name,
-      this.viewList[0].cluster,
-      this.viewList[0].project
-    );
   };
 
   loadAdminServiceList = async () => {
@@ -131,14 +116,18 @@ class Service {
         runInAction(() => {
           if (res.data.data !== null) {
             this.adminList = res.data.data.sort((a, b) => {
-              //최신순으로 정렬
               return new Date(b.createAt) - new Date(a.createAt);
             });
             this.serviceList = this.adminList.filter(
               (data) => data.cluster === "gm-cluster"
             );
+            this.adminServiceDetail = this.serviceList[0];
+            this.loadServiceDetail(
+              this.serviceList[0].name,
+              this.serviceList[0].cluster,
+              this.serviceList[0].project
+            );
             if (this.serviceList.length !== 0) {
-              this.adminServiceDetail = this.serviceList[0];
               this.totalPages = Math.ceil(this.serviceList.length / 10);
               this.totalElements = this.serviceList.length;
             }
@@ -147,18 +136,9 @@ class Service {
           }
         });
       })
-      .then(() => {
-        this.paginationList();
-      })
       .catch(() => {
         this.serviceList = [];
-        this.paginationList();
       });
-    this.loadServiceDetail(
-      this.serviceList[0].name,
-      this.serviceList[0].cluster,
-      this.serviceList[0].project
-    );
   };
 
   loadServiceDetail = async (name, cluster, project) => {
